@@ -12,20 +12,35 @@ const SplitScreen = () => {
   const [leftPaneContent, setLeftPaneContent] = useState(<Home title="Home" />);
   const [tabs, setTabs] = useState([
     { id: '2', label: 'About', component: <About title="About" /> },
-	{ id: '3', label: 'Home', component: <Home title="Home" /> },
+    { id: '3', label: 'Home', component: <Home title="Home" /> },
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSplit, setIsSplit] = useState(true);
 
+  // Function to close a tab
+  const closeTab = (tabId, index) => {
+    const newTabs = tabs.filter((tab) => tab.id !== tabId);
+    setTabs(newTabs);
+
+    // Adjust selected index if the current tab is closed
+    if (selectedIndex >= index && selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    }
+
+    // If there are no more tabs in the right pane, collapse the split
+    if (newTabs.length === 0) {
+      setIsSplit(false);
+    }
+  };
+
+  // Function to handle drag and drop
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
     const { source, destination } = result;
 
-    if (
-      source.droppableId === 'droppable-tabs' &&
-      destination.droppableId === 'left-pane'
-    ) {
+    // Dragging from right pane to left pane
+    if (source.droppableId === 'droppable-tabs' && destination.droppableId === 'left-pane') {
       const movedTab = tabs[source.index];
       setLeftPaneContent(movedTab.component);
 
@@ -41,26 +56,19 @@ const SplitScreen = () => {
         setIsSplit(false);
       }
     }
-    else if (
-      source.droppableId === 'droppable-tabs' &&
-      destination.droppableId === 'droppable-tabs'
-    ) {
+    // Rearranging tabs within right pane
+    else if (source.droppableId === 'droppable-tabs' && destination.droppableId === 'droppable-tabs') {
       const reorderedTabs = Array.from(tabs);
       const [removed] = reorderedTabs.splice(source.index, 1);
       reorderedTabs.splice(destination.index, 0, removed);
 
       setTabs(reorderedTabs);
+
       if (source.index === selectedIndex) {
         setSelectedIndex(destination.index);
-      } else if (
-        source.index < selectedIndex &&
-        destination.index >= selectedIndex
-      ) {
+      } else if (source.index < selectedIndex && destination.index >= selectedIndex) {
         setSelectedIndex((prevIndex) => prevIndex - 1);
-      } else if (
-        source.index > selectedIndex &&
-        destination.index <= selectedIndex
-      ) {
+      } else if (source.index > selectedIndex && destination.index <= selectedIndex) {
         setSelectedIndex((prevIndex) => prevIndex + 1);
       }
     }
@@ -96,7 +104,7 @@ const SplitScreen = () => {
               setTabs={setTabs}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              closeTab={() => {}}
+              closeTab={closeTab} // Pass the closeTab function
             />
           </SplitPane>
         ) : (
