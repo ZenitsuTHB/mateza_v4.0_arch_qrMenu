@@ -1,7 +1,7 @@
 :root {
-	--color-background: #fff;
-	--color-active-bg: #f5f5f5;
-	--color-text: #333;
-	--color-border: #a9aeb4;
-	--color-tab-selected-bg: #eaeaea; /* Add this new variable */
+	--color-white: #fff;
+	--color-bg: #eaeaea;
+	--color-black: #000;
+	--color-nav-selection: #f3f3f3;
+	--color-border: #a4a4a4;
   }

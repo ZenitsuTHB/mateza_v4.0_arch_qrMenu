@@ -7,15 +7,13 @@ import Home from '../../Pages/Home/index.js';
 import About from '../../Pages/About/index.js';
 
 import './PaneNavigator.css'
-// Import other components as needed
 
 const PaneNavigator = () => {
   return (
-    <Tabs className="navigationTabs">
+    <Tabs className="paneNavigator">
       <TabList>
         <Tab>Home</Tab>
         <Tab>About</Tab>
-        {/* Add more tabs as needed */}
       </TabList>
 
       <TabPanel>
@@ -24,7 +22,6 @@ const PaneNavigator = () => {
       <TabPanel>
         <About title="About" />
       </TabPanel>
-      {/* Add more TabPanels as needed */}
     </Tabs>
   );
 };

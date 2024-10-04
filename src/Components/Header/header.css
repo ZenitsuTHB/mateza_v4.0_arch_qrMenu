@@ -1,6 +1,6 @@
 /* header.css */
 .withHeader {
-	background-color: rgb(234, 234, 234);
+	background-color: var(--color-bg);
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box;
@@ -9,17 +9,13 @@
 	overflow: hidden;
   }
   
-  .withHeader * {
-	padding: 20px 16px;
-  }
+.withHeader > * {
+	padding-left: 30px;
+}
 
-  .navigationTabs {
-	padding: 0;
-  }
+.withHeader > h1{
+	padding-top: 30px;
+}
 
   
-  .withHeader > div {
-	flex: 1;
-	overflow: auto;
-  }
   

@@ -1,26 +1,24 @@
-/* SplitScreen.css */
 .split-screen {
-	flex: 1; /* Allows it to fill the parent container */
+	flex: 1;
 	display: flex;
 	height: 100%;
 	overflow: hidden;
   }
   
   .SplitPane {
-	height: 100% !important;
-	width: 100% !important;
-	position: relative; /* Ensures it respects parent dimensions */
+	height: 100%;
+	width: 100%;
+	position: relative;
   }
   
-/* Components/SplitScreen/SplitScreen.css */
 .Pane {
 	height: 100%;
-	overflow: auto; /* Add this line */
+	overflow: auto;
   }
   
   
   .Resizer {
-	background: #000;
+	background: var(--color-black);
 	opacity: 0.2;
 	z-index: 1;
 	cursor: col-resize;
