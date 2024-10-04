@@ -1,0 +1,7 @@
+:root {
+	--color-background: #fff;
+	--color-active-bg: #f5f5f5;
+	--color-text: #333;
+	--color-border: #a9aeb4;
+	--color-tab-selected-bg: #eaeaea; /* Add this new variable */
+  }

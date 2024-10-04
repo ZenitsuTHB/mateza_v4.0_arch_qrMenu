@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Sidebar/index.js';
 import Content from './Routing/index.js';
 import './Styles/fonts.css';
+import './Styles/colors.css';
 import './index.css';
 
 function App() {

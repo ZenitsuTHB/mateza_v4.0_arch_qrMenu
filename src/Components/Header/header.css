@@ -1,19 +1,22 @@
-/* Update your existing CSS for .withHeader */
+/* header.css */
 .withHeader {
 	background-color: rgb(234, 234, 234);
-	height: 100%; /* Use 100% height to fill parent container */
-	width: 100%; /* Use 100% width to stay within parent container */
-	padding-left: 50px;
-	padding-top: 20px;
-	box-sizing: border-box; /* Include padding in width and height calculations */
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
   }
   
-  .withHeader > h1 {
-	margin: 0;
-	padding-bottom: 20px;
+  .withHeader * {
+	padding: 20px 16px;
   }
+
+  .navigationTabs {
+	padding: 0;
+  }
+
   
   .withHeader > div {
 	flex: 1;

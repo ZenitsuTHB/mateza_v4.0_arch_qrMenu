@@ -1,0 +1,3 @@
+.navigationTabs .react-tabs__tab--selected {
+  background-color: var(--color-tab-selected-bg);
+}

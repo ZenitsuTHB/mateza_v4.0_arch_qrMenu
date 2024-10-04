@@ -12,9 +12,12 @@
 	position: relative; /* Ensures it respects parent dimensions */
   }
   
-  .Pane {
+/* Components/SplitScreen/SplitScreen.css */
+.Pane {
 	height: 100%;
+	overflow: auto; /* Add this line */
   }
+  
   
   .Resizer {
 	background: #000;
