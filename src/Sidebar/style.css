@@ -1,0 +1,59 @@
+/* Sidebar container */
+.sidebar {
+	width: 250px;
+	height: 100vh;
+	background-color: #ffffff; /* Background always white */
+	transition: width 0.3s ease-in-out;
+	overflow: hidden;
+}
+
+/* Sidebar collapsed state */
+.sidebar.collapsed {
+	width: 60px;
+}
+
+/* Toggle button styling */
+.toggle-button {
+	width: 100%;
+	padding: 10px;
+	border: none;
+	background-color: #34495e;
+	color: #ffffff;
+	cursor: pointer;
+	outline: none;
+	transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+	background-color: #3b5375;
+}
+
+/* Expand button styling */
+.expand-button {
+	width: 100%;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #34495e;
+	margin-left: 10px;
+	transition: transform 0.3s ease;
+}
+
+.expand-button:hover {
+	color: #2c3e50;
+}
+
+.nav-item {
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0;
+}
+
+
+
+.nav-sub-items {
+	margin-top: 5px;
+}
+
+
+
