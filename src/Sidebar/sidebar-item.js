@@ -25,7 +25,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab }) => {
       ) : null}
       <span className="sidebar-item__icon">
         <IconComponent />
-        <span className="tooltip">{"DJKDSKJD"}</span>
+        <span className="tooltip">{item.title}</span>
       </span>
     </motion.div>
   );
