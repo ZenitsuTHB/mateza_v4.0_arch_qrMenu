@@ -24,16 +24,6 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isSidebarCollapsed }) => {
       <span className="sidebar-item__icon">
         <IconComponent />
       </span>
-      {activeTab === item.id && !isSidebarCollapsed ? (
-        <motion.span
-          className="sidebar-item__tooltip"
-          initial={{ opacity: 0, x: 10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 10 }}
-        >
-          {item.title}
-        </motion.span>
-      ) : null}
     </motion.div>
   );
 };
