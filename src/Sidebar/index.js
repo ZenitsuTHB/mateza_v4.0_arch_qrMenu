@@ -1,57 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { LuHome, LuMail, LuFolderClosed, LuStickyNote, LuBell, LuChevronRight, LuChevronLeft } from "react-icons/lu";
+import SidebarItem from "./sidebar-item.js";
 import './style.css';
-import NavButton from '../Components/Sidebar/NavButton';
-import routesConfig from '../Routing/config.js';
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
-function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [expandedItems, setExpandedItems] = useState({});
+const SIDEBAR_ITEMS = [
+  { id: "dashboard", title: "Dashboard", icon: LuHome },
+  { id: "mail", title: "Mail", icon: LuMail },
+  { id: "projects", title: "Projects", icon: LuFolderClosed },
+  { id: "reports", title: "Reports", icon: LuStickyNote },
+  { id: "notifications", title: "Notifications", icon: LuBell },
+];
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-  };
-
-  const toggleExpand = (index) => {
-    setExpandedItems((prevExpandedItems) => ({
-      ...prevExpandedItems,
-      [index]: !prevExpandedItems[index],
-    }));
-  };
-
-  const renderNavItems = (items, isSidebarOpen, parentPath = '') => {
-    return items.map((item, index) => {
-      const fullPath = `${parentPath}${item.path}`.replace(/\/+/g, '/');
-      const isExpanded = expandedItems[fullPath];
-
-      return (
-        <div key={index} className="nav-item">
-          <div className="nav-button-wrapper">
-            <NavButton to={fullPath} icon={item.icon} label={item.label} />
-            {item.children && (
-              <button onClick={() => toggleExpand(fullPath)} className="expand-button">
-                {isExpanded ? <FaAngleUp /> : <FaAngleDown />}
-              </button>
-            )}
-          </div>
-          {item.children && isExpanded && isSidebarOpen && (
-            <div className="nav-sub-items">
-              {renderNavItems(item.children, isSidebarOpen, `${fullPath}/`)}
-            </div>
-          )}
-        </div>
-      );
-    });
-  };
+const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[0].id);
 
   return (
-    <div className={`sidebar ${isSidebarOpen ? 'open' : 'collapsed'}`}>
-      <button onClick={toggleSidebar} className="toggle-button">
-        {isSidebarOpen ? 'Collapse' : 'Expand'}
+    <motion.div
+      className="sidebar"
+      animate={{ width: isCollapsed ? 80 : 280 }}
+      layout
+    >
+      <h3>Logo</h3>
+      <button
+        className="sidebar__collapse-button"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        {isCollapsed ? <LuChevronRight /> : <LuChevronLeft />}
       </button>
-      {renderNavItems(routesConfig, isSidebarOpen)}
-    </div>
+      {SIDEBAR_ITEMS.map((item) => (
+        <SidebarItem
+          isSidebarCollapsed={isCollapsed}
+          key={item.id}
+          item={item}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      ))}
+    </motion.div>
   );
-}
+};
 
 export default Sidebar;
