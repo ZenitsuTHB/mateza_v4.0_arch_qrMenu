@@ -1,41 +1,34 @@
+
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { LuHome, LuMail, LuFolderClosed, LuStickyNote, LuBell, LuChevronRight, LuChevronLeft } from "react-icons/lu";
 import SidebarItem from "./sidebar-item.js";
+import { useNavigate } from 'react-router-dom';
 import './style.css';
-
-const SIDEBAR_ITEMS = [
-  { id: "dashboard", title: "Dashboard", icon: LuHome },
-  { id: "mail", title: "Mail", icon: LuMail },
-  { id: "projects", title: "Projects", icon: LuFolderClosed },
-  { id: "reports", title: "Reports", icon: LuStickyNote },
-  { id: "notifications", title: "Notifications", icon: LuBell },
-];
+import routesConfig from '../Routing/config.js';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState(SIDEBAR_ITEMS[0].id);
+  const [activeTab, setActiveTab] = useState(routesConfig[0].label);
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    setActiveTab(path);
+    navigate(path);
+  };
 
   return (
     <motion.div
       className="sidebar"
-      animate={{ width: isCollapsed ? 80 : 280 }}
+      animate={{ width: 80 }}
       layout
     >
-      <h3>Logo</h3>
-      <button
-        className="sidebar__collapse-button"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-      >
-        {isCollapsed ? <LuChevronRight /> : <LuChevronLeft />}
-      </button>
-      {SIDEBAR_ITEMS.map((item) => (
+      {routesConfig.map((route) => (
         <SidebarItem
-          isSidebarCollapsed={isCollapsed}
-          key={item.id}
-          item={item}
+          isSidebarCollapsed={true}
+          key={route.path}
+          item={{ id: route.path, title: route.label, icon: route.icon }}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={() => handleNavigation(route.path)}
         />
       ))}
     </motion.div>
