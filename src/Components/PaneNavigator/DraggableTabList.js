@@ -1,44 +1,29 @@
+// Components/PaneNavigator/DraggableTabList.js
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaTimes } from 'react-icons/fa';
 
-// Custom TabList component that forwards refs
-const TabList = React.forwardRef(({ children, ...props }, ref) => (
-  <div ref={ref} {...props} className="react-tabs__tab-list">
-    {children}
-  </div>
-));
-
-// Custom Tab component that forwards refs
-const DraggableTab = React.forwardRef(({ children, ...props }, ref) => (
-  <div ref={ref} {...props} className="react-tabs__tab">
-    {children}
-  </div>
-));
-
 const DraggableTabList = ({ tabs, selectedIndex, setSelectedIndex, closeTab }) => (
   <Droppable droppableId="droppable-tabs" direction="horizontal">
     {(provided) => (
-      <TabList
+      <div
         ref={provided.innerRef}
         {...provided.droppableProps}
-        style={{ display: 'flex', flexGrow: 1 }}
+        className="react-tabs__tab-list"
       >
         {tabs.map((tab, index) => (
           <Draggable key={tab.id} draggableId={tab.id} index={index}>
             {(provided) => (
-              <DraggableTab
+              <div
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 onClick={() => setSelectedIndex(index)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  ...provided.draggableProps.style,
-                }}
+                className={`react-tabs__tab ${
+                  selectedIndex === index ? 'react-tabs__tab--selected' : ''
+                }`}
               >
-                {tab.label}
+                <span>{tab.label}</span>
                 <FaTimes
                   className="close-icon"
                   onClick={(e) => {
@@ -46,12 +31,12 @@ const DraggableTabList = ({ tabs, selectedIndex, setSelectedIndex, closeTab }) =
                     closeTab(tab.id, index);
                   }}
                 />
-              </DraggableTab>
+              </div>
             )}
           </Draggable>
         ))}
         {provided.placeholder}
-      </TabList>
+      </div>
     )}
   </Droppable>
 );

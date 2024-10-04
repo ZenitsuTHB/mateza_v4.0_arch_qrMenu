@@ -1,4 +1,11 @@
+/* Your Existing Styles */
 
+.paneNavigator {
+  padding: 0;
+  padding-top: 10px;
+}
+
+/* This rule appears twice; I'll combine them to avoid redundancy */
 .paneNavigator {
   padding: 0;
   padding-top: 10px;
@@ -6,10 +13,6 @@
 
 .react-tabs__tab--selected {
   background-color: var(--color-bg);
-}
-
-.paneNavigator {
-  padding: 0px;
 }
 
 .paneNavigator .close-icon {
@@ -27,4 +30,68 @@
 
 .popover h1 {
   margin-top: -40px;
+}
+
+/* New CSS Added for Draggable Tabs */
+
+/* Style the draggable tab list */
+.paneNavigator .react-tabs__tab-list {
+  display: flex; /* Ensure tabs are displayed horizontally */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Style the draggable tabs */
+.paneNavigator .react-tabs__tab {
+  position: relative;
+  padding: 8px 12px;
+  margin: 0;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text);
+  transition: background-color 0.2s ease-in-out;
+  display: flex; /* Align label and close icon horizontally */
+  align-items: center;
+}
+
+.paneNavigator .react-tabs__tab:hover {
+  background-color: var(--color-active-bg);
+}
+
+.paneNavigator .react-tabs__tab--selected {
+  /* You already have this selector; adding styles without altering existing ones */
+  background-color: var(--color-tab-selected-bg); /* Ensure consistent variable usage */
+  color: var(--color-text);
+}
+
+/* Remove focus outline */
+.paneNavigator .react-tabs__tab:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Styles for the left pane when a tab is dropped */
+.left-pane {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Optional: Style for the placeholder text in the left pane */
+.left-pane p {
+  color: var(--color-text);
+  text-align: center;
+  margin-top: 20%;
+}
+
+/* Adjust the SplitScreen container if needed */
+.split-screen {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
 }
