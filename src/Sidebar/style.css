@@ -5,7 +5,6 @@
 	--color-border: #a9aeb4;
   }
   
-  
   .sidebar {
 	position: relative;
 	display: flex;
@@ -64,6 +63,28 @@
   .sidebar-item__icon {
 	position: relative;
 	display: flex;
+  }
+  
+  .sidebar-item__icon:hover .tooltip {
+	opacity: 1;
+	visibility: visible;
+  }
+  
+  .tooltip {
+	position: absolute;
+	left: 100%;
+	top: 50%;
+	transform: translateY(-50%) translateX(18px);
+	background-color: var(--color-background);
+	color: var(--color-text);
+	padding: 4px 8px;
+	border-radius: 4px;
+	border: 1px solid var(--color-border);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   
   .sidebar-item__title {
