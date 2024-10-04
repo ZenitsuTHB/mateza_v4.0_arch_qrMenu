@@ -12,6 +12,7 @@
 	gap: 4px;
 	background-color: var(--color-background);
 	padding: 24px 16px;
+	z-index: 10000;
   }
   
   .sidebar-item__collapsed {
