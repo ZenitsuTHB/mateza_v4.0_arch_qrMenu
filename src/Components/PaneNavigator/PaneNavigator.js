@@ -55,7 +55,7 @@ const PaneNavigator = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Tabs
-        className="paneNavigator"
+        className="popover withHeader paneNavigator"
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
       >

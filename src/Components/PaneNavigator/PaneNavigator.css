@@ -2,16 +2,15 @@
 .paneNavigator {
   padding: 0;
   padding-top: 10px;
-  padding-left: 0;
 }
 
 .react-tabs__tab--selected {
   background-color: var(--color-bg);
 }
 
-
-/* PaneNavigator.css */
-
+.paneNavigator {
+  padding: 0px;
+}
 
 .paneNavigator .close-icon {
   margin-left: 8px;
@@ -26,4 +25,6 @@
   opacity: 1;
 }
 
-
+.popover h1 {
+  margin-top: -40px;
+}

@@ -24,12 +24,10 @@ const SplitScreen = ({ left }) => {
         onDragFinished={onDragFinished}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <div className={`withHeader ${isLeftPaneCollapsed ? 'collapsed' : ''}`}>
+        <div className={`${isLeftPaneCollapsed ? 'collapsed' : ''}`}>
           {!isLeftPaneCollapsed && left}
         </div>
-        <div className="withHeader">
-          <PaneNavigator />
-        </div>
+          <PaneNavigator/>
       </SplitPane>
     </div>
   );
