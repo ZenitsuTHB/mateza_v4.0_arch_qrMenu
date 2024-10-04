@@ -1,0 +1,15 @@
+/* Components/SplitScreen/SplitScreen.css */
+.split-screen {
+	display: flex;
+	height: 100%;
+  }
+  
+  .split-screen__pane {
+	overflow: auto;
+	border-right: 1px solid #ccc;
+  }
+  
+  .split-screen__pane:last-child {
+	border-right: none;
+  }
+  

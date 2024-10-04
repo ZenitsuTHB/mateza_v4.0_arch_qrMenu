@@ -1,0 +1,6 @@
+/* In your global CSS or App component CSS */
+html, body, #root {
+	height: 100%;
+	margin: 0;
+  }
+  

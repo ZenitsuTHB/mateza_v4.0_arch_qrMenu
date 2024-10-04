@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import SidebarItem from "./sidebar-item.js";
+// Components/Sidebar/Sidebar.js
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import SidebarItem from './sidebar-item.js';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 import routesConfig from '../Routing/config.js';
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState(routesConfig[0].label);
+  const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
@@ -15,10 +16,7 @@ const Sidebar = () => {
   };
 
   return (
-    <motion.div
-      className="sidebar"
-      layout
-    >
+    <motion.div className="sidebar" layout>
       {routesConfig.map((route) => (
         <SidebarItem
           key={route.path}

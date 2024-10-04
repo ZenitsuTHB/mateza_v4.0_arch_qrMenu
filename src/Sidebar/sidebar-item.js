@@ -1,28 +1,25 @@
-import React from "react";
-import { motion } from "framer-motion";
-import clsx from "clsx";
+// Components/Sidebar/SidebarItem.js
+import React from 'react';
+import { motion } from 'framer-motion';
+import clsx from 'clsx';
 
 const SidebarItem = ({ item, activeTab, setActiveTab }) => {
   const IconComponent = item.icon;
 
   return (
-
     <motion.div
-	
       layout
-      className={clsx("sidebar-item", {
-        "sidebar-item__active": activeTab === item.id,
+      className={clsx('sidebar-item', {
+        'sidebar-item__active': activeTab === item.id,
       })}
-      onFocus={() => setActiveTab(item.id)}
-      onMouseOver={() => setActiveTab(item.id)}
-      onMouseLeave={() => setActiveTab(item.id)}
+      onClick={setActiveTab}
     >
-      {activeTab === item.id ? (
+      {activeTab === item.id && (
         <motion.div
           layoutId="sidebar-item-indicator"
           className="sidebar-item__active-bg"
         />
-      ) : null}
+      )}
       <span className="sidebar-item__icon">
         <IconComponent />
         <span className="tooltip">{item.title}</span>
