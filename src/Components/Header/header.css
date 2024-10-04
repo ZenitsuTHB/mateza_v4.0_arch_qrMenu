@@ -17,5 +17,74 @@
 	padding-top: 30px;
 }
 
+/* Existing styles... */
+
+@keyframes rainbowStar {
+	0% {
+	  transform: scale(1);
+	  filter: hue-rotate(0deg);
+	}
+	25% {
+	  transform: scale(1.2);
+	  filter: hue-rotate(60deg);
+	}
+	50% {
+	  transform: scale(1.4);
+	  filter: hue-rotate(120deg);
+	}
+	75% {
+	  transform: scale(1.2);
+	  filter: hue-rotate(180deg);
+	}
+	100% {
+	  transform: scale(1);
+	  filter: hue-rotate(240deg);
+	}
+  }
   
+  h1 {
+	display: flex;
+	align-items: center;
+	position: relative; /* Ensure positioning for absolute elements */
+  }
+  
+  .clickableStar {
+	cursor: pointer;
+	margin-left: 10px; /* Add margin between the title and star */
+  }
+  
+  .star {
+	font-size: 1.4rem; /* Smaller star */
+	transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+  }
+  
+  .outlinedStar {
+	color: transparent;
+	stroke: black;
+	stroke-width: 40; /* Black border for unfilled star */
+  }
+  
+  .filledStar {
+	color: black; /* Filled black star when selected */
+	stroke: none;
+  }
+  
+  .rainbowStar {
+	animation: rainbowStar 1s ease-in-out;
+  }
+  
+  .star:hover {
+	transform: scale(1.2); /* Slightly increase size on hover */
+  }
+  
+  /* Make the star initially hidden and only show on hover */
+  .title .clickableStar {
+	opacity: 0; /* Initially hidden */
+	transition: opacity 0.3s ease; /* Smooth fade-in */
+  }
+  
+  .title:hover .clickableStar,
+  .title.starred .clickableStar {
+	opacity: 1; /* Show star on hover or if it's starred */
+  }
   

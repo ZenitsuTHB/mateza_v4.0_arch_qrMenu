@@ -2,6 +2,7 @@
 .paneNavigator {
   padding: 0;
   padding-top: 10px;
+  padding-left: 0;
 }
 
 .react-tabs__tab--selected {
@@ -24,3 +25,5 @@
 .paneNavigator .close-icon:hover {
   opacity: 1;
 }
+
+
