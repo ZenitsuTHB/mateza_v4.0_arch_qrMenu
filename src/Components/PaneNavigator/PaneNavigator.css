@@ -7,3 +7,20 @@
 .react-tabs__tab--selected {
   background-color: var(--color-bg);
 }
+
+
+/* PaneNavigator.css */
+
+
+.paneNavigator .close-icon {
+  margin-left: 8px;
+  color: var(--color-text);
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.paneNavigator .close-icon:hover {
+  opacity: 1;
+}
