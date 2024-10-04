@@ -12,16 +12,16 @@ const SplitScreen = () => {
   const [leftPaneContent, setLeftPaneContent] = useState(<Home title="Home" />);
   const [tabs, setTabs] = useState([
     { id: '2', label: 'About', component: <About title="About" /> },
+	{ id: '3', label: 'Home', component: <Home title="Home" /> },
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isSplit, setIsSplit] = useState(true); // New state to control split view
+  const [isSplit, setIsSplit] = useState(true);
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
     const { source, destination } = result;
 
-    // Dragging from right pane to left pane
     if (
       source.droppableId === 'droppable-tabs' &&
       destination.droppableId === 'left-pane'
@@ -33,17 +33,14 @@ const SplitScreen = () => {
       newTabs.splice(source.index, 1);
       setTabs(newTabs);
 
-      // Adjust selectedIndex if necessary
       if (selectedIndex >= source.index) {
         setSelectedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
       }
 
-      // If no more tabs, collapse the split screen
       if (newTabs.length === 0) {
         setIsSplit(false);
       }
     }
-    // Rearranging tabs within right pane
     else if (
       source.droppableId === 'droppable-tabs' &&
       destination.droppableId === 'droppable-tabs'
@@ -53,8 +50,6 @@ const SplitScreen = () => {
       reorderedTabs.splice(destination.index, 0, removed);
 
       setTabs(reorderedTabs);
-
-      // Adjust selectedIndex if necessary
       if (source.index === selectedIndex) {
         setSelectedIndex(destination.index);
       } else if (
@@ -69,11 +64,6 @@ const SplitScreen = () => {
         setSelectedIndex((prevIndex) => prevIndex + 1);
       }
     }
-  };
-
-  // Function to handle opening the split screen again
-  const openSplitScreen = () => {
-    setIsSplit(true);
   };
 
   return (
@@ -110,7 +100,6 @@ const SplitScreen = () => {
             />
           </SplitPane>
         ) : (
-          // When split screen is collapsed, show only the left pane
           <div className="left-pane full-width">
             {leftPaneContent}
           </div>
