@@ -1,11 +1,11 @@
-/* Components/SplitScreen/SplitScreen.css */
+/* Update your existing CSS for .withHeader */
 .withHeader {
 	background-color: rgb(234, 234, 234);
-	height: 100%;
-	width: 100%;
+	height: 100%; /* Use 100% height to fill parent container */
+	width: 100%; /* Use 100% width to stay within parent container */
 	padding-left: 50px;
 	padding-top: 20px;
-	box-sizing: border-box;
+	box-sizing: border-box; /* Include padding in width and height calculations */
 	display: flex;
 	flex-direction: column;
   }
@@ -18,27 +18,5 @@
   .withHeader > div {
 	flex: 1;
 	overflow: auto;
-  }
-  
-  .SplitPane {
-	height: 100vh; /* Ensure the split pane fills the viewport height */
-  }
-  
-  .Pane {
-	height: 100%;
-  }
-  
-  .Resizer {
-	background: #000;
-	opacity: 0.2;
-	z-index: 1;
-	cursor: col-resize;
-	width: 5px;
-	margin: 0 -2px;
-	box-sizing: border-box;
-  }
-  
-  .Resizer:hover {
-	opacity: 0.5;
   }
   

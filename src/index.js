@@ -1,10 +1,11 @@
+// App.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Sidebar/index.js';
 import Content from './Routing/index.js';
-import './Styles/fonts.css'
-import './index.css'
+import './Styles/fonts.css';
+import './index.css';
 
 function App() {
   return (

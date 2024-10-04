@@ -1,6 +1,13 @@
-/* In your global CSS or App component CSS */
-html, body, #root {
-	height: 100%;
-	margin: 0;
+/* index.css or App.css */
+.app-component {
+	display: flex;
+	height: 100vh; /* Fill the viewport height */
+	overflow: hidden; /* Prevent scrollbars from appearing */
+  }
+  
+  /* Create or update Content.css */
+.content {
+	flex: 1; /* Take up remaining space */
+	overflow: hidden;
   }
   

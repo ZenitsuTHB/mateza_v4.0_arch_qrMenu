@@ -5,14 +5,17 @@ import './SplitScreen.css';
 
 const SplitScreen = ({ left, right }) => {
   return (
-    <SplitPane split="vertical" minSize={100} defaultSize="50%">
-      <div className="withHeader">
-        {left}
-      </div>
-      <div className="withHeader">
-        {right}
-      </div>
-    </SplitPane>
+    <div className="split-screen">
+      <SplitPane
+        split="vertical"
+        minSize={100}
+        defaultSize="50%"
+        style={{ position: 'relative' }}
+      >
+        <div className="withHeader">{left}</div>
+        <div className="withHeader">{right}</div>
+      </SplitPane>
+    </div>
   );
 };
 

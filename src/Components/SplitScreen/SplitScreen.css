@@ -1,15 +1,27 @@
 /* Components/SplitScreen/SplitScreen.css */
 .split-screen {
-	display: flex;
+	height: 100%; /* Fill the parent container's height */
+  }
+  
+  .SplitPane {
 	height: 100%;
   }
   
-  .split-screen__pane {
-	overflow: auto;
-	border-right: 1px solid #ccc;
+  .Pane {
+	height: 100%;
   }
   
-  .split-screen__pane:last-child {
-	border-right: none;
+  .Resizer {
+	background: #000;
+	opacity: 0.2;
+	z-index: 1;
+	cursor: col-resize;
+	width: 5px;
+	margin: 0 -2px;
+	box-sizing: border-box;
+  }
+  
+  .Resizer:hover {
+	opacity: 0.5;
   }
   
