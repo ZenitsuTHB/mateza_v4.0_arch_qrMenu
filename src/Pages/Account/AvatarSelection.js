@@ -1,6 +1,4 @@
-// AvatarSelection.jsx
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './css/avatarSelection.css';
 
 // Importing avatar images
@@ -31,7 +29,17 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [avatarPosition, setAvatarPosition] = useState({ initialTop: 0, initialLeft: 0 });
   const [avatarTransform, setAvatarTransform] = useState({ deltaX: 0, deltaY: 0 });
   const [isReverting, setIsReverting] = useState(false);
+  const [accountName, setAccountName] = useState('');
   const avatarRefs = useRef([]);
+  const [titleText, setTitleText] = useState('Kies een Avatar');
+
+  useEffect(() => {
+    if (selectedAvatar !== null && !isReverting) {
+      setTitleText('Wat is uw Naam?');
+    } else if (isReverting) {
+      setTitleText('Kies een Avatar');
+    }
+  }, [selectedAvatar, isReverting]);
 
   const handleSelectAvatar = (index) => {
     if (selectedAvatar === index || isReverting) return; // Prevent re-selecting the same avatar or during revert
@@ -76,7 +84,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   return (
     <div className="avatar-page-container">
       <div className="avatar-title-and-selection">
-        <h1 className="avatar-title">Kies een Avatar</h1>
+        <h1 className="avatar-title">{titleText}</h1>
         <div className="avatar-selection-container">
           {avatars.map((avatar, index) => (
             <button
@@ -114,6 +122,15 @@ const AvatarSelection = ({ onSelectAvatar }) => {
               />
             </button>
           ))}
+          {selectedAvatar !== null && (
+            <input
+              type="text"
+              className={`account-input ${selectedAvatar !== null ? 'visible' : ''}`}
+              placeholder="Vul uw naam in"
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+            />
+          )}
         </div>
         {selectedAvatar !== null && (
           <div className="button-group">

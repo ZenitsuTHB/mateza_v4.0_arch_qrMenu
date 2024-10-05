@@ -17,6 +17,7 @@
 
 .avatar-title {
   margin-bottom: 30px;
+  transition: all 0.5s ease;
 }
 
 .avatar-selection-container {
@@ -169,4 +170,23 @@
 
 .avatar-image.miraculous {
   /* Add any special styles for the selected avatar image */
+}
+
+.account-input {
+  position: absolute;
+  top: calc(50% + 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 1s ease, opacity 1s ease;
+  opacity: 0;
+}
+
+.account-input.visible {
+  opacity: 1;
 }
