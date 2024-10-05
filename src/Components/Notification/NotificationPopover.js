@@ -1,4 +1,3 @@
-// src/components/NotificationPopover.jsx
 import React, { useRef } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import './css/notification.css';

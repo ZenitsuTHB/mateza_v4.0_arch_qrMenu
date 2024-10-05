@@ -1,17 +1,39 @@
-// src/hooks/useNotification.js
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import NotificationPopover from './NotificationPopover';
 
 const useNotification = () => {
   const [notifications, setNotifications] = useState([]);
 
   const triggerNotification = (message, type) => {
-    const id = new Date().getTime();
-    setNotifications((prevNotifications) => [...prevNotifications, { id, message, type }]);
-    setTimeout(() => {
-      setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
-    }, 3000);
+    setNotifications((prevNotifications) => {
+      const isDuplicate = prevNotifications.some(
+        (n) => n.message === message && n.type === type
+      );
+
+      if (isDuplicate) {
+        const updatedNotifications = prevNotifications.map((n) =>
+          n.message === message && n.type === type
+            ? { ...n, count: (n.count || 1) + 1 }
+            : n
+        );
+        return updatedNotifications;
+      }
+
+      const id = new Date().getTime();
+      return [...prevNotifications, { id, message, type }];
+    });
   };
+
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const timer = setTimeout(() => {
+        setNotifications((prevNotifications) => prevNotifications.slice(1));
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [notifications]);
 
   const NotificationComponent = () => (
     <div className="notification-container">
