@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './css/avatarSelection.css';
 
 import blue1 from '../../Assets/avatars/blue1.png';
@@ -32,11 +33,12 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const avatarRefs = useRef([]);
   const [titleText, setTitleText] = useState('Kies een Avatar');
   const [subtitleText, setSubtitleText] = useState('Stap 1/3');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedAvatar !== null && !isReverting) {
       setSubtitleText('Stap 2/3');
-      setTitleText('Wat is uw Naam?');
+      setTitleText('Kies een Accountnaam');
     } else if (isReverting) {
       setSubtitleText('Stap 1/3');
       setTitleText('Kies een Avatar');
@@ -112,6 +114,13 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     }, 1000); // Duration should match the CSS transition duration
   };
 
+  const goToNextPage = () => {
+    localStorage.setItem('loginSuccessful', 'true');
+    navigate('/');
+    window.location.reload();
+}
+
+
   return (
     <div className="avatar-page-container">
       <div className="avatar-title-and-selection">
@@ -158,7 +167,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             <input
               type="text"
               className={`account-input ${selectedAvatar !== null ? 'visible' : ''}`}
-              placeholder="Enter account name"
+              placeholder="Vul accountnaam in"
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
             />
@@ -175,7 +184,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             </button>
             <button
               className="next-button visible"
-              onClick={() => console.log('Next button clicked')}
+              onClick={goToNextPage}
               disabled={isReverting}
             >
               Volgende

@@ -9,9 +9,7 @@ import './Styles/colors.css';
 import './Styles/index.css';
 
 function App() {
-  window.loginSuccessful = false;
-  const loginSuccessful = window.loginSuccessful || false;
-
+  const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
   
   return loginSuccessful ? (
     <div className="app-component">
