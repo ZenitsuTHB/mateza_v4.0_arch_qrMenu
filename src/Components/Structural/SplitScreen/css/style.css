@@ -13,7 +13,7 @@
 	box-sizing: border-box;
 }
   
-.Resizer:hover {
+.split-screen .Resizer:hover {
 	opacity: 0.5;
 }
   
