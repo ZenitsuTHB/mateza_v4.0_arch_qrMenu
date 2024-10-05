@@ -88,7 +88,7 @@ const SplitScreen = () => {
           <SplitPane
             split="vertical"
             minSize={0}
-            maxSize={-1}
+            maxSize={-10}
             defaultSize="50%"
             style={{ position: 'relative', width: '100%', height: '100%' }}
           >
