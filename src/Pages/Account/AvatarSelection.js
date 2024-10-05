@@ -48,9 +48,18 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             </button>
           ))}
         </div>
+        {selectedAvatar !== null && (
+          <button
+            className="next-button visible"
+            onClick={() => console.log('Next button clicked')}
+          >
+            Volgende
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
 export default AvatarSelection;
+
