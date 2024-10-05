@@ -24,6 +24,18 @@ const avatars = [
   green3,
 ];
 
+const avatarNames = [
+  "blue1",
+  "blue2",
+  "blue3",
+  "red1",
+  "red2",
+  "red3",
+  "green1",
+  "green2",
+  "green3",
+]
+
 const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [avatarPosition, setAvatarPosition] = useState({ initialTop: 0, initialLeft: 0 });
@@ -116,7 +128,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
 
   const goToNextPage = () => {
     localStorage.setItem('loginSuccessful', 'true');
-    localStorage.setItem('selectedAvatar', selectedAvatar);
+    localStorage.setItem('selectedAvatar', avatarNames[selectedAvatar]);
     navigate('/');
     window.location.reload();
 }

@@ -27,8 +27,8 @@ const EditableTitle = ({ title, setTitle }) => {
         e.preventDefault();
         return;
       }
-      if (titleRef.current.innerText.length > 15) {
-        titleRef.current.innerText = titleRef.current.innerText.substring(0, 15);
+      if (titleRef.current.innerText.length > 60) {
+        titleRef.current.innerText = titleRef.current.innerText.substring(0, 60);
       }
       const selection = window.getSelection();
       const range = selection.getRangeAt(0);

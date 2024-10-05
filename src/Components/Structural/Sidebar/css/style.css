@@ -81,6 +81,13 @@
 
 @media (max-width: 768px) {
 	.sidebar {
+		margin: 0;
+		padding: 0;
+		right: 0;
+		position: fixed;
+	}
+
+	.sidebar-inner {
 		position: fixed;
 		bottom: 0;
 		left: 0;
