@@ -1,7 +1,6 @@
-// routesConfig.js
-import { FaChartPie, FaInfoCircle, FaColumns } from 'react-icons/fa';
+import { FaChartPie, FaColumns } from 'react-icons/fa';
 import Home from './Pages/Home/index.js';
-import SplitScreen from './Components/SplitScreen/SplitScreen.js';
+import SplitScreen from './Components/Structural/SplitScreen/SplitScreen.js';
 
 const routesConfig = [
   {

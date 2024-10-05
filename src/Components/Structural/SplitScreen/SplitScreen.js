@@ -5,8 +5,8 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TabNavigator from './TabNavigator.js';
 import './css/style.css';
 
-import Home from '../../Pages/Home/index.js';
-import About from '../../Pages/About/index.js';
+import Home from '../../../Pages/Home/index.js';
+import About from '../../../Pages/About/index.js';
 
 const SplitScreen = () => {
   const [leftPaneContent, setLeftPaneContent] = useState(<Home title="Home" />);
