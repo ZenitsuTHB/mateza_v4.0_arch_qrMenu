@@ -1,16 +1,30 @@
+// src/components/NotificationPopover.jsx
 import React, { useRef } from 'react';
-import { FaCheckCircle, FaTimes } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import './css/notification.css';
 
 const NotificationPopover = ({ message, type }) => {
   const popoverRef = useRef(null);
-  const icon = type === "success" ? <FaCheckCircle /> : <FaTimes />;
+
+  // Determine icon and color based on the type
+  const getIconAndColor = (type) => {
+    switch (type) {
+      case 'success':
+        return { icon: <FaCheckCircle />, color: '#4CAF50' };
+      case 'error':
+        return { icon: <FaTimesCircle />, color: '#f44336' };
+      default:
+        return { icon: <FaCheckCircle />, color: '#4CAF50' }; // Default to success
+    }
+  };
+
+  const { icon, color } = getIconAndColor(type);
 
   return (
-    <div ref={popoverRef} className="notification-popover">
+    <div ref={popoverRef} className={`notification-popover ${type}`}>
       <div
         className="notification-icon"
-        style={{ backgroundColor: type === "success" ? "#4CAF50" : "#f44336" }}
+        style={{ backgroundColor: color }}
       >
         {icon}
       </div>
