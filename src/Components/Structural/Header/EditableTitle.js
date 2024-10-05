@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
+import useNotification from './useNotification';
 import './css/style.css';
 
 const EditableTitle = ({ title, setTitle }) => {
   const titleRef = useRef(null);
   const editIconId = useRef(uuidv4());
   const isEditingRef = useRef(false);
+  const { triggerNotification, NotificationComponent} = useNotification();
 
   useEffect(() => {
     if (titleRef.current && !isEditingRef.current) {
@@ -16,6 +18,7 @@ const EditableTitle = ({ title, setTitle }) => {
 
   const handleTitleBlur = () => {
     isEditingRef.current = false;
+	triggerNotification("Titel succesvol bewerkt", "success");
   };
 
   const handleInputChange = (e) => {
@@ -79,6 +82,7 @@ const EditableTitle = ({ title, setTitle }) => {
         }
       }}
     >
+	<NotificationComponent/>
       <h1
         ref={titleRef}
         className="title"

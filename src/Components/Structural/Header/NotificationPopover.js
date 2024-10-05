@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { FaCheckCircle, FaTimes } from 'react-icons/fa';
 import './css/notification.css';
 
-const NotificationPopover = ({ message, type, onClose }) => {
+const NotificationPopover = ({ message, type }) => {
   const popoverRef = useRef(null);
   const icon = type === "success" ? <FaCheckCircle /> : <FaTimes />;
 

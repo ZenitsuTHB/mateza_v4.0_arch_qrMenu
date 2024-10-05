@@ -8,6 +8,7 @@ import './Styles/colors.css';
 import './Styles/index.css';
 
 function App() {
+
   return (
     <div className="app-component">
       <Sidebar />
