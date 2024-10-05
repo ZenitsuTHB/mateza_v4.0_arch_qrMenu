@@ -27,40 +27,39 @@
 }
 
 .avatar-button {
-  opacity: 0.5; /* Set initial opacity to 0.5 */
-  transition: opacity 0.3s ease, transform 1s ease, top 1s ease, left 1s ease; /* Added transitions */
-  background: none; /* Remove default button background */
-  border: none; /* Remove default button border */
+  opacity: 0.5;
+  transition: opacity 0.5s ease, transform 1s ease, top 1s ease, left 1s ease;
+  background: none;
+  border: none;
   width: 100px;
   height: 100px;
-  cursor: pointer; /* Change cursor to pointer on hover */
+  cursor: pointer;
   padding: 0;
-  position: relative; /* Changed to relative to handle transitions */
+  position: relative;
 }
 
 .avatar-button.selected {
   opacity: 1;
-  /* Inline styles handle transform, top, and left */
+}
+
+.avatar-button.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .avatar-button.reverting {
-  /* Optional: Add styles if needed during reverting */
+  /* Optional: Add any specific styles during reverting if needed */
 }
 
-.avatar-button.unselected {
-  animation: fadeOut 1s forwards;
-}
-
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-  }
+.avatar-button:hover:not(.selected) {
+  transform: scale(1.1);
+  opacity: 1;
 }
 
 .avatar-image {
   width: 100%;
-  height: auto; /* Maintain aspect ratio */
-  display: block; /* Remove any inline spacing */
+  height: auto;
+  display: block;
   opacity: 1;
   transition: opacity 0.3s ease;
 }
@@ -81,13 +80,11 @@
   }
 }
 
-/* Button Group Container */
 .button-group {
   display: flex;
-  gap: 10px; /* Space between buttons */
+  gap: 10px;
 }
 
-/* Next Button Styles */
 .next-button {
   padding: 10px 20px;
   font-size: 16px;
@@ -115,12 +112,11 @@
   cursor: not-allowed;
 }
 
-/* Previous Button Styles */
 .previous-button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #6c757d; /* Gray color for 'Vorige' */
+  background-color: #6c757d;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -143,38 +139,34 @@
   cursor: not-allowed;
 }
 
-/* Ensure the avatar buttons are styled appropriately */
 .avatar-button {
-  opacity: 0.5; /* Set initial opacity to 0.5 */
-  transition: opacity 0.3s ease, transform 1s ease, top 1s ease, left 1s ease; /* Added transitions */
-  background: none; /* Remove default button background */
-  border: none; /* Remove default button border */
-  cursor: pointer; /* Change cursor to pointer on hover */
+  opacity: 0.5;
+  transition: opacity 0.5s ease, transform 1s ease, top 1s ease, left 1s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-/* Increase opacity on hover */
-.avatar-button:hover {
+.avatar-button:hover:not(.selected) {
+  transform: scale(1.1);
   opacity: 1;
 }
 
-/* When an avatar is selected, set its opacity to 1 */
 .avatar-button.selected {
   opacity: 1;
 }
 
-/* Optional: Style for unselected avatars when one is selected */
-.avatar-button.unselected {
-  opacity: 0.5; /* Maintain lower opacity for unselected avatars */
+.avatar-button.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-/* Ensure the avatar images fill their container */
 .avatar-image {
-  width: 100%; /* Adjust as needed */
-  height: auto; /* Maintain aspect ratio */
-  display: block; /* Remove any inline spacing */
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-/* Optional: Additional styles for the 'miraculous' class if needed */
 .avatar-image.miraculous {
   /* Add any special styles for the selected avatar image */
 }

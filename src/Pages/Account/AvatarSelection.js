@@ -87,7 +87,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                     ? 'reverting'
                     : 'selected'
                   : selectedAvatar !== null
-                  ? 'unselected'
+                  ? 'hidden'
                   : ''
               }`}
               onClick={() => handleSelectAvatar(index)}
@@ -110,6 +110,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                 className={`avatar-image ${
                   selectedAvatar === index && !isReverting ? 'miraculous' : ''
                 }`}
+                onError={(e) => { e.target.onerror = null; e.target.src = 'path_to_placeholder_image'; }}
               />
             </button>
           ))}
@@ -119,12 +120,14 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             <button
               className="previous-button visible"
               onClick={handleRevertAvatar}
+              disabled={isReverting}
             >
               Vorige
             </button>
             <button
               className="next-button visible"
               onClick={() => console.log('Next button clicked')}
+              disabled={isReverting}
             >
               Volgende
             </button>
