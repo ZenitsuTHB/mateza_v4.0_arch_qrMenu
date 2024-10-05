@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import './css/style.css';
+import { v4 as uuidv4 } from 'uuid';
 
 const withHeader = (WrappedComponent) => {
   return (props) => {
@@ -8,6 +9,8 @@ const withHeader = (WrappedComponent) => {
 
     const [title, setTitle] = useState(props.title);
     const titleRef = useRef(null);
+    const editIconId = useRef(uuidv4());
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
       const storedTitle = localStorage.getItem(localStorageKey);
@@ -23,21 +26,36 @@ const withHeader = (WrappedComponent) => {
     }, [title]);
 
     const handleTitleBlur = () => {
+      setIsEditing(false);
       localStorage.setItem(localStorageKey, title);
     };
 
-    const handleInputChange = () => {
+    const handleInputChange = (e) => {
       if (titleRef.current) {
+        if (e.inputType === 'insertParagraph') {
+          e.preventDefault();
+          return;
+        }
         const selection = window.getSelection();
         const range = selection.getRangeAt(0);
         const cursorPosition = range.startOffset;
         setTitle(titleRef.current.innerText);
+        setIsEditing(true);
+
+        // Hide the edit icon after first character change
+        const editIcon = document.getElementById(editIconId.current);
+        if (editIcon) {
+          editIcon.style.visibility = 'hidden';
+        }
+
         setTimeout(() => {
           const newRange = document.createRange();
-          newRange.setStart(titleRef.current.childNodes[0], cursorPosition);
-          newRange.collapse(true);
-          selection.removeAllRanges();
-          selection.addRange(newRange);
+          if (titleRef.current.childNodes.length > 0) {
+            newRange.setStart(titleRef.current.childNodes[0], Math.min(cursorPosition, titleRef.current.childNodes[0].length));
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+          }
         }, 0);
       }
     };
@@ -59,13 +77,15 @@ const withHeader = (WrappedComponent) => {
         <div
           className="title-container"
           onMouseEnter={() => {
-            const editIcon = document.querySelector('.edit-icon');
-            if (editIcon) {
-              editIcon.style.visibility = 'visible';
+            if (!isEditing) {
+              const editIcon = document.getElementById(editIconId.current);
+              if (editIcon) {
+                editIcon.style.visibility = 'visible';
+              }
             }
           }}
           onMouseLeave={() => {
-            const editIcon = document.querySelector('.edit-icon');
+            const editIcon = document.getElementById(editIconId.current);
             if (editIcon) {
               editIcon.style.visibility = 'hidden';
             }
@@ -83,7 +103,7 @@ const withHeader = (WrappedComponent) => {
             {title}
           </h1>
           <FaPencilAlt
-            className="edit-icon"
+            id={editIconId.current}
             style={{ cursor: 'pointer', color: 'black', visibility: 'hidden', fontSize: '1.5rem' }}
             onClick={handleEditClick}
           />
