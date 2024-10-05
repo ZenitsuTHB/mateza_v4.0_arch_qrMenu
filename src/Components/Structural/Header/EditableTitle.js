@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import useNotification from './useNotification';
+import useNotification from '../../Notification';
 import './css/style.css';
 
 const EditableTitle = ({ title, setTitle }) => {
