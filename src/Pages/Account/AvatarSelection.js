@@ -41,6 +41,35 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     }
   }, [selectedAvatar, isReverting]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (selectedAvatar !== null) {
+        const avatarElement = avatarRefs.current[selectedAvatar];
+        const rect = avatarElement.getBoundingClientRect();
+        const initialTop = rect.top;
+        const initialLeft = rect.left;
+
+        const avatarWidth = avatarElement.offsetWidth;
+        const avatarHeight = avatarElement.offsetHeight;
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        const centerLeft = viewportWidth / 2 - avatarWidth / 2;
+        const centerTop = viewportHeight / 2 - avatarHeight / 2;
+
+        const deltaX = centerLeft - initialLeft;
+        const deltaY = centerTop - initialTop;
+
+        setAvatarPosition({ initialTop: initialTop, initialLeft: initialLeft });
+        setAvatarTransform({ deltaX: deltaX, deltaY: deltaY });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [selectedAvatar]);
+
   const handleSelectAvatar = (index) => {
     if (selectedAvatar === index || isReverting) return; // Prevent re-selecting the same avatar or during revert
 
@@ -126,7 +155,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             <input
               type="text"
               className={`account-input ${selectedAvatar !== null ? 'visible' : ''}`}
-              placeholder="Vul uw naam in"
+              placeholder="Enter account name"
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
             />

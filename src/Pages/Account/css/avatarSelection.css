@@ -168,10 +168,6 @@
   display: block;
 }
 
-.avatar-image.miraculous {
-  /* Add any special styles for the selected avatar image */
-}
-
 .account-input {
   position: absolute;
   top: calc(50% + 120px);
