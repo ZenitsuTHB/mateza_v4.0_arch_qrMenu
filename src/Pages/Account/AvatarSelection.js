@@ -116,6 +116,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
 
   const goToNextPage = () => {
     localStorage.setItem('loginSuccessful', 'true');
+    localStorage.setItem('selectedAvatar', selectedAvatar);
     navigate('/');
     window.location.reload();
 }

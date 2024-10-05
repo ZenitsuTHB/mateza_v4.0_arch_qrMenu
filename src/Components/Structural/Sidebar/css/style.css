@@ -1,13 +1,29 @@
 .sidebar {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between; /* Distribute space between items */
+	height: 100vh; /* Full viewport height */
+	padding: 24px 16px;
+	background-color: var(--color-white);
+  }
+
+  .sidebar-initial {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 50vh;
+	background-color: var(--color-white);
+  }
+
+  .sidebar-inner {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 5px;
 	background-color: var(--color-white);
-	padding: 24px 16px;
 	z-index: 10000;
 }
-
+  
 .sidebar .sidebar-item {
 	position: relative;
 	height: 40px;
@@ -94,4 +110,15 @@
 	.sidebar .tooltip {
 		display: none;
 	}
+
+	.profile-pic {
+		display: none;
+	}
 }
+
+.profile-pic {
+	width: 45px; /* Match icon size */
+	height: 45px;
+	position: static;
+	object-fit: cover;
+  }
