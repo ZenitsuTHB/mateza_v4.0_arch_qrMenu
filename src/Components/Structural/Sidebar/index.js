@@ -1,7 +1,7 @@
 // Components/Sidebar/Sidebar.js
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import SidebarItem from './sidebar-item.js';
+import SidebarItem from './SidebarItem.js';
 import { useNavigate } from 'react-router-dom';
 import './css/style.css';
 import routesConfig from '../../../config.js';
