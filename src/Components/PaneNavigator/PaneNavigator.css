@@ -1,12 +1,7 @@
 
-.paneNavigator {
-  padding: 0;
-  padding-top: 10px;
-}
 
-.paneNavigator {
-  padding: 0;
-  padding-top: 10px;
+.react-tabs__tab.rendered:first-child {
+  margin-left: 20px !important; /* Larger margin after rendering */
 }
 
 .react-tabs__tab--selected {
