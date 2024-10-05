@@ -10,7 +10,9 @@ const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
   const handleAvatarSelect = (avatarKey) => {
     onAvatarSelect(avatarKey);
     setShowAvatarModal(false);
-	
+
+	localStorage.setItem('selectedAvatar', avatarKey);
+
   };
 
   const handleModalClose = () => {
@@ -35,7 +37,7 @@ const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
             >
               &times;
             </span>
-            <h2>Select an Avatar</h2>
+            <h2>Kies een Avatar</h2>
             <div className="profile-page__avatar-grid">
               {Object.keys(avatarMapping).map((key, index) => (
                 <img

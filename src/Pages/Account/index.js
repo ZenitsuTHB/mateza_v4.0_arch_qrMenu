@@ -1,7 +1,7 @@
 import React from 'react';
 import AvatarSelection from './AvatarSelection';
 import useNotification from '../../Components/Notification/index';
-import './css/avatarSelection.css';
+import './css/style.css';
 
 const AccountManagement = () => {
 	const { triggerNotification, NotificationComponent} = useNotification();

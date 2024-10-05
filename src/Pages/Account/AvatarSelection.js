@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css/avatarSelection.css';
 
 import blue1 from '../../Assets/avatars/blue1.png';
 import blue2 from '../../Assets/avatars/blue2.png';
