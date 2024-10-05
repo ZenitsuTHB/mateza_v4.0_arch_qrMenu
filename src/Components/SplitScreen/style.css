@@ -1,23 +1,13 @@
+
 .split-screen {
 	flex: 1;
 	display: flex;
 	height: 100%;
 	overflow: hidden;
+	background-color: var(--color-bg);
   }
   
-  .SplitPane {
-	height: 100%;
-	width: 100%;
-	position: relative;
-  }
-  
-.Pane {
-	height: 100%;
-	overflow: auto;
-  }
-  
-  
-  .Resizer {
+  .split-screen .Resizer {
 	background: var(--color-black);
 	opacity: 0.2;
 	z-index: 1;
@@ -25,9 +15,8 @@
 	width: 5px;
 	margin: 0 -2px;
 	box-sizing: border-box;
-  }
+}
   
-  .Resizer:hover {
+.split-screen .Resizer:hover {
 	opacity: 0.5;
-  }
-  
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withHeader } from '../../Components/Header/index.js';
-import './style.css';
+import './css/style.css';
 
 const Notepad = () => {
   const [note, setNote] = useState(localStorage.getItem('notepadNote') || '');
@@ -27,7 +27,6 @@ const Notepad = () => {
       document.execCommand('underline');
       e.preventDefault();
     } else if (e.key === 'Enter') {
-      // Reset formatting to default when starting a new line
       setTimeout(() => {
         document.execCommand('formatBlock', false, 'div');
       }, 0);
@@ -44,7 +43,6 @@ const Notepad = () => {
       const range = selection.getRangeAt(0);
       const node = range.startContainer;
 
-      // Find the block element containing the cursor
       let blockNode = node;
       while (blockNode && blockNode !== editor && !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)) {
         blockNode = blockNode.parentNode;
@@ -55,15 +53,12 @@ const Notepad = () => {
         const lastThreeChars = blockText.slice(-3);
 
         if (lastThreeChars === '#h1' || lastThreeChars === '#h2' || lastThreeChars === '#h3') {
-          // Remove the last three characters
           blockText = blockText.slice(0, -3);
           blockNode.textContent = blockText;
 
-          // Apply formatting to the block
           const format = lastThreeChars === '#h1' ? 'h1' : lastThreeChars === '#h2' ? 'h2' : 'h3';
           document.execCommand('formatBlock', false, format);
 
-          // Move cursor to the end of the block
           const newRange = document.createRange();
           newRange.setStart(blockNode, blockNode.childNodes.length);
           newRange.collapse(true);

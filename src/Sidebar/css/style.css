@@ -1,4 +1,4 @@
-  .sidebar {
+.sidebar {
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -6,29 +6,9 @@
 	background-color: var(--color-background);
 	padding: 24px 16px;
 	z-index: 10000;
-  }
-  
-  .sidebar-item__collapsed {
-	width: 80px;
-  }
-  
-  .sidebar__collapse-button {
-	cursor: pointer;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 24px;
-	height: 24px;
-	border-radius: 16px;
-	background-color: var(--color-background);
-	border: 1px solid var(--color-border);
-	right: -10px;
-	top: 16px;
-	z-index: 10;
-  }
-  
-  .sidebar-item {
+}
+
+.sidebar .sidebar-item {
 	position: relative;
 	height: 40px;
 	display: flex;
@@ -39,32 +19,27 @@
 	font-weight: 500;
 	color: var(--color-text);
 	transition: all 0.4s ease;
-  }
-  
-  .sidebar-item__active {
-	transform: scale(1);
-	color: var(--color-text);
-  }
-  
-  .sidebar-item__active-bg {
+}
+
+.sidebar .sidebar-item__active-bg {
 	position: absolute;
 	inset: 0px;
 	border-radius: 8px;
 	color: var(--color-text);
 	background-color: var(--color-nav-selection);
-  }
-  
-  .sidebar-item__icon {
+}
+
+.sidebar .sidebar-item__icon {
 	position: relative;
 	display: flex;
-  }
-  
-  .sidebar-item__icon:hover .tooltip {
+}
+
+.sidebar .sidebar-item__icon:hover .tooltip {
 	opacity: 1;
 	visibility: visible;
-  }
-  
-  .tooltip {
+}
+
+.sidebar .tooltip {
 	position: absolute;
 	left: 100%;
 	top: 50%;
@@ -79,17 +54,5 @@
 	opacity: 0;
 	visibility: hidden;
 	backdrop-filter: blur(30px);
-	
 	transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  
-  .sidebar-item__title {
-	position: relative;
-  }
-  
-  .main-content {
-	background-color: var(--color-active-bg);
-	color: var(--color-text);
-	flex-grow: 1;
-	padding: 32px;
-  }
+}

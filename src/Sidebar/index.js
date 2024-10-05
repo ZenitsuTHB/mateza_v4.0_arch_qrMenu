@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './sidebar-item.js';
 import { useNavigate } from 'react-router-dom';
-import './style.css';
-import routesConfig from '../Routing/config.js';
+import './css/style.css';
+import routesConfig from '../config.js';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);

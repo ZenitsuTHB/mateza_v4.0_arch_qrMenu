@@ -1,10 +1,10 @@
 
 
-.react-tabs__tab.rendered:first-child {
-  margin-left: 20px !important; /* Larger margin after rendering */
+.paneNavigator .react-tabs__tab.rendered:first-child {
+  margin-left: 20px !important;
 }
 
-.react-tabs__tab--selected {
+.paneNavigator .react-tabs__tab--selected {
   background-color: var(--color-bg);
 }
 
@@ -25,11 +25,8 @@
   margin-top: -40px;
 }
 
-/* New CSS Added for Draggable Tabs */
-
-/* Style the draggable tab list */
 .paneNavigator .react-tabs__tab-list {
-  display: flex; /* Ensure tabs are displayed horizontally */
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -38,7 +35,6 @@
   background-color: var(--color-bg);
 }
 
-/* Style the draggable tabs */
 .paneNavigator .react-tabs__tab {
   position: relative;
   padding: 8px 12px;
@@ -48,16 +44,6 @@
   border: none;
   color: var(--color-text);
   transition: background-color 0.2s ease-in-out;
-  display: flex; /* Align label and close icon horizontally */
-  align-items: center;
-}
-
-
-/* Adjust the SplitScreen container if needed */
-.split-screen {
-  flex: 1;
   display: flex;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--color-bg);
+  align-items: center;
 }

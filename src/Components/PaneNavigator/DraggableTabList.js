@@ -1,4 +1,3 @@
-// Components/PaneNavigator/DraggableTabList.js
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaTimes } from 'react-icons/fa';

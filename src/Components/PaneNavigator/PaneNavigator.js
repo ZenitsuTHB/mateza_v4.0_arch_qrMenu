@@ -1,9 +1,8 @@
-// Components/PaneNavigator/PaneNavigator.js
 import React from 'react';
 import { Tabs, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import DraggableTabList from './DraggableTabList'; // Import the updated component
-import './PaneNavigator.css';
+import DraggableTabList from './DraggableTabList';
+import './css/style.css';
 
 const PaneNavigator = ({ tabs, setTabs, selectedIndex, setSelectedIndex, closeTab }) => {
   return (

@@ -1,0 +1,11 @@
+.app-component {
+	display: flex;
+	height: 100vh;
+	overflow: hidden;
+  }
+  
+.content-routing {
+	flex: 1;
+	overflow: hidden;
+  }
+  
