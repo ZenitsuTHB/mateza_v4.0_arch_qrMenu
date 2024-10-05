@@ -20,6 +20,12 @@
   transition: all 0.5s ease;
 }
 
+.avatar-subtitle {
+  margin-bottom: 0px;
+  font-weight: 500;
+  color: rgb(101, 101, 101);
+}
+
 .avatar-selection-container {
   display: grid;
   grid-template-columns: repeat(3, 100px);

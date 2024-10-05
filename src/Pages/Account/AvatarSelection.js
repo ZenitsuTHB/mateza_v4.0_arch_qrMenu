@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './css/avatarSelection.css';
 
-// Importing avatar images
 import blue1 from '../../Assets/avatars/blue1.png';
 import blue2 from '../../Assets/avatars/blue2.png';
 import blue3 from '../../Assets/avatars/blue3.png';
@@ -32,11 +31,14 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [accountName, setAccountName] = useState('');
   const avatarRefs = useRef([]);
   const [titleText, setTitleText] = useState('Kies een Avatar');
+  const [subtitleText, setSubtitleText] = useState('Stap 1/3');
 
   useEffect(() => {
     if (selectedAvatar !== null && !isReverting) {
+      setSubtitleText('Stap 2/3');
       setTitleText('Wat is uw Naam?');
     } else if (isReverting) {
+      setSubtitleText('Stap 1/3');
       setTitleText('Kies een Avatar');
     }
   }, [selectedAvatar, isReverting]);
@@ -113,6 +115,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   return (
     <div className="avatar-page-container">
       <div className="avatar-title-and-selection">
+        <h4 className="avatar-subtitle">{subtitleText}</h4>
         <h1 className="avatar-title">{titleText}</h1>
         <div className="avatar-selection-container">
           {avatars.map((avatar, index) => (
