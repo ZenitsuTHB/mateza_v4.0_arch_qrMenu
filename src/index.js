@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
-import AccountManagement from './Pages/Account/index.js'; // Assuming Account component is in Pages/Account
+import AccountManagement from './Pages/Account/index.js';
 import './Styles/fonts.css';
 import './Styles/colors.css';
 import './Styles/index.css';
 
 function App() {
   window.loginSuccessful = false;
-  const loginSuccessful = window.loginSuccessful || false; // Default to false if not defined
+  const loginSuccessful = window.loginSuccessful || false;
 
   
   return loginSuccessful ? (
