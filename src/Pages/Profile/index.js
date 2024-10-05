@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import ProfileImage from './ProfileImage';
 import ProfileBio from './ProfileBio';
-import blue1 from '../../Assets/avatars/blue1.png';
-import blue2 from '../../Assets/avatars/blue2.png';
-import blue3 from '../../Assets/avatars/blue3.png';
-import red1 from '../../Assets/avatars/red1.png';
-import red2 from '../../Assets/avatars/red2.png';
-import red3 from '../../Assets/avatars/red3.png';
-import green1 from '../../Assets/avatars/green1.png';
-import green2 from '../../Assets/avatars/green2.png';
-import green3 from '../../Assets/avatars/green3.png';
+import blue1 from '../../Assets/avatars/blue1.webp';
+import blue2 from '../../Assets/avatars/blue2.webp';
+import blue3 from '../../Assets/avatars/blue3.webp';
+import red1 from '../../Assets/avatars/red1.webp';
+import red2 from '../../Assets/avatars/red2.webp';
+import red3 from '../../Assets/avatars/red3.webp';
+import green1 from '../../Assets/avatars/green1.webp';
+import green2 from '../../Assets/avatars/green2.webp';
+import green3 from '../../Assets/avatars/green3.webp';
 import './css/style.css';
 
 const avatarMapping = {
