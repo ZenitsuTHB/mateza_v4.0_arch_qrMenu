@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AvatarSelection from './AvatarSelection';
+import useNotification from '../../Components/Notification/index';
 import './css/avatarSelection.css';
 
-const ParentComponent = () => {
+const AccountManagement = () => {
+	const { triggerNotification, NotificationComponent} = useNotification();
 
   const handleAvatarSelect = (avatarIndex) => {
     console.log(`Selected Avatar Index: ${avatarIndex}`);
+	triggerNotification("Avatar geselecteerd")
   };
 
   return (
-    <div className="parent-component-container">
+    <div>
+		<NotificationComponent/>
         <AvatarSelection onSelectAvatar={handleAvatarSelect} />
 
     </div>
   );
 };
 
-export default ParentComponent;
+export default AccountManagement;

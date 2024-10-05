@@ -1,24 +1,28 @@
+// src/hooks/useNotification.js
 import { useState } from 'react';
 import NotificationPopover from './NotificationPopover';
 
 const useNotification = () => {
-  const [notification, setNotification] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   const triggerNotification = (message, type) => {
-    setNotification({ message, type });
+    const id = new Date().getTime();
+    setNotifications((prevNotifications) => [...prevNotifications, { id, message, type }]);
     setTimeout(() => {
-      setNotification(null);
+      setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
     }, 3000);
   };
 
   const NotificationComponent = () => (
-    notification && (
-      <NotificationPopover
-        message={notification.message}
-        type={notification.type}
-        onClose={() => setNotification(null)}
-      />
-    )
+    <div className="notification-container">
+      {notifications.map((notification) => (
+        <NotificationPopover
+          key={notification.id}
+          message={notification.message}
+          type={notification.type}
+        />
+      ))}
+    </div>
   );
 
   return { triggerNotification, NotificationComponent };
