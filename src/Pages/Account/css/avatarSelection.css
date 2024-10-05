@@ -1,0 +1,50 @@
+
+
+/* CSS for the updated layout */
+.avatar-page-container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-5%);
+}
+
+.avatar-title-and-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.avatar-title {
+  margin-bottom: 30px;
+}
+
+.avatar-selection-container {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 10px;
+}
+
+.avatar-button {
+  border: none;
+  background-color: transparent;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.avatar-button:hover .avatar-image,
+.avatar-button.selected .avatar-image {
+  opacity: 1;
+  backdrop-filter: blur(0);
+}
+
+.avatar-image {
+  width: 100px;
+  height: 100px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}

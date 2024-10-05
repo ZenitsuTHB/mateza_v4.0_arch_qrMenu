@@ -5,9 +5,9 @@
 	flex-direction: column;
 	background-color: var(--color-bg);
 	box-sizing: border-box;
-  }
+}
   
-  .notepad-textarea {
+.notepad-textarea {
 	flex: 1;
 	background-color: var(--color-bg);
 	color: var(--color-black);
@@ -19,9 +19,9 @@
 	padding-top: 10px;
 	padding-right: 20px;
 	margin-left: -10px;
-  }
-  
-  .ql-container {
+}
+
+.ql-container {
 	height: calc(100vh - 200px);
-  }
+}
   

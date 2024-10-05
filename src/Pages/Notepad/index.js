@@ -8,13 +8,38 @@ const Notepad = () => {
 
   useEffect(() => {
     if (editorRef.current) {
-      editorRef.current.innerHTML = note;
+      if (note === '') {
+        editorRef.current.innerHTML = '';
+      } else {
+        editorRef.current.innerHTML = note;
+      }
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem('notepadNote', note);
   }, [note]);
+
+  const resetToParagraph = () => {
+    // Ensure the block element is always a <p> after Enter or Shift+Enter or Delete on blank line
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      let blockNode = range.startContainer;
+
+      while (
+        blockNode &&
+        blockNode !== editorRef.current &&
+        !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)
+      ) {
+        blockNode = blockNode.parentNode;
+      }
+
+      if (blockNode && blockNode.nodeName !== 'P') {
+        document.execCommand('formatBlock', false, 'p');
+      }
+    }
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === 'b' && e.ctrlKey) {
@@ -27,9 +52,25 @@ const Notepad = () => {
       document.execCommand('underline');
       e.preventDefault();
     } else if (e.key === 'Enter') {
+      // Treat both Enter and Shift+Enter the same
+      e.preventDefault();
+      document.execCommand('insertParagraph');
       setTimeout(() => {
-        document.execCommand('formatBlock', false, 'div');
+        resetToParagraph();
       }, 0);
+    } else if (e.key === 'Delete') {
+      // Check if the current line is empty
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const blockNode = range.startContainer.parentNode;
+
+        // Check if the current block is empty
+        if (blockNode.textContent.trim() === '') {
+          e.preventDefault(); // Prevent default delete behavior
+          resetToParagraph();
+        }
+      }
     }
   };
 
@@ -44,19 +85,41 @@ const Notepad = () => {
       const node = range.startContainer;
 
       let blockNode = node;
-      while (blockNode && blockNode !== editor && !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)) {
+      while (
+        blockNode &&
+        !['P', 'DIV', 'H1', 'H2', 'H3'].includes(blockNode.nodeName)
+      ) {
         blockNode = blockNode.parentNode;
       }
 
-      if (blockNode && blockNode !== editor) {
+      if (blockNode) {
         let blockText = blockNode.textContent;
         const lastThreeChars = blockText.slice(-3);
 
-        if (lastThreeChars === '#h1' || lastThreeChars === '#h2' || lastThreeChars === '#h3') {
+        if (
+          lastThreeChars === '#h1' ||
+          lastThreeChars === '#h2' ||
+          lastThreeChars === '#h3'
+        ) {
           blockText = blockText.slice(0, -3);
-          blockNode.textContent = blockText;
 
-          const format = lastThreeChars === '#h1' ? 'h1' : lastThreeChars === '#h2' ? 'h2' : 'h3';
+          if (blockNode === editor) {
+            // Wrap content in a paragraph
+            const p = document.createElement('p');
+            p.textContent = blockText;
+            editor.innerHTML = '';
+            editor.appendChild(p);
+            blockNode = p;
+          } else {
+            blockNode.textContent = blockText;
+          }
+
+          const format =
+            lastThreeChars === '#h1'
+              ? 'h1'
+              : lastThreeChars === '#h2'
+              ? 'h2'
+              : 'h3';
           document.execCommand('formatBlock', false, format);
 
           const newRange = document.createRange();
@@ -86,7 +149,10 @@ const Notepad = () => {
           color: note === '' ? 'lightgray' : 'black',
         }}
       >
-        {note === '' ? 'Begin met typen...\nTip: gebruik #h1, #h2 of h3 in het begin van een zin voor titels' : ''}</div>
+        {note === ''
+          ? 'Begin met typen...\nTip: gebruik #h1, #h2 of h3 in het begin van een zin voor titels'
+          : ''}
+      </div>
     </div>
   );
 };

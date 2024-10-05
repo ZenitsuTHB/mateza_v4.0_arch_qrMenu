@@ -5,15 +5,26 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TabNavigator from './TabNavigator.js';
 import './css/style.css';
 
-import Home from '../../../Pages/Home/index.js';
-import Notepad from '../../../Pages/Notepad/index.js';
+import routesConfig from '../../../config.js'; // Adjust the import path accordingly
 
 const SplitScreen = () => {
-  const [leftPaneContent, setLeftPaneContent] = useState(<Home title="Home" />);
-  const [tabs, setTabs] = useState([
-    { id: '2', label: 'Notities', component: <Notepad title="Notities" /> },
-    { id: '3', label: 'Home', component: <Home title="Home" /> },
-  ]);
+  // Filter the routes that should be displayed as tabs
+  const tabRoutes = routesConfig.filter((route) => route.isTab);
+
+  // Initialize the tabs state with the routes that are tabs
+  const [tabs, setTabs] = useState(
+    tabRoutes.map((route) => ({
+      id: route.path,
+      label: route.label,
+      component: route.element,
+    }))
+  );
+
+  // Set the initial content of the left pane to the first tab's component
+  const [leftPaneContent, setLeftPaneContent] = useState(
+    tabRoutes[0]?.element || null
+  );
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSplit, setIsSplit] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -44,7 +55,10 @@ const SplitScreen = () => {
     if (!result.destination) return;
 
     const { source, destination } = result;
-    if (source.droppableId === 'droppable-tabs' && destination.droppableId === 'left-pane') {
+    if (
+      source.droppableId === 'droppable-tabs' &&
+      destination.droppableId === 'left-pane'
+    ) {
       const movedTab = tabs[source.index];
       setLeftPaneContent(movedTab.component);
 
@@ -59,8 +73,10 @@ const SplitScreen = () => {
       if (newTabs.length === 0) {
         setIsSplit(false);
       }
-    }
-    else if (source.droppableId === 'droppable-tabs' && destination.droppableId === 'droppable-tabs') {
+    } else if (
+      source.droppableId === 'droppable-tabs' &&
+      destination.droppableId === 'droppable-tabs'
+    ) {
       const reorderedTabs = Array.from(tabs);
       const [removed] = reorderedTabs.splice(source.index, 1);
       reorderedTabs.splice(destination.index, 0, removed);
@@ -69,9 +85,15 @@ const SplitScreen = () => {
 
       if (source.index === selectedIndex) {
         setSelectedIndex(destination.index);
-      } else if (source.index < selectedIndex && destination.index >= selectedIndex) {
+      } else if (
+        source.index < selectedIndex &&
+        destination.index >= selectedIndex
+      ) {
         setSelectedIndex((prevIndex) => prevIndex - 1);
-      } else if (source.index > selectedIndex && destination.index <= selectedIndex) {
+      } else if (
+        source.index > selectedIndex &&
+        destination.index <= selectedIndex
+      ) {
         setSelectedIndex((prevIndex) => prevIndex + 1);
       }
     }
@@ -81,9 +103,7 @@ const SplitScreen = () => {
     <div className="split-screen">
       <DragDropContext onDragEnd={handleDragEnd}>
         {isMobile || !isSplit ? (
-          <div className="left-pane full-width">
-            {leftPaneContent}
-          </div>
+          <div className="left-pane full-width">{leftPaneContent}</div>
         ) : (
           <SplitPane
             split="vertical"

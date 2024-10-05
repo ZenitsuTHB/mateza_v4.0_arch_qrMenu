@@ -1,4 +1,3 @@
-// Components/Sidebar/Sidebar.js
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem.js';
@@ -9,6 +8,7 @@ import routesConfig from '../../../config.js';
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const navigate = useNavigate();
+  const isMobile = window.innerWidth < 768;
 
   const handleNavigation = (path) => {
     setActiveTab(path);
@@ -17,14 +17,16 @@ const Sidebar = () => {
 
   return (
     <motion.div className="sidebar" layout>
-      {routesConfig.map((route) => (
-        <SidebarItem
-          key={route.path}
-          item={{ id: route.path, title: route.label, icon: route.icon }}
-          activeTab={activeTab}
-          setActiveTab={() => handleNavigation(route.path)}
-        />
-      ))}
+      {routesConfig
+        .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
+        .map((route) => (
+          <SidebarItem
+            key={route.path}
+            item={{ id: route.path, title: route.label, icon: route.icon }}
+            activeTab={activeTab}
+            setActiveTab={() => handleNavigation(route.path)}
+          />
+        ))}
     </motion.div>
   );
 };
