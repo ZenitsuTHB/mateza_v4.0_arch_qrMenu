@@ -1,9 +1,8 @@
-// Routing/index.js (or Content/index.js)
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import routesConfig from '../config.js';
+import routesConfig from '../../config.js';
 
-const Content = () => {
+const ContentRouting = () => {
   return (
     <div className="content-routing">
       <Routes>
@@ -15,4 +14,4 @@ const Content = () => {
   );
 };
 
-export default Content;
+export default ContentRouting;
