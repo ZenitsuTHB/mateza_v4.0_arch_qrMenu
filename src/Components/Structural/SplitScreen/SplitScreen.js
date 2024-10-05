@@ -6,12 +6,12 @@ import TabNavigator from './TabNavigator.js';
 import './css/style.css';
 
 import Home from '../../../Pages/Home/index.js';
-import About from '../../../Pages/About/index.js';
+import Notepad from '../../../Pages/Notepad/index.js';
 
 const SplitScreen = () => {
   const [leftPaneContent, setLeftPaneContent] = useState(<Home title="Home" />);
   const [tabs, setTabs] = useState([
-    { id: '2', label: 'About', component: <About title="About" /> },
+    { id: '2', label: 'Notities', component: <Notepad title="" /> },
     { id: '3', label: 'Home', component: <Home title="Home" /> },
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { withHeader } from '../../Components/Header/index.js';
+import { withHeader } from '../../Components/Structural/Header/index.js';
 import './css/style.css';
 
 const Notepad = () => {
@@ -85,7 +85,8 @@ const Notepad = () => {
           textAlign: 'left',
           color: note === '' ? 'lightgray' : 'black',
         }}
-      >{note === '' ? 'Begin met typen...\nTip: gebruik #h1, #h2 of h3 in het begin van een zin voor titels' : ''}</div>
+      >
+        {note === '' ? 'Begin met typen...\nTip: gebruik #h1, #h2 of h3 in het begin van een zin voor titels' : ''}</div>
     </div>
   );
 };
