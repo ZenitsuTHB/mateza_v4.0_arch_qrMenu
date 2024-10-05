@@ -2,12 +2,12 @@ import React from 'react';
 import { Tabs, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import DraggableTabList from './DraggableTabList';
-import './css/style.css';
+import './css/tabStyle.css';
 
-const PaneNavigator = ({ tabs, setTabs, selectedIndex, setSelectedIndex, closeTab }) => {
+const TabNavigator = ({ tabs, setTabs, selectedIndex, setSelectedIndex, closeTab }) => {
   return (
     <Tabs
-      className="paneNavigator"
+      className="tabStyle"
       selectedIndex={selectedIndex}
       onSelect={(index) => setSelectedIndex(index)}
     >
@@ -25,4 +25,4 @@ const PaneNavigator = ({ tabs, setTabs, selectedIndex, setSelectedIndex, closeTa
   );
 };
 
-export default PaneNavigator;
+export default TabNavigator;

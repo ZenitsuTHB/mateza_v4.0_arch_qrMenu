@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import SplitPane from 'react-split-pane';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import PaneNavigator from '../PaneNavigator/PaneNavigator.js';
-import './style.css';
+import TabNavigator from './TabNavigator.js';
+import './css/style.css';
 
 import Home from '../../Pages/Home/index.js';
 import About from '../../Pages/About/index.js';
@@ -92,7 +92,7 @@ const SplitScreen = () => {
                 )}
               </Droppable>
             </div>
-            <PaneNavigator
+            <TabNavigator
               tabs={tabs}
               setTabs={setTabs}
               selectedIndex={selectedIndex}

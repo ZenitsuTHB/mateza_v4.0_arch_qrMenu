@@ -1,14 +1,14 @@
 
 
-.paneNavigator .react-tabs__tab.rendered:first-child {
+.tabStyle .react-tabs__tab.rendered:first-child {
   margin-left: 20px !important;
 }
 
-.paneNavigator .react-tabs__tab--selected {
+.tabStyle .react-tabs__tab--selected {
   background-color: var(--color-bg);
 }
 
-.paneNavigator .close-icon {
+.tabStyle .close-icon {
   margin-left: 8px;
   color: var(--color-text);
   font-size: 12px;
@@ -17,15 +17,15 @@
   transition: opacity 0.2s;
 }
 
-.paneNavigator .close-icon:hover {
+.tabStyle .close-icon:hover {
   opacity: 1;
 }
 
-.popover h1 {
+.tabStyle .popover h1 {
   margin-top: -40px;
 }
 
-.paneNavigator .react-tabs__tab-list {
+.tabStyle .react-tabs__tab-list {
   display: flex;
   margin: 0;
   padding: 0;
@@ -35,7 +35,7 @@
   background-color: var(--color-bg);
 }
 
-.paneNavigator .react-tabs__tab {
+.tabStyle .react-tabs__tab {
   position: relative;
   padding: 8px 12px;
   margin: 0;
