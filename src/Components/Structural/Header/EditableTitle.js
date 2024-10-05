@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import './css/style.css';
@@ -6,17 +6,16 @@ import './css/style.css';
 const EditableTitle = ({ title, setTitle }) => {
   const titleRef = useRef(null);
   const editIconId = useRef(uuidv4());
-  const [isEditing, setIsEditing] = useState(false);
+  const isEditingRef = useRef(false);
 
   useEffect(() => {
-    if (titleRef.current) {
+    if (titleRef.current && !isEditingRef.current) {
       titleRef.current.innerText = title;
     }
   }, [title]);
 
   const handleTitleBlur = () => {
-    setIsEditing(false);
-    localStorage.setItem(`headerTitle_${title}`, title);
+    isEditingRef.current = false;
   };
 
   const handleInputChange = (e) => {
@@ -32,9 +31,7 @@ const EditableTitle = ({ title, setTitle }) => {
       const range = selection.getRangeAt(0);
       const cursorPosition = range.startOffset;
       setTitle(titleRef.current.innerText);
-      setIsEditing(true);
 
-      // Hide the edit icon after first character change
       const editIcon = document.getElementById(editIconId.current);
       if (editIcon) {
         editIcon.style.visibility = 'hidden';
@@ -68,7 +65,7 @@ const EditableTitle = ({ title, setTitle }) => {
     <div
       className="title-container"
       onMouseEnter={() => {
-        if (!isEditing) {
+        if (!isEditingRef.current) {
           const editIcon = document.getElementById(editIconId.current);
           if (editIcon) {
             editIcon.style.visibility = 'visible';
@@ -95,7 +92,12 @@ const EditableTitle = ({ title, setTitle }) => {
       </h1>
       <FaPencilAlt
         id={editIconId.current}
-        style={{ cursor: 'pointer', color: 'black', visibility: 'hidden', fontSize: '1.5rem' }}
+        style={{
+          cursor: 'pointer',
+          color: 'black',
+          visibility: 'hidden',
+          fontSize: '1.5rem',
+        }}
         onClick={handleEditClick}
       />
     </div>
