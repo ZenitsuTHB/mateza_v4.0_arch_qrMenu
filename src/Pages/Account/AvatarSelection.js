@@ -1,3 +1,5 @@
+// AvatarSelection.jsx
+
 import React, { useState, useRef } from 'react';
 import './css/avatarSelection.css';
 
@@ -28,9 +30,12 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [avatarPosition, setAvatarPosition] = useState({ initialTop: 0, initialLeft: 0 });
   const [avatarTransform, setAvatarTransform] = useState({ deltaX: 0, deltaY: 0 });
+  const [isReverting, setIsReverting] = useState(false);
   const avatarRefs = useRef([]);
 
   const handleSelectAvatar = (index) => {
+    if (selectedAvatar === index || isReverting) return; // Prevent re-selecting the same avatar or during revert
+
     const avatarElement = avatarRefs.current[index];
     const rect = avatarElement.getBoundingClientRect();
     const initialTop = rect.top;
@@ -54,6 +59,20 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     onSelectAvatar(index);
   };
 
+  const handleRevertAvatar = () => {
+    if (selectedAvatar === null || isReverting) return;
+
+    setIsReverting(true);
+
+    // Delay the state reset to allow the revert animation to play
+    setTimeout(() => {
+      setSelectedAvatar(null);
+      setAvatarPosition({ initialTop: 0, initialLeft: 0 });
+      setAvatarTransform({ deltaX: 0, deltaY: 0 });
+      setIsReverting(false);
+    }, 1000); // Duration should match the CSS transition duration
+  };
+
   return (
     <div className="avatar-page-container">
       <div className="avatar-title-and-selection">
@@ -64,7 +83,9 @@ const AvatarSelection = ({ onSelectAvatar }) => {
               key={index}
               className={`avatar-button ${
                 selectedAvatar === index
-                  ? 'selected'
+                  ? isReverting
+                    ? 'reverting'
+                    : 'selected'
                   : selectedAvatar !== null
                   ? 'unselected'
                   : ''
@@ -72,14 +93,12 @@ const AvatarSelection = ({ onSelectAvatar }) => {
               onClick={() => handleSelectAvatar(index)}
               ref={(el) => (avatarRefs.current[index] = el)}
               style={
-                selectedAvatar === index
+                selectedAvatar === index && !isReverting
                   ? {
                       position: 'fixed',
                       top: avatarPosition.initialTop,
                       left: avatarPosition.initialLeft,
-                      animation: 'moveToCenter 1s forwards',
-                      '--deltaX': `${avatarTransform.deltaX}px`,
-                      '--deltaY': `${avatarTransform.deltaY}px`,
+                      transform: `translate(${avatarTransform.deltaX}px, ${avatarTransform.deltaY}px) scale(2)`,
                       zIndex: 10,
                     }
                   : {}
@@ -88,18 +107,28 @@ const AvatarSelection = ({ onSelectAvatar }) => {
               <img
                 src={avatar}
                 alt={`Avatar ${index + 1}`}
-                className={`avatar-image ${selectedAvatar === index ? 'miraculous' : ''}`}
+                className={`avatar-image ${
+                  selectedAvatar === index && !isReverting ? 'miraculous' : ''
+                }`}
               />
             </button>
           ))}
         </div>
         {selectedAvatar !== null && (
-          <button
-            className="next-button visible"
-            onClick={() => console.log('Next button clicked')}
-          >
-            Volgende
-          </button>
+          <div className="button-group">
+            <button
+              className="previous-button visible"
+              onClick={handleRevertAvatar}
+            >
+              Vorige
+            </button>
+            <button
+              className="next-button visible"
+              onClick={() => console.log('Next button clicked')}
+            >
+              Volgende
+            </button>
+          </div>
         )}
       </div>
     </div>
