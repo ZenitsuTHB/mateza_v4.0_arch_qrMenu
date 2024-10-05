@@ -1,5 +1,5 @@
 // Components/SplitScreen/SplitScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SplitPane from 'react-split-pane';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TabNavigator from './TabNavigator.js';
@@ -16,6 +16,16 @@ const SplitScreen = () => {
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSplit, setIsSplit] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const closeTab = (tabId, index) => {
     const newTabs = tabs.filter((tab) => tab.id !== tabId);
@@ -70,7 +80,11 @@ const SplitScreen = () => {
   return (
     <div className="split-screen">
       <DragDropContext onDragEnd={handleDragEnd}>
-        {isSplit ? (
+        {isMobile || !isSplit ? (
+          <div className="left-pane full-width">
+            {leftPaneContent}
+          </div>
+        ) : (
           <SplitPane
             split="vertical"
             minSize={0}
@@ -100,10 +114,6 @@ const SplitScreen = () => {
               closeTab={closeTab}
             />
           </SplitPane>
-        ) : (
-          <div className="left-pane full-width">
-            {leftPaneContent}
-          </div>
         )}
       </DragDropContext>
     </div>

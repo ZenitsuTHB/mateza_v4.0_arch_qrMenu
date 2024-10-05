@@ -32,6 +32,12 @@
 .sidebar .sidebar-item__icon {
 	position: relative;
 	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.sidebar .sidebar-item__icon .tooltip {
+	opacity: 0;
 }
 
 .sidebar .sidebar-item__icon:hover .tooltip {
@@ -55,4 +61,37 @@
 	visibility: hidden;
 	backdrop-filter: blur(30px);
 	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+@media (max-width: 768px) {
+	.sidebar {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		gap: 16px;
+		padding: 16px;
+		background-color: var(--color-white);
+		z-index: 10000;
+	}
+
+	.sidebar .sidebar-item {
+		height: 50px;
+		width: 50px;
+		padding: 8px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		color: var(--color-black);
+	}
+
+	.sidebar .tooltip {
+		display: none;
+	}
 }
