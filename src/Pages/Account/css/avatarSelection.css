@@ -54,10 +54,6 @@
   pointer-events: none;
 }
 
-.avatar-button.reverting {
-  /* Optional: Add any specific styles during reverting if needed */
-}
-
 .avatar-button:hover:not(.selected) {
   transform: scale(1.1);
   opacity: 1;
