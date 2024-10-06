@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Palette from './Palette';
-import Canvas from './Canvas';
+import Palette from './Palette.js';
+import Canvas from './Canvas.js';
 import './css/dragAndDropEditor.css';
 import {
   FaFont,
