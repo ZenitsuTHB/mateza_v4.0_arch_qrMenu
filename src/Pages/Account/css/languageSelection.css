@@ -82,3 +82,15 @@
 .language-page .next-button:hover {
 	background-color: #0056b3;
 }
+
+
+.language-page .fade-in {
+	opacity: 1;
+	transition: opacity 1s ease-in;
+  }
+  
+  .language-page .fade-out {
+	opacity: 0;
+	transition: opacity 1s ease-out;
+  }
+  
