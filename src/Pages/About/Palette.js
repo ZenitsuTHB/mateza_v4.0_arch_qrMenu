@@ -15,7 +15,6 @@ import {
 
 const Palette = ({ blocks }) => (
   <div className="palette">
-    <h2>Elementen</h2>
     <Droppable droppableId="Palette" isDropDisabled={true}>
       {(provided) => (
         <div className="palette-blocks" ref={provided.innerRef} {...provided.droppableProps}>

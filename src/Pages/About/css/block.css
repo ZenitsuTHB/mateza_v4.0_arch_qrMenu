@@ -2,64 +2,82 @@
 
 .block {
 	position: relative;
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	padding: 15px;
+	border-radius: 8px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+	transition: border 0.2s ease;
+  }
+  
+  .block.selected {
+	border: 2px solid #1890ff; /* Blue border */
+  }
+  
+  .drag-handle {
+	cursor: grab;
+	margin-right: 10px;
+	color: #ccc;
+  }
+  
+  .drag-handle:hover {
+	color: #999;
+  }
+  
+  .block-content {
+	flex-grow: 1;
+  }
+  
+  .block-content label {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 16px;
   }
   
   .block-content input,
   .block-content select,
   .block-content textarea {
 	width: 100%;
-	padding: 8px;
+	padding: 10px;
 	border-radius: 4px;
 	border: 1px solid #ccc;
 	box-sizing: border-box;
+	font-size: 16px; /* Increased font size */
   }
   
-  .block-content h3 {
-	margin: 0;
+  .block-content textarea {
+	resize: vertical;
   }
   
-  .options-button {
-	position: absolute;
-	top: 5px;
-	right: 5px;
+  .action-icons {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+  }
+  
+  .action-icons button {
 	background: transparent;
 	border: none;
-	color: #888;
 	cursor: pointer;
+	padding: 5px;
+	transition: transform 0.2s ease;
   }
   
-  .options-button:hover {
-	color: #555;
+  .action-icons button:hover {
+	transform: scale(1.1); /* Popping animation */
   }
   
-  .options-menu {
-	position: absolute;
-	top: 30px;
-	right: 5px;
-	background: rgba(255, 255, 255, 0.8); /* Slightly transparent */
-	backdrop-filter: blur(5px); /* Backdrop blur */
-	border: 1px solid #000; /* Black edge */
-	border-radius: 4px;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-	z-index: 10;
+  .edit-button svg {
+	color: #000; /* Black */
   }
   
-  .menu-item {
-	padding: 8px 12px;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
+  .delete-button svg {
+	color: #f5222d; /* Red */
   }
   
-  .menu-item:hover {
-	background-color: #f0f0f0;
-  }
-  
-  .menu-item span {
-	margin-left: 8px;
-  }
-  
-  .menu-item svg {
-	flex-shrink: 0;
+  .action-icons button + button {
+	margin-top: 5px;
   }
   

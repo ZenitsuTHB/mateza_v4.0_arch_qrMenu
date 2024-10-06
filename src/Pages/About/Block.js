@@ -1,54 +1,90 @@
 // src/components/DragAndDropEditor/Block.jsx
 
 import React, { useState } from 'react';
-import { FaTrashAlt, FaEllipsisV, FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaEdit, FaGripHorizontal } from 'react-icons/fa';
 import './css/block.css';
 
-const Block = ({ type, label, id, onDelete }) => {
-  const [showMenu, setShowMenu] = useState(false);
+const Block = ({ type, label, id, onDelete, provided }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   const renderField = () => {
     switch (type) {
       case 'input':
-        return <input type="text" placeholder="Invoerveld" />;
+        return (
+          <>
+            <label>Invoerveld</label>
+            <input type="text" placeholder="Invoerveld" />
+          </>
+        );
       case 'select':
         return (
-          <select>
-            <option>Optie 1</option>
-            <option>Optie 2</option>
-          </select>
+          <>
+            <label>Selectievak</label>
+            <select>
+              <option>Optie 1</option>
+              <option>Optie 2</option>
+            </select>
+          </>
         );
       case 'phone':
-        return <input type="tel" placeholder="Telefoonnummer" />;
+        return (
+          <>
+            <label>Telefoonnummer</label>
+            <input type="tel" placeholder="Telefoonnummer" />
+          </>
+        );
       case 'email':
-        return <input type="email" placeholder="Emailadres" />;
+        return (
+          <>
+            <label>Emailadres</label>
+            <input type="email" placeholder="Emailadres" />
+          </>
+        );
       case 'picture':
-        return <input type="file" accept="image/*" />;
+        return (
+          <>
+            <label>Afbeelding</label>
+            <input type="file" accept="image/*" />
+          </>
+        );
       case 'textarea':
-        return <textarea placeholder="Tekstveld"></textarea>;
+        return (
+          <>
+            <label>Tekstveld</label>
+            <textarea placeholder="Tekstveld"></textarea>
+          </>
+        );
       case 'title':
-        return <h3>Titel</h3>;
+        return (
+          <>
+            <h3>Titel</h3>
+          </>
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="block">
+    <div
+      className={`block ${isHovered ? 'selected' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+    >
+      <div className="drag-handle" {...provided.dragHandleProps}>
+        <FaGripHorizontal />
+      </div>
       <div className="block-content">{renderField()}</div>
-      <button className="options-button" onClick={() => setShowMenu(!showMenu)}>
-        <FaEllipsisV />
-      </button>
-      {showMenu && (
-        <div className="options-menu">
-          <div className="menu-item" onClick={() => setShowMenu(false)}>
+      {isHovered && (
+        <div className="action-icons">
+          <button className="edit-button">
             <FaEdit />
-            <span>Bewerken</span>
-          </div>
-          <div className="menu-item" onClick={() => onDelete(id)}>
+          </button>
+          <button className="delete-button" onClick={() => onDelete(id)}>
             <FaTrashAlt />
-            <span>Verwijderen</span>
-          </div>
+          </button>
         </div>
       )}
     </div>

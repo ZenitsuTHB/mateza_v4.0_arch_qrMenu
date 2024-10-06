@@ -1,6 +1,11 @@
 /* src/components/DragAndDropEditor/css/canvas.css */
 
-.canvas {
+:root {
+	--color-bg: #f9f9f9; /* Define your background color */
+	--primary-color: #1890ff; /* Blue color */
+  }
+  
+  .canvas {
 	width: 75%;
 	padding: 20px;
 	box-sizing: border-box;
@@ -16,17 +21,14 @@
 	flex-direction: column;
 	gap: 10px;
 	min-height: 200px;
-	border: 2px dashed #ccc;
 	padding: 10px;
 	border-radius: 8px;
   }
   
   .canvas-item {
-	background-color: #e6f7ff;
-	padding: 10px;
+	background-color: var(--color-bg);
 	border-radius: 8px;
 	cursor: grab;
-	transition: opacity 0.2s ease, transform 0.2s ease;
 	position: relative;
   }
   
@@ -40,6 +42,41 @@
 	color: #888;
 	font-size: 16px;
 	padding: 20px;
+  }
+  
+  /* Custom Dropping Indicator */
+  .canvas-area .custom-placeholder {
+	position: relative;
+	height: 10px;
+	margin: 10px 0;
+  }
+  
+  .custom-placeholder::before {
+	content: '';
+	display: block;
+	height: 4px;
+	background-color: var(--primary-color);
+	border-radius: 2px;
+	position: absolute;
+	top: 3px;
+	left: 0;
+	right: 0;
+  }
+  
+  .custom-placeholder::after {
+	content: '+';
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: var(--primary-color);
+	color: white;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
   }
   
   @media (max-width: 768px) {

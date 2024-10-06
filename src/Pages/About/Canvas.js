@@ -13,24 +13,27 @@ const Canvas = ({ items, setItems }) => {
 
   return (
     <div className="canvas">
-      <h2>Uw Formulier</h2>
       <Droppable droppableId="Canvas">
-        {(provided) => (
-          <div className="canvas-area" ref={provided.innerRef} {...provided.droppableProps}>
+        {(provided, snapshot) => (
+          <div
+            className={`canvas-area ${snapshot.isDraggingOver ? 'is-dragging-over' : ''}`}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
             {items.map((item, index) => (
               <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided, snapshot) => (
                   <div
                     className={`canvas-item ${snapshot.isDragging ? 'dragging' : ''}`}
                     ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
+                    // Remove dragHandleProps from here
                   >
                     <Block
                       type={item.type}
                       label={item.label}
                       id={item.id}
                       onDelete={handleDelete}
+                      provided={provided}
                     />
                   </div>
                 )}
