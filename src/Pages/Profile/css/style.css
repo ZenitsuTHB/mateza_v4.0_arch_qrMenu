@@ -185,3 +185,7 @@
   .profile-page__bio_p {
 	height: fit-content;
   }
+
+  .profile-page__container {
+	margin-bottom: 100px;
+  }
