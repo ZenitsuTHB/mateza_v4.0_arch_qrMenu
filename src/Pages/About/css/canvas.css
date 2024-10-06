@@ -31,7 +31,7 @@
   }
   
   .form-editing-page .canvas-item.selected {
-	border: 2px solid var(--primary-color); /* Blue border */
+	border: 2px solid var(--color-bg); /* Blue border */
 	box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
   }
   
