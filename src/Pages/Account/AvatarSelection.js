@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
 import { avatars, avatarNames } from './avatars'; // Importing from avatars.js
+import './css/avatarSelection.css'
 
 const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -114,7 +115,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   };
 
   return (
-    <div className="avatar-page-container">
+    <div className="avatar-page avatar-page-container">
       <div className="avatar-title-and-selection">
         <h4 className="avatar-subtitle">{subtitleText}</h4>
         <h1 className="avatar-title">{titleText}</h1>
