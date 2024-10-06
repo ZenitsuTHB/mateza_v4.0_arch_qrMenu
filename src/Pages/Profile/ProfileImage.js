@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
+import useNotification from '../../Components/Notification/index';
 
 const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
 const dispatch = useDispatch();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   const handleAvatarClick = () => {
     setShowAvatarModal(true);
@@ -14,6 +16,7 @@ const dispatch = useDispatch();
     onAvatarSelect(avatarKey);
     setShowAvatarModal(false);
 	dispatch(setAvatar(avatarKey));
+	triggerNotification('Profiel aangepast', 'success');
   };
 
   const handleModalClose = () => {
@@ -22,6 +25,7 @@ const dispatch = useDispatch();
 
   return (
     <div>
+		<NotificationComponent/>
       <div
         className="profile-page__image-container"
         onClick={handleAvatarClick}
