@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAvatar } from '../../Redux/actions/avatarActions';
 
 const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
+const dispatch = useDispatch();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   const handleAvatarClick = () => {
@@ -10,9 +13,7 @@ const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
   const handleAvatarSelect = (avatarKey) => {
     onAvatarSelect(avatarKey);
     setShowAvatarModal(false);
-
-	localStorage.setItem('selectedAvatar', avatarKey);
-
+	dispatch(setAvatar(avatarKey));
   };
 
   const handleModalClose = () => {

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem.js';
 import { useNavigate } from 'react-router-dom';
-import './css/style.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAvatar } from '../../../Redux/actions/avatarActions.js';
 import routesConfig from '../../../config.js';
+import './css/style.css';
 
 import blue1 from '../../../Assets/avatars/blue1.webp';
 import blue2 from '../../../Assets/avatars/blue2.webp';
@@ -32,8 +34,10 @@ const defaultAvatar = blue1;
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [innerClass, setInnerClass] = useState('sidebar-initial');
-  const [profileImage, setProfileImage] = useState(defaultAvatar);
+  const profileImage = useSelector((state) => avatarMapping[state.avatar]); // Get avatar from Redux
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
@@ -41,17 +45,9 @@ const Sidebar = () => {
     
     const selectedAvatar = localStorage.getItem('selectedAvatar');
     if (selectedAvatar && avatarMapping[selectedAvatar]) {
-      setProfileImage(avatarMapping[selectedAvatar]);
+      dispatch(setAvatar(selectedAvatar)); 
     }
 
-    const interval = setInterval(() => {
-      const selectedAvatar = localStorage.getItem('selectedAvatar');
-      if (selectedAvatar && avatarMapping[selectedAvatar] !== profileImage) {
-        setProfileImage(avatarMapping[selectedAvatar]);
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
   }, [profileImage]);
 
   const handleNavigation = (path) => {

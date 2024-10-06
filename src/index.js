@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
 import AccountManagement from './Pages/Account/index.js';
+import { Provider } from 'react-redux';
+import store from './Redux/store.js'; // Path to your store
+
 import './Styles/fonts.css';
 import './Styles/colors.css';
 import './Styles/index.css';
@@ -25,7 +28,9 @@ function App() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 );

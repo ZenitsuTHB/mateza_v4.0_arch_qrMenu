@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setAvatar } from '../../Redux/actions/avatarActions';
 
 import blue1 from '../../Assets/avatars/blue1.webp';
 import blue2 from '../../Assets/avatars/blue2.webp';
@@ -45,6 +47,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [titleText, setTitleText] = useState('Kies een Avatar');
   const [subtitleText, setSubtitleText] = useState('Stap 1/3');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedAvatar !== null && !isReverting) {
@@ -127,7 +130,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
 
   const goToNextPage = () => {
     localStorage.setItem('loginSuccessful', 'true');
-    localStorage.setItem('selectedAvatar', avatarNames[selectedAvatar]);
+    dispatch(setAvatar(avatarNames[selectedAvatar]));
     navigate('/');
     window.location.reload();
 }
