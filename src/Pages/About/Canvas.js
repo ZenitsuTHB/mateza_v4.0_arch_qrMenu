@@ -13,16 +13,18 @@ const Canvas = ({ items, setItems, dropPosition }) => {
 
   return (
     <div className="canvas">
-      <h2>Uw Formulier</h2>
       <Droppable droppableId="Canvas">
         {(provided, snapshot) => (
           <div
-            className={`canvas-area ${snapshot.isDraggingOver ? 'is-dragging-over' : ''}`}
+            className={`canvas-area ${
+              snapshot.isDraggingOver ? 'is-dragging-over' : ''
+            }`}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
             {items.map((item, index) => (
               <React.Fragment key={item.id}>
+                {/* Render drop indicator before each item */}
                 {dropPosition === index && (
                   <div className="custom-drop-indicator">
                     <div className="drop-line"></div>
@@ -34,7 +36,9 @@ const Canvas = ({ items, setItems, dropPosition }) => {
                 <Draggable draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
-                      className={`canvas-item ${snapshot.isDragging ? 'dragging' : ''}`}
+                      className={`canvas-item ${
+                        snapshot.isDragging ? 'dragging' : ''
+                      }`}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -50,6 +54,7 @@ const Canvas = ({ items, setItems, dropPosition }) => {
                 </Draggable>
               </React.Fragment>
             ))}
+            {/* Render drop indicator at the end if necessary */}
             {dropPosition === items.length && (
               <div className="custom-drop-indicator">
                 <div className="drop-line"></div>
@@ -60,7 +65,9 @@ const Canvas = ({ items, setItems, dropPosition }) => {
             )}
             {provided.placeholder}
             {items.length === 0 && (
-              <div className="canvas-placeholder">Sleep hier uw elementen naartoe</div>
+              <div className="canvas-placeholder">
+                Sleep hier uw elementen naartoe
+              </div>
             )}
           </div>
         )}

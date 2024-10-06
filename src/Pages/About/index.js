@@ -72,11 +72,13 @@ const DragAndDropEditor = () => {
   };
 
   return (
+    <div className="form-editing-page">
     <div className="editor-container">
       <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
         <Palette blocks={blocks} />
         <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
       </DragDropContext>
+    </div>
     </div>
   );
 };

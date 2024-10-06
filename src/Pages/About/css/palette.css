@@ -1,9 +1,8 @@
 /* src/components/DragAndDropEditor/css/palette.css */
 
-.palette {
+.form-editing-page .palette {
 	width: 25%;
 	padding: 20px;
-	background-color: #f5f5f5;
 	box-sizing: border-box;
 	overflow-y: auto;
 	border-radius: 8px;
@@ -11,18 +10,14 @@
 	flex-direction: column;
   }
   
-  .palette h2 {
-	margin-top: 0;
-  }
-  
-  .palette-blocks {
+  .form-editing-page .palette-blocks {
 	display: flex;
-	flex-direction: column; /* One column layout */
+	flex-direction: column;
 	gap: 10px;
   }
   
-  .palette-block {
-	background-color: #fff;
+  .form-editing-page .palette-block {
+	background-color: var(--color-white);
 	padding: 10px;
 	border-radius: 8px;
 	cursor: grab;
@@ -32,28 +27,35 @@
 	box-sizing: border-box;
   }
   
-  .palette-block.dragging {
+  .form-editing-page .palette-block:hover {
+	transform: scale(1.05);
+  }
+  
+  .form-editing-page .palette-block.dragging {
 	opacity: 0.5;
 	transform: scale(0.95);
   }
   
-  .palette-drag-icon {
+  .form-editing-page .palette-drag-icon {
 	font-size: 16px;
 	margin-right: 10px;
 	color: #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
   }
   
-  .palette-block .icon {
+  .form-editing-page .palette-block .icon {
 	font-size: 24px;
 	margin-right: 10px;
   }
   
-  .palette-block .label {
+  .form-editing-page .palette-block .label {
 	font-size: 14px;
   }
   
   @media (max-width: 768px) {
-	.palette {
+	.form-editing-page .palette {
 	  width: 100%;
 	  order: 2;
 	}

@@ -7,18 +7,23 @@ import { FaGripHorizontal } from 'react-icons/fa';
 
 const Palette = ({ blocks }) => (
   <div className="palette">
-    <h2>Elementen</h2>
     <Droppable droppableId="Palette" isDropDisabled={true}>
       {(provided) => (
-        <div className="palette-blocks" ref={provided.innerRef} {...provided.droppableProps}>
+        <div
+          className="palette-blocks"
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
           {blocks.map((block, index) => (
             <Draggable key={block.id} draggableId={block.id} index={index}>
               {(provided, snapshot) => (
                 <div
-                  className={`palette-block ${snapshot.isDragging ? 'dragging' : ''}`}
+                  className={`palette-block ${
+                    snapshot.isDragging ? 'dragging' : ''
+                  }`}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
-                  {...provided.dragHandleProps} // Entire block is draggable
+                  {...provided.dragHandleProps}
                 >
                   <span className="palette-drag-icon">
                     <FaGripHorizontal />

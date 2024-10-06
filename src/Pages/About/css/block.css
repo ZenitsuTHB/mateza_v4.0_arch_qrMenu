@@ -1,9 +1,9 @@
 /* src/components/DragAndDropEditor/css/block.css */
 
-.block {
+.form-editing-page .block {
 	position: relative;
 	display: flex;
-	align-items: flex-start; /* Align items to the top */
+	align-items: center;
 	background-color: #fff;
 	padding: 15px;
 	border-radius: 8px;
@@ -11,62 +11,65 @@
 	transition: border 0.2s ease, box-shadow 0.2s ease;
   }
   
-  .block.selected {
-	border: 2px solid var(--primary-color); /* Blue border */
+  .form-editing-page .block.selected {
+	border: 2px solid var(--primary-color);
 	box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
   }
   
-  .drag-handle {
+  .form-editing-page .drag-handle {
 	cursor: grab;
 	margin-right: 10px;
 	color: #ccc;
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	height: 100%;
   }
   
-  .drag-handle:hover {
+  .form-editing-page .drag-handle:hover {
 	color: #999;
   }
   
-  .block-content {
+  .form-editing-page .block-content {
 	flex-grow: 1;
   }
   
-  .block-content label {
+  .form-editing-page .block-content label {
 	display: block;
 	margin-bottom: 5px;
 	font-size: 16px;
   }
   
-  .block-content input,
-  .block-content select,
-  .block-content textarea {
+  .form-editing-page .block-content input,
+  .form-editing-page .block-content select,
+  .form-editing-page .block-content textarea {
 	width: 100%;
-	padding: 12px; /* Increased padding */
+	padding: 12px;
 	border-radius: 4px;
 	border: 1px solid #ccc;
 	box-sizing: border-box;
-	font-size: 18px; /* Increased font size */
-	margin-bottom: 10px; /* Spacing between label and input */
+	font-size: 18px;
+	margin-bottom: 10px;
   }
   
-  .block-content textarea {
+  .form-editing-page .block-content textarea {
 	resize: vertical;
-	height: 80px; /* Increased height */
+	height: 80px;
   }
   
-  .block-content p {
+  .form-editing-page .block-content p {
 	margin: 0;
-	font-size: 18px; /* Increased font size */
+	font-size: 18px;
   }
   
-  .action-icons {
+  .form-editing-page .action-icons {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	margin-left: 10px;
   }
   
-  .action-icons button {
+  .form-editing-page .action-icons button {
 	background: transparent;
 	border: none;
 	cursor: pointer;
@@ -74,26 +77,26 @@
 	transition: transform 0.2s ease;
   }
   
-  .action-icons button:hover {
-	transform: scale(1.2); /* Popping animation */
+  .form-editing-page .action-icons button:hover {
+	transform: scale(1.2);
   }
   
-  .edit-button svg {
-	color: #000; /* Black */
+  .form-editing-page .edit-button svg {
+	color: #000;
 	font-size: 18px;
   }
   
-  .delete-button svg {
-	color: #f5222d; /* Red */
+  .form-editing-page .delete-button svg {
+	color: #f5222d;
 	font-size: 18px;
   }
   
-  .action-icons button + button {
+  .form-editing-page .action-icons button + button {
 	margin-top: 5px;
   }
   
   /* Input field when editing label */
-  .block-content input[type='text'] {
+  .form-editing-page .block-content input[type='text'] {
 	margin-bottom: 10px;
   }
   
