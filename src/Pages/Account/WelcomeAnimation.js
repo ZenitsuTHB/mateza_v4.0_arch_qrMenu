@@ -12,7 +12,7 @@ const WelcomeAnimation = ({ onComplete }) => {
   // Constants for adjustable parameters
   const DURATION = 4000; // Animation duration in ms
   const NUM_SHAPES = 10; // Number of squares
-  const MAX_SCALE = 20; // Maximum zoom scale
+  const MAX_SCALE = 23; // Maximum zoom scale
   const ROTATION_SPEED = 0.5; // Rotation speed multiplier
   const COLOR_BRIGHTNESS = 100; // Brightness of colors (0 - 100)
 

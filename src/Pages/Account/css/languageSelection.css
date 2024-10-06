@@ -54,6 +54,8 @@
 	width: 40px;
 	height: 40px;
 	margin-right: 10px;
+	border-radius: 100px;
+	margin-right: 15px;
 }
 
 .language-page .language-name {
