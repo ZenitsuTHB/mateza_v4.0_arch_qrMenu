@@ -33,7 +33,7 @@ const Profile = (props) => {
     'John Doe is a software engineer with over 10 years of experience in full-stack development. Passionate about building scalable web applications, he specializes in JavaScript, React, and Node.js. In his free time, he enjoys contributing to open source projects and exploring new tech innovations.'
   );
   const [name, setName] = useState('John Doe');
-  const [interests, setInterests] = useState(['Coding', 'Open Source', 'AI', 'Technology']);
+  const [interests, setInterests] = useState(['Admin Account', '3 Maanden Actief']);
 
   useEffect(() => {
     const selectedAvatar = localStorage.getItem('selectedAvatar');

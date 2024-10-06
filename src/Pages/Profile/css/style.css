@@ -181,4 +181,6 @@
 	background-color: var(--color-nav-selection);
 }
   
-  
+  .profile-page__bio_p {
+	height: fit-content;
+  }

@@ -83,7 +83,7 @@ const ProfileBio = ({ name, interests }) => {
               rows={5}
             />
           ) : (
-            <p className="profile-page__bio">{bio}</p>
+            <p className="profile-page__bio_p">{bio}</p>
           )}
 
           <FaPencilAlt
