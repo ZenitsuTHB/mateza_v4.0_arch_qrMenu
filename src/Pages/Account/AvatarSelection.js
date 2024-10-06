@@ -1,41 +1,10 @@
+// src/components/AvatarSelection/AvatarSelection.jsx
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
-
-import blue1 from '../../Assets/avatars/blue1.webp';
-import blue2 from '../../Assets/avatars/blue2.webp';
-import blue3 from '../../Assets/avatars/blue3.webp';
-import red1 from '../../Assets/avatars/red1.webp';
-import red2 from '../../Assets/avatars/red2.webp';
-import red3 from '../../Assets/avatars/red3.webp';
-import green1 from '../../Assets/avatars/green1.webp';
-import green2 from '../../Assets/avatars/green2.webp';
-import green3 from '../../Assets/avatars/green3.webp';
-
-const avatars = [
-  blue1,
-  blue2,
-  blue3,
-  red1,
-  red2,
-  red3,
-  green1,
-  green2,
-  green3,
-];
-
-const avatarNames = [
-  "blue1",
-  "blue2",
-  "blue3",
-  "red1",
-  "red2",
-  "red3",
-  "green1",
-  "green2",
-  "green3",
-]
+import { avatars, avatarNames } from './avatars'; // Importing from avatars.js
 
 const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -63,6 +32,8 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     const handleResize = () => {
       if (selectedAvatar !== null) {
         const avatarElement = avatarRefs.current[selectedAvatar];
+        if (!avatarElement) return;
+
         const rect = avatarElement.getBoundingClientRect();
         const initialTop = rect.top;
         const initialLeft = rect.left;
@@ -79,8 +50,8 @@ const AvatarSelection = ({ onSelectAvatar }) => {
         const deltaX = centerLeft - initialLeft;
         const deltaY = centerTop - initialTop;
 
-        setAvatarPosition({ initialTop: initialTop, initialLeft: initialLeft });
-        setAvatarTransform({ deltaX: deltaX, deltaY: deltaY });
+        setAvatarPosition({ initialTop, initialLeft });
+        setAvatarTransform({ deltaX, deltaY });
       }
     };
 
@@ -92,6 +63,8 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     if (selectedAvatar === index || isReverting) return; // Prevent re-selecting the same avatar or during revert
 
     const avatarElement = avatarRefs.current[index];
+    if (!avatarElement) return;
+
     const rect = avatarElement.getBoundingClientRect();
     const initialTop = rect.top;
     const initialLeft = rect.left;
@@ -108,8 +81,8 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     const deltaX = centerLeft - initialLeft;
     const deltaY = centerTop - initialTop;
 
-    setAvatarPosition({ initialTop: initialTop, initialLeft: initialLeft });
-    setAvatarTransform({ deltaX: deltaX, deltaY: deltaY });
+    setAvatarPosition({ initialTop, initialLeft });
+    setAvatarTransform({ deltaX, deltaY });
     setSelectedAvatar(index);
     onSelectAvatar(index);
   };
@@ -129,12 +102,16 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   };
 
   const goToNextPage = () => {
+    if (accountName.trim() === '') {
+      alert('Please enter an account name.');
+      return;
+    }
+
     localStorage.setItem('loginSuccessful', 'true');
     dispatch(setAvatar(avatarNames[selectedAvatar]));
     navigate('/');
     window.location.reload();
-}
-
+  };
 
   return (
     <div className="avatar-page-container">
@@ -164,6 +141,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                       left: avatarPosition.initialLeft,
                       transform: `translate(${avatarTransform.deltaX}px, ${avatarTransform.deltaY}px) scale(2)`,
                       zIndex: 10,
+                      transition: 'transform 1s, top 1s, left 1s', // Ensure transitions match the revert delay
                     }
                   : {}
               }
@@ -174,7 +152,10 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                 className={`avatar-image ${
                   selectedAvatar === index && !isReverting ? 'miraculous' : ''
                 }`}
-                onError={(e) => { e.target.onerror = null; e.target.src = 'path_to_placeholder_image'; }}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'path_to_placeholder_image'; // Replace with actual placeholder path
+                }}
               />
             </button>
           ))}
