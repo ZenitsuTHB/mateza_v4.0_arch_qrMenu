@@ -14,6 +14,7 @@ import {
   FaList,
   FaHeading,
   FaKeyboard,
+  FaParagraph,
 } from 'react-icons/fa';
 
 const initialBlocks = [
@@ -24,6 +25,7 @@ const initialBlocks = [
   { id: '5', type: 'picture', label: 'Afbeelding', icon: <FaImage /> },
   { id: '6', type: 'textarea', label: 'Tekstveld', icon: <FaFont /> },
   { id: '7', type: 'title', label: 'Titel', icon: <FaHeading /> },
+  { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> }, // New element
 ];
 
 const DragAndDropEditor = () => {
@@ -46,7 +48,10 @@ const DragAndDropEditor = () => {
       setCanvasItems(newCanvasItems);
     }
     // Reordering within Canvas
-    else if (result.source.droppableId === 'Canvas' && result.destination.droppableId === 'Canvas') {
+    else if (
+      result.source.droppableId === 'Canvas' &&
+      result.destination.droppableId === 'Canvas'
+    ) {
       const items = Array.from(canvasItems);
       const [movedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, movedItem);

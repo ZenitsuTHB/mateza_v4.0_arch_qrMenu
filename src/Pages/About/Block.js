@@ -6,20 +6,22 @@ import './css/block.css';
 
 const Block = ({ type, label, id, onDelete, provided }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [fieldLabel, setFieldLabel] = useState(label);
 
   const renderField = () => {
     switch (type) {
       case 'input':
         return (
           <>
-            <label>Invoerveld</label>
+            <label>{fieldLabel}</label>
             <input type="text" placeholder="Invoerveld" />
           </>
         );
       case 'select':
         return (
           <>
-            <label>Selectievak</label>
+            <label>{fieldLabel}</label>
             <select>
               <option>Optie 1</option>
               <option>Optie 2</option>
@@ -29,35 +31,41 @@ const Block = ({ type, label, id, onDelete, provided }) => {
       case 'phone':
         return (
           <>
-            <label>Telefoonnummer</label>
+            <label>{fieldLabel}</label>
             <input type="tel" placeholder="Telefoonnummer" />
           </>
         );
       case 'email':
         return (
           <>
-            <label>Emailadres</label>
+            <label>{fieldLabel}</label>
             <input type="email" placeholder="Emailadres" />
           </>
         );
       case 'picture':
         return (
           <>
-            <label>Afbeelding</label>
+            <label>{fieldLabel}</label>
             <input type="file" accept="image/*" />
           </>
         );
       case 'textarea':
         return (
           <>
-            <label>Tekstveld</label>
+            <label>{fieldLabel}</label>
             <textarea placeholder="Tekstveld"></textarea>
           </>
         );
       case 'title':
         return (
           <>
-            <h3>Titel</h3>
+            <h3>{fieldLabel}</h3>
+          </>
+        );
+      case 'paragraph':
+        return (
+          <>
+            <p>{fieldLabel}</p>
           </>
         );
       default:
@@ -69,17 +77,32 @@ const Block = ({ type, label, id, onDelete, provided }) => {
     <div
       className={`block ${isHovered ? 'selected' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsEditing(false);
+      }}
       ref={provided.innerRef}
       {...provided.draggableProps}
     >
       <div className="drag-handle" {...provided.dragHandleProps}>
         <FaGripHorizontal />
       </div>
-      <div className="block-content">{renderField()}</div>
+      <div className="block-content">
+        {isEditing ? (
+          <input
+            type="text"
+            value={fieldLabel}
+            onChange={(e) => setFieldLabel(e.target.value)}
+            onBlur={() => setIsEditing(false)}
+            autoFocus
+          />
+        ) : (
+          renderField()
+        )}
+      </div>
       {isHovered && (
         <div className="action-icons">
-          <button className="edit-button">
+          <button className="edit-button" onClick={() => setIsEditing(true)}>
             <FaEdit />
           </button>
           <button className="delete-button" onClick={() => onDelete(id)}>

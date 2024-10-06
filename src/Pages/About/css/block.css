@@ -51,6 +51,11 @@
 	resize: vertical;
   }
   
+  .block-content p {
+	margin: 0;
+	font-size: 16px;
+  }
+  
   .action-icons {
 	display: flex;
 	flex-direction: column;
@@ -79,5 +84,10 @@
   
   .action-icons button + button {
 	margin-top: 5px;
+  }
+  
+  /* Input field when editing label */
+  .block-content input[type='text'] {
+	margin-bottom: 5px;
   }
   

@@ -6,7 +6,7 @@
   }
   
   .canvas {
-	width: 75%;
+	flex-grow: 1;
 	padding: 20px;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -17,12 +17,7 @@
   }
   
   .canvas-area {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	min-height: 200px;
-	padding: 10px;
-	border-radius: 8px;
+	position: relative;
   }
   
   .canvas-item {
@@ -30,6 +25,7 @@
 	border-radius: 8px;
 	cursor: grab;
 	position: relative;
+	margin-bottom: 10px;
   }
   
   .canvas-item.dragging {
@@ -44,35 +40,28 @@
 	padding: 20px;
   }
   
-  /* Custom Dropping Indicator */
-  .canvas-area .custom-placeholder {
+  .dropzone {
+	height: 4px;
+	background-color: transparent;
 	position: relative;
-	height: 10px;
-	margin: 10px 0;
+	margin-bottom: 10px;
   }
   
-  .custom-placeholder::before {
-	content: '';
-	display: block;
-	height: 4px;
+  .dropzone.active {
 	background-color: var(--primary-color);
 	border-radius: 2px;
-	position: absolute;
-	top: 3px;
-	left: 0;
-	right: 0;
   }
   
-  .custom-placeholder::after {
+  .dropzone.active::after {
 	content: '+';
 	position: absolute;
-	top: -10px;
+	top: -14px;
 	left: 50%;
 	transform: translateX(-50%);
 	background-color: var(--primary-color);
 	color: white;
-	width: 20px;
-	height: 20px;
+	width: 24px;
+	height: 24px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;

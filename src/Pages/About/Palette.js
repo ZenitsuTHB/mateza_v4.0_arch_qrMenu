@@ -3,15 +3,6 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import './css/palette.css';
-import {
-  FaFont,
-  FaEnvelope,
-  FaPhone,
-  FaImage,
-  FaList,
-  FaHeading,
-  FaKeyboard,
-} from 'react-icons/fa';
 
 const Palette = ({ blocks }) => (
   <div className="palette">
