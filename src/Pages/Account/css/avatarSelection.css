@@ -8,32 +8,32 @@
   transform: translateY(-5%);
 }
 
-.avatar-title-and-selection {
+.avatar-page .avatar-title-and-selection {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
 }
 
-.avatar-title {
+.avatar-page .avatar-title {
   margin-bottom: 30px;
   transition: all 0.5s ease;
 }
 
-.avatar-subtitle {
+.avatar-page .avatar-subtitle {
   margin-bottom: 0px;
   font-weight: 500;
   color: rgb(101, 101, 101);
 }
 
-.avatar-selection-container {
+.avatar-page .avatar-selection-container {
   display: grid;
   grid-template-columns: repeat(3, 100px);
   gap: 10px;
   margin-bottom: 25px;
 }
 
-.avatar-button {
+.avatar-page .avatar-button {
   opacity: 0.5;
   transition: opacity 0.5s ease, transform 1s ease, top 1s ease, left 1s ease;
   background: none;
@@ -45,21 +45,21 @@
   position: relative;
 }
 
-.avatar-button.selected {
+.avatar-page .avatar-button.selected {
   opacity: 1;
 }
 
-.avatar-button.hidden {
+.avatar-page .avatar-button.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-.avatar-button:hover:not(.selected) {
+.avatar-page .avatar-button:hover:not(.selected) {
   transform: scale(1.1);
   opacity: 1;
 }
 
-.avatar-image {
+.avatar-page .avatar-image {
   width: 100%;
   height: auto;
   display: block;
@@ -67,7 +67,7 @@
   transition: opacity 0.3s ease;
 }
 
-.avatar-image.miraculous {
+.avatar-page .avatar-image.miraculous {
   animation: shine 1s forwards;
 }
 
@@ -83,12 +83,12 @@
   }
 }
 
-.button-group {
+.avatar-page .button-group {
   display: flex;
   gap: 10px;
 }
 
-.next-button {
+.avatar-page .next-button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -101,21 +101,21 @@
   transform: translateY(-50%);
 }
 
-.next-button.visible {
+.avatar-page .next-button.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.next-button:hover {
+.avatar-page .next-button:hover {
   background-color: #0056b3;
 }
 
-.next-button:disabled {
+.avatar-page .next-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.previous-button {
+.avatar-page .previous-button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -128,21 +128,21 @@
   transform: translateY(-50%);
 }
 
-.previous-button.visible {
+.avatar-page .previous-button.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.previous-button:hover {
+.avatar-page .previous-button:hover {
   background-color: #5a6268;
 }
 
-.previous-button:disabled {
+.avatar-page .previous-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.avatar-button {
+.avatar-page .avatar-button {
   opacity: 0.5;
   transition: opacity 0.5s ease, transform 1s ease, top 1s ease, left 1s ease;
   background: none;
@@ -150,27 +150,27 @@
   cursor: pointer;
 }
 
-.avatar-button:hover:not(.selected) {
+.avatar-page .avatar-button:hover:not(.selected) {
   transform: scale(1.1);
   opacity: 1;
 }
 
-.avatar-button.selected {
+.avatar-page .avatar-button.selected {
   opacity: 1;
 }
 
-.avatar-button.hidden {
+.avatar-page .avatar-button.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-.avatar-image {
+.avatar-page .avatar-image {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.account-input {
+.avatar-page .account-input {
   position: absolute;
   top: calc(50% + 120px);
   left: 50%;
@@ -185,6 +185,6 @@
   opacity: 0;
 }
 
-.account-input.visible {
+.avatar-page .account-input.visible {
   opacity: 1;
 }

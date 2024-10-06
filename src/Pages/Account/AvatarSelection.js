@@ -85,7 +85,6 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     setAvatarPosition({ initialTop, initialLeft });
     setAvatarTransform({ deltaX, deltaY });
     setSelectedAvatar(index);
-    onSelectAvatar(index);
   };
 
   const handleRevertAvatar = () => {
@@ -103,6 +102,8 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   };
 
   const goToNextPage = () => {
+    onSelectAvatar(selectedAvatar);
+
     if (accountName.trim() === '') {
       alert('Please enter an account name.');
       return;

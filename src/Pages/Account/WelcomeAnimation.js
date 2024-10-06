@@ -106,7 +106,7 @@ const WelcomeAnimation = ({ onComplete }) => {
   };
 
   return (
-    <div className="welcome-animation-container">
+    <div className="welcome-page welcome-animation-container">
       <div ref={sketchRef}></div>
       {showMessage && (
         <div className="welcome-message">
