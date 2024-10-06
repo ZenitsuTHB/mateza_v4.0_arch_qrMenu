@@ -7,7 +7,7 @@ import './css/welcomeAnimation.css';
 const WelcomeAnimation = ({ onComplete }) => {
   const sketchRef = useRef();
   const [showMessage, setShowMessage] = useState(false);
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   // Constants for adjustable parameters
   const DURATION = 4000; // Animation duration in ms
@@ -81,6 +81,11 @@ const WelcomeAnimation = ({ onComplete }) => {
           animationEnded = true;
           p.noLoop();
           setShowMessage(true);
+
+          // Show the button after 1 second
+          setTimeout(() => {
+            setShowButton(true);
+          }, 1000);
         }
       };
 
@@ -97,7 +102,6 @@ const WelcomeAnimation = ({ onComplete }) => {
   }, []);
 
   const handleButtonClick = () => {
-    setAnimationComplete(true);
     onComplete(); // Notify parent component to proceed to the next step
   };
 
@@ -107,6 +111,16 @@ const WelcomeAnimation = ({ onComplete }) => {
       {showMessage && (
         <div className="welcome-message">
           <h1>Welkom bij Mateza Booking 4.0</h1>
+          <button
+            className="next-button"
+            onClick={handleButtonClick}
+            style={{
+              opacity: showButton ? 1 : 0,
+              pointerEvents: showButton ? 'auto' : 'none',
+            }}
+          >
+            Start Nu
+          </button>
         </div>
       )}
     </div>
