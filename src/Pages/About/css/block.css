@@ -3,23 +3,25 @@
 .block {
 	position: relative;
 	display: flex;
-	align-items: center;
+	align-items: flex-start; /* Align items to the top */
 	background-color: #fff;
 	padding: 15px;
 	border-radius: 8px;
 	box-sizing: border-box;
-	margin-bottom: 10px;
-	transition: border 0.2s ease;
+	transition: border 0.2s ease, box-shadow 0.2s ease;
   }
   
   .block.selected {
-	border: 2px solid #1890ff; /* Blue border */
+	border: 2px solid var(--primary-color); /* Blue border */
+	box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
   }
   
   .drag-handle {
 	cursor: grab;
 	margin-right: 10px;
 	color: #ccc;
+	display: flex;
+	align-items: center;
   }
   
   .drag-handle:hover {
@@ -40,20 +42,22 @@
   .block-content select,
   .block-content textarea {
 	width: 100%;
-	padding: 10px;
+	padding: 12px; /* Increased padding */
 	border-radius: 4px;
 	border: 1px solid #ccc;
 	box-sizing: border-box;
-	font-size: 16px; /* Increased font size */
+	font-size: 18px; /* Increased font size */
+	margin-bottom: 10px; /* Spacing between label and input */
   }
   
   .block-content textarea {
 	resize: vertical;
+	height: 80px; /* Increased height */
   }
   
   .block-content p {
 	margin: 0;
-	font-size: 16px;
+	font-size: 18px; /* Increased font size */
   }
   
   .action-icons {
@@ -71,15 +75,17 @@
   }
   
   .action-icons button:hover {
-	transform: scale(1.1); /* Popping animation */
+	transform: scale(1.2); /* Popping animation */
   }
   
   .edit-button svg {
 	color: #000; /* Black */
+	font-size: 18px;
   }
   
   .delete-button svg {
 	color: #f5222d; /* Red */
+	font-size: 18px;
   }
   
   .action-icons button + button {
@@ -88,6 +94,6 @@
   
   /* Input field when editing label */
   .block-content input[type='text'] {
-	margin-bottom: 5px;
+	margin-bottom: 10px;
   }
   

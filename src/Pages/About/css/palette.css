@@ -17,7 +17,7 @@
   
   .palette-blocks {
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column; /* One column layout */
 	gap: 10px;
   }
   
@@ -29,13 +29,18 @@
 	display: flex;
 	align-items: center;
 	transition: opacity 0.2s ease, transform 0.2s ease;
-	flex: 1 1 calc(50% - 10px); /* Adjusts width to container */
 	box-sizing: border-box;
   }
   
   .palette-block.dragging {
 	opacity: 0.5;
 	transform: scale(0.95);
+  }
+  
+  .palette-drag-icon {
+	font-size: 16px;
+	margin-right: 10px;
+	color: #ccc;
   }
   
   .palette-block .icon {

@@ -1,6 +1,6 @@
 // src/components/DragAndDropEditor/DragAndDropEditor.jsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette';
@@ -29,10 +29,13 @@ const initialBlocks = [
 ];
 
 const DragAndDropEditor = () => {
-  const [blocks] = React.useState(initialBlocks);
-  const [canvasItems, setCanvasItems] = React.useState([]);
+  const [blocks] = useState(initialBlocks);
+  const [canvasItems, setCanvasItems] = useState([]);
+  const [dropPosition, setDropPosition] = useState(null); // Track drop position
 
   const handleOnDragEnd = (result) => {
+    setDropPosition(null); // Reset drop position on drag end
+
     if (!result.destination) return;
 
     // Dropping from Palette to Canvas
@@ -59,11 +62,20 @@ const DragAndDropEditor = () => {
     }
   };
 
+  const handleOnDragUpdate = (update) => {
+    const { destination } = update;
+    if (!destination) {
+      setDropPosition(null);
+      return;
+    }
+    setDropPosition(destination.index);
+  };
+
   return (
     <div className="editor-container">
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+      <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
         <Palette blocks={blocks} />
-        <Canvas items={canvasItems} setItems={setCanvasItems} />
+        <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
       </DragDropContext>
     </div>
   );

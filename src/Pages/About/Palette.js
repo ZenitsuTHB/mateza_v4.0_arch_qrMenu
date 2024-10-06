@@ -3,9 +3,11 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import './css/palette.css';
+import { FaGripHorizontal } from 'react-icons/fa';
 
 const Palette = ({ blocks }) => (
   <div className="palette">
+    <h2>Elementen</h2>
     <Droppable droppableId="Palette" isDropDisabled={true}>
       {(provided) => (
         <div className="palette-blocks" ref={provided.innerRef} {...provided.droppableProps}>
@@ -16,8 +18,11 @@ const Palette = ({ blocks }) => (
                   className={`palette-block ${snapshot.isDragging ? 'dragging' : ''}`}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
-                  {...provided.dragHandleProps}
+                  {...provided.dragHandleProps} // Entire block is draggable
                 >
+                  <span className="palette-drag-icon">
+                    <FaGripHorizontal />
+                  </span>
                   <span className="icon">{block.icon}</span>
                   <span className="label">{block.label}</span>
                 </div>

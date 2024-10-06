@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FaTrashAlt, FaEdit, FaGripHorizontal } from 'react-icons/fa';
 import './css/block.css';
 
-const Block = ({ type, label, id, onDelete, provided }) => {
+const Block = ({ type, label, id, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [fieldLabel, setFieldLabel] = useState(label);
@@ -59,13 +59,15 @@ const Block = ({ type, label, id, onDelete, provided }) => {
       case 'title':
         return (
           <>
-            <h3>{fieldLabel}</h3>
+            <label>{fieldLabel}</label>
+            <h3>Titel</h3>
           </>
         );
       case 'paragraph':
         return (
           <>
-            <p>{fieldLabel}</p>
+            <label>{fieldLabel}</label>
+            <p>Paragraaf tekst hier...</p>
           </>
         );
       default:
@@ -81,10 +83,8 @@ const Block = ({ type, label, id, onDelete, provided }) => {
         setIsHovered(false);
         setIsEditing(false);
       }}
-      ref={provided.innerRef}
-      {...provided.draggableProps}
     >
-      <div className="drag-handle" {...provided.dragHandleProps}>
+      <div className="drag-handle">
         <FaGripHorizontal />
       </div>
       <div className="block-content">

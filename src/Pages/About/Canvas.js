@@ -5,7 +5,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Block from './Block';
 import './css/canvas.css';
 
-const Canvas = ({ items, setItems }) => {
+const Canvas = ({ items, setItems, dropPosition }) => {
   const handleDelete = (id) => {
     const newItems = items.filter((item) => item.id !== id);
     setItems(newItems);
@@ -13,63 +13,52 @@ const Canvas = ({ items, setItems }) => {
 
   return (
     <div className="canvas">
+      <h2>Uw Formulier</h2>
       <Droppable droppableId="Canvas">
         {(provided, snapshot) => (
           <div
-            className={`canvas-area`}
+            className={`canvas-area ${snapshot.isDraggingOver ? 'is-dragging-over' : ''}`}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
             {items.map((item, index) => (
               <React.Fragment key={item.id}>
-                <Droppable droppableId={`dropzone-${index}`} type="dropzone">
-                  {(providedDropZone, snapshotDropZone) => (
-                    <div
-                      className={`dropzone ${
-                        snapshotDropZone.isDraggingOver ? 'active' : ''
-                      }`}
-                      ref={providedDropZone.innerRef}
-                      {...providedDropZone.droppableProps}
-                    >
-                      {providedDropZone.placeholder}
+                {dropPosition === index && (
+                  <div className="custom-drop-indicator">
+                    <div className="drop-line"></div>
+                    <div className="drop-dot">
+                      <span className="plus-sign">+</span>
                     </div>
-                  )}
-                </Droppable>
-
+                  </div>
+                )}
                 <Draggable draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
                       className={`canvas-item ${snapshot.isDragging ? 'dragging' : ''}`}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      style={provided.draggableProps.style}
+                      {...provided.dragHandleProps}
                     >
                       <Block
                         type={item.type}
                         label={item.label}
                         id={item.id}
                         onDelete={handleDelete}
-                        provided={provided}
                       />
                     </div>
                   )}
                 </Draggable>
               </React.Fragment>
             ))}
-            {/* Add a dropzone at the end */}
-            <Droppable droppableId={`dropzone-${items.length}`} type="dropzone">
-              {(providedDropZone, snapshotDropZone) => (
-                <div
-                  className={`dropzone ${
-                    snapshotDropZone.isDraggingOver ? 'active' : ''
-                  }`}
-                  ref={providedDropZone.innerRef}
-                  {...providedDropZone.droppableProps}
-                >
-                  {providedDropZone.placeholder}
+            {dropPosition === items.length && (
+              <div className="custom-drop-indicator">
+                <div className="drop-line"></div>
+                <div className="drop-dot">
+                  <span className="plus-sign">+</span>
                 </div>
-              )}
-            </Droppable>
+              </div>
+            )}
+            {provided.placeholder}
             {items.length === 0 && (
               <div className="canvas-placeholder">Sleep hier uw elementen naartoe</div>
             )}
