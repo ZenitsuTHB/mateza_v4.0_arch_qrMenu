@@ -1,0 +1,51 @@
+/* src/components/DragAndDropEditor/css/canvas.css */
+
+.canvas {
+	width: 75%;
+	padding: 20px;
+	box-sizing: border-box;
+	overflow-y: auto;
+  }
+  
+  .canvas h2 {
+	margin-top: 0;
+  }
+  
+  .canvas-area {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	min-height: 200px;
+	border: 2px dashed #ccc;
+	padding: 10px;
+	border-radius: 8px;
+  }
+  
+  .canvas-item {
+	background-color: #e6f7ff;
+	padding: 10px;
+	border-radius: 8px;
+	cursor: grab;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	position: relative;
+  }
+  
+  .canvas-item.dragging {
+	opacity: 0.5;
+	transform: scale(0.95);
+  }
+  
+  .canvas-placeholder {
+	text-align: center;
+	color: #888;
+	font-size: 16px;
+	padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+	.canvas {
+	  width: 100%;
+	  order: 1;
+	}
+  }
+  
