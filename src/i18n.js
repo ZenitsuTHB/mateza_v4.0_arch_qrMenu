@@ -1,26 +1,40 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en from './i18n/en.json';  // Adjust these paths if necessary
-import fr from './i18n/fr.json';
-import es from './i18n/es.json';
-import de from './i18n/de.json';
-import nl from './i18n/nl.json';
+
+// Import English translations
+import enAccount from './i18n/en/account.json';
+import frAccount from './i18n/fr/account.json';
+import esAccount from './i18n/es/account.json';
+import deAccount from './i18n/de/account.json';
+import nlAccount from './i18n/nl/account.json';
 
 i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: { translation: en },
-      fr: { translation: fr },
-      es: { translation: es },
-      de: { translation: de },
-      nl: { translation: nl }
+      en: {
+        accountOnboarding: enAccount,
+      },
+      fr: {
+        accountOnboarding: frAccount,
+      },
+      es: {
+        accountOnboarding: esAccount,
+      },
+      de: {
+        accountOnboarding: deAccount,
+      },
+      nl: {
+        accountOnboarding: nlAccount,
+      },
     },
     lng: 'en', // default language
     fallbackLng: 'en',
+    ns: ['accountOnboarding'], // Only 'account' namespace
+    defaultNS: 'accountOnboarding', // Default namespace set to 'account'
     interpolation: {
-      escapeValue: false // React already does escaping
-    }
+      escapeValue: false, // React already does escaping
+    },
   });
 
 export default i18n;

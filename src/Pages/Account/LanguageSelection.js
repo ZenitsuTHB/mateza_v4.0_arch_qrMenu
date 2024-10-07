@@ -23,7 +23,7 @@ const LanguageSelection = ({ onSelectLanguage }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [currentText, setCurrentText] = useState(0); // To rotate text
   const [isVisible, setIsVisible] = useState(true); // For fade effect
-  const { t } = useTranslation();
+  const { t } = useTranslation("accountOnboarding");
 
   // Cycle through the languages every 2 seconds, with a 1-second fade transition
   useEffect(() => {

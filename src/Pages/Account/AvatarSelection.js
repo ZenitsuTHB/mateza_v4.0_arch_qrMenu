@@ -15,7 +15,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [isReverting, setIsReverting] = useState(false);
   const [accountName, setAccountName] = useState('');
   const avatarRefs = useRef([]);
-  const { t } = useTranslation();
+  const { t } = useTranslation("accountOnboarding");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
