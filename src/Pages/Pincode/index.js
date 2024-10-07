@@ -10,9 +10,8 @@ const PincodeScreen = () => {
     <div className="pincode-page">
       <div className="pincode-screen">
         <div className="pincode-container">
-		
+			<h2>Vul Uw Pincode In</h2>
           <PincodeInput length={6} />
-          <button className="button next-button">Volgende</button>
         </div>
       </div>
     </div>
