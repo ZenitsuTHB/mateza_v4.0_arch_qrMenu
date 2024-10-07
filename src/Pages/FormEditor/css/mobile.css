@@ -18,3 +18,18 @@
 	  order: 1;
 	}
   }
+
+.palette-responsive {
+	width: 100%;
+	order: 2;
+  }
+  
+  .editor-container-responsive {
+	flex-direction: column;
+  }
+  
+  .canvas-responsive {
+	width: 100%;
+	order: 1;
+  }
+  

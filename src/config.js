@@ -1,6 +1,6 @@
 // routesConfig.js
 import { FaChartPie, FaColumns, FaStickyNote, FaPencilAlt } from 'react-icons/fa'; // Import the new icon
-import DragAndDrop from './Pages/About/index.js';
+import DragAndDrop from './Pages/FormEditor/index.js';
 import Notepad from './Pages/Notepad/index.js';
 import Profile from './Pages/Profile/index.js';
 
