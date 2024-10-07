@@ -3,8 +3,10 @@ import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette.js';
 import Canvas from './Canvas.js';
+import './css/animations.css';
 import './css/style.css';
 import './css/mobile.css';
+
 import {
   FaFont,
   FaEnvelope,

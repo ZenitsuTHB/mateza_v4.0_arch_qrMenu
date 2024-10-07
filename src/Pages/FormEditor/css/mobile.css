@@ -4,6 +4,7 @@
 	  width: 100%;
 	  order: 2;
 	  margin-bottom: 220px;
+	  margin-left: 0px;
 	}
   }
   
@@ -17,6 +18,8 @@
 	.form-editing-page .canvas {
 	  width: 100%;
 	  order: 1;
+	  min-height: 300px;
+	  margin-bottom: 0px;
 	}
   }
 
@@ -24,6 +27,7 @@
 	width: 100% !important;
 	order: 2;
 	margin-bottom: 220px;
+	margin-left: 0px;
   }
   
   .editor-container-responsive {
@@ -33,5 +37,6 @@
   .canvas-responsive {
 	width: 100%;
 	order: 1;
+	margin-bottom: 0px;
   }
   

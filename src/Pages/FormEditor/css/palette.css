@@ -3,6 +3,7 @@
 .form-editing-page .palette {
 	width: 300px;
 	padding: 20px;
+	margin-left: -20px;
 	box-sizing: border-box;
 	overflow-y: auto;
 	border-radius: 8px;
@@ -52,5 +53,43 @@
   
   .form-editing-page .palette-block .label {
 	font-size: 14px;
+  }
+  
+
+  /* src/components/DragAndDropEditor/css/palette.css */
+
+.form-editing-page .palette-block {
+	position: relative; /* Ensure the pseudo-element is positioned relative to this element */
+	background-color: var(--color-white);
+	padding: 10px;
+	border-radius: 8px;
+	cursor: grab;
+	display: flex;
+	align-items: center;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	box-sizing: border-box;
+  }
+  
+  .form-editing-page .palette-block:hover {
+	transform: scale(1.05);
+	z-index: 10000;
+  }
+  
+  .form-editing-page .palette-block:hover::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+	border: 2px solid rgba(24, 144, 255, 0.8); /* Blue border */
+	border-radius: 16px; /* Increase border radius to maintain the rounded effect */
+	pointer-events: none; /* Prevent the pseudo-element from blocking interactions */
+	box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
+  }
+  
+  .form-editing-page .palette-block.dragging {
+	opacity: 0.5;
+	transform: scale(0.95);
   }
   

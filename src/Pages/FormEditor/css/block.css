@@ -100,3 +100,20 @@
 	margin-bottom: 10px;
   }
   
+  .form-editing-page .block:hover::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+	border: 2px solid rgba(24, 144, 255, 0.8); /* Blue border */
+	border-radius: 16px; /* Increase border radius to maintain the rounded effect */
+	pointer-events: none; /* Make sure the pseudo-element doesn't block interaction */
+  }
+  
+  .form-editing-page .block.selected {
+	border: 2px solid var(--color-bg);
+  }
+
+  
