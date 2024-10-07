@@ -20,6 +20,7 @@
 	  order: 1;
 	  min-height: 300px;
 	  margin-bottom: 0px;
+	  padding: 0 !important;
 	}
   }
 
@@ -38,5 +39,7 @@
 	width: 100%;
 	order: 1;
 	margin-bottom: 0px;
+	padding: 0 !important;
+	
   }
   
