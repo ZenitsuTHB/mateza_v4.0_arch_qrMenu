@@ -12,6 +12,9 @@
 	"pleaseEnterAccountName": "Bitte geben Sie einen Kontonamen ein.",
 	"enterAccountName": "Kontonamen eingeben",
 	"previous": "Zurück",
-	"avatar": "Avatar"
+	"avatar": "Avatar",
+	"languageSelected": "Sprache ausgewählt: {{language}}",
+	"avatarSelected": "Avatar ausgewählt",
+	"accountSetupComplete": "Kontoeinrichtung abgeschlossen!"
   }
   

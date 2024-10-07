@@ -12,6 +12,9 @@
 	"pleaseEnterAccountName": "Veuillez entrer un nom de compte.",
 	"enterAccountName": "Entrez le nom du compte",
 	"previous": "Précédent",
-	"avatar": "Avatar"
+	"avatar": "Avatar",
+	"languageSelected": "Langue sélectionnée: {{language}}",
+	"avatarSelected": "Avatar sélectionné",
+	"accountSetupComplete": "Configuration du compte terminée!"
   }
   

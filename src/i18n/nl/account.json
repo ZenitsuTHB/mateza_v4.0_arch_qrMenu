@@ -12,6 +12,9 @@
 	"pleaseEnterAccountName": "Voer een accountnaam in.",
 	"enterAccountName": "Voer accountnaam in",
 	"previous": "Vorige",
-	"avatar": "Avatar"
+	"avatar": "Avatar",
+	"languageSelected": "Taal geselecteerd: {{language}}",
+	"avatarSelected": "Avatar geselecteerd",
+	"accountSetupComplete": "Accountinstelling voltooid!"
   }
   
