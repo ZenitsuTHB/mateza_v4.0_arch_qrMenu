@@ -3,6 +3,7 @@ import { FaChartPie, FaColumns, FaStickyNote, FaPencilAlt } from 'react-icons/fa
 import DragAndDrop from './Pages/FormEditor/index.js';
 import Notepad from './Pages/Notepad/index.js';
 import Profile from './Pages/Profile/index.js';
+import Pincode from './Pages/Pincode/index.js';
 
 import SplitScreen from './Components/Structural/SplitScreen/index.js';
 
@@ -23,6 +24,15 @@ const routesConfig = [
     icon: FaChartPie,
     isMenu: false,
     isMobile: false,
+    isTab: false,
+  },
+  {
+    path: '/pincode',
+    element: <Pincode title="Pincode" />,
+    label: 'Profiel',
+    icon: FaChartPie,
+    isMenu: true,
+    isMobile: true,
     isTab: false,
   },
   {
