@@ -19,10 +19,6 @@ const dispatch = useDispatch();
 	triggerNotification('Profiel aangepast', 'success');
   };
 
-  const handleModalClose = () => {
-    setShowAvatarModal(false);
-  };
-
   return (
     <div>
 		<NotificationComponent/>
@@ -36,12 +32,6 @@ const dispatch = useDispatch();
       {showAvatarModal && (
         <div className="profile-page__modal">
           <div className="profile-page__modal-content">
-            <span
-              className="profile-page__modal-close"
-              onClick={handleModalClose}
-            >
-              &times;
-            </span>
             <h2>Kies een Avatar</h2>
             <div className="profile-page__avatar-grid">
               {Object.keys(avatarMapping).map((key, index) => (

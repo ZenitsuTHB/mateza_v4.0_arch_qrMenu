@@ -33,7 +33,7 @@ const LanguageSelector = () => {
     setSelectedLanguage(lang);
     i18n.changeLanguage(lang.code);
     localStorage.setItem('selectedLanguage', lang.code);
-    triggerNotification(`Geselecteerde taal: ${lang.name}`, 'success');
+    triggerNotification(`Taal: ${lang.name}`, 'success');
     setIsModalOpen(false);
   };
 

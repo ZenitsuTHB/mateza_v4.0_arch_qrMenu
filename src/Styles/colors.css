@@ -4,6 +4,7 @@
 	--color-black: #000;
 	--color-nav-selection: #f3f3f3;
 	--color-border: #a4a4a4;
-	---color-blue: rgb(0, 157, 255);
+	--color-blue: rgb(0, 157, 255);
+	--color-modal-bg: rgba(0, 0, 0, 0.5);
 	--mobile-max-width: 900px;
   }

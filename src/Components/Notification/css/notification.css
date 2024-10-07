@@ -28,9 +28,9 @@
   }
   
   .notification-component .notification-message {
-	flex: 1;
 	font-size: 0.85rem;
-	margin-left: 9px
+	margin-left: 45px;
+	position: absolute;
   }
   
   .notification-component .notification-close-icon {

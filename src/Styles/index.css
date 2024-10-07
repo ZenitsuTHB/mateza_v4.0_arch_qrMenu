@@ -1,3 +1,8 @@
+
+:root {
+	--border-radius: 10px;
+}
+
 .app-component {
 	display: flex;
 	height: 100vh;
@@ -12,7 +17,6 @@
   body {
 	background-color: var(--color-bg);
   }
-
   .button {
 	padding: 10px 20px;
 	font-size: 16px;
