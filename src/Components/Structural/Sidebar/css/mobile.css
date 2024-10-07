@@ -6,7 +6,7 @@
 		position: fixed;
 	}
 
-	.sidebar-inner {
+	.sidebar .sidebar-inner {
 		position: fixed;
 		bottom: 0;
 		left: 0;
@@ -37,7 +37,7 @@
 		display: none;
 	}
 
-	.profile-pic {
+	.sidebar .profile-pic {
 		display: none;
 	}
 }

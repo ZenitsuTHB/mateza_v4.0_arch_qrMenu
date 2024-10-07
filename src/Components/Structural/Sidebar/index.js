@@ -61,44 +61,46 @@ const Sidebar = () => {
   };
 
   return (
-    <motion.div className="sidebar" layout>
-      <motion.div className={innerClass} layout>
-        {routesConfig
-          .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
-          .map((route) => (
-            <SidebarItem
-              key={route.path}
-              item={{ id: route.path, title: route.label, icon: route.icon }}
-              activeTab={activeTab}
-              setActiveTab={() => handleNavigation(route.path)}
-            />
-          ))}
-      </motion.div>
+    <div className="sidebar-component">
+      <motion.div className="sidebar" layout>
+        <motion.div className={innerClass} layout>
+          {routesConfig
+            .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
+            .map((route) => (
+              <SidebarItem
+                key={route.path}
+                item={{ id: route.path, title: route.label, icon: route.icon }}
+                activeTab={activeTab}
+                setActiveTab={() => handleNavigation(route.path)}
+              />
+            ))}
+        </motion.div>
 
-      <motion.div
-        className="sidebar-profile"
-        onClick={handleProfileClick}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        tabIndex="0"
-        role="button"
-        aria-label="Profile"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            handleProfileClick();
-          }
-        }}
-      >
-        <span className="sidebar-item__icon">
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="profile-pic"
-          />
-          <span className="tooltip">Profile</span>
-        </span>
+        <motion.div
+          className="sidebar-profile"
+          onClick={handleProfileClick}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          tabIndex="0"
+          role="button"
+          aria-label="Profile"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleProfileClick();
+            }
+          }}
+        >
+          <span className="sidebar-item__icon">
+            <img
+              src={profileImage}
+              alt="Profile"
+              className="profile-pic"
+            />
+            <span className="tooltip">Profile</span>
+          </span>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -56,6 +56,7 @@ const LanguageSelector = () => {
   }, [isModalOpen]);
 
   return (
+    <div className="profile-language-page">
     <div className="language-selector-container">
       <NotificationComponent />
       <h2>Taalvoorkeuren</h2>
@@ -87,6 +88,7 @@ const LanguageSelector = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };
