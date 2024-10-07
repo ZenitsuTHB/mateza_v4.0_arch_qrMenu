@@ -1,10 +1,10 @@
 
-.profile-language-page .language-selector-container {
+.profile-page .language-selector-container {
 	margin-top: 30px;
 	position: relative;
   }
   
-  .profile-language-page .language-selector {
+  .profile-page .language-selector {
 	display: flex;
 	align-items: center;
 	background-color: #fff;
@@ -15,25 +15,25 @@
   }
 
   
-  .profile-language-page .language-selector__flag {
+  .profile-page .language-selector__flag {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
 	margin-right: 13px;
   }
   
-  .profile-language-page .language-selector__name {
+  .profile-page .language-selector__name {
 	font-size: 16px;
 	margin-right: 5px;
 	color: #333;
   }
   
-  .profile-language-page .language-selector__icon {
+  .profile-page .language-selector__icon {
 	color: #555;
 	font-size: 18px;
   }
   
-  .profile-language-page .language-selector__modal-overlay {
+  .profile-page .language-selector__modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -48,7 +48,7 @@
 	z-index: 100000;
   }
   
-  .profile-language-page .language-selector__modal {
+  .profile-page .language-selector__modal {
 	background-color: #fff;
 	border-radius: 10px;
 	padding: 20px;
@@ -57,20 +57,20 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
-  .profile-language-page .language-selector__modal h3 {
+  .profile-page .language-selector__modal h3 {
 	margin-top: 0;
 	margin-bottom: 20px;
 	text-align: center;
 	color: #333;
   }
   
-  .profile-language-page .language-selector__options {
+  .profile-page .language-selector__options {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
   }
   
-  .profile-language-page .language-selector__option {
+  .profile-page .language-selector__option {
 	display: flex;
 	align-items: center;
 	padding: 10px;
@@ -79,27 +79,27 @@
 	transition: background-color 0.2s ease;
   }
   
-  .profile-language-page .language-selector__option:hover {
+  .profile-page .language-selector__option:hover {
 	background-color: #f0f0f0;
   }
   
-  .profile-language-page .language-selector__option.selected {
+  .profile-page .language-selector__option.selected {
 	background-color: #e6f7ff;
   }
   
-  .profile-language-page .language-selector__option-flag {
+  .profile-page .language-selector__option-flag {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
 	margin-right: 10px;
   }
   
-  .profile-language-page .language-selector__option-name {
+  .profile-page .language-selector__option-name {
 	font-size: 16px;
 	color: #333;
   }
 
-  .profile-language-page .language-selector-container h2 {
+  .profile-page .language-selector-container h2 {
 	margin-top: 0;
 	margin-bottom: 30px;
   }
