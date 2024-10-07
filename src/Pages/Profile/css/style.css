@@ -105,11 +105,8 @@
 	cursor: pointer;
 	opacity: 0;
 	transform: scale(0.8);
+	transition: transform 0.2s ease;
 	animation: avatarFadeIn 0.5s forwards;
-}
-
-.profile-page__avatar-option:hover {
-	transform: scale(1.1);
 }
 
 .profile-page__bio {
@@ -145,3 +142,4 @@
   .profile-page__container {
 	margin-bottom: 100px;
   }
+

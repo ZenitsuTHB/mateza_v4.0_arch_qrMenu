@@ -24,6 +24,8 @@
 	z-index: 10000;
 }
   
+
+
 .sidebar .sidebar-item {
 	position: relative;
 	height: 40px;
@@ -89,3 +91,52 @@
   .sidebar {
 	z-index: 10;
   }
+
+/* style.css */
+
+/* Existing sidebar styles ... */
+
+/* Sidebar Apps (Nine Dots) */
+.sidebar-apps {
+	position: relative;
+	cursor: pointer;
+  }
+  
+  .nine-dots {
+	display: flex;
+	flex-wrap: wrap;
+	width: 24px;
+	height: 24px;
+  }
+  
+  .nine-dots .dot {
+	width: 6px;
+	height: 6px;
+	margin: 1px;
+	border-radius: 50%;
+  }
+  
+  .nine-dots .dot-1 { background-color: #FF5733; } /* Red */
+  .nine-dots .dot-2 { background-color: #FFBD33; } /* Orange */
+  .nine-dots .dot-3 { background-color: #DBFF33; } /* Yellow */
+  .nine-dots .dot-4 { background-color: #75FF33; } /* Light Green */
+  .nine-dots .dot-5 { background-color: #33FF57; } /* Green */
+  .nine-dots .dot-6 { background-color: #33FFBD; } /* Teal */
+  .nine-dots .dot-7 { background-color: #33DBFF; } /* Light Blue */
+  .nine-dots .dot-8 { background-color: #3375FF; } /* Blue */
+  .nine-dots .dot-9 { background-color: #5733FF; } /* Purple */
+  
+  
+  .sidebar .sidebar-apps:hover .tooltip,
+  .sidebar .sidebar-apps:focus .tooltip {
+	opacity: 1;
+	visibility: visible;
+  }
+  
+  
+  /* Adjust AppsMenu appearance to match tooltip style */
+  .apps-menu {
+	/* Rounded corners and margin already handled in AppsMenu.css */
+	/* Additional tooltip-like styles if needed */
+  }
+  

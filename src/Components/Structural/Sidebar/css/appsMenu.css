@@ -1,0 +1,85 @@
+/* AppsMenu.css */
+.apps-menu {
+	position: fixed;
+	bottom: 20px; /* Margin from the bottom */
+	left: 20px;   /* Margin from the left */
+	width: 25%;
+	background-color: rgba(255, 255, 255, 0.9); /* Slight opacity */
+	padding: 24px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+	border-radius: 12px;
+	z-index: 1000;
+	max-height: 60%;
+	overflow-y: auto;
+	backdrop-filter: blur(10px); /* Backdrop blur effect */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  @media (max-width: 768px) {
+	.apps-menu {
+	  width: 90%;
+	  left: 5%;
+	  bottom: 10px;
+	}
+  }
+  
+  .apps-menu-close {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	color: #555;
+  }
+  
+  .apps-menu-title {
+	margin-top: 24px;
+	margin-bottom: 16px;
+	font-size: 18px;
+	color: #333;
+	text-align: center;
+  }
+  
+  .apps-flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 16px;
+	width: 100%;
+  }
+  
+  .app-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-decoration: none;
+	color: gray;
+	padding: 8px;
+	border-radius: 8px;
+	transition: background-color 0.3s ease;
+	width: 80px; /* Adjust width to fit smaller icons */
+  }
+  
+  .app-item:hover {
+	background-color: lightgray;
+  }
+  
+  .app-icon {
+	width: 50px; /* Smaller icon size */
+	height: 50px;
+	border-radius: 8px;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+  }
+  
+  .app-name {
+	margin-top: 8px;
+	font-size: 12px;
+	color: #555;
+	text-align: center;
+  }
+  

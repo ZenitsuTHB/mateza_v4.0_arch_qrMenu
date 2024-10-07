@@ -1,5 +1,6 @@
+// Sidebar.js
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import SidebarItem from './SidebarItem.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,57 +8,52 @@ import { setAvatar } from '../../../Redux/actions/avatarActions.js';
 import routesConfig from '../../../config.js';
 import './css/style.css';
 import './css/mobile.css';
-
-import blue1 from '../../../Assets/avatars/blue1.webp';
-import blue2 from '../../../Assets/avatars/blue2.webp';
-import blue3 from '../../../Assets/avatars/blue3.webp';
-import red1 from '../../../Assets/avatars/red1.webp';
-import red2 from '../../../Assets/avatars/red2.webp';
-import red3 from '../../../Assets/avatars/red3.webp';
-import green1 from '../../../Assets/avatars/green1.webp';
-import green2 from '../../../Assets/avatars/green2.webp';
-import green3 from '../../../Assets/avatars/green3.webp';
+import AppsMenu from './AppsMenu.js';
 
 const avatarMapping = {
-  'blue1': blue1,
-  'blue2': blue2,
-  'blue3': blue3,
-  'red1': red1,
-  'red2': red2,
-  'red3': red3,
-  'green1': green1,
-  'green2': green2,
-  'green3': green3,
+  'blue1': 'https://static.reservaties.net/images/logo/logo.png',
+  'blue2': 'https://static.reservaties.net/images/logo/logo.png',
+  'blue3': 'https://static.reservaties.net/images/logo/logo.png',
+  'red1': 'https://static.reservaties.net/images/logo/logo.png',
+  'red2': 'https://static.reservaties.net/images/logo/logo.png',
+  'red3': 'https://static.reservaties.net/images/logo/logo.png',
+  'green1': 'https://static.reservaties.net/images/logo/logo.png',
+  'green2': 'https://static.reservaties.net/images/logo/logo.png',
+  'green3': 'https://static.reservaties.net/images/logo/logo.png',
 };
 
-const defaultAvatar = blue1;
+const defaultAvatar = 'https://static.reservaties.net/images/logo/logo.png';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [innerClass, setInnerClass] = useState('sidebar-initial');
-  const profileImage = useSelector((state) => avatarMapping[state.avatar]); // Get avatar from Redux
+  const profileImage = useSelector((state) => avatarMapping[state.avatar] || defaultAvatar); // Get avatar from Redux
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const isMobile = window.innerWidth < 768;
+  const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
 
   useEffect(() => {
     setInnerClass('sidebar-inner');
-    
+
     const selectedAvatar = localStorage.getItem('selectedAvatar');
     if (selectedAvatar && avatarMapping[selectedAvatar]) {
-      dispatch(setAvatar(selectedAvatar)); 
+      dispatch(setAvatar(selectedAvatar));
     }
-
-  }, [profileImage]);
+  }, [dispatch]);
 
   const handleNavigation = (path) => {
     setActiveTab(path);
     navigate(path);
   };
 
-  const handleProfileClick = () => {
-    navigate('/profile');
+  const handleAppsMenuOpen = () => {
+    setIsAppsMenuOpen(true);
+  };
+
+  const handleAppsMenuClose = () => {
+    setIsAppsMenuOpen(false);
   };
 
   return (
@@ -77,29 +73,32 @@ const Sidebar = () => {
         </motion.div>
 
         <motion.div
-          className="sidebar-profile"
-          onClick={handleProfileClick}
+          className="sidebar-apps"
+          onClick={handleAppsMenuOpen}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           tabIndex="0"
           role="button"
-          aria-label="Profile"
+          aria-label="Open Apps Menu"
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              handleProfileClick();
+              handleAppsMenuOpen();
             }
           }}
         >
           <span className="sidebar-item__icon">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="profile-pic"
-            />
-            <span className="tooltip">Profile</span>
+            <div className="nine-dots">
+              {[...Array(9)].map((_, index) => (
+                <span key={index} className={`dot dot-${index + 1}`}></span>
+              ))}
+              <span className="tooltip">Apps</span>
+            </div>
           </span>
         </motion.div>
       </motion.div>
+      <AnimatePresence>
+        {isAppsMenuOpen && <AppsMenu onClose={handleAppsMenuClose} />}
+      </AnimatePresence>
     </div>
   );
 };

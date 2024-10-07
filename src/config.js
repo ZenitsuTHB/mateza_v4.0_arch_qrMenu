@@ -29,7 +29,7 @@ const routesConfig = [
   {
     path: '/pincode',
     element: <Pincode title="Pincode" />,
-    label: '',
+    label: 'Pincode',
     icon: FaBoxes,
     isMenu: true,
     isMobile: true,
