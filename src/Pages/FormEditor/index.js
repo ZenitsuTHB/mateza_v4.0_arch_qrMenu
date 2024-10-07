@@ -48,7 +48,7 @@ const DragAndDropEditor = () => {
         const editorContainer = container.querySelector('.editor-container');
         const canvas = container.querySelector('.canvas');
 
-        if (containerWidth <= 1000) {
+        if (containerWidth <= 600) {
           // Apply responsive classes
           palette?.classList.add('palette-responsive');
           editorContainer?.classList.add('editor-container-responsive');
