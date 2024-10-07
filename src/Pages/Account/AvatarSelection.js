@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
 import { avatars, avatarNames } from './avatars'; // Importing from avatars.js
-import './css/avatarSelection.css'
+import './css/avatarSelection.css';
+import { useTranslation } from 'react-i18next';
 
 const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -14,20 +15,22 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   const [isReverting, setIsReverting] = useState(false);
   const [accountName, setAccountName] = useState('');
   const avatarRefs = useRef([]);
-  const [titleText, setTitleText] = useState('Kies een Avatar');
-  const [subtitleText, setSubtitleText] = useState('Stap 1/3');
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [titleText, setTitleText] = useState(t('chooseAnAvatar'));
+  const [subtitleText, setSubtitleText] = useState(t('Step 2/3'));
+
   useEffect(() => {
     if (selectedAvatar !== null && !isReverting) {
-      setSubtitleText('Stap 2/3');
-      setTitleText('Kies een Accountnaam');
+      setSubtitleText(t('Step 3/3'));
+      setTitleText(t('chooseAccountName'));
     } else if (isReverting) {
-      setSubtitleText('Stap 1/3');
-      setTitleText('Kies een Avatar');
+      setSubtitleText(t('Step 2/3'));
+      setTitleText(t('chooseAnAvatar'));
     }
-  }, [selectedAvatar, isReverting]);
+  }, [selectedAvatar, isReverting, t]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -105,7 +108,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     onSelectAvatar(selectedAvatar);
 
     if (accountName.trim() === '') {
-      alert('Please enter an account name.');
+      alert(t('pleaseEnterAccountName'));
       return;
     }
 
@@ -150,7 +153,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             >
               <img
                 src={avatar}
-                alt={`Avatar ${index + 1}`}
+                alt={`${t('avatar')} ${index + 1}`}
                 className={`avatar-image ${
                   selectedAvatar === index && !isReverting ? 'miraculous' : ''
                 }`}
@@ -165,7 +168,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
             <input
               type="text"
               className={`account-input ${selectedAvatar !== null ? 'visible' : ''}`}
-              placeholder="Vul accountnaam in"
+              placeholder={t('enterAccountName')}
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
             />
@@ -178,14 +181,14 @@ const AvatarSelection = ({ onSelectAvatar }) => {
               onClick={handleRevertAvatar}
               disabled={isReverting}
             >
-              Vorige
+              {t('previous')}
             </button>
             <button
               className="next-button visible"
               onClick={goToNextPage}
               disabled={isReverting}
             >
-              Volgende
+              {t('next')}
             </button>
           </div>
         )}

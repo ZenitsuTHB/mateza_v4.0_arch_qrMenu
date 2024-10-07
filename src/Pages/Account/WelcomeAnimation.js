@@ -1,13 +1,13 @@
-// src/components/WelcomeAnimation/WelcomeAnimation.jsx
-
 import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
+import { useTranslation } from 'react-i18next';
 import './css/welcomeAnimation.css';
 
 const WelcomeAnimation = ({ onComplete }) => {
   const sketchRef = useRef();
   const [showMessage, setShowMessage] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  const { t } = useTranslation();
 
   // Constants for adjustable parameters
   const DURATION = 4000; // Animation duration in ms
@@ -110,7 +110,7 @@ const WelcomeAnimation = ({ onComplete }) => {
       <div ref={sketchRef}></div>
       {showMessage && (
         <div className="welcome-message">
-          <h1>Welkom bij Mateza Booking 4.0</h1>
+          <h1>{t('welcomeMessage')}</h1>
           <button
             className="next-button"
             onClick={handleButtonClick}
@@ -119,7 +119,7 @@ const WelcomeAnimation = ({ onComplete }) => {
               pointerEvents: showButton ? 'auto' : 'none',
             }}
           >
-            Start Nu
+            {t('startNow')}
           </button>
         </div>
       )}
