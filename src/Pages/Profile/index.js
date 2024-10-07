@@ -1,7 +1,10 @@
+// src/components/Profile/Profile.jsx
+
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import ProfileImage from './ProfileImage';
 import ProfileBio from './ProfileBio';
+import Language from './Language'; // Import the LanguageSelector
 import blue1 from '../../Assets/avatars/blue1.webp';
 import blue2 from '../../Assets/avatars/blue2.webp';
 import blue3 from '../../Assets/avatars/blue3.webp';
@@ -12,8 +15,8 @@ import green1 from '../../Assets/avatars/green1.webp';
 import green2 from '../../Assets/avatars/green2.webp';
 import green3 from '../../Assets/avatars/green3.webp';
 import './css/style.css';
-import './css/mobile.css'
-import './css/animations.css'
+import './css/mobile.css';
+import './css/animations.css';
 
 const avatarMapping = {
   blue1: blue1,
@@ -69,6 +72,7 @@ const Profile = (props) => {
           onAvatarSelect={handleAvatarSelect}
         />
         <ProfileBio name={name} bio={bio} interests={interests} />
+        <Language /> {/* Include the LanguageSelector component */}
       </div>
     </div>
   );
