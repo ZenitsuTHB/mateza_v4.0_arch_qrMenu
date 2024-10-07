@@ -7,9 +7,3 @@
 	margin-top: 30px;
   }
   
-  @media (max-width: 768px) {
-	.form-editing-page .editor-container {
-	  flex-direction: column;
-	}
-  }
-  

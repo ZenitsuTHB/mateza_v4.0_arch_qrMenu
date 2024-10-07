@@ -1,23 +1,5 @@
-@keyframes fadeInOut {
-	0% {
-	  opacity: 0;
-	  transform: translateX(-100%);
-	}
-	10% {
-	  opacity: 1;
-	  transform: translateX(0);
-	}
-	90% {
-	  opacity: 1;
-	  transform: translateX(0);
-	}
-	100% {
-	  opacity: 0;
-	  transform: translateX(-100%);
-	}
-  }
   
-  .notification-popover {
+  .notification-component .notification-popover {
 	position: fixed;
 	bottom: 20px;
 	left: 15px;
@@ -35,7 +17,7 @@
 	animation: fadeInOut 3s ease-in-out;
   }
   
-  .notification-icon {
+  .notification-component .notification-icon {
 	width: 30px;
 	height: 30px;
 	display: flex;
@@ -45,13 +27,13 @@
 	margin-right: 10px;
   }
   
-  .notification-message {
+  .notification-component .notification-message {
 	flex: 1;
 	font-size: 0.85rem;
 	margin-left: 9px
   }
   
-  .notification-close-icon {
+  .notification-component .notification-close-icon {
 	cursor: pointer;
 	margin-left: 10px;
   }

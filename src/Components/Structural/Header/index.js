@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import EditableTitle from './EditableTitle';
 import './css/style.css';
+import './css/mobile.css'
 
 const withHeader = (WrappedComponent) => {
   return (props) => {

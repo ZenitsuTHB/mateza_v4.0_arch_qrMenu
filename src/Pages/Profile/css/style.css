@@ -75,15 +75,6 @@
 	z-index: 100000;
 }
   
-@keyframes modalFadeIn {
-	from {
-	  opacity: 0;
-	}
-	to {
-	  opacity: 1;
-	}
-}
-  
 .profile-page__modal-content {
 	background-color: #fff;
 	padding: 20px;
@@ -92,20 +83,6 @@
 	width: 80%;
 	max-width: 500px;
 	animation: modalContentBounceIn 0.6s ease;
-}
-  
-@keyframes modalContentBounceIn {
-	0% {
-	  transform: scale(0.7);
-	  opacity: 0;
-	}
-	60% {
-	  transform: scale(1.05);
-	  opacity: 1;
-	}
-	100% {
-	  transform: scale(1);
-	}
 }
   
 .profile-page__modal-close {
@@ -134,27 +111,6 @@
 .profile-page__avatar-option:hover {
 	transform: scale(1.1);
 }
-  
-@keyframes avatarFadeIn {
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-@media (max-width: 768px) {
-	.profile-page {
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 100%;
-	}
-
-	.profile-page__modal-content {
-		width: 90%;
-	}
-}
-
 
 .profile-page__bio {
 	font-size: 17px;

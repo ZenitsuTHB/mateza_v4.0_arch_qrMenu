@@ -12,6 +12,8 @@ import green1 from '../../Assets/avatars/green1.webp';
 import green2 from '../../Assets/avatars/green2.webp';
 import green3 from '../../Assets/avatars/green3.webp';
 import './css/style.css';
+import './css/mobile.css'
+import './css/animations.css'
 
 const avatarMapping = {
   blue1: blue1,

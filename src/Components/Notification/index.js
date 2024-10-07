@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import NotificationPopover from './NotificationPopover';
+import './css/animations.css'
 
 const useNotification = () => {
   const [notifications, setNotifications] = useState([]);
@@ -36,7 +37,7 @@ const useNotification = () => {
   }, [notifications]);
 
   const NotificationComponent = () => (
-    <div className="notification-container">
+    <div className="notification-component">
       {notifications.map((notification) => (
         <NotificationPopover
           key={notification.id}

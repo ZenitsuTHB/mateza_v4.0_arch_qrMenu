@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAvatar } from '../../../Redux/actions/avatarActions.js';
 import routesConfig from '../../../config.js';
 import './css/style.css';
+import './css/mobile.css';
 
 import blue1 from '../../../Assets/avatars/blue1.webp';
 import blue2 from '../../../Assets/avatars/blue2.webp';

@@ -54,10 +54,3 @@
 	font-size: 14px;
   }
   
-  @media (max-width: 768px) {
-	.form-editing-page .palette {
-	  width: 100%;
-	  order: 2;
-	}
-  }
-  

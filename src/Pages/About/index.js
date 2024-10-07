@@ -5,7 +5,9 @@ import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette.js';
 import Canvas from './Canvas.js';
-import './css/dragAndDropEditor.css';
+import './css/style.css';
+import './css/mobile.css';
+
 import {
   FaFont,
   FaEnvelope,
@@ -20,8 +22,8 @@ import {
 const initialBlocks = [
   { id: '1', type: 'input', label: 'Invoerveld', icon: <FaKeyboard /> },
   { id: '2', type: 'select', label: 'Selectievak', icon: <FaList /> },
-  { id: '3', type: 'phone', label: 'Telefoonnummer', icon: <FaPhone /> },
-  { id: '4', type: 'email', label: 'Emailadres', icon: <FaEnvelope /> },
+  { id: '3', type: 'phone', label: 'Telefoon', icon: <FaPhone /> },
+  { id: '4', type: 'email', label: 'Email', icon: <FaEnvelope /> },
   { id: '5', type: 'picture', label: 'Afbeelding', icon: <FaImage /> },
   { id: '6', type: 'textarea', label: 'Tekstveld', icon: <FaFont /> },
   { id: '7', type: 'title', label: 'Titel', icon: <FaHeading /> },
