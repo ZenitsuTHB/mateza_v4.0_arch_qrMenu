@@ -1,13 +1,10 @@
-// src/components/DragAndDropEditor/DragAndDropEditor.jsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette.js';
 import Canvas from './Canvas.js';
 import './css/style.css';
 import './css/mobile.css';
-
 import {
   FaFont,
   FaEnvelope,
@@ -34,6 +31,51 @@ const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
   const [canvasItems, setCanvasItems] = useState([]);
   const [dropPosition, setDropPosition] = useState(null); // Track drop position
+  const formEditingPageRef = useRef(null); // Reference to the .form-editing-page container
+
+  // Effect to handle applying responsive styles based on container size
+  useEffect(() => {
+    const applyResponsiveStyles = () => {
+      const container = formEditingPageRef.current;
+
+      if (container) {
+        const containerWidth = container.offsetWidth;
+
+        // Elements to modify
+        const palette = container.querySelector('.palette');
+        const editorContainer = container.querySelector('.editor-container');
+        const canvas = container.querySelector('.canvas');
+
+        if (containerWidth <= 1000) {
+          // Apply responsive classes
+          palette?.classList.add('palette-responsive');
+          editorContainer?.classList.add('editor-container-responsive');
+          canvas?.classList.add('canvas-responsive');
+        } else {
+          // Remove responsive classes if the container is larger
+          palette?.classList.remove('palette-responsive');
+          editorContainer?.classList.remove('editor-container-responsive');
+          canvas?.classList.remove('canvas-responsive');
+        }
+      }
+    };
+
+    // Add resize observer to listen for size changes
+    const observer = new ResizeObserver(() => {
+      applyResponsiveStyles();
+    });
+
+    if (formEditingPageRef.current) {
+      observer.observe(formEditingPageRef.current);
+    }
+
+    // Cleanup observer on unmount
+    return () => {
+      if (formEditingPageRef.current) {
+        observer.unobserve(formEditingPageRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this effect runs only once
 
   const handleOnDragEnd = (result) => {
     setDropPosition(null); // Reset drop position on drag end
@@ -74,13 +116,13 @@ const DragAndDropEditor = () => {
   };
 
   return (
-    <div className="form-editing-page">
-    <div className="editor-container">
-      <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
-        <Palette blocks={blocks} />
-        <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
-      </DragDropContext>
-    </div>
+    <div className="form-editing-page" ref={formEditingPageRef}>
+      <div className="editor-container">
+        <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
+          <Palette blocks={blocks} />
+          <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
+        </DragDropContext>
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@
 	.form-editing-page .palette {
 	  width: 100%;
 	  order: 2;
+	  margin-bottom: 220px;
 	}
   }
   
@@ -20,8 +21,9 @@
   }
 
 .palette-responsive {
-	width: 100%;
+	width: 100% !important;
 	order: 2;
+	margin-bottom: 220px;
   }
   
   .editor-container-responsive {

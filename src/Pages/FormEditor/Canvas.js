@@ -24,7 +24,6 @@ const Canvas = ({ items, setItems, dropPosition }) => {
           >
             {items.map((item, index) => (
               <React.Fragment key={item.id}>
-                {/* Render drop indicator before each item */}
                 {dropPosition === index && (
                   <div className="custom-drop-indicator">
                     <div className="drop-line"></div>
@@ -54,7 +53,6 @@ const Canvas = ({ items, setItems, dropPosition }) => {
                 </Draggable>
               </React.Fragment>
             ))}
-            {/* Render drop indicator at the end if necessary */}
             {dropPosition === items.length && (
               <div className="custom-drop-indicator">
                 <div className="drop-line"></div>
