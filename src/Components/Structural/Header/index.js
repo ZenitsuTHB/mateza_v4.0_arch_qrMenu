@@ -1,29 +1,21 @@
 // withHeader.jsx
 import React, { useState, useEffect } from 'react';
-import EditableTitle from './EditableTitle';
 import './css/style.css';
 import './css/mobile.css'
 
 const withHeader = (WrappedComponent) => {
   return (props) => {
-    const localStorageKey = `headerTitle_${WrappedComponent.displayName || WrappedComponent.name || 'Component'}`;
-    const [title, setTitle] = useState(props.title || 'Default Title');
+    const [title, setTitle] = useState(props.title);
 
-    useEffect(() => {
-      const storedTitle = localStorage.getItem(localStorageKey);
-      if (storedTitle) {
-        setTitle(storedTitle);
-      }
-    }, [localStorageKey]);
-
-    useEffect(() => {
-      localStorage.setItem(localStorageKey, title);
-    }, [localStorageKey, title]);
 
     return (
       <div className="withHeader">
         <div className="header-container">
-          <EditableTitle title={title} setTitle={setTitle} />
+        <h1
+          className="title"
+        >
+          {title}
+        </h1>
         </div>
         <WrappedComponent {...props} />
       </div>
