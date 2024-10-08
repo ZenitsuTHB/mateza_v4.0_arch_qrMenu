@@ -1,13 +1,12 @@
 // TopBar.js
 import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { FaPlus, FaChartLine, FaUser, FaLock } from 'react-icons/fa';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
-
+import logoImage from '../../../Assets/logos/black.png'; // Adjust the path to your image
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);

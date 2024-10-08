@@ -115,5 +115,8 @@
 	display: inline-block;
 	background: none;
 	-webkit-background-clip: none;
-	-webkit-text-fill-color: var(--color-accent);
+	-webkit-text-fill-color: var(--color-accent-main);
+	color: var(--color-accent-main);
   }
+
+
