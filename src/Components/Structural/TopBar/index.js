@@ -13,10 +13,6 @@ const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
   const menuTimeoutRef = useRef(null);
 
-  const profileImage = useSelector(
-    (state) => state.avatar.avatarImage || 'https://static.reservaties.net/images/logo/logo.png'
-  );
-
   const handleMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);
     setIsAppsMenuOpen(true);

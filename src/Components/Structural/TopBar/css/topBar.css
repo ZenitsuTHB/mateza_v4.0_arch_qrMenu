@@ -64,7 +64,6 @@
 	color: #000000;
   }
   
-  /* Nine Dots Wrapper */
   .top-bar-component .nine-dots-wrapper {
 	padding: 4px;
 	border-radius: 4px;
@@ -72,7 +71,6 @@
 	transition: background-color 0.3s ease;
   }
   
-  /* Nine Dots */
   .top-bar-component .nine-dots {
 	display: flex;
 	flex-wrap: wrap;
