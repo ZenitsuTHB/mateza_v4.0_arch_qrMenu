@@ -99,7 +99,7 @@ const EditableTitle = ({ title, setTitle }) => {
           cursor: 'pointer',
           color: 'black',
           visibility: 'hidden',
-          fontSize: '1.5rem',
+          fontSize: '1rem',
         }}
         onClick={handleEditClick}
       />
