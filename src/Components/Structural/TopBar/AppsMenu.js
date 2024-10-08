@@ -1,7 +1,8 @@
 // AppsMenu.js
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import './css/appsMenu.css';
+import AppsSearchBar from './AppsSearchBar'; // Import the new search bar
 import icon1 from '../../../Assets/logos/1.webp';
 import icon2 from '../../../Assets/logos/2.webp';
 import icon3 from '../../../Assets/logos/3.webp';
@@ -26,18 +27,53 @@ const apps = [
 
 const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift'];
 
-const AppsMenu = ({ onClose }) => {
+const AppsMenu = ({ onMouseEnter, onMouseLeave }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const menuRef = useRef(null);
+
+  // Filter apps based on search term
+  const filteredApps = apps.filter((app) =>
+    app.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Function to highlight matched text
+  const highlightMatch = (name) => {
+    if (!searchTerm) return name;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    const parts = name.split(regex);
+    return parts.map((part, index) =>
+      regex.test(part) ? <mark key={index}>{part}</mark> : part
+    );
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        onMouseLeave();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onMouseLeave]);
+
   return (
     <motion.div
+      ref={menuRef}
       className="apps-menu"
       initial={{ opacity: 0, y: '-20px' }}
       animate={{ opacity: 1, y: '0' }}
       exit={{ opacity: 0, y: '-20px' }}
       transition={{ duration: 0.3 }}
-    >
-      <h4 className="apps-menu-title">Verander van App</h4>
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >		
+      <AppsSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      
       <div className="apps-flex-container">
-        {apps.map((app, index) => {
+        {filteredApps.map((app, index) => {
           const isEnabled = enabledApps.includes(app.name);
 
           return (
@@ -48,6 +84,7 @@ const AppsMenu = ({ onClose }) => {
               target={isEnabled ? '_blank' : ''}
               rel={isEnabled ? 'noopener noreferrer' : ''}
               onClick={(e) => !isEnabled && e.preventDefault()}
+              aria-label={isEnabled ? `Open ${app.name}` : `${app.name} is disabled`}
             >
               <motion.img
                 src={app.icon}
@@ -58,7 +95,7 @@ const AppsMenu = ({ onClose }) => {
                   opacity: isEnabled ? 1 : 0.5,
                 }}
               />
-              <span className="app-name">{app.name}</span>
+              <span className="app-name">{highlightMatch(app.name)}</span>
             </a>
           );
         })}
