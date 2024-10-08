@@ -8,6 +8,7 @@
 	padding: 15px 10px;
 	margin-top: 20px;
 	border-radius: 100px;
+	margin-left: 10px;
   }
   
   .sidebar-component .sidebar-item {
@@ -26,8 +27,8 @@
   .sidebar-component .sidebar-item__active-bg {
 	position: absolute;
 	inset: 0;
-	border-radius: 8px;
-	color: var(--color-text);
+	border-radius: 100px;
+	background-color: var(--color-bg)
   }
   
   .sidebar-component .sidebar-item__icon {
