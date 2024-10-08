@@ -127,10 +127,4 @@
   .nine-dots .dot-8 { background-color: #3375FF; } /* Blue */
   .nine-dots .dot-9 { background-color: #5733FF; } /* Purple */
   
-  
-  /* Ensure AppsMenu does not interfere with tooltip styles */
-  .apps-menu {
-	/* Rounded corners and margin already handled in AppsMenu.css */
-	/* Additional tooltip-like styles if needed */
-  }
-  
+

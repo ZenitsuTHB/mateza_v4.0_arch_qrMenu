@@ -40,9 +40,12 @@
 	.sidebar .profile-pic {
 		display: none;
 	}
+
+	.sidebar-apps {
+		display: none;
+	}
 }
-/* mobile.css */
-/* mobile.css */
+
 @media (max-width: 1024px) {
 	.apps-menu {
 	  width: 60%;

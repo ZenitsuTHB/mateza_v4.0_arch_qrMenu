@@ -23,8 +23,7 @@ const apps = [
   { name: 'Mateza Advice', link: 'https://mateza.be/other', icon: icon9},
 ];
 
-// Specify which apps are enabled
-const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift']; // Add the names of enabled apps here
+const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift'];
 
 const AppsMenu = ({ onClose }) => {
   return (
@@ -39,7 +38,7 @@ const AppsMenu = ({ onClose }) => {
       <h4 className="apps-menu-title">Onze Andere Diensten</h4>
       <div className="apps-flex-container">
         {apps.map((app, index) => {
-          const isEnabled = enabledApps.includes(app.name); // Check if app is in the enabledApps array
+          const isEnabled = enabledApps.includes(app.name);
 
           return (
             <a
@@ -48,7 +47,7 @@ const AppsMenu = ({ onClose }) => {
               className={`app-item ${isEnabled ? '' : 'disabled'}`}
               target={isEnabled ? '_blank' : ''}
               rel={isEnabled ? 'noopener noreferrer' : ''}
-              onClick={(e) => !isEnabled && e.preventDefault()} // Prevent click if disabled
+              onClick={(e) => !isEnabled && e.preventDefault()}
             >
               <motion.img
                 src={app.icon}
