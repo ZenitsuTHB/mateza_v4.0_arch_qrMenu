@@ -1,15 +1,16 @@
+// AppsMenu.js
 import React from 'react';
 import { motion } from 'framer-motion';
 import './css/appsMenu.css';
-import icon1 from '../../../Assets/logos/1.webp'
-import icon2 from '../../../Assets/logos/2.webp'
-import icon3 from '../../../Assets/logos/3.webp'
-import icon4 from '../../../Assets/logos/4.webp'
-import icon5 from '../../../Assets/logos/5.webp'
-import icon6 from '../../../Assets/logos/6.webp'
-import icon7 from '../../../Assets/logos/7.webp'
-import icon8 from '../../../Assets/logos/8.webp'
-import icon9 from '../../../Assets/logos/9.webp'
+import icon1 from '../../../Assets/logos/1.webp';
+import icon2 from '../../../Assets/logos/2.webp';
+import icon3 from '../../../Assets/logos/3.webp';
+import icon4 from '../../../Assets/logos/4.webp';
+import icon5 from '../../../Assets/logos/5.webp';
+import icon6 from '../../../Assets/logos/6.webp';
+import icon7 from '../../../Assets/logos/7.webp';
+import icon8 from '../../../Assets/logos/8.webp';
+import icon9 from '../../../Assets/logos/9.webp';
 
 const apps = [
   { name: 'Mateza Booking', link: '', icon: icon1 },
@@ -20,7 +21,7 @@ const apps = [
   { name: 'Mateza Supply', link: 'https://mateza.be/supply', icon: icon6 },
   { name: 'Mateza People', link: 'https://mateza.be/hr', icon: icon7 },
   { name: 'Mateza Pay', link: 'https://mateza.be/pay', icon: icon8 },
-  { name: 'Mateza Advice', link: 'https://mateza.be/other', icon: icon9},
+  { name: 'Mateza Advice', link: 'https://mateza.be/other', icon: icon9 },
 ];
 
 const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift'];
@@ -29,11 +30,10 @@ const AppsMenu = ({ onClose }) => {
   return (
     <motion.div
       className="apps-menu"
-      initial={{ opacity: 0, x: '-100%' }}
-      animate={{ opacity: 1, x: '0%' }}
-      exit={{ opacity: 0, x: '-100%' }}
-      transition={{ duration: 0.5 }}
-      onMouseLeave={onClose}
+      initial={{ opacity: 0, y: '-20px' }}
+      animate={{ opacity: 1, y: '0' }}
+      exit={{ opacity: 0, y: '-20px' }}
+      transition={{ duration: 0.3 }}
     >
       <h4 className="apps-menu-title">Onze Andere Diensten</h4>
       <div className="apps-flex-container">

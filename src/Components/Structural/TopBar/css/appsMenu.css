@@ -1,13 +1,38 @@
-.apps-menu {
+/* topBar.css */
+.nine-dots {
+	display: flex;
+	flex-wrap: wrap;
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
+	cursor: pointer;
+  }
+  
+  .nine-dots .dot {
+	width: 6px;
+	height: 6px;
+	margin: 1px;
+	border-radius: 50%;
+	background-color: #333;
+  }
+  
+  .top-bar-left.active .nine-dots {
+	background-color: #f0f0f0; /* Gray background when hovering */
+	padding: 6px;
+	border-radius: 5px;
+  }
+  
+  /* appsMenu.css */
+  
+  .apps-menu {
 	position: fixed;
-	bottom: 20px;
-	left: 20px;
-	width: 400px;
-	height: 425px;
-	background-color: rgba(255, 255, 255, 0.9);
-	padding: 24px;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-	border-radius: 12px;
+	top: 60px;
+	left: 0;
+	width: 320px;
+	background-color: rgba(255, 255, 255, 0.95);
+	padding: 16px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
 	z-index: 1000;
 	overflow-y: auto;
 	backdrop-filter: blur(10px);
@@ -16,30 +41,10 @@
 	align-items: center;
   }
   
-  @media (max-width: 768px) {
-	.apps-menu {
-	  width: 90%;
-	  left: 5%;
-	  bottom: 10px;
-	}
-  }
-  
-  .apps-menu-close {
-	position: absolute;
-	top: 12px;
-	right: 12px;
-	background: none;
-	border: none;
-	font-size: 24px;
-	cursor: pointer;
-	color: #555;
-  }
-  
   .apps-menu-title {
-	margin-top: 24px;
 	margin-bottom: 16px;
-	font-size: 18px;
-	color: #333;
+	font-size: 16px;
+	font-weight: 600;
 	text-align: center;
   }
   
@@ -59,7 +64,7 @@
 	padding: 8px;
 	border-radius: 8px;
 	transition: background-color 0.3s ease;
-	width: 110px; /* Adjust width to fit smaller icons */
+	width: 90px;
   }
   
   .app-item:hover {
@@ -67,30 +72,26 @@
   }
   
   .app-icon {
-	width: 50px; /* Smaller icon size */
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	border-radius: 8px;
 	object-fit: cover;
   }
   
   .app-name {
-	width: 200%;
-	margin-top: 8px;
+	width: 100%;
+	margin-top: 4px;
 	font-size: 12px;
 	color: #555;
 	text-align: center;
   }
   
   .app-item.disabled {
-	pointer-events: none; /* Disables clickability */
+	pointer-events: none;
   }
   
-  .app-item.disabled .app-name {
-	opacity: 0.5;
-  }
-  
+  .app-item.disabled .app-name,
   .app-item.disabled img {
 	opacity: 0.5;
-	filter: blur(2px); /* Adjust blur level as needed */
   }
   
