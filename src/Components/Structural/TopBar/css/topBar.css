@@ -1,3 +1,5 @@
+/* topBar.css */
+
 .top-bar-component .top-bar {
 	position: fixed;
 	top: 0;
@@ -9,76 +11,133 @@
 	align-items: center;
 	padding: 0 20px;
 	z-index: 100000;
-}
-
-.top-bar-component .top-bar-left,
-.top-bar-component .top-bar-middle,
-.top-bar-component .top-bar-right {
-display: flex;
-align-items: center;
-}
-
-.top-bar-component .top-bar-left {
-flex: 1;
-}
-
-.top-bar-component .top-bar-middle {
-flex: 2;
-justify-content: center;
-}
-
-.top-bar-component .top-bar-right {
-flex: 1;
-justify-content: flex-end;
-}
-
-.top-bar-component .top-bar-title {
-margin-left: 20px;
-font-size: 18px;
-font-weight: 500;
-color: #7a7a7a;
-}
-
-.top-bar-component .icon-button {
-background: none;
-border: none;
-padding: 8px;
-cursor: pointer;
-margin-left: 10px;
-color: #7a7a7a;
-transition: color 0.3s ease;
-}
-
-.top-bar-component .icon-button:hover {
-color: #000000;
-}
-
-.top-bar-component .icon-button:focus {
-outline: none;
-color: #000000;
-}
-
-.top-bar-component .nine-dots {
-display: flex;
-flex-wrap: wrap;
-width: 21px;
-height: 21px;
-cursor: pointer;
-position: relative;
-}
-
-.top-bar-component .nine-dots .dot {
-width: 5px;
-height: 5px;
-margin: 1px;
-border-radius: 50%;
-background-color: #7a7a7a;
-}
-
-.top-bar-component .nine-dots-wrapper {
-padding: 4px;
-border-radius: 4px;
-margin-left: 5px;
-transition: background-color 0.3s ease;
-}
+  }
+  
+  .top-bar-component .top-bar-left,
+  .top-bar-component .top-bar-middle,
+  .top-bar-component .top-bar-right {
+	display: flex;
+	align-items: center;
+  }
+  
+  .top-bar-component .top-bar-left {
+	flex: 1;
+  }
+  
+  .top-bar-component .top-bar-middle {
+	flex: 2;
+	justify-content: center;
+  }
+  
+  .top-bar-component .top-bar-right {
+	flex: 1;
+	justify-content: flex-end;
+  }
+  
+  .top-bar-component .top-bar-title {
+	margin-left: 20px;
+	font-size: 18px;
+	font-weight: 500;
+	color: #7a7a7a;
+	position: relative;
+	transition: color 0.3s ease;
+	cursor: pointer;
+	display: inline-block;
+	background: none;
+	-webkit-background-clip: none;
+	-webkit-text-fill-color: #7a7a7a;
+  }
+  
+  /* Icon Buttons */
+  .top-bar-component .icon-button {
+	background: none;
+	border: none;
+	padding: 8px;
+	cursor: pointer;
+	margin-left: 10px;
+	color: #7a7a7a;
+	transition: color 0.3s ease;
+  }
+  
+  .top-bar-component .icon-button:hover {
+	color: #000000;
+  }
+  
+  .top-bar-component .icon-button:focus {
+	outline: none;
+	color: #000000;
+  }
+  
+  /* Nine Dots Wrapper */
+  .top-bar-component .nine-dots-wrapper {
+	padding: 4px;
+	border-radius: 4px;
+	margin-left: 5px;
+	transition: background-color 0.3s ease;
+  }
+  
+  /* Nine Dots */
+  .top-bar-component .nine-dots {
+	display: flex;
+	flex-wrap: wrap;
+	width: 21px;
+	height: 21px;
+	cursor: pointer;
+	position: relative;
+  }
+  
+  .top-bar-component .nine-dots .dot {
+	width: 5px;
+	height: 5px;
+	margin: 1px;
+	border-radius: 50%;
+	background-color: #7a7a7a;
+	transition: background-color 0.3s ease;
+  }
+  
+  /* Change dot color to black on hover */
+  .top-bar-component .nine-dots-wrapper:hover .dot {
+	background-color: #000000;
+  }
+  
+  /* Rainbow Gradient on Title Hover */
+  .top-bar-component .top-bar-title:hover {
+	color: transparent; /* Make text transparent to show gradient */
+	background: linear-gradient(270deg, 
+	  red, 
+	  orange, 
+	  yellow, 
+	  green, 
+	  blue, 
+	  indigo, 
+	  violet, 
+	  red
+	);
+	background-size: 1400% 1400%;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: rainbowAnimation 5s ease infinite;
+  }
+  
+  /* Reset text color when not hovered */
+  .top-bar-component .top-bar-title {
+	display: inline-block;
+	background: none;
+	-webkit-background-clip: none;
+	-webkit-text-fill-color: #7a7a7a;
+  }
+  
+  /* Rainbow Animation Keyframes */
+  @keyframes rainbowAnimation {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+  }
+  
+  /* Media Queries */
+  @media (max-width: 900px) {
+	.top-bar-component .top-bar {
+	  display: none;
+	}
+  }
   
