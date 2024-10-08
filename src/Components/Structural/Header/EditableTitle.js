@@ -89,7 +89,7 @@ const EditableTitle = ({ title, setTitle }) => {
         suppressContentEditableWarning
         onInput={handleInputChange}
         onBlur={handleTitleBlur}
-        style={{ display: 'inline-block', marginRight: '8px' }}
+        style={{ display: 'inline-block', marginRight: '8px'}}
       >
         {title}
       </h1>

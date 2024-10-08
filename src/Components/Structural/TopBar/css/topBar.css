@@ -34,7 +34,7 @@
   }
   
   .top-bar-component .top-bar-title {
-	margin-left: 20px;
+	margin-left: 40px;
 	font-size: 18px;
 	font-weight: 500;
 	position: relative;
@@ -67,7 +67,7 @@
   .top-bar-component .nine-dots-wrapper {
 	padding: 4px;
 	border-radius: 4px;
-	margin-left: 5px;
+	margin-left: 10px;
 	transition: background-color 0.3s ease;
   }
   
@@ -120,3 +120,13 @@
   }
 
 
+/* Style for the icon next to the title */
+.top-bar-component .title-image {
+	width: 30px;
+	margin-left: 5px;
+	margin-top: 3px;
+  }
+  
+  .top-bar-component .title-image:hover {
+	color: #000000;
+  }

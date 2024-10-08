@@ -6,7 +6,7 @@ import AppsMenu from './AppsMenu';
 import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
-import logoImage from '../../../Assets/logos/black.png'; // Adjust the path to your image
+import logoImage from '../../../Assets/logos/6.webp'; // Adjust the path to your image
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
@@ -39,6 +39,7 @@ const TopBar = () => {
             </div>
           </div>
           <h3 className="top-bar-title">Mateza Booking</h3>
+          <img src={logoImage} alt="Logo" className="title-image" />
           {isAppsMenuOpen && (
             <AppsMenu
               onMouseEnter={handleMouseEnter}

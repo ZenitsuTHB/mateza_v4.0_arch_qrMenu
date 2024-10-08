@@ -14,12 +14,12 @@ import icon8 from '../../../Assets/logos/8.webp';
 import icon9 from '../../../Assets/logos/9.webp';
 
 const apps = [
-  { name: 'Mateza Booking', link: '', icon: icon1 },
+  { name: 'Mateza Booking', link: '', icon: icon6 },
   { name: 'Mateza Websites', link: 'https://mateza.be/menu', icon: icon2 },
   { name: 'Mateza Gift', link: 'https://mateza.be/tables', icon: icon3 },
   { name: 'Mateza Tables', link: 'https://mateza.be/websites', icon: icon4 },
   { name: 'Mateza Predict', link: 'https://mateza.be/predict', icon: icon5 },
-  { name: 'Mateza Supply', link: 'https://mateza.be/supply', icon: icon6 },
+  { name: 'Mateza Supply', link: 'https://mateza.be/supply', icon: icon1 },
   { name: 'Mateza People', link: 'https://mateza.be/hr', icon: icon7 },
   { name: 'Mateza Pay', link: 'https://mateza.be/pay', icon: icon8 },
   { name: 'Mateza Advice', link: 'https://mateza.be/other', icon: icon9 },
