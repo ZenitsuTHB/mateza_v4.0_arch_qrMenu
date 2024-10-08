@@ -42,34 +42,20 @@
 	}
 }
 /* mobile.css */
-
-/* Ensure AppsMenu takes full width on mobile with some margin */
-@media (max-width: 768px) {
+/* mobile.css */
+@media (max-width: 1024px) {
+	.apps-menu {
+	  width: 60%;
+	  left: 20%;
+	  bottom: 20px;
+	}
+  }
+  
+  @media (max-width: 768px) {
 	.apps-menu {
 	  width: 90%;
 	  left: 5%;
 	  bottom: 10px;
-	}
-  
-	.apps-flex-container {
-	  gap: 12px;
-	}
-  
-	.app-item {
-	  width: 60px; /* Slightly larger for better touch interaction */
-	}
-  
-	.app-icon {
-	  width: 40px; /* Smaller icons for mobile */
-	  height: 40px;
-	}
-  
-	.app-name {
-	  font-size: 10px;
-	}
-  
-	.apps-menu-title {
-	  font-size: 16px;
 	}
   }
   

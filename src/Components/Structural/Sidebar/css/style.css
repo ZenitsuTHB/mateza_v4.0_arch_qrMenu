@@ -116,6 +116,7 @@
 	border-radius: 50%;
   }
   
+  /* Assign distinct colors to each dot */
   .nine-dots .dot-1 { background-color: #FF5733; } /* Red */
   .nine-dots .dot-2 { background-color: #FFBD33; } /* Orange */
   .nine-dots .dot-3 { background-color: #DBFF33; } /* Yellow */
@@ -127,14 +128,7 @@
   .nine-dots .dot-9 { background-color: #5733FF; } /* Purple */
   
   
-  .sidebar .sidebar-apps:hover .tooltip,
-  .sidebar .sidebar-apps:focus .tooltip {
-	opacity: 1;
-	visibility: visible;
-  }
-  
-  
-  /* Adjust AppsMenu appearance to match tooltip style */
+  /* Ensure AppsMenu does not interfere with tooltip styles */
   .apps-menu {
 	/* Rounded corners and margin already handled in AppsMenu.css */
 	/* Additional tooltip-like styles if needed */
