@@ -15,6 +15,7 @@ import './Styles/fonts.css';
 import './Styles/colors.css';
 import './Styles/index.css';
 import './Styles/mobile.css';
+import SecondaryTopBar from './Components/Structural/SecondaryTopBar/index.js';
 
 function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
@@ -22,6 +23,7 @@ function App() {
   return loginSuccessful ? (
     <div className="app-component">
       <TopBar />
+      <SecondaryTopBar />
       <Sidebar />
       <ContentRouting />
     </div>
