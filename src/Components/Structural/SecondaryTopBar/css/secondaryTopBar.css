@@ -2,14 +2,12 @@
 
 .secondary-top-bar {
 	position: fixed;
-	top: 60px; /* Adjust based on the height of your main top bar */
 	left: 0;
 	width: 100%;
-	height: 50px; /* Adjust height as needed */
+	height: 50px;
 	display: flex;
 	justify-content: center; /* Center horizontally */
 	align-items: center; /* Center vertically */
-	z-index: 998; /* Below the main top bar's z-index */
   }
   
   .buttons-container {

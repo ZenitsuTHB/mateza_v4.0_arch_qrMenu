@@ -15,7 +15,7 @@ const routesConfig = [
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,
-    isTab: true,
+    isTab: false,
   },
   {
     path: '/profile',
