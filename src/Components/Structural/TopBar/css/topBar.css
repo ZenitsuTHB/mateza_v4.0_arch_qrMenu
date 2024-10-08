@@ -45,6 +45,7 @@
 	background: none;
 	-webkit-background-clip: none;
 	-webkit-text-fill-color: #7a7a7a;
+	color: #156eea !important;
   }
   
   /* Icon Buttons */
@@ -54,7 +55,7 @@
 	padding: 8px;
 	cursor: pointer;
 	margin-left: 10px;
-	color: #7a7a7a;
+	color: var(--color-accent);
 	transition: color 0.3s ease;
   }
   
@@ -90,7 +91,7 @@
 	height: 5px;
 	margin: 1px;
 	border-radius: 50%;
-	background-color: #7a7a7a;
+	background-color: var(--color-accent);;
 	transition: background-color 0.3s ease;
   }
   
@@ -123,7 +124,7 @@
 	display: inline-block;
 	background: none;
 	-webkit-background-clip: none;
-	-webkit-text-fill-color: #7a7a7a;
+	-webkit-text-fill-color: var(--color-accent);
   }
   
   /* Rainbow Animation Keyframes */

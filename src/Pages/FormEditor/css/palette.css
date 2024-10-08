@@ -87,10 +87,10 @@
 	left: -10px;
 	right: -10px;
 	bottom: -10px;
-	border: 2px solid rgba(24, 144, 255, 0.8); /* Blue border */
+	border: 2px solid var(--color-accent);
 	border-radius: 16px; /* Increase border radius to maintain the rounded effect */
 	pointer-events: none; /* Prevent the pseudo-element from blocking interactions */
-	box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
+	box-shadow: 0 0 10px var(--color-accent);
   }
   
   .form-editing-page .palette-block.dragging {
