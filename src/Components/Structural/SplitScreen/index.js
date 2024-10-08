@@ -3,15 +3,11 @@ import React, { useState, useEffect } from 'react';
 import SplitPane from 'react-split-pane';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TabNavigator from './TabNavigator.js';
+import routesConfig from '../../../config.js';
 import './css/style.css';
 
-import routesConfig from '../../../config.js'; // Adjust the import path accordingly
-
 const SplitScreen = () => {
-  // Filter the routes that should be displayed as tabs
   const tabRoutes = routesConfig.filter((route) => route.isTab);
-
-  // Initialize the tabs state with the routes that are tabs
   const [tabs, setTabs] = useState(
     tabRoutes.map((route) => ({
       id: route.path,
@@ -20,7 +16,6 @@ const SplitScreen = () => {
     }))
   );
 
-  // Set the initial content of the left pane to the first tab's component
   const [leftPaneContent, setLeftPaneContent] = useState(
     tabRoutes[0]?.element || null
   );
@@ -100,7 +95,7 @@ const SplitScreen = () => {
   };
 
   return (
-    <div className="split-screen">
+    <div className="split-screen-component">
       <DragDropContext onDragEnd={handleDragEnd}>
         {isMobile || !isSplit ? (
           <div className="left-pane full-width">{leftPaneContent}</div>

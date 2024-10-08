@@ -7,7 +7,7 @@ import './css/tabStyle.css';
 const TabNavigator = ({ tabs, setTabs, selectedIndex, setSelectedIndex, closeTab }) => {
   return (
     <Tabs
-      className="tabStyle"
+      className="tab-style"
       selectedIndex={selectedIndex}
       onSelect={(index) => setSelectedIndex(index)}
     >

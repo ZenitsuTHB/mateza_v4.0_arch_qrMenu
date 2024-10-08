@@ -1,22 +1,16 @@
-
-
-
-  .sidebar {
+.sidebar-component {
 	position: fixed;
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 	background-color: var(--color-white);
 	z-index: 10000;
-	padding: 10px;
-	padding-top: 15px;
-	padding-bottom: 15px;
+	padding: 15px 10px;
 	margin-top: 20px;
-	
 	border-radius: 100px;
-}
+  }
   
-.sidebar .sidebar-item {
+  .sidebar-component .sidebar-item {
 	position: relative;
 	height: 40px;
 	display: flex;
@@ -26,39 +20,39 @@
 	cursor: pointer;
 	font-weight: 500;
 	color: var(--color-black);
-	transition: all 0.4s ease;
-}
-
-.sidebar .sidebar-item__active-bg {
+	transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  
+  .sidebar-component .sidebar-item__active-bg {
 	position: absolute;
-	inset: 0px;
+	inset: 0;
 	border-radius: 8px;
 	color: var(--color-text);
-}
-
-.sidebar .sidebar-item__icon {
+  }
+  
+  .sidebar-component .sidebar-item__icon {
 	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	color: #7a7a7a;
-	transition: all 0.3s ease;
-}
-
-.sidebar .sidebar-item__icon:hover {
-	color: #000000;
-}
-
-.sidebar .sidebar-item__icon .tooltip {
+	transition: color 0.3s ease;
+  }
+  
+  .sidebar-component .sidebar-item__icon:hover {
+	color: #000;
+  }
+  
+  .sidebar-component .sidebar-item__icon .tooltip {
 	opacity: 0;
-}
-
-.sidebar .sidebar-item__icon:hover .tooltip {
+  }
+  
+  .sidebar-component .sidebar-item__icon:hover .tooltip {
 	opacity: 1;
 	visibility: visible;
-}
-
-.sidebar .tooltip {
+  }
+  
+  .sidebar-component .tooltip {
 	position: absolute;
 	left: 100%;
 	top: 50%;
@@ -74,5 +68,5 @@
 	visibility: hidden;
 	backdrop-filter: blur(30px);
 	transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
+  }
+  

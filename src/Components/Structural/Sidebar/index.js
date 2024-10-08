@@ -48,7 +48,7 @@ const Sidebar = () => {
 
 
   return (
-        <motion.div className="sidebar" layout>
+        <motion.div className="sidebar-component" layout>
           {routesConfig
             .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
             .map((route) => (
