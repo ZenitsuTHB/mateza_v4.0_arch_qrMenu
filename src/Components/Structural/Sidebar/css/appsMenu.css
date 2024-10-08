@@ -4,7 +4,7 @@
 	bottom: 20px; /* Margin from the bottom */
 	left: 20px;   /* Margin from the left */
 	width: 400px;
-	height: 475px;
+	height: 425px;
 	background-color: rgba(255, 255, 255, 0.9); /* Slight opacity */
 	padding: 24px;
 	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
@@ -48,7 +48,6 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	gap: 16px;
 	width: 100%;
   }
   
@@ -61,7 +60,7 @@
 	padding: 8px;
 	border-radius: 8px;
 	transition: background-color 0.3s ease;
-	width: 80px; /* Adjust width to fit smaller icons */
+	width: 110px; /* Adjust width to fit smaller icons */
   }
   
   .app-item:hover {
@@ -76,6 +75,7 @@
   }
   
   .app-name {
+	width: 200%;
 	margin-top: 8px;
 	font-size: 12px;
 	color: #555;

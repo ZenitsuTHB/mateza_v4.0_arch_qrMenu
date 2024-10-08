@@ -1,0 +1,24 @@
+/* ProfilePicture.css */
+
+.profile-picture-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1000; /* Ensure it's above other elements */
+  }
+  
+  .profile-pic {
+	width: 45px;
+	height: 45px;
+	object-fit: cover;
+	cursor: pointer;
+  }
+  
+  
+  /* Hide the profile picture on mobile devices */
+  @media (max-width: 768px) {
+	.profile-picture-container {
+	  display: none;
+	}
+  }
+  

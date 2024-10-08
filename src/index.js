@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
+import ProfilePicture from './Components/Structural/ProfilePicture/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
 import AccountManagement from './Pages/Account/index.js';
 import { Provider } from 'react-redux';
@@ -20,6 +21,7 @@ function App() {
   return loginSuccessful ? (
     <div className="app-component">
       <Sidebar />
+      <ProfilePicture />
       <ContentRouting />
     </div>
   ) : (

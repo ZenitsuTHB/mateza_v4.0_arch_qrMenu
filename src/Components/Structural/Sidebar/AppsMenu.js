@@ -24,7 +24,7 @@ const apps = [
 ];
 
 // Specify which apps are enabled
-const enabledApps = ['Mateza Websites', 'Mateza Gift', 'Mateza Pay']; // Add the names of enabled apps here
+const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift']; // Add the names of enabled apps here
 
 const AppsMenu = ({ onClose }) => {
   return (
