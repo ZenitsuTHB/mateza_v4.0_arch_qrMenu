@@ -1,22 +1,14 @@
-// withHeader.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './css/style.css';
 import './css/mobile.css'
+import Breadcrumb from './BreadCrumb';
 
 const withHeader = (WrappedComponent) => {
   return (props) => {
-    const [title, setTitle] = useState(props.title);
-
-
     return (
       <div className="withHeader">
-        <div className="header-container">
-        <h1
-          className="title"
-        >
-          {title}
-        </h1>
-        </div>
+        <h1 className="title">{props.title}</h1>
+        <Breadcrumb/>
         <WrappedComponent {...props} />
       </div>
     );

@@ -6,7 +6,6 @@ import './css/breadcrumb.css';
 const Breadcrumb = () => {
   const location = useLocation();
 
-  // Extract pathname and split into segments
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
