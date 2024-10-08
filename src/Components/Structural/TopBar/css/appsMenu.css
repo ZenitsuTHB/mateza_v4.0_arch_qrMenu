@@ -61,7 +61,8 @@
 	padding: 8px;
 	border-radius: 5px;
 	transition: background-color 0.3s ease;
-	width: 100px;
+	width: 120px;
+	height: 80px;
   }
   
   .top-bar-component .app-item:hover {
