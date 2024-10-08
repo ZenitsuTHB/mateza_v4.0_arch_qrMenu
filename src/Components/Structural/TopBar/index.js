@@ -1,34 +1,53 @@
 // TopBar.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { FaPlus, FaChartLine, FaUser, FaLock } from 'react-icons/fa'; // Importing Font Awesome icons from react-icons
+import { FaPlus, FaChartLine, FaUser, FaLock } from 'react-icons/fa';
 import SearchBar from './SearchBar';
-import AppsMenu from './AppsMenu'; // Import the AppsMenu
+import AppsMenu from './AppsMenu';
 import './css/topBar.css';
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
+  const menuTimeoutRef = useRef(null);
 
   const profileImage = useSelector(
     (state) => state.avatar.avatarImage || 'https://static.reservaties.net/images/logo/logo.png'
   );
 
+  const handleMouseEnter = () => {
+    clearTimeout(menuTimeoutRef.current);
+    setIsAppsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    menuTimeoutRef.current = setTimeout(() => {
+      setIsAppsMenuOpen(false);
+    }, 300); // 1 second delay
+  };
+
   return (
     <div className="top-bar">
       {/* Left Section */}
       <div
-        className={`top-bar-left ${isAppsMenuOpen ? 'active' : ''}`} // Toggle background color when hovering
-        onMouseEnter={() => setIsAppsMenuOpen(true)}
-        onMouseLeave={() => setIsAppsMenuOpen(false)}
+        className="top-bar-left"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <div className="nine-dots">
-          {[...Array(9)].map((_, index) => (
-            <span key={index} className={`dot dot-${index + 1}`}></span>
-          ))}
+        <div className={`nine-dots-wrapper ${isAppsMenuOpen ? 'active' : ''}`}>
+          <div className="nine-dots">
+            {[...Array(9)].map((_, index) => (
+              <span key={index} className={`dot dot-${index + 1}`}></span>
+            ))}
+          </div>
         </div>
         <h3 className="top-bar-title">Mateza Booking</h3>
-        {/* Show Apps Menu on hover */}
-        {isAppsMenuOpen && <AppsMenu onClose={() => setIsAppsMenuOpen(false)} />}
+        {/* Show Apps Menu */}
+        {isAppsMenuOpen && (
+          <AppsMenu
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+        )}
       </div>
 
       {/* Middle Section */}

@@ -35,7 +35,7 @@ const AppsMenu = ({ onClose }) => {
       exit={{ opacity: 0, y: '-20px' }}
       transition={{ duration: 0.3 }}
     >
-      <h4 className="apps-menu-title">Onze Andere Diensten</h4>
+      <h4 className="apps-menu-title">Verander van App</h4>
       <div className="apps-flex-container">
         {apps.map((app, index) => {
           const isEnabled = enabledApps.includes(app.name);
