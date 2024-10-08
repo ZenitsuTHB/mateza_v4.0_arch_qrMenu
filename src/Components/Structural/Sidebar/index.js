@@ -8,7 +8,6 @@ import { setAvatar } from '../../../Redux/actions/avatarActions.js';
 import routesConfig from '../../../config.js';
 import './css/style.css';
 import './css/mobile.css';
-import AppsMenu from './AppsMenu.js';
 
 const avatarMapping = {
   'blue1': 'https://static.reservaties.net/images/logo/logo.png',
@@ -31,8 +30,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isMobile = window.innerWidth < 768;
-  const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
+  const isMobile = window.innerWidth < 900;
 
   useEffect(() => {
     setInnerClass('sidebar-inner');
@@ -48,13 +46,6 @@ const Sidebar = () => {
     navigate(path);
   };
 
-  const handleAppsMenuOpen = () => {
-    setIsAppsMenuOpen(true);
-  };
-
-  const handleAppsMenuClose = () => {
-    setIsAppsMenuOpen(false);
-  };
 
   return (
     <div className="sidebar-component">
@@ -71,34 +62,7 @@ const Sidebar = () => {
               />
             ))}
         </motion.div>
-
-        <motion.div
-          className="sidebar-apps"
-          onClick={handleAppsMenuOpen}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          tabIndex="0"
-          role="button"
-          aria-label="Open Apps Menu"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleAppsMenuOpen();
-            }
-          }}
-        >
-          <span className="sidebar-item__icon">
-            <div className="nine-dots">
-              {[...Array(9)].map((_, index) => (
-                <span key={index} className={`dot dot-${index + 1}`}></span>
-              ))}
-              <span className="tooltip">Apps</span>
-            </div>
-          </span>
-        </motion.div>
       </motion.div>
-      <AnimatePresence>
-        {isAppsMenuOpen && <AppsMenu onClose={handleAppsMenuClose} />}
-      </AnimatePresence>
     </div>
   );
 };

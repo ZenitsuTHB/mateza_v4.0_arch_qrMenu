@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
-import ProfilePicture from './Components/Structural/ProfilePicture/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
 import AccountManagement from './Pages/Account/index.js';
 import { Provider } from 'react-redux';
@@ -14,14 +13,15 @@ import './i18n';
 import './Styles/fonts.css';
 import './Styles/colors.css';
 import './Styles/index.css';
+import TopBar from './Components/Structural/TopBar/index.js';
 
 function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
   
   return loginSuccessful ? (
     <div className="app-component">
+      <TopBar />
       <Sidebar />
-      <ProfilePicture />
       <ContentRouting />
     </div>
   ) : (
