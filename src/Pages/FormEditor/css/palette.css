@@ -49,6 +49,11 @@
   .form-editing-page .palette-block .icon {
 	font-size: 24px;
 	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	padding-top: 5px;
+	padding-bottom: 5px;
   }
   
   .form-editing-page .palette-block .label {
