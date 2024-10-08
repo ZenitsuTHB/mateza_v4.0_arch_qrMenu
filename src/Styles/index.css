@@ -19,6 +19,7 @@
 .content-routing {
 	flex: 1;
 	overflow: hidden;
+	margin-left: 60px;
   }
   
   body {

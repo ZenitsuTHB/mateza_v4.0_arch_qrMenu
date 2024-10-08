@@ -48,9 +48,7 @@ const Sidebar = () => {
 
 
   return (
-    <div className="sidebar-component">
-      <motion.div className="sidebar" layout>
-        <motion.div className={innerClass} layout>
+        <motion.div className="sidebar" layout>
           {routesConfig
             .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
             .map((route) => (
@@ -62,8 +60,6 @@ const Sidebar = () => {
               />
             ))}
         </motion.div>
-      </motion.div>
-    </div>
   );
 };
 
