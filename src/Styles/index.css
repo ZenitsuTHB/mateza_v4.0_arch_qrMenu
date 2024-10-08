@@ -9,12 +9,6 @@
 	overflow: hidden;
 	margin-top: 60px;
   }
-
-  @media (max-width: 900px) {
-	.app-component {
-		margin-top: 0px;
-	  }
-  }
   
 .content-routing {
 	flex: 1;

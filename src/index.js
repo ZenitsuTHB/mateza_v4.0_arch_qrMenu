@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
+import TopBar from './Components/Structural/TopBar/index.js';
 import AccountManagement from './Pages/Account/index.js';
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
@@ -13,7 +14,7 @@ import './i18n';
 import './Styles/fonts.css';
 import './Styles/colors.css';
 import './Styles/index.css';
-import TopBar from './Components/Structural/TopBar/index.js';
+import './Styles/mobile.css';
 
 function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
