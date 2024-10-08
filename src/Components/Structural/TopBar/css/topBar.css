@@ -62,14 +62,12 @@
   }
   
   
-  /* Responsive Design */
   @media (max-width: 900px) {
 	.top-bar {
 	  display: none;
   }
 }
 
-/* topBar.css */
 .nine-dots {
 	display: flex;
 	flex-wrap: wrap;
@@ -112,7 +110,6 @@
 	background-color: #7a7a7a;
   }
   
-  /* Add a wrapper for the nine dots to apply background without affecting their size */
   .nine-dots-wrapper {
 	padding: 4px;
 	border-radius: 4px;

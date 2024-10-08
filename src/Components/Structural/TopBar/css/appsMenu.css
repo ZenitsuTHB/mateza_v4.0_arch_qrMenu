@@ -1,5 +1,5 @@
 /* topBar.css */
-.nine-dots {
+  .nine-dots {
 	display: flex;
 	flex-wrap: wrap;
 	width: 24px;
@@ -8,7 +8,7 @@
 	cursor: pointer;
   }
   
-  .nine-dots .dot {
+    .nine-dots .dot {
 	width: 6px;
 	height: 6px;
 	margin: 1px;
@@ -16,17 +16,15 @@
 	background-color: #333;
   }
   
-  .top-bar-left.active .nine-dots {
-	background-color: #f0f0f0; /* Gray background when hovering */
+    .top-bar-left.active .nine-dots {
+	background-color: #f0f0f0; 
 	padding: 6px;
 	border-radius: 5px;
   }
-  
-  /* appsMenu.css */
-  
-  .apps-menu {
+    
+    .apps-menu {
 	position: fixed;
-	top: 60px;
+	top: 80px;
 	left: 0;
 	width: 320px;
 	background-color: rgba(255, 255, 255, 0.95);
@@ -41,21 +39,21 @@
 	align-items: center;
   }
   
-  .apps-menu-title {
+   .apps-menu-title {
 	margin-bottom: 16px;
 	font-size: 16px;
 	font-weight: 600;
 	text-align: center;
   }
   
-  .apps-flex-container {
+    .apps-flex-container {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 	width: 100%;
   }
   
-  .app-item {
+    .app-item {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -67,18 +65,18 @@
 	width: 90px;
   }
   
-  .app-item:hover {
+    .app-item:hover {
 	background-color: rgb(243, 243, 243);
   }
   
-  .app-icon {
+    .app-icon {
 	width: 40px;
 	height: 40px;
 	border-radius: 8px;
 	object-fit: cover;
   }
   
-  .app-name {
+    .app-name {
 	width: 100%;
 	margin-top: 4px;
 	font-size: 12px;
@@ -86,11 +84,11 @@
 	text-align: center;
   }
   
-  .app-item.disabled {
+    .app-item.disabled {
 	pointer-events: none;
   }
   
-  .app-item.disabled .app-name,
+    .app-item.disabled .app-name,
   .app-item.disabled img {
 	opacity: 0.5;
   }

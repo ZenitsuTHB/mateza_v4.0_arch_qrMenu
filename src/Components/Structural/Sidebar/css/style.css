@@ -55,6 +55,11 @@
 	justify-content: center;
 	align-items: center;
 	color: #7a7a7a;
+	transition: all 0.3s ease;
+}
+
+.sidebar .sidebar-item__icon:hover {
+	color: #000000;
 }
 
 .sidebar .sidebar-item__icon .tooltip {
@@ -89,11 +94,6 @@
 	z-index: 10;
   }
 
-/* style.css */
-
-/* Existing sidebar styles ... */
-
-/* Sidebar Apps (Nine Dots) */
 .sidebar-apps {
 	position: relative;
 	cursor: pointer;
