@@ -1,6 +1,5 @@
-/* SearchBar.css */
 
-.search-bar {
+.top-bar-component .search-bar {
 	display: flex;
 	align-items: center;
 	background-color: #f0f0f0;
@@ -10,13 +9,13 @@
 	max-width: 400px;
   }
   
-  .search-icon {
+  .top-bar-component .search-icon {
 	width: 15px;
 	height: 15px;
 	color: #777777;
   }
   
-  .search-input {
+  .top-bar-component .search-input {
 	flex: 1;
 	border: none;
 	background: none;
@@ -25,7 +24,7 @@
 	outline: none;
   }
   
-  .search-input::placeholder {
+  .top-bar-component .search-input::placeholder {
 	color: #777777;
   }
   

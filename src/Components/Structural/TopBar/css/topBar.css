@@ -1,6 +1,4 @@
-
-
-.top-bar {
+.top-bar-component .top-bar {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -13,28 +11,28 @@
 	z-index: 10200;
   }
   
-  .top-bar-left,
-  .top-bar-middle,
-  .top-bar-right {
+  .top-bar-component .top-bar-left,
+  .top-bar-component .top-bar-middle,
+  .top-bar-component .top-bar-right {
 	display: flex;
 	align-items: center;
   }
   
-  .top-bar-left {
+  .top-bar-component .top-bar-left {
 	flex: 1;
   }
   
-  .top-bar-middle {
+  .top-bar-component .top-bar-middle {
 	flex: 2;
 	justify-content: center;
   }
   
-  .top-bar-right {
+  .top-bar-component .top-bar-right {
 	flex: 1;
 	justify-content: flex-end;
   }
   
-  .top-bar-title {
+  .top-bar-component .top-bar-title {
 	margin-left: 20px;
 	font-size: 18px;
 	font-weight: 500;
@@ -42,7 +40,7 @@
   }
   
   /* Icon Buttons */
-  .icon-button {
+  .top-bar-component .icon-button {
 	background: none;
 	border: none;
 	padding: 8px;
@@ -52,48 +50,16 @@
 	transition: color 0.3s ease;
   }
   
-  .icon-button:hover {
+  .top-bar-component .icon-button:hover {
 	color: #000000;
   }
   
-  .icon-button:focus {
+  .top-bar-component .icon-button:focus {
 	outline: none;
 	color: #000000;
   }
   
-  
-  @media (max-width: 900px) {
-	.top-bar {
-	  display: none;
-  }
-}
-
-.nine-dots {
-	display: flex;
-	flex-wrap: wrap;
-	width: 18px;
-	height: 18px;
-	cursor: pointer;
-	position: relative;
-  }
-  
-  .nine-dots .dot {
-	width: 4px;
-	height: 4px;
-	margin: 1px;
-	border-radius: 50%;
-	background-color: #333;
-  }
-  
-  /* Add a wrapper for the nine dots to apply background without affecting their size */
-  .nine-dots-wrapper {
-	padding: 20px;
-	border-radius: 4px;
-	margin-left: 5px;
-  }
-
-  /* topBar.css */
-.nine-dots {
+  .top-bar-component .nine-dots {
 	display: flex;
 	flex-wrap: wrap;
 	width: 21px;
@@ -102,7 +68,7 @@
 	position: relative;
   }
   
-  .nine-dots .dot {
+  .top-bar-component .nine-dots .dot {
 	width: 5px;
 	height: 5px;
 	margin: 1px;
@@ -110,8 +76,10 @@
 	background-color: #7a7a7a;
   }
   
-  .nine-dots-wrapper {
+  .top-bar-component .nine-dots-wrapper {
 	padding: 4px;
 	border-radius: 4px;
+	margin-left: 5px;
 	transition: background-color 0.3s ease;
   }
+  

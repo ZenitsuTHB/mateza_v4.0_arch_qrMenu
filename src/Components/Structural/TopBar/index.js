@@ -5,6 +5,8 @@ import { FaPlus, FaChartLine, FaUser, FaLock } from 'react-icons/fa';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';
+import './css/mobile.css';
+
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);

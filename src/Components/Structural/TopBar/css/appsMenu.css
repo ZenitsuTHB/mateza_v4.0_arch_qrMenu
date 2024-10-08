@@ -1,5 +1,4 @@
-/* topBar.css */
-  .nine-dots {
+.top-bar-component .nine-dots {
 	display: flex;
 	flex-wrap: wrap;
 	width: 24px;
@@ -8,7 +7,7 @@
 	cursor: pointer;
   }
   
-    .nine-dots .dot {
+  .top-bar-component .nine-dots .dot {
 	width: 6px;
 	height: 6px;
 	margin: 1px;
@@ -16,13 +15,13 @@
 	background-color: #333;
   }
   
-    .top-bar-left.active .nine-dots {
+  .top-bar-component .top-bar-left.active .nine-dots {
 	background-color: #f0f0f0; 
 	padding: 6px;
 	border-radius: 5px;
   }
     
-    .apps-menu {
+  .top-bar-component .apps-menu {
 	position: fixed;
 	top: 80px;
 	left: 0;
@@ -39,14 +38,14 @@
 	align-items: center;
   }
   
-   .apps-menu-title {
+  .top-bar-component .apps-menu-title {
 	margin-bottom: 16px;
 	font-size: 16px;
 	font-weight: 600;
 	text-align: center;
   }
   
-    .apps-flex-container {
+  .top-bar-component .apps-flex-container {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -65,18 +64,18 @@
 	width: 90px;
   }
   
-    .app-item:hover {
+  .top-bar-component .app-item:hover {
 	background-color: rgb(243, 243, 243);
   }
   
-    .app-icon {
+  .top-bar-component .app-icon {
 	width: 40px;
 	height: 40px;
 	border-radius: 8px;
 	object-fit: cover;
   }
   
-    .app-name {
+  .top-bar-component .app-name {
 	width: 100%;
 	margin-top: 4px;
 	font-size: 12px;
@@ -84,11 +83,11 @@
 	text-align: center;
   }
   
-    .app-item.disabled {
+  .top-bar-component .app-item.disabled {
 	pointer-events: none;
   }
   
-    .app-item.disabled .app-name,
+  .top-bar-component .app-item.disabled .app-name,
   .app-item.disabled img {
 	opacity: 0.5;
   }
