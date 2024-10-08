@@ -13,7 +13,7 @@
   
   .form-editing-page .block.selected {
 	border: 2px solid var(--color-bg);
-	box-shadow: 0 0 10px var(--color-accent);
+	box-shadow: 0 0 10px var(--color-blue);
   }
   
   .form-editing-page .drag-handle {
@@ -107,9 +107,9 @@
 	left: -10px;
 	right: -10px;
 	bottom: -10px;
-	border: 2px solid var(--color-accent); /* Blue border */
-	border-radius: 16px; /* Increase border radius to maintain the rounded effect */
-	pointer-events: none; /* Make sure the pseudo-element doesn't block interaction */
+	border: 2px solid var(--color-blue);
+	border-radius: 16px;
+	pointer-events: none;
   }
   
   .form-editing-page .block.selected {

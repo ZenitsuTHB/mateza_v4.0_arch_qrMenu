@@ -5,7 +5,7 @@
 	left: 0;
 	width: 100%;
 	height: 60px;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	display: flex;
 	align-items: center;
 	padding: 0 20px;
@@ -37,18 +37,14 @@
 	margin-left: 20px;
 	font-size: 18px;
 	font-weight: 500;
-	color: #7a7a7a;
 	position: relative;
 	transition: color 0.3s ease;
 	cursor: pointer;
 	display: inline-block;
 	background: none;
-	-webkit-background-clip: none;
-	-webkit-text-fill-color: #7a7a7a;
-	color: #156eea !important;
+
   }
   
-  /* Icon Buttons */
   .top-bar-component .icon-button {
 	background: none;
 	border: none;
@@ -95,14 +91,12 @@
 	transition: background-color 0.3s ease;
   }
   
-  /* Change dot color to black on hover */
   .top-bar-component .nine-dots-wrapper:hover .dot {
 	background-color: #000000;
   }
   
-  /* Rainbow Gradient on Title Hover */
   .top-bar-component .top-bar-title:hover {
-	color: transparent; /* Make text transparent to show gradient */
+	color: transparent;
 	background: linear-gradient(270deg, 
 	  red, 
 	  orange, 
@@ -119,25 +113,9 @@
 	animation: rainbowAnimation 5s ease infinite;
   }
   
-  /* Reset text color when not hovered */
   .top-bar-component .top-bar-title {
 	display: inline-block;
 	background: none;
 	-webkit-background-clip: none;
 	-webkit-text-fill-color: var(--color-accent);
   }
-  
-  /* Rainbow Animation Keyframes */
-  @keyframes rainbowAnimation {
-	0% { background-position: 0% 50%; }
-	50% { background-position: 100% 50%; }
-	100% { background-position: 0% 50%; }
-  }
-  
-  /* Media Queries */
-  @media (max-width: 900px) {
-	.top-bar-component .top-bar {
-	  display: none;
-	}
-  }
-  

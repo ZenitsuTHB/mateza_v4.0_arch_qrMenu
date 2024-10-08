@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';
 import './css/mobile.css';
+import './css/animations.css';
 
 
 const TopBar = () => {

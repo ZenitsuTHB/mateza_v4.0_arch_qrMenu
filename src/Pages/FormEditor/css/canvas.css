@@ -1,4 +1,3 @@
-/* src/components/DragAndDropEditor/css/canvas.css */
 
   .form-editing-page .canvas {
 	flex-grow: 1;
@@ -31,8 +30,8 @@
   }
   
   .form-editing-page .canvas-item.selected {
-	border: 2px solid var(--color-bg); /* Blue border */
-	box-shadow: 0 0 10px var(--color-accent);
+	border: 2px solid var(--color-bg);
+	box-shadow: 0 0 10px var(--color-blue);
   }
   
   .form-editing-page .canvas-placeholder {
@@ -52,7 +51,7 @@
   .form-editing-page .drop-line {
 	width: 100%;
 	height: 4px;
-	background-color: var(--color-accent);
+	background-color: var(--color-blue);
 	border-radius: 2px;
   }
   
@@ -61,7 +60,7 @@
 	top: -12px;
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: var(--color-accent);
+	background-color: var(--color-blue);
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
