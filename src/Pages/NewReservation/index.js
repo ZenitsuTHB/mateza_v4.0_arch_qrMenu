@@ -149,4 +149,4 @@ const NewReservation = () => {
   );
 };
 
-export default withHeader(NewReservation);
+export default NewReservation;

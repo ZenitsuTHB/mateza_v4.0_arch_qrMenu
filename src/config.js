@@ -46,6 +46,15 @@ const routesConfig = [
     isTab: false,
   },
   {
+    path: '/new-reservation', // Dutch for 'reserve'
+    element: <NewReservation title="Nieuwe Reservatie" />, // Use the new component
+    label: 'Reserveren',
+    icon: FaCalendarPlus, // New icon
+    isMenu: true, // Show in menu
+    isMobile: true, // Show on mobile
+    isTab: true,
+  },
+  {
     path: '/split',
     element: <SplitScreen />,
     label: 'Split View',
@@ -53,15 +62,6 @@ const routesConfig = [
     isMenu: true,
     isMobile: false,
     isTab: false,
-  },
-  {
-    path: '/new-reservation', // Dutch for 'reserve'
-    element: <NewReservation />, // Use the new component
-    label: 'Reserveren',
-    icon: FaCalendarPlus, // New icon
-    isMenu: true, // Show in menu
-    isMobile: true, // Show on mobile
-    isTab: true,
   },
 ];
 
