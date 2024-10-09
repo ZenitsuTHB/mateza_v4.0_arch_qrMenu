@@ -34,7 +34,7 @@
   }
   
   .top-bar-component .top-bar-title {
-	margin-left: 40px;
+	margin-left: 45.5px;
 	font-size: 18px;
 	font-weight: 500;
 	position: relative;
@@ -67,7 +67,7 @@
   .top-bar-component .nine-dots-wrapper {
 	padding: 4px;
 	border-radius: 4px;
-	margin-left: 10px;
+	margin-left: 4.5px;
 	transition: background-color 0.3s ease;
   }
   
