@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
+import { FaMagic } from 'react-icons/fa'; // Import the sparkle icon
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './Palette.js';
 import Canvas from './Canvas.js';
@@ -35,26 +36,21 @@ const DragAndDropEditor = () => {
   const [dropPosition, setDropPosition] = useState(null); // Track drop position
   const formEditingPageRef = useRef(null); // Reference to the .form-editing-page container
 
-  // Effect to handle applying responsive styles based on container size
   useEffect(() => {
     const applyResponsiveStyles = () => {
       const container = formEditingPageRef.current;
 
       if (container) {
         const containerWidth = container.offsetWidth;
-
-        // Elements to modify
         const palette = container.querySelector('.palette');
         const editorContainer = container.querySelector('.editor-container');
         const canvas = container.querySelector('.canvas');
 
-        if (containerWidth <= 600) {
-          // Apply responsive classes
+        if (containerWidth <= 900) {
           palette?.classList.add('palette-responsive');
           editorContainer?.classList.add('editor-container-responsive');
           canvas?.classList.add('canvas-responsive');
         } else {
-          // Remove responsive classes if the container is larger
           palette?.classList.remove('palette-responsive');
           editorContainer?.classList.remove('editor-container-responsive');
           canvas?.classList.remove('canvas-responsive');
@@ -62,7 +58,6 @@ const DragAndDropEditor = () => {
       }
     };
 
-    // Add resize observer to listen for size changes
     const observer = new ResizeObserver(() => {
       applyResponsiveStyles();
     });
@@ -71,32 +66,28 @@ const DragAndDropEditor = () => {
       observer.observe(formEditingPageRef.current);
     }
 
-    // Cleanup observer on unmount
     return () => {
       if (formEditingPageRef.current) {
         observer.unobserve(formEditingPageRef.current);
       }
     };
-  }, []); // Empty dependency array means this effect runs only once
+  }, []);
 
   const handleOnDragEnd = (result) => {
-    setDropPosition(null); // Reset drop position on drag end
+    setDropPosition(null);
 
     if (!result.destination) return;
-
-    // Dropping from Palette to Canvas
     if (result.source.droppableId === 'Palette' && result.destination.droppableId === 'Canvas') {
       const item = blocks.find((block) => block.id === result.draggableId);
       const newItem = {
         ...item,
-        id: `${item.id}-${new Date().getTime()}`, // Unique ID
+        id: `${item.id}-${new Date().getTime()}`,
       };
 
       const newCanvasItems = Array.from(canvasItems);
       newCanvasItems.splice(result.destination.index, 0, newItem);
       setCanvasItems(newCanvasItems);
     }
-    // Reordering within Canvas
     else if (
       result.source.droppableId === 'Canvas' &&
       result.destination.droppableId === 'Canvas'
@@ -125,6 +116,10 @@ const DragAndDropEditor = () => {
           <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
         </DragDropContext>
       </div>
+        <button className="themes-button">
+          <FaMagic className="icon" />
+          Stijl Kiezen
+        </button>
     </div>
   );
 };
