@@ -1,4 +1,3 @@
-// Components/SplitScreen/SplitScreen.js
 import React, { useState, useEffect } from 'react';
 import SplitPane from 'react-split-pane';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
