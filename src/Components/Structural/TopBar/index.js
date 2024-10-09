@@ -1,6 +1,8 @@
 // TopBar.js
+
 import React, { useState, useRef } from 'react';
-import { FaPlus, FaChartLine, FaUser, FaLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import topBarConfig from '../../../topbarConfig.js'; // Adjust the path as needed
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';
@@ -11,6 +13,7 @@ import logoImage from '../../../Assets/logos/6.webp'; // Adjust the path to your
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
   const menuTimeoutRef = useRef(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);
@@ -53,18 +56,19 @@ const TopBar = () => {
         </div>
 
         <div className="top-bar-right">
-          <button className="icon-button" aria-label="Add">
-            <FaPlus />
-          </button>
-          <button className="icon-button" aria-label="Analytics">
-            <FaChartLine />
-          </button>
-          <button className="icon-button" aria-label="Lock">
-            <FaLock />
-          </button>
-          <button className="icon-button" aria-label="Account">
-            <FaUser />
-          </button>
+          {topBarConfig.map((button) => {
+            const IconComponent = button.icon;
+            return (
+              <button
+                key={button.label}
+                className="icon-button"
+                aria-label={button.label}
+                onClick={() => navigate(button.path)}
+              >
+                <IconComponent />
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
