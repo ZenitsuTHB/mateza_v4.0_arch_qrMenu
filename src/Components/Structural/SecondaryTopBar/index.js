@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import routesConfig from '../../../config';
+import routesConfig from '../../../Config/sidebarConfig';
 import './css/secondaryTopBar.css';
 
 const SecondaryTopBar = () => {

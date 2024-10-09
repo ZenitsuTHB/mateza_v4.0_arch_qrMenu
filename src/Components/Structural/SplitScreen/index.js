@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import SplitPane from 'react-split-pane';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TabNavigator from './TabNavigator.js';
-import routesConfig from '../../../config.js';
+import routesConfig from '../../../Config/sidebarConfig.js';
 import './css/style.css';
 
 const SplitScreen = () => {

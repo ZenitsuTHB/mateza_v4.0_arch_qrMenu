@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import topBarConfig from '../../../topbarConfig.js'; // Adjust the path as needed
+import topBarConfig from '../../../Config/topbarConfig.js'; // Adjust the path as needed
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';

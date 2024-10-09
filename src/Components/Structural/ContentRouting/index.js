@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import routesConfig from '../../../config.js';
+import routesConfig from '../../../Config/sidebarConfig.js';
 
 const ContentRouting = () => {
   return (

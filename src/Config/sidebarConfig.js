@@ -12,12 +12,12 @@ import {
   FaRocket, // Additional icons for subbuttons
 } from 'react-icons/fa'; // Import necessary icons
 
-import DragAndDrop from './Pages/FormEditor/index.js';
-import Notepad from './Pages/Notepad/index.js';
-import Profile from './Pages/Profile/index.js';
-import Pincode from './Pages/Pincode/index.js';
-import NewReservation from './Pages/NewReservation/index.js'; // Ensure correct path
-import SplitScreen from './Components/Structural/SplitScreen/index.js';
+import DragAndDrop from '../Pages/FormEditor/index.js';
+import Notepad from '../Pages/Notepad/index.js';
+import Profile from '../Pages/Profile/index.js';
+import Pincode from '../Pages/Pincode/index.js';
+import NewReservation from '../Pages/NewReservation/index.js'; // Ensure correct path
+import SplitScreen from '../Components/Structural/SplitScreen/index.js';
 
 const routesConfig = [
   {

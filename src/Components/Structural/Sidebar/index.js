@@ -5,7 +5,7 @@ import SidebarItem from './SidebarItem.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAvatar } from '../../../Redux/actions/avatarActions.js';
-import routesConfig from '../../../config.js';
+import routesConfig from '../../../Config/sidebarConfig.js';
 import './css/style.css';
 import './css/mobile.css';
 
