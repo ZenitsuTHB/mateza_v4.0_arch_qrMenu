@@ -1,6 +1,4 @@
-// src/Components/Structural/SecondaryTopBar/index.js
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import routesConfig from '../../../config'; // Adjust the relative path as needed
@@ -10,6 +8,7 @@ const SecondaryTopBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
+  const [activePath, setActivePath] = useState(null);
 
   // Function to find the matching route configuration
   const findCurrentRoute = () => {
@@ -21,12 +20,21 @@ const SecondaryTopBar = () => {
   const currentRoute = findCurrentRoute();
   const secondaryTopBarConfig = currentRoute?.secondaryTopBar || [];
 
+  useEffect(() => {
+    // Set the first button's path as the default active path if no activePath is selected
+    if (!activePath && secondaryTopBarConfig.length > 0) {
+      setActivePath(secondaryTopBarConfig[0].path);
+      navigate(secondaryTopBarConfig[0].path); // Automatically navigate to the first button's path
+    }
+  }, [secondaryTopBarConfig, activePath, navigate]);
+
   // If there's no secondaryTopBar configuration for the current route, don't render the component
   if (secondaryTopBarConfig.length === 0) {
     return null;
   }
 
   const handleNavigation = (path) => {
+    setActivePath(path); // Set the active button
     navigate(path); // Programmatically navigate to the desired path
   };
 
@@ -37,7 +45,7 @@ const SecondaryTopBar = () => {
           <button
             key={button.path}
             className={clsx('secondary-button', {
-              'active': currentPath === button.path,
+              'active': activePath === button.path,
             })}
             onClick={() => handleNavigation(button.path)}
             aria-label={button.label}

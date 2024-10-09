@@ -31,7 +31,7 @@ const routesConfig = [
     secondaryTopBar: [
       {
         label: 'Bewerken',
-        path: '/edit',
+        path: '/',
         icon: FaEdit,
       },
       {
