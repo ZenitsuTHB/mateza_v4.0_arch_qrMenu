@@ -6,68 +6,77 @@
 	width: 100%;
 	height: 50px;
 	display: flex;
-	justify-content: center; /* Center horizontally */
-	align-items: center; /* Center vertically */
+	justify-content: center;
+	align-items: center;
   }
   
   .buttons-container {
 	display: flex;
-	gap: 40px; /* Space between buttons */
-	position: relative; /* For positioning the indicator */
+	gap: 40px;
+	position: relative;
   }
   
   .secondary-button {
 	position: relative;
 	background: none;
 	border: none;
-	color: #777777; /* Light gray text */
+	color: #777777;
 	font-size: 16px;
 	cursor: pointer;
 	padding: 8px 0;
 	transition: color 0.3s ease;
+	text-decoration: none; /* No underline text decoration */
   }
   
-
   .secondary-button.active {
-	color: #007bff; /* Blue text for active button */
+	color: #007bff;
   }
   
   .secondary-button:focus {
 	outline: none;
   }
   
+  .button-link {
+	text-decoration: none; /* Ensure links have no underline */
+	color: inherit; /* Inherit button color */
+  }
+  
   .underline {
 	position: absolute;
-	bottom: -5px; /* Adjust based on button height */
+	bottom: -5px;
 	left: 0;
 	right: 0;
 	height: 3px;
-	background-color: #007bff; /* Blue underline */
+	background-color: #007bff;
 	border-radius: 2px;
+	opacity: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
   }
   
   .secondary-button.active .underline {
 	opacity: 1;
+	transform: scaleX(1);
   }
   
   .secondary-button:not(.active) .underline {
 	opacity: 0;
+	transform: scaleX(0);
   }
   
   /* Responsive Adjustments */
   @media (max-width: 768px) {
 	.secondary-top-bar {
-	  height: 60px; /* Increase height for better touch targets */
-	  top: 60px; /* Adjust if main top bar height changes */
+	  height: 60px;
+	  top: 60px;
 	}
   
 	.buttons-container {
-	  gap: 20px; /* Reduce gap between buttons on smaller screens */
+	  gap: 20px;
 	}
   
 	.secondary-button {
-	  font-size: 14px; /* Slightly smaller text on smaller screens */
-	  padding: 6px 0; /* Adjust padding */
+	  font-size: 14px;
+	  padding: 6px 0;
 	}
   }
   
