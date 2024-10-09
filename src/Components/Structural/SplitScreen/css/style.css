@@ -1,5 +1,6 @@
 .split-screen-component .Pane {
-	height: 100%;
+	position: absolute;
+	height: 100vh;
 	overflow: auto;
 }
   
