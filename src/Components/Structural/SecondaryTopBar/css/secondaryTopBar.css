@@ -27,6 +27,7 @@
 	transition: color 0.3s ease;
   }
   
+
   .secondary-button.active {
 	color: #007bff; /* Blue text for active button */
   }
