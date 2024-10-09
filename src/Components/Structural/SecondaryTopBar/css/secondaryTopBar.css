@@ -1,6 +1,6 @@
 /* secondaryTopBar.css */
 
-.secondary-top-bar {
+.secondary-top-bar-component .secondary-top-bar {
 	position: fixed;
 	left: 0;
 	width: 100%;
@@ -10,13 +10,13 @@
 	align-items: center;
   }
   
-  .buttons-container {
+  .secondary-top-bar-component .buttons-container {
 	display: flex;
 	gap: 40px;
 	position: relative;
   }
   
-  .secondary-button {
+  .secondary-top-bar-component .secondary-button {
 	position: relative;
 	background: none;
 	border: none;
@@ -28,20 +28,20 @@
 	text-decoration: none; /* No underline text decoration */
   }
   
-  .secondary-button.active {
+  .secondary-top-bar-component .secondary-button.active {
 	color: #007bff;
   }
   
-  .secondary-button:focus {
+  .secondary-top-bar-component .secondary-button:focus {
 	outline: none;
   }
   
-  .button-link {
+  .secondary-top-bar-component .button-link {
 	text-decoration: none; /* Ensure links have no underline */
 	color: inherit; /* Inherit button color */
   }
   
-  .underline {
+  .secondary-top-bar-component .underline {
 	position: absolute;
 	bottom: -5px;
 	left: 0;
@@ -53,30 +53,13 @@
 	transition: opacity 0.3s ease, transform 0.3s ease;
   }
   
-  .secondary-button.active .underline {
+  .secondary-top-bar-component .secondary-button.active .underline {
 	opacity: 1;
 	transform: scaleX(1);
   }
   
-  .secondary-button:not(.active) .underline {
+  .secondary-top-bar-component .secondary-button:not(.active) .underline {
 	opacity: 0;
 	transform: scaleX(0);
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-	.secondary-top-bar {
-	  height: 60px;
-	  top: 60px;
-	}
-  
-	.buttons-container {
-	  gap: 20px;
-	}
-  
-	.secondary-button {
-	  font-size: 14px;
-	  padding: 6px 0;
-	}
   }
   

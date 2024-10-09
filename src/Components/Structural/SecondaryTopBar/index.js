@@ -36,6 +36,7 @@ const SecondaryTopBar = () => {
   };
 
   return (
+	<div className="secondary-top-bar-component">
     <div className="secondary-top-bar">
       <div className="buttons-container">
         {secondaryTopBarConfig.map((button) => (
@@ -66,6 +67,7 @@ const SecondaryTopBar = () => {
         ))}
       </div>
     </div>
+	</div>
   );
 };
 
