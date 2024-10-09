@@ -5,9 +5,9 @@
 	gap: 5px;
 	background-color: var(--color-white);
 	z-index: 10000;
-	padding: 15px 10px;
-	margin-top: 20px;
-	border-radius: 100px;
+	padding: 10px 4px;
+	margin-top: 60px;
+	border-radius: 10px;
 	margin-left: 10px;
   }
   
@@ -27,7 +27,7 @@
   .sidebar-component .sidebar-item__active-bg {
 	position: absolute;
 	inset: 0;
-	border-radius: 100px;
+	border-radius: 10px;
 	background-color: var(--color-bg)
   }
   
