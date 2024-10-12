@@ -6,13 +6,11 @@
 .app-component {
 	display: flex;
 	height: 100vh;
-	overflow: hidden;
 	margin-top: 60px;
   }
   
 .content-routing {
 	flex: 1;
-	overflow: hidden;
 	margin-left: 60px;
   }
   

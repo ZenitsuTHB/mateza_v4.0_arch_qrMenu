@@ -3,11 +3,9 @@
 		margin-top: 0px;
 		height: 100vh;
 		display: flex;
-		overflow: hidden;
 	  }
 	  
 	.content-routing {
-		overflow: hidden;
 		flex: 1;
 		margin-left: 0px;
 		margin-top: 20px;

@@ -62,7 +62,6 @@
 	flex-direction: column;
 	margin-top: 10px;
 	border-radius: 8px;
-	overflow: hidden;
 	background: #f9f9f9;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
   }

@@ -1,45 +1,47 @@
 /* src/Pages/FormEditor/LaunchPage/css/emailSampleTab.css */
 
+/* Email Section Styling */
 .email-section {
-	margin-bottom: 20px;
+	margin-bottom: 2000px;
   }
   
-  .email-section p {
+  .email-header {
+	display: flex;
+	align-items: center;
 	margin-bottom: 15px;
+  }
+  
+  .email-icon {
+	font-size: 24px;
+	color: #007bff;
+	margin-right: 10px;
+  }
+  
+  .email-title {
+	font-size: 20px;
+	color: var(--color-black);
+	margin: 0;
+  }
+  
+  .email-intro {
+	margin-bottom: 20px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  .email-button {
-	display: inline-block;
-	padding: 12px 20px;
-	background-color: #007bff;
-	color: #ffffff;
-	border-radius: 4px;
-	text-decoration: none;
-	font-size: 16px;
-	margin-bottom: 20px;
-	transition: background-color 0.3s ease;
-  }
-  
-  .email-button:hover {
-	background-color: #0056b3;
-  }
-  
-  .email-sample-text {
-	font-weight: bold;
-	margin-bottom: 10px;
-  }
-  
+  /* Sample Email Styling */
   .email-sample {
 	background-color: #f8f9fa;
-	padding: 15px;
+	padding: 20px;
 	border: 1px solid #ced4da;
 	border-radius: 4px;
+	margin-bottom: 20px;
   }
   
   .email-sample p {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
+	font-size: 16px;
+	color: var(--color-black);
   }
   
   .email-sample a {
@@ -49,5 +51,33 @@
   
   .email-sample a:hover {
 	text-decoration: underline;
+  }
+  
+  /* Send Email Button */
+  .email-button {
+	display: inline-block;
+	padding: 12px 20px;
+	background-color: #28a745; /* Green color for emphasis */
+	color: #ffffff;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .email-button:hover {
+	background-color: #218838;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.email-header {
+	  flex-direction: column;
+	  align-items: flex-start;
+	}
+  
+	.email-icon {
+	  margin-bottom: 10px;
+	}
   }
   
