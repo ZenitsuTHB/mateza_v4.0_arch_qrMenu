@@ -1,7 +1,6 @@
 // src/components/NewReservation/NewReservation.jsx
 
 import React, { useState } from 'react';
-import { withHeader } from '../../Components/Structural/Header/index.js'; // Adjust the path as needed
 import './css/newReservation.css';
 
 const NewReservation = () => {

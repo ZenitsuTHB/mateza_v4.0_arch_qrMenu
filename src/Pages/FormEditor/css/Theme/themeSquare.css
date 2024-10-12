@@ -1,0 +1,63 @@
+/* themeSquare.css */
+
+.theme-square {
+	width: 180px;
+	border-radius: 12px;
+	overflow: hidden;
+	background: #f9f9f9;
+	cursor: pointer;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .theme-square:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .theme-square-content {
+	display: flex;
+	height: 180px;
+  }
+  
+  .theme-square-left,
+  .theme-square-right {
+	width: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .theme-square-left {
+	background-color: #e0e0e0;
+  }
+  
+  .theme-square-left::after {
+	content: '';
+	display: block;
+	width: 80%;
+	height: 80%;
+	background-color: currentColor;
+	border-radius: 50%;
+  }
+  
+  .theme-square-right img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 0 12px 0 0;
+  }
+  
+  .theme-square-title {
+	text-align: center;
+	padding: 12px;
+	background: #fff;
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+  }
+  
+  @media (max-width: 600px) {
+	.theme-square {
+	  width: 100%;
+	}
+  }
+  

@@ -1,0 +1,43 @@
+/* addThemeSquare.css */
+
+.add-theme-square {
+	background: #e0e0e0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .add-theme-square:hover {
+	background: #d0d0d0;
+	transform: translateY(-5px);
+  }
+  
+  .add-theme-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 180px;
+  }
+  
+  .add-theme-content .fa-plus {
+	font-size: 48px;
+	color: #888;
+  }
+  
+  .theme-square-title {
+	text-align: center;
+	padding: 12px;
+	background: #fff;
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+  }
+  
+  @media (max-width: 600px) {
+	.add-theme-square {
+	  width: 100%;
+	}
+  }
+  

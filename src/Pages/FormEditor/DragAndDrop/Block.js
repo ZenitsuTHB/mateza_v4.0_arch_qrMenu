@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaTrashAlt, FaEdit, FaGripHorizontal } from 'react-icons/fa';
-import './css/block.css';
+import '../css/DragAndDrop/block.css';
 
 const Block = ({ type, label, id, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);

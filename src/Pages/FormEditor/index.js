@@ -1,12 +1,15 @@
+// DragAndDropEditor.js
 import React, { useState, useEffect, useRef } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import { FaMagic } from 'react-icons/fa'; // Import the sparkle icon
+import { FaMagic } from 'react-icons/fa'; // Import the magic wand icon
 import { DragDropContext } from 'react-beautiful-dnd';
-import Palette from './Palette.js';
-import Canvas from './Canvas.js';
-import './css/animations.css';
-import './css/style.css';
-import './css/mobile.css';
+import Palette from './DragAndDrop/Palette.js';
+import Canvas from './DragAndDrop/Canvas.js';
+import './css/DragAndDrop/animations.css';
+import './css/DragAndDrop/style.css';
+import './css/DragAndDrop/mobile.css';
+import ThemeSelectorModal from './Theme/ThemeSelectorModal.js';
+import useNotification from '../../Components/Notification/index';
 
 import {
   FaFont,
@@ -33,8 +36,11 @@ const initialBlocks = [
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
   const [canvasItems, setCanvasItems] = useState([]);
-  const [dropPosition, setDropPosition] = useState(null); // Track drop position
-  const formEditingPageRef = useRef(null); // Reference to the .form-editing-page container
+  const [dropPosition, setDropPosition] = useState(null);
+  const [showThemeModal, setShowThemeModal] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(null);
+  const formEditingPageRef = useRef(null);
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   useEffect(() => {
     const applyResponsiveStyles = () => {
@@ -87,8 +93,7 @@ const DragAndDropEditor = () => {
       const newCanvasItems = Array.from(canvasItems);
       newCanvasItems.splice(result.destination.index, 0, newItem);
       setCanvasItems(newCanvasItems);
-    }
-    else if (
+    } else if (
       result.source.droppableId === 'Canvas' &&
       result.destination.droppableId === 'Canvas'
     ) {
@@ -108,18 +113,40 @@ const DragAndDropEditor = () => {
     setDropPosition(destination.index);
   };
 
+  const handleSelectTheme = (theme) => {
+    setSelectedTheme(theme);
+    triggerNotification('Thema geselecteerd', 'success');
+  };
+
+  const handleAddTheme = (newTheme) => {
+    triggerNotification('Nieuw thema toegevoegd', 'success');
+  };
+
   return (
     <div className="form-editing-page" ref={formEditingPageRef}>
+      <NotificationComponent />
       <div className="editor-container">
         <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
           <Palette blocks={blocks} />
-          <Canvas items={canvasItems} setItems={setCanvasItems} dropPosition={dropPosition} />
+          <Canvas
+            items={canvasItems}
+            setItems={setCanvasItems}
+            dropPosition={dropPosition}
+            selectedTheme={selectedTheme}
+          />
         </DragDropContext>
       </div>
-        <button className="themes-button">
-          <FaMagic className="icon" />
-          Stijl Kiezen
-        </button>
+      <button className="themes-button" onClick={() => setShowThemeModal(true)}>
+        <FaMagic className="icon" />
+        Stijl Kiezen
+      </button>
+      {showThemeModal && (
+        <ThemeSelectorModal
+          onClose={() => setShowThemeModal(false)}
+          onSelectTheme={handleSelectTheme}
+          onAddTheme={handleAddTheme}
+        />
+      )}
     </div>
   );
 };
