@@ -34,3 +34,8 @@
 	background-color: #0056b3;
 	cursor: pointer;
 }
+
+.secondary-title {
+	text-align: center;
+	margin-bottom: 20px;
+}

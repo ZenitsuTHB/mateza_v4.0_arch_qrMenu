@@ -40,7 +40,9 @@ const FormSettings = () => {
 
   return (
     <div className="form-settings-page">
+		
       <form className="form-settings-form" onSubmit={handleSubmit}>
+	  <h2 className="secondary-title">Stel uw Pagina in</h2>
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input

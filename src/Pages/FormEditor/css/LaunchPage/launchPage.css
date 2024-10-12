@@ -2,14 +2,22 @@
 
 .launch-page {
 	display: flex;
-	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 	padding: 20px;
   }
   
-  .link-section {
+  .launch-page-form {
+	background-color: var(--color-white);
+	padding: 30px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	width: 100%;
 	max-width: 600px;
+  }
+  
+  .link-section {
+	width: 100%;
 	margin-bottom: 30px;
   }
   
@@ -113,6 +121,10 @@
   }
   
   @media (max-width: 768px) {
+	.launch-page-form {
+	  padding: 20px;
+	}
+  
 	.link-section,
 	.share-section {
 	  width: 100%;
