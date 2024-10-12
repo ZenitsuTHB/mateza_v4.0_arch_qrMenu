@@ -34,7 +34,7 @@ import image24 from '../../../Assets/themes/small/24.webp';
 import image25 from '../../../Assets/themes/small/25.webp';
 
 const initialThemes = [
-  { id: 1, title: 'Oceaan Bries', color: '#5DADE2', image: image1 },
+  { id: 1, title: 'Oceaan Bries', color: '#5DADE2', image: image9 },
   { id: 2, title: 'Zandstrand', color: '#F0E68C', image: image23 },
   { id: 3, title: 'Zonsondergang Oranje', color: '#FF7F50', image: image6 },
   { id: 4, title: 'Pastel Dromen', color: '#F8C8DC', image: image7 },
@@ -51,8 +51,8 @@ const initialThemes = [
   { id: 15, title: 'Romig Beige', color: '#F5CBA7', image: image25 },
   { id: 16, title: 'Leigrijs', color: '#7F8C8D', image: image19 },
   { id: 17, title: 'Blozend Roze', color: '#F1948A', image: image17 },
-  { id: 18, title: 'Smaragd Eiland', color: '#1ABC9C', image: image9 },
-  { id: 19, title: 'Chocolade Genot', color: '#6E2C00', image: image16 },
+  { id: 18, title: 'Smaragd Eiland', color: '#1ABC9C', image: image1 },
+  { id: 19, title: 'Koffie Genot', color: '#6E2C00', image: image16 },
   { id: 20, title: 'Zonnebloem', color: '#F1C40F', image: image5 },
   { id: 21, title: 'Diep Paars', color: '#4A235A', image: image21 },
   { id: 22, title: 'Blauwgroene Twist', color: '#117A65', image: image12 },

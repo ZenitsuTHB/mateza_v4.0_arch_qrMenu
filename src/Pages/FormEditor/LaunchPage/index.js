@@ -50,8 +50,13 @@ const LaunchPage = () => {
               value={reservationLink}
               readOnly
             />
-            <a href={reservationLink} target="_blank" rel="noopener noreferrer">
-              <FaExternalLinkAlt className="link-icon" />
+            <a
+              href={reservationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-icon"
+            >
+              <FaExternalLinkAlt />
             </a>
           </div>
         </div>

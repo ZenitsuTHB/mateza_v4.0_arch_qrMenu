@@ -27,6 +27,7 @@
   .launch-page-form {
 	background-color: var(--color-white);
 	padding: 30px;
+	padding-bottom: 0;
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	width: 100%;
@@ -53,6 +54,7 @@
   }
   
   .link-input-container {
+	position: relative;
 	display: flex;
 	align-items: center;
   }
@@ -60,8 +62,9 @@
   .link-input-container input {
 	flex: 1;
 	padding: 10px 12px;
+	padding-right: 35px; /* Add padding to the right for the icon */
 	border: 1px solid #cccccc;
-	border-radius: 4px 0 0 4px;
+	border-radius: 4px;
 	font-size: 16px;
 	transition: border-color 0.3s ease;
   }
@@ -71,25 +74,16 @@
 	outline: none;
   }
   
-  .link-input-container a {
-	padding: 10px;
-	background-color: #007bff;
-	color: #ffffff;
-	border: 1px solid #007bff;
-	border-left: none;
-	border-radius: 0 4px 4px 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: background-color 0.3s ease;
-  }
-  
-  .link-input-container a:hover {
-	background-color: #0056b3;
-  }
-  
-  .link-icon {
+  .link-input-container .link-icon {
+	position: absolute;
+	right: 10px;
+	color: #777777;
+	cursor: pointer;
 	font-size: 18px;
+  }
+  
+  .link-input-container .link-icon:hover {
+	color: #0056b3;
   }
   
   /* Tab Menu */
