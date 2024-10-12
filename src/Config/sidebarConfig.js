@@ -14,7 +14,8 @@ import {
 } from 'react-icons/fa'; // Import necessary icons
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
-import FormSettings from '../Pages/FormEditor/FormSettings/index.js'; // Import the FormSettings component
+import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
+import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js'; // Import the FormSettings component
 import Notepad from '../Pages/Notepad/index.js';
 import Profile from '../Pages/Profile/index.js';
 import Pincode from '../Pages/Pincode/index.js';
@@ -48,7 +49,32 @@ const routesConfig = [
       },
     ],
   },
-  // Add the new FormSettings route here
+  {
+    path: '/launch',
+    element: <LaunchPage title="Lanceren" />,
+    label: 'Lanceren',
+    icon: FaRocket,
+    isMenu: false,
+    isMobile: true,
+    isTab: false,
+    secondaryTopBar: [
+      {
+        label: 'Bewerken',
+        path: '/',
+        icon: FaEdit,
+      },
+      {
+        label: 'Instellen',
+        path: '/settings',
+        icon: FaEye,
+      },
+      {
+        label: 'Lanceren',
+        path: '/launch',
+        icon: FaRocket,
+      },
+    ],
+  },
   {
     path: '/settings',
     element: <FormSettings title="Instellingen" />,
@@ -70,7 +96,7 @@ const routesConfig = [
       },
       {
         label: 'Lanceren',
-        path: '/',
+        path: '/launch',
         icon: FaRocket,
       },
     ],

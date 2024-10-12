@@ -1,0 +1,121 @@
+/* src/Pages/FormEditor/LaunchPage/css/launchPage.css */
+
+.launch-page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+  }
+  
+  .link-section {
+	width: 100%;
+	max-width: 600px;
+	margin-bottom: 30px;
+  }
+  
+  .link-section label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: var(--color-black);
+  }
+  
+  .link-input-container {
+	display: flex;
+	align-items: center;
+  }
+  
+  .link-input-container input {
+	flex: 1;
+	padding: 10px 12px;
+	border: 1px solid #cccccc;
+	border-radius: 4px 0 0 4px;
+	font-size: 16px;
+	transition: border-color 0.3s ease;
+  }
+  
+  .link-input-container input:focus {
+	border-color: #007bff;
+	outline: none;
+  }
+  
+  .link-input-container a {
+	padding: 10px;
+	background-color: #007bff;
+	color: #ffffff;
+	border: 1px solid #007bff;
+	border-left: none;
+	border-radius: 0 4px 4px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.3s ease;
+  }
+  
+  .link-input-container a:hover {
+	background-color: #0056b3;
+  }
+  
+  .link-icon {
+	font-size: 18px;
+  }
+  
+  .share-section {
+	text-align: center;
+  }
+  
+  .share-section p {
+	margin-bottom: 15px;
+	font-size: 18px;
+	color: var(--color-black);
+  }
+  
+  .social-icons {
+	display: flex;
+	gap: 15px;
+	justify-content: center;
+  }
+  
+  .social-icon {
+	font-size: 20px;
+	color: #ffffff;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 0.3s ease;
+  }
+  
+  .social-icon.facebook {
+	background-color: #3b5998;
+  }
+  
+  .social-icon.twitter {
+	background-color: #1da1f2;
+  }
+  
+  .social-icon.linkedin {
+	background-color: #0077b5;
+  }
+  
+  .social-icon.whatsapp {
+	background-color: #25d366;
+  }
+  
+  .social-icon.email {
+	background-color: #ea4335;
+  }
+  
+  .social-icon:hover {
+	opacity: 0.8;
+  }
+  
+  @media (max-width: 768px) {
+	.link-section,
+	.share-section {
+	  width: 100%;
+	}
+  }
+  
