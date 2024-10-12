@@ -1,6 +1,6 @@
 /* themeSelectorModal.css */
 
-.theme-selector-modal {
+.theme-page .theme-selector-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -13,14 +13,14 @@
 	backdrop-filter: blur(5px);
   }
   
-  .modal-overlay {
+  .theme-page .modal-overlay {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
   }
   
-  .modal-content {
+  .theme-page .modal-content {
 	position: relative;
 	background: #fff;
 	padding: 30px;
@@ -33,18 +33,7 @@
 	animation: modalFadeIn 0.3s ease-out;
   }
   
-  @keyframes modalFadeIn {
-	from {
-	  opacity: 0;
-	  transform: translateY(-20px);
-	}
-	to {
-	  opacity: 1;
-	  transform: translateY(0);
-	}
-  }
-  
-  .modal-content h2 {
+  .theme-page .modal-content h2 {
 	margin-bottom: 20px;
 	font-size: 24px;
 	color: #333;
@@ -52,7 +41,7 @@
   }
   
   /* Close button styles */
-  .modal-close-button {
+  .theme-page .modal-close-button {
 	position: absolute;
 	top: 15px;
 	right: 15px;
@@ -64,21 +53,14 @@
 	transition: color 0.3s ease;
   }
   
-  .modal-close-button:hover {
+  .theme-page .modal-close-button:hover {
 	color: #333;
   }
   
-  .theme-grid {
+  .theme-page .theme-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
 	justify-content: center;
-  }
-  
-  @media (max-width: 600px) {
-	.theme-grid {
-	  flex-direction: column;
-	  align-items: center;
-	}
   }
   

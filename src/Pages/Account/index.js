@@ -6,6 +6,8 @@ import WelcomeAnimation from './WelcomeAnimation';
 import LanguageSelection from './LanguageSelection';
 import AvatarSelection from './AvatarSelection';
 import useNotification from '../../Components/Notification/index';
+import './css/animations.css';
+import './css/mobile.css';
 
 const AccountManagement = () => {
   const [currentStep, setCurrentStep] = useState(1);

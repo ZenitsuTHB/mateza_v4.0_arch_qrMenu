@@ -8,7 +8,7 @@ import Canvas from './DragAndDrop/Canvas.js';
 import './css/DragAndDrop/animations.css';
 import './css/DragAndDrop/style.css';
 import './css/DragAndDrop/mobile.css';
-import ThemeSelectorModal from './Theme/ThemeSelectorModal.js';
+import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
 
 import {

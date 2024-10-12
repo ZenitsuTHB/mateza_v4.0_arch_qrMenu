@@ -1,6 +1,6 @@
 /* addThemeModal.css */
 
-.add-theme-modal {
+.theme-page .add-theme-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -13,14 +13,14 @@
 	backdrop-filter: blur(5px);
   }
   
-  .add-theme-modal .modal-overlay {
+  .theme-page .add-theme-modal .modal-overlay {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
   }
   
-  .add-theme-modal .modal-content {
+  .theme-page .add-theme-modal .modal-content {
 	position: relative;
 	background: #fff;
 	padding: 30px;
@@ -32,7 +32,7 @@
   }
   
   /* Close button styles */
-  .add-theme-modal .modal-close-button {
+  .theme-page .add-theme-modal .modal-close-button {
 	position: absolute;
 	top: 15px;
 	right: 15px;
@@ -44,27 +44,27 @@
 	transition: color 0.3s ease;
   }
   
-  .add-theme-modal .modal-close-button:hover {
+  .theme-page .add-theme-modal .modal-close-button:hover {
 	color: #333;
   }
   
-  .add-theme-modal h2 {
+  .theme-page .add-theme-modal h2 {
 	margin-bottom: 20px;
 	font-size: 24px;
 	color: #333;
 	text-align: center;
   }
   
-  .add-theme-modal label {
+  .theme-page .add-theme-modal label {
 	display: block;
 	margin-bottom: 8px;
 	font-weight: 400;
 	color: #555;
   }
   
-  .add-theme-modal input[type='text'],
-  .add-theme-modal input[type='color'],
-  .add-theme-modal input[type='file'] {
+  .theme-page .add-theme-modal input[type='text'],
+  .theme-page .add-theme-modal input[type='color'],
+  .theme-page .add-theme-modal input[type='file'] {
 	width: 100%;
 	padding: 12px;
 	margin-bottom: 20px;
@@ -75,23 +75,23 @@
 	transition: border-color 0.3s ease;
   }
 
-  .add-theme-modal input[type='color'] {
+  .theme-page .add-theme-modal input[type='color'] {
 	height: 100px;
   }
   
-  .add-theme-modal input[type='text']:focus,
-  .add-theme-modal input[type='color']:focus,
-  .add-theme-modal input[type='file']:focus {
+  .theme-page .add-theme-modal input[type='text']:focus,
+  .theme-page .add-theme-modal input[type='color']:focus,
+  .theme-page .add-theme-modal input[type='file']:focus {
 	border-color: #007bff;
   }
   
-  .modal-buttons {
+  .theme-page .modal-buttons {
 	display: flex;
 	justify-content: space-between;
 	margin-top: 20px;
   }
   
-  .modal-buttons button {
+  .theme-page .modal-buttons button {
 	padding: 12px 24px;
 	font-size: 16px;
 	font-weight: 600;
@@ -101,32 +101,21 @@
 	transition: background-color 0.3s ease;
   }
   
-  .modal-buttons button:first-child {
+  .theme-page .modal-buttons button:first-child {
 	background-color: #dc3545;;
 	color: #fff;
   }
   
-  .modal-buttons button:first-child:hover {
+  .theme-page .modal-buttons button:first-child:hover {
 	background-color: #dc3545;
   }
   
-  .modal-buttons button:last-child {
+  .theme-page .modal-buttons button:last-child {
 	background-color: #218838;
 	color: #fff;
   }
   
-  .modal-buttons button:last-child:hover {
+  .theme-page .modal-buttons button:last-child:hover {
 	background-color: #218838;
-  }
-  
-  @keyframes modalFadeIn {
-	from {
-	  opacity: 0;
-	  transform: translateY(20px);
-	}
-	to {
-	  opacity: 1;
-	  transform: translateY(0);
-	}
   }
   

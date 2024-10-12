@@ -1,26 +1,4 @@
 
-@keyframes fadeIn {
-	from {
-	  opacity: 0;
-	  transform: translate(-50%, -60%);
-	}
-	to {
-	  opacity: 1;
-	  transform: translate(-50%, -50%);
-	}
-  }
-	
-  @keyframes rainbowAnimation {
-	  0% {
-	  background-position: 0% 50%;
-	  }
-	  50% {
-	  background-position: 100% 50%;
-	  }
-	  100% {
-	  background-position: 0% 50%;
-	  }
-  }
 
 .welcome-animation-container {
   position: relative;
@@ -73,13 +51,4 @@
 .welcome-page .next-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-
-
-@media (max-width: 768px) {
-	.welcome-page .welcome-message h1 {
-		font-size: 25px;
-		width: 100vw;
-	  }
-
 }

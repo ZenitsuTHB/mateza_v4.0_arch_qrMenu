@@ -1,6 +1,6 @@
 /* addThemeSquare.css */
 
-.add-theme-square {
+.theme-page .add-theme-square {
 	width: 180px;
 	border-radius: 12px;
 	overflow: hidden;
@@ -13,24 +13,24 @@
 	cursor: pointer;
   }
   
-  .add-theme-square:hover {
+  .theme-page .add-theme-square:hover {
 	background: #d0d0d0;
 	transform: translateY(-5px);
   }
   
-  .add-theme-content {
+  .theme-page .add-theme-content {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 180px;
   }
   
-  .add-theme-content .fa-plus {
+  .theme-page .add-theme-content .fa-plus {
 	font-size: 48px;
 	color: #888;
   }
   
-  .theme-square-title {
+  .theme-page .theme-square-title {
 	text-align: center;
 	padding: 12px;
 	background: #fff;
@@ -39,11 +39,5 @@
 	color: #333;
 	width: 100%; /* Span full width */
 	box-sizing: border-box;
-  }
-  
-  @media (max-width: 600px) {
-	.add-theme-square {
-	  width: 100%;
-	}
   }
   

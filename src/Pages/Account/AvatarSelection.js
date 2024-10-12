@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
 import { avatars, avatarNames } from './avatars'; // Importing from avatars.js
-import './css/avatarSelection.css';
 import { useTranslation } from 'react-i18next';
+import './css/avatarSelection.css';
 
 const AvatarSelection = ({ onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);

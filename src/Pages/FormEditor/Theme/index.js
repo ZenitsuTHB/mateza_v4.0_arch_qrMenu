@@ -1,9 +1,11 @@
 // ThemeSelectorModal.js
 import React, { useState } from 'react';
-import ThemeSquare from './ThemeSquare';
-import AddThemeSquare from './AddThemeSquare';
-import AddThemeModal from './AddThemeModal';
+import ThemeSquare from './Square';
+import AddThemeSquare from './AddSquare';
+import AddThemeModal from './AddModal';
 import '../css/Theme/themeSelectorModal.css';
+import '../css/Theme/animations.css';
+import '../css/Theme/mobile.css';
 
 import image1 from '../../../Assets/themes/small/1.webp';
 import image2 from '../../../Assets/themes/small/2.webp';
@@ -74,6 +76,7 @@ const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
   };
 
   return (
+    <div className="theme-page">
     <div className="theme-selector-modal">
       <div className="modal-overlay" onClick={onClose}></div>
       <div className="modal-content">
@@ -97,6 +100,7 @@ const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
         </div>
       </div>
       
+    </div>
     </div>
   );
 };
