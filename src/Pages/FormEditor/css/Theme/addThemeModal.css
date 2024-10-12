@@ -9,7 +9,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 1001;
+	z-index: var(--z-index-modal);
 	backdrop-filter: blur(5px);
   }
   
@@ -29,6 +29,23 @@
 	width: 90%;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 	animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  /* Close button styles */
+  .add-theme-modal .modal-close-button {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	background: transparent;
+	border: none;
+	font-size: 24px;
+	color: #888;
+	cursor: pointer;
+	transition: color 0.3s ease;
+  }
+  
+  .add-theme-modal .modal-close-button:hover {
+	color: #333;
   }
   
   .add-theme-modal h2 {

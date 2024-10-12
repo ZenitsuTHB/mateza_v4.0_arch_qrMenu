@@ -13,6 +13,7 @@ import './i18n';
 
 import './Styles/fonts.css';
 import './Styles/colors.css';
+import './Styles/z-index.css';
 import './Styles/index.css';
 import './Styles/mobile.css';
 import SecondaryTopBar from './Components/Structural/SecondaryTopBar/index.js';

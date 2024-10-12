@@ -9,7 +9,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 1000;
+	z-index: var(--z-index-modal); /* Increased z-index */
 	backdrop-filter: blur(5px);
   }
   
@@ -49,6 +49,23 @@
 	font-size: 24px;
 	color: #333;
 	text-align: center;
+  }
+  
+  /* Close button styles */
+  .modal-close-button {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	background: transparent;
+	border: none;
+	font-size: 24px;
+	color: #888;
+	cursor: pointer;
+	transition: color 0.3s ease;
+  }
+  
+  .modal-close-button:hover {
+	color: #333;
   }
   
   .theme-grid {

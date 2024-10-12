@@ -28,22 +28,22 @@
   }
   
   .theme-square-left {
-	background-color: #e0e0e0;
+	background-color: currentColor;
   }
   
-  .theme-square-left::after {
+  /* Removed the black dot */
+  /* .theme-square-left::after {
 	content: '';
 	display: block;
 	width: 80%;
 	height: 80%;
 	background-color: currentColor;
 	border-radius: 50%;
-  }
+  } */
   
   .theme-square-right img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 0 12px 0 0;
   }
   
   .theme-square-title {
@@ -53,6 +53,8 @@
 	font-size: 16px;
 	font-weight: 600;
 	color: #333;
+	width: 100%; /* Span full width */
+	box-sizing: border-box;
   }
   
   @media (max-width: 600px) {

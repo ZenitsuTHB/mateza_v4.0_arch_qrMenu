@@ -28,6 +28,7 @@ const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
     <div className="theme-selector-modal">
       <div className="modal-overlay" onClick={onClose}></div>
       <div className="modal-content">
+        <button className="modal-close-button" onClick={onClose}>×</button>
         <h2>Selecteer een thema</h2>
         <div className="theme-grid">
           {themes.map((theme) => (

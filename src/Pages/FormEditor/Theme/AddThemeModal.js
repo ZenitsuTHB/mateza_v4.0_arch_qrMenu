@@ -25,6 +25,7 @@ const AddThemeModal = ({ onClose, onSave }) => {
     <div className="add-theme-modal">
       <div className="modal-overlay" onClick={onClose}></div>
       <div className="modal-content">
+        <button className="modal-close-button" onClick={onClose}>×</button>
         <h2>Nieuw Thema Toevoegen</h2>
         <label>Titel:</label>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
