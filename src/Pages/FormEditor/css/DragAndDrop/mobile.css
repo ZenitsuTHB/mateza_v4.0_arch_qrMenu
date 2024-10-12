@@ -3,7 +3,7 @@
 	.form-editing-page .palette {
 	  width: 100%;
 	  order: 2;
-	  margin-bottom: 220px;
+	  margin-bottom: 60px;
 	  margin-left: 0px;
 	}
   }
@@ -28,7 +28,7 @@
 .palette-responsive {
 	width: 100% !important;
 	order: 2;
-	margin-bottom: 220px;
+	margin-bottom: 20px;
 	margin-left: 0px;
 	padding-right: 20px;
 	flex-grow: 0; /* Do not grow beyond the assigned space */
@@ -44,7 +44,7 @@
   .canvas-responsive {
 	width: 100%;
 	order: 1;
-	margin-bottom: 0px;
+	margin-bottom: 60px;
 	padding: 0 !important;
 	height: calc(80%); /* Increase the minimum height to make canvas more prominent */
   }
