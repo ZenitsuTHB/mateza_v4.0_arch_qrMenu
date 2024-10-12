@@ -9,23 +9,18 @@ import icon3 from '../../../Assets/logos/3.webp';
 import icon4 from '../../../Assets/logos/4.webp';
 import icon5 from '../../../Assets/logos/5.webp';
 import icon6 from '../../../Assets/logos/6.webp';
-import icon7 from '../../../Assets/logos/7.webp';
-import icon8 from '../../../Assets/logos/8.webp';
-import icon9 from '../../../Assets/logos/9.webp';
+
 
 const apps = [
-  { name: 'Mateza Booking', link: '', icon: icon6 },
-  { name: 'Mateza Websites', link: 'https://mateza.be/menu', icon: icon2 },
-  { name: 'Mateza Gift', link: 'https://mateza.be/tables', icon: icon3 },
-  { name: 'Mateza Tables', link: 'https://mateza.be/websites', icon: icon4 },
-  { name: 'Mateza Predict', link: 'https://mateza.be/predict', icon: icon5 },
-  { name: 'Mateza Supply', link: 'https://mateza.be/supply', icon: icon1 },
-  { name: 'Mateza People', link: 'https://mateza.be/hr', icon: icon7 },
-  { name: 'Mateza Pay', link: 'https://mateza.be/pay', icon: icon8 },
-  { name: 'Mateza Advice', link: 'https://mateza.be/other', icon: icon9 },
+  { name: 'Gasten', link: '', icon: icon1 },
+  { name: 'Tafels', link: 'https://mateza.be/menu', icon: icon2 },
+  { name: 'Email', link: 'https://mateza.be/tables', icon: icon3 },
+  { name: 'Statistieken', link: 'https://mateza.be/websites', icon: icon4 },
+  { name: 'Cadeaubonnen', link: 'https://mateza.be/predict', icon: icon5 },
+  { name: 'Instellingen', link: 'https://mateza.be/supply', icon: icon6 },
 ];
 
-const enabledApps = ['Mateza Booking', 'Mateza Websites', 'Mateza Gift'];
+const enabledApps = ['Gasten', 'Tafels', 'Email', 'Statistieken', 'Cadeaubonnen', 'Instellingen'];
 
 const AppsMenu = ({ onMouseEnter, onMouseLeave }) => {
   const [searchTerm, setSearchTerm] = useState('');
