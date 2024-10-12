@@ -12,7 +12,7 @@
   }
   
   @media (max-width: 900px) {
-	.theme-square {
+	.theme-page .theme-square {
 	  width: 100%;
 	}
   }
