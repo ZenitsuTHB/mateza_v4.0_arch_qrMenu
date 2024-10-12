@@ -11,6 +11,7 @@ const ThemeSquare = ({ theme, onClick }) => {
           <img src={theme.image} alt={theme.title} />
         </div>
       </div>
+      <div className="theme-square-title">{theme.title}</div>
     </div>
   );
 };
