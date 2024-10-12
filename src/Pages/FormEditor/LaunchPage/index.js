@@ -1,29 +1,37 @@
 // src/Pages/FormEditor/LaunchPage/index.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import '../css/LaunchPage/launchPage.css'; // Ensure this path is correct
-import { FaExternalLinkAlt } from 'react-icons/fa';
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaWhatsapp,
-  FaEnvelope,
-} from 'react-icons/fa';
+import '../css/LaunchPage/launchPage.css';
+import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
 
 const LaunchPage = () => {
-  const reservationLink = 'https://yourwebsite.com/reservation'; // Replace with your actual link
+  const [activeTab, setActiveTab] = useState('embedCode'); // Default to 'embedCode' tab
+
+  const reservationLink = 'https://uwwebsite.com/reservering'; // Vervang door uw eigen link
 
   const shareMessage = 'Bekijk onze reserveringspagina!';
 
-  // Complete message for platforms that require it
-  const fullMessage = `${shareMessage} ${reservationLink}`;
+  // Volledige boodschap voor e-mail
+  const emailSubject = 'Uitnodiging voor Reservering';
+  const emailBody = `${shareMessage} ${reservationLink}`;
+
+  // Voorbeeld van insluitcode
+  const embedCode = `<iframe src="${reservationLink}" width="600" height="800" frameborder="0"></iframe>`;
 
   return (
     <div className="launch-page">
-      <div className="launch-page-form"> {/* Added container similar to FormSettings */}
-		<h2 className="secondary-title">Deel uw Link</h2>
+      {/* Succesbericht */}
+      <div className="success-message">
+        <FaCheckCircle className="success-icon" />
+        <p>Uw pagina is klaar om te delen!</p>
+      </div>
+
+      <div className="launch-page-form">
+        {/* Titel */}
+        <h2 className="secondary-title">Uw Reserveringspagina</h2>
+
+        {/* Link Sectie */}
         <div className="link-section">
           <label htmlFor="reservationLink">Reservatielink:</label>
           <div className="link-input-container">
@@ -39,59 +47,74 @@ const LaunchPage = () => {
           </div>
         </div>
 
-        <div className="share-section">
-          <p>Deel deze link op sociale media:</p>
-          <div className="social-icons">
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                reservationLink
-              )}&quote=${encodeURIComponent(shareMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon facebook"
-            >
-              <FaFacebookF />
-            </a>
-            <a
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                reservationLink
-              )}&text=${encodeURIComponent(shareMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon twitter"
-            >
-              <FaTwitter />
-            </a>
-            <a
-              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-                reservationLink
-              )}&title=${encodeURIComponent(shareMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon linkedin"
-            >
-              <FaLinkedinIn />
-            </a>
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon whatsapp"
-            >
-              <FaWhatsapp />
-            </a>
-            <a
-              href={`mailto:?subject=${encodeURIComponent(
-                'Reservatielink'
-              )}&body=${encodeURIComponent(fullMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon email"
-            >
-              <FaEnvelope />
-            </a>
-          </div>
+        {/* Tab Menu */}
+        <div className="tab-menu">
+          <button
+            className={activeTab === 'embedCode' ? 'tab active' : 'tab'}
+            onClick={() => setActiveTab('embedCode')}
+          >
+            Insluitcode
+          </button>
+          <button
+            className={activeTab === 'emailSample' ? 'tab active' : 'tab'}
+            onClick={() => setActiveTab('emailSample')}
+          >
+            E-mailvoorbeeld
+          </button>
         </div>
+
+        {/* Inhoud op basis van actieve tab */}
+        {activeTab === 'embedCode' && (
+          <>
+            <div className="embed-section">
+              <p>
+                Kopieer en plak de onderstaande code om de reserveringspagina op
+                uw website in te sluiten:
+              </p>
+              <div className="code-container">
+                <pre>
+                  <code>{embedCode}</code>
+                </pre>
+                <button
+                  className="copy-button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(embedCode);
+                    alert('Code gekopieerd naar klembord!');
+                  }}
+                >
+                  Kopiëren
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'emailSample' && (
+          <>
+            <div className="email-section">
+              <p>
+                Gebruik de onderstaande knop om een uitnodiging per e-mail te
+                versturen:
+              </p>
+              <a
+                href={`mailto:?subject=${encodeURIComponent(
+                  emailSubject
+                )}&body=${encodeURIComponent(emailBody)}`}
+                className="email-button"
+              >
+                E-mail Versturen
+              </a>
+              <p className="email-sample-text">Voorbeeldtekst:</p>
+              <div className="email-sample">
+                <p>{shareMessage}</p>
+                <p>
+                  Klik hier om te reserveren:{' '}
+                  <a href={reservationLink}>{reservationLink}</a>
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
