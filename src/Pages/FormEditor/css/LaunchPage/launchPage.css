@@ -99,39 +99,44 @@
 	margin-bottom: 20px;
   }
   
-  .tab {
+  .buttons-container {
+	display: flex;
+	gap: 40px;
+	position: relative;
+  }
+  
+  .tab-button {
 	position: relative;
 	background: none;
 	border: none;
 	color: #777777;
 	font-size: 16px;
 	cursor: pointer;
-	padding: 8px 16px;
+	padding: 8px 0;
 	transition: color 0.3s ease;
-	margin: 0 10px;
+	text-decoration: none;
   }
   
-  .tab.active {
-	color: #007bff;
-  }
-  
-  .tab:hover {
+  .tab-button:hover {
 	color: #0056b3;
   }
   
-  .tab::after {
-	content: '';
+  .tab-button.active {
+	color: #007bff;
+  }
+  
+  .tab-label {
+	position: relative;
+  }
+  
+  .tab-underline {
 	position: absolute;
 	bottom: -5px;
 	left: 0;
 	right: 0;
 	height: 3px;
-	background-color: transparent;
-	transition: background-color 0.3s ease;
-  }
-  
-  .tab.active::after {
 	background-color: #007bff;
+	border-radius: 2px;
   }
   
   /* Embed Section */
@@ -237,15 +242,18 @@
 	  padding: 20px;
 	}
   
-	.tab {
+	.tab-button {
 	  font-size: 14px;
-	  margin: 0 5px;
-	  padding: 6px 12px;
+	  padding: 6px 0;
 	}
   
 	.email-button {
 	  width: 100%;
 	  text-align: center;
+	}
+  
+	.buttons-container {
+	  gap: 20px;
 	}
   }
   

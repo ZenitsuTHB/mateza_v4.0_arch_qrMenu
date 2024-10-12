@@ -1,0 +1,53 @@
+/* src/Pages/FormEditor/LaunchPage/css/emailSampleTab.css */
+
+.email-section {
+	margin-bottom: 20px;
+  }
+  
+  .email-section p {
+	margin-bottom: 15px;
+	font-size: 16px;
+	color: var(--color-black);
+  }
+  
+  .email-button {
+	display: inline-block;
+	padding: 12px 20px;
+	background-color: #007bff;
+	color: #ffffff;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 16px;
+	margin-bottom: 20px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .email-button:hover {
+	background-color: #0056b3;
+  }
+  
+  .email-sample-text {
+	font-weight: bold;
+	margin-bottom: 10px;
+  }
+  
+  .email-sample {
+	background-color: #f8f9fa;
+	padding: 15px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+  }
+  
+  .email-sample p {
+	margin-bottom: 10px;
+  }
+  
+  .email-sample a {
+	color: #007bff;
+	text-decoration: none;
+  }
+  
+  .email-sample a:hover {
+	text-decoration: underline;
+  }
+  

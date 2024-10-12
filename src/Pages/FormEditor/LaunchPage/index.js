@@ -1,9 +1,12 @@
-// src/Pages/FormEditor/LaunchPage/index.js
+// src/Pages/FormEditor/LaunchPage/index.jsx
 
 import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/LaunchPage/launchPage.css';
 import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import EmbedCodeTab from './EmbedCodeTab.js';
+import EmailSampleTab from './EmailSampleTab.js';
 
 const LaunchPage = () => {
   const [activeTab, setActiveTab] = useState('embedCode'); // Default to 'embedCode' tab
@@ -18,6 +21,12 @@ const LaunchPage = () => {
 
   // Voorbeeld van insluitcode
   const embedCode = `<iframe src="${reservationLink}" width="600" height="800" frameborder="0"></iframe>`;
+
+  // Tabs configuration
+  const tabs = [
+    { id: 'embedCode', label: 'Insluitcode' },
+    { id: 'emailSample', label: 'E-mailvoorbeeld' },
+  ];
 
   return (
     <div className="launch-page">
@@ -49,71 +58,42 @@ const LaunchPage = () => {
 
         {/* Tab Menu */}
         <div className="tab-menu">
-          <button
-            className={activeTab === 'embedCode' ? 'tab active' : 'tab'}
-            onClick={() => setActiveTab('embedCode')}
-          >
-            Insluitcode
-          </button>
-          <button
-            className={activeTab === 'emailSample' ? 'tab active' : 'tab'}
-            onClick={() => setActiveTab('emailSample')}
-          >
-            E-mailvoorbeeld
-          </button>
+          <div className="buttons-container">
+            {tabs.map((tab) => (
+              <motion.button
+                key={tab.id}
+                className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="tab-label">{tab.label}</span>
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="underline-launch-page" // Unique layoutId
+                    className="tab-underline"
+                    initial={false}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </motion.button>
+            ))}
+          </div>
         </div>
 
         {/* Inhoud op basis van actieve tab */}
         {activeTab === 'embedCode' && (
-          <>
-            <div className="embed-section">
-              <p>
-                Kopieer en plak de onderstaande code om de reserveringspagina op
-                uw website in te sluiten:
-              </p>
-              <div className="code-container">
-                <pre>
-                  <code>{embedCode}</code>
-                </pre>
-                <button
-                  className="copy-button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(embedCode);
-                    alert('Code gekopieerd naar klembord!');
-                  }}
-                >
-                  Kopiëren
-                </button>
-              </div>
-            </div>
-          </>
+          <EmbedCodeTab embedCode={embedCode} />
         )}
 
         {activeTab === 'emailSample' && (
-          <>
-            <div className="email-section">
-              <p>
-                Gebruik de onderstaande knop om een uitnodiging per e-mail te
-                versturen:
-              </p>
-              <a
-                href={`mailto:?subject=${encodeURIComponent(
-                  emailSubject
-                )}&body=${encodeURIComponent(emailBody)}`}
-                className="email-button"
-              >
-                E-mail Versturen
-              </a>
-              <p className="email-sample-text">Voorbeeldtekst:</p>
-              <div className="email-sample">
-                <p>{shareMessage}</p>
-                <p>
-                  Klik hier om te reserveren:{' '}
-                  <a href={reservationLink}>{reservationLink}</a>
-                </p>
-              </div>
-            </div>
-          </>
+          <EmailSampleTab
+            emailSubject={emailSubject}
+            emailBody={emailBody}
+            shareMessage={shareMessage}
+            reservationLink={reservationLink}
+          />
         )}
       </div>
     </div>
