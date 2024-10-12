@@ -10,9 +10,11 @@ import {
   FaEdit,
   FaEye,
   FaRocket, // Additional icons for subbuttons
+  FaCog, // Import the settings icon
 } from 'react-icons/fa'; // Import necessary icons
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
+import FormSettings from '../Pages/FormEditor/FormSettings/index.js'; // Import the FormSettings component
 import Notepad from '../Pages/Notepad/index.js';
 import Profile from '../Pages/Profile/index.js';
 import Pincode from '../Pages/Pincode/index.js';
@@ -35,13 +37,40 @@ const routesConfig = [
         icon: FaEdit,
       },
       {
-        label: 'Bekijken',
-        path: '/view',
+        label: 'Instellen',
+        path: '/settings',
         icon: FaEye,
       },
       {
         label: 'Lanceren',
         path: '/launch',
+        icon: FaRocket,
+      },
+    ],
+  },
+  // Add the new FormSettings route here
+  {
+    path: '/settings',
+    element: <FormSettings title="Instellingen" />,
+    label: 'Instellingen',
+    icon: FaCog,
+    isMenu: true,
+    isMobile: true,
+    isTab: false,
+    secondaryTopBar: [
+      {
+        label: 'Bewerken',
+        path: '/',
+        icon: FaEdit,
+      },
+      {
+        label: 'Instellen',
+        path: '/settings',
+        icon: FaEye,
+      },
+      {
+        label: 'Lanceren',
+        path: '/',
         icon: FaRocket,
       },
     ],
@@ -54,7 +83,7 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-    // No SecondaryTopBar on profile page
+    // No secondaryTopBar on profile page
   },
   {
     path: '/pincode',
@@ -64,7 +93,7 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: false,
-    // No SecondaryTopBar on pincode page
+    // No secondaryTopBar on pincode page
   },
   {
     path: '/notepad',
@@ -74,7 +103,7 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: false,
-    // No SecondaryTopBar on notepad page
+    // No secondaryTopBar on notepad page
   },
   {
     path: '/new-reservation', // Dutch for 'reserve'
@@ -84,6 +113,7 @@ const routesConfig = [
     isMenu: true, // Show in menu
     isMobile: true, // Show on mobile
     isTab: true,
+    // No secondaryTopBar on new reservation page
   },
   {
     path: '/split',
@@ -93,7 +123,7 @@ const routesConfig = [
     isMenu: true,
     isMobile: false,
     isTab: false,
-    // No SecondaryTopBar on split view
+    // No secondaryTopBar on split view
   },
 ];
 

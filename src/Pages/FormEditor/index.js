@@ -115,8 +115,10 @@ const DragAndDropEditor = () => {
 
   const handleSelectTheme = (theme) => {
     setSelectedTheme(theme);
+    localStorage.setItem('selectedTheme', JSON.stringify(theme));
     triggerNotification('Thema geselecteerd', 'success');
   };
+  
 
   const handleAddTheme = (newTheme) => {
     triggerNotification('Nieuw thema toegevoegd', 'success');
