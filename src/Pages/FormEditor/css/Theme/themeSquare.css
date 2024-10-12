@@ -31,20 +31,21 @@
 	background-color: currentColor;
   }
   
-  /* Removed the black dot */
-  /* .theme-square-left::after {
-	content: '';
-	display: block;
-	width: 80%;
-	height: 80%;
-	background-color: currentColor;
-	border-radius: 50%;
-  } */
-  
+  /* Ensure the image fills its container without stretching */
   .theme-square-right img {
-	max-width: 100%;
-	height: auto;
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* This maintains aspect ratio and fills the container */
   }
+  
+  /* Alternatively, if you want to maintain aspect ratio without cropping, use 'contain' */
+  .theme-square-right img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+  }
+  
+  /* The above code ensures the image covers the entire container while maintaining aspect ratio */
   
   .theme-square-title {
 	text-align: center;

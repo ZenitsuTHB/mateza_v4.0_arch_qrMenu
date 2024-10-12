@@ -79,22 +79,23 @@ const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
         <button className="modal-close-button" onClick={onClose}>×</button>
         <h2>Stijlen</h2>
         <div className="theme-grid">
+          {showAddThemeModal && (
+          <AddThemeModal
+            onClose={() => setShowAddThemeModal(false)}
+            onSave={(newTheme) => {
+              setThemes([...themes, newTheme]);
+              onAddTheme(newTheme);
+              setShowAddThemeModal(false);
+            }}
+          />
+        )}
           {themes.map((theme) => (
             <ThemeSquare key={theme.id} theme={theme} onClick={() => handleThemeClick(theme)} />
           ))}
           <AddThemeSquare onClick={handleAddThemeClick} />
         </div>
       </div>
-      {showAddThemeModal && (
-        <AddThemeModal
-          onClose={() => setShowAddThemeModal(false)}
-          onSave={(newTheme) => {
-            setThemes([...themes, newTheme]);
-            onAddTheme(newTheme);
-            setShowAddThemeModal(false);
-          }}
-        />
-      )}
+      
     </div>
   );
 };

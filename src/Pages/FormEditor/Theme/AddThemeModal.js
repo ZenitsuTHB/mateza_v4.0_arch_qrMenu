@@ -38,8 +38,8 @@ const AddThemeModal = ({ onClose, onSave }) => {
           onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
         />
         <div className="modal-buttons">
-          <button onClick={onClose}>Annuleren</button>
-		  <button onClick={handleSave}>Opslaan</button>
+          <button className="button" onClick={onClose}>Annuleren</button>
+		  <button className="button" onClick={handleSave}>Opslaan</button>
         </div>
       </div>
     </div>
