@@ -31,7 +31,7 @@
 	padding: 16px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	border-radius: 8px;
-	z-index: 1000;
+	z-index: var(--z-index-nav);
 	overflow-y: auto;
 	backdrop-filter: blur(10px);
 	display: flex;
