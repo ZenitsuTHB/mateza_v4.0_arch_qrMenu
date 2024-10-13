@@ -14,13 +14,10 @@ const Settings = () => {
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [buttonColor, setButtonColor] = useState('#007bff');
 
-  // Load settings from localStorage on mount
   useEffect(() => {
-    // Retrieve and set formData
     const storedFormData = JSON.parse(localStorage.getItem('formData'));
     if (storedFormData) {
       if (!storedFormData.pageTitle.trim()) {
-        // If the stored title is empty, set it to "Reserveer Nu"
         const updatedFormData = { ...storedFormData, pageTitle: 'Reserveer Nu' };
         setFormData(updatedFormData);
         localStorage.setItem('formData', JSON.stringify(updatedFormData));
@@ -28,7 +25,6 @@ const Settings = () => {
         setFormData(storedFormData);
       }
     } else {
-      // If no formData is stored, initialize with default title
       setFormData((prevData) => ({
         ...prevData,
         pageTitle: 'Reserveer Nu',
@@ -39,16 +35,12 @@ const Settings = () => {
       }));
     }
 
-    // Retrieve and set selectedTheme
     const theme = localStorage.getItem('selectedTheme');
     if (theme) {
       const parsedTheme = JSON.parse(theme);
       setSelectedTheme(parsedTheme);
-
-      // Update buttonColor based on theme
       setButtonColor(parsedTheme.color || '#007bff');
     } else {
-      // If no theme is selected, retrieve buttonColor
       const storedButtonColor = localStorage.getItem('buttonColor');
       if (storedButtonColor) {
         setButtonColor(storedButtonColor);
@@ -56,21 +48,17 @@ const Settings = () => {
     }
   }, []);
 
-  // Update localStorage whenever formData changes
   useEffect(() => {
     localStorage.setItem('formData', JSON.stringify(formData));
   }, [formData]);
 
-  // Update localStorage whenever selectedTheme changes
   useEffect(() => {
     if (selectedTheme) {
       localStorage.setItem('selectedTheme', JSON.stringify(selectedTheme));
-      // Also update buttonColor based on the selected theme
       localStorage.setItem('buttonColor', selectedTheme.color || '#007bff');
     }
   }, [selectedTheme]);
 
-  // Update localStorage whenever buttonColor changes independently
   useEffect(() => {
     if (!selectedTheme) {
       localStorage.setItem('buttonColor', buttonColor);
@@ -82,7 +70,6 @@ const Settings = () => {
 
     if (name === 'pageTitle') {
       if (value.trim() === '') {
-        // If the user clears the title, set it to "Reserveer Nu"
         setFormData((prevData) => ({
           ...prevData,
           pageTitle: 'Reserveer Nu',
@@ -103,7 +90,6 @@ const Settings = () => {
 
   return (
     <div>
-        {/* Page Title */}
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input
@@ -116,8 +102,6 @@ const Settings = () => {
             placeholder="Voer de paginatitel in"
           />
         </div>
-
-        {/* General Notification */}
         <div className="form-group">
           <label htmlFor="generalNotification">Mededeling:</label>
           <textarea
@@ -128,8 +112,6 @@ const Settings = () => {
             placeholder="Voer een algemene mededeling in"
           ></textarea>
         </div>
-
-        {/* Theme Selection */}
         <div className="form-group">
           <label>Thema:</label>
           {selectedTheme ? (
@@ -149,12 +131,9 @@ const Settings = () => {
             <p>Geen thema geselecteerd</p>
           )}
         </div>
-
-        {/* Submit Button */}
         <button
           type="submit"
           className="submit-button"
-          style={{ backgroundColor: buttonColor }}
         >
           Opslaan
         </button>
