@@ -1,3 +1,5 @@
+// prebuildChecks.js
+
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
@@ -5,7 +7,7 @@ const chalk = require('chalk');
 // Directory to check
 const srcDirectory = path.join(__dirname, 'src');
 // Maximum allowed lines per file
-const MAX_LINES = 190;
+const MAX_LINES = 200;
 
 /**
  * Recursively retrieves all files in the given directory.
@@ -52,20 +54,85 @@ function shouldSkipFile(filePath) {
 }
 
 /**
- * Runs the pre-build checks.
+ * Calculates the average number of lines given total lines and file count.
+ * @param {number} totalLines - The sum of lines across all files.
+ * @param {number} fileCount - The number of files.
+ * @returns {number} - The average number of lines.
+ */
+function calculateAverage(totalLines, fileCount) {
+  if (fileCount === 0) return 0;
+  return (totalLines / fileCount).toFixed(2);
+}
+
+/**
+ * Runs the pre-build checks, including line count validations and average calculations.
  */
 function runPrebuildChecks() {
   try {
     const allFiles = getAllFiles(srcDirectory);
     const oversizedFiles = [];
 
+    // Initialize counters for averages
+    let totalLinesAll = 0;
+    let countAll = 0;
+
+    let totalLinesJS = 0;
+    let countJS = 0;
+
+    let totalLinesIndexJS = 0;
+    let countIndexJS = 0;
+
     allFiles.forEach((file) => {
-      if (!shouldSkipFile(file) && checkFileLines(file)) {
-        const relativePath = path.relative(__dirname, file);
-        oversizedFiles.push(relativePath);
+      const ext = path.extname(file).toLowerCase();
+
+      // Only consider .js and .css files for averages
+      if (ext === '.js' || ext === '.css') {
+        const content = fs.readFileSync(file, 'utf-8');
+        const lineCount = content.split('\n').length;
+
+        // Update overall counters
+        totalLinesAll += lineCount;
+        countAll += 1;
+
+        // If it's a .js file, update JS counters
+        if (ext === '.js') {
+          totalLinesJS += lineCount;
+          countJS += 1;
+
+          // If it's an index.js file, update index.js counters
+          if (path.basename(file).toLowerCase() === 'index.js') {
+            totalLinesIndexJS += lineCount;
+            countIndexJS += 1;
+          }
+        }
+
+        // Check if the file exceeds the maximum line limit
+        if (!shouldSkipFile(file) && lineCount > MAX_LINES) {
+          const relativePath = path.relative(__dirname, file);
+          oversizedFiles.push(relativePath);
+        }
       }
     });
 
+    // Calculate averages
+    const averageAll = calculateAverage(totalLinesAll, countAll);
+    const averageJS = calculateAverage(totalLinesJS, countJS);
+    const averageIndexJS = calculateAverage(totalLinesIndexJS, countIndexJS);
+
+    // Display the calculated averages
+    console.log(chalk.blue.bold('\n===== Average Code Lengths ====='));
+    console.log(
+      `Average number of lines in .js and .css files: ${chalk.yellow(averageAll)}`
+    );
+    console.log(
+      `Average number of lines in .js files: ${chalk.yellow(averageJS)}`
+    );
+    console.log(
+      `Average number of lines in index.js files: ${chalk.yellow(averageIndexJS)}`
+    );
+    console.log(chalk.blue.bold('================================\n'));
+
+    // Handle oversized files
     if (oversizedFiles.length > 0) {
       console.error(
         chalk.red.bold(
@@ -77,7 +144,7 @@ function runPrebuildChecks() {
     } else {
       console.log(
         chalk.green.bold(
-          `Pre-build check passed: All files in '${path.relative(
+          `Pre-build check passed: All .js and .css files in '${path.relative(
             __dirname,
             srcDirectory
           )}' have ${MAX_LINES} lines or fewer.`

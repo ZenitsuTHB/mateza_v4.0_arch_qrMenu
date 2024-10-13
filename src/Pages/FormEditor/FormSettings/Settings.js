@@ -19,7 +19,24 @@ const Settings = () => {
     // Retrieve and set formData
     const storedFormData = JSON.parse(localStorage.getItem('formData'));
     if (storedFormData) {
-      setFormData(storedFormData);
+      if (!storedFormData.pageTitle.trim()) {
+        // If the stored title is empty, set it to "Reserveer Nu"
+        const updatedFormData = { ...storedFormData, pageTitle: 'Reserveer Nu' };
+        setFormData(updatedFormData);
+        localStorage.setItem('formData', JSON.stringify(updatedFormData));
+      } else {
+        setFormData(storedFormData);
+      }
+    } else {
+      // If no formData is stored, initialize with default title
+      setFormData((prevData) => ({
+        ...prevData,
+        pageTitle: 'Reserveer Nu',
+      }));
+      localStorage.setItem('formData', JSON.stringify({
+        ...formData,
+        pageTitle: 'Reserveer Nu',
+      }));
     }
 
     // Retrieve and set selectedTheme
@@ -63,15 +80,37 @@ const Settings = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === 'pageTitle') {
+      if (value.trim() === '') {
+        // If the user clears the title, set it to "Reserveer Nu"
+        setFormData((prevData) => ({
+          ...prevData,
+          pageTitle: 'Reserveer Nu',
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevents the default form submission behavior (page reload)
+
+    // Optional: Provide feedback to the user
+    alert('Instellingen opgeslagen!');
   };
 
   return (
-
-      <div>
+    <div>
+        {/* Page Title */}
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input
@@ -122,10 +161,11 @@ const Settings = () => {
         <button
           type="submit"
           className="submit-button"
+          style={{ backgroundColor: buttonColor }}
         >
           Opslaan
         </button>
-        </div>
+    </div>
   );
 };
 
