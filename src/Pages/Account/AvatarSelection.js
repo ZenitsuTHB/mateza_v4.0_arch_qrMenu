@@ -41,16 +41,12 @@ const AvatarSelection = ({ onSelectAvatar }) => {
         const rect = avatarElement.getBoundingClientRect();
         const initialTop = rect.top;
         const initialLeft = rect.left;
-
         const avatarWidth = avatarElement.offsetWidth;
         const avatarHeight = avatarElement.offsetHeight;
-
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-
         const centerLeft = viewportWidth / 2 - avatarWidth / 2;
         const centerTop = viewportHeight / 2 - avatarHeight / 2;
-
         const deltaX = centerLeft - initialLeft;
         const deltaY = centerTop - initialTop;
 
@@ -64,7 +60,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
   }, [selectedAvatar]);
 
   const handleSelectAvatar = (index) => {
-    if (selectedAvatar === index || isReverting) return; // Prevent re-selecting the same avatar or during revert
+    if (selectedAvatar === index || isReverting) return;
 
     const avatarElement = avatarRefs.current[index];
     if (!avatarElement) return;
@@ -95,13 +91,12 @@ const AvatarSelection = ({ onSelectAvatar }) => {
 
     setIsReverting(true);
 
-    // Delay the state reset to allow the revert animation to play
     setTimeout(() => {
       setSelectedAvatar(null);
       setAvatarPosition({ initialTop: 0, initialLeft: 0 });
       setAvatarTransform({ deltaX: 0, deltaY: 0 });
       setIsReverting(false);
-    }, 1000); // Duration should match the CSS transition duration
+    }, 1000);
   };
 
   const goToNextPage = () => {
@@ -146,7 +141,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                       left: avatarPosition.initialLeft,
                       transform: `translate(${avatarTransform.deltaX}px, ${avatarTransform.deltaY}px) scale(2)`,
                       zIndex: 10,
-                      transition: 'transform 1s, top 1s, left 1s', // Ensure transitions match the revert delay
+                      transition: 'transform 1s, top 1s, left 1s',
                     }
                   : {}
               }
@@ -159,7 +154,7 @@ const AvatarSelection = ({ onSelectAvatar }) => {
                 }`}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = 'path_to_placeholder_image'; // Replace with actual placeholder path
+                  e.target.src = 'path_to_placeholder_image';
                 }}
               />
             </button>

@@ -61,3 +61,54 @@
 	background-color: #218838;
   }
   
+  .launch-page .email-section {
+	margin-bottom: 20px;
+  }
+  
+  .launch-page .email-section p {
+	margin-bottom: 15px;
+	font-size: 16px;
+	color: var(--color-black);
+  }
+  
+  .launch-page .email-button {
+	display: inline-block;
+	padding: 12px 20px;
+	background-color: #007bff;
+	color: #ffffff;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 16px;
+	margin-bottom: 20px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .launch-page .email-button:hover {
+	background-color: #0056b3;
+  }
+  
+  .launch-page .email-sample-text {
+	font-weight: bold;
+	margin-bottom: 10px;
+  }
+  
+  .launch-page .email-sample {
+	background-color: #f8f9fa;
+	padding: 15px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+  }
+  
+  .launch-page .email-sample p {
+	margin-bottom: 10px;
+  }
+  
+  .launch-page .email-sample a {
+	color: #007bff;
+	text-decoration: none;
+  }
+  
+  .launch-page .email-sample a:hover {
+	text-decoration: underline;
+  }
+  

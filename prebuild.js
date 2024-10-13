@@ -42,6 +42,16 @@ function checkFileLines(filePath) {
 }
 
 /**
+ * Checks if a file should be skipped based on its extension.
+ * @param {string} filePath - The path to the file.
+ * @returns {boolean} - True if the file should be skipped, else false.
+ */
+function shouldSkipFile(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  return ext === '.webp' || ext === '.jpg';
+}
+
+/**
  * Runs the pre-build checks.
  */
 function runPrebuildChecks() {
@@ -50,7 +60,7 @@ function runPrebuildChecks() {
     const oversizedFiles = [];
 
     allFiles.forEach((file) => {
-      if (checkFileLines(file)) {
+      if (!shouldSkipFile(file) && checkFileLines(file)) {
         const relativePath = path.relative(__dirname, file);
         oversizedFiles.push(relativePath);
       }
