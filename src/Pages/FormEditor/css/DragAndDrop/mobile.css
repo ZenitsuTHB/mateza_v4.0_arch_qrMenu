@@ -1,5 +1,5 @@
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
 	.form-editing-page .palette {
 	  width: 100%;
 	  order: 2;
@@ -8,13 +8,13 @@
 	}
   }
   
-  @media (max-width: 1000px) {
+  @media (max-width: 900px) {
 	.form-editing-page .editor-container {
 	  flex-direction: column;
 	}
   }
   
-  @media (max-width: 1000px) {
+  @media (max-width: 900px) {
 	.form-editing-page .canvas {
 	  width: 100%;
 	  order: 1;
@@ -24,28 +24,25 @@
 	}
   }
 
-/* Palette Responsive Styles */
-.palette-responsive {
+  .form-editing-pag .palette-responsive {
 	width: 100% !important;
 	order: 2;
 	margin-bottom: 20px;
 	margin-left: 0px;
 	padding-right: 20px;
-	flex-grow: 0; /* Do not grow beyond the assigned space */
+	flex-grow: 0;
   }
   
-  /* Editor Container Responsive Styles */
-  .editor-container-responsive {
+  .form-editing-pag .editor-container-responsive {
 	flex-direction: column;
 	display: flex;
   }
   
-  /* Canvas Responsive Styles */
-  .canvas-responsive {
+  .form-editing-pag .canvas-responsive {
 	width: 100%;
 	order: 1;
 	margin-bottom: 60px;
 	padding: 0 !important;
-	height: calc(80%); /* Increase the minimum height to make canvas more prominent */
+	height: calc(80%);
   }
   
