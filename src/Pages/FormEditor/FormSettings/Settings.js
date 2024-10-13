@@ -101,13 +101,6 @@ const Settings = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevents the default form submission behavior (page reload)
-
-    // Optional: Provide feedback to the user
-    alert('Instellingen opgeslagen!');
-  };
-
   return (
     <div>
         {/* Page Title */}
