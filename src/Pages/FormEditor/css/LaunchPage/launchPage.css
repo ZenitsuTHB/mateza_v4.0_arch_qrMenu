@@ -7,11 +7,11 @@
 	padding: 20px;
   }
   
-  .success-message {
+  .launch-page .success-message {
 	display: flex;
 	align-items: center;
-	background-color: #d4edda; /* Lichtgroene achtergrond */
-	color: #155724; /* Donkergroene tekst */
+	background-color: #d4edda;
+	color: #155724;
 	padding: 15px 20px;
 	border-radius: 4px;
 	margin-bottom: 20px;
@@ -19,12 +19,12 @@
 	max-width: 600px;
   }
   
-  .success-icon {
+  .launch-page .success-icon {
 	font-size: 24px;
 	margin-right: 10px;
   }
   
-  .launch-page-form {
+  .launch-page .launch-page-form {
 	background-color: var(--color-white);
 	padding: 30px;
 	padding-bottom: 0;
@@ -34,47 +34,46 @@
 	max-width: 600px;
   }
   
-  .secondary-title {
+  .launch-page .secondary-title {
 	text-align: center;
 	margin-bottom: 20px;
 	color: var(--color-black);
   }
   
-  /* Link Section */
-  .link-section {
+  .launch-page .link-section {
 	width: 100%;
 	margin-bottom: 30px;
   }
   
-  .link-section label {
+  .launch-page .link-section label {
 	display: block;
 	margin-bottom: 5px;
 	font-weight: 500;
 	color: var(--color-black);
   }
   
-  .link-input-container {
+  .launch-page .link-input-container {
 	position: relative;
 	display: flex;
 	align-items: center;
   }
   
-  .link-input-container input {
+  .launch-page .link-input-container input {
 	flex: 1;
 	padding: 10px 12px;
-	padding-right: 35px; /* Add padding to the right for the icon */
+	padding-right: 35px;
 	border: 1px solid #cccccc;
 	border-radius: 4px;
 	font-size: 16px;
 	transition: border-color 0.3s ease;
   }
   
-  .link-input-container input:focus {
+  .launch-page .link-input-container input:focus {
 	border-color: #007bff;
 	outline: none;
   }
   
-  .link-input-container .link-icon {
+  .launch-page .link-input-container .link-icon {
 	position: absolute;
 	right: 10px;
 	color: #777777;
@@ -82,24 +81,23 @@
 	font-size: 18px;
   }
   
-  .link-input-container .link-icon:hover {
+  .launch-page .link-input-container .link-icon:hover {
 	color: #0056b3;
   }
   
-  /* Tab Menu */
-  .tab-menu {
+  .launch-page .tab-menu {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
   }
   
-  .buttons-container {
+  .launch-page .buttons-container {
 	display: flex;
 	gap: 40px;
 	position: relative;
   }
   
-  .tab-button {
+  .launch-page .tab-button {
 	position: relative;
 	background: none;
 	border: none;
@@ -111,19 +109,19 @@
 	text-decoration: none;
   }
   
-  .tab-button:hover {
+  .launch-page .tab-button:hover {
 	color: #0056b3;
   }
   
-  .tab-button.active {
+  .launch-page .tab-button.active {
 	color: #007bff;
   }
   
-  .tab-label {
+  .launch-page .tab-label {
 	position: relative;
   }
   
-  .tab-underline {
+  .launch-page .tab-underline {
 	position: absolute;
 	bottom: -5px;
 	left: 0;
@@ -133,34 +131,33 @@
 	border-radius: 2px;
   }
   
-  /* Embed Section */
-  .embed-section {
+  .launch-page .embed-section {
 	margin-bottom: 20px;
   }
   
-  .embed-section p {
+  .launch-page .embed-section p {
 	margin-bottom: 15px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  .code-container {
+  .launch-page .code-container {
 	position: relative;
   }
   
-  .code-container pre {
+  .launch-page .code-container pre {
 	background-color: #f8f9fa;
 	padding: 15px;
 	border: 1px solid #ced4da;
 	border-radius: 4px;
   }
   
-  .code-container code {
+  .launch-page .code-container code {
 	font-family: monospace;
 	font-size: 14px;
   }
   
-  .copy-button {
+  .launch-page .copy-button {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -173,22 +170,21 @@
 	cursor: pointer;
   }
   
-  .copy-button:hover {
+  .launch-page .copy-button:hover {
 	background-color: #0056b3;
   }
   
-  /* Email Section */
-  .email-section {
+  .launch-page .email-section {
 	margin-bottom: 20px;
   }
   
-  .email-section p {
+  .launch-page .email-section p {
 	margin-bottom: 15px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  .email-button {
+  .launch-page .email-button {
 	display: inline-block;
 	padding: 12px 20px;
 	background-color: #007bff;
@@ -200,53 +196,32 @@
 	transition: background-color 0.3s ease;
   }
   
-  .email-button:hover {
+  .launch-page .email-button:hover {
 	background-color: #0056b3;
   }
   
-  .email-sample-text {
+  .launch-page .email-sample-text {
 	font-weight: bold;
 	margin-bottom: 10px;
   }
   
-  .email-sample {
+  .launch-page .email-sample {
 	background-color: #f8f9fa;
 	padding: 15px;
 	border: 1px solid #ced4da;
 	border-radius: 4px;
   }
   
-  .email-sample p {
+  .launch-page .email-sample p {
 	margin-bottom: 10px;
   }
   
-  .email-sample a {
+  .launch-page .email-sample a {
 	color: #007bff;
 	text-decoration: none;
   }
   
-  .email-sample a:hover {
+  .launch-page .email-sample a:hover {
 	text-decoration: underline;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-	.launch-page-form {
-	  padding: 20px;
-	}
-  
-	.tab-button {
-	  font-size: 14px;
-	  padding: 6px 0;
-	}
-  
-	.email-button {
-	  width: 100%;
-	  text-align: center;
-	}
-  
-	.buttons-container {
-	  gap: 20px;
-	}
   }
   

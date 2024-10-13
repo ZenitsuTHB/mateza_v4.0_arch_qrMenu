@@ -1,13 +1,13 @@
 /* src/components/FormSettings/css/formSettings.css */
 
-.form-settings-page {
+.form-settings-page .form-settings-page {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding: 20px;
   }
   
-  .form-settings-form {
+  .form-settings-page .form-settings-form {
 	background-color: var(--color-white);
 	padding: 30px;
 	border-radius: 8px;
@@ -16,27 +16,27 @@
 	max-width: 600px;
   }
   
-  .form-settings-form h2 {
+  .form-settings-page .form-settings-form h2 {
 	text-align: center;
 	margin-bottom: 20px;
 	color: var(--color-black);
   }
   
-  .form-group {
+  .form-settings-page .form-group {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 15px;
   }
   
-  .form-group label {
+  .form-settings-page .form-group label {
 	margin-bottom: 5px;
 	font-weight: 500;
 	color: var(--color-black);
   }
   
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
+  .form-settings-page .form-group input,
+  .form-settings-page .form-group textarea,
+  .form-settings-page .form-group select {
 	padding: 10px 12px;
 	border: 1px solid #cccccc;
 	border-radius: 4px;
@@ -44,20 +44,20 @@
 	transition: border-color 0.3s ease;
   }
   
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
+  .form-settings-page .form-group input:focus,
+  .form-settings-page .form-group textarea:focus,
+  .form-settings-page .form-group select:focus {
 	border-color: #007bff; /* Blue border on focus */
 	outline: none;
   }
   
-  .form-group textarea {
+  .form-settings-page .form-group textarea {
 	resize: vertical;
 	min-height: 80px;
   }
   
   /* Theme Preview Styling */
-  .theme-preview {
+  .form-settings-page .theme-preview {
 	display: flex;
 	flex-direction: column;
 	margin-top: 10px;
@@ -66,30 +66,30 @@
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .theme-preview-content {
+  .form-settings-page .theme-preview-content {
 	display: flex;
 	height: 100px;
   }
   
-  .theme-preview-left,
-  .theme-preview-right {
+  .form-settings-page .theme-preview-left,
+  .form-settings-page .theme-preview-right {
 	width: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
   }
   
-  .theme-preview-left {
+  .form-settings-page .theme-preview-left {
 	background-color: currentColor;
   }
   
-  .theme-preview-right img {
+  .form-settings-page .theme-preview-right img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
   }
   
-  .theme-preview-title {
+  .form-settings-page .theme-preview-title {
 	text-align: center;
 	padding: 12px;
 	background: #f9f9f9;
@@ -100,7 +100,7 @@
 	box-sizing: border-box;
   }
   
-  .submit-button {
+  .form-settings-page .submit-button {
 	width: 100%;
 	padding: 12px;
 	background-color: #007bff; /* Blue background */
@@ -112,22 +112,6 @@
 	transition: background-color 0.3s ease;
   }
   
-  .submit-button:hover {
-	background-color: #0056b3; /* Darker blue on hover */
+  .form-settings-page .submit-button:hover {
+	background-color: #0056b3;
   }
-  
-  @media (max-width: 768px) {
-	.form-settings-form {
-	  padding: 20px;
-	}
-  
-	.form-settings-form h2 {
-	  font-size: 20px;
-	}
-  
-	.submit-button {
-	  font-size: 16px;
-	  padding: 10px;
-	}
-  }
-  

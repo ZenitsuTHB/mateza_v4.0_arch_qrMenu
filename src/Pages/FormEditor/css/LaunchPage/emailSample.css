@@ -1,30 +1,29 @@
 
-  .email-header {
+.launch-page .email-header {
 	display: flex;
 	align-items: center;
 	margin-bottom: 15px;
   }
   
-  .email-icon {
+  .launch-page .email-icon {
 	font-size: 24px;
 	color: #007bff;
 	margin-right: 10px;
   }
   
-  .email-title {
+  .launch-page .email-title {
 	font-size: 20px;
 	color: var(--color-black);
 	margin: 0;
   }
   
-  .email-intro {
+  .launch-page .email-intro {
 	margin-bottom: 20px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  /* Sample Email Styling */
-  .email-sample {
+  .launch-page .email-sample {
 	background-color: #f8f9fa;
 	padding: 20px;
 	border: 1px solid #ced4da;
@@ -32,22 +31,22 @@
 	margin-bottom: 20px;
   }
   
-  .email-sample p {
+  .launch-page .email-sample p {
 	margin-bottom: 15px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  .email-sample a {
+  .launch-page .email-sample a {
 	color: #007bff;
 	text-decoration: none;
   }
   
-  .email-sample a:hover {
+  .launch-page .email-sample a:hover {
 	text-decoration: underline;
   }
   
-  .email-button {
+  .launch-page .email-button {
 	display: inline-block;
 	padding: 12px 20px;
 	background-color: #28a745;
@@ -58,7 +57,7 @@
 	transition: background-color 0.3s ease;
   }
   
-  .email-button:hover {
+  .launch-page .email-button:hover {
 	background-color: #218838;
   }
   

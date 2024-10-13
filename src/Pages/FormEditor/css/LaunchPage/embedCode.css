@@ -1,20 +1,20 @@
 /* src/Pages/FormEditor/LaunchPage/css/embedCodeTab.css */
 
-.embed-section {
+  .launch-page .embed-section {
 	margin-bottom: 20px;
   }
   
-  .embed-section p {
+  .launch-page .embed-section p {
 	margin-bottom: 15px;
 	font-size: 16px;
 	color: var(--color-black);
   }
   
-  .code-container {
+  .launch-page .code-container {
 	position: relative;
   }
   
-  .copy-button {
+  .launch-page .copy-button {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -27,7 +27,7 @@
 	cursor: pointer;
   }
   
-  .copy-button:hover {
+  .launch-page .copy-button:hover {
 	background-color: #0056b3;
   }
   

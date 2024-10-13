@@ -1,0 +1,16 @@
+  
+  @media (max-width: 900px) {
+	.form-settings-page .form-settings-form {
+	  padding: 20px;
+	}
+  
+	.form-settings-page .form-settings-form h2 {
+	  font-size: 20px;
+	}
+  
+	.form-settings-page .submit-button {
+	  font-size: 16px;
+	  padding: 10px;
+	}
+  }
+  

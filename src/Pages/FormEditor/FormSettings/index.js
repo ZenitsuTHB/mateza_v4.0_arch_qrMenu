@@ -1,8 +1,9 @@
 // src/components/FormSettings/FormSettings.jsx
 
 import React, { useState, useEffect } from 'react';
-import '../css/FormSettings/formSettings.css';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
+import '../css/FormSettings/formSettings.css';
+import '../css/FormSettings/mobile.css';
 
 const FormSettings = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,6 @@ const FormSettings = () => {
   const [selectedTheme, setSelectedTheme] = useState(null);
 
   useEffect(() => {
-    // Retrieve the selected theme from localStorage
     const theme = localStorage.getItem('selectedTheme');
     if (theme) {
       setSelectedTheme(JSON.parse(theme));
@@ -32,10 +32,8 @@ const FormSettings = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log('Form Settings:', formData);
     alert('Instellingen succesvol opgeslagen!');
-    // Optionally, save settings to localStorage or backend
   };
 
   return (
@@ -102,7 +100,6 @@ const FormSettings = () => {
             <option value="Times New Roman">Times New Roman</option>
             <option value="Georgia">Georgia</option>
             <option value="Courier New">Courier New</option>
-            {/* Add more fonts as needed */}
           </select>
         </div>
 

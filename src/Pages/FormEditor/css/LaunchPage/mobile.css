@@ -1,11 +1,31 @@
+
+
 @media (max-width: 900px) {
-	.email-header {
+	.launch-page .email-header {
 	  flex-direction: column;
 	  align-items: flex-start;
 	}
   
-	.email-icon {
+	.launch-page .email-icon {
 	  margin-bottom: 10px;
+	}
+	
+	.launch-page .launch-page-form {
+	  padding: 20px;
+	}
+  
+	.launch-page .tab-button {
+	  font-size: 14px;
+	  padding: 6px 0;
+	}
+  
+	.launch-page .email-button {
+	  width: 100%;
+	  text-align: center;
+	}
+  
+	.launch-page .buttons-container {
+	  gap: 20px;
 	}
   }
   
