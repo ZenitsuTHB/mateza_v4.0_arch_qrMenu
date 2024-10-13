@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './css/newReservation.css';
 import { title, notification, theme, font, fields } from './formConfig';
+import { FaCheckCircle } from 'react-icons/fa';
 
 const NewReservation = () => {
   // Initialize form data state with empty values for each field
@@ -12,7 +13,7 @@ const NewReservation = () => {
   });
 
   const [formData, setFormData] = useState(initialFormData);
-  const [showNotification, setShowNotification] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -28,19 +29,16 @@ const NewReservation = () => {
     });
   };
 
+  const handleNext = (e) => {
+    e.preventDefault();
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here (e.g., API call)
     console.log('Reserveringsgegevens:', formData);
-
-    // Show notification
-    setShowNotification(true);
-
-    // Reset form after a short delay
-    setTimeout(() => {
-      setFormData(initialFormData);
-      setShowNotification(false);
-    }, 3000);
+    setCurrentStep((prevStep) => prevStep + 1);
   };
 
   // Function to darken the theme color for hover effects
@@ -63,6 +61,25 @@ const NewReservation = () => {
     );
   };
 
+  // Fields for each step
+  const stepFields = [
+    // Step 1 fields
+    fields.filter(
+      (field) =>
+        field.id === 'datum' ||
+        field.id === 'tijd' ||
+        field.id === 'aantalPersonen'
+    ),
+    // Step 2 fields
+    fields.filter(
+      (field) =>
+        field.id === 'naam' ||
+        field.id === 'email' ||
+        field.id === 'telefoonnummer' ||
+        field.id === 'opmerkingen'
+    ),
+  ];
+
   return (
     <div
       className="new-reservation-page"
@@ -83,43 +100,55 @@ const NewReservation = () => {
           backgroundColor: theme.color,
         }}
       >
-        <form className="reservation-form" onSubmit={handleSubmit}>
-          <h2>{title}</h2>
+        {currentStep <= 2 && (
+          <form
+            className="reservation-form"
+            onSubmit={currentStep === 1 ? handleNext : handleSubmit}
+          >
+            <h2>{title}</h2>
 
-          {fields.map((field) => (
-            <div className="form-group" key={field.id}>
-              <label htmlFor={field.id}>
-                {field.label}
-                {field.required && <span className="required">*</span>}
-              </label>
-              {field.type === 'textarea' ? (
-                <textarea
-                  id={field.id}
-                  name={field.id}
-                  value={formData[field.id]}
-                  onChange={handleChange}
-                  required={field.required}
-                  placeholder={field.placeholder || ''}
-                ></textarea>
-              ) : (
-                <input
-                  type={field.type === 'input' ? 'text' : field.type}
-                  id={field.id}
-                  name={field.id}
-                  value={formData[field.id]}
-                  onChange={handleChange}
-                  required={field.required}
-                  placeholder={field.placeholder || ''}
-                  min={field.min || undefined}
-                />
-              )}
-            </div>
-          ))}
+            {stepFields[currentStep - 1].map((field) => (
+              <div className="form-group" key={field.id}>
+                <label htmlFor={field.id}>
+                  {field.label}
+                  {field.required && <span className="required">*</span>}
+                </label>
+                {field.type === 'textarea' ? (
+                  <textarea
+                    id={field.id}
+                    name={field.id}
+                    value={formData[field.id]}
+                    onChange={handleChange}
+                    required={field.required}
+                    placeholder={field.placeholder || ''}
+                  ></textarea>
+                ) : (
+                  <input
+                    type={field.type === 'input' ? 'text' : field.type}
+                    id={field.id}
+                    name={field.id}
+                    value={formData[field.id]}
+                    onChange={handleChange}
+                    required={field.required}
+                    placeholder={field.placeholder || ''}
+                    min={field.min || undefined}
+                  />
+                )}
+              </div>
+            ))}
 
-          <button type="submit" className="submit-button">
-            Reserveren
-          </button>
-        </form>
+            <button type="submit" className="submit-button">
+              {currentStep === 1 ? 'Volgende' : 'Reserveren'}
+            </button>
+          </form>
+        )}
+
+        {currentStep === 3 && (
+          <div className="success-message">
+            <FaCheckCircle className="success-icon" />
+            <p>Uw pagina is klaar om te delen!</p>
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -127,9 +156,6 @@ const NewReservation = () => {
           font-family: ${font};
         }
       `}</style>
-
-      {/* Notification */}
-      {showNotification && <div className="notification">{notification}</div>}
     </div>
   );
 };
