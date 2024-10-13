@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
-import { avatars, avatarNames } from './avatars'; // Importing from avatars.js
+import { avatars, avatarNames } from './avatars';
 import { useTranslation } from 'react-i18next';
 import './css/avatarSelection.css';
 
@@ -68,19 +68,15 @@ const AvatarSelection = ({ onSelectAvatar }) => {
     const rect = avatarElement.getBoundingClientRect();
     const initialTop = rect.top;
     const initialLeft = rect.left;
-
     const avatarWidth = avatarElement.offsetWidth;
     const avatarHeight = avatarElement.offsetHeight;
-
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-
     const centerLeft = viewportWidth / 2 - avatarWidth / 2;
     const centerTop = viewportHeight / 2 - avatarHeight / 2;
-
     const deltaX = centerLeft - initialLeft;
     const deltaY = centerTop - initialTop;
-
+    
     setAvatarPosition({ initialTop, initialLeft });
     setAvatarTransform({ deltaX, deltaY });
     setSelectedAvatar(index);
@@ -171,18 +167,10 @@ const AvatarSelection = ({ onSelectAvatar }) => {
         </div>
         {selectedAvatar !== null && (
           <div className="button-group">
-            <button
-              className="previous-button visible"
-              onClick={handleRevertAvatar}
-              disabled={isReverting}
-            >
+            <button className="previous-button visible" onClick={handleRevertAvatar} disabled={isReverting}>
               {t('previous')}
             </button>
-            <button
-              className="next-button visible"
-              onClick={goToNextPage}
-              disabled={isReverting}
-            >
+            <button className="next-button visible" onClick={goToNextPage} disabled={isReverting}>
               {t('next')}
             </button>
           </div>
