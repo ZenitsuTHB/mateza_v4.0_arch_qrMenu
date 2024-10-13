@@ -96,7 +96,7 @@ const Fonts = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [fontCategories]);
+  }, []);
 
   // Handle font selection
   const handleFontSelect = (categoryKey, font) => {
@@ -121,16 +121,34 @@ const Fonts = () => {
       {fontCategories.map(({ key, label }) => (
         <div className="form-group" key={key} ref={dropdownRefs[key]}>
           <label>{label}:</label>
-          <div className="custom-select" onClick={() => toggleDropdown(key)}>
+          <div className="custom-select">
             <div
-              className="selected-option"
+              className={`selected-option ${dropdownOpen[key] ? 'open' : ''}`}
               style={{ fontFamily: fontsState[key] }}
+              onClick={() => toggleDropdown(key)}
             >
               {fontsState[key] === 'Poppins'
                 ? 'Poppins (standaard)'
                 : fontsState[key]}
-              <span className={`arrow ${dropdownOpen[key] ? 'open' : ''}`}>
-                {dropdownOpen[key] ? '▲' : '▼'}
+              <span className="arrow">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  style={{
+                    transform: dropdownOpen[key]
+                      ? 'rotate(180deg)'
+                      : 'rotate(0deg)',
+                    transition: 'transform 0.2s',
+                  }}
+                >
+                  <path
+                    d="M7 10l5 5 5-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
               </span>
             </div>
             {dropdownOpen[key] && (

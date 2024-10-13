@@ -7,7 +7,7 @@
 	padding: 20px;
 	background-color: var(--color-bg);
   }
-
+  
   input[type='color'] {
 	height: 50px;
 	outline: none;
@@ -74,7 +74,6 @@
 	background: #f9f9f9;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-
   
   .form-settings-page .theme-preview-content {
 	display: flex;
@@ -127,8 +126,8 @@
   .form-settings-page .submit-button:hover {
 	background-color: #0056b3;
   }
-
-.font-preview {
+  
+  .font-preview {
 	margin-top: 20px;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -140,11 +139,10 @@
   }
   
   /* Custom Select Styles */
-.custom-select {
+  .custom-select {
 	position: relative;
 	width: 100%;
 	cursor: pointer;
-	
   }
   
   .selected-option {
@@ -157,12 +155,17 @@
 	border-radius: 5px;
   }
   
+  .selected-option.open {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+  }
+  
   .arrow {
 	margin-left: 10px;
 	color: gray;
+	display: flex;
+	align-items: center;
   }
-
-  
   
   .options-list {
 	position: absolute;
@@ -172,19 +175,19 @@
 	max-height: 200px;
 	overflow-y: auto;
 	border: 1px solid #ccc;
-	border-top: none;
 	background-color: #fff;
 	z-index: 1000;
+	border-top: none;
+	border-radius: 0 0 5px 5px; /* Rounded corners at the bottom */
   }
   
   .option-item {
 	padding: 10px;
 	transition: background-color 0.2s;
+	cursor: pointer;
   }
   
   .option-item:hover {
 	background-color: #f0f0f0;
   }
-  
-
   
