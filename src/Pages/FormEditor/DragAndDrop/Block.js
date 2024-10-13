@@ -26,18 +26,25 @@ const Block = ({
       required: isRequired,
     };
 
+    const renderLabel = () => (
+      <label>
+        {fieldLabel}
+        {isRequired && <span className="required-warning">(*)</span>}
+      </label>
+    );
+
     switch (type) {
       case 'input':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <input type="text" {...commonProps} />
           </>
         );
       case 'select':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <select {...commonProps}>
               <option>Optie 1</option>
               <option>Optie 2</option>
@@ -47,42 +54,42 @@ const Block = ({
       case 'phone':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <input type="tel" {...commonProps} />
           </>
         );
       case 'email':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <input type="email" {...commonProps} />
           </>
         );
       case 'picture':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <input type="file" accept="image/*" required={isRequired} />
           </>
         );
       case 'textarea':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <textarea {...commonProps}></textarea>
           </>
         );
       case 'title':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <h3>{placeholder || 'Titel'}</h3>
           </>
         );
       case 'paragraph':
         return (
           <>
-            <label>{fieldLabel}</label>
+            {renderLabel()}
             <p>{placeholder || 'Paragraaf tekst hier...'}</p>
           </>
         );
@@ -125,16 +132,14 @@ const Block = ({
             <div className="required-switch">
               <label className="switch-label">
                 Verplicht:
-                {/* Styled Toggle Switch */}
-                </label>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={isRequired}
-                    onChange={() => setIsRequired(!isRequired)}
-                  />
-                  <span className="slider round"></span>
-                
+              </label>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={isRequired}
+                  onChange={() => setIsRequired(!isRequired)}
+                />
+                <span className="slider round"></span>
               </label>
             </div>
             <button className="button" onClick={handleSave}>
