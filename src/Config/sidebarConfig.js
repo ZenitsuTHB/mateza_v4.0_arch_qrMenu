@@ -40,10 +40,6 @@ const routesConfig = [
         path: '/settings',
       },
       {
-        label: 'Kleuren',
-        path: '/colors',
-      },
-      {
         label: 'Lanceren',
         path: '/launch',
       },
@@ -66,10 +62,6 @@ const routesConfig = [
         path: '/settings',
       },
       {
-        label: 'Kleuren',
-        path: '/colors',
-      },
-      {
         label: 'Lanceren',
         path: '/launch',
       },
@@ -90,36 +82,6 @@ const routesConfig = [
       {
         label: 'Instellen',
         path: '/settings',
-      },
-      {
-        label: 'Kleuren',
-        path: '/colors',
-      },
-      {
-        label: 'Lanceren',
-        path: '/launch',
-      },
-    ],
-  },
-  {
-    path: '/colors',
-    element: <FormColors title="Kleuren" />,
-    label: 'Kleuren',
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: [
-      {
-        label: 'Bewerken',
-        path: '/',
-      },
-      {
-        label: 'Instellen',
-        path: '/settings',
-      },
-      {
-        label: 'Kleuren',
-        path: '/colors',
       },
       {
         label: 'Lanceren',

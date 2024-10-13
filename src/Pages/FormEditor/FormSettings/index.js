@@ -9,22 +9,21 @@ import '../css/FormSettings/settingsTabs.css';
 
 const SettingsTabs = () => {
   const [activeTab, setActiveTab] = useState('formSettings');
+  const [activeTitle, setActiveTitle] = useState("Tekst Instellingen")
 
   const tabs = [
-    { id: 'formSettings', label: 'Tekst' },
-    { id: 'appearanceSettings', label: 'Kleuren' },
+    { id: 'formSettings', label: 'Tekst', title: "Tekst Instellingen" },
+    { id: 'appearanceSettings', label: 'Kleuren', title: "Kleuren Instellingen" },
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Instellingen succesvol opgeslagen!');
-    // You can also save formData to localStorage or send it to a server here
   };
 
   return (
 	<div className="form-settings-page">
       <form className="form-settings-form" onSubmit={handleSubmit}>
-        <h2 className="secondary-title">Stel uw Pagina in</h2>
+        <h2 className="secondary-title">{activeTitle}</h2>
 
     <div className="settings-tabs">
       <div className="tab-menu">
@@ -33,7 +32,7 @@ const SettingsTabs = () => {
             <motion.button
               key={tab.id}
               className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {setActiveTab(tab.id); setActiveTitle(tab.title)}}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

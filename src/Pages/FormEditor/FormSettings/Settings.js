@@ -1,7 +1,6 @@
 // src/components/FormSettings/FormSettings.jsx
 
 import React, { useState, useEffect } from 'react';
-import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 

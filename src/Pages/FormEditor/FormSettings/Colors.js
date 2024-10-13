@@ -1,7 +1,6 @@
 // src/components/AppearanceSettings/AppearanceSettings.jsx
 
 import React, { useState, useEffect } from 'react';
-import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
@@ -56,22 +55,8 @@ const Colors = () => {
     localStorage.setItem(name, value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Appearance Settings:', appearanceData);
-    alert('Appearance settings successfully saved!');
-  };
-
   return (
-    <div
-      className="form-settings-page"
-    >
-      <form
-        className="form-settings-form"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="secondary-title">Kleuren Instellingen</h2>
-
+    <div>
         <div className="form-group">
           <label htmlFor="textColor">Tekstkleur:</label>
           <input
@@ -104,7 +89,6 @@ const Colors = () => {
             onChange={handleChange}
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="buttonColor">Knopkleur:</label>
           <input
@@ -133,7 +117,6 @@ const Colors = () => {
         >
           Opslaan
         </button>
-      </form>
     </div>
   );
 };
