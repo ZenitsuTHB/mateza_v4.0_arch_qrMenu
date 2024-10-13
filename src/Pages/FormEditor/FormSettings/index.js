@@ -109,17 +109,6 @@ const FormSettings = () => {
           )}
         </div>
 
-		<div className="form-group">
-          <label htmlFor="buttonColor">Knopkleur:</label>
-          <input
-            type="color"
-            id="buttonColor"
-            name="buttonColor"
-            value={buttonColor}
-            onChange={handleButtonColorChange}
-          />
-        </div>
-
         <div className="form-group">
           <label htmlFor="pageFont">Lettertype:</label>
           <select
