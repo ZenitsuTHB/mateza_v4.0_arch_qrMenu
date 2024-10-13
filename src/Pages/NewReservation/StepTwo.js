@@ -4,7 +4,6 @@ import React from 'react';
 
 const StepTwo = ({
   title,
-  subtitle,
   formData,
   handleChange,
   setCurrentStep,
@@ -20,7 +19,7 @@ const StepTwo = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here (e.g., API call)
+    localStorage.setItem('summary', JSON.stringify(formData));
     console.log('Reserveringsgegevens:', formData);
     setCurrentStep(3);
   };
@@ -28,7 +27,7 @@ const StepTwo = ({
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
       <h2>{title}</h2>
-      <h3 className="subtitle">{subtitle}</h3>
+      <h3 className="subtitle">Stap 2/3</h3>
 
       {stepFields.map((field) => (
         <div className="form-group" key={field.id}>

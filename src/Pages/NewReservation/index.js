@@ -76,7 +76,6 @@ const NewReservation = () => {
         {currentStep === 1 && (
           <StepOne
             title={title}
-            subtitle="Stap 1/3"
             formData={formData}
             handleChange={handleChange}
             setCurrentStep={setCurrentStep}
@@ -87,7 +86,6 @@ const NewReservation = () => {
         {currentStep === 2 && (
           <StepTwo
             title={title}
-            subtitle="Stap 2/3"
             formData={formData}
             handleChange={handleChange}
             setCurrentStep={setCurrentStep}
@@ -96,7 +94,7 @@ const NewReservation = () => {
         )}
 
         {currentStep === 3 && (
-          <SuccessMessage message="Uw pagina is klaar om te delen!" />
+          <SuccessMessage/>
         )}
       </div>
 

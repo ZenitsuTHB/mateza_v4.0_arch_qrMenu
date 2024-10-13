@@ -4,7 +4,6 @@ import React from 'react';
 
 const StepOne = ({
   title,
-  subtitle,
   formData,
   handleChange,
   setCurrentStep,
@@ -25,7 +24,7 @@ const StepOne = ({
   return (
     <form className="reservation-form" onSubmit={handleNext}>
       <h2>{title}</h2>
-      <h3 className="subtitle">{subtitle}</h3>
+      <h3 className="subtitle">Stap 1/3</h3>
 
       {stepFields.map((field) => (
         <div className="form-group" key={field.id}>
