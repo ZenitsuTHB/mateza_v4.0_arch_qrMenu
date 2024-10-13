@@ -1,6 +1,6 @@
 /* src/components/FormSettings/css/formSettings.css */
 
-.form-settings-page .form-settings-page {
+.form-settings-page {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -47,7 +47,7 @@
   .form-settings-page .form-group input:focus,
   .form-settings-page .form-group textarea:focus,
   .form-settings-page .form-group select:focus {
-	border-color: #007bff; /* Blue border on focus */
+	border-color: #007bff;
 	outline: none;
   }
   
@@ -56,7 +56,6 @@
 	min-height: 80px;
   }
   
-  /* Theme Preview Styling */
   .form-settings-page .theme-preview {
 	display: flex;
 	flex-direction: column;
