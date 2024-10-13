@@ -13,7 +13,7 @@ import {
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
 import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
-import FormColors from '../Pages/FormEditor/FormSettings/formColors.js';
+import FormColors from '../Pages/FormEditor/FormSettings/index.js';
 import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Notepad from '../Pages/Notepad/index.js';
 import Profile from '../Pages/Profile/index.js';

@@ -1,143 +1,66 @@
-// src/components/FormSettings/FormSettings.jsx
+// src/components/FormSettings/SettingsTabs.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import Settings from './Settings.js';
+import Colors from './Colors.js';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import '../css/FormSettings/formSettings.css';
-import '../css/FormSettings/mobile.css';
+import '../css/FormSettings/settingsTabs.css';
 
-const FormSettings = () => {
-  const [formData, setFormData] = useState({
-    pageTitle: '',
-    generalNotification: '',
-    pageFont: '',
-  });
+const SettingsTabs = () => {
+  const [activeTab, setActiveTab] = useState('formSettings');
 
-  const [selectedTheme, setSelectedTheme] = useState(null);
-  const [buttonColor, setButtonColor] = useState('#007bff'); // Default blue color
-
-  useEffect(() => {
-    // Retrieve selectedTheme from localStorage
-    const theme = localStorage.getItem('selectedTheme');
-    if (theme) {
-      const parsedTheme = JSON.parse(theme);
-      setSelectedTheme(parsedTheme);
-
-      // If buttonColor is not set, default to selectedTheme.color
-      const storedButtonColor = localStorage.getItem('buttonColor');
-      if (storedButtonColor) {
-        setButtonColor(storedButtonColor);
-      } else {
-        setButtonColor(parsedTheme.color || '#007bff'); // Fallback to default blue
-      }
-    } else {
-      // If no theme is selected, use default button color or stored color
-      const storedButtonColor = localStorage.getItem('buttonColor');
-      if (storedButtonColor) {
-        setButtonColor(storedButtonColor);
-      }
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleButtonColorChange = (e) => {
-    const newColor = e.target.value;
-    setButtonColor(newColor);
-    localStorage.setItem('buttonColor', newColor);
-  };
+  const tabs = [
+    { id: 'formSettings', label: 'Tekst' },
+    { id: 'appearanceSettings', label: 'Kleuren' },
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Settings:', formData);
     alert('Instellingen succesvol opgeslagen!');
     // You can also save formData to localStorage or send it to a server here
   };
 
   return (
-    <div className="form-settings-page">
+	<div className="form-settings-page">
       <form className="form-settings-form" onSubmit={handleSubmit}>
         <h2 className="secondary-title">Stel uw Pagina in</h2>
 
-        <div className="form-group">
-          <label htmlFor="pageTitle">Titel:</label>
-          <input
-            type="text"
-            id="pageTitle"
-            name="pageTitle"
-            value={formData.pageTitle}
-            onChange={handleChange}
-            required
-            placeholder="Voer de paginatitel in"
-          />
+    <div className="settings-tabs">
+      <div className="tab-menu">
+        <div className="buttons-container">
+          {tabs.map((tab) => (
+            <motion.button
+              key={tab.id}
+              className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="tab-label">{tab.label}</span>
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="underline-settings-tabs"
+                  className="tab-underline"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          ))}
         </div>
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="generalNotification">Mededeling:</label>
-          <textarea
-            id="generalNotification"
-            name="generalNotification"
-            value={formData.generalNotification}
-            onChange={handleChange}
-            placeholder="Voer een algemene mededeling in"
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label>Thema:</label>
-          {selectedTheme ? (
-            <div className="theme-preview">
-              <div className="theme-preview-content">
-                <div
-                  className="theme-preview-left"
-                  style={{ backgroundColor: selectedTheme.color }}
-                ></div>
-                <div className="theme-preview-right">
-                  <img src={selectedTheme.image} alt={selectedTheme.title} />
-                </div>
-              </div>
-              <div className="theme-preview-title">{selectedTheme.title}</div>
-            </div>
-          ) : (
-            <p>Geen thema geselecteerd</p>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="pageFont">Lettertype:</label>
-          <select
-            id="pageFont"
-            name="pageFont"
-            value={formData.pageFont}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecteer een lettertype</option>
-            <option value="Arial">Arial</option>
-            <option value="Helvetica">Helvetica</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Courier New">Courier New</option>
-          </select>
-        </div>
-
-        
-
-        <button
-          type="submit"
-          className="submit-button"
-        >
-          Opslaan
-        </button>
-      </form>
+      <div className="tab-content">
+        {activeTab === 'formSettings' && <Settings />}
+        {activeTab === 'appearanceSettings' && <Colors />}
+      </div>
     </div>
+
+	</form>
+	</div>
   );
 };
 
-export default withHeader(FormSettings);
+export default withHeader(SettingsTabs);

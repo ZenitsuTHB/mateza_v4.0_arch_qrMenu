@@ -5,7 +5,7 @@ import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
-const AppearanceSettings = () => {
+const Colors = () => {
   const [appearanceData, setAppearanceData] = useState({
     textColor: '#000000',
     backgroundColor: '',
@@ -138,4 +138,4 @@ const AppearanceSettings = () => {
   );
 };
 
-export default withHeader(AppearanceSettings);
+export default Colors;
