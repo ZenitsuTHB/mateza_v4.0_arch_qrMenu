@@ -11,27 +11,27 @@ const Settings = () => {
     pageFont: '',
   });
 
-
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [buttonColor, setButtonColor] = useState('#007bff');
 
-
+  // Load settings from localStorage on mount
   useEffect(() => {
-    // Retrieve selectedTheme from localStorage
+    // Retrieve and set formData
+    const storedFormData = JSON.parse(localStorage.getItem('formData'));
+    if (storedFormData) {
+      setFormData(storedFormData);
+    }
+
+    // Retrieve and set selectedTheme
     const theme = localStorage.getItem('selectedTheme');
     if (theme) {
       const parsedTheme = JSON.parse(theme);
       setSelectedTheme(parsedTheme);
 
-      // If buttonColor is not set, default to selectedTheme.color
-      const storedButtonColor = localStorage.getItem('buttonColor');
-      if (storedButtonColor) {
-        setButtonColor(storedButtonColor);
-      } else {
-        setButtonColor(parsedTheme.color || '#007bff'); // Fallback to default blue
-      }
+      // Update buttonColor based on theme
+      setButtonColor(parsedTheme.color || '#007bff');
     } else {
-      // If no theme is selected, use default button color or stored color
+      // If no theme is selected, retrieve buttonColor
       const storedButtonColor = localStorage.getItem('buttonColor');
       if (storedButtonColor) {
         setButtonColor(storedButtonColor);
@@ -39,22 +39,39 @@ const Settings = () => {
     }
   }, []);
 
+  // Update localStorage whenever formData changes
+  useEffect(() => {
+    localStorage.setItem('formData', JSON.stringify(formData));
+  }, [formData]);
+
+  // Update localStorage whenever selectedTheme changes
+  useEffect(() => {
+    if (selectedTheme) {
+      localStorage.setItem('selectedTheme', JSON.stringify(selectedTheme));
+      // Also update buttonColor based on the selected theme
+      localStorage.setItem('buttonColor', selectedTheme.color || '#007bff');
+    }
+  }, [selectedTheme]);
+
+  // Update localStorage whenever buttonColor changes independently
+  useEffect(() => {
+    if (!selectedTheme) {
+      localStorage.setItem('buttonColor', buttonColor);
+    }
+  }, [buttonColor, selectedTheme]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
-  
-
   return (
-    
 
-		
-        <div>
+      <div>
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input
@@ -68,6 +85,7 @@ const Settings = () => {
           />
         </div>
 
+        {/* General Notification */}
         <div className="form-group">
           <label htmlFor="generalNotification">Mededeling:</label>
           <textarea
@@ -79,6 +97,7 @@ const Settings = () => {
           ></textarea>
         </div>
 
+        {/* Theme Selection */}
         <div className="form-group">
           <label>Thema:</label>
           {selectedTheme ? (
@@ -99,6 +118,7 @@ const Settings = () => {
           )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="submit-button"
@@ -106,7 +126,6 @@ const Settings = () => {
           Opslaan
         </button>
         </div>
-      
   );
 };
 

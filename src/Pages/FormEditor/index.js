@@ -6,13 +6,12 @@ import { FaMagic } from 'react-icons/fa';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './DragAndDrop/Palette.js';
 import Canvas from './DragAndDrop/Canvas.js';
+import ThemeSelectorModal from './Theme/index.js';
+import useNotification from '../../Components/Notification/index';
+import { initialBlocks, defaultCanvasItems } from './defaultElements.js'; // Importing from defaultElements.js
 import './css/DragAndDrop/animations.css';
 import './css/DragAndDrop/style.css';
 import './css/DragAndDrop/mobile.css';
-import ThemeSelectorModal from './Theme/index.js';
-import useNotification from '../../Components/Notification/index';
-
-import { initialBlocks, defaultCanvasItems } from './defaultElements.js'; // Importing from defaultElements.js
 
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
@@ -104,6 +103,8 @@ const DragAndDropEditor = () => {
   const handleSelectTheme = (theme) => {
     setSelectedTheme(theme);
     localStorage.setItem('selectedTheme', JSON.stringify(theme));
+    localStorage.setItem('backgroundColor', theme.color);
+    localStorage.setItem('buttonColor', theme.color);
     triggerNotification('Thema geselecteerd', 'success');
   };
 

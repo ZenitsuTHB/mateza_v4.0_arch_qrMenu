@@ -7,7 +7,7 @@ import '../css/Theme/themeSelectorModal.css';
 import '../css/Theme/animations.css';
 import '../css/Theme/mobile.css';
 
-import { initialThemes } from './defaultThemes'; // Import initialThemes
+import { initialThemes } from './defaultThemes';
 
 const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
   const [themes, setThemes] = useState(initialThemes);
