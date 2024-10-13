@@ -67,12 +67,14 @@ const Settings = () => {
   useEffect(() => {
     if (selectedTheme) {
       localStorage.setItem('selectedTheme', JSON.stringify(selectedTheme));
+      localStorage.setItem('backgroundColor', selectedTheme.color || '#007bff');
       localStorage.setItem('buttonColor', selectedTheme.color || '#007bff');
     }
   }, [selectedTheme]);
 
   useEffect(() => {
     if (!selectedTheme) {
+      localStorage.setItem('backgroundColor', buttonColor);
       localStorage.setItem('buttonColor', buttonColor);
     }
   }, [buttonColor, selectedTheme]);
