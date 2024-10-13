@@ -107,7 +107,7 @@ const Block = ({ type, label, id, onDelete }) => {
               type="text"
               value={fieldLabel}
               onChange={(e) => setFieldLabel(e.target.value)}
-              placeholder="Veldlabel"
+              placeholder="Naam"
             />
             <input
               type="text"
@@ -116,13 +116,18 @@ const Block = ({ type, label, id, onDelete }) => {
               placeholder="Placeholder"
             />
             <div className="required-switch">
-              <label>
+              <label className="switch-label">
                 Verplicht:
-                <input
-                  type="checkbox"
-                  checked={isRequired}
-                  onChange={() => setIsRequired(!isRequired)}
-                />
+                {/* Styled Toggle Switch */}
+                </label>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={isRequired}
+                    onChange={() => setIsRequired(!isRequired)}
+                  />
+                  <span className="slider round"></span>
+                
               </label>
             </div>
             <button className="button" onClick={handleSave}>
