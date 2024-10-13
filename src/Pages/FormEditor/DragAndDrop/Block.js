@@ -4,14 +4,21 @@ import React, { useState } from 'react';
 import { FaTrashAlt, FaEdit, FaGripHorizontal, FaSave } from 'react-icons/fa';
 import '../css/DragAndDrop/block.css';
 
-const Block = ({ type, label, id, onDelete }) => {
+const Block = ({
+  type,
+  label,
+  id,
+  placeholder: initialPlaceholder,
+  required: initialRequired,
+  onDelete,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   // State variables for label, placeholder, and required flag
   const [fieldLabel, setFieldLabel] = useState(label);
-  const [placeholder, setPlaceholder] = useState('');
-  const [isRequired, setIsRequired] = useState(false);
+  const [placeholder, setPlaceholder] = useState(initialPlaceholder || '');
+  const [isRequired, setIsRequired] = useState(initialRequired || false);
 
   const renderField = () => {
     const commonProps = {

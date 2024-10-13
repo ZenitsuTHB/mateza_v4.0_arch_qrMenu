@@ -42,12 +42,7 @@ const Canvas = ({ items, setItems, dropPosition }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <Block
-                        type={item.type}
-                        label={item.label}
-                        id={item.id}
-                        onDelete={handleDelete}
-                      />
+                      <Block {...item} onDelete={handleDelete} />
                     </div>
                   )}
                 </Draggable>

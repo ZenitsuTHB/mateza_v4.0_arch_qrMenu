@@ -1,7 +1,7 @@
 // DragAndDropEditor.js
 import React, { useState, useEffect, useRef } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import { FaMagic } from 'react-icons/fa'; // Import the magic wand icon
+import { FaMagic } from 'react-icons/fa';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './DragAndDrop/Palette.js';
 import Canvas from './DragAndDrop/Canvas.js';
@@ -30,17 +30,50 @@ const initialBlocks = [
   { id: '5', type: 'picture', label: 'Afbeelding', icon: <FaImage /> },
   { id: '6', type: 'textarea', label: 'Tekstveld', icon: <FaFont /> },
   { id: '7', type: 'title', label: 'Titel', icon: <FaHeading /> },
-  { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> }, // New element
+  { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> },
+];
+
+// Define the default canvas items
+const defaultCanvasItems = [
+  {
+    id: `input-${Date.now()}-voornaam`,
+    type: 'input',
+    label: 'Voornaam',
+    placeholder: 'Uw Voornaam',
+    required: true,
+  },
+  {
+    id: `input-${Date.now()}-achternaam`,
+    type: 'input',
+    label: 'Achternaam',
+    placeholder: 'Uw Achternaam',
+    required: true,
+  },
+  {
+    id: `email-${Date.now()}-email`,
+    type: 'email',
+    label: 'Email',
+    placeholder: 'Uw Email',
+    required: true,
+  },
+  {
+    id: `textarea-${Date.now()}-extra-info`,
+    type: 'textarea',
+    label: 'Extra Info / Allergenen',
+    placeholder: '',
+    required: true,
+  },
 ];
 
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
-  const [canvasItems, setCanvasItems] = useState([]);
+  const [canvasItems, setCanvasItems] = useState(defaultCanvasItems);
   const [dropPosition, setDropPosition] = useState(null);
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const formEditingPageRef = useRef(null);
   const { triggerNotification, NotificationComponent } = useNotification();
+
 
   useEffect(() => {
     const applyResponsiveStyles = () => {
@@ -81,15 +114,20 @@ const DragAndDropEditor = () => {
 
   const handleOnDragEnd = (result) => {
     setDropPosition(null);
-
+  
     if (!result.destination) return;
-    if (result.source.droppableId === 'Palette' && result.destination.droppableId === 'Canvas') {
+    if (
+      result.source.droppableId === 'Palette' &&
+      result.destination.droppableId === 'Canvas'
+    ) {
       const item = blocks.find((block) => block.id === result.draggableId);
       const newItem = {
         ...item,
-        id: `${item.id}-${new Date().getTime()}`,
+        id: `${item.id}-${Date.now()}`,
+        placeholder: '',
+        required: false,
       };
-
+  
       const newCanvasItems = Array.from(canvasItems);
       newCanvasItems.splice(result.destination.index, 0, newItem);
       setCanvasItems(newCanvasItems);
@@ -103,6 +141,7 @@ const DragAndDropEditor = () => {
       setCanvasItems(items);
     }
   };
+  
 
   const handleOnDragUpdate = (update) => {
     const { destination } = update;
