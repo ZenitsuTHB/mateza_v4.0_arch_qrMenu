@@ -1,8 +1,11 @@
 // src/components/FormSettings/FormSettings.jsx
 
 import React, { useState, useEffect } from 'react';
+import ThemeSelectorModal from '../Theme/index.js';
+import useNotification from '../../../Components/Notification/index.js' // Adjust the import path as needed
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
+
 
 const Settings = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,20 @@ const Settings = () => {
 
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [buttonColor, setButtonColor] = useState('#007bff');
+  const [showThemeModal, setShowThemeModal] = useState(false); // State to control modal visibility
+
+  const handleSelectTheme = (theme) => {
+    setSelectedTheme(theme);
+    localStorage.setItem('selectedTheme', JSON.stringify(theme));
+
+    setButtonColor(theme.color);
+    localStorage.setItem('buttonColor', theme.color);
+  };
+
+  const handleAddTheme = (newTheme) => {
+    handleSelectTheme(newTheme);
+
+  };
 
   useEffect(() => {
     const storedFormData = JSON.parse(localStorage.getItem('formData'));
@@ -25,21 +42,18 @@ const Settings = () => {
         setFormData(storedFormData);
       }
     } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        pageTitle: 'Reserveer Nu',
-      }));
-      localStorage.setItem('formData', JSON.stringify({
-        ...formData,
-        pageTitle: 'Reserveer Nu',
-      }));
+      const initialFormData = { ...formData, pageTitle: 'Reserveer Nu' };
+      setFormData(initialFormData);
+      localStorage.setItem('formData', JSON.stringify(initialFormData));
     }
 
     const theme = localStorage.getItem('selectedTheme');
     if (theme) {
       const parsedTheme = JSON.parse(theme);
       setSelectedTheme(parsedTheme);
-      setButtonColor(parsedTheme.color || '#007bff');
+
+      localStorage.setItem('backgroundColor', parsedTheme.color);
+      localStorage.setItem('buttonColor', parsedTheme.color);
     } else {
       const storedButtonColor = localStorage.getItem('buttonColor');
       if (storedButtonColor) {
@@ -88,8 +102,10 @@ const Settings = () => {
     }
   };
 
+
   return (
     <div>
+
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input
@@ -102,6 +118,7 @@ const Settings = () => {
             placeholder="Voer de paginatitel in"
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="generalNotification">Mededeling:</label>
           <textarea
@@ -112,10 +129,16 @@ const Settings = () => {
             placeholder="Voer een algemene mededeling in"
           ></textarea>
         </div>
+
         <div className="form-group">
           <label>Thema:</label>
           {selectedTheme ? (
-            <div className="theme-preview">
+            <div
+              className="theme-preview clickable"
+              onClick={() => setShowThemeModal(true)}
+              style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
+              title="Klik om het thema te wijzigen" // Tooltip for better UX
+            >
               <div className="theme-preview-content">
                 <div
                   className="theme-preview-left"
@@ -131,12 +154,22 @@ const Settings = () => {
             <p>Geen thema geselecteerd</p>
           )}
         </div>
+
         <button
           type="submit"
           className="submit-button"
+          style={{ backgroundColor: buttonColor }}
         >
           Opslaan
         </button>
+
+      {showThemeModal && (
+        <ThemeSelectorModal
+          onClose={() => setShowThemeModal(false)}
+          onSelectTheme={handleSelectTheme}
+          onAddTheme={handleAddTheme}
+        />
+      )}
     </div>
   );
 };

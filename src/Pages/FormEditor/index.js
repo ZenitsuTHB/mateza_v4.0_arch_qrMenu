@@ -6,9 +6,9 @@ import { FaMagic } from 'react-icons/fa';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './DragAndDrop/Palette.js';
 import Canvas from './DragAndDrop/Canvas.js';
-import ThemeSelectorModal from './Theme/index.js';
+import ThemeSelectorModal from './Theme/index.js'; // Adjust the import path as needed
 import useNotification from '../../Components/Notification/index';
-import { initialBlocks, defaultCanvasItems } from './defaultElements.js'; // Importing from defaultElements.js
+import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
 import './css/DragAndDrop/animations.css';
 import './css/DragAndDrop/style.css';
 import './css/DragAndDrop/mobile.css';
@@ -59,6 +59,15 @@ const DragAndDropEditor = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Load selected theme from localStorage on mount
+    const storedTheme = localStorage.getItem('selectedTheme');
+    if (storedTheme) {
+      const parsedTheme = JSON.parse(storedTheme);
+      setSelectedTheme(parsedTheme);
+    }
+  }, []);
+
   const handleOnDragEnd = (result) => {
     setDropPosition(null);
 
@@ -100,17 +109,8 @@ const DragAndDropEditor = () => {
     setDropPosition(destination.index);
   };
 
-  const handleSelectTheme = (theme) => {
-    setSelectedTheme(theme);
-    localStorage.setItem('selectedTheme', JSON.stringify(theme));
-    localStorage.setItem('backgroundColor', theme.color);
-    localStorage.setItem('buttonColor', theme.color);
-    triggerNotification('Thema geselecteerd', 'success');
-  };
-
-  const handleAddTheme = (newTheme) => {
-    triggerNotification('Nieuw thema toegevoegd', 'success');
-  };
+  // Remove handleSelectTheme and handleAddTheme from here
+  // These are now handled within ThemeSelectorModal
 
   return (
     <div className="form-editing-page" ref={formEditingPageRef}>
@@ -133,8 +133,6 @@ const DragAndDropEditor = () => {
       {showThemeModal && (
         <ThemeSelectorModal
           onClose={() => setShowThemeModal(false)}
-          onSelectTheme={handleSelectTheme}
-          onAddTheme={handleAddTheme}
         />
       )}
     </div>
