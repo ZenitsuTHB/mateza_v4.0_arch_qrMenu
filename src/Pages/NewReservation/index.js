@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './css/newReservation.css';
+import './css/mobile.css';
 
 const NewReservation = () => {
   const [formData, setFormData] = useState({
