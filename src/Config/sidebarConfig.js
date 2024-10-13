@@ -7,19 +7,18 @@ import {
   FaPencilAlt,
   FaBoxes,
   FaCalendarPlus,
-  FaEdit,
-  FaEye,
-  FaRocket, // Additional icons for subbuttons
-  FaCog, // Import the settings icon
-} from 'react-icons/fa'; // Import necessary icons
+  FaRocket,
+  FaCog,
+} from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
 import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
-import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js'; // Import the FormSettings component
+import FormColors from '../Pages/FormEditor/FormSettings/formColors.js';
+import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Notepad from '../Pages/Notepad/index.js';
 import Profile from '../Pages/Profile/index.js';
 import Pincode from '../Pages/Pincode/index.js';
-import NewReservation from '../Pages/NewReservation/index.js'; // Ensure correct path
+import NewReservation from '../Pages/NewReservation/index.js';
 import SplitScreen from '../Components/Structural/SplitScreen/index.js';
 
 const routesConfig = [
@@ -35,17 +34,18 @@ const routesConfig = [
       {
         label: 'Bewerken',
         path: '/',
-        icon: FaEdit,
       },
       {
         label: 'Instellen',
         path: '/settings',
-        icon: FaEye,
+      },
+      {
+        label: 'Kleuren',
+        path: '/colors',
       },
       {
         label: 'Lanceren',
         path: '/launch',
-        icon: FaRocket,
       },
     ],
   },
@@ -53,25 +53,25 @@ const routesConfig = [
     path: '/launch',
     element: <LaunchPage title="Lanceren" />,
     label: 'Lanceren',
-    icon: FaRocket,
     isMenu: false,
-    isMobile: true,
+    isMobile: false,
     isTab: false,
     secondaryTopBar: [
       {
         label: 'Bewerken',
         path: '/',
-        icon: FaEdit,
       },
       {
         label: 'Instellen',
         path: '/settings',
-        icon: FaEye,
+      },
+      {
+        label: 'Kleuren',
+        path: '/colors',
       },
       {
         label: 'Lanceren',
         path: '/launch',
-        icon: FaRocket,
       },
     ],
   },
@@ -79,25 +79,51 @@ const routesConfig = [
     path: '/settings',
     element: <FormSettings title="Instellingen" />,
     label: 'Instellingen',
-    icon: FaCog,
-    isMenu: true,
-    isMobile: true,
+    isMenu: false,
+    isMobile: false,
     isTab: false,
     secondaryTopBar: [
       {
         label: 'Bewerken',
         path: '/',
-        icon: FaEdit,
       },
       {
         label: 'Instellen',
         path: '/settings',
-        icon: FaEye,
+      },
+      {
+        label: 'Kleuren',
+        path: '/colors',
       },
       {
         label: 'Lanceren',
         path: '/launch',
-        icon: FaRocket,
+      },
+    ],
+  },
+  {
+    path: '/colors',
+    element: <FormColors title="Kleuren" />,
+    label: 'Kleuren',
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: [
+      {
+        label: 'Bewerken',
+        path: '/',
+      },
+      {
+        label: 'Instellen',
+        path: '/settings',
+      },
+      {
+        label: 'Kleuren',
+        path: '/colors',
+      },
+      {
+        label: 'Lanceren',
+        path: '/launch',
       },
     ],
   },
@@ -109,7 +135,6 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-    // No secondaryTopBar on profile page
   },
   {
     path: '/pincode',
@@ -119,7 +144,6 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: false,
-    // No secondaryTopBar on pincode page
   },
   {
     path: '/notepad',
@@ -129,17 +153,15 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: false,
-    // No secondaryTopBar on notepad page
   },
   {
-    path: '/new-reservation', // Dutch for 'reserve'
-    element: <NewReservation title="Nieuwe Reservatie" />, // Use the new component
+    path: '/new-reservation',
+    element: <NewReservation title="Nieuwe Reservatie" />,
     label: 'Reserveren',
-    icon: FaCalendarPlus, // New icon
-    isMenu: true, // Show in menu
-    isMobile: true, // Show on mobile
+    icon: FaCalendarPlus,
+    isMenu: true,
+    isMobile: true,
     isTab: true,
-    // No secondaryTopBar on new reservation page
   },
   {
     path: '/split',
@@ -149,7 +171,6 @@ const routesConfig = [
     isMenu: true,
     isMobile: false,
     isTab: false,
-    // No secondaryTopBar on split view
   },
 ];
 
