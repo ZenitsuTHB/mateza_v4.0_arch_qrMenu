@@ -1,12 +1,13 @@
 // src/components/FormSettings/Fonts.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
+import WebFont from 'webfontloader';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Fonts = () => {
-  const fonts = [
-	'Poppins',
+  const availableFonts = [
+    'Poppins',
     'Arial',
     'Helvetica',
     'Times New Roman',
@@ -19,95 +20,138 @@ const Fonts = () => {
     'Montserrat',
   ];
 
-  const [selectedFont, setSelectedFont] = useState('');
-  const [previewText, setPreviewText] = useState('Dit is een voorbeeldtekst.');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  // Define font categories
+  const fontCategories = [
+    { key: 'titleFont', label: 'Titel' },
+    { key: 'subtitleFont', label: 'Subtitel' },
+    { key: 'labelFont', label: 'Label Tekst' },
+    { key: 'buttonFont', label: 'Knop' },
+  ];
 
-  useEffect(() => {
-    const storedFont = localStorage.getItem('pageFont');
-    if (storedFont) {
-      setSelectedFont(storedFont);
-      document.body.style.fontFamily = storedFont;
-    } else {
-      document.body.style.fontFamily = 'inherit';
-    }
-  }, []);
+  // Initialize state for each font category
+  const [fontsState, setFontsState] = useState({
+    titleFont: 'Poppins',
+    subtitleFont: 'Poppins',
+    labelFont: 'Poppins',
+    buttonFont: 'Poppins',
+  });
 
-  useEffect(() => {
-    // Update body font when selectedFont changes
-    document.body.style.fontFamily = selectedFont || 'inherit';
-  }, [selectedFont]);
+  // Dropdown states
+  const [dropdownOpen, setDropdownOpen] = useState({
+    titleFont: false,
+    subtitleFont: false,
+    labelFont: false,
+    buttonFont: false,
+  });
 
+  const dropdownRefs = {
+    titleFont: useRef(null),
+    subtitleFont: useRef(null),
+    labelFont: useRef(null),
+    buttonFont: useRef(null),
+  };
+
+  // Load fonts from localStorage on mount
   useEffect(() => {
-    // Handle click outside to close dropdown
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
+    const storedFonts = { ...fontsState };
+    fontCategories.forEach(({ key }) => {
+      const storedFont = localStorage.getItem(key);
+      if (storedFont) {
+        storedFonts[key] = storedFont;
       }
+    });
+    setFontsState(storedFonts);
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  // Load selected fonts using WebFont loader
+  useEffect(() => {
+    const fontsToLoad = Array.from(new Set(Object.values(fontsState))); // Remove duplicates
+    WebFont.load({
+      google: {
+        families: fontsToLoad,
+      },
+      active: () => {
+        // Fonts loaded
+      },
+      inactive: () => {
+        console.error('Failed to load fonts.');
+      },
+    });
+  }, [fontsState]);
+
+  // Handle clicks outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      fontCategories.forEach(({ key }) => {
+        if (
+          dropdownRefs[key].current &&
+          !dropdownRefs[key].current.contains(event.target)
+        ) {
+          setDropdownOpen((prev) => ({ ...prev, [key]: false }));
+        }
+      });
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [fontCategories]);
 
-  const handleFontSelect = (font) => {
-    setSelectedFont(font);
-    localStorage.setItem('pageFont', font);
-    setDropdownOpen(false);
+  // Handle font selection
+  const handleFontSelect = (categoryKey, font) => {
+    setFontsState((prev) => ({
+      ...prev,
+      [categoryKey]: font,
+    }));
+    localStorage.setItem(categoryKey, font);
+    setDropdownOpen((prev) => ({ ...prev, [categoryKey]: false })); // Close the dropdown
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  const handlePreviewChange = (e) => {
-    setPreviewText(e.target.value);
+  // Toggle dropdown
+  const toggleDropdown = (categoryKey) => {
+    setDropdownOpen((prev) => ({
+      ...prev,
+      [categoryKey]: !prev[categoryKey],
+    }));
   };
 
   return (
-    <div>
-      <div className="form-group" ref={dropdownRef}>
-        <label>Selecteer een Lettertype:</label>
-        <div className="custom-select" onClick={toggleDropdown}>
-          <div className="selected-option" style={{ fontFamily: selectedFont || 'inherit' }}>
-            {selectedFont || 'Selecteer een lettertype'}
-            <span className="arrow">{dropdownOpen ? '▲' : '▼'}</span>
+    <div className="fonts-container">
+      {fontCategories.map(({ key, label }) => (
+        <div className="form-group" key={key} ref={dropdownRefs[key]}>
+          <label>{label}:</label>
+          <div className="custom-select" onClick={() => toggleDropdown(key)}>
+            <div
+              className="selected-option"
+              style={{ fontFamily: fontsState[key] }}
+            >
+              {fontsState[key] === 'Poppins'
+                ? 'Poppins (standaard)'
+                : fontsState[key]}
+              <span className={`arrow ${dropdownOpen[key] ? 'open' : ''}`}>
+                {dropdownOpen[key] ? '▲' : '▼'}
+              </span>
+            </div>
+            {dropdownOpen[key] && (
+              <ul className="options-list">
+                {availableFonts.map((font) => (
+                  <li
+                    key={font}
+                    className="option-item"
+                    style={{ fontFamily: font }}
+                    onClick={() => handleFontSelect(key, font)}
+                  >
+                    {font === 'Poppins' ? 'Poppins (standaard)' : font}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {dropdownOpen && (
-            <ul className="options-list">
-              {fonts.map((font) => (
-                <li
-                  key={font}
-                  className="option-item"
-                  style={{ fontFamily: font }}
-                  onClick={() => handleFontSelect(font)}
-                >
-                  {font}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
-      </div>
+      ))}
 
-      <div className="form-group">
-        <label htmlFor="previewText">Voorbeeldtekst:</label>
-        <input
-          type="text"
-          id="previewText"
-          name="previewText"
-          value={previewText}
-          onChange={handlePreviewChange}
-          placeholder="Voer tekst in voor een voorbeeld"
-        />
-      </div>
-
-      <div className="font-preview" style={{ fontFamily: selectedFont }}>
-        {previewText || 'Dit is een voorbeeldtekst.'}
-      </div>
-
+      {/* Submit Button */}
       <button type="submit" className="submit-button">
         Opslaan
       </button>
