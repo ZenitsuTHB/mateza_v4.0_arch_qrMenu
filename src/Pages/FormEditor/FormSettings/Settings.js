@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import ThemeSelectorModal from '../Theme/index.js';
-import useNotification from '../../../Components/Notification/index.js' // Adjust the import path as needed
+import useNotification from '../../../Components/Notification/index.js'; // Adjust the import path as needed
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
-
 
 const Settings = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +27,6 @@ const Settings = () => {
 
   const handleAddTheme = (newTheme) => {
     handleSelectTheme(newTheme);
-
   };
 
   useEffect(() => {
@@ -82,86 +80,81 @@ const Settings = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'pageTitle') {
-      if (value.trim() === '') {
-        setFormData((prevData) => ({
-          ...prevData,
-          pageTitle: 'Reserveer Nu',
-        }));
-      } else {
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      }
-    } else {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    if (name === 'pageTitle' && value.trim() === '') {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        pageTitle: 'Reserveer Nu',
       }));
     }
   };
 
-
   return (
     <div>
+      <div className="form-group">
+        <label htmlFor="pageTitle">Titel:</label>
+        <input
+          type="text"
+          id="pageTitle"
+          name="pageTitle"
+          value={formData.pageTitle}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          required
+          placeholder="Voer de paginatitel in"
+        />
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="pageTitle">Titel:</label>
-          <input
-            type="text"
-            id="pageTitle"
-            name="pageTitle"
-            value={formData.pageTitle}
-            onChange={handleChange}
-            required
-            placeholder="Voer de paginatitel in"
-          />
-        </div>
+      <div className="form-group">
+        <label htmlFor="generalNotification">Mededeling:</label>
+        <textarea
+          id="generalNotification"
+          name="generalNotification"
+          value={formData.generalNotification}
+          onChange={handleChange}
+          placeholder="Voer een algemene mededeling in"
+        ></textarea>
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="generalNotification">Mededeling:</label>
-          <textarea
-            id="generalNotification"
-            name="generalNotification"
-            value={formData.generalNotification}
-            onChange={handleChange}
-            placeholder="Voer een algemene mededeling in"
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label>Thema:</label>
-          {selectedTheme ? (
-            <div
-              className="theme-preview clickable"
-              onClick={() => setShowThemeModal(true)}
-              style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
-              title="Klik om het thema te wijzigen" // Tooltip for better UX
-            >
-              <div className="theme-preview-content">
-                <div
-                  className="theme-preview-left"
-                  style={{ backgroundColor: selectedTheme.color }}
-                ></div>
-                <div className="theme-preview-right">
-                  <img src={selectedTheme.image} alt={selectedTheme.title} />
-                </div>
+      <div className="form-group">
+        <label>Thema:</label>
+        {selectedTheme ? (
+          <div
+            className="theme-preview clickable"
+            onClick={() => setShowThemeModal(true)}
+            style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
+            title="Klik om het thema te wijzigen" // Tooltip for better UX
+          >
+            <div className="theme-preview-content">
+              <div
+                className="theme-preview-left"
+                style={{ backgroundColor: selectedTheme.color }}
+              ></div>
+              <div className="theme-preview-right">
+                <img src={selectedTheme.image} alt={selectedTheme.title} />
               </div>
-              <div className="theme-preview-title">{selectedTheme.title}</div>
             </div>
-          ) : (
-            <p>Geen thema geselecteerd</p>
-          )}
-        </div>
+            <div className="theme-preview-title">{selectedTheme.title}</div>
+          </div>
+        ) : (
+          <p>Geen thema geselecteerd</p>
+        )}
+      </div>
 
-        <button
-          type="submit"
-          className="submit-button"
-          style={{ backgroundColor: buttonColor }}
-        >
-          Opslaan
-        </button>
+      <button
+        type="submit"
+        className="submit-button"
+        style={{ backgroundColor: buttonColor }}
+      >
+        Opslaan
+      </button>
 
       {showThemeModal && (
         <ThemeSelectorModal
