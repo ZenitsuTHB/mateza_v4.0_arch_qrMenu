@@ -1,13 +1,13 @@
 // src/components/NewReservation/formConfig.js
 
-import image1 from '../../Assets/themes/original/1.jpg'; // Adjust the path as necessary
+import image1 from '../../Assets/themes/original/20.jpg'; // Adjust the path as necessary
 
 export const title = 'Reserveer een Tafel';
 export const notification = 'Uw reservering is succesvol geplaatst!';
 export const theme = {
   id: 1,
   title: 'Oceaan Bries',
-  color: '#5DADE2',
+  color: 'pink',
   image: image1, // Imported image
 };
 

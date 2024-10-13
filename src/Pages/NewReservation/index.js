@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import './css/newReservation.css';
-import { title, notification, theme, font, fields } from './formConfig';
+import { title, theme, font, fields } from './formConfig';
 import { FaCheckCircle } from 'react-icons/fa';
+import StepOne from './StepOne';
+import StepTwo from './StepTwo';
+import SuccessMessage from './SuccessMessage';
 
 const NewReservation = () => {
   // Initialize form data state with empty values for each field
@@ -15,6 +18,7 @@ const NewReservation = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(1);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -27,18 +31,6 @@ const NewReservation = () => {
       ...formData,
       [name]: value,
     });
-  };
-
-  const handleNext = (e) => {
-    e.preventDefault();
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here (e.g., API call)
-    console.log('Reserveringsgegevens:', formData);
-    setCurrentStep((prevStep) => prevStep + 1);
   };
 
   // Function to darken the theme color for hover effects
@@ -61,25 +53,6 @@ const NewReservation = () => {
     );
   };
 
-  // Fields for each step
-  const stepFields = [
-    // Step 1 fields
-    fields.filter(
-      (field) =>
-        field.id === 'datum' ||
-        field.id === 'tijd' ||
-        field.id === 'aantalPersonen'
-    ),
-    // Step 2 fields
-    fields.filter(
-      (field) =>
-        field.id === 'naam' ||
-        field.id === 'email' ||
-        field.id === 'telefoonnummer' ||
-        field.id === 'opmerkingen'
-    ),
-  ];
-
   return (
     <div
       className="new-reservation-page"
@@ -100,54 +73,30 @@ const NewReservation = () => {
           backgroundColor: theme.color,
         }}
       >
-        {currentStep <= 2 && (
-          <form
-            className="reservation-form"
-            onSubmit={currentStep === 1 ? handleNext : handleSubmit}
-          >
-            <h2>{title}</h2>
+        {currentStep === 1 && (
+          <StepOne
+            title={title}
+            subtitle="Stap 1/3"
+            formData={formData}
+            handleChange={handleChange}
+            setCurrentStep={setCurrentStep}
+            fields={fields}
+          />
+        )}
 
-            {stepFields[currentStep - 1].map((field) => (
-              <div className="form-group" key={field.id}>
-                <label htmlFor={field.id}>
-                  {field.label}
-                  {field.required && <span className="required">*</span>}
-                </label>
-                {field.type === 'textarea' ? (
-                  <textarea
-                    id={field.id}
-                    name={field.id}
-                    value={formData[field.id]}
-                    onChange={handleChange}
-                    required={field.required}
-                    placeholder={field.placeholder || ''}
-                  ></textarea>
-                ) : (
-                  <input
-                    type={field.type === 'input' ? 'text' : field.type}
-                    id={field.id}
-                    name={field.id}
-                    value={formData[field.id]}
-                    onChange={handleChange}
-                    required={field.required}
-                    placeholder={field.placeholder || ''}
-                    min={field.min || undefined}
-                  />
-                )}
-              </div>
-            ))}
-
-            <button type="submit" className="submit-button">
-              {currentStep === 1 ? 'Volgende' : 'Reserveren'}
-            </button>
-          </form>
+        {currentStep === 2 && (
+          <StepTwo
+            title={title}
+            subtitle="Stap 2/3"
+            formData={formData}
+            handleChange={handleChange}
+            setCurrentStep={setCurrentStep}
+            fields={fields}
+          />
         )}
 
         {currentStep === 3 && (
-          <div className="success-message">
-            <FaCheckCircle className="success-icon" />
-            <p>Uw pagina is klaar om te delen!</p>
-          </div>
+          <SuccessMessage message="Uw pagina is klaar om te delen!" />
         )}
       </div>
 

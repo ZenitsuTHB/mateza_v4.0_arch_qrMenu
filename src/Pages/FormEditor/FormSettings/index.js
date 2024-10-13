@@ -13,11 +13,28 @@ const FormSettings = () => {
   });
 
   const [selectedTheme, setSelectedTheme] = useState(null);
+  const [buttonColor, setButtonColor] = useState('#007bff'); // Default blue color
 
   useEffect(() => {
+    // Retrieve selectedTheme from localStorage
     const theme = localStorage.getItem('selectedTheme');
     if (theme) {
-      setSelectedTheme(JSON.parse(theme));
+      const parsedTheme = JSON.parse(theme);
+      setSelectedTheme(parsedTheme);
+
+      // If buttonColor is not set, default to selectedTheme.color
+      const storedButtonColor = localStorage.getItem('buttonColor');
+      if (storedButtonColor) {
+        setButtonColor(storedButtonColor);
+      } else {
+        setButtonColor(parsedTheme.color || '#007bff'); // Fallback to default blue
+      }
+    } else {
+      // If no theme is selected, use default button color or stored color
+      const storedButtonColor = localStorage.getItem('buttonColor');
+      if (storedButtonColor) {
+        setButtonColor(storedButtonColor);
+      }
     }
   }, []);
 
@@ -30,17 +47,24 @@ const FormSettings = () => {
     });
   };
 
+  const handleButtonColorChange = (e) => {
+    const newColor = e.target.value;
+    setButtonColor(newColor);
+    localStorage.setItem('buttonColor', newColor);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form Settings:', formData);
     alert('Instellingen succesvol opgeslagen!');
+    // You can also save formData to localStorage or send it to a server here
   };
 
   return (
     <div className="form-settings-page">
-		
       <form className="form-settings-form" onSubmit={handleSubmit}>
-	  <h2 className="secondary-title">Stel uw Pagina in</h2>
+        <h2 className="secondary-title">Stel uw Pagina in</h2>
+
         <div className="form-group">
           <label htmlFor="pageTitle">Titel:</label>
           <input
@@ -85,6 +109,17 @@ const FormSettings = () => {
           )}
         </div>
 
+		<div className="form-group">
+          <label htmlFor="buttonColor">Knopkleur:</label>
+          <input
+            type="color"
+            id="buttonColor"
+            name="buttonColor"
+            value={buttonColor}
+            onChange={handleButtonColorChange}
+          />
+        </div>
+
         <div className="form-group">
           <label htmlFor="pageFont">Lettertype:</label>
           <select
@@ -103,7 +138,12 @@ const FormSettings = () => {
           </select>
         </div>
 
-        <button type="submit" className="submit-button">
+        
+
+        <button
+          type="submit"
+          className="submit-button"
+        >
           Opslaan
         </button>
       </form>
