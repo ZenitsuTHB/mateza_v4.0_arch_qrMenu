@@ -99,26 +99,6 @@ const Settings = () => {
           )}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="pageFont">Lettertype:</label>
-          <select
-            id="pageFont"
-            name="pageFont"
-            value={formData.pageFont}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecteer een lettertype</option>
-            <option value="Arial">Arial</option>
-            <option value="Helvetica">Helvetica</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Courier New">Courier New</option>
-          </select>
-        </div>
-
-        
-
         <button
           type="submit"
           className="submit-button"
