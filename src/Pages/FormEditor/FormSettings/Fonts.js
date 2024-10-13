@@ -1,11 +1,12 @@
 // src/components/FormSettings/Fonts.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Fonts = () => {
-  const [fonts] = useState([
+  const fonts = [
+	'Poppins',
     'Arial',
     'Helvetica',
     'Times New Roman',
@@ -16,30 +17,49 @@ const Fonts = () => {
     'Open Sans',
     'Lato',
     'Montserrat',
-  ]);
+  ];
 
   const [selectedFont, setSelectedFont] = useState('');
   const [previewText, setPreviewText] = useState('Dit is een voorbeeldtekst.');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    if (selectedFont) {
-      
-		document.body.style.fontFamily = selectedFont;
-    } else {
-      document.body.style.fontFamily = 'inherit';
-    }
-
-    // Retrieve stored font from localStorage
     const storedFont = localStorage.getItem('pageFont');
     if (storedFont) {
       setSelectedFont(storedFont);
+      document.body.style.fontFamily = storedFont;
+    } else {
+      document.body.style.fontFamily = 'inherit';
     }
+  }, []);
+
+  useEffect(() => {
+    // Update body font when selectedFont changes
+    document.body.style.fontFamily = selectedFont || 'inherit';
   }, [selectedFont]);
 
-  const handleFontChange = (e) => {
-    const font = e.target.value;
+  useEffect(() => {
+    // Handle click outside to close dropdown
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleFontSelect = (font) => {
     setSelectedFont(font);
     localStorage.setItem('pageFont', font);
+    setDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   const handlePreviewChange = (e) => {
@@ -48,22 +68,28 @@ const Fonts = () => {
 
   return (
     <div>
-      <div className="form-group">
-        <label htmlFor="pageFont">Selecteer een Lettertype:</label>
-        <select
-          id="pageFont"
-          name="pageFont"
-          value={selectedFont}
-          onChange={handleFontChange}
-          required
-        >
-          <option value="">Selecteer een lettertype</option>
-          {fonts.map((font) => (
-            <option key={font} value={font} style={{ fontFamily: font }}>
-              {font}
-            </option>
-          ))}
-        </select>
+      <div className="form-group" ref={dropdownRef}>
+        <label>Selecteer een Lettertype:</label>
+        <div className="custom-select" onClick={toggleDropdown}>
+          <div className="selected-option" style={{ fontFamily: selectedFont || 'inherit' }}>
+            {selectedFont || 'Selecteer een lettertype'}
+            <span className="arrow">{dropdownOpen ? '▲' : '▼'}</span>
+          </div>
+          {dropdownOpen && (
+            <ul className="options-list">
+              {fonts.map((font) => (
+                <li
+                  key={font}
+                  className="option-item"
+                  style={{ fontFamily: font }}
+                  onClick={() => handleFontSelect(font)}
+                >
+                  {font}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
       <div className="form-group">
@@ -82,10 +108,7 @@ const Fonts = () => {
         {previewText || 'Dit is een voorbeeldtekst.'}
       </div>
 
-      <button
-        type="submit"
-        className="submit-button"
-      >
+      <button type="submit" className="submit-button">
         Opslaan
       </button>
     </div>

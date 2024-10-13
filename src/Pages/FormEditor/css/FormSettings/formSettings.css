@@ -139,3 +139,50 @@
 	background-color: #f9f9f9;
   }
   
+  /* Custom Select Styles */
+.custom-select {
+	position: relative;
+	width: 100%;
+	cursor: pointer;
+	
+  }
+  
+  .selected-option {
+	padding: 10px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 5px;
+  }
+  
+  .arrow {
+	margin-left: 10px;
+	color: gray;
+  }
+
+  
+  
+  .options-list {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	max-height: 200px;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	border-top: none;
+	background-color: #fff;
+	z-index: 1000;
+  }
+  
+  .option-item {
+	padding: 10px;
+	transition: background-color 0.2s;
+  }
+  
+  .option-item:hover {
+	background-color: #f0f0f0;
+  }
+  
