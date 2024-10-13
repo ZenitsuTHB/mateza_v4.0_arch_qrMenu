@@ -151,7 +151,6 @@ const Settings = () => {
       <button
         type="submit"
         className="submit-button"
-        style={{ backgroundColor: buttonColor }}
       >
         Opslaan
       </button>
