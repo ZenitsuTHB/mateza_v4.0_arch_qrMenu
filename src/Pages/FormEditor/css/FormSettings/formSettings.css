@@ -128,3 +128,14 @@
 	background-color: #0056b3;
   }
 
+.font-preview {
+	margin-top: 20px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	min-height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f9f9f9;
+  }
+  
