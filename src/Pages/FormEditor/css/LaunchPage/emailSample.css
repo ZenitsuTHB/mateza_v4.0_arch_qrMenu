@@ -1,7 +1,4 @@
-/* src/Pages/FormEditor/LaunchPage/css/emailSampleTab.css */
 
-
-  
   .email-header {
 	display: flex;
 	align-items: center;
@@ -50,11 +47,10 @@
 	text-decoration: underline;
   }
   
-  /* Send Email Button */
   .email-button {
 	display: inline-block;
 	padding: 12px 20px;
-	background-color: #28a745; /* Green color for emphasis */
+	background-color: #28a745;
 	color: #ffffff;
 	border-radius: 4px;
 	text-decoration: none;
@@ -64,17 +60,5 @@
   
   .email-button:hover {
 	background-color: #218838;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-	.email-header {
-	  flex-direction: column;
-	  align-items: flex-start;
-	}
-  
-	.email-icon {
-	  margin-bottom: 10px;
-	}
   }
   

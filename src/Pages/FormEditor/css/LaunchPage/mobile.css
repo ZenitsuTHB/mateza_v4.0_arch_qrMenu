@@ -1,0 +1,11 @@
+@media (max-width: 900px) {
+	.email-header {
+	  flex-direction: column;
+	  align-items: flex-start;
+	}
+  
+	.email-icon {
+	  margin-bottom: 10px;
+	}
+  }
+  

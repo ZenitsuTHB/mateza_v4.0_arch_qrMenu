@@ -2,27 +2,21 @@
 
 import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import '../css/LaunchPage/launchPage.css';
 import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import EmbedCodeTab from './EmbedCodeTab.js';
 import EmailSampleTab from './EmailSampleTab.js';
+import '../css/LaunchPage/launchPage.css';
+import '../css/LaunchPage/mobile.css';
 
 const LaunchPage = () => {
-  const [activeTab, setActiveTab] = useState('embedCode'); // Default to 'embedCode' tab
-
-  const reservationLink = 'https://uwwebsite.com/reservering'; // Vervang door uw eigen link
-
+  const [activeTab, setActiveTab] = useState('embedCode');
+  const reservationLink = 'https://uwwebsite.com/reservering';
   const shareMessage = 'Bekijk onze reserveringspagina!';
-
-  // Volledige boodschap voor e-mail
   const emailSubject = 'Uitnodiging voor Reservering';
   const emailBody = `${shareMessage} ${reservationLink}`;
-
-  // Voorbeeld van insluitcode
   const embedCode = `<iframe src="${reservationLink}" width="600" height="800" frameborder="0"></iframe>`;
 
-  // Tabs configuration
   const tabs = [
     { id: 'embedCode', label: 'Insluitcode' },
     { id: 'emailSample', label: 'E-mailvoorbeeld' },
@@ -30,17 +24,14 @@ const LaunchPage = () => {
 
   return (
     <div className="launch-page">
-      {/* Succesbericht */}
       <div className="success-message">
         <FaCheckCircle className="success-icon" />
         <p>Uw pagina is klaar om te delen!</p>
       </div>
 
       <div className="launch-page-form">
-        {/* Titel */}
         <h2 className="secondary-title">Uw Reserveringspagina</h2>
 
-        {/* Link Sectie */}
         <div className="link-section">
           <label htmlFor="reservationLink">Reservatielink:</label>
           <div className="link-input-container">
@@ -61,7 +52,6 @@ const LaunchPage = () => {
           </div>
         </div>
 
-        {/* Tab Menu */}
         <div className="tab-menu">
           <div className="buttons-container">
             {tabs.map((tab) => (
@@ -75,7 +65,7 @@ const LaunchPage = () => {
                 <span className="tab-label">{tab.label}</span>
                 {activeTab === tab.id && (
                   <motion.div
-                    layoutId="underline-launch-page" // Unique layoutId
+                    layoutId="underline-launch-page"
                     className="tab-underline"
                     initial={false}
                     animate={{ opacity: 1 }}
@@ -87,7 +77,6 @@ const LaunchPage = () => {
           </div>
         </div>
 
-        {/* Inhoud op basis van actieve tab */}
         {activeTab === 'embedCode' && (
           <EmbedCodeTab embedCode={embedCode} />
         )}
