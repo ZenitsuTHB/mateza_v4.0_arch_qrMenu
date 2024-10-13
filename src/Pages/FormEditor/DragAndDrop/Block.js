@@ -1,28 +1,37 @@
 // src/components/DragAndDropEditor/Block.jsx
 
 import React, { useState } from 'react';
-import { FaTrashAlt, FaEdit, FaGripHorizontal } from 'react-icons/fa';
+import { FaTrashAlt, FaEdit, FaGripHorizontal, FaSave } from 'react-icons/fa';
 import '../css/DragAndDrop/block.css';
 
 const Block = ({ type, label, id, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  // State variables for label, placeholder, and required flag
   const [fieldLabel, setFieldLabel] = useState(label);
+  const [placeholder, setPlaceholder] = useState('');
+  const [isRequired, setIsRequired] = useState(false);
 
   const renderField = () => {
+    const commonProps = {
+      placeholder: placeholder || 'Voer hier uw tekst in',
+      required: isRequired,
+    };
+
     switch (type) {
       case 'input':
         return (
           <>
             <label>{fieldLabel}</label>
-            <input type="text" placeholder="Invoerveld" />
+            <input type="text" {...commonProps} />
           </>
         );
       case 'select':
         return (
           <>
             <label>{fieldLabel}</label>
-            <select>
+            <select {...commonProps}>
               <option>Optie 1</option>
               <option>Optie 2</option>
             </select>
@@ -32,47 +41,51 @@ const Block = ({ type, label, id, onDelete }) => {
         return (
           <>
             <label>{fieldLabel}</label>
-            <input type="tel" placeholder="Telefoonnummer" />
+            <input type="tel" {...commonProps} />
           </>
         );
       case 'email':
         return (
           <>
             <label>{fieldLabel}</label>
-            <input type="email" placeholder="Emailadres" />
+            <input type="email" {...commonProps} />
           </>
         );
       case 'picture':
         return (
           <>
             <label>{fieldLabel}</label>
-            <input type="file" accept="image/*" />
+            <input type="file" accept="image/*" required={isRequired} />
           </>
         );
       case 'textarea':
         return (
           <>
             <label>{fieldLabel}</label>
-            <textarea placeholder="Tekstveld"></textarea>
+            <textarea {...commonProps}></textarea>
           </>
         );
       case 'title':
         return (
           <>
             <label>{fieldLabel}</label>
-            <h3>Titel</h3>
+            <h3>{placeholder || 'Titel'}</h3>
           </>
         );
       case 'paragraph':
         return (
           <>
             <label>{fieldLabel}</label>
-            <p>Paragraaf tekst hier...</p>
+            <p>{placeholder || 'Paragraaf tekst hier...'}</p>
           </>
         );
       default:
         return null;
     }
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
   };
 
   return (
@@ -89,18 +102,38 @@ const Block = ({ type, label, id, onDelete }) => {
       </div>
       <div className="block-content">
         {isEditing ? (
-          <input
-            type="text"
-            value={fieldLabel}
-            onChange={(e) => setFieldLabel(e.target.value)}
-            onBlur={() => setIsEditing(false)}
-            autoFocus
-          />
+          <div className="editing-interface">
+            <input
+              type="text"
+              value={fieldLabel}
+              onChange={(e) => setFieldLabel(e.target.value)}
+              placeholder="Veldlabel"
+            />
+            <input
+              type="text"
+              value={placeholder}
+              onChange={(e) => setPlaceholder(e.target.value)}
+              placeholder="Placeholder"
+            />
+            <div className="required-switch">
+              <label>
+                Verplicht:
+                <input
+                  type="checkbox"
+                  checked={isRequired}
+                  onChange={() => setIsRequired(!isRequired)}
+                />
+              </label>
+            </div>
+            <button className="button" onClick={handleSave}>
+              <FaSave /> Opslaan
+            </button>
+          </div>
         ) : (
           renderField()
         )}
       </div>
-      {isHovered && (
+      {isHovered && !isEditing && (
         <div className="action-icons">
           <button className="edit-button" onClick={() => setIsEditing(true)}>
             <FaEdit />
