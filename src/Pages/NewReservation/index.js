@@ -36,7 +36,7 @@ const NewReservation = () => {
       className="new-reservation-page"
       style={{
         '--theme-color': theme.color,
-        '--theme-color-dark': theme.color,
+        '--theme-button-color': theme.buttonColor,
       }}
     >
       <div className="top-image-section">

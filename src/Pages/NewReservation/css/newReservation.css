@@ -84,7 +84,7 @@
   .new-reservation-page .submit-button {
 	width: 100%;
 	padding: 12px;
-	background-color: var(--theme-color, #5DADE2);
+	background-color: var(--theme-button-color, #5DADE2);
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;
@@ -95,7 +95,7 @@
   }
   
   .new-reservation-page .submit-button:hover {
-	background-color: var(--theme-color-dark, #3c8ecf);
+	background-color: var(--theme-button-color, #3c8ecf);
   }
   
   .new-reservation-page .notification {

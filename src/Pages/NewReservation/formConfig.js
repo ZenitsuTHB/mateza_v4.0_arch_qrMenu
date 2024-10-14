@@ -8,6 +8,7 @@ export const theme = {
   id: 1,
   title: 'Oceaan Bries',
   color: 'pink',
+  buttonColor: 'rgb(226, 139, 153)',
   image: image1,
 };
 
