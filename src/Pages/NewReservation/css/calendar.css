@@ -1,9 +1,35 @@
-/* src/components/NewReservation/Calendar.css */
+/* src/components/NewReservation/css/calendar.css */
 
-.calendar {
+.calendar-container {
+	position: relative;
 	width: 100%;
-	max-width: 400px;
-	margin: 0 auto;
+  }
+  
+  .calendar-display {
+	display: inline-block;
+	width: 100%;
+	padding: 10px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	user-select: none;
+	text-align: left;
+  }
+  
+  .calendar-display::after {
+	content: '\25BC'; /* Down arrow */
+	float: right;
+	margin-right: 10px;
+  }
+  
+  .calendar {
+	position: absolute;
+	z-index: 1000;
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	margin-top: 5px;
+	padding: 10px;
   }
   
   .calendar-header {
@@ -15,13 +41,14 @@
   
   .calendar-header button {
 	background-color: #fff;
-	border: 1px solid #ccc;
-	padding: 5px 10px;
+	border: none;
 	cursor: pointer;
+	font-size: 18px;
   }
   
   .calendar-header span {
 	font-weight: bold;
+	font-size: 16px;
   }
   
   .calendar-table {
@@ -34,45 +61,107 @@
 	width: 14.28%;
 	text-align: center;
 	padding: 5px;
-	border: 1px solid #ddd;
   }
   
   .calendar-table th {
-	background-color: #f0f0f0;
+	color: #666;
+	font-weight: normal;
+	padding-bottom: 10px;
+  }
+  
+  .calendar-table td {
+	vertical-align: middle;
+	cursor: pointer;
+  }
+  
+  .calendar-table td:hover .day-circle.available {
+	transform: scale(1.1);
   }
   
   .day-circle {
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
 	border-radius: 50%;
 	display: inline-block;
+	transition: all 0.3s ease;
   }
   
   .available .day-circle {
 	background-color: #ccffcc; /* Green for available dates */
 	color: #006600;
-	cursor: pointer;
   }
   
   .unavailable .day-circle {
-	background-color: #ffcccc; /* Red for unavailable dates */
+	background-color: #f5f5f5; /* Dimmed red for unavailable dates */
 	color: #b30000;
+  }
+  
+  .gray-out .day-circle {
+	background-color: #e0e0e0; /* Gray out past or far future dates */
+	color: #999;
+	cursor: not-allowed;
   }
   
   .selected .day-circle {
 	border: 2px solid #000; /* Highlight selected date */
   }
   
-  .unavailable {
+  .calendar-table td.unavailable,
+  .calendar-table td.gray-out {
 	cursor: not-allowed;
   }
   
-  .calendar-table td {
-	vertical-align: middle;
+  .calendar-table td.unavailable:hover .day-circle,
+  .calendar-table td.gray-out:hover .day-circle {
+	transform: none;
   }
   
-  .calendar-table td:hover .day-circle {
-	background-color: #e0e0e0;
+  .calendar-table td:not(.available) .day-circle {
+	background-color: #f5f5f5;
+  }
+  
+  .calendar-table td {
+	border: none; /* No table borders */
+  }
+  
+  .calendar-table th {
+	border-bottom: 1px solid #ddd;
+  }
+  
+  .calendar-table td .day-circle {
+	font-size: 16px;
+  }
+  
+  .calendar {
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .calendar-table td.available:hover .day-circle {
+	background-color: #b3ffb3;
+  }
+  
+  .calendar-table td.available:active .day-circle {
+	background-color: #99ff99;
+  }
+  
+  .calendar-display {
+	font-size: 16px;
+  }
+  
+  @media screen and (max-width: 480px) {
+	.day-circle {
+	  width: 30px;
+	  height: 30px;
+	  line-height: 30px;
+	}
+  
+	.calendar-header span {
+	  font-size: 14px;
+	}
+  
+	.calendar-display {
+	  font-size: 14px;
+	}
   }
   

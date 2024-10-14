@@ -16,12 +16,21 @@ const StepOne = ({
   useEffect(() => {
     // Fetch available dates from your API or define them statically
     // Ensure dates are in 'YYYY-MM-DD' format and consider CEST timezone
-    setAvailableDates([
-      '2023-11-10',
-      '2023-11-12',
-      '2023-11-15',
-      // Add more dates as needed
-    ]);
+
+    // Example of generating dates for the next year
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const oneYearLater = today.clone().add(1, 'year');
+    const dates = [];
+
+    while (today.isSameOrBefore(oneYearLater, 'day')) {
+      // Randomly make some dates unavailable for demonstration
+      if (today.date() % 2 === 0) {
+        dates.push(today.format('YYYY-MM-DD'));
+      }
+      today.add(1, 'day');
+    }
+
+    setAvailableDates(dates);
   }, []);
 
   const handleDateSelect = (date) => {
@@ -63,8 +72,7 @@ const StepOne = ({
       {/* Render other form fields */}
       {fields
         .filter(
-          (field) =>
-            field.id === 'tijd' || field.id === 'aantalPersonen'
+          (field) => field.id === 'tijd' || field.id === 'aantalPersonen'
         )
         .map((field) => (
           <div className="form-group" key={field.id}>

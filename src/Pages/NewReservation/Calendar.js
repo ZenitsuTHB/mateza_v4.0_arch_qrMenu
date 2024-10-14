@@ -1,62 +1,72 @@
 // src/components/NewReservation/Calendar.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
 import './css/calendar.css';
 
 const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
-  const [currentMonth, setCurrentMonth] = useState(
-    moment().tz('Europe/Amsterdam') // Set to CEST timezone
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [currentDate, setCurrentDate] = useState(
+    moment().tz('Europe/Amsterdam')
   );
+  const [startDate, setStartDate] = useState(
+    moment().tz('Europe/Amsterdam').startOf('isoWeek')
+  );
+  const calendarRef = useRef(null);
 
-  const daysOfWeek = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-  const months = [
-    'Januari',
-    'Februari',
-    'Maart',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Augustus',
-    'September',
-    'Oktober',
-    'November',
-    'December',
-  ];
+  const maxDate = moment()
+    .tz('Europe/Amsterdam')
+    .add(1, 'year')
+    .endOf('day');
+
+  // Close calendar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const generateCalendarDays = () => {
-    const startOfMonth = currentMonth.clone().startOf('month');
-    const endOfMonth = currentMonth.clone().endOf('month');
-
-    // Start from Monday
-    const startDate = startOfMonth.clone().startOf('isoWeek');
-    const endDate = endOfMonth.clone().endOf('isoWeek');
-
-    const date = startDate.clone();
     const days = [];
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const twoWeeksFromStart = startDate.clone().add(13, 'days');
 
-    while (date.isBefore(endDate) || date.isSame(endDate, 'day')) {
-      days.push(date.clone());
+    let date = startDate.clone();
+    while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
+      days.push({
+        date: date.clone(),
+        isPast: date.isBefore(today, 'day'),
+        isFuture: date.isAfter(maxDate, 'day'),
+        isAvailable: availableDates.includes(date.format('YYYY-MM-DD')),
+      });
       date.add(1, 'day');
     }
 
     return days;
   };
 
-  const handleDateClick = (date) => {
-    const dateString = date.format('YYYY-MM-DD');
-    if (availableDates.includes(dateString)) {
-      onSelectDate(date.toDate());
+  const handleDateClick = (day) => {
+    if (day.isAvailable && !day.isPast && !day.isFuture) {
+      onSelectDate(day.date.toDate());
+      setIsExpanded(false);
     }
   };
 
-  const handlePrevMonth = () => {
-    setCurrentMonth(currentMonth.clone().subtract(1, 'month'));
+  const handlePrevWeek = () => {
+    setStartDate(startDate.clone().subtract(1, 'week'));
   };
 
-  const handleNextMonth = () => {
-    setCurrentMonth(currentMonth.clone().add(1, 'month'));
+  const handleNextWeek = () => {
+    setStartDate(startDate.clone().add(1, 'week'));
   };
 
   const days = generateCalendarDays();
@@ -65,62 +75,87 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
     return date1.isSame(date2, 'day');
   };
 
-  const today = moment().tz('Europe/Amsterdam');
+  const formatDisplayDate = () => {
+    return selectedDate
+      ? moment(selectedDate)
+          .tz('Europe/Amsterdam')
+          .format('DD MMMM YYYY')
+      : 'Selecteer een datum';
+  };
 
   return (
-    <div className="calendar">
-      {/* Calendar header with month and year navigation */}
-      <div className="calendar-header">
-        <button type="button" onClick={handlePrevMonth}>
-          &lt;
-        </button>
-        <span>
-          {months[currentMonth.month()]} {currentMonth.year()}
-        </span>
-        <button type="button" onClick={handleNextMonth}>
-          &gt;
-        </button>
+    <div className="calendar-container" ref={calendarRef}>
+      <div
+        className="calendar-display"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {formatDisplayDate()}
       </div>
-      {/* Calendar grid */}
-      <table className="calendar-table">
-        <thead>
-          <tr>
-            {daysOfWeek.map((day) => (
-              <th key={day}>{day}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: days.length / 7 }).map((_, weekIndex) => (
-            <tr key={weekIndex}>
-              {days
-                .slice(weekIndex * 7, weekIndex * 7 + 7)
-                .map((day, index) => {
-                  const dateString = day.format('YYYY-MM-DD');
-                  const isAvailable = availableDates.includes(dateString);
-                  const isSelected =
-                    selectedDate &&
-                    isSameDay(
-                      day,
-                      moment(selectedDate).tz('Europe/Amsterdam')
-                    );
+      {isExpanded && (
+        <div className="calendar">
+          <div className="calendar-header">
+            <button type="button" onClick={handlePrevWeek}>
+              &lt;
+            </button>
+            <span>
+              {startDate.format('DD MMM')} -{' '}
+              {startDate.clone().add(13, 'days').format('DD MMM YYYY')}
+            </span>
+            <button type="button" onClick={handleNextWeek}>
+              &gt;
+            </button>
+          </div>
+          {/* Calendar grid */}
+          <table className="calendar-table">
+            <thead>
+              <tr>
+                {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
+                  <th key={day}>{day}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 2 }).map((_, weekIndex) => (
+                <tr key={weekIndex}>
+                  {days
+                    .slice(weekIndex * 7, weekIndex * 7 + 7)
+                    .map((dayObj, index) => {
+                      const isSelected =
+                        selectedDate &&
+                        isSameDay(
+                          dayObj.date,
+                          moment(selectedDate).tz('Europe/Amsterdam')
+                        );
+                      const classNames = [];
+                      if (dayObj.isPast || dayObj.isFuture) {
+                        classNames.push('gray-out');
+                      } else if (dayObj.isAvailable) {
+                        classNames.push('available');
+                      } else {
+                        classNames.push('unavailable');
+                      }
+                      if (isSelected) {
+                        classNames.push('selected');
+                      }
 
-                  return (
-                    <td
-                      key={index}
-                      className={`${
-                        isAvailable ? 'available' : 'unavailable'
-                      } ${isSelected ? 'selected' : ''}`}
-                      onClick={() => handleDateClick(day)}
-                    >
-                      <div className="day-circle">{day.date()}</div>
-                    </td>
-                  );
-                })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                      return (
+                        <td
+                          key={index}
+                          className={classNames.join(' ')}
+                          onClick={() => handleDateClick(dayObj)}
+                        >
+                          <div className="day-circle">
+                            {dayObj.date.date()}
+                          </div>
+                        </td>
+                      );
+                    })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
