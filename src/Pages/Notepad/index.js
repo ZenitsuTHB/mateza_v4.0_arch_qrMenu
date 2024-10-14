@@ -133,7 +133,7 @@ const Notepad = () => {
   };
 
   return (
-    <div className="notepad-container">
+    <div className="notepad-page">
       <div
         ref={editorRef}
         className="notepad-textarea"

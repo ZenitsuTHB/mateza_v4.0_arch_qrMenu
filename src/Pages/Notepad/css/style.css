@@ -1,5 +1,5 @@
 
-.notepad-container {
+.notepad-page {
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -7,7 +7,7 @@
 	box-sizing: border-box;
 }
   
-.notepad-textarea {
+.notepad-page .notepad-textarea {
 	flex: 1;
 	background-color: var(--color-bg);
 	color: var(--color-black);
@@ -21,7 +21,7 @@
 	margin-left: -10px;
 }
 
-.ql-container {
+.notepad-page .ql-container {
 	height: calc(100vh - 200px);
 }
   
