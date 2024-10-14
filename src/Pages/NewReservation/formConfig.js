@@ -11,7 +11,6 @@ export const theme = {
   image: image1,
 };
 
-
 export const font = "Poppins";
 
 export const fields = [

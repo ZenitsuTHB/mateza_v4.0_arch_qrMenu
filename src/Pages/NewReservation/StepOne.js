@@ -1,6 +1,8 @@
 // src/components/NewReservation/StepOne.jsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment-timezone';
+import Calendar from './Calendar';
 
 const StepOne = ({
   title,
@@ -9,12 +11,26 @@ const StepOne = ({
   setCurrentStep,
   fields,
 }) => {
-  const stepFields = fields.filter(
-    (field) =>
-      field.id === 'datum' ||
-      field.id === 'tijd' ||
-      field.id === 'aantalPersonen'
-  );
+  const [availableDates, setAvailableDates] = useState([]);
+
+  useEffect(() => {
+    // Fetch available dates from your API or define them statically
+    // Ensure dates are in 'YYYY-MM-DD' format and consider CEST timezone
+    setAvailableDates([
+      '2023-11-10',
+      '2023-11-12',
+      '2023-11-15',
+      // Add more dates as needed
+    ]);
+  }, []);
+
+  const handleDateSelect = (date) => {
+    // Convert selected date to CEST timezone
+    const dateInCEST = moment(date).tz('Europe/Amsterdam');
+    handleChange({
+      target: { name: 'datum', value: dateInCEST.format('YYYY-MM-DD') },
+    });
+  };
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -26,35 +42,59 @@ const StepOne = ({
       <h2>{title}</h2>
       <h3 className="subtitle">Stap 1/3</h3>
 
-      {stepFields.map((field) => (
-        <div className="form-group" key={field.id}>
-          <label htmlFor={field.id}>
-            {field.label}
-            {field.required && <span className="required">*</span>}
-          </label>
-          {field.type === 'textarea' ? (
-            <textarea
-              id={field.id}
-              name={field.id}
-              value={formData[field.id]}
-              onChange={handleChange}
-              required={field.required}
-              placeholder={field.placeholder || ''}
-            ></textarea>
-          ) : (
-            <input
-              type={field.type === 'input' ? 'text' : field.type}
-              id={field.id}
-              name={field.id}
-              value={formData[field.id]}
-              onChange={handleChange}
-              required={field.required}
-              placeholder={field.placeholder || ''}
-              min={field.min || undefined}
-            />
-          )}
-        </div>
-      ))}
+      {/* Calendar component for date selection */}
+      <div className="form-group">
+        <label htmlFor="datum">
+          Datum<span className="required">*</span>
+        </label>
+        <Calendar
+          availableDates={availableDates}
+          selectedDate={
+            formData.datum
+              ? moment(formData.datum, 'YYYY-MM-DD')
+                  .tz('Europe/Amsterdam')
+                  .toDate()
+              : null
+          }
+          onSelectDate={handleDateSelect}
+        />
+      </div>
+
+      {/* Render other form fields */}
+      {fields
+        .filter(
+          (field) =>
+            field.id === 'tijd' || field.id === 'aantalPersonen'
+        )
+        .map((field) => (
+          <div className="form-group" key={field.id}>
+            <label htmlFor={field.id}>
+              {field.label}
+              {field.required && <span className="required">*</span>}
+            </label>
+            {field.type === 'textarea' ? (
+              <textarea
+                id={field.id}
+                name={field.id}
+                value={formData[field.id]}
+                onChange={handleChange}
+                required={field.required}
+                placeholder={field.placeholder || ''}
+              ></textarea>
+            ) : (
+              <input
+                type={field.type === 'input' ? 'text' : field.type}
+                id={field.id}
+                name={field.id}
+                value={formData[field.id]}
+                onChange={handleChange}
+                required={field.required}
+                placeholder={field.placeholder || ''}
+                min={field.min || undefined}
+              />
+            )}
+          </div>
+        ))}
 
       <button type="submit" className="submit-button">
         Volgende

@@ -1,0 +1,78 @@
+/* src/components/NewReservation/Calendar.css */
+
+.calendar {
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+  }
+  
+  .calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+  }
+  
+  .calendar-header button {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 5px 10px;
+	cursor: pointer;
+  }
+  
+  .calendar-header span {
+	font-weight: bold;
+  }
+  
+  .calendar-table {
+	width: 100%;
+	border-collapse: collapse;
+  }
+  
+  .calendar-table th,
+  .calendar-table td {
+	width: 14.28%;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #ddd;
+  }
+  
+  .calendar-table th {
+	background-color: #f0f0f0;
+  }
+  
+  .day-circle {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 50%;
+	display: inline-block;
+  }
+  
+  .available .day-circle {
+	background-color: #ccffcc; /* Green for available dates */
+	color: #006600;
+	cursor: pointer;
+  }
+  
+  .unavailable .day-circle {
+	background-color: #ffcccc; /* Red for unavailable dates */
+	color: #b30000;
+  }
+  
+  .selected .day-circle {
+	border: 2px solid #000; /* Highlight selected date */
+  }
+  
+  .unavailable {
+	cursor: not-allowed;
+  }
+  
+  .calendar-table td {
+	vertical-align: middle;
+  }
+  
+  .calendar-table td:hover .day-circle {
+	background-color: #e0e0e0;
+  }
+  
