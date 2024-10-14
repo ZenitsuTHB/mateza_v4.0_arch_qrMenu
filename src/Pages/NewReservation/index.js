@@ -19,6 +19,7 @@ const NewReservation = ({ mode = 'popup' }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false); // New state for handling closing animation
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -38,11 +39,29 @@ const NewReservation = ({ mode = 'popup' }) => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    // Reset form data and step if needed
-    setFormData(initialFormData);
-    setCurrentStep(1);
+    setIsClosing(true); // Start closing animation
+    // Wait for animation to finish before unmounting
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsClosing(false);
+      // Reset form data and step if needed
+      setFormData(initialFormData);
+      setCurrentStep(1);
+    }, 300); // Duration should match the CSS animation duration (0.3s)
   };
+
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isModalOpen]);
 
   // Render the form content
   const formContent = (
@@ -99,13 +118,17 @@ const NewReservation = ({ mode = 'popup' }) => {
           <button className="open-modal-button" onClick={openModal}>
             Reserveer
           </button>
-          {isModalOpen && (
+          {(isModalOpen || isClosing) && (
             <>
               <div
-                className={`modal-overlay ${isModalOpen ? 'show' : ''}`}
+                className={`modal-overlay ${
+                  isClosing ? 'hide' : 'show'
+                }`}
                 onClick={closeModal}
               ></div>
-              <div className={`modal ${isModalOpen ? 'show' : ''}`}>
+              <div
+                className={`modal ${isClosing ? 'hide' : 'show'}`}
+              >
                 <div className="modal-content">
                   <button className="close-modal-button" onClick={closeModal}>
                     &times;
