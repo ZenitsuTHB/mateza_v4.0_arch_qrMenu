@@ -9,6 +9,7 @@ const Breadcrumb = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
+    <div className="breadcrumb-component">
     <nav className="breadcrumb">
       <span className="breadcrumb-app">
         <Link to="/" className="breadcrumb-link">
@@ -39,6 +40,7 @@ const Breadcrumb = () => {
         </>
       )}
     </nav>
+    </div>
   );
 };
 
