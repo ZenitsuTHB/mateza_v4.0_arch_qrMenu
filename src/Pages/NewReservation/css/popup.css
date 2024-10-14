@@ -1,4 +1,4 @@
-/* popup.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
 /* Popup mode styles */
 .new-reservation-page .popup-mode .top-image-section,
@@ -10,7 +10,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: var(--theme-button-color, #5DADE2);
+  background-color: #000;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -23,7 +23,7 @@
 }
 
 .new-reservation-page .open-modal-button:hover {
-  background-color: var(--theme-button-color, #3c8ecf);
+  background-color: #000;
 }
 
 /* New Styles for Button Content */
@@ -31,7 +31,6 @@
   display: flex;
   align-items:center;
   padding: 0px 0px;
-  
 }
 
 .new-reservation-page .open-modal-button .button-icon {
@@ -50,8 +49,9 @@
 }
 
 .new-reservation-page .open-modal-button .button-text {
-  font-size: 14px; /* Ensure readability */
-
+  font-size: 13px; /* Ensure readability */
+  font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
+  font-weight: 300; /* Semi-bold for better visibility */
 }
 
 /* Modal Overlay */
@@ -164,5 +164,3 @@
     font-size: 12px;
   }
 }
-
-

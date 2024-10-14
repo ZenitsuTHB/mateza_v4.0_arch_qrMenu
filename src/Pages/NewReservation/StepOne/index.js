@@ -34,7 +34,7 @@ const StepOne = ({
   const guestsExceeded = numGuests > maxGuests;
 
   return (
-    <form className="reservation-form" onSubmit={handleNext}>
+    <form className="" onSubmit={handleNext}>
       <Title title={title} subtitle="Stap 1/3" />
 
       <GuestNumberSelector

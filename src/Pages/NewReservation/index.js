@@ -11,7 +11,7 @@ import './css/mobile.css';
 import './css/animations.css';
 import reserveIcon from '../../Assets/logos/logo-white.webp'; // Ensure this path is correct
 
-const NewReservation = ({ mode = 'popup' }) => {
+const NewReservation = ({ mode = 'pop-up' }) => {
   const initialFormData = {};
   fields.forEach((field) => {
     initialFormData[field.id] = '';
@@ -118,7 +118,7 @@ const NewReservation = ({ mode = 'popup' }) => {
         <>
           <button className="open-modal-button" onClick={openModal}>
             <span className="button-content">
-              <span className="button-text">Reserveer Nu</span>
+              <span className="button-text">Boek een Tafel</span>
               <div className="separator"></div>
               <img src={reserveIcon} alt="Reserve Icon" className="button-icon" />
             </span>
