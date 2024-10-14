@@ -1,7 +1,7 @@
 // src/components/NewReservation/SuccessMessage.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaPrint, FaShareAlt, FaCalendarPlus } from 'react-icons/fa';
 import { fields } from './formConfig';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -69,15 +69,15 @@ const SuccessMessage = () => {
     const subject = `Reservering bij ${restaurantName}`;
 
     const icsContent = `BEGIN:VCALENDAR
-    VERSION:2.0
-    BEGIN:VEVENT
-    DTSTART:${start}
-    DTEND:${end}
-    SUMMARY:${subject}
-    DESCRIPTION:${description}
-    LOCATION:${location}
-    END:VEVENT
-    END:VCALENDAR`;
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:${subject}
+DESCRIPTION:${description}
+LOCATION:${location}
+END:VEVENT
+END:VCALENDAR`;
 
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -112,12 +112,15 @@ const SuccessMessage = () => {
 
       <div className="action-buttons">
         <button className="action-button" onClick={handlePrint}>
+          <FaPrint className="button-icon" />
           Print
         </button>
         <button className="action-button" onClick={handleShare}>
+          <FaShareAlt className="button-icon" />
           Deel
         </button>
         <button className="action-button" onClick={handleAddToCalendar}>
+          <FaCalendarPlus className="button-icon" />
           Agenda
         </button>
       </div>

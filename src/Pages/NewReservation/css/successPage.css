@@ -53,7 +53,7 @@
 	flex: 1;
 	margin: 0 5px;
 	padding: 12px;
-	background-color: var(--theme-color, #5DADE2);
+	background-color: var(--theme-button-color, #5DADE2);
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;
@@ -64,9 +64,15 @@
 	align-items: center;
 	justify-content: center;
   }
+
+  .new-reservation-page .button-icon {
+	margin-right: 8px;
+	color: white;
+	font-size: 16px;
+  }
   
   .new-reservation-page .action-button:hover {
-	background-color: var(--theme-color-dark, #3c8ecf);
+	background-color: var(--theme-button-color, #3c8ecf);
   }
   
   .new-reservation-page .action-button svg {
