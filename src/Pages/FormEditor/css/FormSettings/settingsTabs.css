@@ -1,22 +1,22 @@
 /* src/components/FormSettings/css/settingsTabs.css */
 
-.settings-tabs {
+.form-settings-page .settings-tabs {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
   }
   
-  .tab-menu {
+  .form-settings-page .tab-menu {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
   }
   
-  .buttons-container {
+  .form-settings-page .buttons-container {
 	display: flex;
   }
   
-  .tab-button {
+  .form-settings-page .tab-button {
 	position: relative;
 	padding: 10px 20px;
 	background: none;
@@ -27,11 +27,11 @@
 	color: #333;
   }
   
-  .tab-button.active {
+  .form-settings-page .tab-button.active {
 	color: #007bff;
   }
   
-  .tab-underline {
+  .form-settings-page .tab-underline {
 	position: absolute;
 	bottom: -2px;
 	left: 0;
