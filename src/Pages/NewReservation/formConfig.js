@@ -1,6 +1,6 @@
 // src/components/NewReservation/formConfig.js
 
-import image1 from '../../Assets/themes/original/20.jpg'; // Adjust the path as necessary
+import image1 from '../../Assets/themes/original/20.jpg';
 
 export const title = 'Reserveer een Tafel';
 export const notification = 'Uw reservering is succesvol geplaatst!';
@@ -8,7 +8,7 @@ export const theme = {
   id: 1,
   title: 'Oceaan Bries',
   color: 'pink',
-  image: image1, // Imported image
+  image: image1,
 };
 
 
@@ -31,7 +31,7 @@ export const fields = [
   },
   {
     id: 'telefoonnummer',
-    type: 'tel', // Changed to 'tel' for better semantics
+    type: 'tel',
     label: 'Telefoonnummer',
     placeholder: 'Uw telefoonnummer',
     required: true,
