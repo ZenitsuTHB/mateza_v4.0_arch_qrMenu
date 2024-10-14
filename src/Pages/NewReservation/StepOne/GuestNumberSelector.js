@@ -10,11 +10,9 @@ const GuestNumberSelector = ({
   setGuestSelected,
   maxGuests,
 }) => {
-  // Move Hooks to the top level
-  const presetNumbers = [1, 2, 3, 4];
-  const [customGuests, setCustomGuests] = useState('');
+  const presetNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+  const [customGuestsVisible, setCustomGuestsVisible] = useState(false);
 
-  // Ensure `field` is included in dependencies and safely accessed
   useEffect(() => {
     if (field) {
       if (parseInt(formData[field.id], 10) > maxGuests) {
@@ -23,7 +21,6 @@ const GuestNumberSelector = ({
     }
   }, [formData, field, maxGuests]);
 
-  // After Hooks, handle the early return
   if (!field) {
     return null; // Handle case when field is not provided
   }
@@ -33,6 +30,15 @@ const GuestNumberSelector = ({
       target: { name: field.id, value: number },
     });
     setGuestSelected(true);
+    setCustomGuestsVisible(false); // Hide custom input if previously visible
+  };
+
+  const handleCustomButtonClick = () => {
+    setCustomGuestsVisible(true);
+    handleChange({
+      target: { name: field.id, value: '' },
+    });
+    setGuestSelected(false);
   };
 
   const handleInputChange = (e) => {
@@ -40,7 +46,6 @@ const GuestNumberSelector = ({
     handleChange({
       target: { name: field.id, value: value },
     });
-    setCustomGuests(value);
     setGuestSelected(!!value);
   };
 
@@ -64,18 +69,31 @@ const GuestNumberSelector = ({
               {number}
             </button>
           ))}
+          {!customGuestsVisible && (
+            <button
+              type="button"
+              className={`guest-number-button guest-number-custom-button ${
+                parseInt(formData[field.id], 10) > 8 ? 'selected' : ''
+              }`}
+              onClick={handleCustomButtonClick}
+            >
+              8+
+            </button>
+          )}
+          {customGuestsVisible && (
+            <input
+              type="number"
+              id={field.id}
+              name={field.id}
+              value={formData[field.id] || ''}
+              onChange={handleInputChange}
+              required={field.required}
+              placeholder="Aantal"
+              min={field.min || 6}
+              className="guest-number-input"
+            />
+          )}
         </div>
-        <input
-          type="number"
-          id={field.id}
-          name={field.id}
-          value={formData[field.id] || customGuests}
-          onChange={handleInputChange}
-          required={field.required}
-          placeholder="Aantal"
-          min={field.min || 1}
-          className="guest-number-input"
-        />
       </div>
     </div>
   );

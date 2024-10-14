@@ -60,7 +60,7 @@ const StepOne = ({
         <MaxGuestMessage maxGuests={maxGuests} />
       )}
 
-      {dateSelected && (
+      {guestSelected && dateSelected && !guestsExceeded && (
         <TimeSelector
           formData={formData}
           handleChange={handleChange}

@@ -35,7 +35,8 @@
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	width: 100%;
 	max-width: 600px;
-	margin-top: -400px;
+	position: fixed;
+	top: 150px;
   }
   
   .new-reservation-page .reservation-form h2 {

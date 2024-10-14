@@ -1,19 +1,35 @@
 // src/components/NewReservation/TimeSelector.jsx
 
-import React, { useState, useEffect } from 'react';
-import './css/timeSelector.css'; // Create this CSS file for styling
+import React, { useState, useEffect, useRef } from 'react';
+import './css/timeSelector.css';
 import moment from 'moment-timezone';
 
 const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [availableTimes, setAvailableTimes] = useState({});
-  const [expandedPeriod, setExpandedPeriod] = useState(null);
+  const timeSelectorRef = useRef(null);
 
   useEffect(() => {
     if (selectedDate) {
-      // Generate available times based on the selected date
       generateAvailableTimes(selectedDate);
     }
   }, [selectedDate]);
+
+  // Close time selector when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        timeSelectorRef.current &&
+        !timeSelectorRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const generateAvailableTimes = (date) => {
     // Example logic: Generate times for demonstration purposes
@@ -54,14 +70,15 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
     setAvailableTimes(times);
   };
 
-  const handlePeriodClick = (period) => {
-    setExpandedPeriod((prev) => (prev === period ? null : period));
-  };
-
   const handleTimeSelect = (time) => {
     handleChange({
       target: { name: field.id, value: time },
     });
+    setIsExpanded(false);
+  };
+
+  const formatDisplayTime = () => {
+    return formData[field.id] ? formData[field.id] : 'Selecteer een tijd';
   };
 
   if (!field) {
@@ -69,7 +86,7 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
   }
 
   return (
-    <div className="form-group">
+    <div className="form-group time-selector-container" ref={timeSelectorRef}>
       <label htmlFor={field.id}>
         {field.label}
         {field.required && <span className="required">*</span>}
@@ -78,69 +95,68 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
       {!selectedDate ? (
         <p className="info-text">Selecteer eerst een datum.</p>
       ) : (
-        <div className="time-selector">
-          {['morning', 'afternoon', 'evening'].map((period) => {
-            // Determine if the period has available times
-            const timesInPeriod = availableTimes[period];
-            if (!timesInPeriod || timesInPeriod.length === 0) {
-              return null; // Skip periods with no available times
-            }
+        <>
+          <div
+            className="time-display"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <span>{formatDisplayTime()}</span>
+            <span className="arrow">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                style={{
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                <path
+                  d="M7 10l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </span>
+          </div>
+          {isExpanded && (
+            <div className="time-selector">
+              {['morning', 'afternoon', 'evening'].map((period) => {
+                const timesInPeriod = availableTimes[period];
+                if (!timesInPeriod || timesInPeriod.length === 0) {
+                  return null; // Skip periods with no available times
+                }
 
-            // Map period to Dutch labels
-            const periodLabels = {
-              morning: 'Ochtend',
-              afternoon: 'Middag',
-              evening: 'Avond',
-            };
+                // Map period to Dutch labels
+                const periodLabels = {
+                  morning: 'Ochtend',
+                  afternoon: 'Middag',
+                  evening: 'Avond',
+                };
 
-            return (
-              <div key={period} className="time-period">
-                <div
-                  className="time-period-header"
-                  onClick={() => handlePeriodClick(period)}
-                >
-                  <span>{periodLabels[period]}</span>
-                  <span className="arrow">
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      style={{
-                        transform:
-                          expandedPeriod === period
-                            ? 'rotate(180deg)'
-                            : 'rotate(0deg)',
-                        transition: 'transform 0.2s',
-                      }}
-                    >
-                      <path
-                        d="M7 10l5 5 5-5"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  </span>
-                </div>
-                {expandedPeriod === period && (
-                  <div className="time-options">
-                    {timesInPeriod.map((time) => (
-                      <div
-                        key={time}
-                        className={`time-option ${
-                          formData[field.id] === time ? 'selected' : ''
-                        }`}
-                        onClick={() => handleTimeSelect(time)}
-                      >
-                        {time}
-                      </div>
-                    ))}
+                return (
+                  <div key={period} className="time-period">
+                    <div className="time-period-label">{periodLabels[period]}</div>
+                    <div className="time-options">
+                      {timesInPeriod.map((time) => (
+                        <div
+                          key={time}
+                          className={`time-option ${
+                            formData[field.id] === time ? 'selected' : ''
+                          }`}
+                          onClick={() => handleTimeSelect(time)}
+                        >
+                          {time}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

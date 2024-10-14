@@ -59,8 +59,9 @@
   }
   
   .calendar-header span {
-	font-weight: bold;
-	font-size: 16px;
+	font-size: 15px;
+	color: gray;
+
   }
   
   .calendar-weeks-wrapper {
@@ -107,13 +108,13 @@
   }
   
   .day-square {
-	width: 40px;
-	height: 40px;
+	width: 44px;
+	height: 44px;
 	line-height: 40px;
 	border-radius: 5px;
 	display: inline-block;
 	transition: all 0.3s ease;
-	font-size: 16px;
+	font-size: 17px;
   }
   
   .available .day-square {
@@ -159,9 +160,7 @@
 	border: none; /* No table borders */
   }
   
-  .calendar-table th {
-	border-bottom: 1px solid #ddd;
-  }
+
   
   .calendar {
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

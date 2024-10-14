@@ -7,13 +7,12 @@
   .guest-number-inputs {
 	display: flex;
 	align-items: center;
-	gap: 10px;
   }
   
   .guest-number-buttons {
 	display: flex;
 	gap: 5px;
-	
+	width: 100%;
   }
   
   .guest-number-button {
@@ -31,15 +30,23 @@
   
   .guest-number-button.selected,
   .guest-number-button:hover {
-	background-color: var(--theme-color, #5DADE2);
+	background-color: var(--theme-button-color, #5DADE2);
+	border: 1px solid var(--theme-button-color, #5DADE2);
 	color: #fff;
   }
   
+  .guest-number-custom-button {
+	flex: 1;
+	text-align: center;
+  }
+  
   .guest-number-input {
-	width: 60px;
+	flex: 1;
 	padding: 8px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--theme-color, #5DADE2);
 	border-radius: 5px;
+	font-size: 16px;
+	height: 45px;
   }
   
   .guest-number-input:focus {
