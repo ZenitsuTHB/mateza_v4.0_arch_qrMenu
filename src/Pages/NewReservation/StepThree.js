@@ -18,12 +18,12 @@ const SuccessMessage = () => {
     <div className="reservation-form">
       <div className="success-message">
         <FaCheckCircle className="success-icon" />
-        <p>Uw reservatie werd succesvol aangemaakt.</p>
+        <p>Uw reservatie werd aangemaakt.</p>
       </div>
 
       {summaryData && (
         <div className="reservation-summary">
-          <h2>Reserveringsoverzicht</h2>
+          <h2>Overzicht</h2>
           <ul>
             {fields.map((field) => (
               <li key={field.id}>
