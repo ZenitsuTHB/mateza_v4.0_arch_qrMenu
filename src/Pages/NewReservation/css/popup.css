@@ -1,0 +1,120 @@
+
+  /* Popup mode styles */
+  .popup-mode .top-image-section,
+  .popup-mode .form-section {
+	display: none;
+  }
+  
+  .open-modal-button {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: var(--theme-button-color, #5DADE2);
+	color: #ffffff;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 16px;
+	font-size: 14px;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+	z-index: 2147483647;
+  }
+  
+  .open-modal-button:hover {
+	background-color: var(--theme-button-color, #3c8ecf);
+  }
+  
+  /* Modal and Overlay */
+  .modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 2147483647;
+	transition: opacity 0.3s ease-in-out;
+  }
+  
+  .modal-overlay.show {
+	opacity: 1;
+  }
+  
+  .modal {
+	position: fixed;
+	bottom: -100%;
+	left: 50%;
+	transform: translate(-50%, 0);
+	background-color: var(--color-white, #ffffff);
+	border-radius: 8px;
+	padding: 30px;
+	width: 90%;
+	max-width: 600px;
+	z-index: 2147483647;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+	opacity: 0;
+	transition: all 0.5s ease-in-out;
+  }
+  
+  .modal.show {
+	bottom: 50%;
+	transform: translate(-50%, 50%);
+	opacity: 1;
+  }
+  
+  .modal-content {
+	position: relative;
+  }
+  
+  .close-modal-button {
+	position: absolute;
+	top: -15px;
+	right: -15px;
+	background-color: var(--theme-button-color, #5DADE2);
+	color: #ffffff;
+	border: none;
+	border-radius: 50%;
+	width: 35px;
+	height: 35px;
+	font-size: 24px;
+	cursor: pointer;
+  }
+  
+  .close-modal-button:hover {
+	background-color: var(--theme-button-color, #3c8ecf);
+  }
+  
+  /* Adjust form content in modal */
+  .modal .reservation-form {
+	margin-top: 0;
+	box-shadow: none;
+	padding: 0;
+  }
+  
+  /* For consistent form styling */
+  .form-content {
+	background-color: var(--color-white, #ffffff);
+  }
+  
+  /* Animations */
+  .modal {
+	backdrop-filter: blur(0px);
+  }
+  
+  .modal.show {
+	backdrop-filter: blur(5px);
+  }
+  
+  @media screen and (max-width: 480px) {
+	.modal {
+	  width: 95%;
+	  padding: 20px;
+	}
+  
+	.open-modal-button {
+	  padding: 8px 12px;
+	  font-size: 12px;
+	}
+  }
+  
