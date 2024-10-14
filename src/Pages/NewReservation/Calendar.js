@@ -2,22 +2,17 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
+import 'moment/locale/nl'; // Import Dutch locale
 import './css/calendar.css';
+
+moment.locale('nl'); // Set moment to Dutch locale
 
 const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [currentDate, setCurrentDate] = useState(
-    moment().tz('Europe/Amsterdam')
-  );
-  const [startDate, setStartDate] = useState(
-    moment().tz('Europe/Amsterdam').startOf('isoWeek')
-  );
+  const [startDate, setStartDate] = useState(null);
   const calendarRef = useRef(null);
 
-  const maxDate = moment()
-    .tz('Europe/Amsterdam')
-    .add(1, 'year')
-    .endOf('day');
+  const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
 
   // Close calendar when clicking outside
   useEffect(() => {
@@ -35,7 +30,24 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
     };
   }, []);
 
-  const generateCalendarDays = () => {
+  // Initialize startDate to the first week that is not fully in the past
+  useEffect(() => {
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    let firstWeekStart = today.clone().startOf('isoWeek');
+    // Skip weeks that are fully in the past
+    while (isWeekInPast(firstWeekStart)) {
+      firstWeekStart.add(1, 'week');
+    }
+    setStartDate(firstWeekStart);
+  }, []);
+
+  const isWeekInPast = (weekStartDate) => {
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const weekEndDate = weekStartDate.clone().add(6, 'days').endOf('day');
+    return weekEndDate.isBefore(today);
+  };
+
+  const generateCalendarDays = (startDate) => {
     const days = [];
     const today = moment().tz('Europe/Amsterdam').startOf('day');
     const twoWeeksFromStart = startDate.clone().add(13, 'days');
@@ -62,14 +74,18 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
   };
 
   const handlePrevWeek = () => {
-    setStartDate(startDate.clone().subtract(1, 'week'));
+    const newStartDate = startDate.clone().subtract(1, 'week');
+    if (isWeekInPast(newStartDate)) {
+      // Cannot go to a week fully in the past
+      return;
+    }
+    setStartDate(newStartDate);
   };
 
   const handleNextWeek = () => {
-    setStartDate(startDate.clone().add(1, 'week'));
+    const newStartDate = startDate.clone().add(1, 'week');
+    setStartDate(newStartDate);
   };
-
-  const days = generateCalendarDays();
 
   const isSameDay = (date1, date2) => {
     return date1.isSame(date2, 'day');
@@ -83,13 +99,33 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
       : 'Selecteer een datum';
   };
 
+  const days = startDate ? generateCalendarDays(startDate) : [];
+
   return (
     <div className="calendar-container" ref={calendarRef}>
       <div
         className="calendar-display"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        {formatDisplayDate()}
+        <span>{formatDisplayDate()}</span>
+        <span className="arrow">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            style={{
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+            }}
+          >
+            <path
+              d="M7 10l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+          </svg>
+        </span>
       </div>
       {isExpanded && (
         <div className="calendar">
@@ -105,55 +141,57 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
               &gt;
             </button>
           </div>
-          {/* Calendar grid */}
-          <table className="calendar-table">
-            <thead>
-              <tr>
-                {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
-                  <th key={day}>{day}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 2 }).map((_, weekIndex) => (
-                <tr key={weekIndex}>
-                  {days
-                    .slice(weekIndex * 7, weekIndex * 7 + 7)
-                    .map((dayObj, index) => {
-                      const isSelected =
-                        selectedDate &&
-                        isSameDay(
-                          dayObj.date,
-                          moment(selectedDate).tz('Europe/Amsterdam')
-                        );
-                      const classNames = [];
-                      if (dayObj.isPast || dayObj.isFuture) {
-                        classNames.push('gray-out');
-                      } else if (dayObj.isAvailable) {
-                        classNames.push('available');
-                      } else {
-                        classNames.push('unavailable');
-                      }
-                      if (isSelected) {
-                        classNames.push('selected');
-                      }
-
-                      return (
-                        <td
-                          key={index}
-                          className={classNames.join(' ')}
-                          onClick={() => handleDateClick(dayObj)}
-                        >
-                          <div className="day-circle">
-                            {dayObj.date.date()}
-                          </div>
-                        </td>
-                      );
-                    })}
+          <div className="calendar-weeks-wrapper">
+            <table className="calendar-table">
+              <thead>
+                <tr>
+                  {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
+                    <th key={day}>{day}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {Array.from({ length: 2 }).map((_, weekIndex) => (
+                  <tr key={weekIndex}>
+                    {days
+                      .slice(weekIndex * 7, weekIndex * 7 + 7)
+                      .map((dayObj, index) => {
+                        const isSelected =
+                          selectedDate &&
+                          isSameDay(
+                            dayObj.date,
+                            moment(selectedDate).tz('Europe/Amsterdam')
+                          );
+                        const classNames = [];
+                        if (dayObj.isPast || dayObj.isFuture) {
+                          classNames.push('gray-out');
+                        } else if (dayObj.isAvailable) {
+                          classNames.push('available');
+                        } else {
+                          classNames.push('unavailable');
+                        }
+                        if (isSelected) {
+                          classNames.push('selected');
+                        }
+
+                        return (
+                          <td
+                            key={index}
+                            className={classNames.join(' ')}
+                            onClick={() => handleDateClick(dayObj)}
+                            style={{ '--animation-order': index + weekIndex * 7 }}
+                          >
+                            <div className="day-square">
+                              {dayObj.date.date()}
+                            </div>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

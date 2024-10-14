@@ -22,12 +22,13 @@ const StepOne = ({
     const oneYearLater = today.clone().add(1, 'year');
     const dates = [];
 
-    while (today.isSameOrBefore(oneYearLater, 'day')) {
-      // Randomly make some dates unavailable for demonstration
-      if (today.date() % 2 === 0) {
-        dates.push(today.format('YYYY-MM-DD'));
+    let date = today.clone();
+    while (date.isSameOrBefore(oneYearLater, 'day')) {
+      // For demonstration, make weekdays available
+      if (date.day() !== 0 && date.day() !== 6) {
+        dates.push(date.format('YYYY-MM-DD'));
       }
-      today.add(1, 'day');
+      date.add(1, 'day');
     }
 
     setAvailableDates(dates);
