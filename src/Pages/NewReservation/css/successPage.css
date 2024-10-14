@@ -1,7 +1,7 @@
 /* src/components/NewReservation/css/successMessage.css */
 
 /* Success Message Styles */
-.success-message {
+.new-reservation-page .success-message {
 	display: flex;
 	align-items: center;
 	background-color: #d4edda; /* Light green background */
@@ -11,13 +11,13 @@
 	margin-bottom: 20px;
   }
   
-  .success-icon {
+  .new-reservation-page .success-icon {
 	font-size: 24px;
 	margin-right: 10px;
   }
   
   /* Reservation Summary Styles */
-  .reservation-summary {
+  .new-reservation-page .reservation-summary {
 	background-color: #ffffff;
 	padding: 20px;
 	border-radius: 4px;
@@ -25,34 +25,33 @@
 	border: 1px solid #e0e0e0;
   }
   
-  .reservation-summary h3 {
+  .new-reservation-page .reservation-summary h3 {
 	margin-bottom: 15px;
 	color: var(--color-black, #000000);
   }
   
-  .reservation-summary ul {
+  .new-reservation-page .reservation-summary ul {
 	list-style-type: none;
 	padding: 0;
   }
   
-  .reservation-summary li {
+  .new-reservation-page .reservation-summary li {
 	margin-bottom: 10px;
 	font-size: 16px;
 	color: var(--color-black, #000000);
   }
   
-  .reservation-summary strong {
+  .new-reservation-page .reservation-summary strong {
 	font-weight: 600;
   }
   
-  /* Action Buttons Styles */
-  .action-buttons {
+  .new-reservation-page .action-buttons {
 	display: flex;
 	justify-content: space-between;
 	margin-top: 20px;
   }
   
-  .action-button {
+  .new-reservation-page .action-button {
 	flex: 1;
 	margin: 0 5px;
 	padding: 12px;
@@ -68,11 +67,11 @@
 	justify-content: center;
   }
   
-  .action-button:hover {
+  .new-reservation-page .action-button:hover {
 	background-color: var(--theme-color-dark, #3c8ecf);
   }
   
-  .action-button svg {
+  .new-reservation-page .action-button svg {
 	margin-right: 8px;
   }
   
@@ -82,12 +81,12 @@
 	  visibility: hidden;
 	}
   
-	.reservation-summary,
-	.reservation-summary * {
+	.new-reservation-page .reservation-summary,
+	.new-reservation-page .reservation-summary * {
 	  visibility: visible;
 	}
   
-	.reservation-summary {
+	.new-reservation-page .reservation-summary {
 	  position: absolute;
 	  left: 0;
 	  top: 0;
