@@ -9,6 +9,7 @@ import './css/newReservation.css';
 import './css/popup.css';
 import './css/mobile.css';
 import './css/animations.css';
+import reserveIcon from '../../Assets/logos/logo-white.webp'; // Ensure this path is correct
 
 const NewReservation = ({ mode = 'popup' }) => {
   const initialFormData = {};
@@ -116,19 +117,19 @@ const NewReservation = ({ mode = 'popup' }) => {
       ) : (
         <>
           <button className="open-modal-button" onClick={openModal}>
-            Reserveer
+            <span className="button-content">
+              <span className="button-text">Reserveer Nu</span>
+              <div className="separator"></div>
+              <img src={reserveIcon} alt="Reserve Icon" className="button-icon" />
+            </span>
           </button>
           {(isModalOpen || isClosing) && (
             <>
               <div
-                className={`modal-overlay ${
-                  isClosing ? 'hide' : 'show'
-                }`}
+                className={`modal-overlay ${isClosing ? 'hide' : 'show'}`}
                 onClick={closeModal}
               ></div>
-              <div
-                className={`modal ${isClosing ? 'hide' : 'show'}`}
-              >
+              <div className={`modal ${isClosing ? 'hide' : 'show'}`}>
                 <div className="modal-content">
                   <button className="close-modal-button" onClick={closeModal}>
                     &times;

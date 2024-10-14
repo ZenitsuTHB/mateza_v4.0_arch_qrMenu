@@ -1,115 +1,168 @@
+/* popup.css */
 
-  /* Popup mode styles */
-  .new-reservation-page .popup-mode .top-image-section,
-  .new-reservation-page .popup-mode .form-section {
-	display: none;
-  }
+/* Popup mode styles */
+.new-reservation-page .popup-mode .top-image-section,
+.new-reservation-page .popup-mode .form-section {
+  display: none;
+}
+
+.new-reservation-page .open-modal-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--theme-button-color, #5DADE2);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 2147483647;
+  display: flex; /* Ensure the button uses flex layout */
+  align-items: center; /* Vertically center the content */
+}
+
+.new-reservation-page .open-modal-button:hover {
+  background-color: var(--theme-button-color, #3c8ecf);
+}
+
+/* New Styles for Button Content */
+.new-reservation-page .open-modal-button .button-content {
+  display: flex;
+  align-items:center;
+  padding: 0px 0px;
   
+}
+
+.new-reservation-page .open-modal-button .button-icon {
+  height: 18px; /* Adjusted height to maintain aspect ratio */
+  width: auto; /* Allow width to adjust automatically */
+  max-height: 18px; /* Prevent the image from becoming too large */
+  margin-right: 0px; /* Reduced space between icon and separator */
+}
+
+.new-reservation-page .open-modal-button .separator {
+  height: 25px;
+  width: 1px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: white;
+}
+
+.new-reservation-page .open-modal-button .button-text {
+  font-size: 14px; /* Ensure readability */
+
+}
+
+/* Modal Overlay */
+.new-reservation-page .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2147483647;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.new-reservation-page .modal-overlay.show {
+  opacity: 1;
+}
+
+.new-reservation-page .modal-overlay.hide {
+  opacity: 0;
+}
+
+/* Modal */
+.new-reservation-page .modal {
+  position: fixed;
+  bottom: -100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: var(--color-white, #ffffff);
+  border-radius: 8px;
+  padding: 30px;
+  width: 90%;
+  max-width: 600px;
+  z-index: 2147483647;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.new-reservation-page .modal.show {
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+  opacity: 1;
+  backdrop-filter: blur(5px);
+}
+
+.new-reservation-page .modal.hide {
+  bottom: -100%;
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.new-reservation-page .modal-content {
+  position: relative;
+}
+
+.new-reservation-page .close-modal-button {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: var(--theme-button-color, #5DADE2);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.new-reservation-page .close-modal-button:hover {
+  background-color: var(--theme-button-color, #3c8ecf);
+}
+
+.new-reservation-page .modal .reservation-form {
+  margin-top: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.new-reservation-page .form-content {
+  background-color: var(--color-white, #ffffff);
+}
+
+@media screen and (max-width: 480px) {
+  .new-reservation-page .modal {
+    width: 95%;
+    padding: 20px;
+  }
+
   .new-reservation-page .open-modal-button {
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	background-color: var(--theme-button-color, #5DADE2);
-	color: #ffffff;
-	border: none;
-	border-radius: 8px;
-	padding: 10px 16px;
-	font-size: 14px;
-	cursor: pointer;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-	z-index: 2147483647;
+    padding: 8px 12px;
+    font-size: 12px;
   }
-  
-  .new-reservation-page .open-modal-button:hover {
-	background-color: var(--theme-button-color, #3c8ecf);
+
+  /* Responsive adjustments for button content */
+  .new-reservation-page .open-modal-button .button-icon {
+    height: 16px; /* Further reduced height for smaller screens */
+    max-height: 16px;
+    margin-right: 3px; /* Further reduced space */
   }
-  
-  .new-reservation-page .modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	opacity: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 2147483647;
-	transition: opacity 0.3s ease-in-out;
+
+  .new-reservation-page .open-modal-button .separator {
+    margin: 0 3px;
+    font-size: 10px; /* Further reduced font size */
   }
-  
-  .new-reservation-page .modal-overlay.show {
-	opacity: 1;
+
+  .new-reservation-page .open-modal-button .button-text {
+    font-size: 12px;
   }
-  
-  .new-reservation-page .modal {
-	position: fixed;
-	bottom: -100%;
-	left: 50%;
-	transform: translate(-50%, 0);
-	background-color: var(--color-white, #ffffff);
-	border-radius: 8px;
-	padding: 30px;
-	width: 90%;
-	max-width: 600px;
-	z-index: 2147483647;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-	opacity: 0;
-  }
-  
-  .new-reservation-page .modal.show {
-	bottom: 50%;
-	transform: translate(-50%, 50%);
-	opacity: 1;
-  }
-  
-  .new-reservation-page .modal-content {
-	position: relative;
-  }
-  
-  .new-reservation-page .close-modal-button {
-	position: absolute;
-	top: -15px;
-	right: -15px;
-	background-color: var(--theme-button-color, #5DADE2);
-	color: #ffffff;
-	border: none;
-	border-radius: 50%;
-	width: 35px;
-	height: 35px;
-	font-size: 24px;
-	cursor: pointer;
-  }
-  
-  .new-reservation-page .close-modal-button:hover {
-	background-color: var(--theme-button-color, #3c8ecf);
-  }
-  
-  .new-reservation-page .modal .reservation-form {
-	margin-top: 0;
-	box-shadow: none;
-	padding: 0;
-  }
-  
-  .new-reservation-page .form-content {
-	background-color: var(--color-white, #ffffff);
-  }
-  
-  .new-reservation-page .modal {
-	backdrop-filter: blur(0px);
-  }
-  
-  .new-reservation-page .modal.show {
-	backdrop-filter: blur(5px);
-  }
-  
-  @media screen and (max-width: 480px) {
-	.new-reservation-page .modal {
-	  width: 95%;
-	  padding: 20px;
-	}
-  
-	.new-reservation-page .open-modal-button {
-	  padding: 8px 12px;
-	  font-size: 12px;
-	}
-  }
-  
+}
+
+
