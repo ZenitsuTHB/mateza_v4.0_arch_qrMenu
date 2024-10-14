@@ -16,7 +16,6 @@ const StepOne = ({
 }) => {
   const [guestSelected, setGuestSelected] = useState(false);
   const [dateSelected, setDateSelected] = useState(false);
-  const [maxGuestsExceeded, setMaxGuestsExceeded] = useState(false);
   const maxGuests = 10; // Define maximum guests allowed for online reservations
 
   const handleNext = (e) => {

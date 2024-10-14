@@ -133,6 +133,8 @@
   .unavailable .day-square {
 	background-color: #e0e0e0; /* Gray background for unavailable dates */
 	color: #999; /* Gray font color */
+	color: darkred;
+	background-color: rgba(139, 0, 0, 0.13);
   }
   
   .gray-out .day-square {

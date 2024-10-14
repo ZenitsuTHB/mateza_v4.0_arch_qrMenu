@@ -34,6 +34,7 @@
 	padding: 10px;
 	border-radius: 10px;
 	animation: fadeInTimeSelector 0.3s ease-in-out;
+	top: 75px;
   }
   
   @keyframes fadeInTimeSelector {
