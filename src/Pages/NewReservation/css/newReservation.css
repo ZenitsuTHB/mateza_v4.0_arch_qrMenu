@@ -3,11 +3,11 @@
 .new-reservation-page {
 	display: flex;
 	flex-direction: column;
-	height: 100vh; /* Full viewport height */
+	height: 100vh;
   }
   
   .new-reservation-page .top-image-section {
-	flex: 0 0 25vh; /* 25% of viewport height */
+	flex: 0 0 25vh;
 	width: 100%;
 	overflow: hidden;
   }
@@ -15,11 +15,11 @@
   .new-reservation-page .top-image-section .top-image {
 	width: 100%;
 	height: 100%;
-	object-fit: cover; /* Ensures the image covers the section without distortion */
+	object-fit: cover;
   }
   
   .new-reservation-page .form-section {
-	flex: 1; /* Remaining 75% */
+	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -72,7 +72,7 @@
   
   .new-reservation-page .form-group input:focus,
   .new-reservation-page .form-group textarea:focus {
-	border-color: var(--theme-color, #5DADE2); /* Theme color border on focus */
+	border-color: var(--theme-color, #5DADE2);
 	outline: none;
   }
   
@@ -84,8 +84,8 @@
   .new-reservation-page .submit-button {
 	width: 100%;
 	padding: 12px;
-	background-color: var(--theme-color, #5DADE2); /* Theme background */
-	color: #ffffff; /* White text */
+	background-color: var(--theme-color, #5DADE2);
+	color: #ffffff;
 	border: none;
 	border-radius: 4px;
 	font-size: 18px;
@@ -95,7 +95,7 @@
   }
   
   .new-reservation-page .submit-button:hover {
-	background-color: var(--theme-color-dark, #3c8ecf); /* Darker theme color on hover */
+	background-color: var(--theme-color-dark, #3c8ecf);
   }
   
   .new-reservation-page .notification {

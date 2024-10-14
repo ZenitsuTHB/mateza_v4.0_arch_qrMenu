@@ -1,11 +1,10 @@
 /* src/components/NewReservation/css/successMessage.css */
 
-/* Success Message Styles */
 .new-reservation-page .success-message {
 	display: flex;
 	align-items: center;
-	background-color: #d4edda; /* Light green background */
-	color: #155724; /* Dark green text */
+	background-color: #d4edda;
+	color: #155724;
 	padding: 15px;
 	border-radius: 4px;
 	margin-bottom: 20px;
@@ -16,7 +15,6 @@
 	margin-right: 10px;
   }
   
-  /* Reservation Summary Styles */
   .new-reservation-page .reservation-summary {
 	background-color: #ffffff;
 	padding: 20px;
@@ -75,7 +73,6 @@
 	margin-right: 8px;
   }
   
-  /* Print Styles */
   @media print {
 	body * {
 	  visibility: hidden;

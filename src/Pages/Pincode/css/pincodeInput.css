@@ -20,14 +20,5 @@
   
   .pincode-page .pincode-input:focus {
 	border-color: #1890ff;
-	transform: scale(1.05); /* Smooth scaling on focus */
+	transform: scale(1.05);
   }
-  
-  @media (max-width: 600px) {
-	.pincode-page .pincode-input {
-	  width: 40px;
-	  height: 50px;
-	  font-size: 24px;
-	}
-  }
-  

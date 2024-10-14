@@ -4,6 +4,7 @@ import React from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import PincodeInput from './PincodeInput';
 import './css/pincodeScreen.css';
+import './css/mobile.css';
 
 const PincodeScreen = () => {
   return (

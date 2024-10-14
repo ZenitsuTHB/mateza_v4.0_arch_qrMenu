@@ -4,29 +4,29 @@
 	display: flex;
 	align-items: center;
 	font-size: 14px;
-	margin-bottom: 10px; /* Space below the breadcrumb */
+	margin-bottom: 10px;
   }
   
   .breadcrumb-component .breadcrumb-app {
-	color: #7a7a7a; /* Gray color */
+	color: #7a7a7a;
   }
   
   .breadcrumb-component .breadcrumb-link {
 	text-decoration: none;
-	color: #7a7a7a; /* Gray color */
+	color: #7a7a7a;
 	transition: color 0.3s ease;
   }
   
   .breadcrumb-component .breadcrumb-link:hover {
-	color: #007bff; /* Blue color on hover */
+	color: #007bff;
   }
   
   .breadcrumb-component .breadcrumb-separator {
 	margin: 0 5px;
-	color: #7a7a7a; /* Gray color */
+	color: #7a7a7a;
   }
   
   .breadcrumb-component .breadcrumb-path .breadcrumb-current {
-	color: #007bff; /* Light blue color for current path */
+	color: #007bff;
   }
   

@@ -9,7 +9,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: var(--z-index-modal); /* Increased z-index */
+	z-index: var(--z-index-modal);
 	backdrop-filter: blur(5px);
   }
   
@@ -40,7 +40,6 @@
 	text-align: center;
   }
   
-  /* Close button styles */
   .theme-page .modal-close-button {
 	position: absolute;
 	top: 15px;

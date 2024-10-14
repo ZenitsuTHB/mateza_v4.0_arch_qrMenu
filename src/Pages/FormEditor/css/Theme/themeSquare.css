@@ -30,22 +30,18 @@
 	background-color: currentColor;
   }
   
-  /* Ensure the image fills its container without stretching */
-  .theme-page .theme-square-right img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover; /* This maintains aspect ratio and fills the container */
-  }
-  
-  /* Alternatively, if you want to maintain aspect ratio without cropping, use 'contain' */
   .theme-page .theme-square-right img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
   }
   
-  /* The above code ensures the image covers the entire container while maintaining aspect ratio */
-  
+ .theme-page .theme-square-right img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+  }
+    
   .theme-page .theme-square-title {
 	text-align: center;
 	padding: 12px;
@@ -53,7 +49,7 @@
 	font-size: 16px;
 	font-weight: 600;
 	color: #333;
-	width: 100%; /* Span full width */
+	width: 100%;
 	box-sizing: border-box;
   }
   

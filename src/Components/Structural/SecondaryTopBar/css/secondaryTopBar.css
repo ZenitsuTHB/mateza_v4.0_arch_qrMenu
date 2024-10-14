@@ -25,7 +25,7 @@
 	cursor: pointer;
 	padding: 8px 0;
 	transition: color 0.3s ease;
-	text-decoration: none; /* No underline text decoration */
+	text-decoration: none;
   }
   
   .secondary-top-bar-component .secondary-button.active {
@@ -37,8 +37,8 @@
   }
   
   .secondary-top-bar-component .button-link {
-	text-decoration: none; /* Ensure links have no underline */
-	color: inherit; /* Inherit button color */
+	text-decoration: none;
+	color: inherit;
   }
   
   .secondary-top-bar-component .underline {

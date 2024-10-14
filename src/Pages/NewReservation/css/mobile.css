@@ -17,6 +17,6 @@
 	}
   
 	.new-reservation-page .top-image-section {
-	  flex: 0 0 20vh; /* Adjust image height on smaller screens */
+	  flex: 0 0 20vh;
 	}
   }
