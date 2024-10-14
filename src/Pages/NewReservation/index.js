@@ -6,7 +6,7 @@ import { title, theme, font, fields } from './formConfig';
 import { FaCheckCircle } from 'react-icons/fa';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
-import SuccessMessage from './SuccessMessage';
+import SuccessMessage from './StepThree';
 
 const NewReservation = () => {
   // Initialize form data state with empty values for each field

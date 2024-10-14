@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { fields } from './formConfig'; // Adjust the import path as necessary
-import './css/successMessage.css';
+import './css/successPage.css';
 
 const SuccessMessage = () => {
   const [summaryData, setSummaryData] = useState(null);
