@@ -1,0 +1,49 @@
+/* src/components/NewReservation/css/guestNumberSelector.css */
+
+.guest-number-selector {
+	margin-bottom: 20px;
+  }
+  
+  .guest-number-inputs {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+  }
+  
+  .guest-number-buttons {
+	display: flex;
+	gap: 5px;
+	
+  }
+  
+  .guest-number-button {
+	width: 45px;
+	height: 45px;
+	background-color: #fff;
+	border: 1px solid var(--theme-color, #5DADE2);
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	font-size: 16px;
+	color: #333;
+	text-align: center;
+  }
+  
+  .guest-number-button.selected,
+  .guest-number-button:hover {
+	background-color: var(--theme-color, #5DADE2);
+	color: #fff;
+  }
+  
+  .guest-number-input {
+	width: 60px;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+  
+  .guest-number-input:focus {
+	border-color: var(--theme-color, #5DADE2);
+	outline: none;
+  }
+  

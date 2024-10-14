@@ -1,0 +1,18 @@
+  /* src/components/NewReservation/css/maxGuestMessage.css */
+
+  .max-guest-message {
+	display: flex;
+	align-items: center;
+	background-color: #fff3cd; /* Light orange background */
+	color: #856404; /* Dark orange text */
+	padding: 15px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	border: 1px solid #ffeeba; /* Border color */
+  }
+  
+  .warning-icon {
+	font-size: 24px;
+	margin-right: 10px;
+  }
+  
