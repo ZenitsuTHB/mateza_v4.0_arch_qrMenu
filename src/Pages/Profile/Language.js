@@ -16,7 +16,6 @@ const languageOptions = [
   { code: 'es', name: 'Español', flag: spanishFlag },
   { code: 'fr', name: 'Français', flag: frenchFlag },
   { code: 'de', name: 'Deutsch', flag: germanFlag },
-  // Add more languages as needed
 ];
 
 const LanguageSelector = () => {
