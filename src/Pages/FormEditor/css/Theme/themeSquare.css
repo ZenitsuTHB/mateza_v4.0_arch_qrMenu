@@ -4,7 +4,6 @@
 	width: 180px;
 	border-radius: 12px;
 	overflow: hidden;
-	background: #f9f9f9;
 	cursor: pointer;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
