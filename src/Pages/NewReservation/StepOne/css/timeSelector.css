@@ -1,0 +1,74 @@
+/* src/components/NewReservation/css/timeSelector.css */
+
+.time-selector {
+	border: 1px solid var(--theme-color, #5DADE2);
+	border-radius: 5px;
+	padding: 10px;
+  }
+  
+  .time-period {
+	margin-bottom: 10px;
+  }
+  
+  .time-period-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	padding: 8px;
+	background-color: #fff;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+  }
+  
+  .time-period-header:hover {
+	background-color: #f9f9f9;
+  }
+  
+  .time-options {
+	margin-top: 5px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	animation: fadeInTimeOptions 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeInTimeOptions {
+	from {
+	  opacity: 0;
+	}
+	to {
+	  opacity: 1;
+	}
+  }
+  
+  .time-option {
+	padding: 8px 12px;
+	background-color: #ccffcc; /* Green background for available times */
+	color: #006600;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+  }
+  
+  .time-option:hover {
+	background-color: #b3ffb3;
+  }
+  
+  .time-option.selected {
+	background-color: #006600;
+	color: #ccffcc;
+  }
+  
+  .info-text {
+	color: #666;
+	font-style: italic;
+  }
+  
+  .arrow {
+	margin-left: 10px;
+	color: gray;
+	display: flex;
+	align-items: center;
+  }
+  

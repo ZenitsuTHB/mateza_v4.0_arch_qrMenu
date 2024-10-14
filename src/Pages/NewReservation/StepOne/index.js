@@ -20,27 +20,28 @@ const StepOne = ({
 
   // Extract the fields for time and number of guests
   const timeField = fields.find((field) => field.id === 'tijd');
-  const guestNumberField = fields.find((field) => field.id === 'aantalPersonen');
+  const guestNumberField = fields.find(
+    (field) => field.id === 'aantalPersonen'
+  );
 
   return (
     <form className="reservation-form" onSubmit={handleNext}>
       <Title title={title} subtitle="Stap 1/3" />
 
-	  <GuestNumberSelector
+      <GuestNumberSelector
         formData={formData}
         handleChange={handleChange}
         field={guestNumberField}
       />
-	  
+
       <DateSelector formData={formData} handleChange={handleChange} />
 
       <TimeSelector
         formData={formData}
         handleChange={handleChange}
         field={timeField}
+        selectedDate={formData.datum} // Pass the selected date
       />
-
-      
 
       <button type="submit" className="submit-button">
         Volgende
