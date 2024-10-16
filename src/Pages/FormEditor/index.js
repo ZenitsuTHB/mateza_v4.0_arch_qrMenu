@@ -101,10 +101,6 @@ const DragAndDropEditor = () => {
   };
 
   const handleSelectTheme = (theme) => {
-    setSelectedTheme(theme);
-    localStorage.setItem('selectedTheme', JSON.stringify(theme));
-    localStorage.setItem('backgroundColor', theme.color);
-    localStorage.setItem('buttonColor', theme.color);
     triggerNotification('Thema geselecteerd', 'success');
   };
 
@@ -133,8 +129,6 @@ const DragAndDropEditor = () => {
       {showThemeModal && (
         <ThemeSelectorModal
           onClose={() => setShowThemeModal(false)}
-          onSelectTheme={handleSelectTheme}
-          onAddTheme={handleAddTheme}
         />
       )}
     </div>

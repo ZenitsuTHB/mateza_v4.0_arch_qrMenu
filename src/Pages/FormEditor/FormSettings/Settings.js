@@ -1,44 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ThemeSelectorModal from '../Theme/index.js';
+import useNotification from '../../../Components/Notification/index.js'; // Adjust the import path as needed
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Settings = () => {
-
-  const [selectedTheme, setSelectedTheme] = useState(null);
-  const [showThemeModal, setShowThemeModal] = useState(false); // State to control modal visibility
-
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
-    pageFont: 'Poppins',
   };
 
-
-  const handleAddTheme = (newTheme) => {
-    handleSelectTheme(newTheme);
-  };
+  const [formData, setFormData] = useState(defaultSettings);
+  const [selectedTheme, setSelectedTheme] = useState(null);
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
   useEffect(() => {
-    // Fetch settings from server
+    // Fetch settings from the server
     axios.get('http://localhost:5000/api/settings/restaurantId123')
       .then((response) => {
-        if (response.data && Object.keys(response.data).length > 0) {
-          setFormData(response.data);
-        } else {
-          setFormData(defaultSettings);
+        if (response.data) {
+          const data = response.data;
+
+          // Set formData and other relevant settings from response
+          setFormData({
+            pageTitle: data.pageTitle || defaultSettings.pageTitle,
+            generalNotification: data.generalNotification || '',
+          });
         }
       })
       .catch((error) => {
         console.error('Error fetching settings:', error);
-        setFormData(defaultSettings); // Set defaults if fetch fails
+        // If fetch fails, use default settings
+        setFormData(defaultSettings);
+      });
+
+    // Fetch theme from the server
+    axios.get('http://localhost:5000/api/theme/restaurantId123')
+      .then((response) => {
+        
+        setSelectedTheme(response.data);
+
+      })
+      .catch((error) => {
+        console.error('Error fetching theme:', error);
       });
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSave = () => {
@@ -46,7 +60,19 @@ const Settings = () => {
       .then(() => {
         console.log('Settings updated successfully');
       })
-      .catch((error) => console.error('Error saving settings:', error));
+      .catch((error) => {
+        console.error('Error saving settings:', error);
+      });
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    if (name === 'pageTitle' && value.trim() === '') {
+      setFormData((prevData) => ({
+        ...prevData,
+        pageTitle: 'Reserveer Nu',
+      }));
+    }
   };
 
   return (
@@ -82,8 +108,8 @@ const Settings = () => {
           <div
             className="theme-preview clickable"
             onClick={() => setShowThemeModal(true)}
-            style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
-            title="Klik om het thema te wijzigen" // Tooltip for better UX
+            style={{ cursor: 'pointer' }}
+            title="Klik om het thema te wijzigen"
           >
             <div className="theme-preview-content">
               <div
@@ -112,8 +138,6 @@ const Settings = () => {
       {showThemeModal && (
         <ThemeSelectorModal
           onClose={() => setShowThemeModal(false)}
-          onSelectTheme={handleSelectTheme}
-          onAddTheme={handleAddTheme}
         />
       )}
     </div>

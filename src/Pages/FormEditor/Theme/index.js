@@ -3,24 +3,43 @@ import React, { useState } from 'react';
 import ThemeSquare from './Square';
 import AddThemeSquare from './AddSquare';
 import AddThemeModal from './AddModal';
+import axios from 'axios';
+
 import '../css/Theme/themeSelectorModal.css';
 import '../css/Theme/animations.css';
 import '../css/Theme/mobile.css';
 
 import { initialThemes } from './defaultThemes';
 
-const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
+const ThemeSelectorModal = ({ onClose }) => {
   const [themes, setThemes] = useState(initialThemes);
   const [showAddThemeModal, setShowAddThemeModal] = useState(false);
 
   const handleThemeClick = (theme) => {
-    onSelectTheme(theme);
+    saveThemeToBackend(theme);
     onClose();
   };
 
   const handleAddThemeClick = () => {
     setShowAddThemeModal(true);
   };
+
+  const saveThemeToBackend = (theme) => {
+    const themeData = {
+      title: theme.title,
+      color: theme.color,
+      image: theme.image,
+    };
+  
+    axios.put(window.baseDomain + 'api/theme/restaurantId123', themeData)
+      .then(() => {
+        console.log('Selected theme saved successfully');
+      })
+      .catch((error) => {
+        console.error('Error saving selected theme:', error);
+      });
+  };
+  
 
   return (
     <div className="theme-page">
@@ -35,7 +54,6 @@ const ThemeSelectorModal = ({ onClose, onSelectTheme, onAddTheme }) => {
                 onClose={() => setShowAddThemeModal(false)}
                 onSave={(newTheme) => {
                   setThemes([...themes, newTheme]);
-                  onAddTheme(newTheme);
                   setShowAddThemeModal(false);
                 }}
               />
