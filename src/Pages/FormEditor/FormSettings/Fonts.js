@@ -32,8 +32,7 @@ const Fonts = forwardRef((props, ref) => {
   ];
 
   useEffect(() => {
-    // Fetch fonts settings from server
-    axios.get('http://localhost:5000/api/fonts/restaurantId123')
+    axios.get(window.baseDomain + 'api/fonts/restaurantId123')
       .then((response) => {
         if (response.data && Object.keys(response.data).length > 0) {
           setFontsState(response.data);
@@ -45,7 +44,7 @@ const Fonts = forwardRef((props, ref) => {
       })
       .catch((error) => {
         console.error('Error fetching fonts:', error);
-        setFontsState(defaultFonts); // Set defaults if fetch fails
+        setFontsState(defaultFonts);
         setInitialFontsState(defaultFonts);
       });
   }, []);
@@ -64,18 +63,16 @@ const Fonts = forwardRef((props, ref) => {
   };
 
   const handleSave = () => {
-    axios.put('http://localhost:5000/api/fonts/restaurantId123', fontsState)
+    axios.put(window.baseDomain + 'api/fonts/restaurantId123', fontsState)
       .then(() => {
         triggerNotification('Lettertypes aangepast', 'success');
-        setInitialFontsState(fontsState); // Reset isDirty flag
+        setInitialFontsState(fontsState);
       })
       .catch((error) => console.error('Error saving fonts:', error));
   };
 
-  // Determine if there are unsaved changes
   const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
 
-  // Expose isDirty to parent
   useImperativeHandle(ref, () => ({
     isDirty,
   }));

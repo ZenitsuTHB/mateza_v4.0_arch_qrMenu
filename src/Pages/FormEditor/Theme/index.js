@@ -11,7 +11,7 @@ import '../css/Theme/mobile.css';
 
 import { initialThemes } from './defaultThemes';
 
-const ThemeSelectorModal = ({ onClose }) => {
+const ThemeSelectorModal = ({ onClose, onSuccess }) => {
   const [themes, setThemes] = useState(initialThemes);
   const [showAddThemeModal, setShowAddThemeModal] = useState(false);
 
@@ -33,7 +33,7 @@ const ThemeSelectorModal = ({ onClose }) => {
   
     axios.put(window.baseDomain + 'api/theme/restaurantId123', themeData)
       .then(() => {
-        console.log('Selected theme saved successfully');
+        onSuccess();
       })
       .catch((error) => {
         console.error('Error saving selected theme:', error);

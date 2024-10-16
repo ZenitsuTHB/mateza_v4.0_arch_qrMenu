@@ -14,7 +14,6 @@ const SettingsTabs = () => {
   const [pendingTab, setPendingTab] = useState(null);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
 
-  // Create refs for each tab component
   const settingsRef = useRef();
   const colorsRef = useRef();
   const fontsRef = useRef();
@@ -25,13 +24,11 @@ const SettingsTabs = () => {
     { id: 'fontsSettings', label: 'Lettertypen', title: "Lettertype Instellingen" },
   ];
 
-  // Prevent form submission
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
   const handleTabClick = (tabId, tabTitle) => {
-    // Check if current tab has unsaved changes
     let currentRef;
     if (activeTab === 'formSettings') {
       currentRef = settingsRef;
@@ -42,11 +39,9 @@ const SettingsTabs = () => {
     }
 
     if (currentRef && currentRef.current && currentRef.current.isDirty) {
-      // There are unsaved changes, show modal
       setPendingTab({ id: tabId, title: tabTitle });
       setShowUnsavedChangesModal(true);
     } else {
-      // No unsaved changes, proceed to change tab
       setActiveTab(tabId);
       setActiveTitle(tabTitle);
     }
@@ -77,7 +72,7 @@ const SettingsTabs = () => {
               {tabs.map((tab) => (
                 <motion.button
                   key={tab.id}
-                  type="button" // Prevent form submission
+                  type="button"
                   className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
                   onClick={() => handleTabClick(tab.id, tab.title)}
                   whileHover={{ scale: 1.05 }}

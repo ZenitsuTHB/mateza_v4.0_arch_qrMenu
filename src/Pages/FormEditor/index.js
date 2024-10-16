@@ -121,6 +121,7 @@ const DragAndDropEditor = () => {
       {showThemeModal && (
         <ThemeSelectorModal
           onClose={() => setShowThemeModal(false)}
+          onSuccess={() => triggerNotification("Thema aangepast", "success")}
         />
       )}
     </div>
