@@ -1,7 +1,5 @@
-// src/components/NewReservation/NewReservation.jsx
-
 import React, { useState, useEffect } from 'react';
-import { title, theme, font, fields } from './formConfig';
+import { title, font, fields } from './formConfig'; // Removed static theme
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import SuccessMessage from './StepThree';
@@ -11,7 +9,7 @@ import './css/mobile.css';
 import './css/animations.css';
 import reserveIcon from '../../Assets/logos/logo-white.webp'; // Ensure this path is correct
 
-const NewReservation = ({ mode = 'full-screen' }) => {
+const NewReservation = () => {
   const initialFormData = {};
   fields.forEach((field) => {
     initialFormData[field.id] = '';
@@ -21,6 +19,7 @@ const NewReservation = ({ mode = 'full-screen' }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false); // New state for handling closing animation
+  const [restaurantData, setRestaurantData] = useState(null); // State for restaurant data
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -51,6 +50,22 @@ const NewReservation = ({ mode = 'full-screen' }) => {
     }, 300);
   };
 
+  // Fetch restaurant data from the API endpoint
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/restaurant/restaurantId123'); // Replace with the correct ID
+        const data = await response.json();
+        setRestaurantData(data); // Store the data in state
+        console.log('Fetched restaurant data:', data); // Print the fetched data
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+      }
+    };
+
+    fetchRestaurantData();
+  }, []);
+
   useEffect(() => {
     if (isModalOpen) {
       document.body.classList.add('modal-open');
@@ -62,6 +77,13 @@ const NewReservation = ({ mode = 'full-screen' }) => {
       document.body.classList.remove('modal-open');
     };
   }, [isModalOpen]);
+
+  // If no restaurant data is available yet, we can return a loading indicator or null
+  if (!restaurantData) {
+    return <div>Loading...</div>;
+  }
+
+  const { colors, theme } = restaurantData;
 
   const formContent = (
     <div className="reservation-form">
@@ -91,23 +113,24 @@ const NewReservation = ({ mode = 'full-screen' }) => {
 
   return (
     <div
-      className={`new-reservation-page ${mode === 'popup' ? 'popup-mode' : ''}`}
+      className={`new-reservation-page ${window.viewMode === 'popup' ? 'popup-mode' : ''}`}
       style={{
-        '--theme-color': theme.color,
-        '--theme-button-color': theme.buttonColor,
+        '--text-color': colors.textColor,
+        '--background-color': colors.backgroundColor,
+        '--container-color': colors.containerColor,
+        '--button-color': colors.buttonColor,
+        '--button-text-color': colors.buttonTextColor,
+        '--widget-text-color': colors.widgetTextColor,
       }}
     >
-      {mode === 'full-screen' ? (
+      {window.viewMode === 'full-screen' ? (
         <>
           <div className="top-image-section">
-            <img src={theme.image} alt={theme.title} className="top-image" />
+            <img src={`https://static.reservaties.net/themes/${theme.id}.webp`} alt={theme.title} className="top-image" />
           </div>
 
           <div
             className="form-section"
-            style={{
-              backgroundColor: theme.color,
-            }}
           >
             {formContent}
           </div>

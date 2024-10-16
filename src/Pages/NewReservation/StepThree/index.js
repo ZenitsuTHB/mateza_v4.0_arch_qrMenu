@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FaCheckCircle, FaPrint, FaShareAlt, FaCalendarPlus } from 'react-icons/fa';
-import { fields } from './formConfig';
+import { fields } from '../formConfig';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './css/successPage.css';
+import '../css/successPage.css';
 
 const SuccessMessage = () => {
   const [summaryData, setSummaryData] = useState(null);

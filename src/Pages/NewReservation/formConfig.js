@@ -1,7 +1,5 @@
 // src/components/NewReservation/formConfig.js
 
-import image1 from 'https://static.reservaties.net/themes/20.webp';
-
 export const title = 'Reserveer een Tafel';
 export const notification = 'Uw reservering is succesvol geplaatst!';
 export const theme = {
@@ -9,7 +7,6 @@ export const theme = {
   title: 'Oceaan Bries',
   color: 'pink',
   buttonColor: 'rgb(226, 139, 153)',
-  image: image1,
 };
 
 export const font = "Poppins";

@@ -29,7 +29,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	background-color: var(--theme-color, #5DADE2);
+	background-color: var(--background-color, #5DADE2);
 	padding: 20px;
 	box-sizing: border-box;
 	position: fixed;
@@ -127,5 +127,9 @@
 	font-weight: 500;
 	color: rgb(101, 101, 101);
 	text-align: center;
+  }
+
+  .new-reservation-page .form-group * {
+	box-sizing: border-box;
   }
   
