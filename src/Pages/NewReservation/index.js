@@ -7,7 +7,7 @@ import './css/newReservation.css';
 import './css/popup.css';
 import './css/mobile.css';
 import './css/animations.css';
-import reserveIcon from '../../Assets/logos/logo-white.webp'; // Ensure this path is correct
+import reserveIcon from '../../Assets/logos/logo-white.webp';
 
 const NewReservation = () => {
   const initialFormData = {};
@@ -18,8 +18,8 @@ const NewReservation = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false); // New state for handling closing animation
-  const [restaurantData, setRestaurantData] = useState(null); // State for restaurant data
+  const [isClosing, setIsClosing] = useState(false);
+  const [restaurantData, setRestaurantData] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -39,25 +39,22 @@ const NewReservation = () => {
   };
 
   const closeModal = () => {
-    setIsClosing(true); // Start closing animation
-    // Wait for animation to finish before unmounting
+    setIsClosing(true);
     setTimeout(() => {
       setIsModalOpen(false);
       setIsClosing(false);
-      // Reset form data and step if needed
       setFormData(initialFormData);
       setCurrentStep(1);
     }, 300);
   };
 
-  // Fetch restaurant data from the API endpoint
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/restaurant/restaurantId123'); // Replace with the correct ID
+        const response = await fetch(window.baseDomain + 'api/restaurant/restaurantId123'); // Replace with the correct ID
         const data = await response.json();
-        setRestaurantData(data); // Store the data in state
-        console.log('Fetched restaurant data:', data); // Print the fetched data
+        setRestaurantData(data);
+        console.log('Fetched restaurant data:', data);
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
       }
@@ -78,7 +75,6 @@ const NewReservation = () => {
     };
   }, [isModalOpen]);
 
-  // If no restaurant data is available yet, we can return a loading indicator or null
   if (!restaurantData) {
     return <div>Loading...</div>;
   }
@@ -129,9 +125,7 @@ const NewReservation = () => {
             <img src={`https://static.reservaties.net/themes/${theme.id}.webp`} alt={theme.title} className="top-image" />
           </div>
 
-          <div
-            className="form-section"
-          >
+          <div className="form-section">
             {formContent}
           </div>
         </>

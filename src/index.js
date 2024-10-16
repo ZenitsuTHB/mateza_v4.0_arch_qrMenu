@@ -21,6 +21,7 @@ import SecondaryTopBar from './Components/Structural/SecondaryTopBar/index.js';
 function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
   window.baseDomain = "http://localhost:5000/";
+  window.viewMode = "full-screen";
   
   return loginSuccessful ? (
     <div className="app-component">
