@@ -59,7 +59,7 @@ export const initialThemes = [
   { id: 6, title: 'Zonsondergang Oranje', color: '#FF7F50', image: themeImages.image6 },
   { id: 7, title: 'Pastel Dromen', color: '#7D3C98', image: themeImages.image7 },
   { id: 8, title: 'Diep Blauw', color: '#154360', image: themeImages.image8 },
-  { id: 20, title: 'Bordeaux Geluk', color: '#F8C8DC', image: themeImages.image20 },
+  { id: 20, title: 'Japans Geluk', color: '#F8C8DC', image: themeImages.image20 },
   { id: 13, title: 'Bosfluistering', color: '#229954', image: themeImages.image13 },
   { id: 14, title: 'Gouden Uur', color: '#F4D03F', image: themeImages.image14 },
   { id: 18, title: 'Koraalrif', color: '#FF6F61', image: themeImages.image18 },
