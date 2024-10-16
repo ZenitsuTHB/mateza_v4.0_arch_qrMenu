@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Settings from './Settings.js';
 import Colors from './Colors.js';
-import Fonts from './Fonts.js'; // Import the Fonts component
+import Fonts from './Fonts.js'; 
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/FormSettings/settingsTabs.css';
 
@@ -20,7 +20,6 @@ const SettingsTabs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implement save logic here if needed
   };
 
   return (
