@@ -11,7 +11,7 @@ import './css/mobile.css';
 import './css/animations.css';
 import reserveIcon from '../../Assets/logos/logo-white.webp'; // Ensure this path is correct
 
-const NewReservation = ({ mode = 'full-screen' }) => {
+const NewReservation = ({ mode = 'pop-up' }) => {
   const initialFormData = {};
   fields.forEach((field) => {
     initialFormData[field.id] = '';

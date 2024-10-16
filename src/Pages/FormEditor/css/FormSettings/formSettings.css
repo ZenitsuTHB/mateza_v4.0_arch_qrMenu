@@ -127,7 +127,7 @@
 	background-color: #0056b3;
   }
   
-  .font-preview {
+  .form-settings-page .font-preview {
 	margin-top: 20px;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -138,13 +138,13 @@
 	background-color: #f9f9f9;
   }
   
-  .custom-select {
+  .form-settings-page .custom-select {
 	position: relative;
 	width: 100%;
 	cursor: pointer;
   }
   
-  .selected-option {
+  .form-settings-page .selected-option {
 	padding: 10px;
 	border: 1px solid #ccc;
 	background-color: #fff;
@@ -154,19 +154,19 @@
 	border-radius: 5px;
   }
   
-  .selected-option.open {
+  .form-settings-page .selected-option.open {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
   }
   
-  .arrow {
+  .form-settings-page .arrow {
 	margin-left: 10px;
 	color: gray;
 	display: flex;
 	align-items: center;
   }
   
-  .options-list {
+  .form-settings-page .options-list {
 	position: absolute;
 	top: 100%;
 	left: 0;
@@ -180,13 +180,13 @@
 	border-radius: 0 0 5px 5px;
   }
   
-  .option-item {
+  .form-settings-page .option-item {
 	padding: 10px;
 	transition: background-color 0.2s;
 	cursor: pointer;
   }
   
-  .option-item:hover {
+  .form-settings-page .option-item:hover {
 	background-color: #f0f0f0;
   }
   
