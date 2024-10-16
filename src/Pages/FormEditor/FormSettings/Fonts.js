@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+// src/components/FormSettings/Fonts.jsx
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
 import WebFont from 'webfontloader';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
-const Fonts = () => {
+const Fonts = forwardRef((props, ref) => {
   const defaultFonts = {
     titleFont: 'Poppins',
     subtitleFont: 'Poppins',
@@ -14,6 +16,7 @@ const Fonts = () => {
   };
 
   const [fontsState, setFontsState] = useState(defaultFonts);
+  const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const availableFonts = [
@@ -34,13 +37,16 @@ const Fonts = () => {
       .then((response) => {
         if (response.data && Object.keys(response.data).length > 0) {
           setFontsState(response.data);
+          setInitialFontsState(response.data);
         } else {
           setFontsState(defaultFonts);
+          setInitialFontsState(defaultFonts);
         }
       })
       .catch((error) => {
         console.error('Error fetching fonts:', error);
         setFontsState(defaultFonts); // Set defaults if fetch fails
+        setInitialFontsState(defaultFonts);
       });
   }, []);
 
@@ -61,13 +67,22 @@ const Fonts = () => {
     axios.put('http://localhost:5000/api/fonts/restaurantId123', fontsState)
       .then(() => {
         triggerNotification('Lettertypes aangepast', 'success');
+        setInitialFontsState(fontsState); // Reset isDirty flag
       })
       .catch((error) => console.error('Error saving fonts:', error));
   };
 
+  // Determine if there are unsaved changes
+  const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
+
+  // Expose isDirty to parent
+  useImperativeHandle(ref, () => ({
+    isDirty,
+  }));
+
   return (
     <div className="fonts-container">
-       <NotificationComponent />
+      <NotificationComponent />
       {fontCategories.map(({ key, label }) => (
         <div className="form-group" key={key}>
           <label>{label}:</label>
@@ -88,6 +103,6 @@ const Fonts = () => {
       </button>
     </div>
   );
-};
+});
 
 export default Fonts;

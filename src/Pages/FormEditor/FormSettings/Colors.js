@@ -1,27 +1,37 @@
-import React, { useState, useEffect } from 'react';
+// src/components/FormSettings/Colors.jsx
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
-const Colors = () => {
+const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
-  const [appearanceData, setAppearanceData] = useState({
+  const defaultAppearanceData = {
     textColor: 'black',
     backgroundColor: 'white',
     containerColor: 'white',
     buttonColor: 'black',
     buttonTextColor: 'white',
-  });
+  };
+
+  const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
+  const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
 
   useEffect(() => {
     axios.get(window.baseDomain + 'api/colors/restaurantId123')
       .then((response) => {
         if (response.data) {
           setAppearanceData(response.data);
+          setInitialAppearanceData(response.data);
         }
       })
-      .catch((error) => console.error('Error fetching colors:', error));
+      .catch((error) => {
+        console.error('Error fetching colors:', error);
+        setAppearanceData(defaultAppearanceData);
+        setInitialAppearanceData(defaultAppearanceData);
+      });
   }, []);
 
   const handleChange = (e) => {
@@ -37,13 +47,20 @@ const Colors = () => {
     axios.put(window.baseDomain + 'api/colors/restaurantId123', appearanceData)
       .then(() => {
         triggerNotification('Kleuren aangepast', 'success');
+        setInitialAppearanceData(appearanceData); // Reset isDirty flag
       })
       .catch((error) => console.error('Error saving colors:', error));
   };
 
+  const isDirty = JSON.stringify(appearanceData) !== JSON.stringify(initialAppearanceData);
+
+  useImperativeHandle(ref, () => ({
+    isDirty,
+  }));
+
   return (
     <div>
-       <NotificationComponent />
+      <NotificationComponent />
       <div className="form-group">
         <label htmlFor="textColor">Tekstkleur:</label>
         <input
@@ -108,6 +125,6 @@ const Colors = () => {
       </button>
     </div>
   );
-};
+});
 
 export default Colors;

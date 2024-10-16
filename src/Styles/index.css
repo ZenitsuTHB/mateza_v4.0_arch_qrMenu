@@ -42,6 +42,10 @@
 	margin-bottom: 20px;
 }
 
+.secondary-title-small {
+	font-size: 22px;
+}
+
   .success-message {
 	display: flex;
 	align-items: center;
@@ -59,3 +63,7 @@
 	margin-right: 10px;
   }
   
+
+  .modal {
+	
+  }

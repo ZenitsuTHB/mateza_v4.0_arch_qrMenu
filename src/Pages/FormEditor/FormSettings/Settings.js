@@ -1,42 +1,46 @@
-import React, { useState, useEffect } from 'react';
+// src/components/FormSettings/Settings.jsx
+
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import ThemeSelectorModal from '../Theme/index.js';
 import useNotification from '../../../Components/Notification/index.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
-const Settings = () => {
+const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
   };
 
   const [formData, setFormData] = useState(defaultSettings);
+  const [initialFormData, setInitialFormData] = useState(defaultSettings);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [showThemeModal, setShowThemeModal] = useState(false);
   const { triggerNotification, NotificationComponent } = useNotification();
-
 
   useEffect(() => {
     axios.get(window.baseDomain +'api/settings/restaurantId123')
       .then((response) => {
         if (response.data) {
           const data = response.data;
-          setFormData({
+          const newFormData = {
             pageTitle: data.pageTitle || defaultSettings.pageTitle,
             generalNotification: data.generalNotification || '',
-          });
+          };
+          setFormData(newFormData);
+          setInitialFormData(newFormData);
         }
       })
       .catch((error) => {
         console.error('Error fetching settings:', error);
         setFormData(defaultSettings);
+        setInitialFormData(defaultSettings);
       });
 
     axios.get(window.baseDomain + 'api/theme/restaurantId123')
       .then((response) => {
         setSelectedTheme(response.data);
-
       })
       .catch((error) => {
         console.error('Error fetching theme:', error);
@@ -55,6 +59,7 @@ const Settings = () => {
     axios.put(window.baseDomain + 'api/settings/restaurantId123', formData)
       .then(() => {
         triggerNotification('Instellingen aangepast', 'success');
+        setInitialFormData(formData); // Reset isDirty flag
       })
       .catch((error) => {
         console.error('Error saving settings:', error);
@@ -71,9 +76,15 @@ const Settings = () => {
     }
   };
 
+  const isDirty = JSON.stringify(formData) !== JSON.stringify(initialFormData);
+
+  useImperativeHandle(ref, () => ({
+    isDirty,
+  }));
+
   return (
     <div>
-       <NotificationComponent />
+      <NotificationComponent />
       <div className="form-group">
         <label htmlFor="pageTitle">Titel:</label>
         <input
@@ -139,6 +150,6 @@ const Settings = () => {
       )}
     </div>
   );
-};
+});
 
 export default Settings;
