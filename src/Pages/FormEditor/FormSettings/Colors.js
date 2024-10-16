@@ -3,26 +3,28 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
+import ColorPicker from './ColorPicker.js'; // Import the ColorPicker subcomponent
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
+  
   const defaultAppearanceData = {
-    widgetBackgroundColor: 'black',
-    widgetTextColor: 'white',
-    textColor: 'black',
-    backgroundColor: 'white',
-    containerColor: 'white',
-    buttonColor: 'black',
-    buttonTextColor: 'white',
+    widgetBackgroundColor: '#000000', // Changed to hex for consistency
+    widgetTextColor: '#FFFFFF',
+    textColor: '#000000',
+    backgroundColor: '#FFFFFF',
+    containerColor: '#FFFFFF',
+    buttonColor: '#000000',
+    buttonTextColor: '#FFFFFF',
   };
 
   const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
 
   useEffect(() => {
-    axios.get(window.baseDomain + 'api/colors/restaurantId123')
+    axios.get(`${window.baseDomain}api/colors/restaurantId123`)
       .then((response) => {
         if (response.data) {
           setAppearanceData(response.data);
@@ -39,19 +41,23 @@ const Colors = forwardRef((props, ref) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setAppearanceData({
-      ...appearanceData,
+    setAppearanceData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSave = () => {
-    axios.put(window.baseDomain + 'api/colors/restaurantId123', appearanceData)
+    axios.put(`${window.baseDomain}api/colors/restaurantId123`, appearanceData)
       .then(() => {
         triggerNotification('Kleuren aangepast', 'success');
         setInitialAppearanceData(appearanceData);
       })
-      .catch((error) => console.error('Error saving colors:', error));
+      .catch((error) => {
+        console.error('Error saving colors:', error);
+        const errorCode = error.response?.status || 'unknown';
+        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+      });
   };
 
   const isDirty = JSON.stringify(appearanceData) !== JSON.stringify(initialAppearanceData);
@@ -61,87 +67,56 @@ const Colors = forwardRef((props, ref) => {
   }));
 
   return (
-    <div>
+    <div className="colors-container">
       <NotificationComponent />
-      <div className="form-group">
-        <label htmlFor="widgetBackgroundColor">Widget Achtergrondkleur:</label>
-        <input
-          type="color"
-          id="widgetBackgroundColor"
-          name="widgetBackgroundColor"
-          value={appearanceData.widgetBackgroundColor}
-          onChange={handleChange}
-        />
-      </div>
+      
+      <ColorPicker
+        label="Widget Achtergrondkleur"
+        name="widgetBackgroundColor"
+        value={appearanceData.widgetBackgroundColor}
+        onChange={handleChange}
+      />
+      <ColorPicker
+        label="Widget Tekstkleur"
+        name="widgetTextColor"
+        value={appearanceData.widgetTextColor}
+        onChange={handleChange}
+      />
 
-      <div className="form-group">
-        <label htmlFor="widgetTextColor">Widget Tekstkleur:</label>
-        <input
-          type="color"
-          id="widgetTextColor"
-          name="widgetTextColor"
-          value={appearanceData.widgetTextColor}
-          onChange={handleChange}
-        />
-      </div>
+      <ColorPicker
+        label="Tekstkleur"
+        name="textColor"
+        value={appearanceData.textColor}
+        onChange={handleChange}
+      />
+      <ColorPicker
+        label="Achtergrondkleur"
+        name="backgroundColor"
+        value={appearanceData.backgroundColor}
+        onChange={handleChange}
+      />
+      <ColorPicker
+        label="Containerkleur"
+        name="containerColor"
+        value={appearanceData.containerColor}
+        onChange={handleChange}
+      />
 
-      <div className="form-group">
-        <label htmlFor="textColor">Tekstkleur:</label>
-        <input
-          type="color"
-          id="textColor"
-          name="textColor"
-          value={appearanceData.textColor}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="backgroundColor">Achtergrondkleur:</label>
-        <input
-          type="color"
-          id="backgroundColor"
-          name="backgroundColor"
-          value={appearanceData.backgroundColor}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="containerColor">Containerkleur:</label>
-        <input
-          type="color"
-          id="containerColor"
-          name="containerColor"
-          value={appearanceData.containerColor}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="buttonColor">Knopkleur:</label>
-        <input
-          type="color"
-          id="buttonColor"
-          name="buttonColor"
-          value={appearanceData.buttonColor}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="buttonTextColor">Knoptekstkleur:</label>
-        <input
-          type="color"
-          id="buttonTextColor"
-          name="buttonTextColor"
-          value={appearanceData.buttonTextColor}
-          onChange={handleChange}
-        />
-      </div>
+      <ColorPicker
+        label="Knopkleur"
+        name="buttonColor"
+        value={appearanceData.buttonColor}
+        onChange={handleChange}
+      />
+      <ColorPicker
+        label="Knoptekstkleur"
+        name="buttonTextColor"
+        value={appearanceData.buttonTextColor}
+        onChange={handleChange}
+      />
 
       <button
-        type="submit"
+        type="button"
         className="submit-button"
         onClick={handleSave}
       >

@@ -59,10 +59,12 @@ const Settings = forwardRef((props, ref) => {
     axios.put(window.baseDomain + 'api/settings/restaurantId123', formData)
       .then(() => {
         triggerNotification('Instellingen aangepast', 'success');
-        setInitialFormData(formData); // Reset isDirty flag
+        setInitialFormData(formData);
       })
       .catch((error) => {
         console.error('Error saving settings:', error);
+        const errorCode = error.response?.status || 'unknown';
+        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
       });
   };
 

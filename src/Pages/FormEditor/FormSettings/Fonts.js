@@ -68,7 +68,11 @@ const Fonts = forwardRef((props, ref) => {
         triggerNotification('Lettertypes aangepast', 'success');
         setInitialFontsState(fontsState);
       })
-      .catch((error) => console.error('Error saving fonts:', error));
+      .catch((error) => {
+        console.error('Error saving fonts:', error);
+        const errorCode = error.response?.status || 'unknown';
+        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+      });
   };
 
   const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
