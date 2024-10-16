@@ -25,7 +25,7 @@ const StepTwo = ({
   };
 
   return (
-    <form className="reservation-form" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <h2>{title}</h2>
       <h3 className="subtitle">Stap 2/3</h3>
 

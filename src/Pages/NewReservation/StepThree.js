@@ -91,7 +91,7 @@ END:VCALENDAR`;
   };
 
   return (
-    <div className="reservation-form">
+    <div>
       <div className="success-message">
         <FaCheckCircle className="success-icon" />
         <p>Uw reservatie werd aangemaakt.</p>

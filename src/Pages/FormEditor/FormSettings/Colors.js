@@ -9,6 +9,8 @@ import '../css/FormSettings/mobile.css';
 const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
   const defaultAppearanceData = {
+    widgetBackgroundColor: 'black',
+    widgetTextColor: 'white',
     textColor: 'black',
     backgroundColor: 'white',
     containerColor: 'white',
@@ -47,7 +49,7 @@ const Colors = forwardRef((props, ref) => {
     axios.put(window.baseDomain + 'api/colors/restaurantId123', appearanceData)
       .then(() => {
         triggerNotification('Kleuren aangepast', 'success');
-        setInitialAppearanceData(appearanceData); // Reset isDirty flag
+        setInitialAppearanceData(appearanceData);
       })
       .catch((error) => console.error('Error saving colors:', error));
   };
@@ -61,6 +63,28 @@ const Colors = forwardRef((props, ref) => {
   return (
     <div>
       <NotificationComponent />
+      <div className="form-group">
+        <label htmlFor="widgetBackgroundColor">Widget Achtergrondkleur:</label>
+        <input
+          type="color"
+          id="widgetBackgroundColor"
+          name="widgetBackgroundColor"
+          value={appearanceData.widgetBackgroundColor}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="widgetTextColor">Widget Tekstkleur:</label>
+        <input
+          type="color"
+          id="widgetTextColor"
+          name="widgetTextColor"
+          value={appearanceData.widgetTextColor}
+          onChange={handleChange}
+        />
+      </div>
+
       <div className="form-group">
         <label htmlFor="textColor">Tekstkleur:</label>
         <input

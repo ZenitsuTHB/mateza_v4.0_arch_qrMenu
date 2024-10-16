@@ -71,13 +71,13 @@
   }
   
   /* Modal Buttons */
-  .modal-buttons {
+  .form-settings-page .modal-buttons {
 	display: flex;
 	justify-content: center;
   }
   
-  .modal-buttons .cancel-button,
-  .modal-buttons .discard-button {
+  .form-settings-page .modal-buttons .cancel-button,
+  .form-settings-page .modal-buttons .discard-button {
 	padding: 10px 20px;
 	font-size: 16px;
 	cursor: pointer;
@@ -85,23 +85,23 @@
 	position: relative;
   }
   
-  .modal-buttons .cancel-button {
+  .form-settings-page .modal-buttons .cancel-button {
 	background-color: #ccc;
 	color: #000;
 	margin-right: 10px;
   }
   
-  .modal-buttons .cancel-button:hover {
+  .form-settings-page .modal-buttons .cancel-button:hover {
 	background-color: #bbb;
   }
   
-  .modal-buttons .discard-button {
+  .form-settings-page .modal-buttons .discard-button {
 	background-color: #d32f2f;
 	color: #fff;
 	margin-left: 20px;
   }
   
-  .modal-buttons .discard-button::after {
+  .form-settings-page .modal-buttons .discard-button::after {
 	content: '';
 	position: absolute;
 	top: -4px;
@@ -113,7 +113,7 @@
 	border-radius: 5px;
   }
   
-  .modal-buttons .discard-button:hover {
+  .form-settings-page .modal-buttons .discard-button:hover {
 	background-color: #b71c1c;
   }
   
