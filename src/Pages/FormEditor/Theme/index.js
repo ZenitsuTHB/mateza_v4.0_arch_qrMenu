@@ -1,4 +1,3 @@
-// ThemeSelectorModal.js
 import React, { useState } from 'react';
 import ThemeSquare from './Square';
 import AddThemeSquare from './AddSquare';
@@ -17,6 +16,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
 
   const handleThemeClick = (theme) => {
     saveThemeToBackend(theme);
+    onSuccess(theme); // Pass the selected theme back to the parent
     onClose();
   };
 
@@ -33,10 +33,10 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
     };
 
     const themeColor = { backgroundColor: theme.color };
-  
+
     axios.put(window.baseDomain + 'api/theme/restaurantId123', themeData)
       .then(() => {
-        console.log("success");
+        console.log("Theme saved successfully");
       })
       .catch((error) => {
         console.error('Error saving selected theme:', error);
@@ -50,7 +50,6 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
         console.error('Error updating background color:', error);
       });
   };
-  
 
   return (
     <div className="theme-page">

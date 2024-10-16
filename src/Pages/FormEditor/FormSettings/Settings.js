@@ -1,5 +1,3 @@
-// src/components/FormSettings/Settings.jsx
-
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import ThemeSelectorModal from '../Theme/index.js';
@@ -20,7 +18,7 @@ const Settings = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   useEffect(() => {
-    axios.get(window.baseDomain +'api/settings/restaurantId123')
+    axios.get(window.baseDomain + 'api/settings/restaurantId123')
       .then((response) => {
         if (response.data) {
           const data = response.data;
@@ -148,7 +146,10 @@ const Settings = forwardRef((props, ref) => {
       {showThemeModal && (
         <ThemeSelectorModal
           onClose={() => setShowThemeModal(false)}
-          onSuccess={() => triggerNotification("Thema aangepast", "success")}
+          onSuccess={(theme) => {
+            setSelectedTheme(theme);
+            triggerNotification("Thema aangepast", "success");
+          }}
         />
       )}
     </div>
