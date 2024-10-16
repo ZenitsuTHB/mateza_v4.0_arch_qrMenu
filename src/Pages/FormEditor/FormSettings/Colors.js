@@ -109,7 +109,7 @@ const Colors = forwardRef((props, ref) => {
         onChange={handleChange}
       />
       <ColorPicker
-        label="Knoptekstkleur"
+        label="Knoptekst kleur"
         name="buttonTextColor"
         value={appearanceData.buttonTextColor}
         onChange={handleChange}
