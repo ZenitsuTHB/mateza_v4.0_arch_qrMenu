@@ -3,7 +3,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
-import ColorPicker from './ColorPicker.js'; // Import the ColorPicker subcomponent
+import ColorPicker from './ColorPicker.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
@@ -11,7 +11,7 @@ const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
   
   const defaultAppearanceData = {
-    widgetBackgroundColor: '#000000', // Changed to hex for consistency
+    widgetBackgroundColor: '#000000',
     widgetTextColor: '#FFFFFF',
     textColor: '#000000',
     backgroundColor: '#FFFFFF',
