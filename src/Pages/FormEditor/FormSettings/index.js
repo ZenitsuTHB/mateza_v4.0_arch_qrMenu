@@ -107,8 +107,8 @@ const SettingsTabs = () => {
       </form>
 
       {showUnsavedChangesModal && (
-        <div className="unsaved-changes-modal">
-          <div className="modal modal-content">
+        <div className="modal unsaved-changes-modal">
+          <div className="modal-content">
             <h2 className='secondary-title secondary-title-small'>Wijzigingen Niet Opgeslagen</h2>
             <p>Wilt doorgaan zonder op te slaan?</p>
             <div className="modal-buttons">
