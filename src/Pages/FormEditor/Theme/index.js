@@ -26,6 +26,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
 
   const saveThemeToBackend = (theme) => {
     const themeData = {
+      id: theme.id,
       title: theme.title,
       color: theme.color,
       image: theme.image,
