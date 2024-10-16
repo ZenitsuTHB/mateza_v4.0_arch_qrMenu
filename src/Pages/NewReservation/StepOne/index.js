@@ -16,20 +16,18 @@ const StepOne = ({
 }) => {
   const [guestSelected, setGuestSelected] = useState(false);
   const [dateSelected, setDateSelected] = useState(false);
-  const maxGuests = 10; // Define maximum guests allowed for online reservations
+  const maxGuests = 10;
 
   const handleNext = (e) => {
     e.preventDefault();
     setCurrentStep(2);
   };
 
-  // Extract the fields for time and number of guests
   const timeField = fields.find((field) => field.id === 'tijd');
   const guestNumberField = fields.find(
     (field) => field.id === 'aantalPersonen'
   );
 
-  // Check if the number of guests exceeds the maximum allowed
   const numGuests = parseInt(formData[guestNumberField.id], 10);
   const guestsExceeded = numGuests > maxGuests;
 
