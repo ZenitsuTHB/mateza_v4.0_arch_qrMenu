@@ -7,15 +7,14 @@ import '../css/FormSettings/mobile.css';
 const Colors = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
   const [appearanceData, setAppearanceData] = useState({
-    textColor: '#000000',
-    backgroundColor: '',
-    containerColor: '#FFFFFF',
-    buttonColor: '',
-    buttonTextColor: '#FFFFFF',
+    textColor: 'black',
+    backgroundColor: 'white',
+    containerColor: 'white',
+    buttonColor: 'black',
+    buttonTextColor: 'white',
   });
 
   useEffect(() => {
-    // Fetch colors settings from server
     axios.get(window.baseDomain + 'api/colors/restaurantId123')
       .then((response) => {
         if (response.data) {
