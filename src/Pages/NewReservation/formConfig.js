@@ -1,6 +1,6 @@
 // src/components/NewReservation/formConfig.js
 
-import image1 from '../../Assets/themes/original/20.jpg';
+import image1 from 'https://static.reservaties.net/themes/20.webp';
 
 export const title = 'Reserveer een Tafel';
 export const notification = 'Uw reservering is succesvol geplaatst!';

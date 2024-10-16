@@ -31,6 +31,8 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
       color: theme.color,
       image: theme.image,
     };
+
+    const themeColor = { backgroundColor: theme.color };
   
     axios.put(window.baseDomain + 'api/theme/restaurantId123', themeData)
       .then(() => {
@@ -38,6 +40,14 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
       })
       .catch((error) => {
         console.error('Error saving selected theme:', error);
+      });
+
+    axios.patch(window.baseDomain + 'api/theme/restaurantId123/backgroundColor', themeColor)
+      .then(() => {
+        onSuccess();
+      })
+      .catch((error) => {
+        console.error('Error saving background color:', error);
       });
   };
   
