@@ -48,10 +48,9 @@ const NewReservation = ({ mode = 'pop-up' }) => {
       // Reset form data and step if needed
       setFormData(initialFormData);
       setCurrentStep(1);
-    }, 300); // Duration should match the CSS animation duration (0.3s)
+    }, 300);
   };
 
-  // Prevent background scrolling when modal is open
   useEffect(() => {
     if (isModalOpen) {
       document.body.classList.add('modal-open');
@@ -64,7 +63,6 @@ const NewReservation = ({ mode = 'pop-up' }) => {
     };
   }, [isModalOpen]);
 
-  // Render the form content
   const formContent = (
     <div className="reservation-form">
       {currentStep === 1 && (

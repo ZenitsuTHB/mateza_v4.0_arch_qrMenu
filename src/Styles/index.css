@@ -62,8 +62,7 @@
 	font-size: 24px;
 	margin-right: 10px;
   }
-  
 
   .modal {
-	z-index: var(--z-index-modal) !important;
+	z-index: var(--z-index-modal);
   }

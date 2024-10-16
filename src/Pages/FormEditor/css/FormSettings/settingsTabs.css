@@ -43,7 +43,7 @@
 
 
   /* Modal Overlay */
-.unsaved-changes-modal {
+  .form-settings-page .unsaved-changes-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -56,7 +56,7 @@
   }
   
   /* Modal Content */
-  .modal-content {
+  .form-settings-page .modal-content {
 	background-color: #fff;
 	padding: 30px 20px;
 	border-radius: 5px;
@@ -64,7 +64,7 @@
 	width: 90%;
   }
   
-  .modal-content p {
+  .form-settings-page .modal-content p {
 	font-size: 16px;
 	margin-bottom: 30px;
 	text-align: center;
