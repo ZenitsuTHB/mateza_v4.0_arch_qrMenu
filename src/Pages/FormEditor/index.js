@@ -100,14 +100,6 @@ const DragAndDropEditor = () => {
     setDropPosition(destination.index);
   };
 
-  const handleSelectTheme = (theme) => {
-    triggerNotification('Thema geselecteerd', 'success');
-  };
-
-  const handleAddTheme = (newTheme) => {
-    triggerNotification('Nieuw thema toegevoegd', 'success');
-  };
-
   return (
     <div className="form-editing-page" ref={formEditingPageRef}>
       <NotificationComponent />

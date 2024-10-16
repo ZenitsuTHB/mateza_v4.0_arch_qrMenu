@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ThemeSelectorModal from '../Theme/index.js';
-import useNotification from '../../../Components/Notification/index.js'; // Adjust the import path as needed
+import useNotification from '../../../Components/Notification/index.js';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
@@ -14,15 +14,14 @@ const Settings = () => {
   const [formData, setFormData] = useState(defaultSettings);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [showThemeModal, setShowThemeModal] = useState(false);
+  const { triggerNotification, NotificationComponent } = useNotification();
+
 
   useEffect(() => {
-    // Fetch settings from the server
-    axios.get('http://localhost:5000/api/settings/restaurantId123')
+    axios.get(window.baseDomain +'api/settings/restaurantId123')
       .then((response) => {
         if (response.data) {
           const data = response.data;
-
-          // Set formData and other relevant settings from response
           setFormData({
             pageTitle: data.pageTitle || defaultSettings.pageTitle,
             generalNotification: data.generalNotification || '',
@@ -31,12 +30,10 @@ const Settings = () => {
       })
       .catch((error) => {
         console.error('Error fetching settings:', error);
-        // If fetch fails, use default settings
         setFormData(defaultSettings);
       });
 
-    // Fetch theme from the server
-    axios.get('http://localhost:5000/api/theme/restaurantId123')
+    axios.get(window.baseDomain + 'api/theme/restaurantId123')
       .then((response) => {
         
         setSelectedTheme(response.data);
@@ -56,9 +53,9 @@ const Settings = () => {
   };
 
   const handleSave = () => {
-    axios.put('http://localhost:5000/api/settings/restaurantId123', formData)
+    axios.put(window.baseDomain + 'api/settings/restaurantId123', formData)
       .then(() => {
-        console.log('Settings updated successfully');
+        triggerNotification('Instellingen aangepast', 'success');
       })
       .catch((error) => {
         console.error('Error saving settings:', error);
@@ -77,6 +74,7 @@ const Settings = () => {
 
   return (
     <div>
+       <NotificationComponent />
       <div className="form-group">
         <label htmlFor="pageTitle">Titel:</label>
         <input

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios for HTTP requests
+import axios from 'axios';
+import useNotification from '../../../Components/Notification/index';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Colors = () => {
+  const { triggerNotification, NotificationComponent } = useNotification();
   const [appearanceData, setAppearanceData] = useState({
     textColor: '#000000',
     backgroundColor: '',
@@ -14,7 +16,7 @@ const Colors = () => {
 
   useEffect(() => {
     // Fetch colors settings from server
-    axios.get('http://localhost:5000/api/colors/restaurantId123')
+    axios.get(window.baseDomain + 'api/colors/restaurantId123')
       .then((response) => {
         if (response.data) {
           setAppearanceData(response.data);
@@ -33,15 +35,16 @@ const Colors = () => {
   };
 
   const handleSave = () => {
-    axios.put('http://localhost:5000/api/colors/restaurantId123', appearanceData)
+    axios.put(window.baseDomain + 'api/colors/restaurantId123', appearanceData)
       .then(() => {
-        console.log('Colors updated successfully');
+        triggerNotification('Kleuren aangepast', 'success');
       })
       .catch((error) => console.error('Error saving colors:', error));
   };
 
   return (
     <div>
+       <NotificationComponent />
       <div className="form-group">
         <label htmlFor="textColor">Tekstkleur:</label>
         <input
