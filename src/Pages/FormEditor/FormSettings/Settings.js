@@ -35,7 +35,6 @@ const Settings = () => {
 
     axios.get(window.baseDomain + 'api/theme/restaurantId123')
       .then((response) => {
-        
         setSelectedTheme(response.data);
 
       })
