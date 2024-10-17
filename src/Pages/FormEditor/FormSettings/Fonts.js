@@ -5,6 +5,7 @@ import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
+import { sansSerifFonts, serifFonts, fontWeights } from './fontsConfig';
 
 const Fonts = forwardRef((props, ref) => {
   const defaultFonts = {
@@ -14,59 +15,12 @@ const Fonts = forwardRef((props, ref) => {
     buttonFont: { font: 'Poppins', weight: '400' },
   };
 
-  const resetFonts = {
-    titleFont: { font: 'Poppins', weight: '700' },
-    subtitleFont: { font: 'Poppins', weight: '500' },
-    labelFont: { font: 'Poppins', weight: '500' },
-    buttonFont: { font: 'Poppins', weight: '500' },
-  };
+  // Reset fonts are now the same as defaultFonts
+  const resetFonts = defaultFonts;
 
   const [fontsState, setFontsState] = useState(defaultFonts);
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
-
-  // Categorized Fonts
-  const serifFonts = [
-    'Merriweather',
-    'Playfair Display',
-    'Lora',
-    'Bitter',
-    'Arvo',
-    'Slabo 27px',
-  ];
-
-  const sansSerifFonts = [
-    'Poppins',
-    'Roboto',
-    'Open Sans',
-    'Lato',
-    'Montserrat',
-    'Nunito',
-    'Raleway',
-    'Oswald',
-    'Ubuntu',
-    'Noto Sans',
-    'Rubik',
-    'PT Sans',
-    'Work Sans',
-    'Inter',
-    'Cabin',
-    'Nunito Sans',
-    'Mukta',
-    'Fira Sans',
-    'Josefin Sans',
-    'Quicksand',
-    'Anton',
-    'Bebas Neue',
-    'Comfortaa',
-    'Karla',
-    'Mulish',
-    'Righteous',
-    'Roboto Condensed',
-    'Source Sans Pro',
-  ];
-
-  const availableFontWeights = ['100', '200', '300', '400', '500', '600', '700', '800', '900'];
 
   const fontCategories = [
     { key: 'titleFont', label: 'Titel' },
@@ -75,7 +29,6 @@ const Fonts = forwardRef((props, ref) => {
     { key: 'buttonFont', label: 'Knoppen' },
   ];
 
-  // Define a mapping for fonts that require labels
   const fontLabels = {
     'Montserrat': '(populair)',
     'Comfortaa': '(aanbevolen)',
@@ -115,17 +68,26 @@ const Fonts = forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
-    const fontsToImport = Object.values(fontsState)
+    // Collect all fonts and weights used to import them
+    const fontWeightMap = {};
+
+    Object.values(fontsState)
       .filter(({ font }) => font)
-      .map(({ font, weight }) => {
-        return `family=${encodeURIComponent(font)}:wght@${weight}`;
+      .forEach(({ font, weight }) => {
+        if (!fontWeightMap[font]) {
+          fontWeightMap[font] = new Set();
+        }
+        fontWeightMap[font].add(weight);
       });
 
-    if (fontsToImport.length > 0) {
-      const uniqueFontsToImport = [...new Set(fontsToImport)];
-      const googleFontsUrl = `https://fonts.googleapis.com/css2?${uniqueFontsToImport.join('&')}&display=swap`;
+    const fontsToImport = Object.entries(fontWeightMap).map(([font, weightsSet]) => {
+      const weightsArray = Array.from(weightsSet);
+      return `family=${encodeURIComponent(font)}:wght@${weightsArray.join(';')}`;
+    });
 
-      // Create or update the link element
+    if (fontsToImport.length > 0) {
+      const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsToImport.join('&')}&display=swap`;
+
       let linkElement = document.getElementById('dynamic-fonts-import');
       if (!linkElement) {
         linkElement = document.createElement('link');
@@ -138,9 +100,14 @@ const Fonts = forwardRef((props, ref) => {
   }, [fontsState]);
 
   const handleFontSelect = (categoryKey, font) => {
+    // Reset the weight to default if the current weight is not available for the new font
+    const availableWeights = fontWeights[font] || ['400'];
+    const currentWeight = fontsState[categoryKey]?.weight || '400';
+    const newWeight = availableWeights.includes(currentWeight) ? currentWeight : availableWeights[0];
+
     setFontsState((prev) => ({
       ...prev,
-      [categoryKey]: { ...prev[categoryKey], font },
+      [categoryKey]: { font: font, weight: newWeight },
     }));
   };
 
@@ -193,6 +160,8 @@ const Fonts = forwardRef((props, ref) => {
         const selectedFont = fontsState[key]?.font || defaultFonts[key].font;
         const selectedWeight = fontsState[key]?.weight || defaultFonts[key].weight;
 
+        const availableWeights = fontWeights[selectedFont] || ['400'];
+
         return (
           <div className="form-group" key={key}>
             <label>{label}:</label>
@@ -214,7 +183,7 @@ const Fonts = forwardRef((props, ref) => {
                 </optgroup>
               </select>
               <select value={selectedWeight} onChange={(e) => handleWeightSelect(key, e.target.value)}>
-                {availableFontWeights.map((weight) => (
+                {availableWeights.map((weight) => (
                   <option key={weight} value={weight}>
                     {weight}
                   </option>
