@@ -9,7 +9,10 @@ const withHeader = (WrappedComponent) => {
       <div className="withHeader">
         <h1 className="title">{props.title}</h1>
         <Breadcrumb/>
-        <WrappedComponent {...props} />
+
+        <div className="content">
+          <WrappedComponent {...props} />
+        </div>
       </div>
     );
   };
