@@ -180,3 +180,7 @@
 	background-color: #f0f0f0;
   }
   
+
+.form-settings-page .form-group select {
+	margin-right: 10px;
+  }
