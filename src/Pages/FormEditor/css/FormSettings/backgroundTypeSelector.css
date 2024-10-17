@@ -6,8 +6,8 @@
   
   .background-type-selector label {
 	display: block;
-	margin-bottom: 10px;
-	font-weight: bold;
+	margin-bottom: 5px;
+	font-weight: 500;
   }
   
   .background-type-options {

@@ -12,12 +12,11 @@ const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const defaultAppearanceData = {
-    backgroundType: 'solid', // Default to solid background
+    backgroundType: 'solid',
     backgroundColor: '#FFFFFF',
     gradientStartColor: '#FFFFFF',
     gradientEndColor: '#000000',
     animationType: 'none',
-    // ... other existing color settings
     widgetBackgroundColor: '#000000',
     widgetTextColor: '#FFFFFF',
     textColor: '#000000',
@@ -113,28 +112,9 @@ const Colors = forwardRef((props, ref) => {
             value={appearanceData.gradientEndColor}
             onChange={handleChange}
           />
-          {/* Optionally, add inputs for gradient direction, etc. */}
         </>
       )}
 
-      {backgroundType === 'animated' && (
-        <>
-          <ColorPicker
-            label="Gradient Startkleur"
-            name="gradientStartColor"
-            value={appearanceData.gradientStartColor}
-            onChange={handleChange}
-          />
-          <ColorPicker
-            label="Gradient Eindkleur"
-            name="gradientEndColor"
-            value={appearanceData.gradientEndColor}
-            onChange={handleChange}
-          />
-        </>
-      )}
-
-      {/* Existing ColorPickers */}
       <ColorPicker
         label="Widget Achtergrondkleur"
         name="widgetBackgroundColor"
@@ -154,7 +134,6 @@ const Colors = forwardRef((props, ref) => {
         value={appearanceData.textColor}
         onChange={handleChange}
       />
-      {/* Other existing color pickers */}
       <ColorPicker
         label="Containerkleur"
         name="containerColor"
