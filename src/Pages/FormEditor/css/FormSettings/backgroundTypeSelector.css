@@ -1,21 +1,21 @@
 /* src/components/FormSettings/css/backgroundTypeSelector.css */
 
-.background-type-selector {
+.form-settings-page .background-type-selector {
 	margin-bottom: 20px;
   }
   
-  .background-type-selector label {
+  .form-settings-page .background-type-selector label {
 	display: block;
 	margin-bottom: 5px;
 	font-weight: 500;
   }
   
-  .background-type-options {
+  .form-settings-page .background-type-options {
 	display: flex;
 	width: 100%;
   }
   
-  .background-type-option {
+  .form-settings-page .background-type-option {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -30,15 +30,15 @@
 	text-align: center;
   }
   
-  .background-type-option.selected {
+  .form-settings-page .background-type-option.selected {
 	border-color: #007bff; /* Blue color to highlight selection */
   }
   
-  .icon-container {
+  .form-settings-page .icon-container {
 	margin-bottom: 10px;
   }
   
-  .option-label {
+  .form-settings-page .option-label {
 	font-size: 14px;
   }
   

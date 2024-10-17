@@ -1,7 +1,9 @@
   
   @media (max-width: 900px) {
+
 	.form-settings-page .form-settings-form {
-	  padding: 20px;
+		padding: 20px;
+		margin-bottom: 60px;
 	}
   
 	.form-settings-page .form-settings-form h2 {
