@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
-import useNotification from '../../../Components/Notification/index';
-import '../css/FormSettings/formSettings.css';
-import '../css/FormSettings/mobile.css';
+import useNotification from '../../../../Components/Notification/index';
+import '../../css/FormSettings/formSettings.css';
+import '../../css/FormSettings/mobile.css';
 import { sansSerifFonts, serifFonts, fontWeights } from './fontsConfig';
 
 const Fonts = forwardRef((props, ref) => {

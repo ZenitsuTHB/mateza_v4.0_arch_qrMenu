@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
-import useNotification from '../../../Components/Notification/index';
+import useNotification from '../../../../Components/Notification/index';
 import ColorPicker from './ColorPicker';
 import BackgroundTypeSelector from './BackgroundTypeSelector';
-import '../css/FormSettings/formSettings.css';
-import '../css/FormSettings/mobile.css';
+import '../../css/FormSettings/formSettings.css';
+import '../../css/FormSettings/mobile.css';
 
 const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();

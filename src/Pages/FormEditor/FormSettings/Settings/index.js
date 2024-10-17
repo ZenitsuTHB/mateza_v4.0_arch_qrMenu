@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
-import useNotification from '../../../Components/Notification/index.js';
-import '../css/FormSettings/formSettings.css';
-import '../css/FormSettings/mobile.css';
-import SettingsForm from './SettingsForm';
-import ThemePreview from './ThemePreview';
-import AlignmentSelector from './AlignmentSelector';
+import useNotification from '../../../../Components/Notification/index.js';
+import '../../css/FormSettings/formSettings.css';
+import '../../css/FormSettings/mobile.css';
+import SettingsForm from './SettingsForm.js';
+import ThemePreview from './ThemePreview.js';
+import AlignmentSelector from './AlignmentSelector.js';
 
 const Settings = forwardRef((props, ref) => {
   const defaultSettings = {

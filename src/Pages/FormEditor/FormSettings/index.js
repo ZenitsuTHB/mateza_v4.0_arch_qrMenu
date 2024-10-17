@@ -2,9 +2,9 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import Settings from './Settings.js';
-import Colors from './Colors.js';
-import Fonts from './Fonts.js'; 
+import Settings from './Settings/index.js';
+import Colors from './Colors/index.js';
+import Fonts from './Fonts/index.js'; 
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import '../css/FormSettings/settingsTabs.css';
 

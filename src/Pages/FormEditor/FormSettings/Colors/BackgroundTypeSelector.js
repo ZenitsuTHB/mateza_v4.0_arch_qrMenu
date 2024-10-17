@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaSquareFull, FaGripLinesVertical, FaMagic } from 'react-icons/fa';
-import '../css/FormSettings/backgroundTypeSelector.css';
+import '../../css/FormSettings/backgroundTypeSelector.css';
 
 const BackgroundTypeSelector = ({ backgroundType, setBackgroundType }) => {
   const options = [

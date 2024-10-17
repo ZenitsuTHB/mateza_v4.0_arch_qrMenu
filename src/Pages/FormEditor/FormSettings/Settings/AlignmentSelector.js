@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaSquareFull, FaColumns, FaImage } from 'react-icons/fa';
-import '../css/FormSettings/alignmentSelector.css';
+import '../../css/FormSettings/alignmentSelector.css';
 
 const AlignmentSelector = ({ alignment, setAlignment }) => {
   const options = [
