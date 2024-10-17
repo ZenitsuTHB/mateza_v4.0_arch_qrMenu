@@ -17,7 +17,7 @@ const ProfileBio = ({ name, interests }) => {
       setBio(storedBio);
     } else {
       setBio(
-        'John Doe is a software engineer with over 10 years of experience in full-stack development. Passionate about building scalable web applications, he specializes in JavaScript, React, and Node.js. In his free time, he enjoys contributing to open source projects and exploring new tech innovations.'
+        'We zijn erg trots op ons restaurant!'
       );
     }
   }, []);
