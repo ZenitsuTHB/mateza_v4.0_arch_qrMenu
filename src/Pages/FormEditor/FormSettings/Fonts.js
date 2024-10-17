@@ -14,6 +14,13 @@ const Fonts = forwardRef((props, ref) => {
     buttonFont: { font: 'Poppins', weight: '400' },
   };
 
+  const resetFonts = {
+    titleFont: { font: 'Poppins', weight: '700' },
+    subtitleFont: { font: 'Poppins', weight: '500' },
+    labelFont: { font: 'Poppins', weight: '500' },
+    buttonFont: { font: 'Poppins', weight: '500' },
+  };
+
   const [fontsState, setFontsState] = useState(defaultFonts);
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
@@ -123,6 +130,21 @@ const Fonts = forwardRef((props, ref) => {
       });
   };
 
+  const handleReset = () => {
+    setFontsState(resetFonts);
+    axios
+      .put(window.baseDomain + 'api/fonts/restaurantId123', resetFonts)
+      .then(() => {
+        triggerNotification('Lettertypes gereset naar standaard', 'success');
+        setInitialFontsState(resetFonts);
+      })
+      .catch((error) => {
+        console.error('Error resetting fonts:', error);
+        const errorCode = error.response?.status || 'unknown';
+        triggerNotification(`Fout bij resetten. Code: ${errorCode}`, 'error');
+      });
+  };
+
   const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
 
   useImperativeHandle(ref, () => ({
@@ -164,11 +186,13 @@ const Fonts = forwardRef((props, ref) => {
           </div>
         );
       })}
+      
+      <button type="button" className="submit-button reset-button" onClick={handleReset}>
+        Reset naar Standaard
+      </button>
       <button type="submit" className="submit-button" onClick={handleSave}>
         Opslaan
       </button>
-
-      
     </div>
   );
 });
