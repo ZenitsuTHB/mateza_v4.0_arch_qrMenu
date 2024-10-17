@@ -25,15 +25,44 @@ const Fonts = forwardRef((props, ref) => {
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
 
-  const availableFonts = [
-    'Poppins', 'Roboto', 'Open Sans', 'Lato', 'Montserrat',
-    'Nunito', 'Raleway', 'Oswald', 'Ubuntu', 'Merriweather',
-    'Playfair Display', 'Lora', 'Noto Sans', 'Rubik', 'PT Sans',
-    'Work Sans', 'Inter', 'Cabin', 'Nunito Sans', 'Mukta',
-    'Fira Sans', 'Josefin Sans', 'Quicksand', 'Bitter',
-    'Anton', 'Bebas Neue', 'Dancing Script', 'Lobster', 'Pacifico',
-    'Comfortaa', 'Arvo', 'Cairo', 'Heebo', 'Karla', 'Mulish',
-    'Righteous', 'Roboto Condensed', 'Satisfy', 'Slabo 27px',
+  // Categorized Fonts
+  const serifFonts = [
+    'Merriweather',
+    'Playfair Display',
+    'Lora',
+    'Bitter',
+    'Arvo',
+    'Slabo 27px',
+  ];
+
+  const sansSerifFonts = [
+    'Poppins',
+    'Roboto',
+    'Open Sans',
+    'Lato',
+    'Montserrat',
+    'Nunito',
+    'Raleway',
+    'Oswald',
+    'Ubuntu',
+    'Noto Sans',
+    'Rubik',
+    'PT Sans',
+    'Work Sans',
+    'Inter',
+    'Cabin',
+    'Nunito Sans',
+    'Mukta',
+    'Fira Sans',
+    'Josefin Sans',
+    'Quicksand',
+    'Anton',
+    'Bebas Neue',
+    'Comfortaa',
+    'Karla',
+    'Mulish',
+    'Righteous',
+    'Roboto Condensed',
     'Source Sans Pro',
   ];
 
@@ -48,7 +77,7 @@ const Fonts = forwardRef((props, ref) => {
 
   useEffect(() => {
     axios
-      .get(window.baseDomain + 'api/fonts/restaurantId123')
+      .get(`${window.baseDomain}api/fonts/restaurantId123`)
       .then((response) => {
         if (response.data && Object.keys(response.data).length > 0) {
           const fetchedFonts = response.data;
@@ -118,7 +147,7 @@ const Fonts = forwardRef((props, ref) => {
 
   const handleSave = () => {
     axios
-      .put(window.baseDomain + 'api/fonts/restaurantId123', fontsState)
+      .put(`${window.baseDomain}api/fonts/restaurantId123`, fontsState)
       .then(() => {
         triggerNotification('Lettertypes aangepast', 'success');
         setInitialFontsState(fontsState);
@@ -133,7 +162,7 @@ const Fonts = forwardRef((props, ref) => {
   const handleReset = () => {
     setFontsState(resetFonts);
     axios
-      .put(window.baseDomain + 'api/fonts/restaurantId123', resetFonts)
+      .put(`${window.baseDomain}api/fonts/restaurantId123`, resetFonts)
       .then(() => {
         triggerNotification('Lettertypes gereset naar standaard', 'success');
         setInitialFontsState(resetFonts);
@@ -163,11 +192,20 @@ const Fonts = forwardRef((props, ref) => {
             <label>{label}:</label>
             <div className="font-selector">
               <select value={selectedFont} onChange={(e) => handleFontSelect(key, e.target.value)}>
-                {availableFonts.map((font) => (
-                  <option key={font} value={font}>
-                    {font}
-                  </option>
-                ))}
+                <optgroup label="Modern">
+                  {sansSerifFonts.map((font) => (
+                    <option key={font} value={font}>
+                      {font}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Klassiek">
+                  {serifFonts.map((font) => (
+                    <option key={font} value={font}>
+                      {font}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
               <select value={selectedWeight} onChange={(e) => handleWeightSelect(key, e.target.value)}>
                 {availableFontWeights.map((weight) => (
@@ -186,7 +224,7 @@ const Fonts = forwardRef((props, ref) => {
           </div>
         );
       })}
-      
+
       <button type="button" className="submit-button reset-button" onClick={handleReset}>
         Reset naar Standaard
       </button>
