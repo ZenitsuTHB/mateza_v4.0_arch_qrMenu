@@ -7,11 +7,13 @@ import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 import SettingsForm from './SettingsForm';
 import ThemePreview from './ThemePreview';
+import AlignmentSelector from './AlignmentSelector';
 
 const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
+    alignment: 'fullScreenColor', // Default alignment
   };
 
   const [formData, setFormData] = useState(defaultSettings);
@@ -28,6 +30,7 @@ const Settings = forwardRef((props, ref) => {
           const newFormData = {
             pageTitle: data.pageTitle || defaultSettings.pageTitle,
             generalNotification: data.generalNotification || '',
+            alignment: data.alignment || defaultSettings.alignment,
           };
           setFormData(newFormData);
           setInitialFormData(newFormData);
@@ -54,6 +57,13 @@ const Settings = forwardRef((props, ref) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const setAlignment = (alignmentValue) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      alignment: alignmentValue,
     }));
   };
 
@@ -94,6 +104,11 @@ const Settings = forwardRef((props, ref) => {
         formData={formData}
         handleChange={handleChange}
         handleBlur={handleBlur}
+      />
+
+      <AlignmentSelector
+        alignment={formData.alignment}
+        setAlignment={setAlignment}
       />
 
       <ThemePreview

@@ -1,0 +1,44 @@
+/* src/components/FormSettings/css/alignmentSelector.css */
+
+.alignment-selector {
+	margin-bottom: 20px;
+  }
+  
+  .alignment-selector label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 500;
+  }
+  
+  .alignment-options {
+	display: flex;
+	width: 100%;
+  }
+  
+  .alignment-option {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	margin: 5px;
+	border: 2px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: border-color 0.3s;
+	text-align: center;
+  }
+  
+  .alignment-option.selected {
+	border-color: #007bff; /* Blue color to highlight selection */
+  }
+  
+  .icon-container {
+	margin-bottom: 10px;
+  }
+  
+  .option-label {
+	font-size: 14px;
+  }
+  

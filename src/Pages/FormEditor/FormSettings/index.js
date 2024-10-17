@@ -19,7 +19,7 @@ const SettingsTabs = () => {
   const fontsRef = useRef();
 
   const tabs = [
-    { id: 'formSettings', label: 'Tekst', title: "Tekst Instellingen" },
+    { id: 'formSettings', label: 'Algemeen', title: "Algemene Instellingen" },
     { id: 'appearanceSettings', label: 'Kleuren', title: "Kleuren Instellingen" },
     { id: 'fontsSettings', label: 'Lettertypen', title: "Lettertype Instellingen" },
   ];
