@@ -1,7 +1,7 @@
 // src/components/FormSettings/Fonts.jsx
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import axios from 'axios';
+import useApi from '../../../../Hooks/useApi'; // Adjust the path as necessary
 import useNotification from '../../../../Components/Notification/index';
 import '../../css/FormSettings/formSettings.css';
 import '../../css/FormSettings/mobile.css';
@@ -21,6 +21,7 @@ const Fonts = forwardRef((props, ref) => {
   const [fontsState, setFontsState] = useState(defaultFonts);
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
+  const api = useApi(); // Initialize useApi
 
   const fontCategories = [
     { key: 'titleFont', label: 'Titel' },
@@ -35,11 +36,13 @@ const Fonts = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${window.baseDomain}api/fonts/` + window.restaurantId)
-      .then((response) => {
-        if (response.data && Object.keys(response.data).length > 0) {
-          const fetchedFonts = response.data;
+    const fetchFonts = async () => {
+      try {
+        const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+        const response = await api.get(endpoint);
+
+        if (response && Object.keys(response).length > 0) {
+          const fetchedFonts = response;
           const transformedFonts = {};
 
           for (const key of Object.keys(fetchedFonts)) {
@@ -58,13 +61,16 @@ const Fonts = forwardRef((props, ref) => {
           setFontsState(defaultFonts);
           setInitialFontsState(defaultFonts);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching fonts:', error);
+        triggerNotification('Fout bij het ophalen van lettertypes.', 'error');
         setFontsState(defaultFonts);
         setInitialFontsState(defaultFonts);
-      });
-  }, []);
+      }
+    };
+
+    fetchFonts();
+  }, [api]); // Added 'api' as a dependency
 
   useEffect(() => {
     // Collect all fonts and weights used to import them
@@ -117,33 +123,31 @@ const Fonts = forwardRef((props, ref) => {
     }));
   };
 
-  const handleSave = () => {
-    axios
-      .put(`${window.baseDomain}api/fonts/` + window.restaurantId, fontsState)
-      .then(() => {
-        triggerNotification('Lettertypes aangepast', 'success');
-        setInitialFontsState(fontsState);
-      })
-      .catch((error) => {
-        console.error('Error saving fonts:', error);
-        const errorCode = error.response?.status || 'unknown';
-        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
-      });
+  const handleSave = async () => {
+    try {
+      const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+      await api.put(endpoint, fontsState);
+      triggerNotification('Lettertypes aangepast', 'success');
+      setInitialFontsState(fontsState);
+    } catch (error) {
+      console.error('Error saving fonts:', error);
+      const errorCode = error.response?.status || 'unknown';
+      triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+    }
   };
 
-  const handleReset = () => {
-    setFontsState(resetFonts);
-    axios
-      .put(`${window.baseDomain}api/fonts/` + window.restaurantId, resetFonts)
-      .then(() => {
-        triggerNotification('Lettertypes gereset naar standaard', 'success');
-        setInitialFontsState(resetFonts);
-      })
-      .catch((error) => {
-        console.error('Error resetting fonts:', error);
-        const errorCode = error.response?.status || 'unknown';
-        triggerNotification(`Fout bij resetten. Code: ${errorCode}`, 'error');
-      });
+  const handleReset = async () => {
+    try {
+      const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+      await api.put(endpoint, resetFonts);
+      setFontsState(resetFonts);
+      triggerNotification('Lettertypes gereset naar standaard', 'success');
+      setInitialFontsState(resetFonts);
+    } catch (error) {
+      console.error('Error resetting fonts:', error);
+      const errorCode = error.response?.status || 'unknown';
+      triggerNotification(`Fout bij resetten. Code: ${errorCode}`, 'error');
+    }
   };
 
   const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
@@ -202,7 +206,7 @@ const Fonts = forwardRef((props, ref) => {
       <button type="button" className="submit-button reset-button" onClick={handleReset}>
         Reset naar Standaard
       </button>
-      <button type="submit" className="submit-button" onClick={handleSave}>
+      <button type="submit" className="submit-button" onClick={handleSave} disabled={!isDirty}>
         Opslaan
       </button>
     </div>

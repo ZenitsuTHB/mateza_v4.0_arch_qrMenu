@@ -35,7 +35,7 @@ const defaultAvatar = blue1;
 const Profile = (props) => {
   const [profileImage, setProfileImage] = useState(defaultAvatar);
   const [bio, setBio] = useState(
-    'John Doe is a software engineer with over 10 years of experience in full-stack development. Passionate about building scalable web applications, he specializes in JavaScript, React, and Node.js. In his free time, he enjoys contributing to open source projects and exploring new tech innovations.'
+    'We zijn heel trots op ons restaurant!'
   );
   const [name, setName] = useState('John Doe');
   const [interests, setInterests] = useState(['Admin Account', '3 Maanden Actief']);
