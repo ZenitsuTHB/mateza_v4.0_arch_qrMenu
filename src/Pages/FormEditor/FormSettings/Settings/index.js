@@ -1,8 +1,8 @@
 // src/components/FormSettings/Settings.jsx
 
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useCallback } from 'react';
 import useNotification from '../../../../Components/Notification/index.js';
+import useApi from '../../../../Hooks/useApi.js'; // Import the useApi hook
 import '../../css/FormSettings/formSettings.css';
 import '../../css/FormSettings/mobile.css';
 import SettingsForm from './SettingsForm.js';
@@ -20,13 +20,14 @@ const Settings = forwardRef((props, ref) => {
   const [initialFormData, setInitialFormData] = useState(defaultSettings);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const { triggerNotification, NotificationComponent } = useNotification();
+  const api = useApi(); // Use the useApi hook
 
   useEffect(() => {
-    // Fetch settings data
-    axios.get(`${window.baseDomain}api/settings/` + window.restaurantId)
-      .then((response) => {
-        if (response.data) {
-          const data = response.data;
+    const fetchSettings = async () => {
+      try {
+        const settingsResponse = await api.get(`${window.baseDomain}api/settings/${window.restaurantId}`);
+        if (settingsResponse) {
+          const data = settingsResponse;
           const newFormData = {
             pageTitle: data.pageTitle || defaultSettings.pageTitle,
             generalNotification: data.generalNotification || '',
@@ -35,52 +36,54 @@ const Settings = forwardRef((props, ref) => {
           setFormData(newFormData);
           setInitialFormData(newFormData);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching settings:', error);
         setFormData(defaultSettings);
         setInitialFormData(defaultSettings);
-      });
+      }
+    };
 
-    // Fetch theme data
-    axios.get(`${window.baseDomain}api/theme/` + window.restaurantId)
-      .then((response) => {
-        setSelectedTheme(response.data);
-      })
-      .catch((error) => {
+    const fetchTheme = async () => {
+      try {
+        const themeResponse = await api.get(`${window.baseDomain}api/theme/${window.restaurantId}`);
+        setSelectedTheme(themeResponse);
+      } catch (error) {
         console.error('Error fetching theme:', error);
-      });
-  }, []);
+      }
+    };
 
-  const handleChange = (e) => {
+    fetchSettings();
+    fetchTheme();
+  }, [api]);
+
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const setAlignment = (alignmentValue) => {
+  const setAlignment = useCallback((alignmentValue) => {
     setFormData((prevData) => ({
       ...prevData,
       alignment: alignmentValue,
     }));
-  };
+  }, []);
 
-  const handleSave = () => {
-    axios.put(`${window.baseDomain}api/settings/` + window.restaurantId, formData)
-      .then(() => {
-        triggerNotification('Instellingen aangepast', 'success');
-        setInitialFormData(formData);
-      })
-      .catch((error) => {
-        console.error('Error saving settings:', error);
-        const errorCode = error.response?.status || 'unknown';
-        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
-      });
-  };
+  const handleSave = useCallback(async () => {
+    try {
+      await api.put(`${window.baseDomain}api/settings/${window.restaurantId}`, formData);
+      triggerNotification('Instellingen aangepast', 'success');
+      setInitialFormData(formData);
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      const errorCode = error.response?.status || 'unknown';
+      triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+    }
+  }, [api, formData, triggerNotification]);
 
-  const handleBlur = (e) => {
+  const handleBlur = useCallback((e) => {
     const { name, value } = e.target;
     if (name === 'pageTitle' && value.trim() === '') {
       setFormData((prevData) => ({
@@ -88,13 +91,20 @@ const Settings = forwardRef((props, ref) => {
         pageTitle: 'Reserveer Nu',
       }));
     }
-  };
+  }, []);
 
-  const isDirty = JSON.stringify(formData) !== JSON.stringify(initialFormData);
+  const isDirty = useMemo(
+    () => JSON.stringify(formData) !== JSON.stringify(initialFormData),
+    [formData, initialFormData]
+  );
 
-  useImperativeHandle(ref, () => ({
-    isDirty,
-  }));
+  useImperativeHandle(
+    ref,
+    () => ({
+      isDirty,
+    }),
+    [isDirty]
+  );
 
   return (
     <div>
@@ -118,9 +128,10 @@ const Settings = forwardRef((props, ref) => {
       />
 
       <button
-        type="submit"
+        type="button" // Changed from 'submit' to 'button' to prevent form submission
         className="submit-button"
         onClick={handleSave}
+        disabled={!isDirty} // Disable save if not dirty
       >
         Opslaan
       </button>

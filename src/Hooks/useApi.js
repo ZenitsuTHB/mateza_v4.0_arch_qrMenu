@@ -1,6 +1,6 @@
 // src/Hooks/useApi.js
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import axios from 'axios';
 
 const CACHE_EXPIRY = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -83,26 +83,19 @@ const useApi = () => {
     [generateCacheKey, getJwtToken]
   );
 
-  // Return memoized API methods
-  return {
-    get,
-    post: useCallback(
-      (endpoint, data, config) => mutate('POST', endpoint, data, config),
-      [mutate]
-    ),
-    put: useCallback(
-      (endpoint, data, config) => mutate('PUT', endpoint, data, config),
-      [mutate]
-    ),
-    patch: useCallback(
-      (endpoint, data, config) => mutate('PATCH', endpoint, data, config),
-      [mutate]
-    ),
-    delete: useCallback(
-      (endpoint, config) => mutate('DELETE', endpoint, null, config),
-      [mutate]
-    ),
-  };
+  // Memoize the API methods to prevent infinite loops
+  const apiMethods = useMemo(
+    () => ({
+      get,
+      post: (endpoint, data, config) => mutate('POST', endpoint, data, config),
+      put: (endpoint, data, config) => mutate('PUT', endpoint, data, config),
+      patch: (endpoint, data, config) => mutate('PATCH', endpoint, data, config),
+      delete: (endpoint, config) => mutate('DELETE', endpoint, null, config),
+    }),
+    [get, mutate]
+  );
+
+  return apiMethods;
 };
 
 export default useApi;

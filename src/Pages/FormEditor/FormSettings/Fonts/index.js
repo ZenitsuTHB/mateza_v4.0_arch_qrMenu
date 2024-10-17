@@ -52,7 +52,6 @@ const Fonts = forwardRef((props, ref) => {
               transformedFonts[key] = defaultFonts[key];
             }
           }
-
           setFontsState(transformedFonts);
           setInitialFontsState(transformedFonts);
         } else {
