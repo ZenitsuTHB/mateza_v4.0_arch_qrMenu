@@ -119,20 +119,18 @@ const Colors = forwardRef((props, ref) => {
 
       {backgroundType === 'animated' && (
         <>
-          <div className="form-group">
-            <label>Animatietype:</label>
-            <select
-              name="animationType"
-              value={appearanceData.animationType || 'particles'}
-              onChange={handleChange}
-            >
-              <option value="particles">Deeltjes</option>
-              <option value="waves">Golven</option>
-              <option value="gradient">Geanimeerde Gradient</option>
-              {/* Add more options as needed */}
-            </select>
-          </div>
-          {/* Additional settings for the selected animation type can be added here */}
+          <ColorPicker
+            label="Gradient Startkleur"
+            name="gradientStartColor"
+            value={appearanceData.gradientStartColor}
+            onChange={handleChange}
+          />
+          <ColorPicker
+            label="Gradient Eindkleur"
+            name="gradientEndColor"
+            value={appearanceData.gradientEndColor}
+            onChange={handleChange}
+          />
         </>
       )}
 
