@@ -6,15 +6,11 @@
 	  margin-bottom: 60px;
 	  margin-left: 0px;
 	}
-  }
-  
-  @media (max-width: 900px) {
+
 	.form-editing-page .editor-container {
 	  flex-direction: column;
 	}
-  }
-  
-  @media (max-width: 900px) {
+
 	.form-editing-page .canvas {
 	  width: 100%;
 	  order: 1;
@@ -22,6 +18,10 @@
 	  margin-bottom: 0px;
 	  padding: 0 !important;
 	}
+
+	.form-editing-page .canvas-area {
+		margin: 20px;
+	  }
   }
 
   .form-editing-pag .palette-responsive {
