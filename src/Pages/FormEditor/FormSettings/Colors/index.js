@@ -1,10 +1,10 @@
 // src/components/FormSettings/Colors.jsx
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import axios from 'axios';
 import useNotification from '../../../../Components/Notification/index';
 import ColorPicker from './ColorPicker';
 import BackgroundTypeSelector from './BackgroundTypeSelector';
+import useApi from '../../../../Hooks/useApi.js'; // Adjust the path as necessary
 import '../../css/FormSettings/formSettings.css';
 import '../../css/FormSettings/mobile.css';
 
@@ -27,21 +27,31 @@ const Colors = forwardRef((props, ref) => {
 
   const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const api = useApi();
+
+  // Fetch Colors Data with Caching
   useEffect(() => {
-    axios.get(`${window.baseDomain}api/colors/` + window.restaurantId)
-      .then((response) => {
-        if (response.data) {
-          setAppearanceData(response.data);
-          setInitialAppearanceData(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching colors:', error);
+    const fetchColors = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/colors/${window.restaurantId}`);
+        setAppearanceData(data);
+        setInitialAppearanceData(data);
+      } catch (err) {
+        console.error('Error fetching colors:', err);
         setAppearanceData(defaultAppearanceData);
         setInitialAppearanceData(defaultAppearanceData);
-      });
-  }, []);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchColors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array ensures this runs once on mount
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,17 +69,16 @@ const Colors = forwardRef((props, ref) => {
     }));
   };
 
-  const handleSave = () => {
-    axios.put(`${window.baseDomain}api/colors/` + window.restaurantId, appearanceData)
-      .then(() => {
-        triggerNotification('Kleuren aangepast', 'success');
-        setInitialAppearanceData(appearanceData);
-      })
-      .catch((error) => {
-        console.error('Error saving colors:', error);
-        const errorCode = error.response?.status || 'unknown';
-        triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
-      });
+  const handleSave = async () => {
+    try {
+      await api.put(`${window.baseDomain}api/colors/${window.restaurantId}`, appearanceData);
+      triggerNotification('Kleuren aangepast', 'success');
+      setInitialAppearanceData(appearanceData);
+    } catch (err) {
+      console.error('Error saving colors:', err);
+      const errorCode = err.response?.status || 'unknown';
+      triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+    }
   };
 
   const isDirty = JSON.stringify(appearanceData) !== JSON.stringify(initialAppearanceData);
@@ -79,6 +88,14 @@ const Colors = forwardRef((props, ref) => {
   }));
 
   const { backgroundType } = appearanceData;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching colors. Please try again later.</div>;
+  }
 
   return (
     <div className="colors-container">
@@ -158,6 +175,7 @@ const Colors = forwardRef((props, ref) => {
         type="button"
         className="submit-button"
         onClick={handleSave}
+        disabled={!isDirty} // Disable the button if there's nothing to save
       >
         Opslaan
       </button>
