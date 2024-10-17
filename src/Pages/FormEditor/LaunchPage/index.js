@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import EmbedCodeTab from './EmbedCodeTab.js';
 import EmailSampleTab from './EmailSampleTab.js';
+import SuccessMessage from '../../../Components/SuccessMessage/index.js'
 import '../css/LaunchPage/launchPage.css';
 import '../css/LaunchPage/mobile.css';
 
@@ -24,10 +25,7 @@ const LaunchPage = () => {
 
   return (
     <div className="launch-page">
-      <div className="success-message">
-        <FaCheckCircle className="success-icon" />
-        <p>Uw pagina is klaar om te delen!</p>
-      </div>
+      <SuccessMessage message="Uw pagina is klaar om te delen!" /> 
 
       <div className="launch-page-form">
         <h2 className="secondary-title">Uw Reserveringspagina</h2>
