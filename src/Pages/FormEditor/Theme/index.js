@@ -34,7 +34,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
 
     const themeColor = { backgroundColor: theme.color };
 
-    axios.put(window.baseDomain + 'api/theme/restaurantId123', themeData)
+    axios.put(window.baseDomain + 'api/theme/' + window.restaurantId, themeData)
       .then(() => {
         console.log("Theme saved successfully");
       })
@@ -42,7 +42,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
         console.error('Error saving selected theme:', error);
       });
 
-    axios.put(window.baseDomain + 'api/colors/restaurantId123/background-color', themeColor)
+    axios.put(window.baseDomain + `api/colors/${window.restaurantId}/background-color`, themeColor)
       .then(() => {
         console.log("Background color updated successfully");
       })

@@ -23,7 +23,7 @@ const Settings = forwardRef((props, ref) => {
 
   useEffect(() => {
     // Fetch settings data
-    axios.get(`${window.baseDomain}api/settings/restaurantId123`)
+    axios.get(`${window.baseDomain}api/settings/` + window.restaurantId)
       .then((response) => {
         if (response.data) {
           const data = response.data;
@@ -43,7 +43,7 @@ const Settings = forwardRef((props, ref) => {
       });
 
     // Fetch theme data
-    axios.get(`${window.baseDomain}api/theme/restaurantId123`)
+    axios.get(`${window.baseDomain}api/theme/` + window.restaurantId)
       .then((response) => {
         setSelectedTheme(response.data);
       })
@@ -68,7 +68,7 @@ const Settings = forwardRef((props, ref) => {
   };
 
   const handleSave = () => {
-    axios.put(`${window.baseDomain}api/settings/restaurantId123`, formData)
+    axios.put(`${window.baseDomain}api/settings/` + window.restaurantId, formData)
       .then(() => {
         triggerNotification('Instellingen aangepast', 'success');
         setInitialFormData(formData);

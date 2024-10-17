@@ -36,7 +36,7 @@ const Fonts = forwardRef((props, ref) => {
 
   useEffect(() => {
     axios
-      .get(`${window.baseDomain}api/fonts/restaurantId123`)
+      .get(`${window.baseDomain}api/fonts/` + window.restaurantId)
       .then((response) => {
         if (response.data && Object.keys(response.data).length > 0) {
           const fetchedFonts = response.data;
@@ -120,7 +120,7 @@ const Fonts = forwardRef((props, ref) => {
 
   const handleSave = () => {
     axios
-      .put(`${window.baseDomain}api/fonts/restaurantId123`, fontsState)
+      .put(`${window.baseDomain}api/fonts/` + window.restaurantId, fontsState)
       .then(() => {
         triggerNotification('Lettertypes aangepast', 'success');
         setInitialFontsState(fontsState);
@@ -135,7 +135,7 @@ const Fonts = forwardRef((props, ref) => {
   const handleReset = () => {
     setFontsState(resetFonts);
     axios
-      .put(`${window.baseDomain}api/fonts/restaurantId123`, resetFonts)
+      .put(`${window.baseDomain}api/fonts/` + window.restaurantId, resetFonts)
       .then(() => {
         triggerNotification('Lettertypes gereset naar standaard', 'success');
         setInitialFontsState(resetFonts);

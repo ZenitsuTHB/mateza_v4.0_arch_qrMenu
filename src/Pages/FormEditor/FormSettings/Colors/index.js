@@ -29,7 +29,7 @@ const Colors = forwardRef((props, ref) => {
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
 
   useEffect(() => {
-    axios.get(`${window.baseDomain}api/colors/restaurantId123`)
+    axios.get(`${window.baseDomain}api/colors/` + window.restaurantId)
       .then((response) => {
         if (response.data) {
           setAppearanceData(response.data);
@@ -60,7 +60,7 @@ const Colors = forwardRef((props, ref) => {
   };
 
   const handleSave = () => {
-    axios.put(`${window.baseDomain}api/colors/restaurantId123`, appearanceData)
+    axios.put(`${window.baseDomain}api/colors/` + window.restaurantId, appearanceData)
       .then(() => {
         triggerNotification('Kleuren aangepast', 'success');
         setInitialAppearanceData(appearanceData);
