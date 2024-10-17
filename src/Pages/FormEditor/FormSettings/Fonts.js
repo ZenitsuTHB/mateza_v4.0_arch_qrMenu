@@ -75,6 +75,12 @@ const Fonts = forwardRef((props, ref) => {
     { key: 'buttonFont', label: 'Knoppen' },
   ];
 
+  // Define a mapping for fonts that require labels
+  const fontLabels = {
+    'Montserrat': '(populair)',
+    'Comfortaa': '(aanbevolen)',
+  };
+
   useEffect(() => {
     axios
       .get(`${window.baseDomain}api/fonts/restaurantId123`)
@@ -195,7 +201,7 @@ const Fonts = forwardRef((props, ref) => {
                 <optgroup label="Modern">
                   {sansSerifFonts.map((font) => (
                     <option key={font} value={font}>
-                      {font}
+                      {font} {fontLabels[font] || ''}
                     </option>
                   ))}
                 </optgroup>
