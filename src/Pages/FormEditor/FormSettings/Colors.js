@@ -3,18 +3,24 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import useNotification from '../../../Components/Notification/index';
-import ColorPicker from './ColorPicker.js';
+import ColorPicker from './ColorPicker';
+import BackgroundTypeSelector from './BackgroundTypeSelector';
 import '../css/FormSettings/formSettings.css';
 import '../css/FormSettings/mobile.css';
 
 const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();
-  
+
   const defaultAppearanceData = {
+    backgroundType: 'solid', // Default to solid background
+    backgroundColor: '#FFFFFF',
+    gradientStartColor: '#FFFFFF',
+    gradientEndColor: '#000000',
+    animationType: 'none',
+    // ... other existing color settings
     widgetBackgroundColor: '#000000',
     widgetTextColor: '#FFFFFF',
     textColor: '#000000',
-    backgroundColor: '#FFFFFF',
     containerColor: '#FFFFFF',
     buttonColor: '#000000',
     buttonTextColor: '#FFFFFF',
@@ -47,6 +53,13 @@ const Colors = forwardRef((props, ref) => {
     }));
   };
 
+  const handleBackgroundTypeChange = (backgroundType) => {
+    setAppearanceData((prevData) => ({
+      ...prevData,
+      backgroundType,
+    }));
+  };
+
   const handleSave = () => {
     axios.put(`${window.baseDomain}api/colors/restaurantId123`, appearanceData)
       .then(() => {
@@ -66,10 +79,64 @@ const Colors = forwardRef((props, ref) => {
     isDirty,
   }));
 
+  const { backgroundType } = appearanceData;
+
   return (
     <div className="colors-container">
       <NotificationComponent />
-      
+
+      <BackgroundTypeSelector
+        backgroundType={backgroundType}
+        setBackgroundType={handleBackgroundTypeChange}
+      />
+
+      {backgroundType === 'solid' && (
+        <ColorPicker
+          label="Achtergrondkleur"
+          name="backgroundColor"
+          value={appearanceData.backgroundColor}
+          onChange={handleChange}
+        />
+      )}
+
+      {backgroundType === 'gradient' && (
+        <>
+          <ColorPicker
+            label="Gradient Startkleur"
+            name="gradientStartColor"
+            value={appearanceData.gradientStartColor}
+            onChange={handleChange}
+          />
+          <ColorPicker
+            label="Gradient Eindkleur"
+            name="gradientEndColor"
+            value={appearanceData.gradientEndColor}
+            onChange={handleChange}
+          />
+          {/* Optionally, add inputs for gradient direction, etc. */}
+        </>
+      )}
+
+      {backgroundType === 'animated' && (
+        <>
+          <div className="form-group">
+            <label>Animatietype:</label>
+            <select
+              name="animationType"
+              value={appearanceData.animationType || 'particles'}
+              onChange={handleChange}
+            >
+              <option value="particles">Deeltjes</option>
+              <option value="waves">Golven</option>
+              <option value="gradient">Geanimeerde Gradient</option>
+              {/* Add more options as needed */}
+            </select>
+          </div>
+          {/* Additional settings for the selected animation type can be added here */}
+        </>
+      )}
+
+      {/* Existing ColorPickers */}
       <ColorPicker
         label="Widget Achtergrondkleur"
         name="widgetBackgroundColor"
@@ -89,12 +156,7 @@ const Colors = forwardRef((props, ref) => {
         value={appearanceData.textColor}
         onChange={handleChange}
       />
-      <ColorPicker
-        label="Achtergrondkleur"
-        name="backgroundColor"
-        value={appearanceData.backgroundColor}
-        onChange={handleChange}
-      />
+      {/* Other existing color pickers */}
       <ColorPicker
         label="Containerkleur"
         name="containerColor"
