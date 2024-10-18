@@ -75,15 +75,17 @@ const ReservationsList = () => {
         </div>
       </div>
       <div className="reservations-container">
-        <div className="reservations-grid">
+        <div className={`reservations-grid ${activeTab === 'eenvoudig' ? 'eenvoudig-grid' : ''}`}>
           <div className="reservations-header">
-            <div className="header-number">#</div>
+		  <div className="reservation-row">
+            <div>#</div>
             <div>Tijdstip</div>
             <div>Naam</div>
-            {activeTab !== 'eenvoudig' && <div>Email</div>}
-            {activeTab !== 'eenvoudig' && <div>Telefoon</div>}
+            {activeTab !== 'eenvoudig' ? <div>Email</div>: <div></div>}
+            {activeTab !== 'eenvoudig' ? <div>Telefoon</div>: <div></div>}
             <div>Extra</div>
           </div>
+		  </div>
           {filteredReservations.map((reservation, index) => (
             <ReservationRow key={index} reservation={reservation} />
           ))}
@@ -101,3 +103,4 @@ const ReservationsList = () => {
 };
 
 export default withHeader(ReservationsList);
+

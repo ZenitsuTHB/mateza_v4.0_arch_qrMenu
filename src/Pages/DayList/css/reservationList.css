@@ -1,34 +1,68 @@
-/* src/components/ReservationsList/css/reservationsList.css */
-
-.reservations-page {
-	padding-top: 20px;
+/* CSS for the tab bar */
+.form-settings-page .settings-tabs {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
   }
   
+  .form-settings-page .tab-menu {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+  }
+  
+  .form-settings-page .buttons-container {
+	display: flex;
+  }
+  
+  .form-settings-page .tab-underline {
+	border-radius: 5px;
+  }
+  
+  .form-settings-page .tab-button {
+	position: relative;
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 16px;
+	color: #333;
+  }
+  
+  .form-settings-page .tab-button.active {
+	color: var(--color-blue);
+  }
+  
+  .form-settings-page .tab-underline {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: var(--color-blue);
+  }
+  
+  /* CSS for adaptive grid */
   .reservations-grid {
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: 50px 130px 200px 2fr 150px 1fr;
+	gap: 10px;
+  }
+  
+  .reservations-grid.eenvoudig-grid {
+	gap: 10px;
   }
   
   .reservations-header {
 	display: contents;
-	background-color: lightgray;
-	font-weight: bold;
-	color: black;
   }
   
   .reservations-header > div {
 	padding: 10px;
-	border-bottom: 1px solid lightgray;
-  }
-  
-/* CSS for adaptive grid */
-.reservations-grid {
-	display: grid;
-	grid-template-columns: 50px 130px 200px 2fr 150px 1fr;
-  }
-  
-  .reservations-grid.eenvoudig-grid {
-	grid-template-columns: 50px 130px 200px 1fr;
+	font-weight: bold;
+	border-radius: 100px;
+	color: black;
   }
   
   .reservations-header > div.header-number {
@@ -43,11 +77,4 @@
   .reservation-number {
 	display: flex;
 	align-items: center;
-  }
-  
-
-  @media (max-width: 900px) {
-	.reservations-container {
-		background-color: var(--color-bg);
-	  }
   }
