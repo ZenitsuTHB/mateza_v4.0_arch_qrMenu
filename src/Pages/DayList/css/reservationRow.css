@@ -31,3 +31,7 @@
 	cursor: pointer;
   }
   
+  .users-icon {
+	color: var(--color-blue);
+	margin-left: 5px;
+  }

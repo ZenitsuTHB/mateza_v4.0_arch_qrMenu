@@ -4,12 +4,6 @@
 	padding-top: 20px;
   }
   
-  .reservations-container {
-	background-color: white;
-	border-radius: 8px;
-	padding: 20px;
-  }
-  
   .reservations-grid {
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -29,7 +23,7 @@
   
 .reservations-grid {
 	display: grid;
-	grid-template-columns: 50px 130px 200px 2fr 150px 1fr; /* Adjusted column widths */
+	grid-template-columns: 50px 130px 200px 2fr 150px 1fr;
   }
   
   .reservations-header > div.header-number {
@@ -40,10 +34,15 @@
 	width: 50px;
   }
   
-  /* Optional: Adjust alignment */
   .header-number,
   .reservation-number {
 	display: flex;
 	align-items: center;
   }
   
+
+  @media (max-width: 900px) {
+	.reservations-container {
+		background-color: var(--color-bg);
+	  }
+  }
