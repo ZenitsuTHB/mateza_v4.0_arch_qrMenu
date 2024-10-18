@@ -34,7 +34,7 @@ const ReservationsList = () => {
       <div className="reservations-container">
         <div className="reservations-grid">
           <div className="reservations-header">
-            <div>Aantal Gasten</div>
+            <div>#</div>
             <div>Tijdstip</div>
             <div>Volledige Naam</div>
             <div>Email</div>

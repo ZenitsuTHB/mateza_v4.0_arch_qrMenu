@@ -1,24 +1,24 @@
 // src/components/ReservationsList/ReservationRow.jsx
 
 import React, { useState } from 'react';
-import ProfilePhoto from './ProfilePhoto';
 import Tooltip from './Tooltip';
+import { FaUsers } from 'react-icons/fa';
 import './css/reservationRow.css';
 
 const ReservationRow = ({ reservation }) => {
   const [showNoteTooltip, setShowNoteTooltip] = useState(false);
   const [showMenuTooltip, setShowMenuTooltip] = useState(false);
 
-  const initials =
-    reservation.firstName.charAt(0).toUpperCase() +
-    reservation.lastName.charAt(0).toUpperCase();
-
   return (
     <div className="reservation-row">
-      <div>{reservation.aantalGasten}</div>
+      <div>
+        <strong>{reservation.aantalGasten}</strong>
+        {reservation.aantalGasten >= 5 && (
+			<FaUsers style={{ color: 'lightgray', marginLeft: '5px' }}/>
+        )}
+      </div>
       <div>{reservation.tijdstip}</div>
-      <div className="profile-name">
-        <ProfilePhoto initials={initials} />
+      <div>
         <a href="#" className="name-link">{`${reservation.firstName} ${reservation.lastName}`}</a>
       </div>
       <div>{reservation.email}</div>
