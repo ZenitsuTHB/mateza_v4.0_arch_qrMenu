@@ -1,7 +1,7 @@
 // src/components/FormSettings/ColorPicker.jsx
 
 import React from 'react';
-import '../../css/FormSettings/colorPicker.css'; // Optional: Create specific CSS for ColorPicker
+import './css/colorPicker.css';
 
 const ColorPicker = ({ label, name, value, onChange }) => {
   return (
