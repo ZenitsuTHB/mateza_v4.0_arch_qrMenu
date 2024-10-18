@@ -21,9 +21,14 @@
 	border-bottom: 1px solid lightgray;
   }
   
+/* CSS for adaptive grid */
 .reservations-grid {
 	display: grid;
 	grid-template-columns: 50px 130px 200px 2fr 150px 1fr;
+  }
+  
+  .reservations-grid.eenvoudig-grid {
+	grid-template-columns: 50px 130px 200px 1fr;
   }
   
   .reservations-header > div.header-number {
