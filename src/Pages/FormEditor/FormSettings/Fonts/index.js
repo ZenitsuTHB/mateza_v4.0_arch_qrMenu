@@ -4,7 +4,9 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import useApi from '../../../../Hooks/useApi';
 import useNotification from '../../../../Components/Notification/index';
 import { sansSerifFonts, serifFonts, fontWeights } from './fontsConfig';
-import './css/fonts.css'
+import FontCategorySelector from './FontSelector';
+import useDynamicFontLoader from '../../../../Hooks/useFontLoader';
+import './css/fonts.css';
 
 const Fonts = forwardRef((props, ref) => {
   const defaultFonts = {
@@ -29,8 +31,8 @@ const Fonts = forwardRef((props, ref) => {
   ];
 
   const fontLabels = {
-    'Montserrat': '(populair)',
-    'Comfortaa': '(aanbevolen)',
+    Montserrat: '(populair)',
+    Comfortaa: '(aanbevolen)',
   };
 
   useEffect(() => {
@@ -70,36 +72,7 @@ const Fonts = forwardRef((props, ref) => {
     fetchFonts();
   }, [api]);
 
-  useEffect(() => {
-    const fontWeightMap = {};
-
-    Object.values(fontsState)
-      .filter(({ font }) => font)
-      .forEach(({ font, weight }) => {
-        if (!fontWeightMap[font]) {
-          fontWeightMap[font] = new Set();
-        }
-        fontWeightMap[font].add(weight);
-      });
-
-    const fontsToImport = Object.entries(fontWeightMap).map(([font, weightsSet]) => {
-      const weightsArray = Array.from(weightsSet);
-      return `family=${encodeURIComponent(font)}:wght@${weightsArray.join(';')}`;
-    });
-
-    if (fontsToImport.length > 0) {
-      const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsToImport.join('&')}&display=swap`;
-
-      let linkElement = document.getElementById('dynamic-fonts-import');
-      if (!linkElement) {
-        linkElement = document.createElement('link');
-        linkElement.id = 'dynamic-fonts-import';
-        linkElement.rel = 'stylesheet';
-        document.head.appendChild(linkElement);
-      }
-      linkElement.href = googleFontsUrl;
-    }
-  }, [fontsState]);
+  useDynamicFontLoader(fontsState);
 
   const handleFontSelect = (categoryKey, font) => {
     const availableWeights = fontWeights[font] || ['400'];
@@ -155,49 +128,20 @@ const Fonts = forwardRef((props, ref) => {
   return (
     <div className="fonts-container">
       <NotificationComponent />
-      {fontCategories.map(({ key, label }) => {
-        const selectedFont = fontsState[key]?.font || defaultFonts[key].font;
-        const selectedWeight = fontsState[key]?.weight || defaultFonts[key].weight;
-
-        const availableWeights = fontWeights[selectedFont] || ['400'];
-
-        return (
-          <div className="form-group" key={key}>
-            <label>{label}:</label>
-            <div className="font-selector">
-              <select value={selectedFont} onChange={(e) => handleFontSelect(key, e.target.value)}>
-                <optgroup label="Modern">
-                  {sansSerifFonts.map((font) => (
-                    <option key={font} value={font}>
-                      {font} {fontLabels[font] || ''}
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Klassiek">
-                  {serifFonts.map((font) => (
-                    <option key={font} value={font}>
-                      {font}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-              <select className="weight-selector" value={selectedWeight} onChange={(e) => handleWeightSelect(key, e.target.value)}>
-                {availableWeights.map((weight) => (
-                  <option key={weight} value={weight}>
-                    {weight}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div
-              className="font-preview"
-              style={{ fontFamily: `'${selectedFont}', sans-serif`, fontWeight: selectedWeight }}
-            >
-              Voorbeeld tekst in {selectedFont} ({selectedWeight})
-            </div>
-          </div>
-        );
-      })}
+      {fontCategories.map(({ key, label }) => (
+        <FontCategorySelector
+          key={key}
+          categoryKey={key}
+          label={label}
+          fontsState={fontsState}
+          defaultFonts={defaultFonts}
+          handleFontSelect={handleFontSelect}
+          handleWeightSelect={handleWeightSelect}
+          sansSerifFonts={sansSerifFonts}
+          serifFonts={serifFonts}
+          fontLabels={fontLabels}
+        />
+      ))}
 
       <button type="button" className="submit-button reset-button" onClick={handleReset}>
         Reset naar Standaard

@@ -32,10 +32,6 @@
 	color: #007bff;
   }
   
-  .secondary-top-bar-component .secondary-button:focus {
-	outline: none;
-  }
-  
   .secondary-top-bar-component .button-link {
 	text-decoration: none;
 	color: inherit;
@@ -53,13 +49,4 @@
 	transition: opacity 0.3s ease, transform 0.3s ease;
   }
   
-  .secondary-top-bar-component .secondary-button.active .underline {
-	opacity: 1;
-	transform: scaleX(1);
-  }
-  
-  .secondary-top-bar-component .secondary-button:not(.active) .underline {
-	opacity: 0;
-	transform: scaleX(0);
-  }
-  
+

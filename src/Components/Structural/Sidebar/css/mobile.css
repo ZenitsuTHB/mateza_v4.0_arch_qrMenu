@@ -8,6 +8,8 @@
 		width: 100vw;
 		justify-content: center;
 		margin-left: 0;
+		border-radius: 0;
+		background-color: var(--color-bg);
 	}
 }
   

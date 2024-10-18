@@ -1,11 +1,10 @@
-// src/components/NewReservation/Calendar.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
-import 'moment/locale/nl'; // Import Dutch locale
+import 'moment/locale/nl';
 import './css/calendar.css';
 
-moment.locale('nl'); // Set moment to Dutch locale
+moment.locale('nl');
 
 const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,7 +13,6 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
 
   const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
 
-  // Close calendar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -30,11 +28,9 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
     };
   }, []);
 
-  // Initialize startDate to the first week that is not fully in the past
   useEffect(() => {
     const today = moment().tz('Europe/Amsterdam').startOf('day');
     let firstWeekStart = today.clone().startOf('isoWeek');
-    // Skip weeks that are fully in the past
     while (isWeekInPast(firstWeekStart)) {
       firstWeekStart.add(1, 'week');
     }
@@ -76,7 +72,6 @@ const Calendar = ({ availableDates, selectedDate, onSelectDate }) => {
   const handlePrevWeek = () => {
     const newStartDate = startDate.clone().subtract(1, 'week');
     if (isWeekInPast(newStartDate)) {
-      // Cannot go to a week fully in the past
       return;
     }
     setStartDate(newStartDate);
