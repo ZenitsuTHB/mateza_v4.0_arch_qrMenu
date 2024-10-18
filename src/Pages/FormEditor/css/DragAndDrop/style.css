@@ -20,12 +20,12 @@
 	justify-content: center;
 	cursor: pointer;
 	z-index: 1000000;
-	transition: transform 0.3s ease; /* Add transition for smooth scaling */
+	transition: transform 0.3s ease;
 }
 
 .form-editing-page .themes-button:hover,
 .form-editing-page .themes-button:focus {
-	transform: scale(1.06); /* Scale up the button slightly on hover or focus */
+	transform: scale(1.06);
 }
   
   .form-editing-page .themes-button .icon {
