@@ -1,34 +1,16 @@
-import React, { useState, useEffect } from 'react';
+// src/Pages/FormEditor/LaunchPage/index.jsx
+
+import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import { FaExternalLinkAlt } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import EmbedCodeTab from './EmbedCodeTab.js';
 import EmailSampleTab from './EmailSampleTab.js';
-import SuccessMessage from '../../../Components/SuccessMessage/index.js';
 import '../css/LaunchPage/launchPage.css';
 import '../css/LaunchPage/mobile.css';
 
 const LaunchPage = () => {
   const [activeTab, setActiveTab] = useState('embedCode');
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < 900 : false
-  );
-  const handleResize = () => {
-    if (window.innerWidth < 900) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const reservationLink = 'https://demo.reservaties.net';
   const shareMessage = 'Bekijk onze reserveringspagina!';
   const emailSubject = 'Uitnodiging voor Reservering';
@@ -42,15 +24,8 @@ const LaunchPage = () => {
 
   return (
     <div className="launch-page">
-      {!isMobile && (
-        <SuccessMessage message="Uw pagina is klaar om te delen!" />
-      )}
 
       <div className="launch-page-form">
-        {isMobile && (
-          <SuccessMessage message="Uw pagina is klaar om te delen!" />
-        )}
-
         <h2 className="secondary-title">Uw Reserveringspagina</h2>
 
         <div className="link-section">
@@ -78,9 +53,7 @@ const LaunchPage = () => {
             {tabs.map((tab) => (
               <motion.button
                 key={tab.id}
-                className={`tab-button ${
-                  activeTab === tab.id ? 'active' : ''
-                }`}
+                className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(tab.id)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -100,7 +73,9 @@ const LaunchPage = () => {
           </div>
         </div>
 
-        {activeTab === 'embedCode' && <EmbedCodeTab embedCode={embedCode} />}
+        {activeTab === 'embedCode' && (
+          <EmbedCodeTab embedCode={embedCode} />
+        )}
 
         {activeTab === 'emailSample' && (
           <EmailSampleTab
