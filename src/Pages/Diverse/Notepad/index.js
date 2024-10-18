@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { withHeader } from '../../Components/Structural/Header/index.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
 import './css/style.css';
 
 const Notepad = () => {
