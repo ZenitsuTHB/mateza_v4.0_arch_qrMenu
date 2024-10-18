@@ -32,7 +32,7 @@
   }
   
   .form-settings-page .alignment-option.selected {
-	border-color: #007bff;
+	border-color: var(--color-blue);
   }
   
   .form-settings-page .icon-container {

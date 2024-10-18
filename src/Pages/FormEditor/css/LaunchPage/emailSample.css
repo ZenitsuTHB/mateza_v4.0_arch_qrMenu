@@ -7,7 +7,7 @@
   
   .launch-page .email-icon {
 	font-size: 24px;
-	color: #007bff;
+	color: var(--color-blue);
 	margin-right: 10px;
   }
   
@@ -38,7 +38,7 @@
   }
   
   .launch-page .email-sample a {
-	color: #007bff;
+	color: var(--color-blue);
 	text-decoration: none;
   }
   
@@ -74,7 +74,7 @@
   .launch-page .email-button {
 	display: inline-block;
 	padding: 12px 20px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	color: #ffffff;
 	border-radius: 4px;
 	text-decoration: none;
@@ -104,7 +104,7 @@
   }
   
   .launch-page .email-sample a {
-	color: #007bff;
+	color: var(--color-blue);
 	text-decoration: none;
   }
   

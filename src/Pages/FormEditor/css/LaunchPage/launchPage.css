@@ -52,7 +52,7 @@
   }
   
   .launch-page .link-input-container input:focus {
-	border-color: #007bff;
+	border-color: var(--color-blue);
 	outline: none;
   }
   
@@ -97,7 +97,7 @@
   }
   
   .launch-page .tab-button.active {
-	color: #007bff;
+	color: var(--color-blue);
   }
   
   .launch-page .tab-label {
@@ -110,7 +110,7 @@
 	left: 0;
 	right: 0;
 	height: 3px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	border-radius: 2px;
   }
   
@@ -146,7 +146,7 @@
 	right: 10px;
 	padding: 6px 12px;
 	font-size: 14px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;

@@ -15,6 +15,10 @@
   .form-settings-page .buttons-container {
 	display: flex;
   }
+
+  .form-settings-page .tab-underline {
+	border-radius: 5px;
+  }
   
   .form-settings-page .tab-button {
 	position: relative;
@@ -28,7 +32,7 @@
   }
   
   .form-settings-page .tab-button.active {
-	color: #007bff;
+	color: var(--color-blue);
   }
   
   .form-settings-page .tab-underline {
@@ -37,7 +41,7 @@
 	left: 0;
 	right: 0;
 	height: 2px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
   }
   
 

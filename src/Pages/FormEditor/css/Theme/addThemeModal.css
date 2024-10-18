@@ -81,7 +81,7 @@
   .theme-page .add-theme-modal input[type='text']:focus,
   .theme-page .add-theme-modal input[type='color']:focus,
   .theme-page .add-theme-modal input[type='file']:focus {
-	border-color: #007bff;
+	border-color: var(--color-blue);
   }
   
   .theme-page .modal-buttons {
