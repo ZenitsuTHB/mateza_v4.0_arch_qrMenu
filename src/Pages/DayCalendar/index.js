@@ -4,6 +4,7 @@ import Timeline from './Timeline.js';
 import Modal from './ModalView';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import './css/dayCalendar.css';
+import './css/mobile.css';
 
 const DayCalendar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

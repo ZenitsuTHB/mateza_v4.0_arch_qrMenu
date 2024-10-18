@@ -38,20 +38,3 @@
   .control-button:hover {
 	transform: scale(1.1);
   }
-  
-  @media (max-width: 900px) {
-	
-	.day-calendar {
-		left: -15px;
-	  }
-
-	  .day-calendar {
-		margin-right:40px;
-	  }
-
-	  .controls {
-		top: 150px;
-		right: 8px;
-	  }
-	  
-  }
