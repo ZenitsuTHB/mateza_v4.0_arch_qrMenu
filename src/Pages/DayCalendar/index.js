@@ -36,11 +36,15 @@ const DayCalendar = () => {
   };
 
   const handleZoomIn = () => {
-    setZoomLevel(zoomLevel * 2);
+    if (zoomLevel < 2) {
+      setZoomLevel(zoomLevel * 2);
+    }
   };
 
   const handleZoomOut = () => {
-    setZoomLevel(zoomLevel / 2);
+    if (zoomLevel > 0.25) {
+      setZoomLevel(zoomLevel / 2);
+    }
   };
 
   return (

@@ -6,7 +6,19 @@ import './css/timeline.css';
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
   const hourHeight = 60 * zoomLevel;
   const hours = [];
-  const hourInterval = zoomLevel >= 1 ? 1 / zoomLevel : 1;
+
+  let hourInterval;
+  if (zoomLevel === 1) {
+    hourInterval = 0.5; // Show every half hour
+  } else if (zoomLevel === 2) {
+    hourInterval = 0.25; // Show every quarter hour
+  } else if (zoomLevel === 0.5) {
+    hourInterval = 1; // Show every hour
+  } else if (zoomLevel === 0.25) {
+    hourInterval = 2; // Show every two hours
+  } else {
+    hourInterval = 1; // Default hour interval
+  }
 
   for (let i = 0; i <= 24; i += hourInterval) {
     hours.push(i);
@@ -20,10 +32,10 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
             <div
               key={index}
               className="timeline-hour"
-              style={{ top: `${hour * hourHeight}px`, height: `${hourHeight}px` }}
+              style={{ top: `${hour * hourHeight}px`, height: `${hourHeight * hourInterval}px` }}
             >
               <div className="hour-label">
-                {`${String(Math.floor(hour)).padStart(2, '0')}:00`}
+                {`${String(Math.floor(hour)).padStart(2, '0')}:${hour % 1 === 0.5 ? '30' : hour % 1 === 0.25 ? '15' : hour % 1 === 0.75 ? '45' : '00'}`}
               </div>
               <div className="hour-line"></div>
             </div>

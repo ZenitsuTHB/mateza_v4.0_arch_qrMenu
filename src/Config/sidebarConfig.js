@@ -97,6 +97,16 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: true,
+    secondaryTopBar: [
+      {
+        label: 'Kalender',
+        path: '/calendar',
+      },
+      {
+        label: 'Tafels',
+        path: '/tables',
+      },
+    ],
   },
 ];
 
