@@ -21,3 +21,15 @@
 	  background-position: 0% 50%;
 	  }
   }
+
+  @keyframes shine {
+	0% {
+	  filter: brightness(1);
+	}
+	50% {
+	  filter: brightness(1.5);
+	}
+	100% {
+	  filter: brightness(1);
+	}
+  }

@@ -8,7 +8,7 @@ import Palette from './DragAndDrop/Palette.js';
 import Canvas from './DragAndDrop/Canvas.js';
 import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
-import { initialBlocks, defaultCanvasItems } from './defaultElements.js'; // Importing from defaultElements.js
+import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
 import './css/DragAndDrop/animations.css';
 import './css/DragAndDrop/style.css';
 import './css/DragAndDrop/mobile.css';
@@ -68,11 +68,11 @@ const DragAndDropEditor = () => {
       result.destination.droppableId === 'Canvas'
     ) {
       const item = blocks.find((block) => block.id === result.draggableId);
-      if (!item) return; // Ensure the item exists
+      if (!item) return;
 
       const newItem = {
         ...item,
-        id: `${item.id}-${Date.now()}`, // Unique ID for the canvas item
+        id: `${item.id}-${Date.now()}`,
         placeholder: '',
         required: false,
       };

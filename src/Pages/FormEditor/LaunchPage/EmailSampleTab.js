@@ -7,7 +7,6 @@ import '../css/LaunchPage/emailSample.css';
 const EmailSampleTab = ({ emailSubject, emailBody, shareMessage, reservationLink }) => {
   return (
     <div className="email-section">
-      {/* Header with Icon */}
       <div className="email-header">
         <FaEnvelopeOpenText className="email-icon" />
         <h3 className="email-title">Uitnodiging per E-mail</h3>
@@ -17,7 +16,6 @@ const EmailSampleTab = ({ emailSubject, emailBody, shareMessage, reservationLink
         Hieronder vindt u een voorbeeld van een uitnodiging die u per e-mail kunt versturen naar uw klanten. U kunt de tekst aanpassen naar wens.
       </p>
 
-      {/* Sample Email */}
       <div className="email-sample">
         <p>Beste klant,</p>
         <p>

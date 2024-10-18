@@ -31,7 +31,6 @@
 	animation: modalFadeIn 0.3s ease-out;
   }
   
-  /* Close button styles */
   .theme-page .add-theme-modal .modal-close-button {
 	position: absolute;
 	top: 15px;

@@ -10,9 +10,6 @@ import green1 from '../../Assets/avatars/green1.webp';
 import green2 from '../../Assets/avatars/green2.webp';
 import green3 from '../../Assets/avatars/green3.webp';
 
-/**
- * Array of avatar image imports.
- */
 export const avatars = [
   blue1,
   blue2,
@@ -25,9 +22,6 @@ export const avatars = [
   green3,
 ];
 
-/**
- * Corresponding names for each avatar.
- */
 export const avatarNames = [
   'blue1',
   'blue2',

@@ -3,32 +3,26 @@
 import { useCallback, useMemo } from 'react';
 import axios from 'axios';
 
-const CACHE_EXPIRY = 10 * 60 * 1000; // 10 minutes in milliseconds
+const TEN_MINUTES = 60 * 10 * 1000
+const CACHE_EXPIRY = TEN_MINUTES;
 
 const useApi = () => {
-  // Helper function to generate cache keys
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
-  // Function to retrieve JWT token
   const getJwtToken = useCallback(() => {
-    // Implement your logic to retrieve the JWT token
-    // For example, from localStorage:
-    return localStorage.getItem('jwtToken');
+    return localStorage.getItem('jwtToken'); // TODO: ADD JWT TOKEN HERE
   }, []);
 
-  // Function to get data (with caching)
   const get = useCallback(
     async (endpoint, config = {}) => {
       const cacheKey = generateCacheKey(endpoint);
       const cachedItem = JSON.parse(localStorage.getItem(cacheKey));
 
-      // Check if cached data is available and valid
       if (cachedItem && Date.now() - cachedItem.timestamp < CACHE_EXPIRY) {
         console.log('Returning Cache');
         return cachedItem.data;
       }
 
-      // Make the GET request
       try {
         const response = await axios.get(endpoint, {
           ...config,
@@ -39,8 +33,6 @@ const useApi = () => {
         });
 
         console.log('New Request');
-
-        // Update cache
         localStorage.setItem(
           cacheKey,
           JSON.stringify({ data: response.data, timestamp: Date.now() })
@@ -55,7 +47,6 @@ const useApi = () => {
     [generateCacheKey, getJwtToken]
   );
 
-  // Function to handle POST, PUT, PATCH, DELETE requests
   const mutate = useCallback(
     async (method, endpoint, data = null, config = {}) => {
       try {
@@ -69,8 +60,6 @@ const useApi = () => {
             Authorization: `Bearer ${getJwtToken()}`,
           },
         });
-
-        // Invalidate cache
         const cacheKey = generateCacheKey(endpoint);
         localStorage.removeItem(cacheKey);
 
@@ -83,7 +72,6 @@ const useApi = () => {
     [generateCacheKey, getJwtToken]
   );
 
-  // Memoize the API methods to prevent infinite loops
   const apiMethods = useMemo(
     () => ({
       get,

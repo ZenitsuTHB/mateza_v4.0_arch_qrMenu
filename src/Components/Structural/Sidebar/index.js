@@ -46,7 +46,6 @@ const Sidebar = () => {
     navigate(path);
   };
 
-
   return (
         <motion.div className="sidebar-component" layout>
           {routesConfig

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import './css/appsMenu.css';
-import AppsSearchBar from './AppsSearchBar'; // Import the new search bar
+import AppsSearchBar from './AppsSearchBar';
 import icon1 from '../../../Assets/logos/1.webp';
 import icon2 from '../../../Assets/logos/2.webp';
 import icon3 from '../../../Assets/logos/3.webp';
@@ -25,13 +25,10 @@ const enabledApps = ['Gasten', 'Tafels', 'Email', 'Statistieken', 'Cadeaubonnen'
 const AppsMenu = ({ onMouseEnter, onMouseLeave }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const menuRef = useRef(null);
-
-  // Filter apps based on search term
   const filteredApps = apps.filter((app) =>
     app.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Function to highlight matched text
   const highlightMatch = (name) => {
     if (!searchTerm) return name;
     const regex = new RegExp(`(${searchTerm})`, 'gi');

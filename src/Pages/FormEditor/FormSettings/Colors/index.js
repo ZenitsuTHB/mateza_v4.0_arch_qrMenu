@@ -4,7 +4,7 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import useNotification from '../../../../Components/Notification/index';
 import ColorPicker from './ColorPicker';
 import BackgroundTypeSelector from './BackgroundTypeSelector';
-import useApi from '../../../../Hooks/useApi.js'; // Adjust the path as necessary
+import useApi from '../../../../Hooks/useApi.js';
 import '../../css/FormSettings/formSettings.css';
 import '../../css/FormSettings/mobile.css';
 
@@ -32,7 +32,6 @@ const Colors = forwardRef((props, ref) => {
 
   const api = useApi();
 
-  // Fetch Colors Data with Caching
   useEffect(() => {
     const fetchColors = async () => {
       try {
@@ -50,8 +49,7 @@ const Colors = forwardRef((props, ref) => {
     };
 
     fetchColors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -175,7 +173,7 @@ const Colors = forwardRef((props, ref) => {
         type="button"
         className="submit-button"
         onClick={handleSave}
-        disabled={!isDirty} // Disable the button if there's nothing to save
+        disabled={!isDirty}
       >
         Opslaan
       </button>

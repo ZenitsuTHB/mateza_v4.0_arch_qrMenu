@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { title, font, fields } from './formConfig'; // Removed static theme
+import { title, font, fields } from './formConfig';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import SuccessMessage from './StepThree';

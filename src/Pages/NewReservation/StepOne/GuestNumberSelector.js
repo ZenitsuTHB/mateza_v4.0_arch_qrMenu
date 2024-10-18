@@ -19,12 +19,10 @@ const GuestNumberSelector = ({
   useEffect(() => {
     if (field) {
       if (parseInt(formData[field.id], 10) > maxGuests) {
-        // Handle max guests exceeded in parent component
       }
     }
   }, [formData, field, maxGuests]);
 
-  // Close guest selector when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -41,7 +39,7 @@ const GuestNumberSelector = ({
   }, []);
 
   if (!field) {
-    return null; // Handle case when field is not provided
+    return null;
   }
 
   const handleButtonClick = () => {
@@ -62,7 +60,7 @@ const GuestNumberSelector = ({
   };
 
   const handleInputChange = (e) => {
-    const value = e.target.value.replace(/\D/, ''); // Remove non-digit characters
+    const value = e.target.value.replace(/\D/, '');
     handleChange({
       target: { name: field.id, value: value },
     });

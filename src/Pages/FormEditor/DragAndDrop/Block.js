@@ -14,8 +14,6 @@ const Block = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  // State variables for label, placeholder, and required flag
   const [fieldLabel, setFieldLabel] = useState(label);
   const [placeholder, setPlaceholder] = useState(initialPlaceholder || '');
   const [isRequired, setIsRequired] = useState(initialRequired || false);

@@ -21,27 +21,26 @@ const languages = [
 
 const LanguageSelection = ({ onSelectLanguage }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const [currentText, setCurrentText] = useState(0); // To rotate text
-  const [isVisible, setIsVisible] = useState(true); // For fade effect
+  const [currentText, setCurrentText] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
   const { t } = useTranslation("accountOnboarding");
 
-  // Cycle through the languages every 2 seconds, with a 1-second fade transition
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsVisible(false); // Start fade-out
+      setIsVisible(false);
       setTimeout(() => {
-        setCurrentText((prevText) => (prevText + 1) % languages.length); // Move to next language
-        setIsVisible(true); // Start fade-in
-      }, 1000); // Wait for fade-out before changing text
-    }, 5000); // 2 seconds display, 1 second transition (total 3 seconds)
+        setCurrentText((prevText) => (prevText + 1) % languages.length);
+        setIsVisible(true);
+      }, 1000);
+    }, 5000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleSelectLanguage = (language) => {
     setSelectedLanguage(language.code);
-    i18n.changeLanguage(language.code); // Change language globally
-    localStorage.setItem('selectedLanguage', language.code); // Save language preference in localStorage
+    i18n.changeLanguage(language.code);
+    localStorage.setItem('selectedLanguage', language.code);
   };
 
   const handleNext = () => {
@@ -53,7 +52,6 @@ const LanguageSelection = ({ onSelectLanguage }) => {
   };
 
   useEffect(() => {
-    // Load saved language preference on component mount
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage) {
       setSelectedLanguage(savedLanguage);

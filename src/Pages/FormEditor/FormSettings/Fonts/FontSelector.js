@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { fontWeights } from './fontsConfig';
-import './css/fonts.css'; // Ensure CSS is imported
+import './css/fonts.css';
 
 const FontCategorySelector = ({
   categoryKey,

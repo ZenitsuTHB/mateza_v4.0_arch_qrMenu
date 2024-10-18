@@ -1,6 +1,6 @@
 // SearchBar.js
 import React from 'react';
-import { FaSearch } from 'react-icons/fa'; // Importing the search icon
+import { FaSearch } from 'react-icons/fa';
 import './css/searchBar.css';
 
 const SearchBar = () => {

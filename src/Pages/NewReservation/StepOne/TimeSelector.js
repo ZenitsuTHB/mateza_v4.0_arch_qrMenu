@@ -15,7 +15,6 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
     }
   }, [selectedDate]);
 
-  // Close time selector when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -82,7 +81,7 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
   };
 
   if (!field) {
-    return null; // Handle case when field is not provided
+    return null;
   }
 
   return (
@@ -125,10 +124,9 @@ const TimeSelector = ({ formData, handleChange, field, selectedDate }) => {
               {['morning', 'afternoon', 'evening'].map((period) => {
                 const timesInPeriod = availableTimes[period];
                 if (!timesInPeriod || timesInPeriod.length === 0) {
-                  return null; // Skip periods with no available times
+                  return null;
                 }
 
-                // Map period to Dutch labels
                 const periodLabels = {
                   morning: 'Ochtend',
                   afternoon: 'Middag',

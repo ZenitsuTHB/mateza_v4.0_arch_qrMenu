@@ -2,25 +2,25 @@
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useCallback } from 'react';
 import useNotification from '../../../../Components/Notification/index.js';
-import useApi from '../../../../Hooks/useApi.js'; // Import the useApi hook
-import '../../css/FormSettings/formSettings.css';
-import '../../css/FormSettings/mobile.css';
+import useApi from '../../../../Hooks/useApi.js';
 import SettingsForm from './SettingsForm.js';
 import ThemePreview from './ThemePreview.js';
 import AlignmentSelector from './AlignmentSelector.js';
+import '../../css/FormSettings/formSettings.css';
+import '../../css/FormSettings/mobile.css';
 
 const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
-    alignment: 'fullScreenColor', // Default alignment
+    alignment: 'fullScreenColor',
   };
 
   const [formData, setFormData] = useState(defaultSettings);
   const [initialFormData, setInitialFormData] = useState(defaultSettings);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const { triggerNotification, NotificationComponent } = useNotification();
-  const api = useApi(); // Use the useApi hook
+  const api = useApi();
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -128,10 +128,10 @@ const Settings = forwardRef((props, ref) => {
       />
 
       <button
-        type="button" // Changed from 'submit' to 'button' to prevent form submission
+        type="button"
         className="submit-button"
         onClick={handleSave}
-        disabled={!isDirty} // Disable save if not dirty
+        disabled={!isDirty}
       >
         Opslaan
       </button>

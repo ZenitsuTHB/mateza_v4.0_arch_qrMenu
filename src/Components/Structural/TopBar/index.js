@@ -1,19 +1,19 @@
 // TopBar.js
 
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import topBarConfig from '../../../Config/topbarConfig.js'; // Adjust the path as needed
+import { useNavigate } from 'react-router-dom';
+import topBarConfig from '../../../Config/topbarConfig.js';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
-import logoImage from '../../../Assets/logos/logo.webp'; // Adjust the path to your image
+import logoImage from '../../../Assets/logos/logo.webp';
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
   const menuTimeoutRef = useRef(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);

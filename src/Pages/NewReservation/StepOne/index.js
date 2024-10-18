@@ -5,7 +5,7 @@ import Title from './Title';
 import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
 import GuestNumberSelector from './GuestNumberSelector';
-import MaxGuestMessage from './MaxGuestsMessage'; // New component for the message
+import MaxGuestMessage from './MaxGuestsMessage';
 
 const StepOne = ({
   title,
@@ -62,7 +62,7 @@ const StepOne = ({
           formData={formData}
           handleChange={handleChange}
           field={timeField}
-          selectedDate={formData.datum} // Pass the selected date
+          selectedDate={formData.datum}
         />
       )}
 

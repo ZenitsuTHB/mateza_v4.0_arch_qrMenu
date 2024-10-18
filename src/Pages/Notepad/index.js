@@ -21,7 +21,6 @@ const Notepad = () => {
   }, [note]);
 
   const resetToParagraph = () => {
-    // Ensure the block element is always a <p> after Enter or Shift+Enter or Delete on blank line
     const selection = window.getSelection();
     if (selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
@@ -52,22 +51,19 @@ const Notepad = () => {
       document.execCommand('underline');
       e.preventDefault();
     } else if (e.key === 'Enter') {
-      // Treat both Enter and Shift+Enter the same
       e.preventDefault();
       document.execCommand('insertParagraph');
       setTimeout(() => {
         resetToParagraph();
       }, 0);
     } else if (e.key === 'Delete') {
-      // Check if the current line is empty
       const selection = window.getSelection();
       if (selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         const blockNode = range.startContainer.parentNode;
 
-        // Check if the current block is empty
         if (blockNode.textContent.trim() === '') {
-          e.preventDefault(); // Prevent default delete behavior
+          e.preventDefault();
           resetToParagraph();
         }
       }

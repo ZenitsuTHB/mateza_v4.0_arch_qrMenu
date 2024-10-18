@@ -72,7 +72,7 @@ const Profile = (props) => {
           onAvatarSelect={handleAvatarSelect}
         />
         <ProfileBio name={name} bio={bio} interests={interests} />
-        <Language /> {/* Include the LanguageSelector component */}
+        <Language />
       </div>
     </div>
   );

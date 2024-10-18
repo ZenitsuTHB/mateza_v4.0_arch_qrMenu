@@ -12,7 +12,6 @@ import {
   FaParagraph,
 } from 'react-icons/fa';
 
-// Define the initial blocks available in the palette
 export const initialBlocks = [
   { id: '1', type: 'input', label: 'Invoerveld', icon: <FaKeyboard /> },
   { id: '2', type: 'select', label: 'Selectievak', icon: <FaList /> },
@@ -24,7 +23,6 @@ export const initialBlocks = [
   { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> },
 ];
 
-// Define the default items present on the canvas
 export const defaultCanvasItems = [
   {
     id: `input-${Date.now()}-voornaam`,
