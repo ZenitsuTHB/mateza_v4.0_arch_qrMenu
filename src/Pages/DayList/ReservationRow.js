@@ -11,10 +11,10 @@ const ReservationRow = ({ reservation }) => {
 
   return (
     <div className="reservation-row">
-      <div>
+      <div className="reservation-number">
         <strong>{reservation.aantalGasten}</strong>
         {reservation.aantalGasten >= 5 && (
-			<FaUsers style={{ color: 'lightgray', marginLeft: '5px' }}/>
+          <FaUsers className="users-icon" />
         )}
       </div>
       <div>{reservation.tijdstip}</div>

@@ -1,7 +1,7 @@
 /* src/components/ReservationsList/css/reservationsList.css */
 
 .reservations-page {
-	padding: 20px;
+	padding-top: 20px;
   }
   
   .reservations-container {
@@ -25,5 +25,25 @@
   .reservations-header > div {
 	padding: 10px;
 	border-bottom: 1px solid lightgray;
+  }
+  
+.reservations-grid {
+	display: grid;
+	grid-template-columns: 50px 130px 200px 2fr 150px 1fr; /* Adjusted column widths */
+  }
+  
+  .reservations-header > div.header-number {
+	width: 50px;
+  }
+  
+  .reservation-row > div.reservation-number {
+	width: 50px;
+  }
+  
+  /* Optional: Adjust alignment */
+  .header-number,
+  .reservation-number {
+	display: flex;
+	align-items: center;
   }
   
