@@ -1,0 +1,62 @@
+/* src/components/Timeline/css/timeline.css */
+
+.timeline {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.timeline-scrollable {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.timeline-container {
+  position: relative;
+  width: 100%;
+}
+
+.timeline-hour {
+  position: absolute;
+  width: 100%;
+}
+
+.hour-label {
+  position: absolute;
+  left: 0;
+  width: 80px;
+  color: gray;
+  font-size: 12px;
+  text-align: right;
+  padding-right: 5px;
+}
+
+.hour-line {
+  position: absolute;
+  left: 80px;
+  right: 0;
+  top: 7px;
+  border-top: 1px solid lightgray;
+}
+
+.time-block {
+  position: absolute;
+  transform: translateY(7px);
+  left: 100px;
+  max-width: 400px;
+  right: 100px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.time-block-title {
+  font-weight: bold;
+}
+
+.time-block-time {
+  font-size: 12px;
+}

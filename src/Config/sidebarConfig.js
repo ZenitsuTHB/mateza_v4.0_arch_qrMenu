@@ -3,12 +3,14 @@
 import {
   FaChartPie,
   FaPencilAlt,
+  FaCalendarAlt,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
 import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
 import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
+import DayCalendar from '../Pages/DayCalendar/index.js';
 
 const routesConfig = [
   {
@@ -86,6 +88,15 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
+  },
+  {
+    path: '/calendar',
+    element: <DayCalendar title="Dag Kalender" />,
+    label: 'Dag Kalender',
+    icon: FaCalendarAlt,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
 ];
 
