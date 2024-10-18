@@ -1,0 +1,29 @@
+/* src/components/ReservationsList/css/reservationsList.css */
+
+.reservations-page {
+	padding: 20px;
+  }
+  
+  .reservations-container {
+	background-color: white;
+	border-radius: 8px;
+	padding: 20px;
+  }
+  
+  .reservations-grid {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .reservations-header {
+	display: contents;
+	background-color: lightgray;
+	font-weight: bold;
+	color: black;
+  }
+  
+  .reservations-header > div {
+	padding: 10px;
+	border-bottom: 1px solid lightgray;
+  }
+  

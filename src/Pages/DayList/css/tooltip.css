@@ -1,0 +1,36 @@
+/* src/components/ReservationsList/css/tooltip.css */
+
+.tooltip {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	padding: 10px;
+	z-index: 1000;
+  }
+  
+  .tooltip-content {
+	font-size: 14px;
+  }
+  
+  .tooltip-item {
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+  }
+  
+  .tooltip-item i {
+	margin-right: 5px;
+  }
+  
+  .tooltip-separator {
+	border-top: 1px solid lightgray;
+	margin: 5px 0;
+  }
+  
+  .tooltip-item.delete {
+	color: red;
+  }
+  

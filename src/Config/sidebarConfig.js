@@ -13,11 +13,13 @@ import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
 import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
+import DayList from '../Pages/DayList/index.js';
+
 
 const routesConfig = [
   {
     path: '/day-list',
-    element: <DayCalendar title="Vandaag" />,
+    element: <DayList title="Vandaag" />,
     label: 'Vandaag',
     icon: FaStar,
     isMenu: true,
