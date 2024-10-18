@@ -4,3 +4,17 @@
 	  display: none;
 	}
   }
+
+
+
+  @media (max-width: 1000px) {
+	.top-bar-component .search-bar {
+		max-width: 300px;
+	  }
+	
+	  .top-bar-middle {
+		max-width: 300px;
+	  }
+  }
+
+  

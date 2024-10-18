@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import Timeline from './Timeline.js';
 import Modal from './ModalView';
-import { FaSearchPlus, FaSearchMinus } from 'react-icons/fa';
+import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import './css/dayCalendar.css';
 
 const DayCalendar = () => {
@@ -65,7 +65,9 @@ const DayCalendar = () => {
         />
       )}
       <div className="controls">
-        <button className="control-button plus" onClick={openModal}>+</button>
+        <button className="control-button" onClick={openModal}>
+        <FaPlus />
+        </button>
         <button className="control-button" onClick={handleZoomIn}>
           <FaSearchPlus />
         </button>

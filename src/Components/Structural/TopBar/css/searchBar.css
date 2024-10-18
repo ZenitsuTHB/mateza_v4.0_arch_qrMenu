@@ -26,4 +26,11 @@
   .top-bar-component .search-input::placeholder {
 	color: #777777;
   }
-  
+
+  .top-bar-component .search-bar {
+	max-width: 400px;
+  }
+
+  .top-bar-middle {
+	max-width: 400px;
+  }

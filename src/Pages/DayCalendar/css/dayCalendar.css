@@ -26,14 +26,15 @@
 	padding: 10px;
 	margin-bottom: 5px;
 	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	width: 40px;
+	height: 40px;
   }
 
-  .plus {
-	width: 40px;
-  }
-  
   .control-button:hover {
-	background-color: darkblue;
+	background-color: var(--color-blue);
   }
   
   @media (max-width: 900px) {
