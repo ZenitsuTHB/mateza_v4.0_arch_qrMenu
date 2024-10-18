@@ -3,11 +3,13 @@
 .day-calendar {
 	position: relative;
 	height: 100vh;
+	left: -40px;
+	top: 15px;
   }
   
   .controls {
 	position: fixed;
-	top: 50%;
+	top: 190px;
 	right: 10px;
 	display: flex;
 	flex-direction: column;
@@ -17,7 +19,7 @@
   }
   
   .control-button {
-	background-color: blue;
+	background-color: var(--color-blue);
 	color: white;
 	border: none;
 	border-radius: 5px;
@@ -25,8 +27,23 @@
 	margin-bottom: 5px;
 	cursor: pointer;
   }
+
+  .plus {
+	width: 40px;
+  }
   
   .control-button:hover {
 	background-color: darkblue;
   }
   
+  @media (max-width: 900px) {
+	
+	.day-calendar {
+		left: -15px;
+	  }
+
+	  .controls {
+		top: 150px;
+	  }
+	  
+  }

@@ -1,9 +1,8 @@
-// src/components/DayCalendar/DayCalendar.jsx
-
 import React, { useState } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import Timeline from './Timeline.js';
 import Modal from './ModalView';
+import { FaSearchPlus, FaSearchMinus } from 'react-icons/fa';
 import './css/dayCalendar.css';
 
 const DayCalendar = () => {
@@ -62,9 +61,13 @@ const DayCalendar = () => {
         />
       )}
       <div className="controls">
-        <button className="control-button" onClick={openModal}>+</button>
-        <button className="control-button" onClick={handleZoomIn}>Zoom In</button>
-        <button className="control-button" onClick={handleZoomOut}>Zoom Out</button>
+        <button className="control-button plus" onClick={openModal}>+</button>
+        <button className="control-button" onClick={handleZoomIn}>
+          <FaSearchPlus />
+        </button>
+        <button className="control-button" onClick={handleZoomOut}>
+          <FaSearchMinus />
+        </button>
       </div>
     </div>
   );
