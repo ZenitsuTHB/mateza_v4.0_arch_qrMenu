@@ -13,7 +13,7 @@
   
   .form-editing-page .block.selected {
 	border: 2px solid var(--color-bg);
-	box-shadow: 0 0 10px var(--color-blue);
+	box-shadow: 0 0 10px var(--color-lightblue);
   }
   
   .form-editing-page .drag-handle {
@@ -107,7 +107,7 @@
 	left: -10px;
 	right: -10px;
 	bottom: -10px;
-	border: 2px solid var(--color-blue);
+	border: 2px solid var(--color-lightblue);
 	border-radius: 16px;
 	pointer-events: none;
   }
@@ -163,11 +163,11 @@
   }
   
   .form-editing-page input:checked + .slider {
-	background-color: var(--color-blue);
+	background-color: var(--color-lightblue);
   }
   
   .form-editing-page input:focus + .slider {
-	box-shadow: 0 0 1px var(--color-blue);
+	box-shadow: 0 0 1px var(--color-lightblue);
   }
   
   .form-editing-page input:checked + .slider:before {
