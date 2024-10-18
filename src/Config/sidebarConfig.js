@@ -2,6 +2,8 @@
 
 import {
   FaChartPie,
+  FaPlus,
+  FaListAlt,
   FaPencilAlt,
   FaCalendarAlt,
 } from 'react-icons/fa';
@@ -14,9 +16,51 @@ import DayCalendar from '../Pages/DayCalendar/index.js';
 
 const routesConfig = [
   {
+    path: '/today',
+    element: <DayCalendar title="Vandaag" />,
+    label: 'Vandaag',
+    icon: FaListAlt,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: [
+      {
+        label: 'Dag',
+        path: '/day-list',
+      },
+      {
+        label: 'Week',
+        path: '/week-list',
+      },
+      {
+        label: 'Maand',
+        path: '/month-list',
+      },
+    ],
+  },
+
+  {
+    path: '/calendar',
+    element: <DayCalendar title="Openingsuren" />,
+    label: 'Openingsuren',
+    icon: FaCalendarAlt,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: [
+      {
+        label: 'Openingsuren',
+        path: '/calendar',
+      },
+      {
+        label: 'Tafels',
+        path: '/tables',
+      },
+    ],
+  },
+  {
     path: '/',
-    element: <DragAndDrop title="Drag and Drop" />,
-    label: 'Drag and Drop',
+    element: <DragAndDrop title="Ontwerp" />,    label: 'Ontwerp',
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,
@@ -88,26 +132,7 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-  },
-  {
-    path: '/calendar',
-    element: <DayCalendar title="Dag Kalender" />,
-    label: 'Dag Kalender',
-    icon: FaCalendarAlt,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: [
-      {
-        label: 'Kalender',
-        path: '/calendar',
-      },
-      {
-        label: 'Tafels',
-        path: '/tables',
-      },
-    ],
-  },
+  }
 ];
 
 export default routesConfig;
