@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import ThemeSelectorModal from '../../Theme/index.js';
+import './css/theme.css'
 
 const ThemePreview = ({ selectedTheme, setSelectedTheme, triggerNotification }) => {
   const [showThemeModal, setShowThemeModal] = useState(false);

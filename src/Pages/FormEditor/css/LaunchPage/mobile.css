@@ -5,27 +5,21 @@
 	  flex-direction: column;
 	  align-items: flex-start;
 	}
-  
-	.launch-page .email-icon {
-	  margin-bottom: 10px;
-	}
-	
-	.launch-page .launch-page-form {
-	  padding: 20px;
-	}
-  
+
 	.launch-page .tab-button {
 	  font-size: 14px;
 	  padding: 6px 0;
 	}
-  
-	.launch-page .email-button {
-	  width: 100%;
-	  text-align: center;
-	}
-  
-	.launch-page .buttons-container {
-	  gap: 20px;
-	}
+
+	.launch-page .launch-page-form {
+		background-color: var(--color-bg);
+		padding: 20px;
+		margin-left: 0px;
+		padding-right: 50px;
+		padding-bottom: 0;
+		border-radius: 8px;
+		box-shadow: none;
+		width: 100vw;
+	  }
   }
   

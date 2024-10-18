@@ -26,6 +26,7 @@
 	border: 2px solid #ccc;
 	border-radius: 5px;
 	cursor: pointer;
+	background-color: white;
 	transition: border-color 0.3s;
 	text-align: center;
   }

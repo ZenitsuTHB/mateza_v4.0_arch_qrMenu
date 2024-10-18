@@ -1,11 +1,10 @@
 // src/components/FormSettings/Fonts.jsx
 
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import useApi from '../../../../Hooks/useApi'; // Adjust the path as necessary
+import useApi from '../../../../Hooks/useApi';
 import useNotification from '../../../../Components/Notification/index';
-import '../../css/FormSettings/formSettings.css';
-import '../../css/FormSettings/mobile.css';
 import { sansSerifFonts, serifFonts, fontWeights } from './fontsConfig';
+import './css/fonts.css'
 
 const Fonts = forwardRef((props, ref) => {
   const defaultFonts = {
@@ -15,13 +14,12 @@ const Fonts = forwardRef((props, ref) => {
     buttonFont: { font: 'Poppins', weight: '400' },
   };
 
-  // Reset fonts are now the same as defaultFonts
   const resetFonts = defaultFonts;
 
   const [fontsState, setFontsState] = useState(defaultFonts);
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
-  const api = useApi(); // Initialize useApi
+  const api = useApi();
 
   const fontCategories = [
     { key: 'titleFont', label: 'Titel' },
@@ -70,10 +68,9 @@ const Fonts = forwardRef((props, ref) => {
     };
 
     fetchFonts();
-  }, [api]); // Added 'api' as a dependency
+  }, [api]);
 
   useEffect(() => {
-    // Collect all fonts and weights used to import them
     const fontWeightMap = {};
 
     Object.values(fontsState)
@@ -105,7 +102,6 @@ const Fonts = forwardRef((props, ref) => {
   }, [fontsState]);
 
   const handleFontSelect = (categoryKey, font) => {
-    // Reset the weight to default if the current weight is not available for the new font
     const availableWeights = fontWeights[font] || ['400'];
     const currentWeight = fontsState[categoryKey]?.weight || '400';
     const newWeight = availableWeights.includes(currentWeight) ? currentWeight : availableWeights[0];
@@ -185,7 +181,7 @@ const Fonts = forwardRef((props, ref) => {
                   ))}
                 </optgroup>
               </select>
-              <select value={selectedWeight} onChange={(e) => handleWeightSelect(key, e.target.value)}>
+              <select className="weight-selector" value={selectedWeight} onChange={(e) => handleWeightSelect(key, e.target.value)}>
                 {availableWeights.map((weight) => (
                   <option key={weight} value={weight}>
                     {weight}
