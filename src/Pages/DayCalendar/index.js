@@ -40,9 +40,9 @@ const DayCalendar = () => {
       setZoomLevel(zoomLevel * 2);
     }
   };
-
+  
   const handleZoomOut = () => {
-    if (zoomLevel > 0.25) {
+    if (zoomLevel > 0.5) {
       setZoomLevel(zoomLevel / 2);
     }
   };
@@ -65,15 +65,26 @@ const DayCalendar = () => {
         />
       )}
       <div className="controls">
-        <button className="control-button" onClick={openModal}>
+        <button className="control-button green-button" onClick={openModal}>
         <FaPlus />
         </button>
-        <button className="control-button" onClick={handleZoomIn}>
-          <FaSearchPlus />
-        </button>
-        <button className="control-button" onClick={handleZoomOut}>
-          <FaSearchMinus />
-        </button>
+        <button 
+        className="control-button round-button" 
+        onClick={handleZoomIn} 
+        disabled={zoomLevel === 2}
+        style={{ display: zoomLevel === 2 ? 'none' : 'block' }}
+      >
+        <FaSearchPlus />
+      </button>
+      <button 
+        className="control-button" 
+        onClick={handleZoomOut} 
+        disabled={zoomLevel === 0.5}
+        style={{ display: zoomLevel === 0.5 ? 'none' : 'block' }}
+      >
+        <FaSearchMinus />
+      </button>
+
       </div>
     </div>
   );

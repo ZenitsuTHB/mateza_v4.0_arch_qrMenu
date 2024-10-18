@@ -59,8 +59,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
                 }}
                 onClick={() => onTimeBlockClick(block)}
               >
-                <div className="time-block-title">{block.title}</div>
-                <div className="time-block-time">{`${block.startTime} - ${block.endTime}`}</div>
+                <div className="time-block-title">{block.title} <span className="time-block-time">{`${block.startTime} - ${block.endTime}`}</span></div>
               </div>
             );
           })}
