@@ -3,7 +3,7 @@
 import {
   FaChartPie,
   FaPlus,
-  FaListAlt,
+  FaStar,
   FaPencilAlt,
   FaCalendarAlt,
 } from 'react-icons/fa';
@@ -16,10 +16,10 @@ import DayCalendar from '../Pages/DayCalendar/index.js';
 
 const routesConfig = [
   {
-    path: '/today',
+    path: '/day-list',
     element: <DayCalendar title="Vandaag" />,
     label: 'Vandaag',
-    icon: FaListAlt,
+    icon: FaStar,
     isMenu: true,
     isMobile: true,
     isTab: true,
@@ -35,6 +35,10 @@ const routesConfig = [
       {
         label: 'Maand',
         path: '/month-list',
+      },
+      {
+        label: 'Tafels',
+        path: '/table',
       },
     ],
   },
@@ -101,6 +105,15 @@ const routesConfig = [
         path: '/launch',
       },
     ],
+  },
+  {
+    path: '/new-reservation',
+    element: <Profile title="Nieuwe Reservatie" />,
+    label: 'Nieuwe Reservatie',
+    icon: FaPlus,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/settings',

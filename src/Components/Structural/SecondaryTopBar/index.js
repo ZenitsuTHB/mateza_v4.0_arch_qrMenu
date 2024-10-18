@@ -20,11 +20,16 @@ const SecondaryTopBar = () => {
   const secondaryTopBarConfig = currentRoute?.secondaryTopBar || [];
 
   useEffect(() => {
-    if (!activePath && secondaryTopBarConfig.length > 0) {
-      setActivePath(secondaryTopBarConfig[0].path);
-      navigate(secondaryTopBarConfig[0].path);
+    if (secondaryTopBarConfig.length > 0) {
+      const matchingTab = secondaryTopBarConfig.find(tab => currentPath === tab.path);
+      if (matchingTab) {
+        setActivePath(matchingTab.path); // Set active tab based on current path
+      } else if (!activePath) {
+        setActivePath(secondaryTopBarConfig[0].path); // Default to the first tab
+        navigate(secondaryTopBarConfig[0].path);
+      }
     }
-  }, [secondaryTopBarConfig, activePath, navigate]);
+  }, [secondaryTopBarConfig, activePath, navigate, currentPath]);
 
   if (secondaryTopBarConfig.length === 0) {
     return null;
@@ -37,36 +42,36 @@ const SecondaryTopBar = () => {
 
   return (
 	<div className="secondary-top-bar-component">
-    <div className="secondary-top-bar">
-      <div className="buttons-container">
-        {secondaryTopBarConfig.map((button) => (
-          <motion.button
-            key={button.path}
-            className={clsx('secondary-button', {
-              'active': activePath === button.path,
-            })}
-            onClick={() => handleNavigation(button.path)}
-            aria-label={button.label}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link to={button.path} className="button-link">
-              {button.icon && <span className="button-icon">{button.icon}</span>}
-              <span className="button-label">{button.label}</span>
-              {activePath === button.path && (
-                <motion.div
-                  layoutId="underline"
-                  className="underline"
-                  initial={false}
-                  animate={{ opacity: 1, scaleX: 1 }}
-                  exit={{ opacity: 0, scaleX: 0 }}
-                />
-              )}
-            </Link>
-          </motion.button>
-        ))}
+      <div className="secondary-top-bar">
+        <div className="buttons-container">
+          {secondaryTopBarConfig.map((button) => (
+            <motion.button
+              key={button.path}
+              className={clsx('secondary-button', {
+                'active': activePath === button.path,
+              })}
+              onClick={() => handleNavigation(button.path)}
+              aria-label={button.label}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link to={button.path} className="button-link">
+                {button.icon && <span className="button-icon">{button.icon}</span>}
+                <span className="button-label">{button.label}</span>
+                {activePath === button.path && (
+                  <motion.div
+                    layoutId="underline"
+                    className="underline"
+                    initial={false}
+                    animate={{ opacity: 1, scaleX: 1 }}
+                    exit={{ opacity: 0, scaleX: 0 }}
+                  />
+                )}
+              </Link>
+            </motion.button>
+          ))}
+        </div>
       </div>
-    </div>
 	</div>
   );
 };
