@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   FaUsers,
   FaEllipsisV,
@@ -7,50 +7,44 @@ import {
 } from 'react-icons/fa';
 import './css/reservationRow.css';
 
-const ReservationRow = ({ reservation, activeTab }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
+const ReservationRow = ({
+  reservation,
+  activeTab,
+  isTooltipOpen,
+  onTooltipOpen,
+  onTooltipClose,
+}) => {
   const tooltipTimerRef = useRef(null);
 
-  const handleMouseEnterIcon = () => {
-    // Clear any existing timer
-    if (tooltipTimerRef.current) {
-      clearTimeout(tooltipTimerRef.current);
-      tooltipTimerRef.current = null;
-    }
-    setShowTooltip(true);
-  };
-
-  const handleMouseLeaveIcon = () => {
-    // Start timer to hide tooltip after 1.5 seconds
-    tooltipTimerRef.current = setTimeout(() => {
-      setShowTooltip(false);
-    }, 1500);
-  };
-
-  const handleMouseEnterTooltip = () => {
-    // Clear timer when entering tooltip
-    if (tooltipTimerRef.current) {
-      clearTimeout(tooltipTimerRef.current);
-      tooltipTimerRef.current = null;
-    }
-    setShowTooltip(true);
-  };
-
-  const handleMouseLeaveTooltip = () => {
-    // Start timer to hide tooltip after 1.5 seconds
-    tooltipTimerRef.current = setTimeout(() => {
-      setShowTooltip(false);
-    }, 1500);
-  };
-
-  // Clean up timer on unmount
   useEffect(() => {
+    if (isTooltipOpen) {
+      // Clear any existing timer
+      if (tooltipTimerRef.current) {
+        clearTimeout(tooltipTimerRef.current);
+      }
+      // Set a new timer to close the tooltip after 2.5 seconds
+      tooltipTimerRef.current = setTimeout(() => {
+        onTooltipClose();
+      }, 2500);
+    } else {
+      // Clear the timer if the tooltip is not open
+      if (tooltipTimerRef.current) {
+        clearTimeout(tooltipTimerRef.current);
+        tooltipTimerRef.current = null;
+      }
+    }
+
+    // Clean up on unmount
     return () => {
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
       }
     };
-  }, []);
+  }, [isTooltipOpen, onTooltipClose]);
+
+  const handleIconClick = () => {
+    onTooltipOpen(reservation.id);
+  };
 
   return (
     <div className="reservation-row">
@@ -75,24 +69,19 @@ const ReservationRow = ({ reservation, activeTab }) => {
       {activeTab !== 'eenvoudig' && <div>{reservation.email}</div>}
       {activeTab !== 'eenvoudig' && <div>{reservation.phone}</div>}
       <div className="extra-column">
-        <div
-          className="ellipsis-container"
-          onMouseEnter={handleMouseEnterIcon}
-          onMouseLeave={handleMouseLeaveIcon}
-        >
-          <FaEllipsisV className="ellipsis-icon" />
-          {showTooltip && (
-            <div
-              className="tooltip-container"
-              onMouseEnter={handleMouseEnterTooltip}
-              onMouseLeave={handleMouseLeaveTooltip}
-            >
+        <div className="ellipsis-container">
+          <FaEllipsisV
+            className="ellipsis-icon"
+            onClick={handleIconClick}
+          />
+          {isTooltipOpen && (
+            <div className="tooltip-container">
               <div className="tooltip-item">
                 <FaPencilAlt className="tooltip-icon" />
                 Bewerken
               </div>
               <div className="tooltip-separator"></div>
-              <div className="tooltip-item">
+              <div className="tooltip-item delete-item">
                 <FaTrashAlt className="tooltip-icon" />
                 Verwijderen
               </div>

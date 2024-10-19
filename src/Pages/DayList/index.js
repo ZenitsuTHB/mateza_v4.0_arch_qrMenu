@@ -10,6 +10,7 @@ import TabBar from './TabBar.js'; // Import the new TabBar component
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState('volledig');
+  const [openTooltipId, setOpenTooltipId] = useState(null); // New state for tooltip
   const itemsPerPage = 10;
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -37,6 +38,14 @@ const ReservationsList = () => {
     setActiveTab(tabId);
   };
 
+  const handleTooltipOpen = (id) => {
+    setOpenTooltipId(id);
+  };
+
+  const handleTooltipClose = () => {
+    setOpenTooltipId(null);
+  };
+
   const filteredReservations = currentReservations.map((reservation) => {
     if (activeTab === 'eenvoudig') {
       return {
@@ -45,6 +54,7 @@ const ReservationsList = () => {
         firstName: reservation.firstName,
         lastName: reservation.lastName,
         extra: reservation.extra,
+        id: reservation.id,
       };
     }
     return reservation;
@@ -66,15 +76,18 @@ const ReservationsList = () => {
               <div>Naam</div>
               {activeTab !== 'eenvoudig' && <div>Email</div>}
               {activeTab !== 'eenvoudig' && <div>Telefoon</div>}
-              <div>Extra</div>
+              <div></div> {/* Empty header for the extra column */}
             </div>
           </div>
 
-          {filteredReservations.map((reservation, index) => (
+          {filteredReservations.map((reservation) => (
             <ReservationRow
-              key={index}
+              key={reservation.id}
               reservation={reservation}
               activeTab={activeTab}
+              isTooltipOpen={openTooltipId === reservation.id}
+              onTooltipOpen={() => handleTooltipOpen(reservation.id)}
+              onTooltipClose={handleTooltipClose}
             />
           ))}
         </div>

@@ -91,3 +91,64 @@
 	margin: 5px 0;
   }
   
+  /* Existing styles... */
+
+.extra-column {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	position: relative;
+  }
+  
+  .ellipsis-container {
+	position: relative;
+  }
+  
+  .ellipsis-icon {
+	color: lightgray;
+	cursor: pointer;
+  }
+  
+  .tooltip-container {
+	position: absolute;
+	bottom: 100%; /* Positions the tooltip above the icon */
+	right: 0;
+	transform: translateY(-10px);
+	background-color: white;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	padding: 5px 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+  }
+  
+  .tooltip-item {
+	display: flex;
+	align-items: center;
+	padding: 8px 15px;
+	cursor: pointer;
+  }
+  
+  .tooltip-item:hover {
+	background-color: #f0f0f0;
+  }
+  
+  .tooltip-icon {
+	margin-right: 8px;
+  }
+  
+  /* New styles for "Verwijderen" */
+  .tooltip-item.delete-item {
+	color: red;
+  }
+  
+  .tooltip-item.delete-item .tooltip-icon {
+	color: red;
+  }
+  
+  .tooltip-separator {
+	height: 1px;
+	background-color: lightgray;
+	margin: 5px 0;
+  }
+  
