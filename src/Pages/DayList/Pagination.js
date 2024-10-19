@@ -6,8 +6,6 @@ import './css/pagination.css';
 const Pagination = ({
   totalPages,
   currentPage,
-  handlePrevPage,
-  handleNextPage,
   handlePageClick,
 }) => {
   const pageNumbers = [];
@@ -17,13 +15,6 @@ const Pagination = ({
 
   return (
     <div className="pagination">
-      <button
-        className="prev-button"
-        onClick={handlePrevPage}
-        disabled={currentPage === 1}
-      >
-        Vorige
-      </button>
       <span className="page-numbers">
         {pageNumbers.map((number) => (
           <button
@@ -35,13 +26,6 @@ const Pagination = ({
           </button>
         ))}
       </span>
-      <button
-        className="next-button"
-        onClick={handleNextPage}
-        disabled={currentPage === totalPages}
-      >
-        Volgende
-      </button>
     </div>
   );
 };

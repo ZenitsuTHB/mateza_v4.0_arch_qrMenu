@@ -1,43 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import ReservationRow from './ReservationRow.js';
 import Pagination from './Pagination.js';
 import reservationsData from './data.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
-import TabBar from './TabBar.js';
-import {
-	FaHashtag,
-	FaClock,
-	FaUser,
-	FaEnvelope,
-	FaPhone,
-  } from 'react-icons/fa';
-  
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState('volledig');
   const [openTooltipId, setOpenTooltipId] = useState(null);
   const [nameSearch, setNameSearch] = useState('');
   const [guestsSearch, setGuestsSearch] = useState('');
   const [timeSearch, setTimeSearch] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const itemsPerPage = 10;
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
   };
 
   const handleTooltipToggle = (id) => {
@@ -64,7 +55,9 @@ const ReservationsList = () => {
     }
 
     if (guestsSearch) {
-      matchesGuests = reservation.aantalGasten.toString().includes(guestsSearch);
+      matchesGuests = reservation.aantalGasten
+        .toString()
+        .includes(guestsSearch);
     }
 
     if (timeSearch) {
@@ -84,7 +77,8 @@ const ReservationsList = () => {
   );
 
   const filteredReservations = currentReservations.map((reservation) => {
-    if (activeTab === 'eenvoudig') {
+    if (isMobile) {
+      // Simplified data for mobile
       return {
         aantalGasten: reservation.aantalGasten,
         tijdstip: reservation.tijdstip,
@@ -94,12 +88,12 @@ const ReservationsList = () => {
         id: reservation.id,
       };
     }
+    // Full data for desktop
     return reservation;
   });
 
   return (
     <div className="reservations-page">
-
       {/* Search Bars */}
       <div className="search-bars-container">
         <input
@@ -128,40 +122,37 @@ const ReservationsList = () => {
       <div className="reservations-container">
         <div
           className={`reservations-grid ${
-            activeTab === 'eenvoudig' ? 'eenvoudig-grid' : ''
+            isMobile ? 'eenvoudig-grid' : ''
           }`}
         >
           <div className="reservations-header reservation-row">
-            <div className="reservations-header reservation-row">
-  <div>
-	#
-  </div>
-  <div>
-	Uur
-  </div>
-  <div>
-    Naam
-  </div>
-  {activeTab !== 'eenvoudig' && (
-    <div>
-      Email
-    </div>
-  )}
-  {activeTab !== 'eenvoudig' && (
-    <div>
-      Telefoon
-    </div>
-  )}
-  <div></div>
-</div>
-
+            <div>
+              #
+            </div>
+            <div>
+              Uur
+            </div>
+            <div>
+              Naam
+            </div>
+            {!isMobile && (
+              <div>
+                Email
+              </div>
+            )}
+            {!isMobile && (
+              <div>
+                Telefoon
+              </div>
+            )}
+            <div></div>
           </div>
 
           {filteredReservations.map((reservation) => (
             <ReservationRow
               key={reservation.id}
               reservation={reservation}
-              activeTab={activeTab}
+              isMobile={isMobile}
               isTooltipOpen={openTooltipId === reservation.id}
               onTooltipToggle={handleTooltipToggle}
               onTooltipClose={handleTooltipClose}
@@ -171,8 +162,6 @@ const ReservationsList = () => {
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
-          handlePrevPage={handlePrevPage}
-          handleNextPage={handleNextPage}
           handlePageClick={handlePageClick}
         />
       </div>

@@ -4,7 +4,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
+	margin-top: 30px;
   }
   
   .pagination button {
@@ -13,7 +13,7 @@
 	color: var(--color-blue);
 	font-size: 16px;
 	cursor: pointer;
-	margin: 0 5px;
+	margin: 0 10px;
   }
   
   .pagination button:disabled {

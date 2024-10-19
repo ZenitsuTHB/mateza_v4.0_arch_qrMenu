@@ -9,7 +9,7 @@ import './css/reservationRow.css';
 
 const ReservationRow = ({
   reservation,
-  activeTab,
+  isMobile,
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
@@ -67,14 +67,11 @@ const ReservationRow = ({
           {`${reservation.firstName} ${reservation.lastName}`}
         </a>
       </div>
-      {activeTab !== 'eenvoudig' && <div>{reservation.email}</div>}
-      {activeTab !== 'eenvoudig' && <div>{reservation.phone}</div>}
+      {!isMobile && <div>{reservation.email}</div>}
+      {!isMobile && <div>{reservation.phone}</div>}
       <div className="extra-column">
         <div className="ellipsis-container">
-          <FaEllipsisV
-            className="ellipsis-icon"
-            onClick={handleIconClick}
-          />
+          <FaEllipsisV className="ellipsis-icon" onClick={handleIconClick} />
           {isTooltipOpen && (
             <div className="tooltip-container">
               <div className="tooltip-item">
