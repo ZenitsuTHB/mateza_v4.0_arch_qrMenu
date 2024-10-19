@@ -15,7 +15,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // Importing FontAwesome calendar icon
-import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaList } from 'react-icons/fa';
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -161,6 +161,12 @@ const ReservationsList = () => {
       >
         <FaCalendarAlt className="date-button-icon" />
         Datum
+      </button>
+	  <button
+        className="shift-button"
+      >
+        <FaList className="shift-button-icon" /> {/* Replace FaShift with the desired icon */}
+        Shift
       </button>
 
       {/* React DatePicker Popup */}

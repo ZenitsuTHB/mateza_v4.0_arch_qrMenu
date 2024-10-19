@@ -88,3 +88,32 @@
 	font-size: 1.5em;
 	color: #333;
   }
+
+  /* reservationList.css */
+
+/* Shift Button Styles */
+.shift-button {
+	position: absolute;
+	top: -40px; /* Adjust this value based on the Datum button's position and height */
+	right: 20px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 10px 15px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	transition: background-color 0.3s ease;
+	margin-top: 10px; /* Adds 10px space below the Datum button */
+  }
+  
+  .shift-button:hover {
+	background-color: #f9f9f9;
+  }
+  
+  .shift-button-icon {
+	margin-right: 8px;
+  }
+  
