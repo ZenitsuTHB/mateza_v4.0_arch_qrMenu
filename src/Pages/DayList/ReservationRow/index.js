@@ -72,8 +72,8 @@ const ReservationRow = ({
           <div>{reservation.phone}</div>
         </div>
         <div className="reservation-item">
-          <div className="label">Extra</div>
-          <div>{reservation.extra || 'Geen extra'}</div>
+          <div className="label">Extra Info / Allergenen</div>
+          <div>{reservation.extra || 'Geen extra info'}</div>
         </div>
         <div className="reservation-item buttons-container">
           <button className="edit-button">
