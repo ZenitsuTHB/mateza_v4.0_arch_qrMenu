@@ -1,0 +1,25 @@
+
+.button-style-1 {
+	position: absolute;
+	top: -40px;
+	right: 20px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 10px 15px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	transition: background-color 0.3s ease;
+	margin-top: 10px;
+  }
+    
+  .button-style-1:hover {
+	background-color: #f9f9f9;
+  }
+  
+  .button-style-1-icon {
+	margin-right: 8px;
+  }

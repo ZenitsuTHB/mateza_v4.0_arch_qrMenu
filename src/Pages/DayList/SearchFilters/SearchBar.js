@@ -1,7 +1,7 @@
 // SearchBar.js
 
 import React from 'react';
-import '../css/searchBar.css'
+import './css/searchBar.css'
 
 const SearchBar = ({ value, onChange, placeholder, className }) => {
   return (

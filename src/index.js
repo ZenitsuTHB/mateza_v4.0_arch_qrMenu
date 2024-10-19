@@ -14,6 +14,7 @@ import './i18n';
 
 import './Styles/fonts.css';
 import './Styles/colors.css';
+import './Styles/buttons.css';
 import './Styles/z-index.css';
 import './Styles/index.css';
 import './Styles/mobile.css';
