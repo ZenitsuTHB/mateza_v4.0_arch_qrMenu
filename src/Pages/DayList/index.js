@@ -1,8 +1,11 @@
+// ReservationsList.js
+
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import ReservationRow from './ReservationRow.js';
 import Pagination from './Pagination.js';
 import reservationsData from './data.js';
+import SearchFilters from './SearchFilters.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
@@ -25,7 +28,6 @@ const ReservationsList = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
 
   const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -94,30 +96,15 @@ const ReservationsList = () => {
 
   return (
     <div className="reservations-page">
-      {/* Search Bars */}
-      <div className="search-bars-container">
-        <input
-          type="text"
-          placeholder="Zoeken op naam"
-          value={nameSearch}
-          onChange={(e) => setNameSearch(e.target.value)}
-          className="search-bar"
-        />
-        <input
-          type="text"
-          placeholder="Zoeken op gasten..."
-          value={guestsSearch}
-          onChange={(e) => setGuestsSearch(e.target.value)}
-          className="search-bar"
-        />
-        <input
-          type="text"
-          placeholder="Zoeken op uur"
-          value={timeSearch}
-          onChange={(e) => setTimeSearch(e.target.value)}
-          className="search-bar"
-        />
-      </div>
+      {/* Search Filters */}
+      <SearchFilters
+        nameSearch={nameSearch}
+        setNameSearch={setNameSearch}
+        guestsSearch={guestsSearch}
+        setGuestsSearch={setGuestsSearch}
+        timeSearch={timeSearch}
+        setTimeSearch={setTimeSearch}
+      />
 
       <div className="reservations-container">
         <div
@@ -126,25 +113,11 @@ const ReservationsList = () => {
           }`}
         >
           <div className="reservations-header reservation-row">
-            <div>
-              #
-            </div>
-            <div>
-              Uur
-            </div>
-            <div>
-              Naam
-            </div>
-            {!isMobile && (
-              <div>
-                Email
-              </div>
-            )}
-            {!isMobile && (
-              <div>
-                Telefoon
-              </div>
-            )}
+            <div>#</div>
+            <div>Uur</div>
+            <div>Naam</div>
+            {!isMobile && <div>Email</div>}
+            {!isMobile && <div>Telefoon</div>}
             <div></div>
           </div>
 
