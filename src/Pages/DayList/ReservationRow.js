@@ -4,6 +4,8 @@ import {
   FaEllipsisV,
   FaPencilAlt,
   FaTrashAlt,
+  FaUserPlus,
+  FaStar,
 } from 'react-icons/fa';
 import './css/reservationRow.css';
 
@@ -47,6 +49,12 @@ const ReservationRow = ({
     };
   }, [isTooltipOpen, onTooltipClose]);
 
+  // Determine if the reservation was created within the last hour
+  const now = new Date();
+  const createdAt = new Date(reservation.createdAt);
+  const diffMs = now - createdAt;
+  const isNewReservation = diffMs <= 3600000; // 1 hour in milliseconds
+
   return (
     <div className="reservation-row">
       <div className="reservation-number">
@@ -62,10 +70,13 @@ const ReservationRow = ({
         )}
       </div>
       <div>{reservation.tijdstip}</div>
-      <div>
+      <div className="name-column">
         <a href="#" className="name-link">
           {`${reservation.firstName} ${reservation.lastName}`}
         </a>
+        {isNewReservation && (
+          <FaStar className="new-user-icon" title="Nieuwe reservering" />
+        )}
       </div>
       {!isMobile && <div>{reservation.email}</div>}
       {!isMobile && <div>{reservation.phone}</div>}
