@@ -12,18 +12,20 @@ const Tooltip = ({
   onTooltipClose,
 }) => {
   const tooltipTimerRef = useRef(null);
-  const [isExtraTooltipOpen, setIsExtraTooltipOpen] = useState(false);
+  const tooltipRef = useRef(null); // Ref for the Tooltip component's container
+  const [isIconHovered, setIsIconHovered] = useState(false);
+  const [isParentHovered, setIsParentHovered] = useState(false);
 
   const handleEllipsisClick = () => {
     onTooltipToggle(reservationId);
   };
 
   const handleExtraIconMouseEnter = () => {
-    setIsExtraTooltipOpen(true);
+    setIsIconHovered(true);
   };
 
   const handleExtraIconMouseLeave = () => {
-    setIsExtraTooltipOpen(false);
+    setIsIconHovered(false);
   };
 
   // Auto-hide tooltip after 2.5 seconds for the action tooltip
@@ -53,11 +55,41 @@ const Tooltip = ({
     };
   }, [isTooltipOpen, onTooltipClose]);
 
+  // Effect to handle parent hover events
+  useEffect(() => {
+    const currentTooltip = tooltipRef.current;
+    if (!currentTooltip) return;
+
+    const parentElement = currentTooltip.parentElement;
+    if (!parentElement) return;
+
+    const handleParentMouseEnter = () => {
+      setIsParentHovered(true);
+    };
+
+    const handleParentMouseLeave = () => {
+      setIsParentHovered(false);
+    };
+
+    // Add event listeners to the parent element
+    parentElement.addEventListener('mouseenter', handleParentMouseEnter);
+    parentElement.addEventListener('mouseleave', handleParentMouseLeave);
+
+    // Clean up event listeners on unmount
+    return () => {
+      parentElement.removeEventListener('mouseenter', handleParentMouseEnter);
+      parentElement.removeEventListener('mouseleave', handleParentMouseLeave);
+    };
+  }, []);
+
   // Determine if extra info icon should be shown
   const shouldShowExtraIcon = extraInfo && extraInfo.trim() !== '';
 
+  // Determine if the extra tooltip should be open
+  const isExtraTooltipOpen = isIconHovered || isParentHovered;
+
   return (
-    <div className="extra-column">
+    <div className="extra-column" ref={tooltipRef}>
       <div className="icons-container">
         {/* Extra Info Icon */}
         {shouldShowExtraIcon && (
