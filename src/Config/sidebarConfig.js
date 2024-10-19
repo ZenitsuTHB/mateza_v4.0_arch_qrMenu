@@ -19,8 +19,8 @@ import DayList from '../Pages/DayList/index.js';
 const routesConfig = [
   {
     path: '/day-list',
-    element: <DayList title="Vandaag" />,
-    label: 'Vandaag',
+    element: <DayList title="Overzicht" />,
+    label: 'Overzicht',
     icon: FaStar,
     isMenu: true,
     isMobile: true,
