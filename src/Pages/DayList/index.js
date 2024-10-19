@@ -16,8 +16,8 @@ import {
   timeToMinutes,
 } from '../../Utils/dateUtils.js';
 
-import ShiftSelector from './ShiftSelector.js';
-import DatePickerComponent from './DatePicker.js';
+import ShiftSelector from './Filters/ShiftSelector.js';
+import DatePickerComponent from './Filters/DatePicker.js';
 
 const ReservationsList = () => {
   const shifts = {
@@ -29,7 +29,7 @@ const ReservationsList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [openTooltipId, setOpenTooltipId] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
 
   const [nameSearch, setNameSearch] = useState('');
   const [guestsSearch, setGuestsSearch] = useState('');

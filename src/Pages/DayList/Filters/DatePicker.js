@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
   isToday,
-} from '../../Utils/dateUtils.js';
+} from '../../../Utils/dateUtils.js';
 import './css/datePicker.css';
 
 const DatePickerComponent = ({
@@ -27,9 +27,9 @@ const DatePickerComponent = ({
 
       <button
         onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-        className="date-button"
+        className="button-style-1 date-button"
       >
-        <FaCalendarAlt className="date-button-icon" />
+        <FaCalendarAlt className="button-style-1-icon date-button-icon" />
         {selectedDate
           ? isToday(selectedDate)
             ? 'Vandaag'
