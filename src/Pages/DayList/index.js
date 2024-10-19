@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import ReservationRow from './ReservationRow.js';
+import ReservationRow from './ReservationRow/ReservationRow.js';
 import Pagination from './Pagination.js';
 import reservationsData from './data.js';
-import SearchFilters from './SearchFilters.js';
+import SearchFilters from './SearchFilters/SearchFilters.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 

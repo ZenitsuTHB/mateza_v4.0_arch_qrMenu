@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { FaEllipsisV, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
-import './css/tooltip.css';
+import '../css/tooltip.css';
 
 const Tooltip = ({
   reservationId,

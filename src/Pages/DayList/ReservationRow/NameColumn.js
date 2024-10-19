@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaCircle } from 'react-icons/fa';
-import './css/nameColumn.css';
+import '../css/nameColumn.css';
 
 const NameColumn = ({ isNewReservationHere, firstName, lastName }) => {
   return (
