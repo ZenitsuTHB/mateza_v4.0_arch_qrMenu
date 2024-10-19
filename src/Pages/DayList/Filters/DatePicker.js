@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaPrint } from 'react-icons/fa'; // Import FaPrint
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
@@ -17,11 +17,22 @@ const DatePickerComponent = ({
   setIsDatePickerOpen,
   handleDateChange,
 }) => {
+  const handlePrintClick = (e) => {
+    e.stopPropagation(); // Prevent triggering other click events
+    // Future implementation for printing
+    console.log('Print icon clicked');
+  };
+
   return (
     <div className="date-picker-component">
       {selectedDate && (
         <h2 className="selected-date">
           {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
+          <FaPrint
+            className="print-icon"
+            onClick={handlePrintClick}
+            title="Print"
+          />
         </h2>
       )}
 

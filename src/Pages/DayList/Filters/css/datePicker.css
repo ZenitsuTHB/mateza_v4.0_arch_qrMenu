@@ -26,5 +26,26 @@
 	color: #333;
   }
   
-
+  .print-icon {
+	margin-left: 8px;
+	color: lightgray;
+	opacity: 0;
+	font-size: 20px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+  }
+  
+  .selected-date:hover .print-icon,
+  .print-icon:hover {
+	opacity: 1;
+  }
+  
+  .selected-date:hover .print-icon {
+	opacity: 1;
+  }
+  
+  .print-icon:hover {
+	color: gray; 
+  }
+  
  
