@@ -1,4 +1,4 @@
-/* src/components/ReservationsList/css/reservationRow.css */
+/* Existing styles... */
 
 .reservation-row {
 	display: contents;
@@ -11,7 +11,8 @@
 	border-bottom: 1px solid lightgray;
   }
   
-  .profile-name {
+  .reservation-number {
+	width: 50px;
 	display: flex;
 	align-items: center;
   }
@@ -20,48 +21,73 @@
 	color: var(--color-blue);
 	text-decoration: none;
   }
-
+  
   .name-link:hover {
 	text-decoration: underline;
-  }
-  
-  .extra-actions {
-	display: flex;
-	align-items: center;
-  }
-  
-  .note-icon,
-  .menu-icon {
-	margin-right: 10px;
-	position: relative;
-	cursor: pointer;
   }
   
   .users-icon {
 	color: var(--color-blue);
 	margin-left: 5px;
   }
-
+  
   .users-icon-gray {
 	color: gray;
 	margin-left: 5px;
   }
-
+  
   .users-icon-red {
 	color: red;
 	margin-left: 5px;
   }
-
-  /* Existing styles... */
-
-.extra-column {
+  
+  .extra-column {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	position: relative;
+  }
+  
+  .ellipsis-container {
+	position: relative;
   }
   
   .ellipsis-icon {
 	color: lightgray;
 	cursor: pointer;
+  }
+  
+  .tooltip-container {
+	position: absolute;
+	bottom: 100%; /* Positions the tooltip above the icon */
+	right: 0;
+	transform: translateY(-10px);
+	background-color: white;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	padding: 5px 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+  }
+  
+  .tooltip-item {
+	display: flex;
+	align-items: center;
+	padding: 8px 15px;
+	cursor: pointer;
+  }
+  
+  .tooltip-item:hover {
+	background-color: #f0f0f0;
+  }
+  
+  .tooltip-icon {
+	margin-right: 8px;
+  }
+  
+  .tooltip-separator {
+	height: 1px;
+	background-color: lightgray;
+	margin: 5px 0;
   }
   
