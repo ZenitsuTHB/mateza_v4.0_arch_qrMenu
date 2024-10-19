@@ -13,9 +13,18 @@ const ReservationRow = ({ reservation, activeTab }) => {
     <div className="reservation-row">
       <div className="reservation-number">
         <strong>{reservation.aantalGasten}</strong>
-        {reservation.aantalGasten >= 5 && (
+        {(reservation.aantalGasten >= 5 && reservation.aantalGasten < 8) && (
           <FaUsers className="users-icon" />
         )}
+
+		{reservation.aantalGasten == 4 && (
+          <FaUsers className="users-icon-gray" />
+        )}
+
+		{reservation.aantalGasten >= 8 && (
+          <FaUsers className="users-icon-red" />
+        )}
+		
       </div>
       <div>{reservation.tijdstip}</div>
       <div>
