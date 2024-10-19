@@ -10,6 +10,13 @@ import { SearchContext } from '../../Context/SearchContext.js'; // Ensure correc
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
+// Importing React DatePicker and necessary styles
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+// Importing FontAwesome calendar icon
+import { FaCalendarAlt } from 'react-icons/fa';
+
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openTooltipId, setOpenTooltipId] = useState(null);
@@ -19,6 +26,10 @@ const ReservationsList = () => {
   const [nameSearch, setNameSearch] = useState('');
   const [guestsSearch, setGuestsSearch] = useState('');
   const [timeSearch, setTimeSearch] = useState('');
+
+  // **State Variables for Date Picker**
+  const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize to today
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const { searchQuery } = useContext(SearchContext);
   const itemsPerPage = 12;
@@ -50,7 +61,33 @@ const ReservationsList = () => {
     setOpenTooltipId(null);
   };
 
-  // **Update the Filtering Logic to Handle Undefined Properties**
+  // **Function to format date to YYYY-MM-DD**
+  const formatDateForFilter = (date) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
+    const day = (`0${date.getDate()}`).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  // **Function to format date in Dutch format (e.g., 19 oktober 2024)**
+  const formatDateDutch = (date) => {
+    if (!date) return '';
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('nl-NL', options);
+  };
+
+  // **Function to check if the date is today**
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  // **Update the Filtering Logic to Handle Undefined Properties and Selected Date**
   const filteredReservationsData = reservationsData.filter((reservation) => {
     // General search from TopBar
     const generalMatch = !searchQuery || (() => {
@@ -89,7 +126,13 @@ const ReservationsList = () => {
         : false;
     })();
 
-    return generalMatch && matchesName && matchesGuests && matchesTime;
+    // Filter by selected date if any
+    const matchesDate = !selectedDate || (() => {
+      const formattedSelectedDate = formatDateForFilter(selectedDate);
+      return reservation.date === formattedSelectedDate;
+    })();
+
+    return generalMatch && matchesName && matchesGuests && matchesTime && matchesDate;
   });
 
   const totalPages = Math.ceil(filteredReservationsData.length / itemsPerPage);
@@ -101,8 +144,64 @@ const ReservationsList = () => {
     indexOfLastItem
   );
 
+  // **Handle Date Selection**
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setIsDatePickerOpen(false);
+    setCurrentPage(1); // Reset to first page on filter change
+  };
+
   return (
-    <div className="reservations-page">
+    <div className="reservations-page" style={{ position: 'relative', padding: '20px' }}>
+      
+      {/* Button to open Date Picker */}
+      <button
+        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+        className="date-button"
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          backgroundColor: '#ffffff',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          padding: '10px 15px',
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          zIndex: 1000
+        }}
+      >
+        <FaCalendarAlt style={{ marginRight: '8px' }} />
+        Datum
+      </button>
+
+      {/* React DatePicker Popup */}
+      {isDatePickerOpen && (
+        <div style={{ position: 'absolute', top: '60px', right: '20px', zIndex: 1000 }}>
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            inline
+            locale="nl"
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Selecteer een datum"
+            // To ensure the date picker defaults to today
+            // and highlights today
+            todayButton="Vandaag"
+          />
+        </div>
+      )}
+
+      {/* Display Selected Date */}
+      {selectedDate && (
+        <h2 style={{ textAlign: 'center', margin: '20px 0' }}>
+          {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
+        </h2>
+      )}
+
+      {/* Search Filters */}
       <SearchFilters
         nameSearch={nameSearch}
         setNameSearch={setNameSearch}
