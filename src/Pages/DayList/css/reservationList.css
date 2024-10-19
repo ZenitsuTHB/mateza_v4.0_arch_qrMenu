@@ -3,12 +3,14 @@
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
+	
   }
   
   .form-settings-page .tab-menu {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
+	
   }
   
   .form-settings-page .buttons-container {
@@ -58,12 +60,13 @@
   
   .reservations-header {
 	display: contents;
+	
   }
   
   .reservations-header > div {
 	padding: 10px;
 	font-weight: bold;
-	color: black;
+	color: #474747;
   }
   
   .reservations-header > div.header-number {
@@ -84,7 +87,7 @@
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
-	margin-top: -20px;
+	margin-top: 25px;
 	background-color: var(--color-bg) !important;
   }
   
@@ -97,5 +100,12 @@
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	background-color: var(--color-bg) !important;
+	
+  }
+  
+  .header-icon {
+	margin-right: 5px;
+	margin-top: -2px;
+	vertical-align: middle;
   }
   

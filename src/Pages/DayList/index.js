@@ -99,7 +99,6 @@ const ReservationsList = () => {
 
   return (
     <div className="reservations-page">
-      <TabBar activeTab={activeTab} handleTabClick={handleTabClick} />
 
       {/* Search Bars */}
       <div className="search-bars-container">
@@ -133,12 +132,29 @@ const ReservationsList = () => {
           }`}
         >
           <div className="reservations-header reservation-row">
-            <div>#</div>
-            <div>Uur</div>
-            <div>Naam</div>
-            {activeTab !== 'eenvoudig' && <div>Email</div>}
-            {activeTab !== 'eenvoudig' && <div>Telefoon</div>}
-            <div></div>
+            <div className="reservations-header reservation-row">
+  <div>
+	#
+  </div>
+  <div>
+	Uur
+  </div>
+  <div>
+    Naam
+  </div>
+  {activeTab !== 'eenvoudig' && (
+    <div>
+      Email
+    </div>
+  )}
+  {activeTab !== 'eenvoudig' && (
+    <div>
+      Telefoon
+    </div>
+  )}
+  <div></div>
+</div>
+
           </div>
 
           {filteredReservations.map((reservation) => (
