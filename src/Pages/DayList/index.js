@@ -152,34 +152,20 @@ const ReservationsList = () => {
   };
 
   return (
-    <div className="reservations-page" style={{ position: 'relative', padding: '0px' }}>
+    <div className="reservations-page">
       
       {/* Button to open Date Picker */}
       <button
         onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
         className="date-button"
-        style={{
-          position: 'absolute',
-          top: '-80px',
-          right: '20px',
-          backgroundColor: '#ffffff',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          padding: '10px 15px',
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          zIndex: 1000
-        }}
       >
-        <FaCalendarAlt style={{ marginRight: '8px' }} />
+        <FaCalendarAlt className="date-button-icon" />
         Datum
       </button>
 
       {/* React DatePicker Popup */}
       {isDatePickerOpen && (
-        <div style={{ position: 'absolute', top: '60px', right: '20px', zIndex: 1000 }}>
+        <div className="date-picker-popup">
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
@@ -187,8 +173,6 @@ const ReservationsList = () => {
             locale="nl"
             dateFormat="dd/MM/yyyy"
             placeholderText="Selecteer een datum"
-            // To ensure the date picker defaults to today
-            // and highlights today
             todayButton="Vandaag"
           />
         </div>
@@ -196,7 +180,7 @@ const ReservationsList = () => {
 
       {/* Display Selected Date */}
       {selectedDate && (
-        <h2 style={{ textAlign: 'center', margin: '20px 0' }}>
+        <h2 className="selected-date">
           {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
         </h2>
       )}

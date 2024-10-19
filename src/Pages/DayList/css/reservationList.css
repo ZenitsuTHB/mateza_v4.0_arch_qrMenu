@@ -35,6 +35,57 @@
 	align-items: center;
   }
   
+  /* reservationList.css */
+
+/* Container for the Reservations Page */
+.reservations-page {
+	position: relative;
+	padding: 0;
+  }
   
-
-
+  /* Date Button Styles */
+  .date-button {
+	position: absolute;
+	top: -80px;
+	right: 20px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 10px 15px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	transition: background-color 0.3s ease;
+  }
+  
+  .date-button:hover {
+	background-color: #f9f9f9;
+  }
+  
+  .date-button-icon {
+	margin-right: 8px;
+  }
+  
+  /* Date Picker Popup Styles */
+  .date-picker-popup {
+	position: absolute;
+	top: 60px;
+	right: 20px;
+	z-index: 1000;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Selected Date Heading Styles */
+  .selected-date {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 1.5em;
+	color: #333;
+  }
+  
