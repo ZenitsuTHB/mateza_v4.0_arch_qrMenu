@@ -20,6 +20,10 @@
 	color: var(--color-blue);
 	text-decoration: none;
   }
+
+  .name-link:hover {
+	text-decoration: underline;
+  }
   
   .extra-actions {
 	display: flex;

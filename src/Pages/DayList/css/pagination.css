@@ -24,4 +24,12 @@
   .pagination .page-number.active {
 	font-weight: bold;
   }
+
+  .pagination .page-number:hover {
+	text-decoration: underline;
+  }
+  
+  .pagination button:hover {
+	text-decoration: underline;
+  }
   
