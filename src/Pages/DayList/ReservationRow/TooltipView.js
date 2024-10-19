@@ -6,15 +6,16 @@ import './css/tooltip.css';
 
 const Tooltip = ({
   reservationId,
-  extraInfo, // Receive the extra info as a prop
+  extraInfo,
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
 }) => {
   const tooltipTimerRef = useRef(null);
-  const tooltipRef = useRef(null); // Ref for the Tooltip component's container
+  const tooltipRef = useRef(null);
   const [isIconHovered, setIsIconHovered] = useState(false);
   const [isParentHovered, setIsParentHovered] = useState(false);
+  const [isEllipsisHovered, setIsEllipsisHovered] = useState(false);
 
   const handleEllipsisClick = () => {
     onTooltipToggle(reservationId);
@@ -28,26 +29,21 @@ const Tooltip = ({
     setIsIconHovered(false);
   };
 
-  // Auto-hide tooltip after 2.5 seconds for the action tooltip
   useEffect(() => {
     if (isTooltipOpen) {
-      // Clear any existing timer
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
       }
-      // Set a new timer to close the tooltip after 2.5 seconds
       tooltipTimerRef.current = setTimeout(() => {
         onTooltipClose();
       }, 2500);
     } else {
-      // Clear the timer if the tooltip is not open
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
         tooltipTimerRef.current = null;
       }
     }
 
-    // Clean up on unmount
     return () => {
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
@@ -55,7 +51,6 @@ const Tooltip = ({
     };
   }, [isTooltipOpen, onTooltipClose]);
 
-  // Effect to handle parent hover events
   useEffect(() => {
     const currentTooltip = tooltipRef.current;
     if (!currentTooltip) return;
@@ -71,27 +66,22 @@ const Tooltip = ({
       setIsParentHovered(false);
     };
 
-    // Add event listeners to the parent element
     parentElement.addEventListener('mouseenter', handleParentMouseEnter);
     parentElement.addEventListener('mouseleave', handleParentMouseLeave);
 
-    // Clean up event listeners on unmount
     return () => {
       parentElement.removeEventListener('mouseenter', handleParentMouseEnter);
       parentElement.removeEventListener('mouseleave', handleParentMouseLeave);
     };
   }, []);
 
-  // Determine if extra info icon should be shown
   const shouldShowExtraIcon = extraInfo && extraInfo.trim() !== '';
 
-  // Determine if the extra tooltip should be open
-  const isExtraTooltipOpen = isIconHovered || isParentHovered;
+  const isExtraTooltipOpen = (isIconHovered || isParentHovered) && !isTooltipOpen && !isEllipsisHovered;
 
   return (
     <div className="extra-column" ref={tooltipRef}>
       <div className="icons-container">
-        {/* Extra Info Icon */}
         {shouldShowExtraIcon && (
           <div
             className="extra-icon-container"
@@ -106,8 +96,11 @@ const Tooltip = ({
             )}
           </div>
         )}
-        {/* Ellipsis Icon */}
-        <div className="ellipsis-container">
+        <div
+          className="ellipsis-container"
+          onMouseEnter={() => setIsEllipsisHovered(true)}
+          onMouseLeave={() => setIsEllipsisHovered(false)}
+        >
           <FaEllipsisV className="ellipsis-icon" onClick={handleEllipsisClick} />
           {isTooltipOpen && (
             <div className="tooltip-container">
