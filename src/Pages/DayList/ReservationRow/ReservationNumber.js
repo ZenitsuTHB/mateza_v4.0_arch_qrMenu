@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaUsers } from 'react-icons/fa';
-import '../css/reservationNumber.css';
+import './css/reservationNumber.css';
 
 const ReservationNumber = ({ aantalGasten }) => {
   return (

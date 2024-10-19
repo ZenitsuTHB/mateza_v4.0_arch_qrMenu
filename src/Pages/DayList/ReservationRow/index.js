@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import ReservationNumber from './ReservationNumber.js';
 import NameColumn from './NameColumn.js';
 import Tooltip from './TooltipView.js';
-import '../css/reservationRow.css';
+import './css/reservationRow.css';
 
 const ReservationRow = ({
   reservation,
