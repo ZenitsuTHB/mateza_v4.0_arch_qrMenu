@@ -6,6 +6,7 @@ import {
   FaTrashAlt,
   FaUserPlus,
   FaStar,
+  FaCircle,
 } from 'react-icons/fa';
 import './css/reservationRow.css';
 
@@ -53,7 +54,7 @@ const ReservationRow = ({
   const now = new Date();
   const createdAt = new Date(reservation.createdAt);
   const diffMs = now - createdAt;
-  const isNewReservation = diffMs <= 3600000; // 1 hour in milliseconds
+  const isNewReservation = diffMs <= 10800000; // 3 hour in milliseconds
 
   return (
     <div className="reservation-row">
@@ -71,12 +72,13 @@ const ReservationRow = ({
       </div>
       <div>{reservation.tijdstip}</div>
       <div className="name-column">
+	  {isNewReservation && (
+          <FaCircle className="new-user-icon" title="Nieuwe reservering" />
+        )}
         <a href="#" className="name-link">
           {`${reservation.firstName} ${reservation.lastName}`}
         </a>
-        {isNewReservation && (
-          <FaStar className="new-user-icon" title="Nieuwe reservering" />
-        )}
+        
       </div>
       {!isMobile && <div>{reservation.email}</div>}
       {!isMobile && <div>{reservation.phone}</div>}

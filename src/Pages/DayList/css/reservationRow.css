@@ -156,9 +156,50 @@
   
   .new-user-icon {
 	color: var(--color-blue);
-	margin-left: 5px;
+	margin-right: 5px;
 	vertical-align: middle;
-	font-size: 14px;
+	font-size: 10px;
 
+  }
+
+  .tooltip-icon-container {
+	position: relative;
+	display: inline-block;
+	margin-left: 5px;
+  }
+
+  
+  .tooltip-text {
+	visibility: hidden;
+	width: 60px;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	border-radius: 5px;
+	padding: 5px 0;
+	font-size: 12px;
+	position: absolute;
+	z-index: 1;
+	bottom: 125%; /* Position above the icon */
+	left: 50%;
+	transform: translateX(-50%); /* Center the tooltip */
+	opacity: 0;
+	transition: opacity 0.3s;
+  }
+  
+  .tooltip-icon-container:hover .tooltip-text {
+	visibility: visible;
+	opacity: 1;
+  }
+  
+  .tooltip-icon-container .tooltip-text::after {
+	content: '';
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: #333 transparent transparent transparent;
   }
   
