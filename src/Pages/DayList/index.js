@@ -16,7 +16,7 @@ const ReservationsList = () => {
   const [guestsSearch, setGuestsSearch] = useState('');
   const [timeSearch, setTimeSearch] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const itemsPerPage = 14;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const handleResize = () => {

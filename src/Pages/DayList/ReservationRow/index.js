@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import ReservationNumber from './ReservationNumber.js';
 import NameColumn from './NameColumn.js';
 import Tooltip from './TooltipView.js';
+import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'; // Importing the necessary icons
 import './css/reservationRow.css';
 
 const ReservationRow = ({
@@ -75,8 +76,14 @@ const ReservationRow = ({
           <div>{reservation.extra}</div>
         </div>
         <div className="reservation-item buttons-container">
-          <button className="edit-button">Bewerk</button>
-          <button className="delete-button">Verwijderen</button>
+          <button className="edit-button">
+            <FaPencilAlt className="button-icon" />
+            Bewerk
+          </button>
+          <button className="delete-button">
+            <FaTrashAlt className="button-icon" />
+            Verwijderen
+          </button>
         </div>
       </div>
     );

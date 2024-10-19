@@ -19,6 +19,7 @@
 	border: 1px solid #ccc;
 	padding: 10px;
 	margin-bottom: 10px;
+	border-radius: 8px; /* Optional: Adds slight rounding to the box */
   }
   
   .reservation-item {
@@ -30,27 +31,68 @@
 	margin-bottom: 5px;
   }
   
-  .reservation-item .buttons-container {
+  /* Buttons container to align buttons horizontally */
+  .buttons-container {
 	display: flex;
 	justify-content: flex-start;
-	gap: 10px;
+	gap: 10px; /* Adds space between the buttons */
   }
   
-  .edit-button,
-  .delete-button {
-	padding: 8px 12px;
-	border: none;
-	cursor: pointer;
-	font-weight: normal; /* Ensure buttons text is not bold */
-  }
-  
+  /* Edit Button Styles */
   .edit-button {
-	background-color: #007bff;
+	display: flex;
+	align-items: center;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 20px; /* Makes the button rounded */
+	background-color: #007bff; /* Bootstrap primary blue color */
 	color: white;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+	height: 45px;
+	margin-top: 15px;
+	transition: background-color 0.3s ease;
   }
   
+  .edit-button:hover {
+	background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Delete Button Styles */
   .delete-button {
-	background-color: red;
+	display: flex;
+	align-items: center;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 5px; /* Makes the button rounded */
+	background-color: red; /* Red background for delete */
 	color: white;
+	cursor: pointer;
+	font-size: 14px;
+	height: 45px;
+	margin-top: 15px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .delete-button:hover {
+	background-color: darkred; /* Darker red on hover */
+  }
+  
+  /* Icon Styles within Buttons */
+  .button-icon {
+	margin-right: 8px; /* Space between icon and text */
+	display: flex;
+	align-items: center;
+	font-size: 16px; /* Adjust icon size as needed */
+  }
+  
+  /* Optional: Ensure buttons are accessible and responsive */
+  @media (max-width: 768px) {
+	.edit-button,
+	.delete-button {
+	  width: 100%;
+	  justify-content: center;
+	}
   }
   
