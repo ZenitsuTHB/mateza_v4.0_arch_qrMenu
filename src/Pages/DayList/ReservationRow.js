@@ -5,7 +5,7 @@ import Tooltip from './Tooltip';
 import { FaUsers } from 'react-icons/fa';
 import './css/reservationRow.css';
 
-const ReservationRow = ({ reservation }) => {
+const ReservationRow = ({ reservation, activeTab }) => {
   const [showNoteTooltip, setShowNoteTooltip] = useState(false);
   const [showMenuTooltip, setShowMenuTooltip] = useState(false);
 
@@ -21,8 +21,8 @@ const ReservationRow = ({ reservation }) => {
       <div>
         <a href="#" className="name-link">{`${reservation.firstName} ${reservation.lastName}`}</a>
       </div>
-      <div>{reservation.email}</div>
-      <div>{reservation.phone}</div>
+      {activeTab !== 'eenvoudig' && <div>{reservation.email}</div>}
+      {activeTab !== 'eenvoudig' && <div>{reservation.phone}</div>}
       <div className="extra-actions">
         {reservation.extra && (
           <div

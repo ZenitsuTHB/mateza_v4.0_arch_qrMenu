@@ -53,6 +53,8 @@
   .reservations-grid.eenvoudig-grid {
 	display: grid;
 	gap: 10px;
+	grid-template-columns: 50px 130px 200px 1fr; /* Adjusted columns */
+
   }
   
   .reservations-header {
