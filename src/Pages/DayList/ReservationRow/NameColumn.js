@@ -10,7 +10,10 @@ const NameColumn = ({ isNewReservationHere, firstName, lastName }) => {
       {isNewReservationHere && (
         <FaCircle className="new-user-icon" title="Nieuwe reservering" />
       )}
-      <a href="#" className="name-link">
+      <a
+        href="#"
+        className={`name-link ${isNewReservationHere ? 'new-reservation' : ''}`}
+      >
         {`${firstName} ${lastName}`}
       </a>
     </div>

@@ -20,4 +20,9 @@
   .reservations-page .name-link:hover {
 	text-decoration: underline;
   }
+
+  .new-reservation {
+	font-weight: bold;
+  }
+  
   
