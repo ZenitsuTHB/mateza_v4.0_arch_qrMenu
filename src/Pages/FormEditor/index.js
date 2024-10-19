@@ -114,8 +114,8 @@ const DragAndDropEditor = () => {
           />
         </DragDropContext>
       </div>
-      <button className="themes-button" onClick={() => setShowThemeModal(true)}>
-        <FaMagic className="icon" />
+      <button className="button-style-2 themes-button" onClick={() => setShowThemeModal(true)}>
+        <FaMagic className="button-style-2-icon icon" />
         Stijl Kiezen
       </button>
       {showThemeModal && (

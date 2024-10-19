@@ -10,27 +10,5 @@
 	position: absolute;
 	top: 120px;
 	right: 50px;
-	background-color: transparent;
-	color: gray;
-	border: 1px solid gray;
-	padding: 10px;
-	border-radius: 20px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	z-index: 1000000;
 	transition: transform 0.3s ease;
 }
-
-.form-editing-page .themes-button:hover,
-.form-editing-page .themes-button:focus {
-	transform: scale(1.06);
-}
-  
-  .form-editing-page .themes-button .icon {
-	margin-right: 5px;
-  }
-  
-
-  

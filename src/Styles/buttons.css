@@ -19,3 +19,27 @@
   .button-style-1-icon {
 	margin-right: 8px;
   }
+
+  .button-style-2 {
+	background-color: transparent;
+	color: gray;
+	border: 1px solid gray;
+	padding: 10px;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 1000;
+	transition: transform 0.3s ease;
+}
+
+.button-style-2:hover,
+.button-style-2:focus {
+	transform: scale(1.06);
+}
+  
+.button-style-2-icon {
+	margin-right: 5px;
+  }
+  
