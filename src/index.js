@@ -8,6 +8,7 @@ import AccountManagement from './Pages/Account/index.js';
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
 import { I18nextProvider } from 'react-i18next';
+import { SearchProvider } from './Context/SearchContext.js';
 import i18n from './i18n';
 import './i18n';
 
@@ -26,10 +27,12 @@ function App() {
   
   return loginSuccessful ? (
     <div className="app-component">
+      <SearchProvider>
       <TopBar />
       <SecondaryTopBar />
       <Sidebar />
       <ContentRouting />
+      </SearchProvider>
     </div>
   ) : (
     <div>

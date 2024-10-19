@@ -1,10 +1,9 @@
-// TopBar.js
-
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import topBarConfig from '../../../Config/topbarConfig.js';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
+import { SearchContext } from '../../../Context/SearchContext.js';
 import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
@@ -14,6 +13,8 @@ const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
   const menuTimeoutRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
   const handleMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);
@@ -24,6 +25,10 @@ const TopBar = () => {
     menuTimeoutRef.current = setTimeout(() => {
       setIsAppsMenuOpen(false);
     }, 300);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -52,7 +57,15 @@ const TopBar = () => {
         </div>
 
         <div className="top-bar-middle">
-          <SearchBar />
+          {location.pathname === '/day-list' ? (
+            <SearchBar
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Zoeken"
+            />
+          ) : (
+            <SearchBar />
+          )}
         </div>
 
         <div className="top-bar-right">
