@@ -1,22 +1,22 @@
 /* reservationNumber.css */
 
-.reservation-number {
+.reservations-page .reservation-number {
 	width: 50px;
 	display: flex;
 	align-items: center;
   }
   
-  .users-icon {
+  .reservations-page .users-icon {
 	color: var(--color-blue);
 	margin-left: 5px;
   }
   
-  .users-icon-gray {
+  .reservations-page .users-icon-gray {
 	color: gray;
 	margin-left: 5px;
   }
   
-  .users-icon-red {
+  .reservations-page .users-icon-red {
 	color: red;
 	margin-left: 5px;
   }

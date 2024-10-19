@@ -1,28 +1,28 @@
 /* src/components/Timeline/css/timeline.css */
 
-.timeline {
+.day-calendar-page .timeline {
   position: relative;
   height: 100%;
   overflow: hidden;
 }
 
-.timeline-scrollable {
+.day-calendar-page .timeline-scrollable {
   position: relative;
   height: 100%;
   overflow-y: auto;
 }
 
-.timeline-container {
+.day-calendar-page .timeline-container {
   position: relative;
   width: 100%;
 }
 
-.timeline-hour {
+.day-calendar-page .timeline-hour {
   position: absolute;
   width: 100%;
 }
 
-.hour-label {
+.day-calendar-page .hour-label {
   position: absolute;
   left: 0;
   width: 80px;
@@ -32,7 +32,7 @@
   padding-right: 5px;
 }
 
-.hour-line {
+.day-calendar-page .hour-line {
   position: absolute;
   left: 80px;
   right: 0;
@@ -40,7 +40,7 @@
   border-top: 1px solid lightgray;
 }
 
-.time-block {
+.day-calendar-page .time-block {
   position: absolute;
   transform: translateY(7px);
   left: 100px;
@@ -53,11 +53,11 @@
   box-sizing: border-box;
 }
 
-.time-block-title {
+.day-calendar-page .time-block-title {
   font-weight: bold;
 }
 
-.time-block-time {
+.day-calendar-page .time-block-time {
   font-weight: lighter;
   font-size: 12px;
 }

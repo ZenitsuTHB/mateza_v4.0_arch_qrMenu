@@ -1,13 +1,13 @@
 /* src/components/DayCalendar/css/dayCalendar.css */
 
-.day-calendar {
+.day-calendar-page .day-calendar {
 	position: relative;
 	height: 100vh;
 	left: -40px;
 	top: 15px;
   }
   
-  .controls {
+  .day-calendar-page .controls {
 	position: fixed;
 	top: 180px;
 	right: 20px;
@@ -17,7 +17,7 @@
 	z-index: 100;
   }
   
-  .control-button {
+  .day-calendar-page .control-button {
 	background-color: var(--color-blue);
 	color: white;
 	border: none;
@@ -35,6 +35,6 @@
 	background-color: var(--color-bg);
   }
 
-  .control-button:hover {
+  .day-calendar-page .control-button:hover {
 	transform: scale(1.1);
   }

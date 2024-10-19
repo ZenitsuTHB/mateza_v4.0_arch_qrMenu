@@ -49,6 +49,7 @@ const DayCalendar = () => {
   };
 
   return (
+    <div className="day-calendar-page">
     <div className="day-calendar">
       <Timeline
         timeBlocks={timeBlocks}
@@ -87,6 +88,7 @@ const DayCalendar = () => {
       </button>
 
       </div>
+    </div>
     </div>
   );
 };

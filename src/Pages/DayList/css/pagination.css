@@ -1,13 +1,13 @@
 /* src/components/ReservationsList/css/pagination.css */
 
-.pagination {
+.reservations-page .pagination {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-top: 30px;
   }
   
-  .pagination button {
+  .reservations-page .pagination button {
 	background: none;
 	border: none;
 	color: var(--color-blue);
@@ -16,20 +16,20 @@
 	margin: 0 10px;
   }
   
-  .pagination button:disabled {
+  .reservations-page .pagination button:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
   }
   
-  .pagination .page-number.active {
+  .reservations-page .pagination .page-number.active {
 	font-weight: bold;
   }
 
-  .pagination .page-number:hover {
+  .reservations-page .pagination .page-number:hover {
 	text-decoration: underline;
   }
   
-  .pagination button:hover {
+  .reservations-page .pagination button:hover {
 	text-decoration: underline;
   }
   

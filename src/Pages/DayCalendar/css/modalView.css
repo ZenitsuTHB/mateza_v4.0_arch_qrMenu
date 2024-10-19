@@ -1,6 +1,6 @@
 /* src/components/Modal/css/modal.css */
 
-.modal-overlay {
+.day-calendar-page .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,41 +10,41 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: var(--z-index-modal);
 }
 
-.modal-content {
+.day-calendar-page .modal-content {
   background-color: white;
   border-radius: 5px;
   padding: 20px;
   width: 300px;
 }
 
-.modal-content h2 {
+.day-calendar-page .modal-content h2 {
   margin-top: 0;
 }
 
-.modal-content form {
+.day-calendar-page .modal-content form {
   display: flex;
   flex-direction: column;
 }
 
-.modal-content label {
+.day-calendar-page .modal-content label {
   margin-bottom: 10px;
 }
 
-.modal-content input {
+.day-calendar-page .modal-content input {
   width: 100%;
   padding: 5px;
   margin-top: 5px;
 }
 
-.modal-buttons {
+.day-calendar-page .modal-buttons {
   display: flex;
   justify-content: flex-end;
 }
 
-.modal-button {
+.day-calendar-page .modal-button {
   background-color: var(--color-blue);
   color: white;
   border: none;
@@ -54,6 +54,6 @@
   cursor: pointer;
 }
 
-.modal-button:hover {
+.day-calendar-page .modal-button:hover {
   background-color: var(--color-blue);
 }

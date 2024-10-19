@@ -1,27 +1,27 @@
 /* CSS for the tab bar */
-.form-settings-page .settings-tabs {
+.reservations-page .form-settings-page .settings-tabs {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
 	
   }
   
-  .form-settings-page .tab-menu {
+  .reservations-page .form-settings-page .tab-menu {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
 	
   }
   
-  .form-settings-page .buttons-container {
+  .reservations-page .form-settings-page .buttons-container {
 	display: flex;
   }
   
-  .form-settings-page .tab-underline {
+  .reservations-page .form-settings-page .tab-underline {
 	border-radius: 5px;
   }
   
-  .form-settings-page .tab-button {
+  .reservations-page .form-settings-page .tab-button {
 	position: relative;
 	padding: 10px 20px;
 	background: none;
@@ -32,11 +32,11 @@
 	color: #333;
   }
   
-  .form-settings-page .tab-button.active {
+  .reservations-page .form-settings-page .tab-button.active {
 	color: var(--color-blue);
   }
   
-  .form-settings-page .tab-underline {
+  .reservations-page .form-settings-page .tab-underline {
 	position: absolute;
 	bottom: -2px;
 	left: 0;
@@ -45,20 +45,20 @@
 	background-color: var(--color-blue);
   }
   
-  .reservations-grid {
+  .reservations-page .reservations-grid {
 	display: grid;
 	grid-template-columns: 50px 130px 200px 2fr 150px 1fr;
 	gap: 10px;
   }
   
-  .reservations-grid.eenvoudig-grid {
+  .reservations-page .reservations-grid.eenvoudig-grid {
 	display: grid;
 	gap: 10px;
 	grid-template-columns: 50px 130px 200px 1fr;
 
   }
   
-  .reservations-header {
+  .reservations-page .reservations-header {
 	display: contents;
 	
   }
@@ -69,21 +69,21 @@
 	color: #474747;
   }
   
-  .reservations-header > div.header-number {
+  .reservations-page .reservations-header > div.header-number {
 	width: 50px;
   }
   
-  .reservation-row > div.reservation-number {
+  .reservations-page .reservation-row > div.reservation-number {
 	width: 50px;
   }
   
-  .header-number,
-  .reservation-number {
+  .reservations-page .header-number,
+  .reservations-page .reservation-number {
 	display: flex;
 	align-items: center;
   }
 
-  .search-bars-container {
+  .reservations-page .search-bars-container {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
@@ -91,7 +91,7 @@
 	background-color: var(--color-bg) !important;
   }
   
-  .search-bar {
+  .reservations-page .search-bar {
 	flex: 1;
 	margin: 0 10px;
 	font-size: 15px;
@@ -103,7 +103,7 @@
 	
   }
   
-  .header-icon {
+  .reservations-page .header-icon {
 	margin-right: 5px;
 	margin-top: -2px;
 	vertical-align: middle;
