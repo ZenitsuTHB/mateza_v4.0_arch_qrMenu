@@ -152,7 +152,7 @@ const ReservationsList = () => {
   };
 
   return (
-    <div className="reservations-page" style={{ position: 'relative', padding: '20px' }}>
+    <div className="reservations-page" style={{ position: 'relative', padding: '0px' }}>
       
       {/* Button to open Date Picker */}
       <button
@@ -160,7 +160,7 @@ const ReservationsList = () => {
         className="date-button"
         style={{
           position: 'absolute',
-          top: '20px',
+          top: '-80px',
           right: '20px',
           backgroundColor: '#ffffff',
           border: '1px solid #ccc',

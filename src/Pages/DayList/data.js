@@ -23,7 +23,7 @@ const reservationsData = [];
 
 const now = new Date();
 
-for (let i = 1; i <= 50; i++) {
+for (let i = 1; i <= 500; i++) {
 	const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
 	const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
 	const aantalGasten = Math.floor(Math.random() * 4) + 2;
