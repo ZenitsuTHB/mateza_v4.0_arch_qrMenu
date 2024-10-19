@@ -1,7 +1,7 @@
 // Tooltip.js
 
 import React, { useEffect, useRef, useState } from 'react';
-import { FaEllipsisV, FaPencilAlt, FaTrashAlt, FaInfoCircle } from 'react-icons/fa';
+import { FaEllipsisV, FaPencilAlt, FaTrashAlt, FaStickyNote } from 'react-icons/fa';
 import './css/tooltip.css';
 
 const Tooltip = ({
@@ -53,17 +53,20 @@ const Tooltip = ({
     };
   }, [isTooltipOpen, onTooltipClose]);
 
+  // Determine if extra info icon should be shown
+  const shouldShowExtraIcon = extraInfo && extraInfo.trim() !== '';
+
   return (
     <div className="extra-column">
       <div className="icons-container">
         {/* Extra Info Icon */}
-        {extraInfo && (
+        {shouldShowExtraIcon && (
           <div
             className="extra-icon-container"
             onMouseEnter={handleExtraIconMouseEnter}
             onMouseLeave={handleExtraIconMouseLeave}
           >
-            <FaInfoCircle className="extra-icon" />
+            <FaStickyNote className="extra-icon" />
             {isExtraTooltipOpen && (
               <div className="extra-tooltip">
                 {extraInfo}

@@ -9,10 +9,9 @@ const ReservationNumber = ({ aantalGasten }) => {
     <div className="reservation-number">
       <span>{aantalGasten}</span>
       {aantalGasten >= 5 && aantalGasten < 8 && (
-        <FaUsers className="users-icon" />
+        <FaUsers className="users-icon-gray" />
       )}
-      {aantalGasten === 4 && <FaUsers className="users-icon-gray" />}
-      {aantalGasten >= 8 && <FaUsers className="users-icon-red" />}
+      {aantalGasten >= 8 && <FaUsers className="users-icon" />}
     </div>
   );
 };
