@@ -78,21 +78,8 @@ const ReservationsList = () => {
     indexOfLastItem
   );
 
-  const filteredReservations = currentReservations.map((reservation) => {
-    if (isMobile) {
-      // Simplified data for mobile
-      return {
-        aantalGasten: reservation.aantalGasten,
-        tijdstip: reservation.tijdstip,
-        firstName: reservation.firstName,
-        lastName: reservation.lastName,
-        extra: reservation.extra,
-        id: reservation.id,
-      };
-    }
-    // Full data for desktop
-    return reservation;
-  });
+  // Use currentReservations directly without filtering out fields
+  const filteredReservations = currentReservations;
 
   return (
     <div className="reservations-page">
@@ -108,18 +95,18 @@ const ReservationsList = () => {
 
       <div className="reservations-container">
         <div
-          className={`reservations-grid ${
-            isMobile ? 'eenvoudig-grid' : ''
-          }`}
+          className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}
         >
-          <div className="reservations-header reservation-row">
-            <div>#</div>
-            <div>Uur</div>
-            <div>Naam</div>
-            {!isMobile && <div>Email</div>}
-            {!isMobile && <div>Telefoon</div>}
-            <div></div>
-          </div>
+          {!isMobile && (
+            <div className="reservations-header reservation-row">
+              <div>#</div>
+              <div>Uur</div>
+              <div>Naam</div>
+              <div>Email</div>
+              <div>Telefoon</div>
+              <div></div>
+            </div>
+          )}
 
           {filteredReservations.map((reservation) => (
             <ReservationRow

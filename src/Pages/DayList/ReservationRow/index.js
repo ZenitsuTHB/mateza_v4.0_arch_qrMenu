@@ -38,30 +38,69 @@ const ReservationRow = ({
   useEffect(() => {
     if (!expiryTimeString) {
       const nowInCEST = getCurrentTimeInCEST();
-      const expiryTime = new Date(nowInCEST.getTime() + 60 * 60 * 1000); // 60 minute from now
+      const expiryTime = new Date(nowInCEST.getTime() + 60 * 60 * 1000); // 60 minutes from now
       localStorage.setItem(seenKey, expiryTime.toISOString());
     }
   }, [expiryTimeString, seenKey]);
 
-  return (
-    <div className="reservation-row">
-      <ReservationNumber aantalGasten={reservation.aantalGasten} />
-      <div>{reservation.tijdstip}</div>
-      <NameColumn
-        isNewReservationHere={isNewReservationHere}
-        firstName={reservation.firstName}
-        lastName={reservation.lastName}
-      />
-      {!isMobile && <div>{reservation.email}</div>}
-      {!isMobile && <div>{reservation.phone}</div>}
-      <Tooltip
-        reservationId={reservation.id}
-        isTooltipOpen={isTooltipOpen}
-        onTooltipToggle={onTooltipToggle}
-        onTooltipClose={onTooltipClose}
-      />
-    </div>
-  );
+  if (isMobile) {
+    return (
+      <div className="reservation-row-mobile">
+        <div className="reservation-item">
+          <div className="label">Aantal Gasten</div>
+          <ReservationNumber aantalGasten={reservation.aantalGasten} />
+        </div>
+        <div className="reservation-item">
+          <div className="label">Tijdstip</div>
+          <div>{reservation.tijdstip}</div>
+        </div>
+        <div className="reservation-item">
+          <div className="label">Naam</div>
+          <NameColumn
+            isNewReservationHere={isNewReservationHere}
+            firstName={reservation.firstName}
+            lastName={reservation.lastName}
+          />
+        </div>
+        <div className="reservation-item">
+          <div className="label">Email</div>
+          <div>{reservation.email}</div>
+        </div>
+        <div className="reservation-item">
+          <div className="label">Telefoon</div>
+          <div>{reservation.phone}</div>
+        </div>
+        <div className="reservation-item">
+          <div className="label">Extra</div>
+          <div>{reservation.extra}</div>
+        </div>
+        <div className="reservation-item buttons-container">
+          <button className="edit-button">Bewerk</button>
+          <button className="delete-button">Verwijderen</button>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="reservation-row">
+        <ReservationNumber aantalGasten={reservation.aantalGasten} />
+        <div>{reservation.tijdstip}</div>
+        <NameColumn
+          isNewReservationHere={isNewReservationHere}
+          firstName={reservation.firstName}
+          lastName={reservation.lastName}
+        />
+        <div>{reservation.email}</div>
+        <div>{reservation.phone}</div>
+        <Tooltip
+          reservationId={reservation.id}
+          isTooltipOpen={isTooltipOpen}
+          onTooltipToggle={onTooltipToggle}
+          onTooltipClose={onTooltipClose}
+        />
+      </div>
+    );
+  }
 };
 
 export default ReservationRow;

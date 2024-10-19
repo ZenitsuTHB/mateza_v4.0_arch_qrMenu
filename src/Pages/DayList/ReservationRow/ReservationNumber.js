@@ -7,16 +7,12 @@ import './css/reservationNumber.css';
 const ReservationNumber = ({ aantalGasten }) => {
   return (
     <div className="reservation-number">
-      <strong>{aantalGasten}</strong>
+      <span>{aantalGasten}</span>
       {aantalGasten >= 5 && aantalGasten < 8 && (
         <FaUsers className="users-icon" />
       )}
-      {aantalGasten === 4 && (
-        <FaUsers className="users-icon-gray" />
-      )}
-      {aantalGasten >= 8 && (
-        <FaUsers className="users-icon-red" />
-      )}
+      {aantalGasten === 4 && <FaUsers className="users-icon-gray" />}
+      {aantalGasten >= 8 && <FaUsers className="users-icon-red" />}
     </div>
   );
 };

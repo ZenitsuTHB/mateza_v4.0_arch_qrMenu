@@ -1,5 +1,7 @@
 /* reservationRow.css */
 
+/* Desktop styles */
+
 .reservations-page .reservation-row {
 	display: contents;
   }
@@ -9,5 +11,46 @@
 	padding-top: 0px;
 	padding-bottom: 7px;
 	border-bottom: 1px solid lightgray;
+  }
+  
+  /* Mobile styles */
+  
+  .reservation-row-mobile {
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 10px;
+  }
+  
+  .reservation-item {
+	margin-bottom: 10px;
+  }
+  
+  .reservation-item .label {
+	font-weight: bold;
+	margin-bottom: 5px;
+  }
+  
+  .reservation-item .buttons-container {
+	display: flex;
+	justify-content: flex-start;
+	gap: 10px;
+  }
+  
+  .edit-button,
+  .delete-button {
+	padding: 8px 12px;
+	border: none;
+	cursor: pointer;
+	font-weight: normal; /* Ensure buttons text is not bold */
+  }
+  
+  .edit-button {
+	background-color: #007bff;
+	color: white;
+  }
+  
+  .delete-button {
+	background-color: red;
+	color: white;
   }
   
