@@ -1,0 +1,23 @@
+/* nameColumn.css */
+
+.name-column {
+	display: flex;
+	align-items: center;
+  }
+  
+  .new-user-icon {
+	color: var(--color-blue);
+	margin-right: 5px;
+	vertical-align: middle;
+	font-size: 10px;
+  }
+  
+  .name-link {
+	color: var(--color-blue);
+	text-decoration: none;
+  }
+  
+  .name-link:hover {
+	text-decoration: underline;
+  }
+  
