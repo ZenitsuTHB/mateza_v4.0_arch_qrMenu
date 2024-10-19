@@ -17,6 +17,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 // Importing FontAwesome icons
 import { FaCalendarAlt, FaList } from 'react-icons/fa';
 
+import {
+	formatDateForFilter,
+	formatDateDutch,
+	isToday,
+	timeToMinutes,
+  } from '../../Utils/dateUtils.js';
+
 const ReservationsList = () => {
   // **Shift Time Intervals**
   const shifts = {
@@ -99,38 +106,6 @@ const ReservationsList = () => {
 
   const handleTooltipClose = () => {
     setOpenTooltipId(null);
-  };
-
-  // **Function to format date to YYYY-MM-DD**
-  const formatDateForFilter = (date) => {
-    if (!date) return '';
-    const year = date.getFullYear();
-    const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
-    const day = (`0${date.getDate()}`).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  // **Function to format date in Dutch format (e.g., 19 oktober 2024)**
-  const formatDateDutch = (date) => {
-    if (!date) return '';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('nl-NL', options);
-  };
-
-  // **Function to check if the date is today**
-  const isToday = (date) => {
-    const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
-  };
-
-  // **Function to convert time string to minutes**
-  const timeToMinutes = (timeStr) => {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;
   };
 
   // **Update the Filtering Logic to Handle Undefined Properties, Selected Date, and Selected Shift**

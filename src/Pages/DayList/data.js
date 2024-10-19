@@ -27,7 +27,7 @@ for (let i = 1; i <= 500; i++) {
 	const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
 	const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
 	const aantalGasten = Math.floor(Math.random() * 4) + 2;
-	const hour = Math.floor(Math.random() * 12) + 12;
+	const hour = Math.floor(Math.random() * 16) + 6;
 	const minute = Math.random() < 0.5 ? '00' : '30';
 	const tijdstip = `${hour.toString().padStart(2, '0')}:${minute}`;
 	const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;

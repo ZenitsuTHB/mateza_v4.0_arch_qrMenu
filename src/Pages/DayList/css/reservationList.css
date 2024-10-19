@@ -71,7 +71,7 @@
   /* Date Picker Popup Styles */
   .date-picker-popup {
 	position: absolute;
-	top: 60px;
+	top: -30px;
 	right: 20px;
 	z-index: 1000;
 	background-color: #fff;
@@ -123,7 +123,7 @@
 /* Shift Options Container */
 .shift-options-container {
 	position: absolute;
-	top: 50px; /* Adjust based on the Shift button's position */
+	top: 20px; /* Adjust based on the Shift button's position */
 	right: 20px;
 	background-color: #ffffff;
 	border: 1px solid #ccc;
