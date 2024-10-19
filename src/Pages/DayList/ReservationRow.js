@@ -11,11 +11,16 @@ const ReservationRow = ({
   reservation,
   activeTab,
   isTooltipOpen,
-  onTooltipOpen,
+  onTooltipToggle,
   onTooltipClose,
 }) => {
   const tooltipTimerRef = useRef(null);
 
+  const handleIconClick = () => {
+    onTooltipToggle(reservation.id);
+  };
+
+  // Auto-hide tooltip after 2.5 seconds
   useEffect(() => {
     if (isTooltipOpen) {
       // Clear any existing timer
@@ -41,10 +46,6 @@ const ReservationRow = ({
       }
     };
   }, [isTooltipOpen, onTooltipClose]);
-
-  const handleIconClick = () => {
-    onTooltipOpen(reservation.id);
-  };
 
   return (
     <div className="reservation-row">

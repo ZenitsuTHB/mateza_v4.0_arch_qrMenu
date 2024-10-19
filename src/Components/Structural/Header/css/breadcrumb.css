@@ -8,12 +8,12 @@
   }
   
   .breadcrumb-component .breadcrumb-app {
-	color: #7a7a7a;
+	color: #777777;
   }
   
   .breadcrumb-component .breadcrumb-link {
 	text-decoration: none;
-	color: #7a7a7a;
+	color: #777777;
 	transition: color 0.3s ease;
   }
   
@@ -23,7 +23,7 @@
   
   .breadcrumb-component .breadcrumb-separator {
 	margin: 0 5px;
-	color: #7a7a7a;
+	color: #777777;
   }
   
   .breadcrumb-component .breadcrumb-path .breadcrumb-current {

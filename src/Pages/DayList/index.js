@@ -5,12 +5,12 @@ import Pagination from './Pagination.js';
 import reservationsData from './data.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
-import TabBar from './TabBar.js'; // Import the new TabBar component
+import TabBar from './TabBar.js';
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState('volledig');
-  const [openTooltipId, setOpenTooltipId] = useState(null); // New state for tooltip
+  const [openTooltipId, setOpenTooltipId] = useState(null);
   const itemsPerPage = 10;
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -38,8 +38,14 @@ const ReservationsList = () => {
     setActiveTab(tabId);
   };
 
-  const handleTooltipOpen = (id) => {
-    setOpenTooltipId(id);
+  const handleTooltipToggle = (id) => {
+    if (openTooltipId === id) {
+      // If the tooltip is already open for this id, close it
+      setOpenTooltipId(null);
+    } else {
+      // Open the tooltip for this id
+      setOpenTooltipId(id);
+    }
   };
 
   const handleTooltipClose = () => {
@@ -86,7 +92,7 @@ const ReservationsList = () => {
               reservation={reservation}
               activeTab={activeTab}
               isTooltipOpen={openTooltipId === reservation.id}
-              onTooltipOpen={() => handleTooltipOpen(reservation.id)}
+              onTooltipToggle={handleTooltipToggle}
               onTooltipClose={handleTooltipClose}
             />
           ))}
