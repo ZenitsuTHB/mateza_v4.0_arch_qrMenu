@@ -7,15 +7,25 @@
 	position: relative;
   }
   
-  .reservations-page .ellipsis-container {
+  .reservations-page .icons-container {
+	display: flex;
+	align-items: center;
+  }
+  
+  .reservations-page .ellipsis-container,
+  .reservations-page .extra-icon-container {
 	position: relative;
+	margin-left: 8px; /* Adds space between icons */
   }
   
-  .reservations-page .ellipsis-icon {
-	color: #a6a6a6;
+  .reservations-page .ellipsis-icon,
+  .reservations-page .extra-icon {
+	color: #a6a6a6; /* Same color for both icons */
 	cursor: pointer;
+	font-size: 16px; /* Adjust size as needed */
   }
   
+  /* Tooltip for Actions (Bewerken & Verwijderen) */
   .reservations-page .tooltip-container {
 	position: absolute;
 	bottom: 100%;
@@ -44,7 +54,7 @@
 	margin-right: 8px;
   }
   
-  .reservations-page  .tooltip-item.delete-item {
+  .reservations-page .tooltip-item.delete-item {
 	color: red;
   }
   
@@ -56,5 +66,32 @@
 	height: 1px;
 	background-color: lightgray;
 	margin: 5px 0;
+  }
+  
+  /* Tooltip for Extra Info */
+  .reservations-page .extra-tooltip {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-10px);
+	background-color: #333;
+	color: #fff;
+	padding: 6px 10px;
+	border-radius: 4px;
+	white-space: nowrap;
+	font-size: 12px;
+	z-index: 1000;
+	opacity: 0.9;
+  }
+  
+  .reservations-page .extra-tooltip::after {
+	content: '';
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: #333 transparent transparent transparent; /* Arrow pointing down */
   }
   

@@ -73,7 +73,7 @@ const ReservationRow = ({
         </div>
         <div className="reservation-item">
           <div className="label">Extra</div>
-          <div>{reservation.extra}</div>
+          <div>{reservation.extra || 'Geen extra'}</div>
         </div>
         <div className="reservation-item buttons-container">
           <button className="edit-button">
@@ -101,6 +101,7 @@ const ReservationRow = ({
         <div>{reservation.phone}</div>
         <Tooltip
           reservationId={reservation.id}
+          extraInfo={reservation.extra} // Pass the extra info here
           isTooltipOpen={isTooltipOpen}
           onTooltipToggle={onTooltipToggle}
           onTooltipClose={onTooltipClose}

@@ -1,3 +1,5 @@
+// data.js
+
 const firstNames = [
 	'Jan', 'Maria', 'Peter', 'Linda', 'Mark',
 	'Sophie', 'Thomas', 'Laura', 'Robert', 'Emma',
@@ -13,8 +15,8 @@ const firstNames = [
   
   const extraOptions = [
 	'Vegetarisch menu', 'Extra broodjes', 'Babystoel nodig',
-	'Kerstdecoraties', 'Glasheldere drankjes', 'Geen extra',
-	'Grote tafel voorkeur', 'Kindermenu', 'Lactosevrij', null
+	'Geen extra', 'Geen extra', 'Geen extra',
+	'Geen extra', 'Geen extra', 'Geen extra', null
   ];
   
   const reservationsData = [];
@@ -30,7 +32,12 @@ const firstNames = [
 	const tijdstip = `${hour.toString().padStart(2, '0')}:${minute}`;
 	const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
 	const phone = `06${Math.floor(10000000 + Math.random() * 90000000)}`;
-	const extra = extraOptions[Math.floor(Math.random() * extraOptions.length)];
+	let extra = extraOptions[Math.floor(Math.random() * extraOptions.length)];
+	
+	// Treat 'Geen extra' as no extra info by setting it to null
+	if (extra === 'Geen extra') {
+	  extra = null;
+	}
   
 	// Generate 'createdAt' timestamps
 	let createdAt;
