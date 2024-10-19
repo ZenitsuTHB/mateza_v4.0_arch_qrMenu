@@ -51,6 +51,7 @@
   }
   
   .reservations-grid.eenvoudig-grid {
+	display: grid;
 	gap: 10px;
   }
   

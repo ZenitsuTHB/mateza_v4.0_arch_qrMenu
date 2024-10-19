@@ -6,6 +6,8 @@
   
   .reservation-row > div {
 	padding: 10px;
+	padding-top: 0px;
+	padding-bottom: 7px;
 	border-bottom: 1px solid lightgray;
   }
   
