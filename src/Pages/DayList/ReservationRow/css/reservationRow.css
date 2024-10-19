@@ -24,6 +24,7 @@
   
   .reservation-item {
 	margin-bottom: 10px;
+	
   }
   
   .reservation-item .label {
@@ -47,16 +48,13 @@
 	border-radius: 20px; /* Makes the button rounded */
 	background-color: var(--color-bg); /* Red background for delete */
 	border: 1px #777 solid;
+	color: #777;
 	cursor: pointer;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 14px;
 	height: 45px;
 	margin-top: 15px;
 	transition: background-color 0.3s ease;
-  }
-  
-  .edit-button:hover {
-	background-color: #0056b3; /* Darker blue on hover */
   }
   
   /* Delete Button Styles */
@@ -69,22 +67,19 @@
 	background-color: var(--color-blue); /* Red background for delete */
 	color: white;
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 14px;
 	height: 45px;
 	margin-top: 15px;
 	transition: background-color 0.3s ease;
   }
   
-  .delete-button:hover {
-	background-color: darkred; /* Darker red on hover */
-  }
   
   /* Icon Styles within Buttons */
   .button-icon {
 	margin-right: 8px; /* Space between icon and text */
 	display: flex;
 	align-items: center;
-	font-size: 16px; /* Adjust icon size as needed */
+	font-size: 14px;
   }
   
   /* Optional: Ensure buttons are accessible and responsive */
@@ -96,3 +91,12 @@
 	}
   }
   
+
+  .reservation-row-mobile {
+	color: #292929;
+	font-size: 15px;
+  }
+
+  .reservation-row-desktop {
+	font-size: 14px;
+  }

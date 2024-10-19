@@ -26,7 +26,7 @@ const firstNames = [
   for (let i = 1; i <= 50; i++) {
 	const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
 	const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-	const aantalGasten = Math.floor(Math.random() * 5) + 2;
+	const aantalGasten = Math.floor(Math.random() * 10) + 2;
 	const hour = Math.floor(Math.random() * 12) + 12;
 	const minute = Math.random() < 0.5 ? '00' : '30';
 	const tijdstip = `${hour.toString().padStart(2, '0')}:${minute}`;

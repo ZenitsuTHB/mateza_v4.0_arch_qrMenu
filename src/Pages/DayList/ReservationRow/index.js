@@ -89,7 +89,7 @@ const ReservationRow = ({
     );
   } else {
     return (
-      <div className="reservation-row">
+      <div className="reservation-row reservation-row-desktop">
         <ReservationNumber aantalGasten={reservation.aantalGasten} />
         <div>{reservation.tijdstip}</div>
         <NameColumn

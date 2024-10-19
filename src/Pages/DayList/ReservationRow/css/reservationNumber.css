@@ -4,20 +4,22 @@
 	width: 50px;
 	display: flex;
 	align-items: center;
+	justify-content: flex-end;
   }
   
   .reservations-page .users-icon {
 	color: var(--color-blue);
-	margin-left: 5px;
+	margin-right: 3px;
   }
   
   .reservations-page .users-icon-gray {
 	color: gray;
-	margin-left: 5px;
+	margin-right: 3px;
   }
   
-  .reservations-page .users-icon-red {
-	color: red;
-	margin-left: 5px;
+  @media (max-width: 900px) {
+	.reservations-page .reservation-number {
+		justify-content: flex-start;
+		margin-left: -1px;
+	  }
   }
-  
