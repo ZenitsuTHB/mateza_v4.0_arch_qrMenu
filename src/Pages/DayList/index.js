@@ -75,15 +75,13 @@ const ReservationsList = () => {
             activeTab === 'eenvoudig' ? 'eenvoudig-grid' : ''
           }`}
         >
-          <div className="reservations-header">
-            <div className="reservation-row">
+            <div className="reservations-header reservation-row">
               <div>#</div>
               <div>Tijdstip</div>
               <div>Naam</div>
               {activeTab !== 'eenvoudig' && <div>Email</div>}
               {activeTab !== 'eenvoudig' && <div>Telefoon</div>}
-              <div></div> {/* Empty header for the extra column */}
-            </div>
+              <div></div>
           </div>
 
           {filteredReservations.map((reservation) => (

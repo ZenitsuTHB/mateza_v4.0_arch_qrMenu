@@ -48,14 +48,8 @@
 	position: relative;
   }
   
-  .ellipsis-container {
-	position: relative;
-  }
-  
-  .ellipsis-icon {
-	color: lightgray;
-	cursor: pointer;
-  }
+
+ 
   
   .tooltip-container {
 	position: absolute;
@@ -105,7 +99,7 @@
   }
   
   .ellipsis-icon {
-	color: lightgray;
+	color: #a6a6a6;
 	cursor: pointer;
   }
   
@@ -151,4 +145,10 @@
 	background-color: lightgray;
 	margin: 5px 0;
   }
+  
+  .reservation-row div {
+	font-size: 15px;
+  }
+
+
   
