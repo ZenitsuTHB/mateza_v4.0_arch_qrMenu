@@ -17,6 +17,36 @@ const ReservationRow = ({
   onTooltipToggle,
   onTooltipClose,
 }) => {
+  const seenKey = `seen-data-${reservation.id}`;
+  const expiryTimeString = localStorage.getItem(seenKey);
+
+  // Function to get current time in CEST
+  function getCurrentTimeInCEST() {
+    const now = new Date();
+    const nowInCESTString = now.toLocaleString('en-US', {
+      timeZone: 'Europe/Berlin', // CEST timezone
+    });
+    return new Date(nowInCESTString);
+  }
+
+  let isNewReservationHere = false;
+
+  if (expiryTimeString) {
+    const expiryTime = new Date(expiryTimeString);
+    const nowInCEST = getCurrentTimeInCEST();
+    isNewReservationHere = nowInCEST < expiryTime;
+  } else {
+    isNewReservationHere = true;
+  }
+
+  useEffect(() => {
+    if (!expiryTimeString) {
+      const nowInCEST = getCurrentTimeInCEST();
+      const expiryTime = new Date(nowInCEST.getTime() + 1 * 60 * 1000); // 1 minute from now
+      localStorage.setItem(seenKey, expiryTime.toISOString());
+    }
+  }, [expiryTimeString, seenKey]);
+
   const tooltipTimerRef = useRef(null);
 
   const handleIconClick = () => {
@@ -50,12 +80,6 @@ const ReservationRow = ({
     };
   }, [isTooltipOpen, onTooltipClose]);
 
-  // Determine if the reservation was created within the last hour
-  const now = new Date();
-  const createdAt = new Date(reservation.createdAt);
-  const diffMs = now - createdAt;
-  const isNewReservation = diffMs <= 10800000; // 3 hour in milliseconds
-
   return (
     <div className="reservation-row">
       <div className="reservation-number">
@@ -72,13 +96,12 @@ const ReservationRow = ({
       </div>
       <div>{reservation.tijdstip}</div>
       <div className="name-column">
-	  {isNewReservation && (
+        {isNewReservationHere && (
           <FaCircle className="new-user-icon" title="Nieuwe reservering" />
         )}
         <a href="#" className="name-link">
           {`${reservation.firstName} ${reservation.lastName}`}
         </a>
-        
       </div>
       {!isMobile && <div>{reservation.email}</div>}
       {!isMobile && <div>{reservation.phone}</div>}
