@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import ReservationRow from './ReservationRow/ReservationRow.js';
+import ReservationRow from './ReservationRow/index.js';
 import Pagination from './Pagination.js';
 import reservationsData from './data.js';
-import SearchFilters from './SearchFilters/SearchFilters.js';
+import SearchFilters from './SearchFilters/index.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
@@ -16,7 +16,7 @@ const ReservationsList = () => {
   const [guestsSearch, setGuestsSearch] = useState('');
   const [timeSearch, setTimeSearch] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const itemsPerPage = 10;
+  const itemsPerPage = 14;
 
   useEffect(() => {
     const handleResize = () => {

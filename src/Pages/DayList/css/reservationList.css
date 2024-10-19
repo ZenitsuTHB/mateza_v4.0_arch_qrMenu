@@ -1,49 +1,4 @@
 /* CSS for the tab bar */
-.reservations-page .form-settings-page .settings-tabs {
-	width: 100%;
-	max-width: 800px;
-	margin: 0 auto;
-	
-  }
-  
-  .reservations-page .form-settings-page .tab-menu {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 20px;
-	
-  }
-  
-  .reservations-page .form-settings-page .buttons-container {
-	display: flex;
-  }
-  
-  .reservations-page .form-settings-page .tab-underline {
-	border-radius: 5px;
-  }
-  
-  .reservations-page .form-settings-page .tab-button {
-	position: relative;
-	padding: 10px 20px;
-	background: none;
-	border: none;
-	outline: none;
-	cursor: pointer;
-	font-size: 16px;
-	color: #333;
-  }
-  
-  .reservations-page .form-settings-page .tab-button.active {
-	color: var(--color-blue);
-  }
-  
-  .reservations-page .form-settings-page .tab-underline {
-	position: absolute;
-	bottom: -2px;
-	left: 0;
-	right: 0;
-	height: 2px;
-	background-color: var(--color-blue);
-  }
   
   .reservations-page .reservations-grid {
 	display: grid;
@@ -83,25 +38,7 @@
 	align-items: center;
   }
 
-  .reservations-page .search-bars-container {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20px;
-	margin-top: 25px;
-	background-color: var(--color-bg) !important;
-  }
-  
-  .reservations-page .search-bar {
-	flex: 1;
-	margin: 0 10px;
-	font-size: 15px;
-	height: 40px;
-	padding: 0 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	background-color: var(--color-bg) !important;
-	
-  }
+
   
   .reservations-page .header-icon {
 	margin-right: 5px;
