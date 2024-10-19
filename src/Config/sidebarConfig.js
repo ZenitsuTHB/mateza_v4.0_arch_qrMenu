@@ -31,10 +31,6 @@ const routesConfig = [
         path: '/day-list',
       },
       {
-        label: 'Week',
-        path: '/week-list',
-      },
-      {
         label: 'Maand',
         path: '/month-list',
       },
