@@ -45,8 +45,8 @@
 	padding: 8px 16px;
 	border: none;
 	border-radius: 20px; /* Makes the button rounded */
-	background-color: #007bff; /* Bootstrap primary blue color */
-	color: white;
+	background-color: var(--color-bg); /* Red background for delete */
+	border: 1px #777 solid;
 	cursor: pointer;
 	border-radius: 5px;
 	font-size: 16px;
@@ -66,7 +66,7 @@
 	padding: 8px 16px;
 	border: none;
 	border-radius: 5px; /* Makes the button rounded */
-	background-color: red; /* Red background for delete */
+	background-color: var(--color-blue); /* Red background for delete */
 	color: white;
 	cursor: pointer;
 	font-size: 16px;
