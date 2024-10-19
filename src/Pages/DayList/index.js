@@ -10,19 +10,14 @@ import { SearchContext } from '../../Context/SearchContext.js';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-
-import { FaCalendarAlt } from 'react-icons/fa';
-
 import {
   formatDateForFilter,
-  formatDateDutch,
   isToday,
   timeToMinutes,
 } from '../../Utils/dateUtils.js';
 
-import ShiftSelector from './ShiftSelector.js'; // Import the new ShiftSelector component
+import ShiftSelector from './ShiftSelector.js';
+import DatePickerComponent from './DatePicker.js';
 
 const ReservationsList = () => {
   const shifts = {
@@ -146,23 +141,14 @@ const ReservationsList = () => {
 
   return (
     <div className="reservations-page">
-      {selectedDate && (
-        <h2 className="selected-date">
-          {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
-        </h2>
-      )}
+      <DatePickerComponent
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        isDatePickerOpen={isDatePickerOpen}
+        setIsDatePickerOpen={setIsDatePickerOpen}
+        handleDateChange={handleDateChange}
+      />
 
-      <button
-        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-        className="date-button"
-      >
-        <FaCalendarAlt className="date-button-icon" />
-        {selectedDate ? (
-          isToday(selectedDate) ? 'Vandaag' : `${formatDateDutch(selectedDate)}`
-        ) : 'Datum'}
-      </button>
-
-      {/* ShiftSelector Component */}
       <ShiftSelector
         shifts={shifts}
         selectedShift={selectedShift}
@@ -172,22 +158,6 @@ const ReservationsList = () => {
         setCurrentPage={setCurrentPage}
       />
 
-      {/* React DatePicker Popup */}
-      {isDatePickerOpen && (
-        <div className="date-picker-popup">
-          <DatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
-            inline
-            locale="nl"
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Selecteer een datum"
-            todayButton="Vandaag"
-          />
-        </div>
-      )}
-
-      {/* Search Filters */}
       <SearchFilters
         nameSearch={nameSearch}
         setNameSearch={setNameSearch}

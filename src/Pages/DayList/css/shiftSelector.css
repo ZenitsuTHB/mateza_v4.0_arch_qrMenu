@@ -4,3 +4,27 @@
 	top: -40px;
 	right: 20px;
   }
+
+  .shift-options-container {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 1000;
+	width: 150px;
+	padding: 10px 0;
+  }
+  
+  .shift-option {
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .shift-option:hover {
+	background-color: #f1f1f1;
+  }
+  
