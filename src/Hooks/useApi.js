@@ -7,7 +7,6 @@ const TEN_MINUTES = 60 * 10 * 1000
 const CACHE_EXPIRY = TEN_MINUTES;
 
 const useApi = () => {
-
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
   const getJwtToken = useCallback(() => {

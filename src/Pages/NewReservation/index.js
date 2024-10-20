@@ -51,7 +51,7 @@ const NewReservation = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch(window.baseDomain + 'api/restaurant/' + window.restaurantId); // Replace with the correct ID
+        const response = await fetch(window.baseDomain + 'api/restaurant/' + window.restaurantId);
         const data = await response.json();
         setRestaurantData(data);
         console.log('Fetched restaurant data:', data);

@@ -37,16 +37,10 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
       image: theme.image,
     };
 
-    const themeColor = { backgroundColor: theme.color };
-
     try {
       await api.put(
         `${window.baseDomain}api/theme/`,
         themeData
-      );
-      await api.put(
-        `${window.baseDomain}api/colors/background-color/`,
-        themeColor
       );
     } catch (error) {
       console.error('Error saving theme or updating background color:', error);
