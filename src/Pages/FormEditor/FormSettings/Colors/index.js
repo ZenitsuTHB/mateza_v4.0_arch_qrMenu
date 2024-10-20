@@ -76,7 +76,7 @@ const Colors = forwardRef((props, ref) => {
 
   const handleSave = async () => {
     try {
-      await api.put(`${window.baseDomain}api/colors/${window.restaurantId}`, appearanceData);
+      await api.put(`${window.baseDomain}api/colors/`, appearanceData);
       triggerNotification('Kleuren aangepast', 'success');
       setInitialAppearanceData(appearanceData);
     } catch (err) {

@@ -94,7 +94,7 @@ const Fonts = forwardRef((props, ref) => {
 
   const handleSave = async () => {
     try {
-      const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+      const endpoint = `${window.baseDomain}api/fonts/`;
       await api.put(endpoint, fontsState);
       triggerNotification('Lettertypes aangepast', 'success');
       setInitialFontsState(fontsState);
@@ -107,7 +107,7 @@ const Fonts = forwardRef((props, ref) => {
 
   const handleReset = async () => {
     try {
-      const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+      const endpoint = `${window.baseDomain}api/fonts/`;
       await api.put(endpoint, resetFonts);
       setFontsState(resetFonts);
       triggerNotification('Lettertypes gereset naar standaard', 'success');

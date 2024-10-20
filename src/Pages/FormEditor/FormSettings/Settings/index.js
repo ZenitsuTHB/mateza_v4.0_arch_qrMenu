@@ -45,7 +45,7 @@ const Settings = forwardRef((props, ref) => {
 
     const fetchTheme = async () => {
       try {
-        const themeResponse = await api.get(`${window.baseDomain}api/theme/${window.restaurantId}`);
+        const themeResponse = await api.get(`${window.baseDomain}api/theme/`);
         setSelectedTheme(themeResponse);
       } catch (error) {
         console.error('Error fetching theme:', error);
@@ -73,7 +73,7 @@ const Settings = forwardRef((props, ref) => {
 
   const handleSave = useCallback(async () => {
     try {
-      await api.put(`${window.baseDomain}api/settings/${window.restaurantId}`, formData);
+      await api.put(`${window.baseDomain}api/settings/`, formData);
       triggerNotification('Instellingen aangepast', 'success');
       setInitialFormData(formData);
     } catch (error) {
