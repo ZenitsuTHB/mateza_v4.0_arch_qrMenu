@@ -67,7 +67,7 @@ const StepOne = ({
       )}
 
       {!guestsExceeded && (
-        <button type="submit" className="submit-button">
+        <button type="submit" className="button-style-3">
           Volgende
         </button>
       )}

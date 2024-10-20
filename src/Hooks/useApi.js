@@ -7,11 +7,29 @@ const TEN_MINUTES = 60 * 10 * 1000
 const CACHE_EXPIRY = TEN_MINUTES;
 
 const useApi = () => {
+
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
   const getJwtToken = useCallback(() => {
-    return localStorage.getItem('jwtToken'); // TODO: ADD JWT TOKEN HERE
+    return localStorage.getItem('jwtToken');
   }, []);
+
+  const getStoredNumber = useCallback(() => {
+    const storedNumber = localStorage.getItem('storedNumber');
+    return storedNumber ? parseInt(storedNumber, 10) : 0;
+  }, []);
+
+  const updateStoredNumber = useCallback(() => {
+    let currentNumber = getStoredNumber();
+    currentNumber += Math.floor(Math.random() * 3) + 1;
+
+    if (currentNumber > 100) {
+      currentNumber = 0;
+    }
+
+    localStorage.setItem('storedNumber', currentNumber);
+    return currentNumber;
+  }, [getStoredNumber]);
 
   const get = useCallback(
     async (endpoint, config = {}) => {
@@ -38,22 +56,27 @@ const useApi = () => {
           JSON.stringify({ data: response.data, timestamp: Date.now() })
         );
 
+        updateStoredNumber();
+
         return response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
       }
     },
-    [generateCacheKey, getJwtToken]
+    [generateCacheKey, getJwtToken, updateStoredNumber]
   );
 
   const mutate = useCallback(
     async (method, endpoint, data = null, config = {}) => {
       try {
+        const storedNumber = updateStoredNumber();
+        const modifiedData = { ...data, storedNumber };
+
         const response = await axios({
           method,
           url: endpoint,
-          data,
+          data: modifiedData,
           ...config,
           headers: {
             ...config.headers,
@@ -69,7 +92,7 @@ const useApi = () => {
         throw error;
       }
     },
-    [generateCacheKey, getJwtToken]
+    [generateCacheKey, getJwtToken, updateStoredNumber]
   );
 
   const apiMethods = useMemo(

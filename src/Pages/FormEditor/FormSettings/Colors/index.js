@@ -171,7 +171,7 @@ const Colors = forwardRef((props, ref) => {
 
       <button
         type="button"
-        className="submit-button"
+        className="button-style-3"
         onClick={handleSave}
         disabled={!isDirty}
       >
