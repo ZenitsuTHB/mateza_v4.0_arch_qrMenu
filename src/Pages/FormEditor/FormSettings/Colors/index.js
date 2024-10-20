@@ -28,28 +28,43 @@ const Colors = forwardRef((props, ref) => {
   const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Removed the error state as it's no longer used for rendering
 
   const api = useApi();
 
   useEffect(() => {
     const fetchColors = async () => {
       try {
-        const data = await api.get(`${window.baseDomain}api/colors/${window.restaurantId}`);
-        setAppearanceData(data);
-        setInitialAppearanceData(data);
+        const response = await api.get(`${window.baseDomain}api/colors/${window.restaurantId}`);
+        const data = response || {};
+
+        // Merge fetched data with defaults to ensure all fields are present
+        const mergedData = { ...defaultAppearanceData, ...data };
+
+        // Optionally, log if any fields are missing in the fetched data
+        const missingFields = Object.keys(defaultAppearanceData).filter(
+          (key) => !(key in data)
+        );
+        if (missingFields.length > 0) {
+          console.warn('Missing color fields from server response:', missingFields);
+        }
+
+        setAppearanceData(mergedData);
+        setInitialAppearanceData(mergedData);
       } catch (err) {
         console.error('Error fetching colors:', err);
+        // Set to default data in case of error
         setAppearanceData(defaultAppearanceData);
         setInitialAppearanceData(defaultAppearanceData);
-        setError(err);
+        // Optionally, you can trigger a notification if you want to inform the user silently
+        // triggerNotification('Failed to load colors. Using default settings.', 'warning');
       } finally {
         setLoading(false);
       }
     };
 
     fetchColors();
-  }, []);
+  }, [api]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -91,9 +106,8 @@ const Colors = forwardRef((props, ref) => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error fetching colors. Please try again later.</div>;
-  }
+  // Removed the error message rendering
+  // Always render the form, prefilled with either fetched or default data
 
   return (
     <div className="colors-container">

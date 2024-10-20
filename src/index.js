@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Sidebar from './Components/Structural/Sidebar/index.js';
 import ContentRouting from './Components/Structural/ContentRouting/index.js';
 import TopBar from './Components/Structural/TopBar/index.js';
-import AccountManagement from './Pages/Account/index.js';
+import Login from './Pages/Login/index.js';
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
 import { I18nextProvider } from 'react-i18next';
@@ -37,7 +37,7 @@ function App() {
     </div>
   ) : (
     <div>
-      <AccountManagement />
+      <Login/>
     </div>
   );
 }
