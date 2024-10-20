@@ -1,11 +1,10 @@
-// src/components/Login.js
 import React, { useState } from 'react';
-import useApi from '../../Hooks/useApi'; // Adjust the path as needed
-import './css/login.css'; // Ensure this path is correct
-import { useNavigate } from 'react-router-dom'; // If you're using React Router
+import useApi from '../../Hooks/useApi';
+import './css/login.css';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,7 +12,7 @@ const Login = () => {
   const api = useApi();
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handleUsernameChange = (e) => setUsername(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
@@ -23,21 +22,19 @@ const Login = () => {
 
     try {
       const data = {
-        email: email,
+        username: username,
         password: password,
       };
-      const response = await api.post('http://localhost:5000/api/auth/jwt-sign-in/', data);
+      const response = await api.post(window.baseDomain + 'api/auth/jwt-sign-in/', data);
       const { accessToken, refreshToken } = response;
-
-	  console.log(response);
 
       if (accessToken) {
         localStorage.setItem('accessToken', accessToken);
-		localStorage.setItem('refreshToken', refreshToken);
-		localStorage.setItem('loginSuccessful', true);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('loginSuccessful', true);
 
         navigate('/');
-		window.location.reload();
+        window.location.reload();
       } else {
         throw new Error('Token not received');
       }
@@ -54,10 +51,10 @@ const Login = () => {
       <form className="login-form" onSubmit={handleSubmit}>
         <h2 className="login-title">Login</h2>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
+          type="text"
+          placeholder="Gebruikersnaam"
+          value={username}
+          onChange={handleUsernameChange}
           className="login-input"
           required
         />
@@ -74,6 +71,7 @@ const Login = () => {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
