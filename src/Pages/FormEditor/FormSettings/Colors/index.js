@@ -28,7 +28,6 @@ const Colors = forwardRef((props, ref) => {
   const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
   const [loading, setLoading] = useState(true);
-  // Removed the error state as it's no longer used for rendering
 
   const api = useApi();
 
@@ -37,11 +36,7 @@ const Colors = forwardRef((props, ref) => {
       try {
         const response = await api.get(`${window.baseDomain}api/colors/${window.restaurantId}`);
         const data = response || {};
-
-        // Merge fetched data with defaults to ensure all fields are present
         const mergedData = { ...defaultAppearanceData, ...data };
-
-        // Optionally, log if any fields are missing in the fetched data
         const missingFields = Object.keys(defaultAppearanceData).filter(
           (key) => !(key in data)
         );
@@ -53,11 +48,8 @@ const Colors = forwardRef((props, ref) => {
         setInitialAppearanceData(mergedData);
       } catch (err) {
         console.error('Error fetching colors:', err);
-        // Set to default data in case of error
         setAppearanceData(defaultAppearanceData);
         setInitialAppearanceData(defaultAppearanceData);
-        // Optionally, you can trigger a notification if you want to inform the user silently
-        // triggerNotification('Failed to load colors. Using default settings.', 'warning');
       } finally {
         setLoading(false);
       }
@@ -105,9 +97,6 @@ const Colors = forwardRef((props, ref) => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  // Removed the error message rendering
-  // Always render the form, prefilled with either fetched or default data
 
   return (
     <div className="colors-container">
