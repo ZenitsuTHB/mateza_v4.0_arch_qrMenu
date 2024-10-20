@@ -38,7 +38,7 @@ const Fonts = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchFonts = async () => {
       try {
-        const endpoint = `${window.baseDomain}api/fonts/${window.restaurantId}`;
+        const endpoint = `${window.baseDomain}api/fonts/`;
         const response = await api.get(endpoint);
 
         if (response && Object.keys(response).length > 0) {

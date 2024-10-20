@@ -24,7 +24,6 @@ function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
   window.baseDomain = "http://localhost:5000/";
   window.viewMode = "full-screen";
-  window.restaurantId = "restaurantId123";
   
   return loginSuccessful ? (
     <div className="app-component">

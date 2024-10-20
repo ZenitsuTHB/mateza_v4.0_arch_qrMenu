@@ -25,7 +25,7 @@ const Settings = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const settingsResponse = await api.get(`${window.baseDomain}api/settings/${window.restaurantId}`);
+        const settingsResponse = await api.get(`${window.baseDomain}api/settings/`);
         if (settingsResponse) {
           const data = settingsResponse;
           const newFormData = {

@@ -34,7 +34,7 @@ const Colors = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchColors = async () => {
       try {
-        const response = await api.get(`${window.baseDomain}api/colors/${window.restaurantId}`);
+        const response = await api.get(`${window.baseDomain}api/colors/`);
         const data = response || {};
         const mergedData = { ...defaultAppearanceData, ...data };
         const missingFields = Object.keys(defaultAppearanceData).filter(
