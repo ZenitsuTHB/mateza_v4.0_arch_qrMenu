@@ -29,10 +29,10 @@ function App() {
   return loginSuccessful ? (
     <div className="app-component">
       <SearchProvider>
-      <TopBar />
-      <SecondaryTopBar />
-      <Sidebar />
-      <ContentRouting />
+        <TopBar />
+        <SecondaryTopBar />
+        <Sidebar />
+        <ContentRouting />
       </SearchProvider>
     </div>
   ) : (

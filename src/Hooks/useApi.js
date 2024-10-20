@@ -11,7 +11,7 @@ const useApi = () => {
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
   const getJwtToken = useCallback(() => {
-    return localStorage.getItem('jwtToken');
+    return localStorage.getItem('accessToken');
   }, []);
 
   const getStoredNumber = useCallback(() => {
