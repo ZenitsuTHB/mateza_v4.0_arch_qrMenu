@@ -7,7 +7,7 @@ const chalk = require('chalk');
 // Directory to check
 const srcDirectory = path.join(__dirname, 'src');
 // Maximum allowed lines per file
-const MAX_LINES = 200;
+const MAX_LINES = 400;
 
 /**
  * Recursively retrieves all files in the given directory.

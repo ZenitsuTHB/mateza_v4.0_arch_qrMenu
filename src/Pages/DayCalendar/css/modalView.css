@@ -30,6 +30,7 @@
   width: 100%;
   padding: 5px;
   margin-top: 5px;
+  height: 40px;
 }
 
 .day-calendar-page .modal-buttons {
@@ -97,6 +98,7 @@
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  height: 40px;
 }
 
 .modal-buttons {
@@ -140,10 +142,9 @@
 
 .switch {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 40px;
   height: 20px;
-  margin-left: 10px;
 }
 
 .switch input {
@@ -206,10 +207,12 @@ input:checked + .slider:before {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  height: 40px;
 }
 
 .shift-item button {
   margin-top: 5px;
+  height: 50px;
 }
 
 .table-settings {
@@ -252,12 +255,14 @@ input:checked + .slider:before {
 
 .experience-item button {
   margin-left: 10px;
+  padding: 10px;
 }
 
 .experience-add {
   display: flex;
   align-items: center;
   margin-top: 10px;
+  padding: 10px;
 }
 
 .experience-add input {
@@ -265,6 +270,7 @@ input:checked + .slider:before {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  height: 40px;
 }
 
 .modal-add-button {
@@ -274,6 +280,7 @@ input:checked + .slider:before {
   border-radius: 5px;
   padding: 8px 12px;
   cursor: pointer;
+  padding: 12px;
 }
 
 .modal-add-button:hover {
@@ -287,6 +294,7 @@ input:checked + .slider:before {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+  padding: 12px;
 }
 
 .modal-delete-button:hover {

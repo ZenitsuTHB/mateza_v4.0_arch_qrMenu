@@ -12,11 +12,14 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
       ]);
     }
     // Ensure the last shift's endTime is always the received endTime
-    if (shifts.length > 0 && shifts[shifts.length - 1].endTime !== endTime) {
-      setShifts([
-        ...shifts.slice(0, -1),
-        { ...shifts[shifts.length - 1], endTime },
-      ]);
+    if (shifts.length > 0) {
+      const lastShift = shifts[shifts.length - 1];
+      if (lastShift.endTime !== endTime) {
+        setShifts([
+          ...shifts.slice(0, -1),
+          { ...lastShift, endTime },
+        ]);
+      }
     }
   }, [startTime, endTime, shifts, setShifts]);
 
@@ -65,12 +68,18 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
   return (
     <div className="shift-list">
       <h3>Shifts</h3>
-      <div className="shift-time">
-        <span>Begin tijd: {startTime}</span>
+
+      {/* Fixed Begin Time */}
+      <div className="shift-item fixed-time">
+        <div className="shift-time">
+          <span>Begin tijd: {startTime}</span>
+        </div>
       </div>
+
+      {/* Shifts */}
       {shifts.map((shift, index) => (
         <div key={shift.id} className="shift-item">
-          {/* Start Time: Not editable */}
+          {/* Start Time: Not editable, except for the first shift which already shows the fixed begin time */}
           {index !== 0 && (
             <div className="shift-time">
               <span>Begin tijd: {shift.startTime}</span>
@@ -89,13 +98,8 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
           </div>
 
           {/* End Time */}
-          {index === shifts.length - 1 ? (
-            // Last Shift: End time is fixed
-            <div className="shift-time">
-              <span>Eind tijd: {endTime}</span>
-            </div>
-          ) : (
-            // Other Shifts: End time is editable
+          {index !== shifts.length - 1 && (
+            // Only show end time input for shifts that are not the last one
             <div className="shift-time">
               <label>
                 Eind tijd:
@@ -122,6 +126,14 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
           )}
         </div>
       ))}
+
+      {/* Fixed End Time */}
+      <div className="shift-item fixed-time">
+        <div className="shift-time">
+          <span>Eind tijd: {endTime}</span>
+        </div>
+      </div>
+
       <button type="button" className="modal-add-button" onClick={addShift}>
         Voeg shift toe
       </button>
