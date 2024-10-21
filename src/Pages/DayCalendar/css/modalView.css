@@ -13,13 +13,6 @@
   z-index: var(--z-index-modal);
 }
 
-.day-calendar-page .modal-content {
-  background-color: white;
-  border-radius: 5px;
-  padding: 20px;
-  width: 300px;
-}
-
 .day-calendar-page .modal-content h2 {
   margin-top: 0;
 }
@@ -56,4 +49,202 @@
 
 .day-calendar-page .modal-button:hover {
   background-color: var(--color-blue);
+}
+
+/* src/components/Modal/css/modalView.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-modal);
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-label {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-label input,
+.modal-label select {
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.modal-button {
+  background-color: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: var(--color-blue-dark);
+}
+
+.toggle-switch {
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--color-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.shift-list {
+  margin-bottom: 15px;
+}
+
+.shift-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.shift-item .shift-time,
+.shift-item .shift-name {
+  margin-bottom: 5px;
+}
+
+.shift-item input[type="time"],
+.shift-item input[type="text"] {
+  width: 100%;
+  padding: 5px;
+}
+
+.shift-item button {
+  margin-top: 5px;
+}
+
+.table-settings {
+  margin-bottom: 15px;
+}
+
+.tables-list {
+  margin-top: 10px;
+}
+
+.table-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.table-item input[type="checkbox"] {
+  margin-left: 10px;
+}
+
+.experience-selector {
+  margin-bottom: 15px;
+}
+
+.experience-list {
+  margin-top: 10px;
+}
+
+.experience-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.experience-item button {
+  margin-left: 10px;
+}
+
+.experience-add {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.experience-add input {
+  flex: 1;
+  padding: 5px;
+}
+
+.experience-add button {
+  margin-left: 10px;
+}
+
+@media (max-height: 500px) {
+  .modal-content {
+    max-height: 100%;
+  }
 }

@@ -1,32 +1,71 @@
 // src/components/Modal/Modal.jsx
 
 import React, { useState, useEffect } from 'react';
+import TimeInput from './TimeInput';
+import NumberInput from './NumberInput';
+import ToggleSwitch from './ToggleSwitch';
+import OptionSelect from './OptionSelect';
+import ShiftList from './ShiftList';
+import TableSettings from './TableSettings';
+import ExperienceSelector from './ExperienceSelector';
+import ColorPicker from './ColorPicker';
 import './css/modalView.css';
 
 const Modal = ({ onClose, onSave, existingBlock }) => {
-  const [title, setTitle] = useState(existingBlock ? existingBlock.title : '');
-  const [color, setColor] = useState(existingBlock ? existingBlock.color : '#ff0000');
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '00:00');
-  const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '01:00');
+  const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:59');
+  const [zitplaatsen, setZitplaatsen] = useState(existingBlock ? existingBlock.zitplaatsen : 0);
+  const [toewijzingsmanier, setToewijzingsmanier] = useState(existingBlock ? existingBlock.toewijzingsmanier : 'Indeling per tijdslot');
+  const [duurtijdReservatie, setDuurtijdReservatie] = useState(existingBlock ? existingBlock.duurtijdReservatie : 0);
+  const [shifts, setShifts] = useState(existingBlock ? existingBlock.shifts : []);
+  const [werkenMetTafels, setWerkenMetTafels] = useState(existingBlock ? existingBlock.werkenMetTafels : false);
+  const [tafels, setTafels] = useState(existingBlock ? existingBlock.tafels : []);
+  const [manierVanTellen, setManierVanTellen] = useState(existingBlock ? existingBlock.manierVanTellen : 'Max. aantal gasten');
+  const [lengteTijdsblok, setLengteTijdsblok] = useState(existingBlock ? existingBlock.lengteTijdsblok : 0);
+  const [minOpVoorhandReserveren, setMinOpVoorhandReserveren] = useState(existingBlock ? existingBlock.minOpVoorhandReserveren : 0);
+  const [wachtlijstTonen, setWachtlijstTonen] = useState(existingBlock ? existingBlock.wachtlijstTonen : false);
+  const [maxCapaciteitWachtlijst, setMaxCapaciteitWachtlijst] = useState(existingBlock ? existingBlock.maxCapaciteitWachtlijst : 0);
+  const [experiences, setExperiences] = useState(existingBlock ? existingBlock.experiences : []);
+  const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#ff0000');
 
   useEffect(() => {
-    if (existingBlock) {
-      setTitle(existingBlock.title);
-      setColor(existingBlock.color);
-      setStartTime(existingBlock.startTime);
-      setEndTime(existingBlock.endTime);
+    if (toewijzingsmanier === 'Indeling per tijdslot') {
+      setShifts([]);
     }
-  }, [existingBlock]);
+  }, [toewijzingsmanier]);
+
+  useEffect(() => {
+    if (!werkenMetTafels) {
+      setTafels([]);
+    }
+  }, [werkenMetTafels]);
+
+  useEffect(() => {
+    if (!wachtlijstTonen) {
+      setMaxCapaciteitWachtlijst(0);
+    }
+  }, [wachtlijstTonen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newBlock = {
       id: existingBlock ? existingBlock.id : Date.now(),
-      title,
-      color,
       startTime,
       endTime,
+      zitplaatsen,
+      toewijzingsmanier,
+      duurtijdReservatie,
+      shifts,
+      werkenMetTafels,
+      tafels,
+      manierVanTellen,
+      lengteTijdsblok,
+      minOpVoorhandReserveren,
+      wachtlijstTonen,
+      maxCapaciteitWachtlijst,
+      experiences,
+      kleurInstelling,
     };
 
     onSave(newBlock);
@@ -35,52 +74,81 @@ const Modal = ({ onClose, onSave, existingBlock }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{existingBlock ? 'Edit Time Block' : 'Add Time Block'}</h2>
+        <h2 className='secondary-title'>{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
         <form onSubmit={handleSubmit}>
-          <label>
-            Title:
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
+          <TimeInput label="Start tijd" value={startTime} onChange={setStartTime} />
+          <TimeInput label="Eindtijd" value={endTime} onChange={setEndTime} />
+          <NumberInput label="Zitplaatsen" value={zitplaatsen} onChange={setZitplaatsen} min={0} />
+          <OptionSelect
+            label="Toewijzingsmanier"
+            options={[
+              'Indeling per tijdslot',
+              'Reservaties per shift',
+              'Vrij reserveren per shift',
+            ]}
+            value={toewijzingsmanier}
+            onChange={setToewijzingsmanier}
+          />
+          {toewijzingsmanier === 'Indeling per tijdslot' && (
+            <NumberInput
+              label="Duurtijd reservatie (min)"
+              value={duurtijdReservatie}
+              onChange={setDuurtijdReservatie}
+              min={0}
             />
-          </label>
-          <label>
-            Color:
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              required
+          )}
+          {(toewijzingsmanier === 'Reservaties per shift' || toewijzingsmanier === 'Vrij reserveren per shift') && (
+            <ShiftList
+              shifts={shifts}
+              setShifts={setShifts}
+              startTime={startTime}
+              endTime={endTime}
             />
-          </label>
-          <label>
-            Start Time:
-            <input
-              type="time"
-              step="300"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
+          )}
+          <ToggleSwitch label="Werken met tafels" value={werkenMetTafels} onChange={setWerkenMetTafels} />
+          {werkenMetTafels && (
+            <TableSettings tafels={tafels} setTafels={setTafels} />
+          )}
+          <OptionSelect
+            label="Manier van tellen"
+            options={
+              werkenMetTafels
+                ? ['Max. aantal tafels', 'Max. tafelcapaciteit']
+                : ['Max. aantal gasten']
+            }
+            value={manierVanTellen}
+            onChange={setManierVanTellen}
+          />
+          <NumberInput
+            label="Lengte van tijdsblok (min)"
+            value={lengteTijdsblok}
+            onChange={setLengteTijdsblok}
+            min={0}
+            step={5}
+          />
+          <NumberInput
+            label="Min. op voorhand reserveren (min)"
+            value={minOpVoorhandReserveren}
+            onChange={setMinOpVoorhandReserveren}
+            min={0}
+          />
+          <ToggleSwitch label="Wachtlijst tonen wanneer volzet" value={wachtlijstTonen} onChange={setWachtlijstTonen} />
+          {wachtlijstTonen && (
+            <NumberInput
+              label="Max. capaciteit wachtlijst"
+              value={maxCapaciteitWachtlijst}
+              onChange={setMaxCapaciteitWachtlijst}
+              min={0}
             />
-          </label>
-          <label>
-            End Time:
-            <input
-              type="time"
-              step="300"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
-            />
-          </label>
+          )}
+          <ExperienceSelector experiences={experiences} setExperiences={setExperiences} />
+          <ColorPicker label="Kleur instelling" value={kleurInstelling} onChange={setKleurInstelling} />
           <div className="modal-buttons">
             <button type="submit" className="modal-button">
-              {existingBlock ? 'Save' : 'Add'}
+              {existingBlock ? 'Opslaan' : 'Toevoegen'}
             </button>
             <button type="button" className="modal-button" onClick={onClose}>
-              Cancel
+              Annuleren
             </button>
           </div>
         </form>
