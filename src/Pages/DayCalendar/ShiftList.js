@@ -68,6 +68,7 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
                     value={shift.endTime}
                     onChange={(e) => updateShift(shift.id, 'endTime', e.target.value)}
                     required
+                    step={300}
                   />
                 </label>
               </div>
@@ -100,6 +101,7 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
                     value={shift.startTime}
                     onChange={(e) => updateShift(shift.id, 'startTime', e.target.value)}
                     required
+                    step={300}
                   />
                 </label>
               </div>
@@ -120,15 +122,16 @@ const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
                     value={shift.endTime}
                     onChange={(e) => updateShift(shift.id, 'endTime', e.target.value)}
                     required
+                    step={300}
                   />
                 </label>
               </div>
-              <button type="button" onClick={() => removeShift(shift.id)}>Verwijder</button>
+              <button type="button" className="modal-delete-button" onClick={() => removeShift(shift.id)}>Verwijder</button>
             </>
           )}
         </div>
       ))}
-      <button type="button" onClick={addShift}>Voeg shift toe</button>
+      <button type="button" className="modal-add-button" onClick={addShift}>Voeg shift toe</button>
     </div>
   );
 };

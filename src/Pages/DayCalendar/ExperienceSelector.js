@@ -23,7 +23,7 @@ const ExperienceSelector = ({ experiences, setExperiences }) => {
         {experiences.map((exp, idx) => (
           <div key={idx} className="experience-item">
             <span>{exp}</span>
-            <button type="button" onClick={() => removeExperience(exp)}>Verwijder</button>
+            <button type="button" className="modal-delete-button" onClick={() => removeExperience(exp)}>Verwijder</button>
           </div>
         ))}
       </div>
@@ -34,7 +34,7 @@ const ExperienceSelector = ({ experiences, setExperiences }) => {
           value={newExperience}
           onChange={(e) => setNewExperience(e.target.value)}
         />
-        <button type="button" onClick={addExperience}>Voeg toe</button>
+        <button type="button" className="modal-add-button" onClick={addExperience}>Voeg toe</button>
       </div>
     </div>
   );

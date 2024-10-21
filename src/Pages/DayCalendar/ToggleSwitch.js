@@ -2,19 +2,21 @@
 
 import React from 'react';
 
-const ToggleSwitch = ({ label, value, onChange }) => {
+const ToggleSwitch = ({ label, value, onChange, alignLeft }) => {
   return (
-    <label className="modal-label toggle-switch">
-      {label}:
-      <div className="switch">
-        <input
-          type="checkbox"
-          checked={value}
-          onChange={(e) => onChange(e.target.checked)}
-        />
-        <span className="slider"></span>
-      </div>
-    </label>
+    <div className={`toggle-switch-container${alignLeft ? ' align-left' : ''}`}>
+      <label className="modal-label toggle-switch">
+        {label}:
+        <div className="switch">
+          <input
+            type="checkbox"
+            checked={value}
+            onChange={(e) => onChange(e.target.checked)}
+          />
+          <span className="slider"></span>
+        </div>
+      </label>
+    </div>
   );
 };
 

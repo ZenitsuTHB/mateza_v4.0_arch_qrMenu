@@ -95,6 +95,8 @@
 .modal-label select {
   margin-top: 5px;
   padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .modal-buttons {
@@ -117,8 +119,23 @@
   background-color: var(--color-blue-dark);
 }
 
-.toggle-switch {
+.toggle-switch-container {
+  margin-bottom: 15px;
+}
+
+.toggle-switch-container.align-left {
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.toggle-switch-container.align-left .modal-label {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-switch-container.align-left .modal-label .switch {
+  margin-left: 10px;
 }
 
 .switch {
@@ -175,6 +192,7 @@ input:checked + .slider:before {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 5px;
 }
 
 .shift-item .shift-time,
@@ -186,6 +204,8 @@ input:checked + .slider:before {
 .shift-item input[type="text"] {
   width: 100%;
   padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .shift-item button {
@@ -196,18 +216,24 @@ input:checked + .slider:before {
   margin-bottom: 15px;
 }
 
-.tables-list {
+.tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
   margin-top: 10px;
 }
 
 .table-item {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  padding: 8px;
+  border-radius: 5px;
 }
 
-.table-item input[type="checkbox"] {
-  margin-left: 10px;
+.table-item span {
+  flex: 1;
 }
 
 .experience-selector {
@@ -237,10 +263,34 @@ input:checked + .slider:before {
 .experience-add input {
   flex: 1;
   padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-.experience-add button {
-  margin-left: 10px;
+.modal-add-button {
+  background-color: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.modal-add-button:hover {
+  background-color: var(--color-blue-dark);
+}
+
+.modal-delete-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.modal-delete-button:hover {
+  background-color: #d9363e;
 }
 
 @media (max-height: 500px) {
