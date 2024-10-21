@@ -65,7 +65,7 @@ const SettingsTabs = () => {
 
   return (
     <div className="form-settings-page">
-      <form className="form-settings-form" onSubmit={handleSubmit}>
+      <form className="form-settings-form central-container-style " onSubmit={handleSubmit}>
         <h2 className="secondary-title">{activeTitle}</h2>
 
         <div className="settings-tabs">

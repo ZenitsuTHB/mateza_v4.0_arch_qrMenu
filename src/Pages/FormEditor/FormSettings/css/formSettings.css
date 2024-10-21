@@ -7,15 +7,6 @@
 	background-color: var(--color-bg);
   }
   
-  .form-settings-page .form-settings-form {
-	background-color: var(--color-white);
-	padding: 30px;
-	border-radius: 8px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	width: 100%;
-	max-width: 600px;
-  }
-  
   .form-settings-page .form-group {
 	display: flex;
 	flex-direction: column;

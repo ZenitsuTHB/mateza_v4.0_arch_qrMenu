@@ -143,7 +143,7 @@ const Fonts = forwardRef((props, ref) => {
         />
       ))}
 
-      <button type="button" className="button-style-3 reset-button" onClick={handleReset}>
+      <button type="button" className="secondary-button-style-3" onClick={handleReset}>
         Reset naar Standaard
       </button>
       <button type="submit" className="button-style-3" onClick={handleSave} disabled={!isDirty}>
