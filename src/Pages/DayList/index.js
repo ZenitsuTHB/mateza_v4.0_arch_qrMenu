@@ -12,7 +12,6 @@ import './css/settingsTabs.css';
 
 import {
   formatDateForFilter,
-  isToday,
   timeToMinutes,
 } from '../../Utils/dateUtils.js';
 

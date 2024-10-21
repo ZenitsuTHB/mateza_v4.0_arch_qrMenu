@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import ProfileImage from './ProfileImage';
-import ProfileBio from './ProfileBio';
-import Language from './Language'; // Import the LanguageSelector
+import ProfileImage from './ProfileImage.js';
+import ProfileBio from './ProfileBio.js';
+import Language from './Language.js'; // Import the LanguageSelector
 import blue1 from '../../Assets/avatars/blue1.webp';
 import blue2 from '../../Assets/avatars/blue2.webp';
 import blue3 from '../../Assets/avatars/blue3.webp';
