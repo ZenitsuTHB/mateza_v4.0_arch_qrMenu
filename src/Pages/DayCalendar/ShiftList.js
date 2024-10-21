@@ -1,137 +1,130 @@
 // src/components/Modal/ShiftList.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 const ShiftList = ({ shifts, setShifts, startTime, endTime }) => {
-  const [localShifts, setLocalShifts] = useState([]);
-
+  // Ensure the first shift's startTime is always the received startTime
   useEffect(() => {
-    if (shifts.length === 0) {
-      setLocalShifts([
-        { id: 0, name: '', startTime: startTime, endTime: endTime }
+    if (shifts.length > 0 && shifts[0].startTime !== startTime) {
+      setShifts([
+        { ...shifts[0], startTime },
+        ...shifts.slice(1),
       ]);
-    } else {
-      setLocalShifts(shifts);
     }
-  }, [shifts, startTime, endTime]);
+    // Ensure the last shift's endTime is always the received endTime
+    if (shifts.length > 0 && shifts[shifts.length - 1].endTime !== endTime) {
+      setShifts([
+        ...shifts.slice(0, -1),
+        { ...shifts[shifts.length - 1], endTime },
+      ]);
+    }
+  }, [startTime, endTime, shifts, setShifts]);
 
   const addShift = () => {
+    const lastShift = shifts[shifts.length - 1];
     const newShift = {
       id: Date.now(),
       name: '',
-      startTime: '',
+      startTime: lastShift ? lastShift.endTime : startTime,
       endTime: '',
     };
-    setLocalShifts([...localShifts, newShift]);
+    setShifts([...shifts, newShift]);
   };
 
   const updateShift = (id, field, value) => {
-    const updatedShifts = localShifts.map((shift) =>
-      shift.id === id ? { ...shift, [field]: value } : shift
-    );
-    setLocalShifts(updatedShifts);
+    const updatedShifts = shifts.map((shift, index) => {
+      if (shift.id === id) {
+        const updatedShift = { ...shift, [field]: value };
+        // If endTime is updated, update the next shift's startTime
+        if (field === 'endTime' && shifts[index + 1]) {
+          shifts[index + 1].startTime = value;
+        }
+        return updatedShift;
+      }
+      return shift;
+    });
+    setShifts([...updatedShifts]);
   };
 
   const removeShift = (id) => {
-    const updatedShifts = localShifts.filter((shift) => shift.id !== id);
-    setLocalShifts(updatedShifts);
-  };
+    const index = shifts.findIndex((shift) => shift.id === id);
+    if (index === -1) return;
 
-  useEffect(() => {
-    setShifts(localShifts);
-  }, [localShifts, setShifts]);
+    const updatedShifts = shifts.filter((shift) => shift.id !== id);
+
+    // Update the startTime of the next shift to the endTime of the removed shift's previous shift
+    if (shifts[index + 1] && index > 0) {
+      updatedShifts[index].startTime = shifts[index - 1].endTime;
+    } else if (shifts[index + 1] && index === 0) {
+      updatedShifts[index].startTime = startTime;
+    }
+
+    setShifts(updatedShifts);
+  };
 
   return (
     <div className="shift-list">
       <h3>Shifts</h3>
-      {localShifts.map((shift, index) => (
+      <div className="shift-time">
+        <span>Begin tijd: {startTime}</span>
+      </div>
+      {shifts.map((shift, index) => (
         <div key={shift.id} className="shift-item">
-          {index === 0 ? (
-            <>
-              <div className="shift-time">
-                <span>Begin tijd: {startTime}</span>
-              </div>
-              <div className="shift-name">
-                <input
-                  type="text"
-                  placeholder="Shift naam"
-                  value={shift.name}
-                  onChange={(e) => updateShift(shift.id, 'name', e.target.value)}
-                  required
-                />
-              </div>
-              <div className="shift-time">
-                <label>
-                  Eindtijd shift 1:
-                  <input
-                    type="time"
-                    value={shift.endTime}
-                    onChange={(e) => updateShift(shift.id, 'endTime', e.target.value)}
-                    required
-                    step={300}
-                  />
-                </label>
-              </div>
-            </>
-          ) : index === localShifts.length - 1 ? (
-            <>
-              <div className="shift-time">
-                <span>Begin tijd: {shift.startTime}</span>
-              </div>
-              <div className="shift-name">
-                <input
-                  type="text"
-                  placeholder="Shift naam"
-                  value={shift.name}
-                  onChange={(e) => updateShift(shift.id, 'name', e.target.value)}
-                  required
-                />
-              </div>
-              <div className="shift-time">
-                <span>Eind tijd: {endTime}</span>
-              </div>
-            </>
+          {/* Start Time: Not editable */}
+          {index !== 0 && (
+            <div className="shift-time">
+              <span>Begin tijd: {shift.startTime}</span>
+            </div>
+          )}
+
+          {/* Shift Name */}
+          <div className="shift-name">
+            <input
+              type="text"
+              placeholder="Shift naam"
+              value={shift.name}
+              onChange={(e) => updateShift(shift.id, 'name', e.target.value)}
+              required
+            />
+          </div>
+
+          {/* End Time */}
+          {index === shifts.length - 1 ? (
+            // Last Shift: End time is fixed
+            <div className="shift-time">
+              <span>Eind tijd: {endTime}</span>
+            </div>
           ) : (
-            <>
-              <div className="shift-time">
-                <label>
-                  Begin tijd:
-                  <input
-                    type="time"
-                    value={shift.startTime}
-                    onChange={(e) => updateShift(shift.id, 'startTime', e.target.value)}
-                    required
-                    step={300}
-                  />
-                </label>
-              </div>
-              <div className="shift-name">
+            // Other Shifts: End time is editable
+            <div className="shift-time">
+              <label>
+                Eind tijd:
                 <input
-                  type="text"
-                  placeholder="Shift naam"
-                  value={shift.name}
-                  onChange={(e) => updateShift(shift.id, 'name', e.target.value)}
+                  type="time"
+                  value={shift.endTime}
+                  onChange={(e) => updateShift(shift.id, 'endTime', e.target.value)}
                   required
+                  step={300}
                 />
-              </div>
-              <div className="shift-time">
-                <label>
-                  Eind tijd:
-                  <input
-                    type="time"
-                    value={shift.endTime}
-                    onChange={(e) => updateShift(shift.id, 'endTime', e.target.value)}
-                    required
-                    step={300}
-                  />
-                </label>
-              </div>
-              <button type="button" className="modal-delete-button" onClick={() => removeShift(shift.id)}>Verwijder</button>
-            </>
+              </label>
+            </div>
+          )}
+
+          {/* Delete Button: Not available for last shift if it's fixed */}
+          {index !== shifts.length - 1 && (
+            <button
+              type="button"
+              className="modal-delete-button"
+              onClick={() => removeShift(shift.id)}
+            >
+              Verwijder
+            </button>
           )}
         </div>
       ))}
-      <button type="button" className="modal-add-button" onClick={addShift}>Voeg shift toe</button>
+      <button type="button" className="modal-add-button" onClick={addShift}>
+        Voeg shift toe
+      </button>
     </div>
   );
 };
