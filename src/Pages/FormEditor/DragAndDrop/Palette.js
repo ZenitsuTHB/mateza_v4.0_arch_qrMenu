@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import '../css/DragAndDrop/palette.css';
 import { FaGripHorizontal } from 'react-icons/fa';
+import './css/palette.css';
 
 const Palette = ({ blocks }) => (
   <div className="palette">

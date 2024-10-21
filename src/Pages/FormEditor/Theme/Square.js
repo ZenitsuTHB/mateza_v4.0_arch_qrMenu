@@ -1,6 +1,6 @@
 // ThemeSquare.js
 import React from 'react';
-import '../css/Theme/themeSquare.css';
+import './css/themeSquare.css';
 
 const ThemeSquare = ({ theme, onClick }) => {
   return (

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaEnvelopeOpenText } from 'react-icons/fa';
-import '../css/LaunchPage/emailSample.css';
+import './css/emailSample.css';
 
 const EmailSampleTab = ({ emailSubject, emailBody, shareMessage, reservationLink }) => {
   return (

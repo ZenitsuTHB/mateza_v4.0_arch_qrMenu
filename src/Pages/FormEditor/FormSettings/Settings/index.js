@@ -6,8 +6,6 @@ import useApi from '../../../../Hooks/useApi.js';
 import SettingsForm from './SettingsForm.js';
 import ThemePreview from './ThemePreview.js';
 import AlignmentSelector from './AlignmentSelector.js';
-import '../../css/FormSettings/formSettings.css';
-import '../../css/FormSettings/mobile.css';
 
 const Settings = forwardRef((props, ref) => {
   const defaultSettings = {

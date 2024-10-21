@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import { FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import EmbedCodeTab from './EmbedCodeTab.js';
 import EmailSampleTab from './EmailSampleTab.js';
-import '../css/LaunchPage/launchPage.css';
-import '../css/LaunchPage/mobile.css';
+import './css/launchPage.css';
+import './css/mobile.css';
 
 const LaunchPage = () => {
   const [activeTab, setActiveTab] = useState('embedCode');
@@ -25,7 +25,7 @@ const LaunchPage = () => {
   return (
     <div className="launch-page">
 
-      <div className="launch-page-form">
+      <div className="launch-page-form central-container-style">
         <h2 className="secondary-title">Uw Reserveringspagina</h2>
 
         <div className="link-section">

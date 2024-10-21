@@ -2,7 +2,10 @@
 
 import React, { useState } from 'react';
 import { FaTrashAlt, FaEdit, FaGripHorizontal, FaSave } from 'react-icons/fa';
-import '../css/DragAndDrop/block.css';
+import './css/block.css';
+import './css/animations.css';
+import './css/style.css';
+import './css/mobile.css';
 
 const Block = ({
   type,

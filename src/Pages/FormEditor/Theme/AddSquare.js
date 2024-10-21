@@ -1,7 +1,7 @@
 // AddThemeSquare.js
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
-import '../css/Theme/addThemeSquare.css';
+import './css/addThemeSquare.css';
 
 const AddThemeSquare = ({ onClick }) => {
   return (

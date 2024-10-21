@@ -9,9 +9,6 @@ import Canvas from './DragAndDrop/Canvas.js';
 import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
 import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
-import './css/DragAndDrop/animations.css';
-import './css/DragAndDrop/style.css';
-import './css/DragAndDrop/mobile.css';
 
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);

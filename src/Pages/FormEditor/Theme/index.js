@@ -6,9 +6,9 @@ import AddThemeSquare from './AddSquare';
 import AddThemeModal from './AddModal';
 import useApi from '../../../Hooks/useApi'; // Adjust the import path as necessary
 
-import '../css/Theme/themeSelectorModal.css';
-import '../css/Theme/animations.css';
-import '../css/Theme/mobile.css';
+import './css/themeSelectorModal.css';
+import './css/animations.css';
+import './css/mobile.css';
 
 import { initialThemes } from './defaultThemes';
 

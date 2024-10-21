@@ -1,6 +1,6 @@
 // AddThemeModal.js
 import React, { useState } from 'react';
-import '../css/Theme/addThemeModal.css';
+import './css/addThemeModal.css';
 
 const AddThemeModal = ({ onClose, onSave }) => {
   const [title, setTitle] = useState('');

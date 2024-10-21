@@ -5,8 +5,6 @@ import useNotification from '../../../../Components/Notification/index';
 import ColorPicker from './ColorPicker';
 import BackgroundTypeSelector from './BackgroundTypeSelector';
 import useApi from '../../../../Hooks/useApi.js';
-import '../../css/FormSettings/formSettings.css';
-import '../../css/FormSettings/mobile.css';
 
 const Colors = forwardRef((props, ref) => {
   const { triggerNotification, NotificationComponent } = useNotification();

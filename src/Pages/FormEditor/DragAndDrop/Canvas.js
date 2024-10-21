@@ -3,7 +3,7 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Block from './Block';
-import '../css/DragAndDrop/canvas.css';
+import './css/canvas.css';
 
 const Canvas = ({ items, setItems, dropPosition }) => {
   const handleDelete = (id) => {

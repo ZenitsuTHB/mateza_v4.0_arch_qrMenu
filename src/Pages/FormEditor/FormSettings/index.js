@@ -6,7 +6,9 @@ import Settings from './Settings/index.js';
 import Colors from './Colors/index.js';
 import Fonts from './Fonts/index.js'; 
 import { withHeader } from '../../../Components/Structural/Header/index.js';
-import '../css/FormSettings/settingsTabs.css';
+import './css/settingsTabs.css';
+import './css/formSettings.css';
+import './css/mobile.css';
 
 const SettingsTabs = () => {
   const [activeTab, setActiveTab] = useState('formSettings');

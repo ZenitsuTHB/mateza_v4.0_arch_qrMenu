@@ -3,7 +3,7 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import '../css/LaunchPage/embedCode.css';
+import './css/embedCode.css';
 
 const EmbedCodeTab = ({ embedCode }) => {
   return (
