@@ -78,7 +78,7 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
+        <h2 className='secondary-title'>{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
         <form onSubmit={handleSubmit}>
           <TextInput label="Titel" value={title} onChange={setTitle} />
           <ColorPicker label="Kleur instelling" value={kleurInstelling} onChange={setKleurInstelling} />

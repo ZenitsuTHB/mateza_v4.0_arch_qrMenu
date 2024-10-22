@@ -1,14 +1,14 @@
 /* src/components/DatePickerComponent/css/datePicker.css */
 
 
-.button-date {
+.day-calendar-page .button-date {
 	position: absolute;
 	right: 30px;
 	top: 80px;
 }
   
   /* Date Picker Popup Styles */
-  .date-picker-popup {
+  .day-calendar-page .date-picker-popup {
 	position: absolute;
 	top: 60px;
 	right: 20px;
@@ -21,14 +21,14 @@
   }
   
   /* Selected Date Heading Styles */
-  .selected-date {
+  .day-calendar-page .selected-date {
 	text-align: center;
 	margin: 20px 0;
 	font-size: 1.5em;
 	color: #333;
   }
   
-  .print-icon {
+  .day-calendar-page .print-icon {
 	margin-left: 8px;
 	color: lightgray;
 	opacity: 0;
@@ -37,16 +37,16 @@
 	cursor: pointer;
   }
   
-  .selected-date:hover .print-icon,
-  .print-icon:hover {
+  .day-calendar-page .selected-date:hover .print-icon,
+  .day-calendar-page .print-icon:hover {
 	opacity: 1;
   }
   
-  .selected-date:hover .print-icon {
+  .day-calendar-page .selected-date:hover .print-icon {
 	opacity: 1;
   }
   
-  .print-icon:hover {
+  .day-calendar-page .print-icon:hover {
 	color: gray;
   }
   

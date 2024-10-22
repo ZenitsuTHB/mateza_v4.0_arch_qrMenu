@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import Timeline from './Timeline.js';
-import Modal from './ModalView.js';
-import DatePickerComponent from './DataPicker.js';
+import Modal from './Modal/index.js';
+import DatePickerComponent from './Modal/DataPicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import './css/dayCalendar.css';
 import './css/mobile.css';

@@ -1,6 +1,6 @@
 /* src/components/Modal/css/modal.css */
 
-.day-calendar-page .modal-overlay {
+.day-calendar-page.day-calendar-page .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -54,7 +54,7 @@
 
 /* src/components/Modal/css/modalView.css */
 
-.modal-overlay {
+.day-calendar-page .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -67,7 +67,7 @@
   z-index: var(--z-index-modal);
 }
 
-.modal-content {
+.day-calendar-page .modal-content {
   background-color: white;
   border-radius: 5px;
   padding: 20px;
@@ -77,23 +77,23 @@
   overflow-y: auto;
 }
 
-.modal-content h2 {
+.day-calendar-page .modal-content h2 {
   margin-top: 0;
 }
 
-.modal-content form {
+.day-calendar-page .modal-content form {
   display: flex;
   flex-direction: column;
 }
 
-.modal-label {
+.day-calendar-page .modal-label {
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
 }
 
-.modal-label input,
-.modal-label select {
+.day-calendar-page .modal-label input,
+.day-calendar-page .modal-label select {
   margin-top: 5px;
   padding: 5px;
   border-radius: 5px;
@@ -101,13 +101,13 @@
   height: 40px;
 }
 
-.modal-buttons {
+.day-calendar-page .modal-buttons {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
 }
 
-.modal-button {
+.day-calendar-page .modal-button {
   background-color: var(--color-blue);
   color: white;
   border: none;
@@ -117,43 +117,43 @@
   cursor: pointer;
 }
 
-.modal-button:hover {
+.day-calendar-page .modal-button:hover {
   background-color: var(--color-blue-dark);
 }
 
-.toggle-switch-container {
+.day-calendar-page .toggle-switch-container {
   margin-bottom: 15px;
 }
 
-.toggle-switch-container.align-left {
+.day-calendar-page .toggle-switch-container.align-left {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 
-.toggle-switch-container.align-left .modal-label {
+.day-calendar-page .toggle-switch-container.align-left .modal-label {
   display: flex;
   align-items: center;
 }
 
-.toggle-switch-container.align-left .modal-label .switch {
+.day-calendar-page .toggle-switch-container.align-left .modal-label .switch {
   margin-left: 10px;
 }
 
-.switch {
+.day-calendar-page .switch {
   position: relative;
   display: block;
   width: 40px;
   height: 20px;
 }
 
-.switch input {
+.day-calendar-page .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.slider {
+.day-calendar-page .slider {
   position: absolute;
   cursor: pointer;
   background-color: #ccc;
@@ -165,7 +165,7 @@
   transition: .4s;
 }
 
-.slider:before {
+.day-calendar-page .slider:before {
   position: absolute;
   content: "";
   height: 14px;
@@ -177,32 +177,32 @@
   transition: .4s;
 }
 
-input:checked + .slider {
+.day-calendar-page input:checked + .slider {
   background-color: var(--color-blue);
 }
 
-input:checked + .slider:before {
+.day-calendar-page input:checked + .slider:before {
   transform: translateX(20px);
 }
 
-.shift-list {
+.day-calendar-page .shift-list {
   margin-bottom: 15px;
 }
 
-.shift-item {
+.day-calendar-page .shift-item {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
 }
 
-.shift-item .shift-time,
-.shift-item .shift-name {
+.day-calendar-page .shift-item .shift-time,
+.day-calendar-page .shift-item .shift-name {
   margin-bottom: 5px;
 }
 
-.shift-item input[type="time"],
-.shift-item input[type="text"] {
+.day-calendar-page .shift-item input[type="time"],
+.day-calendar-page .shift-item input[type="text"] {
   width: 100%;
   padding: 5px;
   border-radius: 5px;
@@ -210,23 +210,23 @@ input:checked + .slider:before {
   height: 40px;
 }
 
-.shift-item button {
+.day-calendar-page .shift-item button {
   margin-top: 5px;
   height: 50px;
 }
 
-.table-settings {
+.day-calendar-page .table-settings {
   margin-bottom: 15px;
 }
 
-.tables-grid {
+.day-calendar-page .tables-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 10px;
   margin-top: 10px;
 }
 
-.table-item {
+.day-calendar-page .table-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -235,37 +235,37 @@ input:checked + .slider:before {
   border-radius: 5px;
 }
 
-.table-item span {
+.day-calendar-page .table-item span {
   flex: 1;
 }
 
-.experience-selector {
+.day-calendar-page .experience-selector {
   margin-bottom: 15px;
 }
 
-.experience-list {
+.day-calendar-page .experience-list {
   margin-top: 10px;
 }
 
-.experience-item {
+.day-calendar-page .experience-item {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
 }
 
-.experience-item button {
+.day-calendar-page .experience-item button {
   margin-left: 10px;
   padding: 10px;
 }
 
-.experience-add {
+.day-calendar-page .experience-add {
   display: flex;
   align-items: center;
   margin-top: 10px;
   padding: 10px;
 }
 
-.experience-add input {
+.day-calendar-page .experience-add input {
   flex: 1;
   padding: 5px;
   border-radius: 5px;
@@ -273,7 +273,7 @@ input:checked + .slider:before {
   height: 40px;
 }
 
-.modal-add-button {
+.day-calendar-page .modal-add-button {
   background-color: var(--color-blue);
   color: white;
   border: none;
@@ -283,11 +283,11 @@ input:checked + .slider:before {
   padding: 12px;
 }
 
-.modal-add-button:hover {
+.day-calendar-page .modal-add-button:hover {
   background-color: var(--color-blue-dark);
 }
 
-.modal-delete-button {
+.day-calendar-page .modal-delete-button {
   background-color: #ff4d4f;
   color: white;
   border: none;
@@ -297,12 +297,12 @@ input:checked + .slider:before {
   padding: 12px;
 }
 
-.modal-delete-button:hover {
+.day-calendar-page .modal-delete-button:hover {
   background-color: #d9363e;
 }
 
 @media (max-height: 500px) {
-  .modal-content {
+  .day-calendar-page .modal-content {
     max-height: 100%;
   }
 }

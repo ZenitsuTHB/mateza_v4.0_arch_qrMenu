@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
   isToday,
-} from '../../Utils/dateUtils.js';
+} from '../../../Utils/dateUtils.js';
 import './css/datePicker.css';
 
 const DatePickerComponent = ({
