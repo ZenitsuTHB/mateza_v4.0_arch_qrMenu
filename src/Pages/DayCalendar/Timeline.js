@@ -35,7 +35,15 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
               style={{ top: `${hour * hourHeight}px`, height: `${hourHeight * hourInterval}px` }}
             >
               <div className="hour-label">
-                {`${String(Math.floor(hour)).padStart(2, '0')}:${hour % 1 === 0.5 ? '30' : hour % 1 === 0.25 ? '15' : hour % 1 === 0.75 ? '45' : '00'}`}
+                {`${String(Math.floor(hour)).padStart(2, '0')}:${
+                  hour % 1 === 0.5
+                    ? '30'
+                    : hour % 1 === 0.25
+                    ? '15'
+                    : hour % 1 === 0.75
+                    ? '45'
+                    : '00'
+                }`}
               </div>
               <div className="hour-line"></div>
             </div>
@@ -59,7 +67,12 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
                 }}
                 onClick={() => onTimeBlockClick(block)}
               >
-                <div className="time-block-title">{block.title} <span className="time-block-time">{`${block.startTime} - ${block.endTime}`}</span></div>
+                <div className="time-block-title">
+                  {block.title}{' '}
+                  <span className="time-block-time">
+                    {`${block.startTime} - ${block.endTime}`}
+                  </span>
+                </div>
               </div>
             );
           })}

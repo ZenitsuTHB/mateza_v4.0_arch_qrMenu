@@ -20,19 +20,24 @@ const DayCalendar = () => {
 
   const api = useApi();
 
+  // Helper function to format date keys consistently
+  const formatDateKey = (date) => date.toISOString().split('T')[0];
+
   useEffect(() => {
     const fetchTimeBlocks = async () => {
       try {
         const response = await api.get(`${window.baseDomain}api/timeblocks/`);
         const blocks = response || [];
         const blocksByDate = {};
+
         blocks.forEach((block) => {
-          const dateKey = new Date(block.date).toDateString();
+          const dateKey = block.date; // 'YYYY-MM-DD' format
           if (!blocksByDate[dateKey]) {
             blocksByDate[dateKey] = [];
           }
           blocksByDate[dateKey].push(block);
         });
+
         setTimeBlocks(blocksByDate);
       } catch (err) {
         console.error('Error fetching time blocks:', err);
@@ -53,7 +58,7 @@ const DayCalendar = () => {
   };
 
   const addTimeBlock = (block) => {
-    const dateKey = new Date(block.date).toDateString();
+    const dateKey = formatDateKey(new Date(block.date));
     setTimeBlocks((prevTimeBlocks) => ({
       ...prevTimeBlocks,
       [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
@@ -62,7 +67,7 @@ const DayCalendar = () => {
   };
 
   const updateTimeBlock = (updatedBlock) => {
-    const dateKey = new Date(updatedBlock.date).toDateString();
+    const dateKey = formatDateKey(new Date(updatedBlock.date));
     setTimeBlocks((prevTimeBlocks) => ({
       ...prevTimeBlocks,
       [dateKey]: prevTimeBlocks[dateKey].map((block) =>
@@ -84,7 +89,8 @@ const DayCalendar = () => {
     }
   };
 
-  const blocksForSelectedDate = timeBlocks[selectedDate.toDateString()] || [];
+  const dateKey = formatDateKey(selectedDate);
+  const blocksForSelectedDate = timeBlocks[dateKey] || [];
 
   return (
     <div className="day-calendar-page">
