@@ -12,9 +12,9 @@ import ExperienceSelector from './ExperienceSelector';
 import ColorPicker from './ColorPicker';
 import './css/modalView.css';
 
-const Modal = ({ onClose, onSave, existingBlock }) => {
+const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const [title, setTitle] = useState(existingBlock ? existingBlock.title : '');
-  const [color, setColor] = useState(existingBlock ? existingBlock.color : '#ff0000');
+  const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#ff0000');
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '00:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:59');
   const [zitplaatsen, setZitplaatsen] = useState(existingBlock ? existingBlock.zitplaatsen : 0);
@@ -53,8 +53,9 @@ const Modal = ({ onClose, onSave, existingBlock }) => {
 
     const newBlock = {
       id: existingBlock ? existingBlock.id : Date.now(),
+      date: selectedDate.toDateString(),
       title,
-      color,
+      kleurInstelling,
       startTime,
       endTime,
       zitplaatsen,
@@ -80,7 +81,7 @@ const Modal = ({ onClose, onSave, existingBlock }) => {
         <h2>{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
         <form onSubmit={handleSubmit}>
           <TextInput label="Titel" value={title} onChange={setTitle} />
-          <ColorPicker label="Kleur instelling" value={color} onChange={setColor} />
+          <ColorPicker label="Kleur instelling" value={kleurInstelling} onChange={setKleurInstelling} />
           <TimeInput label="Start tijd" value={startTime} onChange={setStartTime} />
           <TimeInput label="Eindtijd" value={endTime} onChange={setEndTime} />
           <NumberInput label="Zitplaatsen" value={zitplaatsen} onChange={setZitplaatsen} min={0} />

@@ -55,7 +55,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
                 style={{
                   top: `${topPosition}px`,
                   height: `${blockHeight}px`,
-                  backgroundColor: block.color,
+                  backgroundColor: block.kleurInstelling,
                 }}
                 onClick={() => onTimeBlockClick(block)}
               >

@@ -1,0 +1,52 @@
+/* src/components/DatePickerComponent/css/datePicker.css */
+
+
+.button-date {
+	position: absolute;
+	right: 30px;
+	top: 80px;
+}
+  
+  /* Date Picker Popup Styles */
+  .date-picker-popup {
+	position: absolute;
+	top: 60px;
+	right: 20px;
+	z-index: 100000;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Selected Date Heading Styles */
+  .selected-date {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 1.5em;
+	color: #333;
+  }
+  
+  .print-icon {
+	margin-left: 8px;
+	color: lightgray;
+	opacity: 0;
+	font-size: 20px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+  }
+  
+  .selected-date:hover .print-icon,
+  .print-icon:hover {
+	opacity: 1;
+  }
+  
+  .selected-date:hover .print-icon {
+	opacity: 1;
+  }
+  
+  .print-icon:hover {
+	color: gray;
+  }
+  
