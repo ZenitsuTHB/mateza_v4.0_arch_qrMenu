@@ -7,7 +7,6 @@ import './css/modalContent.css'
 const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const api = useApi();
 
-  // Helper function to format date in Dutch
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -33,7 +32,7 @@ const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
     e.preventDefault();
     const newBlock = {
       id: existingBlock ? existingBlock.id : Date.now(),
-      date: formatDateDutch(selectedDate),
+      date: selectedDate.toISOString().split('T')[0], // e.g., '2024-01-01'
       title,
       kleurInstelling,
       startTime,

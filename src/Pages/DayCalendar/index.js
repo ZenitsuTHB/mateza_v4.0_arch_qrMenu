@@ -57,24 +57,60 @@ const DayCalendar = () => {
     setEditingBlock(null);
   };
 
-  const addTimeBlock = (block) => {
-    const dateKey = formatDateKey(new Date(block.date));
-    setTimeBlocks((prevTimeBlocks) => ({
-      ...prevTimeBlocks,
-      [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
-    }));
-    closeModal();
+  // Add a new time block
+  const addTimeBlock = async (block) => {
+    try {
+      const response = await api.post(`${window.baseDomain}api/timeblocks/`, block);
+      block.id = response.id;
+      const dateKey = formatDateKey(new Date(block.date));
+      setTimeBlocks((prevTimeBlocks) => ({
+        ...prevTimeBlocks,
+        [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
+      }));
+    } catch (err) {
+      console.error('Error adding time block:', err);
+    } finally {
+      closeModal();
+    }
   };
 
-  const updateTimeBlock = (updatedBlock) => {
-    const dateKey = formatDateKey(new Date(updatedBlock.date));
-    setTimeBlocks((prevTimeBlocks) => ({
-      ...prevTimeBlocks,
-      [dateKey]: prevTimeBlocks[dateKey].map((block) =>
-        block.id === updatedBlock.id ? updatedBlock : block
-      ),
-    }));
-    closeModal();
+  // Update an existing time block
+  const updateTimeBlock = async (block) => {
+    try {
+      await api.put(`${window.baseDomain}api/timeblocks/${block.id}/`, block);
+      const dateKey = formatDateKey(new Date(block.date));
+      setTimeBlocks((prevTimeBlocks) => ({
+        ...prevTimeBlocks,
+        [dateKey]: prevTimeBlocks[dateKey].map((b) =>
+          b.id === block.id ? block : b
+        ),
+      }));
+    } catch (err) {
+      console.error('Error updating time block:', err);
+    } finally {
+      closeModal();
+    }
+  };
+
+  // Delete a time block
+  const deleteTimeBlock = async (blockToDelete) => {
+    try {
+      await api.delete(`${window.baseDomain}api/timeblocks/${blockToDelete.id}/`);
+      const dateKey = formatDateKey(new Date(blockToDelete.date));
+      setTimeBlocks((prevTimeBlocks) => {
+        const updatedBlocks = prevTimeBlocks[dateKey].filter(
+          (block) => block.id !== blockToDelete.id
+        );
+        return {
+          ...prevTimeBlocks,
+          [dateKey]: updatedBlocks,
+        };
+      });
+    } catch (err) {
+      console.error('Error deleting time block:', err);
+    } finally {
+      closeModal();
+    }
   };
 
   const handleZoomIn = () => {
@@ -113,6 +149,7 @@ const DayCalendar = () => {
           <Modal
             onClose={closeModal}
             onSave={editingBlock ? updateTimeBlock : addTimeBlock}
+            onDelete={deleteTimeBlock}
             existingBlock={editingBlock}
             selectedDate={selectedDate}
           />
