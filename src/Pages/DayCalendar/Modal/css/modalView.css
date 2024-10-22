@@ -78,7 +78,7 @@
 }
 
 .day-calendar-page .modal-content h2 {
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 .day-calendar-page .modal-content form {
@@ -118,7 +118,7 @@
 }
 
 .day-calendar-page .modal-button:hover {
-  background-color: var(--color-blue-dark);
+  background-color: var(--color-blue-hover);
 }
 
 .day-calendar-page .toggle-switch-container {
@@ -215,63 +215,6 @@
   height: 50px;
 }
 
-.day-calendar-page .table-settings {
-  margin-bottom: 15px;
-}
-
-.day-calendar-page .tables-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.day-calendar-page .table-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f9f9f9;
-  padding: 8px;
-  border-radius: 5px;
-}
-
-.day-calendar-page .table-item span {
-  flex: 1;
-}
-
-.day-calendar-page .experience-selector {
-  margin-bottom: 15px;
-}
-
-.day-calendar-page .experience-list {
-  margin-top: 10px;
-}
-
-.day-calendar-page .experience-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.day-calendar-page .experience-item button {
-  margin-left: 10px;
-  padding: 10px;
-}
-
-.day-calendar-page .experience-add {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  padding: 10px;
-}
-
-.day-calendar-page .experience-add input {
-  flex: 1;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  height: 40px;
-}
 
 .day-calendar-page .modal-add-button {
   background-color: var(--color-blue);
@@ -284,7 +227,7 @@
 }
 
 .day-calendar-page .modal-add-button:hover {
-  background-color: var(--color-blue-dark);
+  background-color: var(--color-blue-hover);
 }
 
 .day-calendar-page .modal-delete-button {
@@ -301,8 +244,3 @@
   background-color: #d9363e;
 }
 
-@media (max-height: 500px) {
-  .day-calendar-page .modal-content {
-    max-height: 100%;
-  }
-}

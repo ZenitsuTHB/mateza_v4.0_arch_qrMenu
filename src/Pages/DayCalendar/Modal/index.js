@@ -7,8 +7,6 @@ import NumberInput from './NumberInput';
 import ToggleSwitch from './ToggleSwitch';
 import OptionSelect from './OptionSelect';
 import ShiftList from './ShiftList';
-import TableSettings from './TableSettings';
-import ExperienceSelector from './ExperienceSelector';
 import ColorPicker from './ColorPicker';
 import './css/modalView.css';
 
@@ -112,14 +110,10 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
               endTime={endTime}
             />
           )}
-          <ToggleSwitch label="Werken met tafels" value={werkenMetTafels} onChange={setWerkenMetTafels} alignLeft />
-          <TableSettings tafels={tafels} setTafels={setTafels} show={werkenMetTafels} />
           <OptionSelect
             label="Manier van tellen"
             options={[
-              'Max. aantal tafels',
               'Max. aantal gasten',
-              'Max. tafelcapaciteit',
             ]}
             value={manierVanTellen}
             onChange={setManierVanTellen}
@@ -138,16 +132,6 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
             min={0}
             step={5}
           />
-          <ToggleSwitch label="Wachtlijst tonen wanneer volzet" value={wachtlijstTonen} onChange={setWachtlijstTonen} alignLeft />
-          {wachtlijstTonen && (
-            <NumberInput
-              label="Max. capaciteit wachtlijst"
-              value={maxCapaciteitWachtlijst}
-              onChange={setMaxCapaciteitWachtlijst}
-              min={0}
-            />
-          )}
-          <ExperienceSelector experiences={experiences} setExperiences={setExperiences} />
           <div className="modal-buttons">
             <button type="submit" className="modal-button">
               {existingBlock ? 'Opslaan' : 'Toevoegen'}
