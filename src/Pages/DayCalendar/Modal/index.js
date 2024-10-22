@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import useApi from '../../../Hooks/useApi';
 import './css/modalView.css';
+import './css/mobile.css';
 
 const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const api = useApi();
@@ -40,24 +41,26 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
               required
             />
           </label>
-          <label className="modal-label">
-            Start tijd:
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
-            />
-          </label>
-          <label className="modal-label">
-            Eindtijd:
-            <input
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
-            />
-          </label>
+          <div className="time-inputs-container">
+            <label className="modal-label">
+              Start tijd:
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </label>
+            <label className="modal-label">
+              Eindtijd:
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                required
+              />
+            </label>
+          </div>
           <label className="modal-label">
             Kleur instelling:
             <input
@@ -68,13 +71,12 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
             />
           </label>
           <div className="modal-buttons">
-          <button type="button" className="modal-button" onClick={onClose}>
+            <button type="button" className="modal-button" onClick={onClose}>
               Annuleren
             </button>
             <button type="submit" className="modal-button">
               {existingBlock ? 'Opslaan' : 'Toevoegen'}
             </button>
-           
           </div>
         </form>
       </div>
