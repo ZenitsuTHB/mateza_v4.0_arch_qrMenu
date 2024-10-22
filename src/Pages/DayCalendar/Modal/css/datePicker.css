@@ -10,7 +10,7 @@
   /* Date Picker Popup Styles */
   .day-calendar-page .date-picker-popup {
 	position: absolute;
-	top: 60px;
+	top: 130px;
 	right: 20px;
 	z-index: 100000;
 	background-color: #fff;
