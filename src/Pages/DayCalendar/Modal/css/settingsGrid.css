@@ -1,0 +1,21 @@
+/* src/components/Modal/css/modalView.css */
+
+.settings-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 10px;
+	margin: 20px 0;
+  }
+  
+  .setting-card {
+	border: 1px solid gray;
+	border-radius: 5px;
+	padding: 10px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+  }
+  
+  .setting-card:hover {
+	background-color: #f0f0f0;
+  }
+  
