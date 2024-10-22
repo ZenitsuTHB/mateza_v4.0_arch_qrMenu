@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import useApi from '../../../Hooks/useApi';
 import './css/modalContent.css'
 
-const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
-  const api = useApi();
+const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
+	const api = useApi();
 
   const formatDateDutch = (date) => {
     const months = [
@@ -31,7 +31,8 @@ const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newBlock = {
-      id: existingBlock ? existingBlock.id : Date.now(),
+      id: existingBlock ? existingBlock._id : undefined,
+      _id: existingBlock ? existingBlock._id : undefined,
       date: selectedDate.toISOString().split('T')[0], // e.g., '2024-01-01'
       title,
       kleurInstelling,
@@ -39,6 +40,10 @@ const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
       endTime,
     };
     onSave(newBlock);
+  };
+
+  const handleDelete = () => {
+    onDelete(existingBlock);
   };
 
   return (
@@ -90,6 +95,15 @@ const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
           <button type="submit" className="modal-button">
             {existingBlock ? 'Opslaan' : 'Toevoegen'}
           </button>
+          {existingBlock && (
+            <button
+              type="button"
+              className="modal-button delete-button"
+              onClick={handleDelete}
+            >
+              Verwijderen
+            </button>
+          )}
         </div>
       </form>
     </>

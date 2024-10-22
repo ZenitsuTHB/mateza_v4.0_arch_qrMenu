@@ -1,5 +1,7 @@
+// src/Components/Notification/NotificationPopover.jsx
+
 import React, { useRef } from 'react';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 import './css/notification.css';
 
 const NotificationPopover = ({ message, type }) => {
@@ -8,11 +10,13 @@ const NotificationPopover = ({ message, type }) => {
   const getIconAndColor = (type) => {
     switch (type) {
       case 'success':
-        return { icon: <FaCheckCircle />, color: '#4CAF50' };
+        return { icon: <FaCheckCircle />, color: '#4CAF50' }; // Green
       case 'error':
-        return { icon: <FaTimesCircle />, color: '#f44336' };
+        return { icon: <FaTimesCircle />, color: '#f44336' }; // Red
+      case 'warning':
+        return { icon: <FaExclamationTriangle />, color: '#FFA500' }; // Orange
       default:
-        return { icon: <FaCheckCircle />, color: '#4CAF50' };
+        return { icon: <FaCheckCircle />, color: '#4CAF50' }; // Default to success
     }
   };
 

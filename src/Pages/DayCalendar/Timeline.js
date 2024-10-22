@@ -58,7 +58,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
 
             return (
               <div
-                key={block.id}
+                key={block._id}
                 className="time-block"
                 style={{
                   top: `${topPosition}px`,

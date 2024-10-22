@@ -7,6 +7,7 @@ import Modal from './Modal/index.js';
 import DatePickerComponent from './Modal/DataPicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useApi from '../../Hooks/useApi';
+import useNotification from '../../Components/Notification/index';
 import './css/dayCalendar.css';
 import './css/mobile.css';
 
@@ -19,6 +20,7 @@ const DayCalendar = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const api = useApi();
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   // Helper function to format date keys consistently
   const formatDateKey = (date) => date.toISOString().split('T')[0];
@@ -57,12 +59,44 @@ const DayCalendar = () => {
     setEditingBlock(null);
   };
 
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const isOverlapping = (newBlock, existingBlocks) => {
+    const newStart = parseTime(newBlock.startTime);
+    const newEnd = parseTime(newBlock.endTime);
+
+    for (const block of existingBlocks) {
+      if (block._id === newBlock._id) continue; // Skip the same block when updating
+      const blockStart = parseTime(block.startTime);
+      const blockEnd = parseTime(block.endTime);
+
+      if (
+        (newStart >= blockStart && newStart < blockEnd) || // New start is inside existing block
+        (newEnd > blockStart && newEnd <= blockEnd) || // New end is inside existing block
+        (newStart <= blockStart && newEnd >= blockEnd) // New block covers existing block
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // Add a new time block
   const addTimeBlock = async (block) => {
+    const dateKey = formatDateKey(new Date(block.date));
+    const existingBlocks = timeBlocks[dateKey] || [];
+
+    if (isOverlapping(block, existingBlocks)) {
+      triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
+      return;
+    }
+
     try {
       const response = await api.post(`${window.baseDomain}api/timeblocks/`, block);
-      block.id = response.id;
-      const dateKey = formatDateKey(new Date(block.date));
+      block._id = response.id;
       setTimeBlocks((prevTimeBlocks) => ({
         ...prevTimeBlocks,
         [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
@@ -76,13 +110,20 @@ const DayCalendar = () => {
 
   // Update an existing time block
   const updateTimeBlock = async (block) => {
+    const dateKey = formatDateKey(new Date(block.date));
+    const existingBlocks = timeBlocks[dateKey] || [];
+
+    if (isOverlapping(block, existingBlocks)) {
+      triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
+      return;
+    }
+
     try {
-      await api.put(`${window.baseDomain}api/timeblocks/${block.id}/`, block);
-      const dateKey = formatDateKey(new Date(block.date));
+      await api.put(`${window.baseDomain}api/timeblocks/${block._id}/`, block);
       setTimeBlocks((prevTimeBlocks) => ({
         ...prevTimeBlocks,
         [dateKey]: prevTimeBlocks[dateKey].map((b) =>
-          b.id === block.id ? block : b
+          b._id === block._id ? block : b
         ),
       }));
     } catch (err) {
@@ -95,11 +136,11 @@ const DayCalendar = () => {
   // Delete a time block
   const deleteTimeBlock = async (blockToDelete) => {
     try {
-      await api.delete(`${window.baseDomain}api/timeblocks/${blockToDelete.id}/`);
+      await api.delete(`${window.baseDomain}api/timeblocks/${blockToDelete._id}/`);
       const dateKey = formatDateKey(new Date(blockToDelete.date));
       setTimeBlocks((prevTimeBlocks) => {
         const updatedBlocks = prevTimeBlocks[dateKey].filter(
-          (block) => block.id !== blockToDelete.id
+          (block) => block._id !== blockToDelete._id
         );
         return {
           ...prevTimeBlocks,
@@ -130,6 +171,7 @@ const DayCalendar = () => {
 
   return (
     <div className="day-calendar-page">
+      <NotificationComponent />
       <DatePickerComponent
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
