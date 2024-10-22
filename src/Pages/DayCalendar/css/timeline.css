@@ -55,6 +55,7 @@
 
 .day-calendar-page .time-block-title {
   font-weight: bold;
+  margin-left: 5px;
 }
 
 .day-calendar-page .time-block-time {
