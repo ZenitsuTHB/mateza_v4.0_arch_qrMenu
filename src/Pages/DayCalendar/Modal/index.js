@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import TextInput from './TextInput';
 import TimeInput from './TimeInput';
 import NumberInput from './NumberInput';
-import ToggleSwitch from './ToggleSwitch';
 import OptionSelect from './OptionSelect';
 import ShiftList from './ShiftList';
 import ColorPicker from './ColorPicker';
@@ -19,32 +18,15 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const [toewijzingsmanier, setToewijzingsmanier] = useState(existingBlock ? existingBlock.toewijzingsmanier : 'Indeling per tijdslot');
   const [duurtijdReservatie, setDuurtijdReservatie] = useState(existingBlock ? existingBlock.duurtijdReservatie : 0);
   const [shifts, setShifts] = useState(existingBlock ? existingBlock.shifts : []);
-  const [werkenMetTafels, setWerkenMetTafels] = useState(existingBlock ? existingBlock.werkenMetTafels : false);
-  const [tafels, setTafels] = useState(existingBlock ? existingBlock.tafels : []);
   const [manierVanTellen, setManierVanTellen] = useState(existingBlock ? existingBlock.manierVanTellen : 'Max. aantal gasten');
   const [lengteTijdsblok, setLengteTijdsblok] = useState(existingBlock ? existingBlock.lengteTijdsblok : 0);
   const [minOpVoorhandReserveren, setMinOpVoorhandReserveren] = useState(existingBlock ? existingBlock.minOpVoorhandReserveren : 0);
-  const [wachtlijstTonen, setWachtlijstTonen] = useState(existingBlock ? existingBlock.wachtlijstTonen : false);
-  const [maxCapaciteitWachtlijst, setMaxCapaciteitWachtlijst] = useState(existingBlock ? existingBlock.maxCapaciteitWachtlijst : 0);
-  const [experiences, setExperiences] = useState(existingBlock ? existingBlock.experiences : []);
 
   useEffect(() => {
     if (toewijzingsmanier === 'Indeling per tijdslot') {
       setShifts([]);
     }
   }, [toewijzingsmanier]);
-
-  useEffect(() => {
-    if (!werkenMetTafels) {
-      setTafels([]);
-    }
-  }, [werkenMetTafels]);
-
-  useEffect(() => {
-    if (!wachtlijstTonen) {
-      setMaxCapaciteitWachtlijst(0);
-    }
-  }, [wachtlijstTonen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,14 +42,9 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
       toewijzingsmanier,
       duurtijdReservatie,
       shifts,
-      werkenMetTafels,
-      tafels,
       manierVanTellen,
       lengteTijdsblok,
       minOpVoorhandReserveren,
-      wachtlijstTonen,
-      maxCapaciteitWachtlijst,
-      experiences,
     };
 
     onSave(newBlock);
