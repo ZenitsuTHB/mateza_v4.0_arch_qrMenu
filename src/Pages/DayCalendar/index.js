@@ -48,11 +48,6 @@ const DayCalendar = () => {
     closeModal();
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setIsDatePickerOpen(false);
-  };
-
   const handleZoomIn = () => {
     if (zoomLevel < 2) {
       setZoomLevel(zoomLevel * 2);

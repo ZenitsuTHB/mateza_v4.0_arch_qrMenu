@@ -1,6 +1,6 @@
 // src/components/Modal/Modal.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useApi from '../../../Hooks/useApi';
 import './css/modalView.css';
 
@@ -68,12 +68,13 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
             />
           </label>
           <div className="modal-buttons">
+          <button type="button" className="modal-button" onClick={onClose}>
+              Annuleren
+            </button>
             <button type="submit" className="modal-button">
               {existingBlock ? 'Opslaan' : 'Toevoegen'}
             </button>
-            <button type="button" className="modal-button" onClick={onClose}>
-              Annuleren
-            </button>
+           
           </div>
         </form>
       </div>
