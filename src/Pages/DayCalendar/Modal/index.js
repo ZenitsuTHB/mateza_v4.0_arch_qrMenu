@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import useApi from '../../../Hooks/useApi';
-import TimeInput from './TimeInput';
-import ColorPicker from './ColorPicker';
 import './css/modalView.css';
 
 const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const api = useApi();
 
   // State variables for basic inputs
+  const [title, setTitle] = useState(existingBlock ? existingBlock.title : '');
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '00:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:59');
   const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#ff0000');
@@ -19,6 +18,7 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
     const newBlock = {
       id: existingBlock ? existingBlock.id : Date.now(),
       date: selectedDate.toDateString(),
+      title,
       kleurInstelling,
       startTime,
       endTime,
@@ -31,9 +31,42 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
       <div className="modal-content">
         <h2 className="secondary-title">{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
         <form onSubmit={handleSubmit}>
-          <TimeInput label="Start tijd" value={startTime} onChange={setStartTime} />
-          <TimeInput label="Eindtijd" value={endTime} onChange={setEndTime} />
-          <ColorPicker label="Kleur instelling" value={kleurInstelling} onChange={setKleurInstelling} />
+          <label className="modal-label">
+            Titel:
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </label>
+          <label className="modal-label">
+            Start tijd:
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+          </label>
+          <label className="modal-label">
+            Eindtijd:
+            <input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+          </label>
+          <label className="modal-label">
+            Kleur instelling:
+            <input
+              type="color"
+              value={kleurInstelling}
+              onChange={(e) => setKleurInstelling(e.target.value)}
+              required
+            />
+          </label>
           <div className="modal-buttons">
             <button type="submit" className="modal-button">
               {existingBlock ? 'Opslaan' : 'Toevoegen'}
