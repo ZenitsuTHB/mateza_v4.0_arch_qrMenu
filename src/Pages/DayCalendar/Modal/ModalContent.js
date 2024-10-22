@@ -2,47 +2,44 @@
 
 import React, { useState } from 'react';
 import useApi from '../../../Hooks/useApi';
-import './css/modalContent.css';
+import './css/modalContent.css'
 
 const ModalContent = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const api = useApi();
 
-  const [title, setTitle] = useState(existingBlock ? existingBlock.title : '');
+  // Helper function to format date in Dutch
+  const formatDateDutch = (date) => {
+    const months = [
+      'januari', 'februari', 'maart', 'april', 'mei', 'juni',
+      'juli', 'augustus', 'september', 'oktober', 'november', 'december'
+    ];
+    const days = [
+      'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'
+    ];
+    const dayName = days[date.getDay()];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${dayName} ${day} ${month} ${year}`;
+  };
+
+  // State variables for basic inputs
+  const [title, setTitle] = useState(existingBlock ? existingBlock.title : `Tijdsblok (${formatDateDutch(selectedDate)})`);
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
-  const [kleurInstelling, setKleurInstelling] = useState(
-    existingBlock ? existingBlock.kleurInstelling : '#2c909b'
-  );
+  const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#2c909b');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const blockData = {
-      date: selectedDate.toISOString().split('T')[0], // 'YYYY-MM-DD' format
+    const newBlock = {
+      id: existingBlock ? existingBlock.id : Date.now(),
+      date: formatDateDutch(selectedDate),
       title,
       kleurInstelling,
       startTime,
       endTime,
     };
-    try {
-      let response;
-      if (existingBlock) {
-        // Editing an existing block, use PUT
-        response = await api.put(
-          `${window.baseDomain}api/timeblocks/${existingBlock.id}/`,
-          blockData
-        );
-        // Keep the id
-        blockData.id = existingBlock.id;
-      } else {
-        // Adding a new block, use POST
-        response = await api.post(`${window.baseDomain}api/timeblocks/`, blockData);
-        blockData.id = response.id; // Get the id from the response
-      }
-      onSave(blockData);
-    } catch (err) {
-      console.error('Error saving time block:', err);
-      // Optionally handle the error (e.g., display an error message)
-    }
+    onSave(newBlock);
   };
 
   return (
