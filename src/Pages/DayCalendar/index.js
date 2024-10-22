@@ -6,6 +6,7 @@ import Timeline from './Timeline.js';
 import Modal from './Modal/index.js';
 import DatePickerComponent from './Modal/DataPicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
+import useApi from '../../Hooks/useApi';
 import './css/dayCalendar.css';
 import './css/mobile.css';
 
@@ -14,9 +15,32 @@ const DayCalendar = () => {
   const [timeBlocks, setTimeBlocks] = useState({});
   const [zoomLevel, setZoomLevel] = useState(1);
   const [editingBlock, setEditingBlock] = useState(null);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const api = useApi();
+
+  useEffect(() => {
+    const fetchTimeBlocks = async () => {
+      try {
+        const response = await api.get(`${window.baseDomain}api/timeblocks/`);
+        const blocks = response || [];
+        const blocksByDate = {};
+        blocks.forEach((block) => {
+          const dateKey = new Date(block.date).toDateString();
+          if (!blocksByDate[dateKey]) {
+            blocksByDate[dateKey] = [];
+          }
+          blocksByDate[dateKey].push(block);
+        });
+        setTimeBlocks(blocksByDate);
+      } catch (err) {
+        console.error('Error fetching time blocks:', err);
+      }
+    };
+
+    fetchTimeBlocks();
+  }, [api]);
 
   const openModal = () => {
     setEditingBlock(null);
@@ -29,22 +53,22 @@ const DayCalendar = () => {
   };
 
   const addTimeBlock = (block) => {
-    const dateKey = selectedDate.toDateString();
-    setTimeBlocks({
-      ...timeBlocks,
-      [dateKey]: [...(timeBlocks[dateKey] || []), block],
-    });
+    const dateKey = new Date(block.date).toDateString();
+    setTimeBlocks((prevTimeBlocks) => ({
+      ...prevTimeBlocks,
+      [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
+    }));
     closeModal();
   };
 
   const updateTimeBlock = (updatedBlock) => {
-    const dateKey = selectedDate.toDateString();
-    setTimeBlocks({
-      ...timeBlocks,
-      [dateKey]: timeBlocks[dateKey].map((block) =>
+    const dateKey = new Date(updatedBlock.date).toDateString();
+    setTimeBlocks((prevTimeBlocks) => ({
+      ...prevTimeBlocks,
+      [dateKey]: prevTimeBlocks[dateKey].map((block) =>
         block.id === updatedBlock.id ? updatedBlock : block
       ),
-    });
+    }));
     closeModal();
   };
 
@@ -60,7 +84,6 @@ const DayCalendar = () => {
     }
   };
 
-  // Get the time blocks for the selected date
   const blocksForSelectedDate = timeBlocks[selectedDate.toDateString()] || [];
 
   return (
