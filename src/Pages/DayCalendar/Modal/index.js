@@ -14,34 +14,6 @@ const Modal = ({ onClose, onSave, existingBlock, selectedDate }) => {
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:59');
   const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#ff0000');
 
-  // State variables for settings
-  const [shifts, setShifts] = useState(existingBlock ? existingBlock.shifts : []);
-
-  // Fetch settings from the server
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const response = await api.get(`${window.baseDomain}api/timeblock-settings/`);
-        console.log('Fetched settings:', response);
-        if (Array.isArray(response)) {
-          setSettings(response);
-        } else {
-          setSettings([]);
-        }
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-        setSettings([]);
-      }
-    };
-    fetchSettings();
-  }, [api]);
-
-  useEffect(() => {
-    if (toewijzingsmanier === 'Indeling per tijdslot') {
-      setShifts([]);
-    }
-  }, [toewijzingsmanier]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const newBlock = {
