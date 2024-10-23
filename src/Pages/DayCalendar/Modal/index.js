@@ -23,8 +23,13 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   };
 
   const handleSave = (blockData) => {
-    setIsSettingsView(false); // Optional, you can decide whether to return to the form view after save
+    setIsSettingsView(false); // Optional: Decide whether to return to the form after save
     onSave(blockData);
+  };
+
+  const handleCreateNewSetting = () => {
+    // Transition back to form view to create a new setting
+    setIsSettingsView(false);
   };
 
   return (
@@ -35,6 +40,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
             settings={settings}
             onBack={handleBack}
             onSave={handleSave}
+            onCreateNewSetting={handleCreateNewSetting}
           />
         ) : (
           <ModalContent

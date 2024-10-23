@@ -37,9 +37,11 @@
   
   .day-calendar-page .modal-buttons {
 	display: flex;
-	justify-content: flex-end;
-	margin-top: 20px;
+	justify-content: right;
+	margin-top: 10px;
   }
+
+
   
   .day-calendar-page .time-inputs-container {
 	display: grid;

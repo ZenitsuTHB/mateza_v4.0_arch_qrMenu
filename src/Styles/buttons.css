@@ -83,6 +83,7 @@
 	padding: 10px;
 	margin-left: 5px;
 	cursor: pointer;
+	font-size: 14px;
   }
 
   input[type="time"] {

@@ -83,7 +83,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
             className="standard-button cancel"
             onClick={onClose}
           >
-            Annuleren
+            Terug
           </button>
           {existingBlock && (
             <button
@@ -99,7 +99,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
             className="standard-button blue"
             onClick={onNext}
           >
-            Volgende
+            Verder
           </button>
         </div>
       </form>
