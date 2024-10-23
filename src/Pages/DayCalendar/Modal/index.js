@@ -1,3 +1,5 @@
+// src/components/Modal/index.js
+
 import React, { useState } from 'react';
 import ModalContent from './ModalContent';
 import SettingsList from './SettingsList';
@@ -22,9 +24,12 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     setIsSettingsView(false);
   };
 
-  const handleSave = (blockData) => {
-    setIsSettingsView(false); // Optional: Decide whether to return to the form after save
+  // Updated handleSave to accept a flag
+  const handleSave = (blockData, continueToSettings = false) => {
     onSave(blockData);
+    if (continueToSettings) {
+      setIsSettingsView(true);
+    }
   };
 
   const handleCreateNewSetting = () => {
@@ -49,7 +54,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
             onDelete={onDelete}
             existingBlock={existingBlock}
             selectedDate={selectedDate}
-            onNext={handleNext}
           />
         )}
       </div>

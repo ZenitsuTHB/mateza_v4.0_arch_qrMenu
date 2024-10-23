@@ -64,7 +64,7 @@ const useTimeBlocks = (triggerNotification) => {
 
     if (isOverlapping(block, existingBlocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
-      return;
+      throw new Error('Overlap');
     }
 
     try {
@@ -75,8 +75,10 @@ const useTimeBlocks = (triggerNotification) => {
         [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
       }));
       triggerNotification('Tijdsblok toegevoegd', 'success');
+      return block;
     } catch (err) {
       console.error('Error adding time block:', err);
+      throw err;
     }
   };
 
@@ -86,7 +88,7 @@ const useTimeBlocks = (triggerNotification) => {
 
     if (isOverlapping(block, existingBlocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
-      return;
+      throw new Error('Overlap');
     }
 
     try {
@@ -98,8 +100,10 @@ const useTimeBlocks = (triggerNotification) => {
         ),
       }));
       triggerNotification('Tijdsblok bewerkt', 'success');
+      return block;
     } catch (err) {
       console.error('Error updating time block:', err);
+      throw err;
     }
   };
 

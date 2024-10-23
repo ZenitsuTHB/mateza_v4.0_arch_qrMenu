@@ -1,3 +1,5 @@
+// src/components/Modal/SettingsList.jsx
+
 import React, { useState } from 'react';
 import './css/settingsList.css';
 

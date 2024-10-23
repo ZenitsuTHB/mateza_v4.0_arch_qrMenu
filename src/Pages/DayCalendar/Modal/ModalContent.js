@@ -1,7 +1,9 @@
+// src/components/Modal/ModalContent.jsx
+
 import React, { useState } from 'react';
 import './css/modalContent.css';
 
-const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, onNext }) => {
+const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -17,7 +19,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
   const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#2c909b');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, continueToSettings = false) => {
     e.preventDefault();
     const newBlock = {
       id: existingBlock ? existingBlock._id : undefined,
@@ -28,7 +30,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
       startTime,
       endTime,
     };
-    onSave(newBlock);
+    onSave(newBlock, continueToSettings);
   };
 
   const handleDelete = () => {
@@ -38,7 +40,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
   return (
     <>
       <h2 className="secondary-title">{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, false)}>
         <label className="modal-label">
           Titel:
           <input
@@ -79,7 +81,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
         </label>
         <div className="modal-buttons">
           <button
-            type="cancel"
+            type="button"
             className="standard-button cancel"
             onClick={onClose}
           >
@@ -94,10 +96,11 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, 
               Verwijderen
             </button>
           )}
+          {/* Update the Verder button to handle save and continue */}
           <button
             type="button"
             className="standard-button blue"
-            onClick={onNext}
+            onClick={(e) => handleSubmit(e, true)}
           >
             Verder
           </button>
