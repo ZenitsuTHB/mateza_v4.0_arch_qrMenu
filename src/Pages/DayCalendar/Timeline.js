@@ -1,8 +1,9 @@
 // src/components/Timeline/Timeline.jsx
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { FaGripHorizontal } from 'react-icons/fa';
+import useBlockPositions from './Hooks/useBlockPositions';
 import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
@@ -60,19 +61,8 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     return Math.round(minutes / interval) * interval;
   };
 
-  // State to manage positions of time blocks
-  const [blockPositions, setBlockPositions] = useState({});
-
-  // Update positions when timeBlocks or zoomLevel change
-  useEffect(() => {
-    const newPositions = {};
-    timeBlocks.forEach((block) => {
-      const startMinutes = parseTime(block.startTime);
-      const yPosition = (startMinutes / 60) * hourHeight;
-      newPositions[block._id] = { x: 0, y: yPosition };
-    });
-    setBlockPositions(newPositions);
-  }, [timeBlocks, hourHeight]);
+  // Use the custom hook for block positions
+  const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
 
   const handleDragStart = () => {
     setDragging(true);
