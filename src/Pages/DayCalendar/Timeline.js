@@ -11,14 +11,8 @@ import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
   const hourHeight = 60 * zoomLevel;
-
-  // Get hourInterval, snappingIntervalMinutes, and hours array from custom hook
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
-
-  // Use the custom hook for block positions
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
-
-  // Use the custom hook for drag handlers
   const { dragging, handleDragStart, handleDrag, handleDragStop } = useDragHandlers(
     hourHeight,
     snappingIntervalMinutes,
