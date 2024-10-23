@@ -2,17 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import useApi from '../../../Hooks/useApi';
+import { formatDateKey } from '../Utils/dateFormat';
 
 const useTimeBlocks = (triggerNotification) => {
   const [timeBlocks, setTimeBlocks] = useState({});
   const api = useApi();
-
-const formatDateKey = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`; // e.g., "2024-10-25"
-};
 
   useEffect(() => {
     const fetchTimeBlocks = async () => {

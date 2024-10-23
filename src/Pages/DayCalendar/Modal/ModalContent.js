@@ -1,6 +1,7 @@
 // src/components/Modal/ModalContent.jsx
 
 import React, { useState } from 'react';
+import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalContent.css';
 
 const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
@@ -13,14 +14,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     const month = months[date.getMonth()];
     return `${day} ${month}`;
   };
-
-  const formatDateKey = (date) => {
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-	const day = String(date.getDate()).padStart(2, '0');
-	return `${year}-${month}-${day}`; // e.g., "2024-10-25"
-  };
-
+  
   const [title, setTitle] = useState(existingBlock ? existingBlock.title : `Tijdsblok (${formatDateDutch(selectedDate)})`);
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
