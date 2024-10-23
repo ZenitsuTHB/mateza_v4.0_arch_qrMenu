@@ -24,7 +24,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     setIsSettingsView(false);
   };
 
-  // Updated handleSave to accept a flag
   const handleSave = (blockData, continueToSettings = false) => {
     onSave(blockData);
     if (continueToSettings) {
@@ -33,7 +32,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   };
 
   const handleCreateNewSetting = () => {
-    // Transition back to form view to create a new setting
     setIsSettingsView(false);
   };
 
