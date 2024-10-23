@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import { FaCalendarAlt, FaPrint } from 'react-icons/fa';
+import { FaCalendarAlt } from 'react-icons/fa';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
@@ -32,11 +32,6 @@ const DatePickerComponent = ({
       {selectedDate && (
         <h2 className="selected-date">
           {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
-          <FaPrint
-            className="print-icon"
-            onClick={handlePrintClick}
-            title="Print"
-          />
         </h2>
       )}
 
