@@ -1,28 +1,35 @@
 // src/components/Timeline/Timeline.jsx
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { FaGripHorizontal } from 'react-icons/fa';
 import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
   const [dragging, setDragging] = useState(false);
-  const dragTimeoutRef = useRef(null); // Reference to manage timeout for distinguishing click and drag
+  const dragTimeoutRef = useRef(null);
 
   const hourHeight = 60 * zoomLevel;
   const hours = [];
 
+  // Determine the hour interval and snapping interval based on zoom level
   let hourInterval;
-  if (zoomLevel === 1) {
-    hourInterval = 0.5; // Show every half hour
-  } else if (zoomLevel === 2) {
-    hourInterval = 0.25; // Show every quarter hour
+  let snappingIntervalMinutes;
+  if (zoomLevel === 2) {
+    hourInterval = 0.25; // 15 minutes
+    snappingIntervalMinutes = 15;
+  } else if (zoomLevel === 1) {
+    hourInterval = 0.5; // 30 minutes
+    snappingIntervalMinutes = 30;
   } else if (zoomLevel === 0.5) {
-    hourInterval = 1; // Show every hour
+    hourInterval = 1; // 60 minutes
+    snappingIntervalMinutes = 60;
   } else if (zoomLevel === 0.25) {
-    hourInterval = 2; // Show every two hours
+    hourInterval = 2; // 120 minutes
+    snappingIntervalMinutes = 120;
   } else {
-    hourInterval = 1; // Default hour interval
+    hourInterval = 1; // Default to 60 minutes
+    snappingIntervalMinutes = 60;
   }
 
   for (let i = 0; i <= 24; i += hourInterval) {
@@ -49,33 +56,76 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   };
 
+  const roundToNearestInterval = (minutes, interval) => {
+    return Math.round(minutes / interval) * interval;
+  };
+
+  // State to manage positions of time blocks
+  const [blockPositions, setBlockPositions] = useState({});
+
+  // Update positions when timeBlocks or zoomLevel change
+  useEffect(() => {
+    const newPositions = {};
+    timeBlocks.forEach((block) => {
+      const startMinutes = parseTime(block.startTime);
+      const yPosition = (startMinutes / 60) * hourHeight;
+      newPositions[block._id] = { x: 0, y: yPosition };
+    });
+    setBlockPositions(newPositions);
+  }, [timeBlocks, hourHeight]);
+
   const handleDragStart = () => {
     setDragging(true);
     if (dragTimeoutRef.current) {
-      clearTimeout(dragTimeoutRef.current); // Clear any pending timeouts
+      clearTimeout(dragTimeoutRef.current);
     }
   };
 
+  const handleDrag = (e, data, block) => {
+    // Update the position in state during dragging
+    setBlockPositions((prevPositions) => ({
+      ...prevPositions,
+      [block._id]: { x: 0, y: data.y },
+    }));
+  };
+
   const handleDragStop = (e, data, block) => {
-    const newStartDecimal = data.y / hourHeight;
-    const newStartMinutes = Math.round(newStartDecimal * 60);
-    const duration = parseTime(block.endTime) - parseTime(block.startTime);
-    const newEndMinutes = newStartMinutes + duration;
+    // Calculate new start time based on final position
+    let finalY = data.y;
+
+    // Convert y position to minutes
+    let newStartMinutes = (finalY / hourHeight) * 60;
+
+    // Snap to the nearest interval
+    newStartMinutes = roundToNearestInterval(newStartMinutes, snappingIntervalMinutes);
+
+    // Ensure times are within valid bounds
+    const blockDurationMinutes = parseTime(block.endTime) - parseTime(block.startTime);
+    newStartMinutes = Math.max(0, Math.min(newStartMinutes, 1440 - blockDurationMinutes));
+    const newEndMinutes = newStartMinutes + blockDurationMinutes;
 
     const newStartTime = formatMinutesToTime(newStartMinutes);
     const newEndTime = formatMinutesToTime(newEndMinutes);
 
     const updatedBlock = { ...block, startTime: newStartTime, endTime: newEndTime };
 
+    // Update the block in parent component
     onTimeBlockMove(updatedBlock);
 
-    // Use a slight delay to allow drag to finish before re-enabling click events
-    dragTimeoutRef.current = setTimeout(() => setDragging(false), 200); // 200ms timeout before re-enabling click
+    // Update the position in state to the snapped position
+    const snappedY = (newStartMinutes / 60) * hourHeight;
+    setBlockPositions((prevPositions) => ({
+      ...prevPositions,
+      [block._id]: { x: 0, y: snappedY },
+    }));
+
+    // Allow drag to finish before re-enabling click events
+    dragTimeoutRef.current = setTimeout(() => setDragging(false), 200);
   };
 
   const handleClick = (block, event) => {
     if (dragging) {
-      event.stopPropagation(); // Prevent click event if currently dragging
+      event.stopPropagation();
       return;
     }
     onTimeBlockClick(block);
@@ -89,7 +139,10 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
             <div
               key={index}
               className="timeline-hour"
-              style={{ top: `${hour * hourHeight}px`, height: `${hourHeight * hourInterval}px` }}
+              style={{
+                top: `${hour * hourHeight}px`,
+                height: `${hourHeight * hourInterval}px`,
+              }}
             >
               <div className="hour-label">
                 {`${String(Math.floor(hour)).padStart(2, '0')}:${
@@ -106,21 +159,21 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
             </div>
           ))}
           {timeBlocks.map((block) => {
-            const [startHour, startMinute] = block.startTime.split(':').map(Number);
-            const [endHour, endMinute] = block.endTime.split(':').map(Number);
-            const startDecimal = startHour + startMinute / 60;
-            const endDecimal = endHour + endMinute / 60;
-            const topPosition = startDecimal * hourHeight;
-            const blockHeight = (endDecimal - startDecimal) * hourHeight;
+            const position = blockPositions[block._id] || { x: 0, y: 0 };
+
+            const blockDurationMinutes =
+              parseTime(block.endTime) - parseTime(block.startTime);
+            const blockHeight = (blockDurationMinutes / 60) * hourHeight;
 
             return (
               <Draggable
                 axis="y"
                 bounds="parent"
                 onStart={handleDragStart}
+                onDrag={(e, data) => handleDrag(e, data, block)}
                 onStop={(e, data) => handleDragStop(e, data, block)}
                 key={block._id + block.startTime + block.endTime}
-                position={{ x: 0, y: topPosition }}
+                position={position}
                 handle=".grip-handle"
               >
                 <div
@@ -128,8 +181,9 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                   style={{
                     height: `${blockHeight}px`,
                     backgroundColor: block.kleurInstelling,
+                    transition: 'transform 0.2s ease-in-out', // Smooth transition when snapping
                   }}
-                  onClick={(event) => handleClick(block, event)} // Use event to prevent clicks while dragging
+                  onClick={(event) => handleClick(block, event)}
                 >
                   <div className="time-block-title">
                     {block.title}{' '}

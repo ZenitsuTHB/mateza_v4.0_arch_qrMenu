@@ -69,6 +69,7 @@
   position: absolute;
   left: 100px;
   right: 100px;
+  margin-top: 6px;
   border-radius: 5px;
   cursor: pointer;
   color: white;
@@ -80,15 +81,19 @@
 
 .time-block .grip-handle {
   display: flex;
-  justify-content: center; /* Horizontally centers the icon */
-  align-items: center; /* Vertically centers the icon */
+  justify-content: center;
+  align-items: center;
   cursor: grab;
   margin-right: 10px;
-  height: 100%; /* Makes the grip handle take up the full height of the time block */
+  height: 100%;
+  padding-left: 30px;
+  opacity: 0.5;
+  transition: 0.3s all ease;
 }
 
 .time-block .grip-handle:hover {
   cursor: grabbing;
+  opacity: 1;
 }
 
 .time-block.react-draggable-dragging {
@@ -110,4 +115,19 @@
   left: 50px;
   right: 0;
   border-top: 1px solid #ccc;
+}
+
+/* src/components/Timeline/css/timeline.css */
+
+/* ... [existing styles] */
+
+.time-block {
+  /* ... [existing styles] */
+  transition: top 0.2s ease-in-out; /* Smooth transition when snapping */
+}
+
+.time-block.react-draggable-dragging {
+  /* ... [existing styles] */
+  opacity: 0.7;
+  transform: scale(1.05);
 }

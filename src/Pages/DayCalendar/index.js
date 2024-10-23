@@ -7,7 +7,6 @@ import Modal from './Modal/index.js';
 import DatePickerComponent from './Modal/DataPicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useApi from '../../Hooks/useApi';
-import Draggable from 'react-draggable'; // Ensure this is imported
 import useNotification from '../../Components/Notification/index';
 import './css/dayCalendar.css';
 import './css/mobile.css';
