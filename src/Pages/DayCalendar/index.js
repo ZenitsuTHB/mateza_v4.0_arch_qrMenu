@@ -101,6 +101,7 @@ const DayCalendar = () => {
         ...prevTimeBlocks,
         [dateKey]: [...(prevTimeBlocks[dateKey] || []), block],
       }));
+      triggerNotification('Tijdsblok toegevoegd', 'success');
     } catch (err) {
       console.error('Error adding time block:', err);
     } finally {
@@ -126,6 +127,7 @@ const DayCalendar = () => {
           b._id === block._id ? block : b
         ),
       }));
+      triggerNotification('Tijdsblok bewerkt', 'success');
     } catch (err) {
       console.error('Error updating time block:', err);
     } finally {
@@ -147,6 +149,7 @@ const DayCalendar = () => {
           [dateKey]: updatedBlocks,
         };
       });
+      triggerNotification('Tijdsblok verwijderd', 'success');
     } catch (err) {
       console.error('Error deleting time block:', err);
     } finally {
