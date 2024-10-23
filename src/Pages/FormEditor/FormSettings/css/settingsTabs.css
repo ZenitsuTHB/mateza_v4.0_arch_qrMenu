@@ -86,7 +86,7 @@
   }
   
   .form-settings-page .modal-buttons .cancel-button {
-	background-color: #ccc;
+	background-color: var(--color-cancel);
 	color: #000;
 	margin-right: 10px;
   }

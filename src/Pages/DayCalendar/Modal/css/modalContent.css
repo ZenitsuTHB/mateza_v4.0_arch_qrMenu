@@ -1,7 +1,5 @@
 
 .day-calendar-page .modal-button {
-	background-color: var(--color-blue);
-	color: white;
 	border: none;
 	border-radius: 5px;
 	padding: 10px;
@@ -9,17 +7,14 @@
 	cursor: pointer;
   }
 
+  .day-calendar-page .primary-button {
+	color: white;
+	background-color: var(--color-blue)
+  }
+
   .day-calendar-page .delete-button {
+	color: white;
 	background-color: var(--color-red);
-  }
-
-  .day-calendar-page .cancel {
-	background-color: var(--color-red);
-  }
-
-  
-  .day-calendar-page .modal-button:hover {
-	background-color: var(--color-blue);
   }
   
   .day-calendar-page .modal-content {
