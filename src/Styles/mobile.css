@@ -12,3 +12,10 @@
 	  }
 	  
   }
+
+  @media (max-width: 900px) {
+	.button-style-3 {
+	  font-size: 16px;
+	  padding: 10px;
+	}
+  }

@@ -89,19 +89,24 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           />
         </label>
         <div className="modal-buttons">
-          <button type="modal-button cancel" className="modal-button" onClick={onClose}>
+          <button
+			type="cancel"
+			className="standard-button cancel" 
+			onClick={onClose}>
             Annuleren
           </button>
 		  {existingBlock && (
             <button
               type="button"
-              className="modal-button red"
+              className="standard-button red"
               onClick={handleDelete}
             >
               Verwijderen
             </button>
           )}
-          <button type="submit" className="modal-button blue">
+          <button
+		  type="submit"
+		  className="standard-button blue">
             {existingBlock ? 'Opslaan' : 'Toevoegen'}
           </button>
         </div>

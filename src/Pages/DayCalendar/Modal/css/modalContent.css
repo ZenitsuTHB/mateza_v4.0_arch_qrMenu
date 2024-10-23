@@ -1,21 +1,5 @@
 
-.day-calendar-page .modal-button {
-	border: none;
-	border-radius: 5px;
-	padding: 10px;
-	margin-left: 5px;
-	cursor: pointer;
-  }
 
-  .day-calendar-page .primary-button {
-	color: white;
-	background-color: var(--color-blue)
-  }
-
-  .day-calendar-page .delete-button {
-	color: white;
-	background-color: var(--color-red);
-  }
   
   .day-calendar-page .modal-content {
 	background-color: white;
@@ -57,17 +41,17 @@
 	margin-top: 20px;
   }
   
-  .time-inputs-container {
+  .day-calendar-page .time-inputs-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
 	width: 100%;
   }
   
-  .time-input {
+  .day-calendar-page .time-input {
 	width: 100%;
   }
   
-  .time-input input {
+  .day-calendar-page .time-input input {
 	width: 100%;
   }
