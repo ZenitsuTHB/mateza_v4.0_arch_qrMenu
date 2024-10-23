@@ -64,12 +64,12 @@ const formatDateKey = (date) => {
   };
 
   const addTimeBlock = async (block) => {
-    const dateKey = formatDateKey(new Date(block.date));
+    const dateKey = block.date;
     const existingBlocks = timeBlocks[dateKey] || [];
 
     if (isOverlapping(block, existingBlocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
-      throw new Error('Overlap');
+      return;
     }
 
     try {
@@ -88,12 +88,12 @@ const formatDateKey = (date) => {
   };
 
   const updateTimeBlock = async (block) => {
-    const dateKey = formatDateKey(new Date(block.date));
+    const dateKey = block.date;
     const existingBlocks = timeBlocks[dateKey] || [];
 
     if (isOverlapping(block, existingBlocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
-      throw new Error('Overlap');
+      return;
     }
 
     try {
@@ -115,7 +115,7 @@ const formatDateKey = (date) => {
   const deleteTimeBlock = async (blockToDelete) => {
     try {
       await api.delete(`${window.baseDomain}api/timeblocks/${blockToDelete._id}/`);
-      const dateKey = formatDateKey(new Date(blockToDelete.date));
+      const dateKey = blockToDelete.date;
       setTimeBlocks((prevTimeBlocks) => {
         const updatedBlocks = prevTimeBlocks[dateKey].filter(
           (block) => block._id !== blockToDelete._id
@@ -132,7 +132,7 @@ const formatDateKey = (date) => {
   };
 
   const handleTimeBlockMove = async (updatedBlock) => {
-    const dateKey = formatDateKey(new Date(updatedBlock.date));
+    const dateKey = updatedBlock.date;
     const existingBlocks = timeBlocks[dateKey] || [];
 
     if (isOverlapping(updatedBlock, existingBlocks)) {

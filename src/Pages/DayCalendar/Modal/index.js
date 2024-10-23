@@ -15,10 +15,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     { title: 'Setting 4', subtitle: 'Subtitle for setting 4' },
   ];
 
-  const handleNext = () => {
-    setIsSettingsView(true);
-  };
-
   const handleBack = () => {
     setIsSettingsView(false);
   };
