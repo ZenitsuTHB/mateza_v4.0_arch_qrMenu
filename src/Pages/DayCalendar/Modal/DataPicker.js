@@ -19,6 +19,8 @@ const DatePickerComponent = ({
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setIsDatePickerOpen(false);
+
+    console.log("SELECTED" + date);
   };
 
   return (
