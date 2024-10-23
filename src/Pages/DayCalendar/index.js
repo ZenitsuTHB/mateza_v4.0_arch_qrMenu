@@ -21,8 +21,6 @@ const DayCalendar = () => {
 
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
-
-  // Helper function to format date keys consistently
   const formatDateKey = (date) => date.toISOString().split('T')[0];
 
   useEffect(() => {
@@ -33,7 +31,7 @@ const DayCalendar = () => {
         const blocksByDate = {};
 
         blocks.forEach((block) => {
-          const dateKey = block.date; // 'YYYY-MM-DD' format
+          const dateKey = block.date;
           if (!blocksByDate[dateKey]) {
             blocksByDate[dateKey] = [];
           }
@@ -69,14 +67,14 @@ const DayCalendar = () => {
     const newEnd = parseTime(newBlock.endTime);
 
     for (const block of existingBlocks) {
-      if (block._id === newBlock._id) continue; // Skip the same block when updating
+      if (block._id === newBlock._id) continue;
       const blockStart = parseTime(block.startTime);
       const blockEnd = parseTime(block.endTime);
 
       if (
-        (newStart >= blockStart && newStart < blockEnd) || // New start is inside existing block
-        (newEnd > blockStart && newEnd <= blockEnd) || // New end is inside existing block
-        (newStart <= blockStart && newEnd >= blockEnd) // New block covers existing block
+        (newStart >= blockStart && newStart < blockEnd) ||
+        (newEnd > blockStart && newEnd <= blockEnd) ||
+        (newStart <= blockStart && newEnd >= blockEnd)
       ) {
         return true;
       }
@@ -109,7 +107,6 @@ const DayCalendar = () => {
     }
   };
 
-  // Update an existing time block
   const updateTimeBlock = async (block) => {
     const dateKey = formatDateKey(new Date(block.date));
     const existingBlocks = timeBlocks[dateKey] || [];
@@ -135,7 +132,6 @@ const DayCalendar = () => {
     }
   };
 
-  // Delete a time block
   const deleteTimeBlock = async (blockToDelete) => {
     try {
       await api.delete(`${window.baseDomain}api/timeblocks/${blockToDelete._id}/`);
