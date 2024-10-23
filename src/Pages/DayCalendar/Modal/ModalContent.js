@@ -1,9 +1,7 @@
-// src/components/Modal/ModalContent.js
-
 import React, { useState } from 'react';
-import './css/modalContent.css'
+import './css/modalContent.css';
 
-const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
+const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate, onNext }) => {
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -14,7 +12,6 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     return `${day} ${month}`;
   };
 
-  // State variables for basic inputs
   const [title, setTitle] = useState(existingBlock ? existingBlock.title : `Tijdsblok (${formatDateDutch(selectedDate)})`);
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
@@ -82,12 +79,13 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
         </label>
         <div className="modal-buttons">
           <button
-			type="cancel"
-			className="standard-button cancel" 
-			onClick={onClose}>
+            type="cancel"
+            className="standard-button cancel"
+            onClick={onClose}
+          >
             Annuleren
           </button>
-		  {existingBlock && (
+          {existingBlock && (
             <button
               type="button"
               className="standard-button red"
@@ -97,9 +95,11 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             </button>
           )}
           <button
-		  type="submit"
-		  className="standard-button blue">
-            {existingBlock ? 'Opslaan' : 'Toevoegen'}
+            type="button"
+            className="standard-button blue"
+            onClick={onNext}
+          >
+            Volgende
           </button>
         </div>
       </form>
