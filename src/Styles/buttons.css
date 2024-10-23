@@ -85,7 +85,7 @@
 	cursor: pointer;
   }
 
-  input {
+  input[type="time"] {
 	cursor: pointer;
   }
 
