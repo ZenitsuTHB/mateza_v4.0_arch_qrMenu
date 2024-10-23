@@ -1,8 +1,6 @@
-/* reservationRow.css */
+  /* reservationRow.css */
 
-/* Desktop styles */
-
-.reservations-page .reservation-row {
+  .reservations-page .reservation-row {
 	display: contents;
   }
   
@@ -12,41 +10,37 @@
 	padding-bottom: 7px;
 	border-bottom: 1px solid lightgray;
   }
-  
-  /* Mobile styles */
-  
-  .reservation-row-mobile {
+    
+ .reservations-page .reservation-row-mobile {
 	border: 1px solid #ccc;
 	padding: 10px;
 	margin-bottom: 10px;
-	border-radius: 8px; /* Optional: Adds slight rounding to the box */
+	border-radius: 8px;
   }
   
-  .reservation-item {
+  .reservations-page .reservation-item {
 	margin-bottom: 10px;
 	
   }
   
-  .reservation-item .label {
+  .reservations-page .reservation-item .label {
 	font-weight: bold;
 	margin-bottom: 5px;
   }
   
-  /* Buttons container to align buttons horizontally */
-  .buttons-container {
+  .reservations-page .buttons-container {
 	display: flex;
 	justify-content: flex-start;
-	gap: 10px; /* Adds space between the buttons */
+	gap: 10px;
   }
-  
-  /* Edit Button Styles */
+
   .edit-button {
 	display: flex;
 	align-items: center;
 	padding: 8px 16px;
 	border: none;
-	border-radius: 20px; /* Makes the button rounded */
-	background-color: var(--color-bg); /* Red background for delete */
+	border-radius: 20px;
+	background-color: var(--color-bg);
 	border: 1px #777 solid;
 	color: #777;
 	cursor: pointer;
@@ -57,14 +51,13 @@
 	transition: background-color 0.3s ease;
   }
   
-  /* Delete Button Styles */
-  .delete-button {
+  .reservations-page .delete-button {
 	display: flex;
 	align-items: center;
 	padding: 8px 16px;
 	border: none;
-	border-radius: 5px; /* Makes the button rounded */
-	background-color: var(--color-blue); /* Red background for delete */
+	border-radius: 5px;
+	background-color: var(--color-blue);
 	color: white;
 	cursor: pointer;
 	font-size: 14px;
@@ -73,31 +66,19 @@
 	transition: background-color 0.3s ease;
   }
   
-  
-  /* Icon Styles within Buttons */
-  .button-icon {
-	margin-right: 8px; /* Space between icon and text */
+  .reservations-page .button-icon {
+	margin-right: 8px;
 	display: flex;
 	align-items: center;
 	font-size: 14px;
   }
   
-  /* Optional: Ensure buttons are accessible and responsive */
-  @media (max-width: 768px) {
-	.edit-button,
-	.delete-button {
-	  width: 100%;
-	  justify-content: center;
-	}
-  }
-  
-
-  .reservation-row-mobile {
+  .reservations-page .reservation-row-mobile {
 	color: #292929;
 	font-size: 15px;
   }
 
-  .reservation-row-desktop {
+  .reservations-page .reservation-row-desktop {
 	font-size: 14px;
   }
 

@@ -6,6 +6,7 @@ import NameColumn from './NameColumn.js';
 import Tooltip from './TooltipView.js';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'; // Importing the necessary icons
 import './css/reservationRow.css';
+import './css/mobile.css';
 
 const ReservationRow = ({
   reservation,

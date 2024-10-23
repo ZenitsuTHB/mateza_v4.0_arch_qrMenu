@@ -8,6 +8,15 @@
 	margin-left: 5px;
 	cursor: pointer;
   }
+
+  .day-calendar-page .delete-button {
+	background-color: var(--color-red);
+  }
+
+  .day-calendar-page .cancel {
+	background-color: var(--color-red);
+  }
+
   
   .day-calendar-page .modal-button:hover {
 	background-color: var(--color-blue);

@@ -44,22 +44,18 @@
 	background-color: var(--color-blue);
   }
   
-
-
-  /* Modal Overlay */
   .form-settings-page .unsaved-changes-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
 	justify-content: center;
 	align-items: center;
   }
   
-  /* Modal Content */
   .form-settings-page .modal-content {
 	background-color: #fff;
 	padding: 30px 20px;
@@ -74,7 +70,6 @@
 	text-align: center;
   }
   
-  /* Modal Buttons */
   .form-settings-page .modal-buttons {
 	display: flex;
 	justify-content: center;
@@ -87,6 +82,7 @@
 	cursor: pointer;
 	border: none;
 	position: relative;
+	border-radius: 5px;
   }
   
   .form-settings-page .modal-buttons .cancel-button {
@@ -100,7 +96,7 @@
   }
   
   .form-settings-page .modal-buttons .discard-button {
-	background-color: #d32f2f;
+	background-color: var(--color-red);
 	color: #fff;
 	margin-left: 20px;
   }
@@ -112,9 +108,9 @@
 	left: -4px;
 	bottom: -4px;
 	right: -4px;
-	border: 2px solid #d32f2f;
+	border: 2px solid var(--color-red);
 	pointer-events: none;
-	border-radius: 5px;
+	border-radius: 10px;
   }
   
   .form-settings-page .modal-buttons .discard-button:hover {
