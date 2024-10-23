@@ -7,6 +7,7 @@ import Modal from './Modal/index.js';
 import DatePickerComponent from './Modal/DataPicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useApi from '../../Hooks/useApi';
+import Draggable from 'react-draggable'; // Ensure this is imported
 import useNotification from '../../Components/Notification/index';
 import './css/dayCalendar.css';
 import './css/mobile.css';
@@ -165,6 +166,30 @@ const DayCalendar = () => {
     }
   };
 
+  const handleTimeBlockMove = async (updatedBlock) => {
+    const dateKey = formatDateKey(new Date(updatedBlock.date));
+    const existingBlocks = timeBlocks[dateKey] || [];
+
+    if (isOverlapping(updatedBlock, existingBlocks)) {
+      triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
+      return;
+    }
+
+    try {
+      await api.put(`${window.baseDomain}api/timeblocks/${updatedBlock._id}/`, updatedBlock);
+      setTimeBlocks((prevTimeBlocks) => ({
+        ...prevTimeBlocks,
+        [dateKey]: prevTimeBlocks[dateKey].map((b) =>
+          b._id === updatedBlock._id ? updatedBlock : b
+        ),
+      }));
+      triggerNotification('Tijdsblok verplaatst', 'success');
+    } catch (err) {
+      console.error('Error updating time block:', err);
+      triggerNotification('Fout bij het verplaatsen van het tijdsblok', 'error');
+    }
+  };
+
   const dateKey = formatDateKey(selectedDate);
   const blocksForSelectedDate = timeBlocks[dateKey] || [];
 
@@ -185,6 +210,7 @@ const DayCalendar = () => {
             setEditingBlock(block);
             setIsModalOpen(true);
           }}
+          onTimeBlockMove={handleTimeBlockMove}
         />
         {isModalOpen && (
           <Modal

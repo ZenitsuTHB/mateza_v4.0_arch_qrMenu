@@ -1,9 +1,11 @@
 // src/components/Timeline/Timeline.jsx
 
 import React from 'react';
+import Draggable from 'react-draggable';
+import { FaGripHorizontal } from 'react-icons/fa';
 import './css/timeline.css';
 
-const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
+const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
   const hourHeight = 60 * zoomLevel;
   const hours = [];
 
@@ -23,6 +25,40 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
   for (let i = 0; i <= 24; i += hourInterval) {
     hours.push(i);
   }
+
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const formatMinutesToTime = (totalMinutes) => {
+    let hours = Math.floor(totalMinutes / 60);
+    let minutes = totalMinutes % 60;
+
+    if (hours >= 24) {
+      hours = 23;
+      minutes = 59;
+    } else if (hours < 0) {
+      hours = 0;
+      minutes = 0;
+    }
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  };
+
+  const handleDragStop = (e, data, block) => {
+    const newStartDecimal = data.y / hourHeight;
+    const newStartMinutes = Math.round(newStartDecimal * 60);
+    const duration = parseTime(block.endTime) - parseTime(block.startTime);
+    const newEndMinutes = newStartMinutes + duration;
+
+    const newStartTime = formatMinutesToTime(newStartMinutes);
+    const newEndTime = formatMinutesToTime(newEndMinutes);
+
+    const updatedBlock = { ...block, startTime: newStartTime, endTime: newEndTime };
+
+    onTimeBlockMove(updatedBlock);
+  };
 
   return (
     <div className="timeline">
@@ -57,23 +93,33 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick }) => {
             const blockHeight = (endDecimal - startDecimal) * hourHeight;
 
             return (
-              <div
-                key={block._id}
-                className="time-block"
-                style={{
-                  top: `${topPosition}px`,
-                  height: `${blockHeight}px`,
-                  backgroundColor: block.kleurInstelling,
-                }}
-                onClick={() => onTimeBlockClick(block)}
+              <Draggable
+                axis="y"
+                bounds="parent"
+                onStop={(e, data) => handleDragStop(e, data, block)}
+                key={block._id + block.startTime + block.endTime}
+                position={{ x: 0, y: topPosition }}
+                handle=".grip-handle"
               >
-                <div className="time-block-title">
-                  {block.title}{' '}
-                  <span className="time-block-time">
-                    {`${block.startTime} - ${block.endTime}`}
-                  </span>
+                <div
+                  className="time-block"
+                  style={{
+                    height: `${blockHeight}px`,
+                    backgroundColor: block.kleurInstelling,
+                  }}
+                  onClick={() => onTimeBlockClick(block)}
+                >
+                  <div className="time-block-title">
+                    {block.title}{' '}
+                    <span className="time-block-time">
+                      {`${block.startTime} - ${block.endTime}`}
+                    </span>
+                  </div>
+                  <div className="grip-handle">
+                    <FaGripHorizontal />
+                  </div>
                 </div>
-              </div>
+              </Draggable>
             );
           })}
         </div>

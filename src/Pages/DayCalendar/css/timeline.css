@@ -62,3 +62,52 @@
   font-weight: lighter;
   font-size: 12px;
 }
+
+/* src/components/Timeline/css/timeline.css */
+
+.time-block {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  padding: 5px;
+  box-sizing: border-box;
+  display: flex;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.time-block .grip-handle {
+  display: flex;
+  justify-content: center; /* Horizontally centers the icon */
+  align-items: center; /* Vertically centers the icon */
+  cursor: grab;
+  margin-right: 10px;
+  height: 100%; /* Makes the grip handle take up the full height of the time block */
+}
+
+.time-block .grip-handle:hover {
+  cursor: grabbing;
+}
+
+.time-block.react-draggable-dragging {
+  opacity: 0.7;
+  transform: scale(1.05);
+}
+
+.time-block-title {
+  flex: 1;
+}
+
+.hour-label {
+  position: absolute;
+  left: 0;
+}
+
+.hour-line {
+  position: absolute;
+  left: 50px;
+  right: 0;
+  border-top: 1px solid #ccc;
+}
