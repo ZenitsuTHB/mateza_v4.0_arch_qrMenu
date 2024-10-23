@@ -15,11 +15,9 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     const days = [
       'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'
     ];
-    const dayName = days[date.getDay()];
     const day = date.getDate();
     const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${dayName} ${day} ${month} ${year}`;
+    return `${day} ${month}`;
   };
 
   // State variables for basic inputs

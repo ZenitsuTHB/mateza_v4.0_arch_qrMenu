@@ -27,6 +27,6 @@
 	font-size: 22px;
 }
 
-  .modal {
+.modal {
 	z-index: var(--z-index-modal);
-  }
+}

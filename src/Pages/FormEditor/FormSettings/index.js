@@ -109,8 +109,8 @@ const SettingsTabs = () => {
             <h2 className='secondary-title secondary-title-small'>Wijzigingen Niet Opgeslagen</h2>
             <p>Wilt doorgaan zonder op te slaan?</p>
             <div className="modal-buttons">
-              <button type="button" className="button cancel-button" onClick={handleCancelTabChange}>Annuleren</button>
-              <button type="button" className="button discard-button" onClick={handleDiscardChanges}>Doorgaan</button>
+              <button type="button" className="button cancel-button cancel" onClick={handleCancelTabChange}>Annuleren</button>
+              <button type="button" className="button discard-button red" onClick={handleDiscardChanges}>Doorgaan</button>
             </div>
           </div>
         </div>

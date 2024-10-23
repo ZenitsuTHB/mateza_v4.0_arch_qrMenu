@@ -86,18 +86,11 @@
   }
   
   .form-settings-page .modal-buttons .cancel-button {
-	background-color: var(--color-cancel);
-	color: #000;
 	margin-right: 10px;
   }
   
-  .form-settings-page .modal-buttons .cancel-button:hover {
-	background-color: #bbb;
-  }
   
   .form-settings-page .modal-buttons .discard-button {
-	background-color: var(--color-red);
-	color: #fff;
 	margin-left: 20px;
   }
   
