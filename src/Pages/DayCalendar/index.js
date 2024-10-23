@@ -27,7 +27,7 @@ const DayCalendar = () => {
   useEffect(() => {
     const fetchTimeBlocks = async () => {
       try {
-        const response = await api.get(`${window.baseDomain}api/timeblocks/`);
+        const response = await api.get(`${window.baseDomain}api/timeblocks/`, { noCache: true });
         const blocks = response || [];
         const blocksByDate = {};
 

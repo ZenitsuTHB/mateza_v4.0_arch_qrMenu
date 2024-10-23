@@ -1,11 +1,14 @@
 // src/components/Timeline/Timeline.jsx
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { FaGripHorizontal } from 'react-icons/fa';
 import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
+  const [dragging, setDragging] = useState(false);
+  const dragTimeoutRef = useRef(null); // Reference to manage timeout for distinguishing click and drag
+
   const hourHeight = 60 * zoomLevel;
   const hours = [];
 
@@ -46,6 +49,13 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   };
 
+  const handleDragStart = () => {
+    setDragging(true);
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current); // Clear any pending timeouts
+    }
+  };
+
   const handleDragStop = (e, data, block) => {
     const newStartDecimal = data.y / hourHeight;
     const newStartMinutes = Math.round(newStartDecimal * 60);
@@ -58,6 +68,17 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     const updatedBlock = { ...block, startTime: newStartTime, endTime: newEndTime };
 
     onTimeBlockMove(updatedBlock);
+
+    // Use a slight delay to allow drag to finish before re-enabling click events
+    dragTimeoutRef.current = setTimeout(() => setDragging(false), 200); // 200ms timeout before re-enabling click
+  };
+
+  const handleClick = (block, event) => {
+    if (dragging) {
+      event.stopPropagation(); // Prevent click event if currently dragging
+      return;
+    }
+    onTimeBlockClick(block);
   };
 
   return (
@@ -96,6 +117,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               <Draggable
                 axis="y"
                 bounds="parent"
+                onStart={handleDragStart}
                 onStop={(e, data) => handleDragStop(e, data, block)}
                 key={block._id + block.startTime + block.endTime}
                 position={{ x: 0, y: topPosition }}
@@ -107,7 +129,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                     height: `${blockHeight}px`,
                     backgroundColor: block.kleurInstelling,
                   }}
-                  onClick={() => onTimeBlockClick(block)}
+                  onClick={(event) => handleClick(block, event)} // Use event to prevent clicks while dragging
                 >
                   <div className="time-block-title">
                     {block.title}{' '}
