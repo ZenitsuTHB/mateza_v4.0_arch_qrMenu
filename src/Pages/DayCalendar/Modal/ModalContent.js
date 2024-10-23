@@ -24,7 +24,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     const newBlock = {
       id: existingBlock ? existingBlock._id : undefined,
       _id: existingBlock ? existingBlock._id : undefined,
-      date: selectedDate.toISOString().split('T')[0], // e.g., '2024-01-01'
+      date: selectedDate.toISOString().split('T')[0],
       title,
       kleurInstelling,
       startTime,
@@ -96,7 +96,6 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
               Verwijderen
             </button>
           )}
-          {/* Update the Verder button to handle save and continue */}
           <button
             type="button"
             className="standard-button blue"

@@ -10,13 +10,13 @@ const NotificationPopover = ({ message, type }) => {
   const getIconAndColor = (type) => {
     switch (type) {
       case 'success':
-        return { icon: <FaCheckCircle />, color: '#4CAF50' }; // Green
+        return { icon: <FaCheckCircle />, color: '#4CAF50' };
       case 'error':
-        return { icon: <FaTimesCircle />, color: '#f44336' }; // Red
+        return { icon: <FaTimesCircle />, color: '#f44336' };
       case 'warning':
-        return { icon: <FaExclamationTriangle />, color: '#FFA500' }; // Orange
+        return { icon: <FaExclamationTriangle />, color: '#FFA500' };
       default:
-        return { icon: <FaCheckCircle />, color: '#4CAF50' }; // Default to success
+        return { icon: <FaCheckCircle />, color: '#4CAF50' };
     }
   };
 

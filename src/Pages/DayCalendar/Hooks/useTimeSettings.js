@@ -7,23 +7,22 @@ const useTimelineSettings = (zoomLevel) => {
     let hourInterval;
     let snappingIntervalMinutes;
     if (zoomLevel === 2) {
-      hourInterval = 0.25; // 15 minutes
+      hourInterval = 0.25;
       snappingIntervalMinutes = 15;
     } else if (zoomLevel === 1) {
-      hourInterval = 0.5; // 30 minutes
+      hourInterval = 0.5;
       snappingIntervalMinutes = 30;
     } else if (zoomLevel === 0.5) {
-      hourInterval = 1; // 60 minutes
+      hourInterval = 1;
       snappingIntervalMinutes = 60;
     } else if (zoomLevel === 0.25) {
-      hourInterval = 2; // 120 minutes
+      hourInterval = 2;
       snappingIntervalMinutes = 120;
     } else {
-      hourInterval = 1; // Default to 60 minutes
+      hourInterval = 1;
       snappingIntervalMinutes = 60;
     }
 
-    // Generate hours array
     const hours = [];
     for (let i = 0; i <= 24; i += hourInterval) {
       hours.push(i);

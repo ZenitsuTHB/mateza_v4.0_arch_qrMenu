@@ -77,7 +77,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                   style={{
                     height: `${blockHeight}px`,
                     backgroundColor: block.kleurInstelling,
-                    transition: 'transform 0.2s ease-in-out', // Smooth transition when snapping
+                    transition: 'transform 0.2s ease-in-out',
                   }}
                   onClick={(event) => handleClick(block, event)}
                 >

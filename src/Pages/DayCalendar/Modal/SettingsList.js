@@ -19,8 +19,6 @@ const SettingsList = ({ settings, onBack, onSave, onCreateNewSetting }) => {
   return (
     <div className="settings-list">
       <h2 className="secondary-title">Instellingen</h2>
-
-      {/* Create New Setting Option */}
       <div
         className="setting-item create-new"
         onClick={onCreateNewSetting}
@@ -28,8 +26,6 @@ const SettingsList = ({ settings, onBack, onSave, onCreateNewSetting }) => {
       >
         <h3>+ Nieuwe Instelling Aanmaken</h3>
       </div>
-
-      {/* List of Existing Settings */}
       <div className="settings-container">
         {settings.map((setting, index) => (
           <div
@@ -49,7 +45,6 @@ const SettingsList = ({ settings, onBack, onSave, onCreateNewSetting }) => {
           </div>
         ))}
       </div>
-
       <div className="modal-buttons">
         <button
           type="button"

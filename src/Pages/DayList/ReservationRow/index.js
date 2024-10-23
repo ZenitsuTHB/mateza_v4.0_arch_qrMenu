@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import ReservationNumber from './ReservationNumber.js';
 import NameColumn from './NameColumn.js';
 import Tooltip from './TooltipView.js';
-import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'; // Importing the necessary icons
+import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import './css/reservationRow.css';
 import './css/mobile.css';
 
@@ -17,12 +17,10 @@ const ReservationRow = ({
 }) => {
   const seenKey = `seen-data-${reservation.id}`;
   const expiryTimeString = localStorage.getItem(seenKey);
-
-  // Function to get current time in CEST
   function getCurrentTimeInCEST() {
     const now = new Date();
     const nowInCESTString = now.toLocaleString('en-US', {
-      timeZone: 'Europe/Berlin', // CEST timezone
+      timeZone: 'Europe/Berlin',
     });
     return new Date(nowInCESTString);
   }
@@ -102,7 +100,7 @@ const ReservationRow = ({
         <div>{reservation.phone}</div>
         <Tooltip
           reservationId={reservation.id}
-          extraInfo={reservation.extra} // Pass the extra info here
+          extraInfo={reservation.extra}
           isTooltipOpen={isTooltipOpen}
           onTooltipToggle={onTooltipToggle}
           onTooltipClose={onTooltipClose}

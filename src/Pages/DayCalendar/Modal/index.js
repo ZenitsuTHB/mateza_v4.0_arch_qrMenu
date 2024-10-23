@@ -8,7 +8,6 @@ import './css/modalView.css';
 const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   const [isSettingsView, setIsSettingsView] = useState(false);
 
-  // Dummy settings data
   const settings = [
     { title: 'Setting 1', subtitle: 'Subtitle for setting 1' },
     { title: 'Setting 2', subtitle: 'Subtitle for setting 2' },

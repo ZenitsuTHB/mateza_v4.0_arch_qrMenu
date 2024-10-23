@@ -3,25 +3,21 @@
 import { useCallback, useMemo } from 'react';
 import axios from 'axios';
 
-const TEN_MINUTES = 60 * 10 * 1000; // 10 minutes in milliseconds
+const TEN_MINUTES = 60 * 10 * 1000;
 const CACHE_EXPIRY = TEN_MINUTES;
 
 const useApi = () => {
-  // Generates a unique cache key based on the endpoint
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
-  // Retrieves JWT token from localStorage
   const getJwtToken = useCallback(() => {
     return localStorage.getItem('accessToken');
   }, []);
 
-  // Retrieves stored number from localStorage
   const getStoredNumber = useCallback(() => {
     const storedNumber = localStorage.getItem('storedNumber');
     return storedNumber ? parseInt(storedNumber, 10) : 0;
   }, []);
 
-  // Updates the stored number in localStorage
   const updateStoredNumber = useCallback(() => {
     let currentNumber = getStoredNumber();
     currentNumber += Math.floor(Math.random() * 3) + 1;
@@ -34,13 +30,11 @@ const useApi = () => {
     return currentNumber;
   }, [getStoredNumber]);
 
-  // GET method with optional caching
   const get = useCallback(
     async (endpoint, config = {}) => {
-      const { noCache, ...axiosConfig } = config; // Destructure noCache from config
+      const { noCache, ...axiosConfig } = config;
       const cacheKey = generateCacheKey(endpoint);
 
-      // If caching is not disabled, attempt to retrieve data from cache
       if (!noCache) {
         const cachedItem = JSON.parse(localStorage.getItem(cacheKey));
 
@@ -58,10 +52,7 @@ const useApi = () => {
             Authorization: `Bearer ${getJwtToken()}`,
           },
         });
-
         console.log('New Request');
-
-        // If caching is not disabled, store the response in cache
         if (!noCache) {
           localStorage.setItem(
             cacheKey,
@@ -80,7 +71,6 @@ const useApi = () => {
     [generateCacheKey, getJwtToken, updateStoredNumber]
   );
 
-  // Mutating methods (POST, PUT, PATCH, DELETE)
   const mutate = useCallback(
     async (method, endpoint, data = null, config = {}) => {
       try {
@@ -99,7 +89,7 @@ const useApi = () => {
         });
 
         const cacheKey = generateCacheKey(endpoint);
-        localStorage.removeItem(cacheKey); // Invalidate cache for the endpoint
+        localStorage.removeItem(cacheKey);
 
         return response.data;
       } catch (error) {
@@ -110,7 +100,6 @@ const useApi = () => {
     [generateCacheKey, getJwtToken, updateStoredNumber]
   );
 
-  // Memoize API methods to prevent unnecessary re-renders
   const apiMethods = useMemo(
     () => ({
       get,

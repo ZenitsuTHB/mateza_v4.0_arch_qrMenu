@@ -34,29 +34,23 @@ for (let i = 1; i <= 500; i++) {
 	const phone = `06${Math.floor(10000000 + Math.random() * 90000000)}`;
 	let extra = extraOptions[Math.floor(Math.random() * extraOptions.length)];
 
-	// Treat 'Geen extra' as no extra info by setting it to null
 	if (extra === 'Geen extra') {
 		extra = null;
 	}
-
-	// Generate 'createdAt' timestamps
 	let createdAt;
 	if (i <= 5) {
-		// For the first 5 reservations, set 'createdAt' within the last hour
-		const minutesAgo = Math.floor(Math.random() * 60); // 0 to 59 minutes ago
+		const minutesAgo = Math.floor(Math.random() * 60);
 		createdAt = new Date(now.getTime() - minutesAgo * 60000);
 	} else {
-		// For others, set 'createdAt' more than an hour ago
-		const minutesAgo = 60 + Math.floor(Math.random() * 180); // 61 to 240 minutes ago
+		const minutesAgo = 60 + Math.floor(Math.random() * 180);
 		createdAt = new Date(now.getTime() - minutesAgo * 60000);
 	}
 
-	// Generate 'date' property centered around today ±30 days
-	const daysOffset = Math.floor(Math.random() * 61) - 30; // -30 to +30 days
+	const daysOffset = Math.floor(Math.random() * 61) - 30;
 	const reservationDate = new Date(now);
 	reservationDate.setDate(now.getDate() + daysOffset);
 	const year = reservationDate.getFullYear();
-	const month = String(reservationDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+	const month = String(reservationDate.getMonth() + 1).padStart(2, '0');
 	const day = String(reservationDate.getDate()).padStart(2, '0');
 	const formattedDate = `${year}-${month}-${day}`;
 
@@ -64,13 +58,13 @@ for (let i = 1; i <= 500; i++) {
 		id: i,
 		aantalGasten,
 		tijdstip,
-		date: formattedDate, // Added date property in YYYY-MM-DD format
+		date: formattedDate,
 		firstName,
 		lastName,
 		email,
 		phone,
 		extra,
-		createdAt: createdAt.toISOString(), // Store as ISO string for consistency
+		createdAt: createdAt.toISOString(),
 	});
 }
 
