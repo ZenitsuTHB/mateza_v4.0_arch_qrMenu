@@ -1,19 +1,13 @@
 // src/components/Modal/ModalContent.js
 
 import React, { useState } from 'react';
-import useApi from '../../../Hooks/useApi';
 import './css/modalContent.css'
 
 const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
-	const api = useApi();
-
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
       'juli', 'augustus', 'september', 'oktober', 'november', 'december'
-    ];
-    const days = [
-      'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'
     ];
     const day = date.getDate();
     const month = months[date.getMonth()];
