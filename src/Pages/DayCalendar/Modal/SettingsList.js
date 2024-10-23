@@ -60,7 +60,7 @@ const SettingsList = ({ settings, onBack, onSave, onCreateNewSetting }) => {
           type="button"
           className="standard-button blue"
           onClick={handleSave}
-          disabled={selectedSetting === null}  // Disable save if no setting is selected
+          disabled={selectedSetting === null}
         >
           Opslaan
         </button>
