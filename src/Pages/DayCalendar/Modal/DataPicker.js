@@ -21,12 +21,6 @@ const DatePickerComponent = ({
     setIsDatePickerOpen(false);
   };
 
-  const handlePrintClick = (e) => {
-    e.stopPropagation(); // Prevent triggering other click events
-    // Future implementation for printing
-    console.log('Print icon clicked');
-  };
-
   return (
     <div className="date-picker-component">
       {selectedDate && (
