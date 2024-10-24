@@ -10,6 +10,9 @@ import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
 import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
 
+// Import the applyResponsiveStyles function
+import { applyResponsiveStyles } from './Utils/responsiveStyles.js';
+
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
   const [canvasItems, setCanvasItems] = useState(() => {
@@ -26,34 +29,16 @@ const DragAndDropEditor = () => {
   const formEditingPageRef = useRef(null);
   const { triggerNotification, NotificationComponent } = useNotification();
 
+  // Apply responsive styles by using the imported function
   useEffect(() => {
-    const applyResponsiveStyles = () => {
-      const container = formEditingPageRef.current;
-
-      if (container) {
-        const containerWidth = container.offsetWidth;
-        const palette = container.querySelector('.palette');
-        const editorContainer = container.querySelector('.editor-container');
-        const canvas = container.querySelector('.canvas');
-
-        if (containerWidth <= 900) {
-          palette?.classList.add('palette-responsive');
-          editorContainer?.classList.add('editor-container-responsive');
-          canvas?.classList.add('canvas-responsive');
-        } else {
-          palette?.classList.remove('palette-responsive');
-          editorContainer?.classList.remove('editor-container-responsive');
-          canvas?.classList.remove('canvas-responsive');
-        }
-      }
-    };
-
     const observer = new ResizeObserver(() => {
-      applyResponsiveStyles();
+      applyResponsiveStyles(formEditingPageRef);
     });
 
     if (formEditingPageRef.current) {
       observer.observe(formEditingPageRef.current);
+      // Apply styles initially
+      applyResponsiveStyles(formEditingPageRef);
     }
 
     return () => {
