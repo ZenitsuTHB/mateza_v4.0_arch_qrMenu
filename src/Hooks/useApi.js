@@ -1,6 +1,6 @@
 // src/Hooks/useApi.js
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import axios from 'axios';
 
 const TEN_MINUTES = 60 * 10 * 1000;
@@ -30,10 +30,29 @@ const useApi = () => {
     return currentNumber;
   }, [getStoredNumber]);
 
+  const requestTimestamps = useRef([]);
+
+  const blockFor = (milliseconds) => {
+    const start = Date.now();
+    while (Date.now() - start < milliseconds) {
+    }
+  };
+
   const get = useCallback(
     async (endpoint, config = {}) => {
       const { noCache, ...axiosConfig } = config;
       const cacheKey = generateCacheKey(endpoint);
+
+      const now = Date.now();
+
+      requestTimestamps.current = requestTimestamps.current.filter(
+        (timestamp) => now - timestamp < 1000
+      );
+
+      if (requestTimestamps.current.length >= 5) {
+        blockFor(800);
+      }
+      requestTimestamps.current.push(now);
 
       if (!noCache) {
         const cachedItem = JSON.parse(localStorage.getItem(cacheKey));
@@ -73,6 +92,18 @@ const useApi = () => {
 
   const mutate = useCallback(
     async (method, endpoint, data = null, config = {}) => {
+      const now = Date.now();
+
+      requestTimestamps.current = requestTimestamps.current.filter(
+        (timestamp) => now - timestamp < 1000
+      );
+
+      if (requestTimestamps.current.length >= 5) {
+        blockFor(800);
+      }
+
+      requestTimestamps.current.push(now);
+
       try {
         const storedNumber = updateStoredNumber();
         const modifiedData = { ...data, storedNumber };
