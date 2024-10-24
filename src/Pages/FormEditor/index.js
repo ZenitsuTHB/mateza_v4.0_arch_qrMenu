@@ -12,7 +12,14 @@ import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
 
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
-  const [canvasItems, setCanvasItems] = useState(defaultCanvasItems);
+  const [canvasItems, setCanvasItems] = useState(() => {
+    const savedItems = localStorage.getItem('canvasItems');
+    if (savedItems) {
+      return JSON.parse(savedItems);
+    } else {
+      return defaultCanvasItems;
+    }
+  });
   const [dropPosition, setDropPosition] = useState(null);
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(null);
@@ -56,6 +63,11 @@ const DragAndDropEditor = () => {
     };
   }, []);
 
+  // Save canvasItems to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('canvasItems', JSON.stringify(canvasItems));
+  }, [canvasItems]);
+
   const handleOnDragEnd = (result) => {
     setDropPosition(null);
 
@@ -69,7 +81,7 @@ const DragAndDropEditor = () => {
 
       const newItem = {
         ...item,
-        id: `${item.id}-${Date.now()}`,
+        id: `${item.id}-${Date.now()}`, // Unique ID
         placeholder: '',
         required: false,
       };
