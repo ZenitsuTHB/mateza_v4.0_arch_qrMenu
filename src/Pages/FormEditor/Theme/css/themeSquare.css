@@ -20,7 +20,7 @@
   
   .theme-page .theme-square-left,
   .theme-page .theme-square-right {
-	width: 50%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;

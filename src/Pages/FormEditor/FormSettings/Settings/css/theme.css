@@ -7,7 +7,7 @@
   
   .form-settings-page .theme-preview-left,
   .form-settings-page .theme-preview-right {
-	width: 50%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;

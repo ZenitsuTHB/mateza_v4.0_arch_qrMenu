@@ -11,7 +11,7 @@ const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
-    alignment: 'fullScreenColor',
+    alignment: 'fullScreenColor', // Default alignment
   };
 
   const [formData, setFormData] = useState(defaultSettings);
@@ -119,11 +119,14 @@ const Settings = forwardRef((props, ref) => {
         setAlignment={setAlignment}
       />
 
-      <ThemePreview
-        selectedTheme={selectedTheme}
-        setSelectedTheme={setSelectedTheme}
-        triggerNotification={triggerNotification}
-      />
+      {/* Conditionally render ThemePreview */}
+      {formData.alignment !== 'fullScreenColor' && (
+        <ThemePreview
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          triggerNotification={triggerNotification}
+        />
+      )}
 
       <button
         type="button"

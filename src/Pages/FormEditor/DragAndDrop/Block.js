@@ -35,9 +35,8 @@ const Block = ({
     // Render static content without input fields for default blocks
     return (
       <div className="static-content">
-        {renderLabel()}
         <span className="static-placeholder">
-          {placeholder || 'Informatie beschikbaar'}
+          {fieldLabel || 'Informatie beschikbaar'}
         </span>
       </div>
     );
@@ -77,11 +76,10 @@ const Block = ({
       }}
     >
       {/* Conditionally render the drag handle only if not a default block */}
-      {!isDefault && (
         <div className="drag-handle">
           <FaGripHorizontal />
         </div>
-      )}
+      
 
       <div className="block-content">
         {isEditing && !isDefault ? (

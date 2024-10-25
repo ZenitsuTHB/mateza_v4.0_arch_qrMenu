@@ -13,12 +13,12 @@ const AlignmentSelector = ({ alignment, setAlignment }) => {
     },
     {
       key: 'halfColorPicture',
-      label: '50/50 Kleur en Foto',
+      label: '50/50 Kleur en Banner',
       icon: <FaColumns size={48} />,
     },
     {
       key: 'fullScreenPicture',
-      label: 'Volledig Scherm Foto',
+      label: 'Enkel Bannerfoto',
       icon: <FaImage size={48} />,
     },
   ];

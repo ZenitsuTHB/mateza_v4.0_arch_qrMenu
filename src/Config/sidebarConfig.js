@@ -62,7 +62,7 @@ const routesConfig = [
   },
   {
     path: '/',
-    element: <DragAndDrop title="Ontwerp" />,    label: 'Ontwerp',
+    element: <DragAndDrop title="Bewerken" />,    label: 'Bewerken',
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,

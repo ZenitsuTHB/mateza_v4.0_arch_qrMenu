@@ -61,7 +61,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
           <button className="modal-close-button" onClick={onClose}>
             ×
           </button>
-          <h2 className="style-title">Kies een Stijl</h2>
+          <h2 className="style-title">Kies een Banner</h2>
           <div className="theme-grid">
             {showAddThemeModal && (
               <AddThemeModal

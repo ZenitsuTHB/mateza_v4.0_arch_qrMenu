@@ -10,7 +10,7 @@ const ThemePreview = ({ selectedTheme, setSelectedTheme, triggerNotification }) 
   return (
     <>
       <div className="form-group">
-        <label>Thema:</label>
+        <label>Banner:</label>
         {selectedTheme ? (
           <div
             className="theme-preview clickable"
@@ -19,10 +19,7 @@ const ThemePreview = ({ selectedTheme, setSelectedTheme, triggerNotification }) 
             title="Klik om het thema te wijzigen"
           >
             <div className="theme-preview-content">
-              <div
-                className="theme-preview-left"
-                style={{ backgroundColor: selectedTheme.color }}
-              ></div>
+
               <div className="theme-preview-right">
                 <img src={selectedTheme.image} alt={selectedTheme.title} />
               </div>
@@ -30,7 +27,7 @@ const ThemePreview = ({ selectedTheme, setSelectedTheme, triggerNotification }) 
             <div className="theme-preview-title">{selectedTheme.title}</div>
           </div>
         ) : (
-          <p>Geen thema geselecteerd</p>
+          <p>Geen banner geselecteerd</p>
         )}
       </div>
 
