@@ -55,7 +55,7 @@ const SettingsList = ({ settings, onBack, onSave, onCreateNewSetting }) => {
         </button>
         <button
           type="button"
-          className="standard-button blue"
+          className="standard-button blue spaced"
           onClick={handleSave}
           disabled={selectedSetting === null}
         >

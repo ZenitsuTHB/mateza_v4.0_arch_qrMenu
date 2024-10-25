@@ -143,7 +143,7 @@ const Block = ({
                 <span className="slider round"></span>
               </label>
             </div>
-            <button className="button" onClick={handleSave}>
+            <button className="button standard-button" onClick={handleSave}>
               <FaSave /> Opslaan
             </button>
           </div>

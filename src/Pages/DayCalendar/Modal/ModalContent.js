@@ -14,7 +14,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     const month = months[date.getMonth()];
     return `${day} ${month}`;
   };
-  
+
   const [title, setTitle] = useState(existingBlock ? existingBlock.title : `Tijdsblok (${formatDateDutch(selectedDate)})`);
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
@@ -91,7 +91,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           {existingBlock && (
             <button
               type="button"
-              className="standard-button red"
+              className="standard-button red spaced"
               onClick={handleDelete}
             >
               Verwijderen
@@ -99,7 +99,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           )}
           <button
             type="button"
-            className="standard-button blue"
+            className="standard-button blue spaced"
             onClick={(e) => handleSubmit(e, true)}
           >
             Verder
