@@ -61,6 +61,22 @@ const SearchBar = ({ value: externalValue, onChange: externalOnChange, placehold
     navigate(path);
   };
 
+  // Function to highlight matched text
+  const getHighlightedText = (text, highlight) => {
+    if (!highlight) return text;
+    const regex = new RegExp(`(${highlight})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, index) =>
+      regex.test(part) ? (
+        <span key={index} className="highlight">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <div className="search-container" ref={searchRef}>
       <div className="search-bar">
@@ -76,15 +92,21 @@ const SearchBar = ({ value: externalValue, onChange: externalOnChange, placehold
       </div>
       {filteredRoutes.length > 0 && (
         <div className="search-results">
-          {filteredRoutes.map((route, index) => (
-            <div
-              key={index}
-              className="search-result-item"
-              onClick={() => handleResultClick(route.path)}
-            >
-              {route.label}
-            </div>
-          ))}
+          {filteredRoutes.map((route, index) => {
+            const IconComponent = route.icon; // Retrieve the icon component
+            return (
+              <div
+                key={index}
+                className="search-result-item"
+                onClick={() => handleResultClick(route.path)}
+              >
+                {IconComponent && <IconComponent className="result-icon" />}
+                <span className="result-label">
+                  {getHighlightedText(route.label, searchValue)}
+                </span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

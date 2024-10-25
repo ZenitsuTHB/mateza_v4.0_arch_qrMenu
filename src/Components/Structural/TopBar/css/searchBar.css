@@ -69,4 +69,17 @@
   .top-bar-component .search-result-item:hover {
 	background-color: #f0f0f0;
   }
-  
+
+  .top-bar-component .search-result-item {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	cursor: pointer;
+	color: #555555; /* Gray color for the result text */
+  }
+
+.top-bar-component .result-icon {
+  margin-right: 10px;
+  color: #555555;
+  min-width: 20px; /* Ensures consistent spacing even if some icons are smaller */
+}
