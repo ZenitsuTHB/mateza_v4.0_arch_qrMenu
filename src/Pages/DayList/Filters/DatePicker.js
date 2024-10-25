@@ -9,6 +9,8 @@ import {
   isToday,
 } from '../../../Utils/dateUtils.js';
 import './css/datePicker.css';
+import '../css/print.css';
+
 
 const DatePickerComponent = ({
   selectedDate,
@@ -19,8 +21,7 @@ const DatePickerComponent = ({
 }) => {
   const handlePrintClick = (e) => {
     e.stopPropagation(); // Prevent triggering other click events
-    // Future implementation for printing
-    console.log('Print icon clicked');
+    window.print(); // Trigger the print dialog
   };
 
   return (

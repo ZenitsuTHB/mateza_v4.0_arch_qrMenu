@@ -15,7 +15,7 @@
 	display: contents;
   }
   
-  .reservations-header > div {
+ .reservations-header > div {
 	padding: 10px;
 	font-weight: bold;
 	color: #474747;
@@ -35,11 +35,31 @@
 	align-items: center;
   }
   
-  /* reservationList.css */
 
-/* Container for the Reservations Page */
 .reservations-page {
 	position: relative;
 	padding: 0;
   }
+  
+.reservations-page .header-cell {
+	display: flex;
+	align-items: center;
+	position: relative;
+  }
+  
+  .reservations-page .sort-icon {
+	margin-left: 5px;
+	display: none;
+  }
+  
+  .reservations-page .reservations-header:hover .sort-icon {
+	display: inline-block;
+  }
+  
+  .reservations-page .sort-icon svg {
+	width: 12px;
+	height: 12px;
+	color: #555;
+  }
+  
   

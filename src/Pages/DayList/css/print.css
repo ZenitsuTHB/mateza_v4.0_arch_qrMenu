@@ -1,0 +1,75 @@
+/* reservationList.css or print.css */
+
+@media print {
+	/* Hide all elements */
+	body * {
+	  visibility: hidden;
+	}
+  
+	/* Make .reservations-container and its children visible */
+	.reservations-container,
+	.reservations-container * {
+	  visibility: visible;
+	}
+  
+	/* Make .selected-date and its children visible */
+	.selected-date,
+	.selected-date * {
+	  visibility: visible;
+	}
+  
+	/* Position the .reservations-container and .selected-date */
+	.reservations-container {
+	  position: absolute;
+	  left: 0;
+	  top: 50px; /* Adjust as needed to position below .selected-date */
+	  width: 100%;
+	}
+  
+	.selected-date {
+	  position: absolute;
+	  left: 0;
+	  top: 0;
+	  width: 100%;
+	  margin-bottom: 20px;
+	  font-size: 18pt;
+	  text-align: center;
+	}
+  
+	/* Hide interactive elements within reservations container */
+	.selected-date .print-icon {
+	  opacity: 0;
+	  display: none;
+	  visibility: hidden;
+	  width: 0;
+	  height: 0;
+	}
+  
+	/* Optional: Enhance print layout */
+	.reservations-container {
+	  font-size: 12pt;
+	  margin: 20px;
+	}
+  
+	.reservations-container table {
+	  width: 100%;
+	  border-collapse: collapse;
+	}
+  
+	.reservations-container th,
+	.reservations-container td {
+	  border: 1px solid #000;
+	  padding: 8px;
+	  text-align: left;
+	}
+  
+	/* Control page breaks */
+	.reservations-container {
+	  page-break-after: always;
+	}
+  
+	.reservations-container .reservation-row {
+	  page-break-inside: avoid;
+	}
+  }
+  
