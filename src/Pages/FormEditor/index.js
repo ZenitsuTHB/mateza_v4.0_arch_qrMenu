@@ -43,16 +43,17 @@ const DragAndDropEditor = () => {
       }
     };
   }, []);
-
   useEffect(() => {
     const fetchCanvasItems = async () => {
       try {
         console.log('Fetching canvas items from server...');
         const response = await api.get(`${window.baseDomain}api/fields/`);
+  
+        console.log(response);
         console.log('Raw data received from server:', response);
-
+  
         const data = response || [];
-
+  
         let parsedData;
         if (Array.isArray(data)) {
           parsedData = data;
@@ -62,7 +63,10 @@ const DragAndDropEditor = () => {
         } else {
           parsedData = [];
         }
-
+  
+        // Filter out any empty objects
+        parsedData = parsedData.filter(item => item && Object.keys(item).length > 0);
+  
         setCanvasItems(parsedData);
         previousCanvasItemsRef.current = parsedData;
         setLoading(false);
@@ -72,9 +76,10 @@ const DragAndDropEditor = () => {
         setLoading(false);
       }
     };
-
+  
     fetchCanvasItems();
   }, [api]);
+  
 
   const updateAPI = (newCanvasItems) => {
     if (JSON.stringify(previousCanvasItemsRef.current) !== JSON.stringify(newCanvasItems)) {
