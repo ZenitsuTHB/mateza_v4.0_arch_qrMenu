@@ -120,7 +120,7 @@ const Block = ({
         )}
       </div>
 
-      {/* Conditionally render action icons */}
+      {/* Conditionally render action icons for non-default blocks */}
       {isHovered && !isDefault && !isEditing && (
         <div className="action-icons">
           <button className="edit-button" onClick={() => setIsEditing(true)}>
@@ -131,10 +131,6 @@ const Block = ({
           </button>
         </div>
       )}
-
-      {/* For default blocks, do not render delete button */}
-      {/* Since the user wants the Email block to be non-deletable, ensure that the delete button is not rendered */}
-      {/* If you still want a delete button but make it non-functional, you can adjust accordingly */}
     </div>
   );
 };

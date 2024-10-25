@@ -23,6 +23,14 @@ const DragAndDropEditor = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
   const { canvasItems, setCanvasItems, loading, error, updateCanvasItemsAPI } = useCanvasItems(triggerNotification);
 
+  // Combined list including default and user-added blocks
+  const [allCanvasItems, setAllCanvasItems] = useState([...defaultCanvasItems, ...canvasItems]);
+
+  useEffect(() => {
+    // Update the combined list whenever canvasItems change
+    setAllCanvasItems([...defaultCanvasItems, ...canvasItems]);
+  }, [canvasItems]);
+
   useEffect(() => {
     const observer = new ResizeObserver(() => {
       applyResponsiveStyles(formEditingPageRef);
@@ -45,8 +53,11 @@ const DragAndDropEditor = () => {
 
     if (!result.destination) return;
 
-    if (result.source.droppableId === 'Palette' && result.destination.droppableId === 'Canvas') {
-      const item = blocks.find((block) => block.id === result.draggableId);
+    const { source, destination } = result;
+
+    // If dragging from Palette to Canvas
+    if (source.droppableId === 'Palette' && destination.droppableId === 'Canvas') {
+      const item = blocks.find(block => block.id === result.draggableId);
       if (!item) return;
 
       const newItem = {
@@ -56,17 +67,18 @@ const DragAndDropEditor = () => {
         required: false,
       };
 
-      const newCanvasItems = Array.from(canvasItems);
-      newCanvasItems.splice(result.destination.index, 0, newItem);
-      setCanvasItems(newCanvasItems);
-      updateCanvasItemsAPI(newCanvasItems);
-
-    } else if (result.source.droppableId === 'Canvas' && result.destination.droppableId === 'Canvas') {
-      const items = Array.from(canvasItems);
-      const [movedItem] = items.splice(result.source.index, 1);
-      items.splice(result.destination.index, 0, movedItem);
-      setCanvasItems(items);
-      updateCanvasItemsAPI(items);
+      const newAllCanvasItems = Array.from(allCanvasItems);
+      newAllCanvasItems.splice(destination.index, 0, newItem);
+      setAllCanvasItems(newAllCanvasItems);
+      updateCanvasItemsAPI(newAllCanvasItems.filter(item => !item.id.startsWith('default-')));
+    }
+    // If dragging within Canvas
+    else if (source.droppableId === 'Canvas' && destination.droppableId === 'Canvas') {
+      const newAllCanvasItems = Array.from(allCanvasItems);
+      const [movedItem] = newAllCanvasItems.splice(source.index, 1);
+      newAllCanvasItems.splice(destination.index, 0, movedItem);
+      setAllCanvasItems(newAllCanvasItems);
+      updateCanvasItemsAPI(newAllCanvasItems.filter(item => !item.id.startsWith('default-')));
     }
   };
 
@@ -83,12 +95,12 @@ const DragAndDropEditor = () => {
     // Prevent deletion of default items
     if (id.startsWith('default-')) return;
 
-    const newItems = canvasItems.filter((item) => item.id !== id);
-    setCanvasItems(newItems);
-    updateCanvasItemsAPI(newItems);
+    const newCanvasItems = allCanvasItems.filter(item => item.id !== id);
+    setAllCanvasItems(newCanvasItems);
+    updateCanvasItemsAPI(newCanvasItems.filter(item => !item.id.startsWith('default-')));
   };
 
-  console.log('Canvas Items before rendering:', canvasItems);
+  console.log('All Canvas Items before rendering:', allCanvasItems);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -105,11 +117,9 @@ const DragAndDropEditor = () => {
         <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
           <Palette blocks={blocks} />
           <Canvas
-            defaultItems={defaultCanvasItems} // Pass default items separately
-            items={canvasItems} // Pass only user-added canvasItems here
-            setItems={setCanvasItems}
+            items={allCanvasItems} // Pass the combined list
+            setItems={setAllCanvasItems} // Update the combined list
             dropPosition={dropPosition}
-            selectedTheme={selectedTheme}
             onDelete={handleDelete}
           />
         </DragDropContext>

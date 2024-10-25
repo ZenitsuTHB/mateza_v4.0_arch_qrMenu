@@ -26,7 +26,7 @@ export const initialBlocks = [
 // Only one default Canvas Item: Email
 export const defaultCanvasItems = [
   {
-    id: 'default-email-email',
+    id: 'default-email-email', // Ensure the ID starts with 'default-'
     type: 'email',
     label: 'Email',
     placeholder: 'Uw Email',
