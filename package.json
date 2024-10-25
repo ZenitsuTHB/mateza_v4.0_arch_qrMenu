@@ -36,7 +36,6 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-tabs": "^6.0.2",
     "redux": "^5.0.1",
-    "use-debounce": "^10.0.4",
     "web-vitals": "^2.1.4",
     "webfontloader": "^1.6.28"
   },

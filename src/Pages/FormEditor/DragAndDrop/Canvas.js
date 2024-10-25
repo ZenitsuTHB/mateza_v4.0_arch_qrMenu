@@ -5,11 +5,9 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Block from './Block';
 import './css/canvas.css';
 
-const Canvas = ({ items, setItems, dropPosition }) => {
-  const handleDelete = (id) => {
-    const newItems = items.filter((item) => item.id !== id);
-    setItems(newItems);
-  };
+const Canvas = ({ items, setItems, dropPosition, onDelete }) => {
+  // Log items before rendering
+  console.log('Canvas component received items:', items);
 
   return (
     <div className="canvas">
@@ -42,7 +40,7 @@ const Canvas = ({ items, setItems, dropPosition }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <Block {...item} onDelete={handleDelete} />
+                      <Block {...item} onDelete={onDelete} />
                     </div>
                   )}
                 </Draggable>
