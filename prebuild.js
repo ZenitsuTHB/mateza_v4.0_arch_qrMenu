@@ -1,5 +1,3 @@
-// prebuildChecks.js
-
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
@@ -33,17 +31,6 @@ function getAllFiles(dir, arrayOfFiles) {
 }
 
 /**
- * Checks if a file exceeds the maximum number of lines.
- * @param {string} filePath - The path to the file.
- * @returns {boolean} - True if the file exceeds the line limit, else false.
- */
-function checkFileLines(filePath) {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const lineCount = content.split('\n').length;
-  return lineCount > MAX_LINES;
-}
-
-/**
  * Checks if a file should be skipped based on its extension.
  * @param {string} filePath - The path to the file.
  * @returns {boolean} - True if the file should be skipped, else false.
@@ -54,14 +41,44 @@ function shouldSkipFile(filePath) {
 }
 
 /**
- * Calculates the average number of lines given total lines and file count.
- * @param {number} totalLines - The sum of lines across all files.
- * @param {number} fileCount - The number of files.
- * @returns {number} - The average number of lines.
+ * Parses import statements from JavaScript code.
+ * @param {string} content - The JavaScript file content.
+ * @returns {Set} - A set of unique imported modules.
  */
-function calculateAverage(totalLines, fileCount) {
-  if (fileCount === 0) return 0;
-  return (totalLines / fileCount).toFixed(2);
+function parseImports(content) {
+  const importRegex = /import\s+(?:[^'"]*\s+from\s+)?['"]([^'"]+)['"]/g;
+  const dynamicImportRegex = /import\(['"]([^'"]+)['"]\)/g;
+  const requireRegex = /require\(['"]([^'"]+)['"]\)/g;
+  const imports = new Set();
+  let match;
+
+  // Match static imports
+  while ((match = importRegex.exec(content)) !== null) {
+    imports.add(match[1]);
+  }
+
+  // Match dynamic imports
+  while ((match = dynamicImportRegex.exec(content)) !== null) {
+    imports.add(match[1]);
+  }
+
+  // Match require statements
+  while ((match = requireRegex.exec(content)) !== null) {
+    imports.add(match[1]);
+  }
+
+  return imports;
+}
+
+/**
+ * Calculates the average number given total and count.
+ * @param {number} total - The total sum.
+ * @param {number} count - The number of items.
+ * @returns {number} - The average value.
+ */
+function calculateAverage(total, count) {
+  if (count === 0) return 0;
+  return (total / count).toFixed(2);
 }
 
 /**
@@ -82,6 +99,16 @@ function runPrebuildChecks() {
     let totalLinesIndexJS = 0;
     let countIndexJS = 0;
 
+    // Coupling metrics
+    let totalCoupling = 0;
+    let couplingCounts = []; // For calculating average
+    let componentCount = 0;
+
+    // Dependency graph: file => set of imported files (fan-out)
+    const dependencyGraph = new Map();
+    // Reverse dependency graph: file => set of files that import this file (fan-in)
+    const reverseDependencyGraph = new Map();
+
     allFiles.forEach((file) => {
       const ext = path.extname(file).toLowerCase();
 
@@ -99,14 +126,62 @@ function runPrebuildChecks() {
           totalLinesJS += lineCount;
           countJS += 1;
 
-          // If it's an index.js file, update index.js counters
+          // Initialize dependency graph entry
+          const relativeFilePath = path.relative(srcDirectory, file);
+          dependencyGraph.set(relativeFilePath, new Set());
+
+          // Parse imports and update dependency graph
+          if (!shouldSkipFile(file)) {
+            const imports = parseImports(content);
+            const importsRelativePaths = new Set();
+
+            imports.forEach((importPath) => {
+              if (importPath.startsWith('.')) {
+                const importedFilePath = path.normalize(
+                  path.join(path.dirname(relativeFilePath), importPath)
+                );
+
+                // Resolve index.js paths
+                let fullImportedPath = path.join(srcDirectory, importedFilePath);
+                if (!fs.existsSync(fullImportedPath) && fs.existsSync(fullImportedPath + '.js')) {
+                  fullImportedPath += '.js';
+                } else if (
+                  fs.existsSync(fullImportedPath) &&
+                  fs.statSync(fullImportedPath).isDirectory()
+                ) {
+                  fullImportedPath = path.join(fullImportedPath, 'index.js');
+                } else if (!fs.existsSync(fullImportedPath)) {
+                  return;
+                } else {
+                  fullImportedPath += '.js';
+                }
+
+                const relativeImportedPath = path.relative(srcDirectory, fullImportedPath);
+                importsRelativePaths.add(relativeImportedPath);
+
+                if (!reverseDependencyGraph.has(relativeImportedPath)) {
+                  reverseDependencyGraph.set(relativeImportedPath, new Set());
+                }
+                reverseDependencyGraph.get(relativeImportedPath).add(relativeFilePath);
+              } else {
+                importsRelativePaths.add(importPath);
+              }
+            });
+
+            const coupling = importsRelativePaths.size;
+            totalCoupling += coupling;
+            couplingCounts.push({ file: relativeFilePath, coupling });
+            componentCount += 1;
+
+            dependencyGraph.set(relativeFilePath, importsRelativePaths);
+          }
+
           if (path.basename(file).toLowerCase() === 'index.js') {
             totalLinesIndexJS += lineCount;
             countIndexJS += 1;
           }
         }
 
-        // Check if the file exceeds the maximum line limit
         if (!shouldSkipFile(file) && lineCount > MAX_LINES) {
           const relativePath = path.relative(__dirname, file);
           oversizedFiles.push(relativePath);
@@ -114,25 +189,68 @@ function runPrebuildChecks() {
       }
     });
 
-    // Calculate averages
+    const fanMetrics = {};
+    let totalFanInIndexJS = 0;
+    let totalFanOutIndexJS = 0;
+    let countIndexComponents = 0;
+
+    const indexCoupling = [];
+
+    dependencyGraph.forEach((imports, file) => {
+      const fanOut = imports.size;
+      const fanIn = reverseDependencyGraph.has(file) ? reverseDependencyGraph.get(file).size : 0;
+
+      fanMetrics[file] = { fanIn, fanOut };
+
+      if (path.basename(file).toLowerCase() === 'index.js') {
+        const totalCoupling = fanIn + fanOut;
+
+        totalFanInIndexJS += fanIn;
+        totalFanOutIndexJS += fanOut;
+        countIndexComponents += 1;
+
+        indexCoupling.push({ file, coupling: totalCoupling, fanIn, fanOut });
+      }
+    });
+
+    indexCoupling.sort((a, b) => b.coupling - a.coupling);
+    const mostCoupledIndexJSFiles = indexCoupling.slice(0, 3);
+
     const averageAll = calculateAverage(totalLinesAll, countAll);
     const averageJS = calculateAverage(totalLinesJS, countJS);
     const averageIndexJS = calculateAverage(totalLinesIndexJS, countIndexJS);
+    const averageCoupling = calculateAverage(totalCoupling, componentCount);
+    const averageFanInIndexJS = calculateAverage(totalFanInIndexJS, countIndexComponents);
+    const averageFanOutIndexJS = calculateAverage(totalFanOutIndexJS, countIndexComponents);
 
-    // Display the calculated averages
-    console.log(chalk.blue.bold('\n===== Average Code Lengths ====='));
+    console.log(chalk.blue.bold('\n===== Code Metrics Report ====='));
     console.log(
       `Average number of lines in .js and .css files: ${chalk.yellow(averageAll)}`
     );
-    console.log(
-      `Average number of lines in .js files: ${chalk.yellow(averageJS)}`
-    );
+    console.log(`Average number of lines in .js files: ${chalk.yellow(averageJS)}`);
     console.log(
       `Average number of lines in index.js files: ${chalk.yellow(averageIndexJS)}`
     );
+    console.log(
+      `Average number of couplings per component: ${chalk.yellow(averageCoupling)}`
+    );
+    console.log(
+      `Average fan-in for index.js files: ${chalk.yellow(averageFanInIndexJS)}`
+    );
+    console.log(
+      `Average fan-out for index.js files: ${chalk.yellow(averageFanOutIndexJS)}`
+    );
+
+    console.log(chalk.green.bold('\nTop 3 Most Coupled index.js Files:'));
+    mostCoupledIndexJSFiles.forEach(({ file, coupling, fanIn, fanOut }, index) => {
+      console.log(
+        `${index + 1}. ${chalk.red.bold(file)} - Total Coupling: ${chalk.red.bold(coupling)} (fan-in: ${fanIn}, fan-out: ${fanOut})`
+      );
+      console.log(`   Full path: ${chalk.blue(path.join(srcDirectory, file))}`);
+    });
+
     console.log(chalk.blue.bold('================================\n'));
 
-    // Handle oversized files
     if (oversizedFiles.length > 0) {
       console.error(
         chalk.red.bold(
