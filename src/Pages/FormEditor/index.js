@@ -5,15 +5,12 @@ import { withHeader } from '../../Components/Structural/Header/index.js';
 import { FaMagic } from 'react-icons/fa';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Palette from './DragAndDrop/Palette.js';
-import Canvas from './DragAndDrop/Canvas.js'; // Adjusted import path if needed
+import Canvas from './DragAndDrop/Canvas.js';
 import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
 import { initialBlocks } from './defaultElements.js';
 
-// Import the applyResponsiveStyles function
 import { applyResponsiveStyles } from './Utils/responsiveStyles.js';
-
-// Import useApi hook
 import useApi from '../../Hooks/useApi.js';
 
 const DragAndDropEditor = () => {
@@ -23,14 +20,13 @@ const DragAndDropEditor = () => {
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const formEditingPageRef = useRef(null);
-  const previousCanvasItemsRef = useRef(null); // Track previous state
+  const previousCanvasItemsRef = useRef(null);
   const { triggerNotification, NotificationComponent } = useNotification();
   const api = useApi();
 
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Apply responsive styles by using the imported function
   useEffect(() => {
     const observer = new ResizeObserver(() => {
       applyResponsiveStyles(formEditingPageRef);
@@ -48,7 +44,6 @@ const DragAndDropEditor = () => {
     };
   }, []);
 
-  // Fetch canvasItems from the server on component mount
   useEffect(() => {
     const fetchCanvasItems = async () => {
       try {
@@ -58,12 +53,10 @@ const DragAndDropEditor = () => {
 
         const data = response || [];
 
-        // Ensure data is in the expected format (array)
         let parsedData;
         if (Array.isArray(data)) {
           parsedData = data;
         } else if (typeof data === 'object' && data !== null) {
-          // If data is an object (e.g., { "0": {...}, "1": {...} }), convert it to an array
           parsedData = Object.values(data);
           console.log('Converted object data to array:', parsedData);
         } else {
@@ -85,7 +78,6 @@ const DragAndDropEditor = () => {
 
   const updateAPI = (newCanvasItems) => {
     if (JSON.stringify(previousCanvasItemsRef.current) !== JSON.stringify(newCanvasItems)) {
-      // Make PUT request only if canvasItems have changed
       const updateFields = async () => {
         try {
           console.log('Updating fields on server with:', newCanvasItems);
@@ -114,7 +106,7 @@ const DragAndDropEditor = () => {
 
       const newItem = {
         ...item,
-        id: `${item.id}-${Date.now()}`, // Unique ID
+        id: `${item.id}-${Date.now()}`,
         placeholder: '',
         required: false,
       };
@@ -122,8 +114,6 @@ const DragAndDropEditor = () => {
       const newCanvasItems = Array.from(canvasItems);
       newCanvasItems.splice(result.destination.index, 0, newItem);
       setCanvasItems(newCanvasItems);
-
-      // Update API after real change
       updateAPI(newCanvasItems);
 
     } else if (result.source.droppableId === 'Canvas' && result.destination.droppableId === 'Canvas') {
@@ -131,8 +121,6 @@ const DragAndDropEditor = () => {
       const [movedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, movedItem);
       setCanvasItems(items);
-
-      // Update API after real change
       updateAPI(items);
     }
   };
@@ -146,16 +134,12 @@ const DragAndDropEditor = () => {
     setDropPosition(destination.index);
   };
 
-  // Handle delete action from Block component
   const handleDelete = (id) => {
     const newItems = canvasItems.filter((item) => item.id !== id);
     setCanvasItems(newItems);
-
-    // Update API after deletion
     updateAPI(newItems);
   };
 
-  // Log canvasItems before rendering
   console.log('Canvas Items before rendering:', canvasItems);
 
   if (loading) {
