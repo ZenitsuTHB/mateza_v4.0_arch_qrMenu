@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 import ThemeSquare from './Square';
-import AddThemeSquare from './AddSquare';
-import AddThemeModal from './AddModal';
 import useApi from '../../../Hooks/useApi'; // Adjust the import path as necessary
 
 import './css/themeSelectorModal.css';
@@ -63,13 +61,7 @@ const ThemeSelectorModal = ({ onClose, onSuccess }) => {
           </button>
           <h2 className="style-title">Kies een Banner</h2>
           <div className="theme-grid">
-            {showAddThemeModal && (
-              <AddThemeModal
-                onClose={() => setShowAddThemeModal(false)}
-                onSave={handleSaveNewTheme}
-              />
-            )}
-            <AddThemeSquare onClick={handleAddThemeClick} />
+
             {themes.map((theme) => (
               <ThemeSquare
                 key={theme.id}
