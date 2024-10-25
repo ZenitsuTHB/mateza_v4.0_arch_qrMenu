@@ -51,7 +51,7 @@ const DragAndDropEditor = () => {
 
       const newItem = {
         ...item,
-        id: `${item.id}-${Date.now()}`,
+        id: `${item.id}-${Date.now()}`, // Unique ID for user-added blocks
         placeholder: '',
         required: false,
       };
@@ -98,9 +98,6 @@ const DragAndDropEditor = () => {
     return <div>Error: {error}</div>;
   }
 
-  // Combine defaultCanvasItems with fetched canvasItems
-  const combinedCanvasItems = [...defaultCanvasItems, ...canvasItems];
-
   return (
     <div className="form-editing-page" ref={formEditingPageRef}>
       <NotificationComponent />
@@ -108,7 +105,8 @@ const DragAndDropEditor = () => {
         <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
           <Palette blocks={blocks} />
           <Canvas
-            items={combinedCanvasItems} // Pass the combined items here
+            defaultItems={defaultCanvasItems} // Pass default items separately
+            items={canvasItems} // Pass only user-added canvasItems here
             setItems={setCanvasItems}
             dropPosition={dropPosition}
             selectedTheme={selectedTheme}

@@ -17,7 +17,7 @@ const useCanvasItems = (triggerNotification) => {
         const response = await api.get(`${window.baseDomain}api/fields/`);
         console.log('Raw data received from server:', response);
 
-        const data = response || [];
+        let data = response || [];
         let parsedData;
 
         if (Array.isArray(data)) {
@@ -29,8 +29,8 @@ const useCanvasItems = (triggerNotification) => {
           parsedData = [];
         }
 
-        // Filter out any empty objects
-        parsedData = parsedData.filter(item => item && Object.keys(item).length > 0);
+        // Filter out any empty objects and ensure each item has an 'id'
+        parsedData = parsedData.filter(item => item && item.id && !item.id.startsWith('default-'));
 
         setCanvasItems(parsedData);
         previousCanvasItemsRef.current = parsedData;

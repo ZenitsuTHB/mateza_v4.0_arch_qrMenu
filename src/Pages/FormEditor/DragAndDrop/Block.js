@@ -24,94 +24,52 @@ const Block = ({
   // Determine if the block is a default block
   const isDefault = id.startsWith('default-');
 
-  const renderField = () => {
+  const renderLabel = () => (
+    <label>
+      {fieldLabel}
+      {isRequired && <span className="required-warning">(*)</span>}
+    </label>
+  );
+
+  const renderStaticContent = () => {
+    // Render static content without input fields for default blocks
+    return (
+      <div className="static-content">
+        {renderLabel()}
+        <span className="static-placeholder">
+          {placeholder || 'Informatie beschikbaar'}
+        </span>
+      </div>
+    );
+  };
+
+  const renderEditableField = () => {
+    // Render editable input fields for non-default blocks
     const commonProps = {
       placeholder: placeholder || 'Voer hier uw tekst in',
       required: isRequired,
     };
 
-    const renderLabel = () => (
-      <label>
-        {fieldLabel}
-        {isRequired && <span className="required-warning">(*)</span>}
-      </label>
+    return (
+      <>
+        {renderLabel()}
+        {type === 'textarea' ? (
+          <textarea {...commonProps}></textarea>
+        ) : (
+          <input type={type} {...commonProps} />
+        )}
+      </>
     );
-
-    switch (type) {
-      case 'input':
-        return (
-          <>
-            {renderLabel()}
-            <input type="text" {...commonProps} />
-          </>
-        );
-      case 'select':
-        return (
-          <>
-            {renderLabel()}
-            <select {...commonProps}>
-              <option>Optie 1</option>
-              <option>Optie 2</option>
-            </select>
-          </>
-        );
-      case 'phone':
-        return (
-          <>
-            {renderLabel()}
-            <input type="tel" {...commonProps} />
-          </>
-        );
-      case 'email':
-        return (
-          <>
-            {renderLabel()}
-            <input type="email" {...commonProps} />
-          </>
-        );
-      case 'picture':
-        return (
-          <>
-            {renderLabel()}
-            <input type="file" accept="image/*" required={isRequired} />
-          </>
-        );
-      case 'textarea':
-        return (
-          <>
-            {renderLabel()}
-            <textarea {...commonProps}></textarea>
-          </>
-        );
-      case 'title':
-        return (
-          <>
-            {renderLabel()}
-            <h3>{placeholder || 'Titel'}</h3>
-          </>
-        );
-      case 'paragraph':
-        return (
-          <>
-            {renderLabel()}
-            <p>{placeholder || 'Paragraaf tekst hier...'}</p>
-          </>
-        );
-      default:
-        return null;
-    }
   };
 
   const handleSave = () => {
     setIsEditing(false);
-    // You might want to add additional logic here to save changes
+    // Add additional logic here to save changes if necessary
   };
 
   return (
     <div
-      className={`block ${isHovered ? 'selected' : ''} ${
-        isDefault ? 'default-block' : ''
-      }`}
+      className={`block ${isHovered ? 'selected' : ''} ${isDefault ? 'default-block' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
@@ -155,28 +113,28 @@ const Block = ({
               <FaSave /> Opslaan
             </button>
           </div>
+        ) : isDefault ? (
+          renderStaticContent()
         ) : (
-          renderField()
+          renderEditableField()
         )}
       </div>
 
-      {/* Conditionally render action icons only if the block is not a default block */}
+      {/* Conditionally render action icons */}
       {isHovered && !isDefault && !isEditing && (
         <div className="action-icons">
-          <button
-            className="edit-button"
-            onClick={() => setIsEditing(true)}
-          >
+          <button className="edit-button" onClick={() => setIsEditing(true)}>
             <FaEdit />
           </button>
-          <button
-            className="delete-button"
-            onClick={() => onDelete(id)}
-          >
+          <button className="delete-button" onClick={() => onDelete(id)}>
             <FaTrashAlt />
           </button>
         </div>
       )}
+
+      {/* For default blocks, do not render delete button */}
+      {/* Since the user wants the Email block to be non-deletable, ensure that the delete button is not rendered */}
+      {/* If you still want a delete button but make it non-functional, you can adjust accordingly */}
     </div>
   );
 };

@@ -23,16 +23,8 @@ export const initialBlocks = [
   { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> },
 ];
 
-// src/components/DragAndDropEditor/defaultElements.js
-
+// Only one default Canvas Item: Email
 export const defaultCanvasItems = [
-  {
-    id: 'default-input-voornaam',
-    type: 'input',
-    label: 'Voornaam',
-    placeholder: 'Uw Voornaam',
-    required: true,
-  },
   {
     id: 'default-email-email',
     type: 'email',
@@ -41,4 +33,3 @@ export const defaultCanvasItems = [
     required: true,
   },
 ];
-
