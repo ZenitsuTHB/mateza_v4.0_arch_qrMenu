@@ -34,24 +34,10 @@ export const defaultCanvasItems = [
     required: true,
   },
   {
-    id: 'default-input-achternaam',
-    type: 'input',
-    label: 'Achternaam',
-    placeholder: 'Uw Achternaam',
-    required: true,
-  },
-  {
     id: 'default-email-email',
     type: 'email',
     label: 'Email',
     placeholder: 'Uw Email',
-    required: true,
-  },
-  {
-    id: 'default-textarea-extra-info',
-    type: 'textarea',
-    label: 'Extra Info / Allergenen',
-    placeholder: '',
     required: true,
   },
 ];

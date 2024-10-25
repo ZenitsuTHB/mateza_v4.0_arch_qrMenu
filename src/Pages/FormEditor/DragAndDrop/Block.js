@@ -109,18 +109,24 @@ const Block = ({
 
   return (
     <div
-      className={`block ${isHovered ? 'selected' : ''} ${isDefault ? 'default-block' : ''}`}
+      className={`block ${isHovered ? 'selected' : ''} ${
+        isDefault ? 'default-block' : ''
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
         setIsEditing(false);
       }}
     >
-      <div className="drag-handle">
-        <FaGripHorizontal />
-      </div>
+      {/* Conditionally render the drag handle only if not a default block */}
+      {!isDefault && (
+        <div className="drag-handle">
+          <FaGripHorizontal />
+        </div>
+      )}
+
       <div className="block-content">
-        {isEditing ? (
+        {isEditing && !isDefault ? (
           <div className="editing-interface">
             <input
               type="text"
@@ -135,9 +141,7 @@ const Block = ({
               placeholder="Placeholder"
             />
             <div className="required-switch">
-              <label className="switch-label">
-                Verplicht:
-              </label>
+              <label className="switch-label">Verplicht:</label>
               <label className="switch">
                 <input
                   type="checkbox"
@@ -155,13 +159,20 @@ const Block = ({
           renderField()
         )}
       </div>
+
       {/* Conditionally render action icons only if the block is not a default block */}
       {isHovered && !isDefault && !isEditing && (
         <div className="action-icons">
-          <button className="edit-button" onClick={() => setIsEditing(true)}>
+          <button
+            className="edit-button"
+            onClick={() => setIsEditing(true)}
+          >
             <FaEdit />
           </button>
-          <button className="delete-button" onClick={() => onDelete(id)}>
+          <button
+            className="delete-button"
+            onClick={() => onDelete(id)}
+          >
             <FaTrashAlt />
           </button>
         </div>
