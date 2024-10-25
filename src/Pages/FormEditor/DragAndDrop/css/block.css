@@ -187,3 +187,20 @@
 	font-size: 12px;
 	margin-left: 5px;
   }
+
+  /* src/components/DragAndDropEditor/css/block.css */
+
+/* Existing styles... */
+
+/* Add this new class for default blocks */
+.form-editing-page .default-block {
+	background-color: #e0f7fa; /* Light blue background */
+	border: 1px solid #81d4fa; /* Optional: a slightly darker border for better visibility */
+  }
+  
+  /* Optional: You can also adjust other styles for default blocks if needed */
+  .form-editing-page .default-block .block-content {
+	/* Example: Make the text slightly different */
+	color: #006064;
+  }
+  

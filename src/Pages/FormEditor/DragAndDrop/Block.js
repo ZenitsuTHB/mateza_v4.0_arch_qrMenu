@@ -21,6 +21,9 @@ const Block = ({
   const [placeholder, setPlaceholder] = useState(initialPlaceholder || '');
   const [isRequired, setIsRequired] = useState(initialRequired || false);
 
+  // Determine if the block is a default block
+  const isDefault = id.startsWith('default-');
+
   const renderField = () => {
     const commonProps = {
       placeholder: placeholder || 'Voer hier uw tekst in',
@@ -101,11 +104,12 @@ const Block = ({
 
   const handleSave = () => {
     setIsEditing(false);
+    // You might want to add additional logic here to save changes
   };
 
   return (
     <div
-      className={`block ${isHovered ? 'selected' : ''}`}
+      className={`block ${isHovered ? 'selected' : ''} ${isDefault ? 'default-block' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
@@ -151,7 +155,8 @@ const Block = ({
           renderField()
         )}
       </div>
-      {isHovered && !isEditing && (
+      {/* Conditionally render action icons only if the block is not a default block */}
+      {isHovered && !isDefault && !isEditing && (
         <div className="action-icons">
           <button className="edit-button" onClick={() => setIsEditing(true)}>
             <FaEdit />

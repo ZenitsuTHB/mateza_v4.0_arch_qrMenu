@@ -23,33 +23,36 @@ export const initialBlocks = [
   { id: '8', type: 'paragraph', label: 'Paragraaf', icon: <FaParagraph /> },
 ];
 
+// src/components/DragAndDropEditor/defaultElements.js
+
 export const defaultCanvasItems = [
   {
-    id: `input-${Date.now()}-voornaam`,
+    id: 'default-input-voornaam',
     type: 'input',
     label: 'Voornaam',
     placeholder: 'Uw Voornaam',
     required: true,
   },
   {
-    id: `input-${Date.now()}-achternaam`,
+    id: 'default-input-achternaam',
     type: 'input',
     label: 'Achternaam',
     placeholder: 'Uw Achternaam',
     required: true,
   },
   {
-    id: `email-${Date.now()}-email`,
+    id: 'default-email-email',
     type: 'email',
     label: 'Email',
     placeholder: 'Uw Email',
     required: true,
   },
   {
-    id: `textarea-${Date.now()}-extra-info`,
+    id: 'default-textarea-extra-info',
     type: 'textarea',
     label: 'Extra Info / Allergenen',
     placeholder: '',
     required: true,
   },
 ];
+

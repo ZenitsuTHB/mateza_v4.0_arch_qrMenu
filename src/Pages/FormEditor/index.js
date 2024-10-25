@@ -8,7 +8,7 @@ import Palette from './DragAndDrop/Palette.js';
 import Canvas from './DragAndDrop/Canvas.js';
 import ThemeSelectorModal from './Theme/index.js';
 import useNotification from '../../Components/Notification/index';
-import { initialBlocks } from './defaultElements.js';
+import { initialBlocks, defaultCanvasItems } from './defaultElements.js';
 
 import { applyResponsiveStyles } from './Utils/responsiveStyles.js';
 import useCanvasItems from './Hooks/fetchCanvas.js';
@@ -80,6 +80,9 @@ const DragAndDropEditor = () => {
   };
 
   const handleDelete = (id) => {
+    // Prevent deletion of default items
+    if (id.startsWith('default-')) return;
+
     const newItems = canvasItems.filter((item) => item.id !== id);
     setCanvasItems(newItems);
     updateCanvasItemsAPI(newItems);
@@ -95,6 +98,9 @@ const DragAndDropEditor = () => {
     return <div>Error: {error}</div>;
   }
 
+  // Combine defaultCanvasItems with fetched canvasItems
+  const combinedCanvasItems = [...defaultCanvasItems, ...canvasItems];
+
   return (
     <div className="form-editing-page" ref={formEditingPageRef}>
       <NotificationComponent />
@@ -102,7 +108,7 @@ const DragAndDropEditor = () => {
         <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
           <Palette blocks={blocks} />
           <Canvas
-            items={canvasItems}
+            items={combinedCanvasItems} // Pass the combined items here
             setItems={setCanvasItems}
             dropPosition={dropPosition}
             selectedTheme={selectedTheme}
