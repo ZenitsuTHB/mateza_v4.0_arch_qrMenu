@@ -6,6 +6,8 @@ import {
   FaStar,
   FaPencilAlt,
   FaCalendarAlt,
+  FaRocket, // Newly added icon for Launch
+  FaCog,    // Newly added icon for Settings
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -14,7 +16,6 @@ import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/DayList/index.js';
-
 
 const routesConfig = [
   {
@@ -62,7 +63,8 @@ const routesConfig = [
   },
   {
     path: '/',
-    element: <DragAndDrop title="Bewerken" />,    label: 'Bewerken',
+    element: <DragAndDrop title="Bewerken" />,
+    label: 'Bewerken',
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,
@@ -86,6 +88,7 @@ const routesConfig = [
     path: '/launch',
     element: <LaunchPage title="Lanceren" />,
     label: 'Lanceren',
+    icon: FaRocket, // Added icon for Launch
     isMenu: false,
     isMobile: false,
     isTab: false,
@@ -117,6 +120,7 @@ const routesConfig = [
     path: '/settings',
     element: <FormSettings title="Instellingen" />,
     label: 'Instellingen',
+    icon: FaCog, // Added icon for Settings
     isMenu: false,
     isMobile: false,
     isTab: false,
@@ -143,7 +147,7 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-  }
+  },
 ];
 
 export default routesConfig;
