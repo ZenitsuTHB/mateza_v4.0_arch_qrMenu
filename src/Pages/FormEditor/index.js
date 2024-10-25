@@ -11,21 +11,17 @@ import useNotification from '../../Components/Notification/index';
 import { initialBlocks } from './defaultElements.js';
 
 import { applyResponsiveStyles } from './Utils/responsiveStyles.js';
-import useApi from '../../Hooks/useApi.js';
+import useCanvasItems from './Hooks/fetchCanvas.js';
 
 const DragAndDropEditor = () => {
   const [blocks] = useState(initialBlocks);
-  const [canvasItems, setCanvasItems] = useState([]);
   const [dropPosition, setDropPosition] = useState(null);
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(null);
   const formEditingPageRef = useRef(null);
-  const previousCanvasItemsRef = useRef(null);
-  const { triggerNotification, NotificationComponent } = useNotification();
-  const api = useApi();
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { triggerNotification, NotificationComponent } = useNotification();
+  const { canvasItems, setCanvasItems, loading, error, updateCanvasItemsAPI } = useCanvasItems(triggerNotification);
 
   useEffect(() => {
     const observer = new ResizeObserver(() => {
@@ -43,62 +39,6 @@ const DragAndDropEditor = () => {
       }
     };
   }, []);
-  useEffect(() => {
-    const fetchCanvasItems = async () => {
-      try {
-        console.log('Fetching canvas items from server...');
-        const response = await api.get(`${window.baseDomain}api/fields/`);
-  
-        console.log(response);
-        console.log('Raw data received from server:', response);
-  
-        const data = response || [];
-  
-        let parsedData;
-        if (Array.isArray(data)) {
-          parsedData = data;
-        } else if (typeof data === 'object' && data !== null) {
-          parsedData = Object.values(data);
-          console.log('Converted object data to array:', parsedData);
-        } else {
-          parsedData = [];
-        }
-  
-        // Filter out any empty objects
-        parsedData = parsedData.filter(item => item && Object.keys(item).length > 0);
-  
-        setCanvasItems(parsedData);
-        previousCanvasItemsRef.current = parsedData;
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching canvas items:', err);
-        setError('Error fetching canvas items');
-        setLoading(false);
-      }
-    };
-  
-    fetchCanvasItems();
-  }, [api]);
-  
-
-  const updateAPI = (newCanvasItems) => {
-    if (JSON.stringify(previousCanvasItemsRef.current) !== JSON.stringify(newCanvasItems)) {
-      const updateFields = async () => {
-        try {
-          console.log('Updating fields on server with:', newCanvasItems);
-          await api.put(`${window.baseDomain}api/fields/`, newCanvasItems);
-          console.log('Fields updated successfully');
-        } catch (err) {
-          console.error('Error updating fields:', err);
-          const errorCode = err.response?.status || 'unknown';
-          triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
-        }
-      };
-
-      updateFields();
-      previousCanvasItemsRef.current = newCanvasItems;
-    }
-  };
 
   const handleOnDragEnd = (result) => {
     setDropPosition(null);
@@ -119,14 +59,14 @@ const DragAndDropEditor = () => {
       const newCanvasItems = Array.from(canvasItems);
       newCanvasItems.splice(result.destination.index, 0, newItem);
       setCanvasItems(newCanvasItems);
-      updateAPI(newCanvasItems);
+      updateCanvasItemsAPI(newCanvasItems);
 
     } else if (result.source.droppableId === 'Canvas' && result.destination.droppableId === 'Canvas') {
       const items = Array.from(canvasItems);
       const [movedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, movedItem);
       setCanvasItems(items);
-      updateAPI(items);
+      updateCanvasItemsAPI(items);
     }
   };
 
@@ -142,7 +82,7 @@ const DragAndDropEditor = () => {
   const handleDelete = (id) => {
     const newItems = canvasItems.filter((item) => item.id !== id);
     setCanvasItems(newItems);
-    updateAPI(newItems);
+    updateCanvasItemsAPI(newItems);
   };
 
   console.log('Canvas Items before rendering:', canvasItems);
