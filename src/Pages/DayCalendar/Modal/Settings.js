@@ -1,7 +1,7 @@
 // src/components/Modal/Instellingen.jsx
 import React from 'react';
 
-const Instellingen = () => {
+const Settings = () => {
   return (
     <div>
       {/* Instellingen content will go here */}
@@ -10,4 +10,4 @@ const Instellingen = () => {
   );
 };
 
-export default Instellingen;
+export default Settings;

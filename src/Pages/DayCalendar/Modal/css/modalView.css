@@ -13,6 +13,8 @@
 
   /* src/components/Modal/css/modalView.css */
 
+/* src/components/Modal/css/modalView.css */
+
 .modal-overlay {
 	position: fixed;
 	top: 0;
@@ -23,6 +25,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	z-index: var(--z-index-modal);
   }
   
   .modal-content {
@@ -33,6 +36,7 @@
 	padding: 20px;
 	position: relative;
   }
+  
   
   /* src/components/Modal/css/settingsTabs.css */
   
@@ -75,4 +79,6 @@
 	height: 2px;
 	background-color: var(--color-blue);
   }
+  
+
   
