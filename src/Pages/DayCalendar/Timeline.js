@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
-import { FaGripHorizontal, FaThumbtack  } from 'react-icons/fa';
+import { FaGripHorizontal, FaThumbtack } from 'react-icons/fa';
 import useBlockPositions from './Hooks/useBlockPositions';
 import useTimelineSettings from './Hooks/useTimeSettings';
 import useDragHandlers from './Hooks/useDragHandlers';
@@ -30,15 +30,21 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
   // Calculate the pixel offset based on hiddenBefore
   const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
 
-  // Handle scrolling when hiddenBefore changes
+  // Load hiddenBefore from localStorage on component mount
+  useEffect(() => {
+    const storedHiddenBefore = localStorage.getItem('hiddenBefore');
+    if (storedHiddenBefore !== null) {
+      const parsedHiddenBefore = parseInt(storedHiddenBefore, 10);
+      if (!isNaN(parsedHiddenBefore) && parsedHiddenBefore >= 0 && parsedHiddenBefore < 24) {
+        setHiddenBefore(parsedHiddenBefore);
+      }
+    }
+  }, []);
+
+  // Handle scrolling to top when hiddenBefore changes or on init
   useEffect(() => {
     if (scrollableRef.current) {
-      if (hiddenBefore !== null) {
-        const scrollTop = hiddenBefore * hourHeight;
-        scrollableRef.current.scrollTop = scrollTop;
-      } else {
-        scrollableRef.current.scrollTop = 0;
-      }
+      scrollableRef.current.scrollTop = 0;
     }
   }, [hiddenBefore, hourHeight]);
 
@@ -54,9 +60,11 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     event.stopPropagation();
     if (hiddenBefore === hour) {
       setHiddenBefore(null); // Show all
+      localStorage.removeItem('hiddenBefore'); // Remove from localStorage
       console.log(`Showing all times again`);
     } else {
       setHiddenBefore(hour); // Hide before this hour
+      localStorage.setItem('hiddenBefore', hour); // Save to localStorage
       console.log(`Hiding times before hour: ${hour}`);
     }
   };
@@ -86,17 +94,11 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               }}
             >
               <div className="hour-label">
-                {hiddenBefore === hour ? (
-                  <FaThumbtack
-                    className="hour-eye active"
-                    onClick={(e) => handleEyeClick(hour, e)}
-                  />
-                ) : (
-                  <FaThumbtack
-                    className="hour-eye"
-                    onClick={(e) => handleEyeClick(hour, e)}
-                  />
-                )}
+                <FaThumbtack
+                  className={`hour-eye ${hiddenBefore === hour ? 'active' : ''}`}
+                  onClick={(e) => handleEyeClick(hour, e)}
+                />
+                <span className="hour-label-span">
                 {`${String(Math.floor(hour)).padStart(2, '0')}:${
                   hour % 1 === 0.5
                     ? '30'
@@ -106,6 +108,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                     ? '45'
                     : '00'
                 }`}
+                </span>
               </div>
               <div className="hour-line"></div>
             </div>

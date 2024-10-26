@@ -2,7 +2,7 @@
 
   
   /* Switch Styling */
-  .switch {
+  .day-calendar-page .switch {
 	position: relative;
 	display: inline-block;
 	width: 50px;
@@ -10,13 +10,13 @@
 	margin-left: 10px;
   }
   
-  .switch input {
+  .day-calendar-page .switch input {
 	opacity: 0;
 	width: 0;
 	height: 0;
   }
   
-  .slider {
+  .day-calendar-page .slider {
 	position: absolute;
 	cursor: pointer;
 	top: 0;
@@ -28,7 +28,7 @@
 	border-radius: 24px;
   }
   
-  .slider:before {
+  .day-calendar-page .slider:before {
 	position: absolute;
 	content: "";
 	height: 18px;
@@ -40,43 +40,43 @@
 	border-radius: 50%;
   }
   
-  .switch input:checked + .slider {
+  .day-calendar-page .switch input:checked + .slider {
 	background-color: var(--color-blue);
   }
   
-  .switch input:checked + .slider:before {
+  .day-calendar-page .switch input:checked + .slider:before {
 	transform: translateX(26px);
   }
   
-  .switch input:focus + .slider {
+  .day-calendar-page .switch input:focus + .slider {
 	box-shadow: 0 0 1px var(--color-blue);
   }
   
   /* Schema Specific Styles */
-  .schema-list {
+  .day-calendar-page .schema-list {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
   }
   
-  .schema-item {
+  .day-calendar-page .schema-item {
 	border-bottom: 1px solid #eee;
 	padding-bottom: 15px;
   }
   
-  .day-header {
+  .day-calendar-page .day-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
   }
   
-  .day-label {
+  .day-calendar-page .day-label {
 	font-size: 16px;
 	font-weight: 500;
   }
   
   /* AnimatePresence container */
-  .time-inputs-container {
+  .day-calendar-page .time-inputs-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
@@ -84,19 +84,19 @@
   }
   
   /* Tab Styling */
-  .settings-tabs {
+  .day-calendar-page .settings-tabs {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
   }
   
-  .tab-menu {
+  .day-calendar-page .tab-menu {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 20px;
   }
   
-  .buttons-container {
+  .day-calendar-page .buttons-container {
 	display: flex;
   }
   
