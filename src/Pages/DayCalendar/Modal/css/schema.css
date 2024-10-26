@@ -124,4 +124,14 @@
 	background-color: var(--color-blue);
   }
   
+  /* Date Input Specific */
+.date-input input {
+	padding: 5px;
+  }
   
+
+  .schema-item-special {
+	background-color: var(--color-lightblue); /* Light blue background */
+	border-radius: 8px; /* Optional: Add border-radius for better aesthetics */
+	padding: 15px; /* Adjust padding if necessary */
+  }
