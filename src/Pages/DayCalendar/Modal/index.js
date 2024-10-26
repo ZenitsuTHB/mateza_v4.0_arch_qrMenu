@@ -20,6 +20,14 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     setActiveTab(tabId);
   };
 
+  // Prevent scrolling when the modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   return (
     <motion.div
       className="modal-overlay"
@@ -27,6 +35,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       layout
+      onClick={onClose} // Close modal when clicking on the overlay
     >
       <motion.div
         className="modal-content"
@@ -35,6 +44,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ duration: 0.3 }}
         layout
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         <div className="settings-tabs">
           <div className="tab-menu">

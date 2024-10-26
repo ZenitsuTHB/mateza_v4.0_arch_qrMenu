@@ -1,20 +1,7 @@
 
 
-  
-  .day-calendar-page .modal-content {
-	background-color: white;
-	border-radius: 5px;
-	padding: 20px;
-	width: 90%;
-	max-width: 600px;
-	max-height: 90%;
-	overflow-y: auto;
-  }
-  
-  .day-calendar-page .modal-content h2 {
-	margin-top: 10px;
-  }
-  
+
+
   .day-calendar-page .modal-content form {
 	display: flex;
 	flex-direction: column;

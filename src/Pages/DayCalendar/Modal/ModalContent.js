@@ -19,9 +19,17 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
   const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
   const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
   const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#2c909b');
+  const [zitplaatsen, setZitplaatsen] = useState(existingBlock ? existingBlock.zitplaatsen : 1); // New state for zitplaatsen
 
   const handleSubmit = (e, continueToSettings = false) => {
     e.preventDefault();
+
+    // Validate zitplaatsen to ensure it's a positive number
+    if (zitplaatsen < 1) {
+      alert('Zitplaatsen moet een positief getal zijn.');
+      return;
+    }
+
     const newBlock = {
       id: existingBlock ? existingBlock._id : undefined,
       _id: existingBlock ? existingBlock._id : undefined,
@@ -30,6 +38,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
       kleurInstelling,
       startTime,
       endTime,
+      zitplaatsen, // Include zitplaatsen in the newBlock
     };
     onSave(newBlock, continueToSettings);
   };
@@ -53,7 +62,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
         </label>
         <div className="time-inputs-container">
           <label className="modal-label time-input">
-            Start tijd:
+            Start:
             <input
               type="time"
               value={startTime}
@@ -62,7 +71,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             />
           </label>
           <label className="modal-label time-input">
-            Eindtijd:
+            Einde:
             <input
               type="time"
               value={endTime}
@@ -71,8 +80,19 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             />
           </label>
         </div>
+        {/* New Zitplaatsen Input */}
         <label className="modal-label">
-          Kleur instelling:
+          Max Capaciteit Gasten:
+          <input
+            type="number"
+            value={zitplaatsen}
+            onChange={(e) => setZitplaatsen(Number(e.target.value))}
+            min="1"
+            required
+          />
+        </label>
+        <label className="modal-label">
+          Kleur:
           <input
             type="color"
             value={kleurInstelling}
@@ -81,13 +101,6 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           />
         </label>
         <div className="modal-buttons">
-          <button
-            type="button"
-            className="standard-button cancel"
-            onClick={onClose}
-          >
-            Terug
-          </button>
           {existingBlock && (
             <button
               type="button"
