@@ -12,7 +12,7 @@ import './css/mobile.css';
 
 const SettingsTabs = () => {
   const [activeTab, setActiveTab] = useState('formSettings');
-  const [activeTitle, setActiveTitle] = useState("Tekst Instellingen");
+  const [activeTitle, setActiveTitle] = useState("Algemene Instellingen");
   const [pendingTab, setPendingTab] = useState(null);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
 

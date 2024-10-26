@@ -6,12 +6,14 @@ import useApi from '../../../../Hooks/useApi.js';
 import SettingsForm from './SettingsForm.js';
 import ThemePreview from './ThemePreview.js';
 import AlignmentSelector from './AlignmentSelector.js';
+import BackgroundBlurSelector from './BackgroundBlurSelector.js';
 
 const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
     alignment: 'fullScreenColor', // Default alignment
+    backgroundBlur: 'sharpPicture', // Default background blur
   };
 
   const [formData, setFormData] = useState(defaultSettings);
@@ -30,6 +32,7 @@ const Settings = forwardRef((props, ref) => {
             pageTitle: data.pageTitle || defaultSettings.pageTitle,
             generalNotification: data.generalNotification || '',
             alignment: data.alignment || defaultSettings.alignment,
+            backgroundBlur: data.backgroundBlur || defaultSettings.backgroundBlur, // Added line
           };
           setFormData(newFormData);
           setInitialFormData(newFormData);
@@ -117,6 +120,13 @@ const Settings = forwardRef((props, ref) => {
       <AlignmentSelector
         alignment={formData.alignment}
         setAlignment={setAlignment}
+      />
+
+    <BackgroundBlurSelector
+        backgroundBlur={formData.backgroundBlur }
+        setBackgroundBlur={(value) =>
+          setFormData((prevData) => ({ ...prevData, backgroundBlur: value }))
+        }
       />
 
       {/* Conditionally render ThemePreview */}
