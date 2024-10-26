@@ -1,8 +1,8 @@
 // src/components/Timeline/Timeline.jsx
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
-import { FaGripHorizontal, FaEye } from 'react-icons/fa';
+import { FaGripHorizontal, FaEye, FaEyeSlash } from 'react-icons/fa';
 import useBlockPositions from './Hooks/useBlockPositions';
 import useTimelineSettings from './Hooks/useTimeSettings';
 import useDragHandlers from './Hooks/useDragHandlers';
@@ -10,6 +10,9 @@ import { parseTime } from './Utils/timeUtils';
 import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
+  const [hiddenBefore, setHiddenBefore] = useState(null);
+  const scrollableRef = useRef(null);
+  
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
@@ -18,6 +21,26 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     snappingIntervalMinutes,
     onTimeBlockMove
   );
+
+  // Calculate the container height based on hiddenBefore
+  const containerHeight = hiddenBefore !== null
+    ? (24 - hiddenBefore) * hourHeight
+    : 24 * hourHeight;
+
+  // Calculate the pixel offset based on hiddenBefore
+  const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
+
+  // Handle scrolling when hiddenBefore changes
+  useEffect(() => {
+    if (scrollableRef.current) {
+      if (hiddenBefore !== null) {
+        const scrollTop = hiddenBefore * hourHeight;
+        scrollableRef.current.scrollTop = scrollTop;
+      } else {
+        scrollableRef.current.scrollTop = 0;
+      }
+    }
+  }, [hiddenBefore, hourHeight]);
 
   const handleClick = (block, event) => {
     if (dragging) {
@@ -29,27 +52,51 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
 
   const handleEyeClick = (hour, event) => {
     event.stopPropagation();
-    console.log(`Eye icon clicked for hour: ${hour}`);
+    if (hiddenBefore === hour) {
+      setHiddenBefore(null); // Show all
+      console.log(`Showing all times again`);
+    } else {
+      setHiddenBefore(hour); // Hide before this hour
+      console.log(`Hiding times before hour: ${hour}`);
+    }
   };
+
+  // Filter hours based on hiddenBefore
+  const filteredHours = hiddenBefore !== null
+    ? hours.filter(hour => hour >= hiddenBefore)
+    : hours;
+
+  // Filter timeBlocks based on hiddenBefore
+  // Hide any time block that starts before hiddenBefore
+  const filteredTimeBlocks = hiddenBefore !== null
+    ? timeBlocks.filter(block => parseTime(block.startTime) >= hiddenBefore)
+    : timeBlocks;
 
   return (
     <div className="timeline">
-      <div className="timeline-scrollable">
-        <div className="timeline-container" style={{ height: `${24 * hourHeight}px` }}>
-          {hours.map((hour, index) => (
+      <div className="timeline-scrollable" ref={scrollableRef}>
+        <div className="timeline-container" style={{ height: `${containerHeight}px` }}>
+          {filteredHours.map((hour, index) => (
             <div
               key={index}
               className="timeline-hour"
               style={{
-                top: `${hour * hourHeight}px`,
+                top: `${(hour - (hiddenBefore || 0)) * hourHeight}px`, // Adjusted top position
                 height: `${hourHeight * hourInterval}px`,
               }}
             >
               <div className="hour-label">
-                <FaEye
-                  className="hour-eye"
-                  onClick={(e) => handleEyeClick(hour, e)}
-                />
+                {hiddenBefore === hour ? (
+                  <FaEyeSlash
+                    className="hour-eye active"
+                    onClick={(e) => handleEyeClick(hour, e)}
+                  />
+                ) : (
+                  <FaEye
+                    className="hour-eye"
+                    onClick={(e) => handleEyeClick(hour, e)}
+                  />
+                )}
                 {`${String(Math.floor(hour)).padStart(2, '0')}:${
                   hour % 1 === 0.5
                     ? '30'
@@ -63,8 +110,15 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               <div className="hour-line"></div>
             </div>
           ))}
-          {timeBlocks.map((block) => {
+          {filteredTimeBlocks.map((block) => {
             const position = blockPositions[block._id] || { x: 0, y: 0 };
+
+            // Adjust position based on hiddenBefore
+            const adjustedY = hiddenBefore !== null
+              ? position.y - pixelOffset
+              : position.y;
+
+            const adjustedPosition = { x: position.x, y: adjustedY };
 
             const blockDurationMinutes =
               parseTime(block.endTime) - parseTime(block.startTime);
@@ -78,7 +132,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                 onDrag={(e, data) => handleDrag(e, data, block, setBlockPositions)}
                 onStop={(e, data) => handleDragStop(e, data, block, setBlockPositions)}
                 key={block._id + block.startTime + block.endTime}
-                position={position}
+                position={adjustedPosition}
                 handle=".grip-handle"
               >
                 <div
