@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Draggable from 'react-draggable';
-import { FaGripHorizontal } from 'react-icons/fa';
+import { FaGripHorizontal, FaEye } from 'react-icons/fa';
 import useBlockPositions from './Hooks/useBlockPositions';
 import useTimelineSettings from './Hooks/useTimeSettings';
 import useDragHandlers from './Hooks/useDragHandlers';
@@ -27,6 +27,11 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     onTimeBlockClick(block);
   };
 
+  const handleEyeClick = (hour, event) => {
+    event.stopPropagation();
+    console.log(`Eye icon clicked for hour: ${hour}`);
+  };
+
   return (
     <div className="timeline">
       <div className="timeline-scrollable">
@@ -41,6 +46,10 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               }}
             >
               <div className="hour-label">
+                <FaEye
+                  className="hour-eye"
+                  onClick={(e) => handleEyeClick(hour, e)}
+                />
                 {`${String(Math.floor(hour)).padStart(2, '0')}:${
                   hour % 1 === 0.5
                     ? '30'

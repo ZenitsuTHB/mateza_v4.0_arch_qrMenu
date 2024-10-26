@@ -1,38 +1,41 @@
 /* src/components/Timeline/css/timeline.css */
 
-.day-calendar-page .timeline {
+/* Base Styles */
+.timeline {
   position: relative;
   height: 100%;
   overflow: hidden;
 }
 
-.day-calendar-page .timeline-scrollable {
+.timeline-scrollable {
   position: relative;
   height: 100%;
   overflow-y: auto;
 }
 
-.day-calendar-page .timeline-container {
+.timeline-container {
   position: relative;
   width: 100%;
 }
 
-.day-calendar-page .timeline-hour {
+.timeline-hour {
   position: absolute;
   width: 100%;
 }
 
-.day-calendar-page .hour-label {
-  position: absolute;
+.hour-label {
+  position: relative;
   left: 0;
   width: 80px;
   color: gray;
   font-size: 12px;
   text-align: right;
-  padding-right: 5px;
+  padding-right: 15px;
+  bottom: 2px;
+  text-align: right;
 }
 
-.day-calendar-page .hour-line {
+.hour-line {
   position: absolute;
   left: 80px;
   right: 0;
@@ -40,7 +43,8 @@
   border-top: 1px solid lightgray;
 }
 
-.day-calendar-page .time-block {
+/* Time Block Styles */
+.time-block {
   position: absolute;
   transform: translateY(7px);
   left: 100px;
@@ -50,36 +54,24 @@
   cursor: pointer;
   color: white;
   padding: 5px;
-  box-sizing: border-box;
-}
-
-.day-calendar-page .time-block-title {
-  font-weight: bold;
-  margin-left: 5px;
-}
-
-.day-calendar-page .time-block-time {
-  font-weight: lighter;
-  font-size: 12px;
-}
-
-/* src/components/Timeline/css/timeline.css */
-
-.time-block {
-  position: absolute;
-  left: 100px;
-  right: 100px;
-  margin-top: 7px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  padding: 5px;
+  margin-top: 6px;
   box-sizing: border-box;
   display: flex;
   transition: transform 0.2s, opacity 0.2s;
 }
 
-.time-block .grip-handle {
+.time-block-title {
+  font-weight: bold;
+  margin-left: 5px;
+  flex: 1;
+}
+
+.time-block-time {
+  font-weight: lighter;
+  font-size: 12px;
+}
+
+.grip-handle {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,7 +83,7 @@
   transition: 0.3s all ease;
 }
 
-.time-block .grip-handle:hover {
+.grip-handle:hover {
   cursor: grabbing;
   opacity: 1;
 }
@@ -101,33 +93,38 @@
   transform: scale(1.05);
 }
 
-.time-block-title {
-  flex: 1;
+/* Eye Icon Styles */
+.hour-label .hour-eye {
+  margin-right: 5px;
+  color: lightgray;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.hour-label {
-  position: absolute;
-  left: 0;
+.hour-label:hover .hour-eye {
+  opacity: 1;
+  transform: translateX(-5px);
 }
 
-.hour-line {
-  position: absolute;
-  left: 50px;
-  right: 0;
-  border-top: 1px solid #ccc;
+.hour-eye:hover {
+  color: #d3d3d3; /* Slightly darker light gray on hover */
 }
 
-/* src/components/Timeline/css/timeline.css */
+/* Responsive Adjustments (Optional) */
+@media (max-width: 600px) {
+  .hour-label {
+    width: 60px;
+    font-size: 10px;
+  }
 
-/* ... [existing styles] */
+  .hour-label .hour-eye {
+    font-size: 12px;
+  }
 
-.time-block {
-  /* ... [existing styles] */
-  transition: top 0.2s ease-in-out; /* Smooth transition when snapping */
-}
-
-.time-block.react-draggable-dragging {
-  /* ... [existing styles] */
-  opacity: 0.7;
-  transform: scale(1.05);
+  .time-block {
+    left: 80px;
+    right: 80px;
+  }
 }
