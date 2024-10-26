@@ -7,7 +7,7 @@ import Modal from './Modal/index.js';
 import DatePickerComponent from './Modal/DataPicker.js'; // Corrected import path
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useNotification from '../../Components/Notification/index';
-import useTimeBlocks from './Hooks/useTimeBlocks';
+import useTimeBlocks from './Hooks/fetchTimeblocks.js';
 import './css/dayCalendar.css';
 import './css/mobile.css';
 
@@ -52,11 +52,6 @@ const DayCalendar = () => {
 
   const dateKey = formatDateKey(selectedDate);
   const blocksForSelectedDate = timeBlocks[dateKey] || [];
-
-  // Optional: Fetch or refresh timeBlocks when selectedDate changes
-  // useEffect(() => {
-  //   fetchTimeBlocksForDate(selectedDate);
-  // }, [selectedDate]);
 
   return (
     <div className="day-calendar-page">

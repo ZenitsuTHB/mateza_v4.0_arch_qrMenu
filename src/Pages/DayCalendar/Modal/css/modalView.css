@@ -10,3 +10,73 @@
 	align-items: center;
 	z-index: var(--z-index-modal);
   }
+
+  /* src/components/Modal/css/modalView.css */
+
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .modal-content {
+	background-color: #fff;
+	border-radius: 8px;
+	width: 90%;
+	max-width: 800px;
+	padding: 20px;
+	position: relative;
+  }
+  
+  /* src/components/Modal/css/settingsTabs.css */
+  
+  .settings-tabs {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+  }
+  
+  .tab-menu {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+  }
+  
+  .buttons-container {
+	display: flex;
+  }
+  
+  .tab-button {
+	position: relative;
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 16px;
+	color: #333;
+  }
+  
+  .tab-button.active {
+	color: var(--color-blue);
+  }
+  
+  .tab-underline {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: var(--color-blue);
+  }
+  
+  .tab-content {
+	/* Add any additional styles for tab content if needed */
+  }
+  

@@ -102,7 +102,7 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             className="standard-button blue spaced"
             onClick={(e) => handleSubmit(e, true)}
           >
-            Verder
+            Opslaan
           </button>
         </div>
       </form>
