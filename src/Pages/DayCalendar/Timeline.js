@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
-import { FaGripHorizontal, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaGripHorizontal, FaThumbtack  } from 'react-icons/fa';
 import useBlockPositions from './Hooks/useBlockPositions';
 import useTimelineSettings from './Hooks/useTimeSettings';
 import useDragHandlers from './Hooks/useDragHandlers';
@@ -87,12 +87,12 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
             >
               <div className="hour-label">
                 {hiddenBefore === hour ? (
-                  <FaEyeSlash
+                  <FaThumbtack
                     className="hour-eye active"
                     onClick={(e) => handleEyeClick(hour, e)}
                   />
                 ) : (
-                  <FaEye
+                  <FaThumbtack
                     className="hour-eye"
                     onClick={(e) => handleEyeClick(hour, e)}
                   />
