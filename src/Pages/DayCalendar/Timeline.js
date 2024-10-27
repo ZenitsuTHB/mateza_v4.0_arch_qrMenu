@@ -1,9 +1,18 @@
+// src/Pages/DayCalendar/Timeline.js
+
+import React, { useState, useEffect, useRef } from 'react';
+import Draggable from 'react-draggable';
 import { FaGripHorizontal, FaThumbtack, FaRedo } from 'react-icons/fa';
+import useBlockPositions from './Hooks/useBlockPositions';
+import useTimelineSettings from './Hooks/useTimeSettings';
+import useDragHandlers from './Hooks/useDragHandlers';
+import { parseTime } from './Utils/timeUtils';
+import './css/timeline.css';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
   const [hiddenBefore, setHiddenBefore] = useState(null);
   const scrollableRef = useRef(null);
-
+  
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
@@ -143,6 +152,8 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                           color: 'white',
                           marginLeft: '5px',
                           verticalAlign: 'middle',
+                          fontSize: '10px',
+
                         }}
                       />
                     )}
