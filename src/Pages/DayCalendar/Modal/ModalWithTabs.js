@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { IoCloseOutline } from 'react-icons/io5';
+import './css/tabs.css'
 
 const ModalWithTabs = ({ tabs, onClose }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
@@ -32,9 +34,11 @@ const ModalWithTabs = ({ tabs, onClose }) => {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ duration: 0.3 }}
-        
         onClick={(e) => e.stopPropagation()}
       >
+        <button className="close-button" onClick={onClose}>
+          <IoCloseOutline />
+        </button>
 
         <div className="tabs-container">
           <div className="tab-menu">

@@ -42,7 +42,7 @@ const ModalContent = ({
   return (
     <>
       <h2 className="secondary-title">{existingBlock ? 'Blok Bewerken' : 'Blok Toevoegen'}</h2>
-      <form onSubmit={(e) => handleSubmit(e, false)}>
+	  <form onSubmit={(e) => handleSubmit(e, false)}>
         <label className="modal-label">
           Titel:
           <input
