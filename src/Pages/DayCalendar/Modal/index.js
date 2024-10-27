@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ModalWithTabs from './ModalWithTabs';
 import ModalContent from './ModalContent';
 import Schema from './Schema';
-import ExceptionalDays from './Exceptions'; // Import the new component
+import ExceptionalDays from './Exceptions';
 import Settings from './Settings';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
@@ -15,22 +15,27 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   );
 
   const [exceptionalDays, setExceptionalDays] = useState(
-    existingBlock?.exceptionalDays || [
-      {
-        enabled: false,
-        startDate: '',
-        endDate: '',
-        startTime: '',
-        endTime: '',
-        type: 'closing',
-      },
-    ]
+    existingBlock?.exceptionalDays || {
+      sluitingsperiode: [],
+      sluitingsdag: [],
+      uitzonderlijkeOpeningsuren: [],
+    }
   );
 
   const formatDateDutch = (date) => {
     const months = [
-      'januari', 'februari', 'maart', 'april', 'mei', 'juni',
-      'juli', 'augustus', 'september', 'oktober', 'november', 'december'
+      'januari',
+      'februari',
+      'maart',
+      'april',
+      'mei',
+      'juni',
+      'juli',
+      'augustus',
+      'september',
+      'oktober',
+      'november',
+      'december',
     ];
     const day = date.getDate();
     const month = months[date.getMonth()];
@@ -127,12 +132,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     },
   ];
 
-  return (
-    <ModalWithTabs
-      tabs={tabs}
-      onClose={onClose}
-    />
-  );
+  return <ModalWithTabs tabs={tabs} onClose={onClose} />;
 };
 
 export default Modal;
