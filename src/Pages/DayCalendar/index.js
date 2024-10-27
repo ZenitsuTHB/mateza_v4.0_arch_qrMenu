@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import Timeline from './Timeline.js';
 import Modal from './Modal/index.js';
-import DatePickerComponent from './Buttons/DatePicker.js'; // Corrected import path
+import DatePickerComponent from './Buttons/DatePicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useNotification from '../../Components/Notification/index';
 import useTimeBlocks from './Hooks/fetchTimeblocks.js';
