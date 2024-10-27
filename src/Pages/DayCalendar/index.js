@@ -49,8 +49,43 @@ const DayCalendar = () => {
     }
   };
 
-  const dateKey = formatDateKey(selectedDate);
-  const blocksForSelectedDate = timeBlocks[dateKey] || [];
+// Assuming formatDateKey is a function that formats the date to 'YYYY-MM-DD'
+const dateKey = formatDateKey(selectedDate);
+const blocksForSelectedDate = [];
+
+for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const blockDate = block.date;
+    const blockDateSchema = block.schemaSettings;
+
+    console.log(blockDateSchema);
+
+    if (blockDate === dateKey) {
+        blocksForSelectedDate.push(block);
+    } else {
+        const selectedDateObj = new Date(selectedDate);
+        const dayOfWeek = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
+        const daySettings = blockDateSchema[dayOfWeek];
+
+        const isInPeriod = blockDateSchema.period.enabled &&
+                   selectedDateObj >= new Date(blockDateSchema.period.startDate) &&
+                   selectedDateObj <= new Date(blockDateSchema.period.endDate);
+
+        const isInClosing = blockDateSchema.closing.enabled &&
+                            selectedDateObj >= new Date(blockDateSchema.closing.startDate) &&
+                            selectedDateObj <= new Date(blockDateSchema.closing.endDate);
+
+        if ((daySettings && daySettings.enabled) && (isInPeriod && !isInClosing)) {
+            blocksForSelectedDate.push(block);
+        }
+
+    }
+}
+
+console.log(blocksForSelectedDate);
+
+  
+
   
   return (
     <div className="day-calendar-page">

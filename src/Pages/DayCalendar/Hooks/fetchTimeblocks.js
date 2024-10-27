@@ -14,17 +14,8 @@ const useTimeBlocks = (triggerNotification) => {
       try {
         const response = await api.get(`${window.baseDomain}api/timeblocks/`, { noCache: true });
         const blocks = response || [];
-        const blocksByDate = {};
-
-        blocks.forEach((block) => {
-          const dateKey = block.date;
-          if (!blocksByDate[dateKey]) {
-            blocksByDate[dateKey] = [];
-          }
-          blocksByDate[dateKey].push(block);
-        });
-
-        setTimeBlocks(blocksByDate);
+        
+        setTimeBlocks(blocks);
         setBlocks(blocks);
       } catch (err) {
         console.error('[useTimeBlocks] Error fetching time blocks:', err);

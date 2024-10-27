@@ -13,13 +13,13 @@ const Schema = ({
   defaultEndTime,
 }) => {
   const items = [
-    { id: 'maandag', label: 'Maandag', type: 'day' },
-    { id: 'dinsdag', label: 'Dinsdag', type: 'day' },
-    { id: 'woensdag', label: 'Woensdag', type: 'day' },
-    { id: 'donderdag', label: 'Donderdag', type: 'day' },
-    { id: 'vrijdag', label: 'Vrijdag', type: 'day' },
-    { id: 'zaterdag', label: 'Zaterdag', type: 'day' },
-    { id: 'zondag', label: 'Zondag', type: 'day' },
+    { id: 'Monday', label: 'Maandag', type: 'day' },
+    { id: 'Tuesday', label: 'Dinsdag', type: 'day' },
+    { id: 'Wednesday', label: 'Woensdag', type: 'day' },
+    { id: 'Thursday', label: 'Donderdag', type: 'day' },
+    { id: 'Friday', label: 'Vrijdag', type: 'day' },
+    { id: 'Saturday', label: 'Zaterdag', type: 'day' },
+    { id: 'Sunday', label: 'Zondag', type: 'day' },
     { id: 'period', label: 'Beperkte Periode', type: 'duration' },
     { id: 'closing', label: 'Sluitingsperiode', type: 'duration' },
   ];
