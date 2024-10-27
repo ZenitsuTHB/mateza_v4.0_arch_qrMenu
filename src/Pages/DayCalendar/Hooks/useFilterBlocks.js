@@ -2,7 +2,6 @@
 
 import { useMemo } from 'react';
 
-
 const validateSelectedDate = (selectedDate) => {
   const dateObj = new Date(selectedDate);
   if (isNaN(dateObj)) {
@@ -32,56 +31,70 @@ const isDayEnabled = (blockDateSchema, dayOfWeek, blockIndex) => {
 };
 
 const isWithinClosingPeriod = (blockDateSchema, selectedDateObj) => {
-	console.log(`\n--- Checking Closing Period ---`);
-	
-	// Check if closing is enabled
-	if (!blockDateSchema.closing || !blockDateSchema.closing.enabled) {
-	  console.log(`--> Closing is not enabled in the block schema.`);
-	  return false;
-	}
-	console.log(`--> Closing is enabled.`);
+  console.log(`\n--- Checking Closing Period ---`);
   
-	// Extract and parse start and end dates
-	const { startDate, endDate } = blockDateSchema.closing;
-	console.log(`--> Closing Start Date (raw): ${startDate}`);
-	console.log(`--> Closing End Date (raw): ${endDate}`);
-  
-	const start = new Date(startDate);
-	const end = new Date(endDate);
-  
+  if (!blockDateSchema.closing || !blockDateSchema.closing.enabled) {
+    console.log(`--> Closing is not enabled in the block schema.`);
+    return false;
+  }
+  console.log(`--> Closing is enabled.`);
 
-	if (!isNaN(end)) {
-		end.setHours(23, 59, 59, 999);
-		console.log(`--> Adjusted Closing End Date to end of day: ${end.toISOString()}`);
-	  }
-	  
-	// Validate start and end dates
-	if (isNaN(start)) {
-	  console.warn(`--> Warning: Invalid startDate for closing period. Parsed value: ${start}`);
-	} else {
-	  console.log(`--> Parsed Closing Start Date: ${start.toISOString()}`);
-	}
+  const { startDate, endDate } = blockDateSchema.closing;
+  console.log(`--> Closing Start Date (raw): ${startDate}`);
+  console.log(`--> Closing End Date (raw): ${endDate}`);
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (!isNaN(end)) {
+    end.setHours(23, 59, 59, 999);
+    console.log(`--> Adjusted Closing End Date to end of day: ${end.toISOString()}`);
+  }
   
-	if (isNaN(end)) {
-	  console.warn(`--> Warning: Invalid endDate for closing period. Parsed value: ${end}`);
-	} else {
-	  console.log(`--> Parsed Closing End Date: ${end.toISOString()}`);
-	}
+  if (isNaN(start) || isNaN(end)) {
+    console.warn(`--> Warning: Closing period has invalid date(s); unable to check range.`);
+    return false;
+  }
+
+  const within = selectedDateObj >= start && selectedDateObj <= end;
+  console.log(`--> Selected Date: ${selectedDateObj.toISOString()}`);
+  console.log(`--> Is Selected Date within Closing Period? ${within}`);
   
-	// If either start or end is invalid, exit
-	if (isNaN(start) || isNaN(end)) {
-	  console.warn(`--> Warning: Closing period has invalid date(s); unable to check range.`);
-	  return false;
-	}
-  
-	// Check if selected date is within the closing range
-	const within = selectedDateObj >= start && selectedDateObj <= end;
-	console.log(`--> Selected Date: ${selectedDateObj.toISOString()}`);
-	console.log(`--> Is Selected Date within Closing Period? ${within}`);
-	
-	return within;
-  };
-  
+  return within;
+};
+
+const isWithinPeriod = (blockDateSchema, selectedDateObj) => {
+  console.log(`\n--- Checking Period ---`);
+
+  if (!blockDateSchema.period || !blockDateSchema.period.enabled) {
+    console.log(`--> Period is not enabled or does not exist in the block schema.`);
+    return true;
+  }
+  console.log(`--> Period is enabled.`);
+
+  const { startDate, endDate } = blockDateSchema.period;
+  console.log(`--> Period Start Date (raw): ${startDate}`);
+  console.log(`--> Period End Date (raw): ${endDate}`);
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (!isNaN(end)) {
+    end.setHours(23, 59, 59, 999);
+    console.log(`--> Adjusted Period End Date to end of day: ${end.toISOString()}`);
+  }
+
+  if (isNaN(start) || isNaN(end)) {
+    console.warn(`--> Warning: Period has invalid date(s); unable to check range.`);
+    return false;
+  }
+
+  const within = selectedDateObj >= start && selectedDateObj <= end;
+  console.log(`--> Selected Date: ${selectedDateObj.toISOString()}`);
+  console.log(`--> Is Selected Date within Period? ${within}`);
+
+  return within;
+};
 
 const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
   const blockDate = block.date;
@@ -105,6 +118,12 @@ const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
       console.log(`--> Within closing period but block.date does not match selectedDate. Excluding block.`);
       return false;
     }
+  }
+
+  const withinPeriod = isWithinPeriod(blockDateSchema, selectedDateObj);
+  if (!withinPeriod && blockDate !== dateKey) {
+    console.log(`--> Outside of enabled period and block.date does not match selectedDate. Excluding block.`);
+    return false;
   }
 
   if (blockDate === dateKey) {
