@@ -1,12 +1,5 @@
 
 
-
-
-  .day-calendar-page .modal-content form {
-	display: flex;
-	flex-direction: column;
-  }
-  
   .day-calendar-page .modal-label {
 	margin-bottom: 15px;
 	display: flex;
