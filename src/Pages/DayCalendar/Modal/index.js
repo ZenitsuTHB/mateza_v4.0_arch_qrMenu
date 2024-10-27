@@ -1,6 +1,6 @@
 // src/components/Modal/index.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ModalContent from './ModalContent';
 import Schema from './Schema';
@@ -20,13 +20,27 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     setActiveTab(tabId);
   };
 
+  // Initialize Schema state
+  const [schemaSettings, setSchemaSettings] = useState(
+    existingBlock?.schemaSettings || {}
+  );
+
   // Prevent scrolling when the modal is open
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
+
+  // Handle saving the entire block, including schema settings
+  const handleSave = (blockData, continueToSettings = false) => {
+    const completeBlockData = {
+      ...blockData,
+      schemaSettings, // Include schemaSettings in the saved block
+    };
+    onSave(completeBlockData, continueToSettings);
+  };
 
   return (
     <motion.div
@@ -79,13 +93,18 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
             {activeTab === 'algemeen' && (
               <ModalContent
                 onClose={onClose}
-                onSave={onSave}
+                onSave={handleSave} // Use handleSave to include schemaSettings
                 onDelete={onDelete}
                 existingBlock={existingBlock}
                 selectedDate={selectedDate}
               />
             )}
-            {activeTab === 'schema' && <Schema />}
+            {activeTab === 'schema' && (
+              <Schema
+                schemaSettings={schemaSettings}
+                setSchemaSettings={setSchemaSettings}
+              />
+            )}
             {activeTab === 'instellingen' && <Settings />}
           </motion.div>
         </div>

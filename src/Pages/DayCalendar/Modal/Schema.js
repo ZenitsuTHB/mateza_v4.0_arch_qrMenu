@@ -1,10 +1,10 @@
 // src/components/Modal/Schema.jsx
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/schema.css';
 
-const Schema = () => {
+const Schema = ({ schemaSettings, setSchemaSettings }) => {
   const items = [
     { id: 'maandag', label: 'Maandag', type: 'day' },
     { id: 'dinsdag', label: 'Dinsdag', type: 'day' },
@@ -14,36 +14,23 @@ const Schema = () => {
     { id: 'zaterdag', label: 'Zaterdag', type: 'day' },
     { id: 'zondag', label: 'Zondag', type: 'day' },
     { id: 'period', label: 'Beperkte Periode', type: 'duration' },
-	{ id: 'closing', label: 'Sluitingsperiode', type: 'duration' },
+    { id: 'closing', label: 'Sluitingsperiode', type: 'duration' },
   ];
-
-  // Initialize state for each item
-  const [itemsSettings, setItemsSettings] = useState(
-    items.reduce((acc, item) => {
-      acc[item.id] = {
-        enabled: false,
-        ...(item.type === 'day'
-          ? { startTime: '08:00', endTime: '17:00' }
-          : { startDate: '', endDate: '' }),
-      };
-      return acc;
-    }, {})
-  );
 
   // Handle toggle switch
   const handleToggle = (itemId) => {
-    setItemsSettings((prev) => ({
+    setSchemaSettings((prev) => ({
       ...prev,
       [itemId]: {
         ...prev[itemId],
-        enabled: !prev[itemId].enabled,
+        enabled: !prev[itemId]?.enabled,
       },
     }));
   };
 
   // Handle input changes
   const handleInputChange = (itemId, field, value) => {
-    setItemsSettings((prev) => ({
+    setSchemaSettings((prev) => ({
       ...prev,
       [itemId]: {
         ...prev[itemId],
@@ -68,14 +55,14 @@ const Schema = () => {
               <label className="switch">
                 <input
                   type="checkbox"
-                  checked={itemsSettings[item.id].enabled}
+                  checked={schemaSettings[item.id]?.enabled || false}
                   onChange={() => handleToggle(item.id)}
                 />
                 <span className="slider round"></span>
               </label>
             </div>
             <AnimatePresence>
-              {itemsSettings[item.id].enabled && (
+              {schemaSettings[item.id]?.enabled && (
                 <motion.div
                   className="time-inputs-container"
                   initial={{ height: 0, opacity: 0 }}
@@ -90,7 +77,7 @@ const Schema = () => {
                         Start tijd:
                         <input
                           type="time"
-                          value={itemsSettings[item.id].startTime}
+                          value={schemaSettings[item.id]?.startTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startTime', e.target.value)
                           }
@@ -101,7 +88,7 @@ const Schema = () => {
                         Eindtijd:
                         <input
                           type="time"
-                          value={itemsSettings[item.id].endTime}
+                          value={schemaSettings[item.id]?.endTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endTime', e.target.value)
                           }
@@ -115,7 +102,7 @@ const Schema = () => {
                         Start datum:
                         <input
                           type="date"
-                          value={itemsSettings[item.id].startDate}
+                          value={schemaSettings[item.id]?.startDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startDate', e.target.value)
                           }
@@ -126,7 +113,7 @@ const Schema = () => {
                         Eind datum:
                         <input
                           type="date"
-                          value={itemsSettings[item.id].endDate}
+                          value={schemaSettings[item.id]?.endDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endDate', e.target.value)
                           }
