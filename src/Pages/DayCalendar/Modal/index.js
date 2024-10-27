@@ -125,11 +125,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
         />
       ),
     },
-    {
-      id: 'instellingen',
-      label: 'Instellingen',
-      content: <Settings />,
-    },
   ];
 
   return <ModalWithTabs tabs={tabs} onClose={onClose} />;
