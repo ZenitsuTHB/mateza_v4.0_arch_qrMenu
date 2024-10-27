@@ -9,8 +9,8 @@ const Schema = ({
   setSchemaSettings,
   onSaveSchema,
   onDeleteSchema,
-  defaultStartTime, // New prop
-  defaultEndTime,   // New prop
+  defaultStartTime,
+  defaultEndTime,
 }) => {
   const items = [
     { id: 'maandag', label: 'Maandag', type: 'day' },
@@ -24,38 +24,25 @@ const Schema = ({
     { id: 'closing', label: 'Sluitingsperiode', type: 'duration' },
   ];
 
-  // Handle toggle switch
   const handleToggle = (itemId) => {
     setSchemaSettings((prev) => {
       const isEnabled = prev[itemId]?.enabled;
       if (!isEnabled) {
-        // Enabling the day: set default times if not already set
         return {
           ...prev,
           [itemId]: {
             enabled: true,
             startTime: prev[itemId]?.startTime || defaultStartTime,
             endTime: prev[itemId]?.endTime || defaultEndTime,
-            // Initialize other fields if necessary
           },
         };
       } else {
-        // Disabling the day: remove its settings or set enabled to false
         const { [itemId]: removed, ...rest } = prev;
         return rest;
-        // Alternatively, keep the settings but set enabled to false
-        // return {
-        //   ...prev,
-        //   [itemId]: {
-        //     ...prev[itemId],
-        //     enabled: false,
-        //   },
-        // };
       }
     });
   };
 
-  // Handle input changes
   const handleInputChange = (itemId, field, value) => {
     setSchemaSettings((prev) => ({
       ...prev,
@@ -66,9 +53,7 @@ const Schema = ({
     }));
   };
 
-  // Handle Save Schema Settings
   const handleSaveSchema = () => {
-    // You can add additional validation or processing here if needed
     onSaveSchema();
   };
 
