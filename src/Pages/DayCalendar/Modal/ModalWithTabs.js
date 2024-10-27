@@ -18,22 +18,12 @@ const ModalWithTabs = ({ tabs, onClose }) => {
   }, []);
 
   return (
-    <motion.div
+    <div
       className="modal-overlay"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      layout
       onClick={onClose}
     >
-      <motion.div
+      <div
         className="modal-content"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        layout
-        onClick={(e) => e.stopPropagation()}
       >
 
         <div className="tabs-container">
@@ -65,7 +55,7 @@ const ModalWithTabs = ({ tabs, onClose }) => {
             </div>
           </div>
 
-          <motion.div className="tab-content" layout>
+          <div className="tab-content">
             {tabs.map(
               (tab) =>
                 activeTab === tab.id && (
@@ -74,10 +64,10 @@ const ModalWithTabs = ({ tabs, onClose }) => {
                   </div>
                 )
             )}
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

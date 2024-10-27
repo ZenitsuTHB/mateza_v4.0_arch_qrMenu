@@ -9,12 +9,9 @@ import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
 
 const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
-  // Initialize Schema state
   const [schemaSettings, setSchemaSettings] = useState(
     existingBlock?.schemaSettings || {}
   );
-
-  // Function to format the date in Dutch
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -24,8 +21,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     const month = months[date.getMonth()];
     return `${day} ${month}`;
   };
-
-  // Form-related state lifted up to Modal
   const [formData, setFormData] = useState({
     title: existingBlock
       ? existingBlock.title
@@ -71,7 +66,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     setSchemaSettings({});
   };
 
-  // Define the tabs configuration
   const tabs = [
     {
       id: 'algemeen',
@@ -96,8 +90,8 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
           setSchemaSettings={setSchemaSettings}
           onSaveSchema={handleSaveSchema}
           onDeleteSchema={handleDeleteSchema}
-          defaultStartTime={formData.startTime} // Pass default start time
-          defaultEndTime={formData.endTime}     // Pass default end time
+          defaultStartTime={formData.startTime}
+          defaultEndTime={formData.endTime}
         />
       ),
     },
