@@ -16,19 +16,24 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
+  
+  // Calculate the pixel offset based on hiddenBefore
+  const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
+
+  // Define a function to get the current pixelOffset
+  const getPixelOffset = () => pixelOffset;
+
   const { dragging, handleDragStart, handleDrag, handleDragStop } = useDragHandlers(
     hourHeight,
     snappingIntervalMinutes,
-    onTimeBlockMove
+    onTimeBlockMove,
+    getPixelOffset
   );
 
   // Calculate the container height based on hiddenBefore
   const containerHeight = hiddenBefore !== null
     ? (24 - hiddenBefore) * hourHeight
     : 24 * hourHeight;
-
-  // Calculate the pixel offset based on hiddenBefore
-  const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
 
   // Load hiddenBefore from localStorage on component mount
   useEffect(() => {
@@ -99,15 +104,15 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                   onClick={(e) => handleEyeClick(hour, e)}
                 />
                 <span className="hour-label-span">
-                {`${String(Math.floor(hour)).padStart(2, '0')}:${
-                  hour % 1 === 0.5
-                    ? '30'
-                    : hour % 1 === 0.25
-                    ? '15'
-                    : hour % 1 === 0.75
-                    ? '45'
-                    : '00'
-                }`}
+                  {`${String(Math.floor(hour)).padStart(2, '0')}:${
+                    hour % 1 === 0.5
+                      ? '30'
+                      : hour % 1 === 0.25
+                      ? '15'
+                      : hour % 1 === 0.75
+                      ? '45'
+                      : '00'
+                  }`}
                 </span>
               </div>
               <div className="hour-line"></div>
