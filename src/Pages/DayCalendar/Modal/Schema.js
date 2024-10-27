@@ -4,7 +4,12 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/schema.css';
 
-const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
+const Schema = ({
+  schemaSettings,
+  setSchemaSettings,
+  onSaveSchema,    // New prop for saving schema settings
+  onDeleteSchema,  // New prop for deleting/resetting schema settings
+}) => {
   const items = [
     { id: 'maandag', label: 'Maandag', type: 'day' },
     { id: 'dinsdag', label: 'Dinsdag', type: 'day' },
@@ -38,6 +43,13 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
       },
     }));
   };
+
+  // Handle Save Schema Settings
+  const handleSaveSchema = () => {
+    // You can add additional validation or processing here if needed
+    onSaveSchema();
+  };
+
 
   return (
     <div>
@@ -77,6 +89,7 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
                         Start tijd:
                         <input
                           type="time"
+                          name={`startTime-${item.id}`}
                           value={schemaSettings[item.id]?.startTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startTime', e.target.value)
@@ -88,6 +101,7 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
                         Eindtijd:
                         <input
                           type="time"
+                          name={`endTime-${item.id}`}
                           value={schemaSettings[item.id]?.endTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endTime', e.target.value)
@@ -102,6 +116,7 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
                         Start datum:
                         <input
                           type="date"
+                          name={`startDate-${item.id}`}
                           value={schemaSettings[item.id]?.startDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startDate', e.target.value)
@@ -113,6 +128,7 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
                         Eind datum:
                         <input
                           type="date"
+                          name={`endDate-${item.id}`}
                           value={schemaSettings[item.id]?.endDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endDate', e.target.value)
@@ -127,6 +143,15 @@ const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
             </AnimatePresence>
           </div>
         ))}
+      </div>
+      <div className="modal-buttons">
+        <button
+          type="button"
+          className="standard-button blue"
+          onClick={handleSaveSchema}
+        >
+          Opslaan
+        </button>
       </div>
     </div>
   );

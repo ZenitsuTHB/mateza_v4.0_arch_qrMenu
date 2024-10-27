@@ -45,10 +45,9 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     startTime: existingBlock ? existingBlock.startTime : '17:00',
     endTime: existingBlock ? existingBlock.endTime : '23:00',
     kleurInstelling: existingBlock ? existingBlock.kleurInstelling : '#2c909b',
-    zitplaatsen: existingBlock ? existingBlock.zitplaatsen : 1, // New state for zitplaatsen
+    zitplaatsen: existingBlock ? existingBlock.zitplaatsen : 1,
   });
 
-  // Prevent scrolling when the modal is open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -56,9 +55,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     };
   }, []);
 
-  // Handle saving the entire block, including schema settings
   const handleSave = (continueToSettings = false) => {
-    // Validate zitplaatsen to ensure it's a positive number
     if (formData.zitplaatsen < 1) {
       alert('Zitplaatsen moet een positief getal zijn.');
       return;
@@ -68,14 +65,22 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
       id: existingBlock ? existingBlock._id : undefined,
       _id: existingBlock ? existingBlock._id : undefined,
       date: formatDateKey(selectedDate),
-      ...formData, // Spread formData to include title, kleurInstelling, etc.
-      schemaSettings, // Include schemaSettings
+      ...formData,
+      schemaSettings,
     };
     onSave(newBlock, continueToSettings);
   };
 
   const handleDelete = () => {
     onDelete(existingBlock);
+  };
+
+  const handleSaveSchema = () => {
+    handleSave();
+  };
+
+  const handleDeleteSchema = () => {
+    setSchemaSettings({});
   };
 
   return (
@@ -85,16 +90,16 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       layout
-      onClick={onClose} // Close modal when clicking on the overlay
+      onClick={onClose}
     >
       <motion.div
         className="modal-content"
-        initial={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 1, opacity: 0 }}
+        exit={{ scale: 0.8, opacity: 0 }}
         transition={{ duration: 0.3 }}
         layout
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="settings-tabs">
           <div className="tab-menu">
@@ -130,7 +135,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
               <ModalContent
                 formData={formData}
                 setFormData={setFormData}
-                onSave={handleSave} // Pass handleSave to ModalContent
+                onSave={handleSave}
                 onDelete={handleDelete}
                 existingBlock={existingBlock}
                 selectedDate={selectedDate}
@@ -140,6 +145,8 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
               <Schema
                 schemaSettings={schemaSettings}
                 setSchemaSettings={setSchemaSettings}
+                onSaveSchema={handleSaveSchema}
+                onDeleteSchema={handleDeleteSchema}
               />
             )}
             {activeTab === 'instellingen' && <Settings />}
