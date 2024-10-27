@@ -20,8 +20,7 @@ const Schema = ({
     { id: 'Friday', label: 'Vrijdag', type: 'day' },
     { id: 'Saturday', label: 'Zaterdag', type: 'day' },
     { id: 'Sunday', label: 'Zondag', type: 'day' },
-    { id: 'period', label: 'Beperkte Periode', type: 'duration' },
-    { id: 'closing', label: 'Sluitingsperiode', type: 'duration' },
+    { id: 'period', label: 'Herhalen voor Beperkte Periode', type: 'duration' },
   ];
 
   const handleToggle = (itemId) => {
@@ -59,7 +58,7 @@ const Schema = ({
 
   return (
     <div>
-      <h2 className="secondary-title">Schema</h2>
+      <h2 className="secondary-title">Openingsuren</h2>
       <div className="schema-list">
         {items.map((item) => (
           <div

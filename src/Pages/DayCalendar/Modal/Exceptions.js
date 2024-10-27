@@ -49,7 +49,7 @@ const ExceptionalDays = ({
 
   return (
     <div>
-      <h2 className="secondary-title">Uitzondering</h2>
+      <h2 className="secondary-title">Sluitingsdagen</h2>
 
       {/* Sluitingsperiode Section */}
       <div className="exception-type-section">
