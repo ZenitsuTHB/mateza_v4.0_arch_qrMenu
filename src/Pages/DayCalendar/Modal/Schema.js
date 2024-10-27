@@ -7,8 +7,10 @@ import './css/schema.css';
 const Schema = ({
   schemaSettings,
   setSchemaSettings,
-  onSaveSchema,    // New prop for saving schema settings
-  onDeleteSchema,  // New prop for deleting/resetting schema settings
+  onSaveSchema,
+  onDeleteSchema,
+  defaultStartTime, // New prop
+  defaultEndTime,   // New prop
 }) => {
   const items = [
     { id: 'maandag', label: 'Maandag', type: 'day' },
@@ -24,13 +26,33 @@ const Schema = ({
 
   // Handle toggle switch
   const handleToggle = (itemId) => {
-    setSchemaSettings((prev) => ({
-      ...prev,
-      [itemId]: {
-        ...prev[itemId],
-        enabled: !prev[itemId]?.enabled,
-      },
-    }));
+    setSchemaSettings((prev) => {
+      const isEnabled = prev[itemId]?.enabled;
+      if (!isEnabled) {
+        // Enabling the day: set default times if not already set
+        return {
+          ...prev,
+          [itemId]: {
+            enabled: true,
+            startTime: prev[itemId]?.startTime || defaultStartTime,
+            endTime: prev[itemId]?.endTime || defaultEndTime,
+            // Initialize other fields if necessary
+          },
+        };
+      } else {
+        // Disabling the day: remove its settings or set enabled to false
+        const { [itemId]: removed, ...rest } = prev;
+        return rest;
+        // Alternatively, keep the settings but set enabled to false
+        // return {
+        //   ...prev,
+        //   [itemId]: {
+        //     ...prev[itemId],
+        //     enabled: false,
+        //   },
+        // };
+      }
+    });
   };
 
   // Handle input changes
@@ -49,7 +71,6 @@ const Schema = ({
     // You can add additional validation or processing here if needed
     onSaveSchema();
   };
-
 
   return (
     <div>
