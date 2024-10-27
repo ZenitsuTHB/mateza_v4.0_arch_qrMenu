@@ -1,7 +1,7 @@
 // src/components/Modal/ExceptionalDays.jsx
 
 import React from 'react';
-import ExceptionItem from './ExceptionItems';
+import ExceptionItem from './ExceptionItems'; // Corrected import path
 import './css/exceptions.css';
 
 const ExceptionalDays = ({
@@ -49,7 +49,7 @@ const ExceptionalDays = ({
 
   return (
     <div>
-      <h2 className="secondary-title">Uitzonderingen</h2>
+      <h2 className="secondary-title">Uitzondering</h2>
 
       {/* Sluitingsperiode Section */}
       <div className="exception-type-section">

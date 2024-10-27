@@ -91,7 +91,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   const tabs = [
     {
       id: 'algemeen',
-      label: 'Algemeen',
+      label: 'Tijdsblok',
       content: (
         <ModalContent
           formData={formData}
@@ -116,7 +116,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     },
     {
       id: 'uitzonderingen',
-      label: 'Uitzonderingen',
+      label: 'Sluiting',
       content: (
         <ExceptionalDays
           exceptionalDays={exceptionalDays}
