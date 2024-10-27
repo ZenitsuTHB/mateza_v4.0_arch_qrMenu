@@ -16,9 +16,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
-  
   const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
-
   const getPixelOffset = () => pixelOffset;
 
   const { dragging, handleDragStart, handleDrag, handleDragStop } = useDragHandlers(
@@ -86,7 +84,7 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               key={index}
               className="timeline-hour"
               style={{
-                top: `${(hour - (hiddenBefore || 0)) * hourHeight}px`, // Adjusted top position
+                top: `${(hour - (hiddenBefore || 0)) * hourHeight}px`,
                 height: `${hourHeight * hourInterval}px`,
               }}
             >
@@ -112,8 +110,6 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
           ))}
           {filteredTimeBlocks.map((block) => {
             const position = blockPositions[block._id] || { x: 0, y: 0 };
-
-            // Adjust position based on hiddenBefore
             const adjustedY = hiddenBefore !== null
               ? position.y - pixelOffset
               : position.y;
