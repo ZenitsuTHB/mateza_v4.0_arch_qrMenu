@@ -6,6 +6,7 @@ import { formatDateKey } from '../Utils/dateFormat';
 
 const useTimeBlocks = (triggerNotification) => {
   const [timeBlocks, setTimeBlocks] = useState({});
+  const [blocks, setBlocks] = useState({});
   const api = useApi();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const useTimeBlocks = (triggerNotification) => {
         });
 
         setTimeBlocks(blocksByDate);
+        setBlocks(blocks);
       } catch (err) {
         console.error('Error fetching time blocks:', err);
       }
@@ -150,6 +152,7 @@ const useTimeBlocks = (triggerNotification) => {
   };
 
   return {
+    blocks,
     timeBlocks,
     addTimeBlock,
     updateTimeBlock,
