@@ -17,10 +17,8 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
   
-  // Calculate the pixel offset based on hiddenBefore
   const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
 
-  // Define a function to get the current pixelOffset
   const getPixelOffset = () => pixelOffset;
 
   const { dragging, handleDragStart, handleDrag, handleDragStop } = useDragHandlers(
@@ -30,12 +28,10 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     getPixelOffset
   );
 
-  // Calculate the container height based on hiddenBefore
   const containerHeight = hiddenBefore !== null
     ? (24 - hiddenBefore) * hourHeight
     : 24 * hourHeight;
 
-  // Load hiddenBefore from localStorage on component mount
   useEffect(() => {
     const storedHiddenBefore = localStorage.getItem('hiddenBefore');
     if (storedHiddenBefore !== null) {
@@ -46,7 +42,6 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     }
   }, []);
 
-  // Handle scrolling to top when hiddenBefore changes or on init
   useEffect(() => {
     if (scrollableRef.current) {
       scrollableRef.current.scrollTop = 0;
@@ -64,23 +59,20 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
   const handleEyeClick = (hour, event) => {
     event.stopPropagation();
     if (hiddenBefore === hour) {
-      setHiddenBefore(null); // Show all
-      localStorage.removeItem('hiddenBefore'); // Remove from localStorage
+      setHiddenBefore(null);
+      localStorage.removeItem('hiddenBefore');
       console.log(`Showing all times again`);
     } else {
-      setHiddenBefore(hour); // Hide before this hour
-      localStorage.setItem('hiddenBefore', hour); // Save to localStorage
+      setHiddenBefore(hour);
+      localStorage.setItem('hiddenBefore', hour);
       console.log(`Hiding times before hour: ${hour}`);
     }
   };
 
-  // Filter hours based on hiddenBefore
   const filteredHours = hiddenBefore !== null
     ? hours.filter(hour => hour >= hiddenBefore)
     : hours;
 
-  // Filter timeBlocks based on hiddenBefore
-  // Hide any time block that starts before hiddenBefore
   const filteredTimeBlocks = hiddenBefore !== null
     ? timeBlocks.filter(block => parseTime(block.startTime) >= hiddenBefore)
     : timeBlocks;
