@@ -30,10 +30,8 @@ const ModalContent = ({
     onDelete();
   };
 
-  // Generic change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // For 'zitplaatsen', ensure the value is a number
     const newValue = name === 'zitplaatsen' ? Number(value) : value;
     setFormData((prev) => ({
       ...prev,
