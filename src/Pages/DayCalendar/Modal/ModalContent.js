@@ -1,10 +1,16 @@
 // src/components/Modal/ModalContent.jsx
 
-import React, { useState } from 'react';
-import { formatDateKey } from '../Utils/dateFormat';
+import React from 'react';
 import './css/modalContent.css';
 
-const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
+const ModalContent = ({
+  formData,
+  setFormData,
+  onSave,
+  onDelete,
+  existingBlock,
+  selectedDate,
+}) => {
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -15,36 +21,24 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
     return `${day} ${month}`;
   };
 
-  const [title, setTitle] = useState(existingBlock ? existingBlock.title : `Tijdsblok (${formatDateDutch(selectedDate)})`);
-  const [startTime, setStartTime] = useState(existingBlock ? existingBlock.startTime : '17:00');
-  const [endTime, setEndTime] = useState(existingBlock ? existingBlock.endTime : '23:00');
-  const [kleurInstelling, setKleurInstelling] = useState(existingBlock ? existingBlock.kleurInstelling : '#2c909b');
-  const [zitplaatsen, setZitplaatsen] = useState(existingBlock ? existingBlock.zitplaatsen : 1); // New state for zitplaatsen
-
   const handleSubmit = (e, continueToSettings = false) => {
     e.preventDefault();
-
-    // Validate zitplaatsen to ensure it's a positive number
-    if (zitplaatsen < 1) {
-      alert('Zitplaatsen moet een positief getal zijn.');
-      return;
-    }
-
-    const newBlock = {
-      id: existingBlock ? existingBlock._id : undefined,
-      _id: existingBlock ? existingBlock._id : undefined,
-      date: formatDateKey(selectedDate),
-      title,
-      kleurInstelling,
-      startTime,
-      endTime,
-      zitplaatsen, // Include zitplaatsen in the newBlock
-    };
-    onSave(newBlock, continueToSettings);
+    onSave(continueToSettings);
   };
 
   const handleDelete = () => {
-    onDelete(existingBlock);
+    onDelete();
+  };
+
+  // Generic change handler
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // For 'zitplaatsen', ensure the value is a number
+    const newValue = name === 'zitplaatsen' ? Number(value) : value;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
   };
 
   return (
@@ -55,8 +49,9 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           Titel:
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
             required
           />
         </label>
@@ -65,8 +60,9 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             Start:
             <input
               type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              name="startTime"
+              value={formData.startTime}
+              onChange={handleChange}
               required
             />
           </label>
@@ -74,19 +70,21 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
             Einde:
             <input
               type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
+              name="endTime"
+              value={formData.endTime}
+              onChange={handleChange}
               required
             />
           </label>
         </div>
-        {/* New Zitplaatsen Input */}
+        {/* Zitplaatsen Input */}
         <label className="modal-label">
           Max Capaciteit Gasten:
           <input
             type="number"
-            value={zitplaatsen}
-            onChange={(e) => setZitplaatsen(Number(e.target.value))}
+            name="zitplaatsen"
+            value={formData.zitplaatsen}
+            onChange={handleChange}
             min="1"
             required
           />
@@ -95,8 +93,9 @@ const ModalContent = ({ onClose, onSave, onDelete, existingBlock, selectedDate }
           Kleur:
           <input
             type="color"
-            value={kleurInstelling}
-            onChange={(e) => setKleurInstelling(e.target.value)}
+            name="kleurInstelling"
+            value={formData.kleurInstelling}
+            onChange={handleChange}
             required
           />
         </label>

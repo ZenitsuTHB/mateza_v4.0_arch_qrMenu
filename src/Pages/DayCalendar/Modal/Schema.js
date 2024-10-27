@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/schema.css';
 
-const Schema = ({ schemaSettings, setSchemaSettings }) => {
+const Schema = ({ schemaSettings, setSchemaSettings, onSave }) => {
   const items = [
     { id: 'maandag', label: 'Maandag', type: 'day' },
     { id: 'dinsdag', label: 'Dinsdag', type: 'day' },
