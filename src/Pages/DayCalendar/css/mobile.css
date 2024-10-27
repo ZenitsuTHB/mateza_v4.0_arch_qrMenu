@@ -1,14 +1,6 @@
 @media (max-width: 900px) {
-	.day-calendar-pag .day-calendar {
-		left: -15px;
+	.day-calendar-page .day-calendar {
+		padding-bottom: 60px;
 	  }
 
-	  .day-calendar-pag .day-calendar {
-		margin-right:40px;
-	  }
-
-	  .day-calendar-pag .controls {
-		top: 150px;
-		right: 8px;
-	  }
   }

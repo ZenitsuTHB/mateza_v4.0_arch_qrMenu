@@ -2,7 +2,6 @@
 
 .day-calendar-page .day-calendar {
 	position: relative;
-	height: 100vh;
 	left: -30px;
 	top: 15px;
   }

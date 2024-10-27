@@ -49,38 +49,75 @@ const DayCalendar = () => {
     }
   };
 
-// Assuming formatDateKey is a function that formats the date to 'YYYY-MM-DD'
-const dateKey = formatDateKey(selectedDate);
-const blocksForSelectedDate = [];
-
-for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i];
-    const blockDate = block.date;
-    const blockDateSchema = block.schemaSettings;
-
-    console.log(blockDateSchema);
-
-    if (blockDate === dateKey) {
-        blocksForSelectedDate.push(block);
-    } else {
-        const selectedDateObj = new Date(selectedDate);
-        const dayOfWeek = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
-        const daySettings = blockDateSchema[dayOfWeek];
-
-        const isInPeriod = blockDateSchema.period.enabled &&
-                   selectedDateObj >= new Date(blockDateSchema.period.startDate) &&
-                   selectedDateObj <= new Date(blockDateSchema.period.endDate);
-
-        const isInClosing = blockDateSchema.closing.enabled &&
-                            selectedDateObj >= new Date(blockDateSchema.closing.startDate) &&
-                            selectedDateObj <= new Date(blockDateSchema.closing.endDate);
-
-        if ((daySettings && daySettings.enabled) && (isInPeriod && !isInClosing)) {
-            blocksForSelectedDate.push(block);
-        }
-
-    }
-}
+  const dateKey = formatDateKey(selectedDate);
+  const blocksForSelectedDate = [];
+  
+  console.log(`Selected Date: ${selectedDate}`);
+  console.log(`Formatted Date Key: ${dateKey}`);
+  
+  for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
+      const blockDate = block.date;
+      const blockDateSchema = block.schemaSettings;
+  
+      console.log(`\nProcessing Block ${i + 1}:`);
+      console.log(`Block Date: ${blockDate}`);
+      console.log(`Block Schema Settings:`, blockDateSchema);
+  
+      if (blockDate === dateKey) {
+          console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
+          blocksForSelectedDate.push(block);
+      } else {
+          // Parse selectedDate into a Date object
+          const selectedDateObj = new Date(selectedDate);
+          console.log(`Selected Date Object: ${selectedDateObj} (${selectedDateObj.toISOString()})`);
+  
+          // Get the day of the week
+          const dayOfWeek = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
+          console.log(`Day of the Week: ${dayOfWeek}`);
+  
+          // Access the corresponding day settings in the schema
+          const daySettings = blockDateSchema[dayOfWeek];
+          console.log(`Day Settings for ${dayOfWeek}:`, daySettings);
+  
+          // Parse period dates
+          const periodStart = new Date(blockDateSchema.period.startDate);
+          const periodEnd = new Date(blockDateSchema.period.endDate);
+          console.log(`Period Enabled: ${blockDateSchema.period.enabled}`);
+          console.log(`Period Start Date: ${blockDateSchema.period.startDate} (${periodStart.toISOString()})`);
+          console.log(`Period End Date: ${blockDateSchema.period.endDate} (${periodEnd.toISOString()})`);
+  
+          // Check if selectedDate is within the period
+          const isInPeriod = blockDateSchema.period.enabled &&
+                             selectedDateObj >= periodStart &&
+                             selectedDateObj <= periodEnd;
+          console.log(`Is in Period: ${isInPeriod}`);
+  
+          // Parse closing dates
+          const closingStart = new Date(blockDateSchema.closing.startDate);
+          const closingEnd = new Date(blockDateSchema.closing.endDate);
+          console.log(`Closing Enabled: ${blockDateSchema.closing.enabled}`);
+          console.log(`Closing Start Date: ${blockDateSchema.closing.startDate} (${closingStart.toISOString()})`);
+          console.log(`Closing End Date: ${blockDateSchema.closing.endDate} (${closingEnd.toISOString()})`);
+  
+          // Check if selectedDate is within the closing period
+          const isInClosing = blockDateSchema.closing.enabled &&
+                              selectedDateObj >= closingStart &&
+                              selectedDateObj <= closingEnd;
+          console.log(`Is in Closing: ${isInClosing}`);
+  
+          // Final condition check
+          if ((daySettings && daySettings.enabled) && (isInPeriod && !isInClosing)) {
+              console.log(`--> Conditions met. Adding block to blocksForSelectedDate.`);
+              blocksForSelectedDate.push(block);
+          } else {
+              console.log(`--> Conditions not met. Block not added.`);
+          }
+      }
+  }
+  
+  console.log(`\nFinal blocksForSelectedDate:`, blocksForSelectedDate);
+  
 
 console.log(blocksForSelectedDate);
 
