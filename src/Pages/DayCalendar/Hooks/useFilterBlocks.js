@@ -2,14 +2,127 @@
 
 import { useMemo } from 'react';
 
-/**
- * Custom hook to filter blocks based on the selected date.
- *
- * @param {Array} blocks - The array of block objects to filter.
- * @param {Date} selectedDate - The currently selected date.
- * @param {Function} formatDateKey - Function to format the date into a key string.
- * @returns {Array} - The filtered array of blocks for the selected date.
- */
+
+const validateSelectedDate = (selectedDate) => {
+  const dateObj = new Date(selectedDate);
+  if (isNaN(dateObj)) {
+    console.error(`--> Error: Invalid selectedDate format: ${selectedDate}`);
+    return null;
+  }
+  console.log(`Selected Date Object: ${dateObj} (${dateObj.toISOString()})`);
+  return dateObj;
+};
+
+const getDayOfWeek = (dateObj) => {
+  const dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'Europe/Berlin' });
+  console.log(`Day of the Week: ${dayOfWeek}`);
+  return dayOfWeek;
+};
+
+const isDayEnabled = (blockDateSchema, dayOfWeek, blockIndex) => {
+  const daySettings = blockDateSchema[dayOfWeek];
+  if (!daySettings) {
+    console.warn(`--> Warning: No settings found for ${dayOfWeek} in Block ${blockIndex + 1}.`);
+    return false;
+  }
+  console.log(`Day Settings for ${dayOfWeek}:`, daySettings);
+  const enabled = daySettings.enabled ?? false;
+  console.log(`Is ${dayOfWeek} Enabled: ${enabled}`);
+  return enabled;
+};
+
+const isWithinClosingPeriod = (blockDateSchema, selectedDateObj) => {
+	console.log(`\n--- Checking Closing Period ---`);
+	
+	// Check if closing is enabled
+	if (!blockDateSchema.closing || !blockDateSchema.closing.enabled) {
+	  console.log(`--> Closing is not enabled in the block schema.`);
+	  return false;
+	}
+	console.log(`--> Closing is enabled.`);
+  
+	// Extract and parse start and end dates
+	const { startDate, endDate } = blockDateSchema.closing;
+	console.log(`--> Closing Start Date (raw): ${startDate}`);
+	console.log(`--> Closing End Date (raw): ${endDate}`);
+  
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+  
+
+	if (!isNaN(end)) {
+		end.setHours(23, 59, 59, 999);
+		console.log(`--> Adjusted Closing End Date to end of day: ${end.toISOString()}`);
+	  }
+	  
+	// Validate start and end dates
+	if (isNaN(start)) {
+	  console.warn(`--> Warning: Invalid startDate for closing period. Parsed value: ${start}`);
+	} else {
+	  console.log(`--> Parsed Closing Start Date: ${start.toISOString()}`);
+	}
+  
+	if (isNaN(end)) {
+	  console.warn(`--> Warning: Invalid endDate for closing period. Parsed value: ${end}`);
+	} else {
+	  console.log(`--> Parsed Closing End Date: ${end.toISOString()}`);
+	}
+  
+	// If either start or end is invalid, exit
+	if (isNaN(start) || isNaN(end)) {
+	  console.warn(`--> Warning: Closing period has invalid date(s); unable to check range.`);
+	  return false;
+	}
+  
+	// Check if selected date is within the closing range
+	const within = selectedDateObj >= start && selectedDateObj <= end;
+	console.log(`--> Selected Date: ${selectedDateObj.toISOString()}`);
+	console.log(`--> Is Selected Date within Closing Period? ${within}`);
+	
+	return within;
+  };
+  
+
+const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
+  const blockDate = block.date;
+  const blockDateSchema = block.schemaSettings;
+
+  console.log(`\n--- Processing Block ${blockIndex + 1} ---`);
+  console.log(`Block Date: ${blockDate}`);
+  console.log(`Block Schema Settings:`, blockDateSchema);
+
+  if (!blockDateSchema) {
+    console.warn(`--> Warning: block.schemaSettings is undefined for Block ${blockIndex + 1}. Skipping this block.`);
+    return false;
+  }
+
+  const withinClosing = isWithinClosingPeriod(blockDateSchema, selectedDateObj);
+  if (withinClosing) {
+    if (blockDate === dateKey) {
+      console.log(`--> Within closing period and block.date matches selectedDate. Adding to blocksForSelectedDate.`);
+      return true;
+    } else {
+      console.log(`--> Within closing period but block.date does not match selectedDate. Excluding block.`);
+      return false;
+    }
+  }
+
+  if (blockDate === dateKey) {
+    console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
+    return true;
+  } else {
+    const dayOfWeek = getDayOfWeek(selectedDateObj);
+    const enabled = isDayEnabled(blockDateSchema, dayOfWeek, blockIndex);
+    if (enabled) {
+      console.log(`--> Day is enabled. Adding block to blocksForSelectedDate.`);
+      return true;
+    } else {
+      console.log(`--> Day is not enabled. Block not added.`);
+      return false;
+    }
+  }
+};
+
 const useFilteredBlocks = (blocks, selectedDate, formatDateKey) => {
   const blocksForSelectedDate = useMemo(() => {
     const dateKey = formatDateKey(selectedDate);
@@ -19,55 +132,16 @@ const useFilteredBlocks = (blocks, selectedDate, formatDateKey) => {
     console.log(`Selected Date: ${selectedDate}`);
     console.log(`Formatted Date Key: ${dateKey}`);
 
+    const selectedDateObj = validateSelectedDate(selectedDate);
+    if (!selectedDateObj) {
+      return filteredBlocks;
+    }
+
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
-      const blockDate = block.date;
-      const blockDateSchema = block.schemaSettings;
-
-      console.log(`\n--- Processing Block ${i + 1} ---`);
-      console.log(`Block Date: ${blockDate}`);
-      console.log(`Block Schema Settings:`, blockDateSchema);
-
-      if (!blockDateSchema) {
-        console.warn(`--> Warning: block.schemaSettings is undefined for Block ${i + 1}. Skipping this block.`);
-        continue; // Skip this block as schemaSettings is essential for further processing
-      }
-
-      if (blockDate === dateKey) {
-        console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
+      const include = shouldIncludeBlock(block, dateKey, selectedDateObj, i);
+      if (include) {
         filteredBlocks.push(block);
-      } else {
-        // Parse selectedDate into a Date object
-        const selectedDateObj = new Date(selectedDate);
-        if (isNaN(selectedDateObj)) {
-          console.error(`--> Error: Invalid selectedDate format: ${selectedDate}`);
-          continue; // Skip processing if selectedDate is invalid
-        }
-        console.log(`Selected Date Object: ${selectedDateObj} (${selectedDateObj.toISOString()})`);
-
-        // Get the day of the week (e.g., "Monday")
-        const dayOfWeek = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'Europe/Berlin' });
-        console.log(`Day of the Week: ${dayOfWeek}`);
-
-        // Access the corresponding day settings in the schema
-        const daySettings = blockDateSchema[dayOfWeek];
-        if (!daySettings) {
-          console.warn(`--> Warning: No settings found for ${dayOfWeek} in Block ${i + 1}.`);
-        } else {
-          console.log(`Day Settings for ${dayOfWeek}:`, daySettings);
-        }
-
-        // Check if the day is enabled
-        const isDayEnabled = daySettings?.enabled ?? false;
-        console.log(`Is ${dayOfWeek} Enabled: ${isDayEnabled}`);
-
-        // Final condition check
-        if (isDayEnabled) {
-          console.log(`--> Day is enabled. Adding block to blocksForSelectedDate.`);
-          filteredBlocks.push(block);
-        } else {
-          console.log(`--> Day is not enabled. Block not added.`);
-        }
       }
     }
 
@@ -77,7 +151,6 @@ const useFilteredBlocks = (blocks, selectedDate, formatDateKey) => {
     return filteredBlocks;
   }, [blocks, selectedDate, formatDateKey]);
 
-  // **Corrected Return Statement**
   return blocksForSelectedDate;
 };
 
