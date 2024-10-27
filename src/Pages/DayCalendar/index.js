@@ -51,20 +51,6 @@ const DayCalendar = () => {
 
   const dateKey = formatDateKey(selectedDate);
   const blocksForSelectedDate = timeBlocks[dateKey] || [];
-
-  const checkEnabledDays = (block) => {
-    if (!block.schemaSettings) return false; // Skip if schemaSettings is undefined
-    const dayOfWeek = new Intl.DateTimeFormat('nl-NL', { weekday: 'long' }).format(selectedDate).toLowerCase();
-    const schedule = block.schemaSettings[dayOfWeek];
-    return schedule ? schedule.enabled : false; // Only access enabled if schedule exists
-  };
-  
-  for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i];
-    if (checkEnabledDays(block)) {
-      blocksForSelectedDate.push(block); // Append to blocksForSelectedDate if enabled
-    }
-  }
   
   return (
     <div className="day-calendar-page">
