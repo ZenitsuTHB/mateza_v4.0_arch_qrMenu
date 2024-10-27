@@ -82,7 +82,6 @@
 	box-shadow: 0 0 1px var(--color-blue);
   }
   
-  /* AnimatePresence container */
   .inputs-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -122,30 +121,12 @@
 	margin-top: 20px;
   }
   
-  .standard-button.blue {
-	background-color: var(--color-blue);
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	cursor: pointer;
-	font-size: 16px;
-  }
+
   
-  .standard-button.blue:hover {
-	background-color: #1a7d8c;
-  }
-  
-
-  /* src/components/Modal/css/exceptions.css */
-
-/* Existing styles ... */
-
-/* Add styles for disabled labels */
 .day-label.disabled {
 	opacity: 0.5;
   }
   
-  /* Adjust the day-label to wrap text if necessary */
   .day-label {
 	font-size: 16px;
 	font-weight: 500;
@@ -153,6 +134,4 @@
 	margin-right: 10px;
 	word-break: break-word;
   }
-  
-  /* Rest of your CSS ... */
-  
+    
