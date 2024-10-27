@@ -1,0 +1,47 @@
+/* src/components/Modal/css/exceptionalDays.css */
+
+.exceptional-days-list {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+  }
+  
+  .exceptional-day-item {
+	border-bottom: 1px solid #eee;
+	padding-bottom: 15px;
+  }
+  
+  .day-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+  }
+  
+  .day-label {
+	font-size: 16px;
+	font-weight: 500;
+  }
+  
+  /* AnimatePresence container */
+  .inputs-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-top: 10px;
+  }
+  
+  .add-exception-button {
+	margin-top: 15px;
+	background: none;
+	border: none;
+	color: var(--color-blue);
+	cursor: pointer;
+	font-size: 16px;
+	text-align: left;
+	padding: 0;
+  }
+  
+  .add-exception-button:hover {
+	text-decoration: underline;
+  }
+  

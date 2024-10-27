@@ -1,9 +1,10 @@
 // src/components/Modal/index.js
 
 import React, { useState, useEffect } from 'react';
-import ModalWithTabs from './ModalWithTabs'; // Ensure you have this component as per previous steps
+import ModalWithTabs from './ModalWithTabs';
 import ModalContent from './ModalContent';
 import Schema from './Schema';
+import ExceptionalDays from './Exceptions'; // Import the new component
 import Settings from './Settings';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
@@ -12,6 +13,20 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
   const [schemaSettings, setSchemaSettings] = useState(
     existingBlock?.schemaSettings || {}
   );
+
+  const [exceptionalDays, setExceptionalDays] = useState(
+    existingBlock?.exceptionalDays || [
+      {
+        enabled: false,
+        startDate: '',
+        endDate: '',
+        startTime: '',
+        endTime: '',
+        type: 'closing',
+      },
+    ]
+  );
+
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -21,6 +36,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     const month = months[date.getMonth()];
     return `${day} ${month}`;
   };
+
   const [formData, setFormData] = useState({
     title: existingBlock
       ? existingBlock.title
@@ -50,6 +66,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
       date: formatDateKey(selectedDate),
       ...formData,
       schemaSettings,
+      exceptionalDays,
     };
     onSave(newBlock, continueToSettings);
   };
@@ -62,8 +79,8 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     handleSave();
   };
 
-  const handleDeleteSchema = () => {
-    setSchemaSettings({});
+  const handleSaveExceptionalDays = () => {
+    handleSave();
   };
 
   const tabs = [
@@ -89,9 +106,17 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
           schemaSettings={schemaSettings}
           setSchemaSettings={setSchemaSettings}
           onSaveSchema={handleSaveSchema}
-          onDeleteSchema={handleDeleteSchema}
-          defaultStartTime={formData.startTime}
-          defaultEndTime={formData.endTime}
+        />
+      ),
+    },
+    {
+      id: 'uitzonderingen',
+      label: 'Uitzonderingen',
+      content: (
+        <ExceptionalDays
+          exceptionalDays={exceptionalDays}
+          setExceptionalDays={setExceptionalDays}
+          onSaveExceptionalDays={handleSaveExceptionalDays}
         />
       ),
     },
