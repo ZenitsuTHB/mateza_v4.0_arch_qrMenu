@@ -97,51 +97,64 @@ const isWithinPeriod = (blockDateSchema, selectedDateObj) => {
 };
 
 const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
-  const blockDate = block.date;
-  const blockDateSchema = block.schemaSettings;
-
-  console.log(`\n--- Processing Block ${blockIndex + 1} ---`);
-  console.log(`Block Date: ${blockDate}`);
-  console.log(`Block Schema Settings:`, blockDateSchema);
-
-  if (!blockDateSchema) {
-    console.warn(`--> Warning: block.schemaSettings is undefined for Block ${blockIndex + 1}. Skipping this block.`);
-    return false;
-  }
-
-  const withinClosing = isWithinClosingPeriod(blockDateSchema, selectedDateObj);
-  if (withinClosing) {
-    if (blockDate === dateKey) {
-      console.log(`--> Within closing period and block.date matches selectedDate. Adding to blocksForSelectedDate.`);
-      return true;
-    } else {
-      console.log(`--> Within closing period but block.date does not match selectedDate. Excluding block.`);
-      return false;
-    }
-  }
-
-  const withinPeriod = isWithinPeriod(blockDateSchema, selectedDateObj);
-  if (!withinPeriod && blockDate !== dateKey) {
-    console.log(`--> Outside of enabled period and block.date does not match selectedDate. Excluding block.`);
-    return false;
-  }
-
-  if (blockDate === dateKey) {
-    console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
-    return true;
-  } else {
-    const dayOfWeek = getDayOfWeek(selectedDateObj);
-    const enabled = isDayEnabled(blockDateSchema, dayOfWeek, blockIndex);
-    if (enabled) {
-      console.log(`--> Day is enabled. Adding block to blocksForSelectedDate.`);
-      return true;
-    } else {
-      console.log(`--> Day is not enabled. Block not added.`);
-      return false;
-    }
-  }
-};
-
+	const blockDate = block.date;
+	const blockDateSchema = block.schemaSettings;
+  
+	console.log(`\n--- Processing Block ${blockIndex + 1} ---`);
+	console.log(`Block Date: ${blockDate}`);
+	console.log(`Block Schema Settings:`, blockDateSchema);
+  
+	if (!blockDateSchema) {
+	  console.warn(`--> Warning: block.schemaSettings is undefined for Block ${blockIndex + 1}. Skipping this block.`);
+	  return false;
+	}
+  
+	// Check if the block falls within the closing period
+	const withinClosing = isWithinClosingPeriod(blockDateSchema, selectedDateObj);
+	if (withinClosing) {
+	  if (blockDate === dateKey) {
+		console.log(`--> Within closing period and block.date matches selectedDate. Adding to blocksForSelectedDate.`);
+		return true;
+	  } else {
+		console.log(`--> Within closing period but block.date does not match selectedDate. Excluding block.`);
+		return false;
+	  }
+	}
+  
+	// Check if the block falls within the period
+	const withinPeriod = isWithinPeriod(blockDateSchema, selectedDateObj);
+	if (!withinPeriod && blockDate !== dateKey) {
+	  console.log(`--> Outside of enabled period and block.date does not match selectedDate. Excluding block.`);
+	  return false;
+	}
+  
+	// Direct date match
+	if (blockDate === dateKey) {
+	  console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
+	  block.dayOfWeekBlock = false;
+	  return true;
+	} else {
+	  // Check for weekday match
+	  const dayOfWeek = getDayOfWeek(selectedDateObj);
+	  const enabled = isDayEnabled(blockDateSchema, dayOfWeek, blockIndex);
+	  if (enabled) {
+		console.log(`--> Day is enabled. Setting block times to schema settings and adding block to blocksForSelectedDate.`);
+		
+		// Set block startTime and endTime to match day settings
+		const daySettings = blockDateSchema[dayOfWeek];
+		block.startTime = daySettings.startTime;
+		block.endTime = daySettings.endTime;
+		block.dayOfWeekBlock = true;
+		console.log(`--> Block startTime set to: ${block.startTime}, endTime set to: ${block.endTime}`);
+		
+		return true;
+	  } else {
+		console.log(`--> Day is not enabled. Block not added.`);
+		return false;
+	  }
+	}
+  };
+  
 const useFilteredBlocks = (blocks, selectedDate, formatDateKey) => {
   const blocksForSelectedDate = useMemo(() => {
     const dateKey = formatDateKey(selectedDate);

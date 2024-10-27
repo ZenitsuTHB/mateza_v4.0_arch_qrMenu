@@ -1,18 +1,9 @@
-// src/components/Timeline/Timeline.jsx
-
-import React, { useState, useEffect, useRef } from 'react';
-import Draggable from 'react-draggable';
-import { FaGripHorizontal, FaThumbtack } from 'react-icons/fa';
-import useBlockPositions from './Hooks/useBlockPositions';
-import useTimelineSettings from './Hooks/useTimeSettings';
-import useDragHandlers from './Hooks/useDragHandlers';
-import { parseTime } from './Utils/timeUtils';
-import './css/timeline.css';
+import { FaGripHorizontal, FaThumbtack, FaRedo } from 'react-icons/fa';
 
 const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
   const [hiddenBefore, setHiddenBefore] = useState(null);
   const scrollableRef = useRef(null);
-  
+
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
@@ -145,6 +136,16 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                     <span className="time-block-time">
                       {`${block.startTime} - ${block.endTime}`}
                     </span>
+                    {block.dayOfWeekBlock && (
+                      <FaRedo
+                        style={{
+                          opacity: 0.5,
+                          color: 'white',
+                          marginLeft: '5px',
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                    )}
                   </div>
                   <div className="grip-handle">
                     <FaGripHorizontal />
