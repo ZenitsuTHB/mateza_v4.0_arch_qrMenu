@@ -5,7 +5,6 @@ import ModalWithTabs from './ModalWithTabs';
 import ModalContent from './ModalContent';
 import Schema from './Schema';
 import ExceptionalDays from './Exceptions';
-import Settings from './Settings';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
 
@@ -116,7 +115,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
     },
     {
       id: 'uitzonderingen',
-      label: 'Sluiting',
+      label: 'Uitzonderingen',
       content: (
         <ExceptionalDays
           exceptionalDays={exceptionalDays}
