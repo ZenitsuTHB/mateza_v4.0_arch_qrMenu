@@ -8,7 +8,7 @@ import DatePickerComponent from './Buttons/DatePicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useNotification from '../../Components/Notification/index';
 import useTimeBlocks from './Hooks/fetchTimeblocks.js';
-import useFilteredBlocks from './Hooks/useFilterBlocks.js'; // Import the custom hook
+import useFilteredBlocks from './Hooks/useFilterBlocks.js';
 import './css/dayCalendar.css';
 import './css/mobile.css';
 
@@ -22,7 +22,6 @@ const DayCalendar = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
   const {
     blocks,
-    timeBlocks,
     addTimeBlock,
     updateTimeBlock,
     deleteTimeBlock,
@@ -30,7 +29,6 @@ const DayCalendar = () => {
     formatDateKey,
   } = useTimeBlocks(triggerNotification);
 
-  // Use the custom hook to get filtered blocks
   const blocksForSelectedDate = useFilteredBlocks(blocks, selectedDate, formatDateKey);
 
   const openModal = () => {

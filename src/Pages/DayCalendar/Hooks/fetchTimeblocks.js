@@ -5,18 +5,15 @@ import useApi from '../../../Hooks/useApi';
 import { formatDateKey } from '../Utils/dateFormat';
 
 const useTimeBlocks = (triggerNotification) => {
-  const [timeBlocks, setTimeBlocks] = useState({});
-  const [blocks, setBlocks] = useState({});
+  const [blocks, setBlocks] = useState([]);
   const api = useApi();
 
   useEffect(() => {
     const fetchTimeBlocks = async () => {
       try {
         const response = await api.get(`${window.baseDomain}api/timeblocks/`, { noCache: true });
-        const blocks = response || [];
-        
-        setTimeBlocks(blocks);
-        setBlocks(blocks);
+        const blocksData = response || [];
+        setBlocks(blocksData);
       } catch (err) {
         console.error('[useTimeBlocks] Error fetching time blocks:', err);
       }
@@ -27,8 +24,7 @@ const useTimeBlocks = (triggerNotification) => {
 
   const parseTime = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes;
-    return totalMinutes;
+    return hours * 60 + minutes;
   };
 
   const isOverlapping = (newBlock, existingBlocks) => {
@@ -36,9 +32,7 @@ const useTimeBlocks = (triggerNotification) => {
     const newEnd = parseTime(newBlock.endTime);
 
     for (const block of existingBlocks) {
-      if (block._id === newBlock._id) {
-        continue;
-      }
+      if (block._id === newBlock._id) continue;
       const blockStart = parseTime(block.startTime);
       const blockEnd = parseTime(block.endTime);
 
@@ -54,10 +48,7 @@ const useTimeBlocks = (triggerNotification) => {
   };
 
   const addTimeBlock = async (block) => {
-    const dateKey = block.date;
-    const existingBlocks = timeBlocks[dateKey] || [];
-
-    if (isOverlapping(block, existingBlocks)) {
+    if (isOverlapping(block, blocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
       return;
     }
@@ -65,25 +56,17 @@ const useTimeBlocks = (triggerNotification) => {
     try {
       const response = await api.post(`${window.baseDomain}api/timeblocks/`, block);
       block._id = response.id;
-      setTimeBlocks((prevTimeBlocks) => {
-        const updatedBlocks = [...(prevTimeBlocks[dateKey] || []), block];
-        return {
-          ...prevTimeBlocks,
-          [dateKey]: updatedBlocks,
-        };
-      });
+      setBlocks((prevBlocks) => [...prevBlocks, block]);
       triggerNotification('Tijdsblok toegevoegd', 'success');
       return block;
     } catch (err) {
+      console.error('[useTimeBlocks] Error adding time block:', err);
       throw err;
     }
   };
 
   const updateTimeBlock = async (block) => {
-    const dateKey = block.date;
-    const existingBlocks = timeBlocks[dateKey] || [];
-
-    if (isOverlapping(block, existingBlocks)) {
+    if (isOverlapping(block, blocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
       return;
     }
@@ -91,21 +74,13 @@ const useTimeBlocks = (triggerNotification) => {
     try {
       const updateUrl = `${window.baseDomain}api/timeblocks/${block._id}/`;
       await api.put(updateUrl, block);
-      setTimeBlocks((prevTimeBlocks) => {
-        if (!prevTimeBlocks[dateKey]) {
-          return prevTimeBlocks;
-        }
-        const updatedBlocks = prevTimeBlocks[dateKey].map((b) =>
-          b._id === block._id ? block : b
-        );
-        return {
-          ...prevTimeBlocks,
-          [dateKey]: updatedBlocks,
-        };
-      });
+      setBlocks((prevBlocks) =>
+        prevBlocks.map((b) => (b._id === block._id ? block : b))
+      );
       triggerNotification('Tijdsblok bewerkt', 'success');
       return block;
     } catch (err) {
+      console.error('[useTimeBlocks] Error updating time block:', err);
       throw err;
     }
   };
@@ -114,19 +89,9 @@ const useTimeBlocks = (triggerNotification) => {
     try {
       const deleteUrl = `${window.baseDomain}api/timeblocks/${blockToDelete._id}/`;
       await api.delete(deleteUrl);
-      const dateKey = blockToDelete.date;
-      setTimeBlocks((prevTimeBlocks) => {
-        if (!prevTimeBlocks[dateKey]) {
-          return prevTimeBlocks;
-        }
-        const updatedBlocks = prevTimeBlocks[dateKey].filter(
-          (block) => block._id !== blockToDelete._id
-        );
-        return {
-          ...prevTimeBlocks,
-          [dateKey]: updatedBlocks,
-        };
-      });
+      setBlocks((prevBlocks) =>
+        prevBlocks.filter((block) => block._id !== blockToDelete._id)
+      );
       triggerNotification('Tijdsblok verwijderd', 'success');
     } catch (err) {
       console.error('[useTimeBlocks] Error deleting time block:', err);
@@ -134,10 +99,7 @@ const useTimeBlocks = (triggerNotification) => {
   };
 
   const handleTimeBlockMove = async (updatedBlock) => {
-    const dateKey = updatedBlock.date;
-    const existingBlocks = timeBlocks[dateKey] || [];
-
-    if (isOverlapping(updatedBlock, existingBlocks)) {
+    if (isOverlapping(updatedBlock, blocks)) {
       triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
       return;
     }
@@ -145,27 +107,18 @@ const useTimeBlocks = (triggerNotification) => {
     try {
       const updateUrl = `${window.baseDomain}api/timeblocks/${updatedBlock._id}/`;
       await api.put(updateUrl, updatedBlock);
-      setTimeBlocks((prevTimeBlocks) => {
-        if (!prevTimeBlocks[dateKey]) {
-          return prevTimeBlocks;
-        }
-        const updatedBlocks = prevTimeBlocks[dateKey].map((b) =>
-          b._id === updatedBlock._id ? updatedBlock : b
-        );
-        return {
-          ...prevTimeBlocks,
-          [dateKey]: updatedBlocks,
-        };
-      });
+      setBlocks((prevBlocks) =>
+        prevBlocks.map((b) => (b._id === updatedBlock._id ? updatedBlock : b))
+      );
       triggerNotification('Tijdsblok verplaatst', 'success');
     } catch (err) {
+      console.error('[useTimeBlocks] Error moving time block:', err);
       triggerNotification('Fout bij het verplaatsen van het tijdsblok', 'error');
     }
   };
 
   return {
     blocks,
-    timeBlocks,
     addTimeBlock,
     updateTimeBlock,
     deleteTimeBlock,
