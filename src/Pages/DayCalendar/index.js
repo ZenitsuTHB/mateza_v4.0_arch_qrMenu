@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import Timeline from './Timeline.js';
+import Timeline from './time.js';
 import Modal from './Modal/index.js';
 import DatePickerComponent from './Buttons/DatePicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
