@@ -1,8 +1,8 @@
 // src/components/Modal/ModalContent.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/modalContent.css';
-import { FaCalendarWeek } from 'react-icons/fa'; // Import FontAwesome icon
+import { FaCalendarWeek } from 'react-icons/fa';
 
 const ModalContent = ({
   formData,
@@ -12,7 +12,14 @@ const ModalContent = ({
   existingBlock,
   selectedDate,
 }) => {
-  const [showMessage, setShowMessage] = useState(true); // Visibility state
+  const [showMessage, setShowMessage] = useState(true);
+
+  useEffect(() => {
+    const isMessageHidden = localStorage.getItem('hideWeeklyScheduleMessage');
+    if (isMessageHidden === 'true') {
+      setShowMessage(false);
+    }
+  }, []);
 
   const formatDateDutch = (date) => {
     const months = [
@@ -44,6 +51,11 @@ const ModalContent = ({
 
   const handleCloseMessage = () => {
     setShowMessage(false);
+  };
+
+  const handlePermanentCloseMessage = () => {
+    setShowMessage(false);
+    localStorage.setItem('hideWeeklyScheduleMessage', 'true');
   };
 
   return (
@@ -85,7 +97,6 @@ const ModalContent = ({
             />
           </label>
         </div>
-        {/* Zitplaatsen Input */}
         <label className="modal-label">
           Max Capaciteit Gasten:
           <input
@@ -107,26 +118,24 @@ const ModalContent = ({
             required
           />
         </label>
-		{/* Conditionally Rendered Light Gray Container with Icon and Message */}
-		{showMessage && (
-        <div className="weekly-schedule-container">
-          <FaCalendarWeek className="weekly-schedule-icon" />
-          <div className="weekly-schedule-message">
-            <span>
-              <strong>Bovenstaande instellingen betreffen het huidige tijdsblok.</strong> U kunt een tijdsblok herhalen en openingsuren instellen in Schema.
-            </span>
-			<span className="close-message" onClick={handleCloseMessage}>
-              Verbergen
-            </span>
-			<span className="close-message left-margin" onClick={handleCloseMessage}>
-              Sluiten
-            </span>
+        
+        {showMessage && (
+          <div className="weekly-schedule-container">
+            <FaCalendarWeek className="weekly-schedule-icon" />
+            <div className="weekly-schedule-message">
+              <span>
+                <strong>Bovenstaande instellingen betreffen het huidige tijdsblok.</strong> U kunt een tijdsblok herhalen en openingsuren instellen in Schema.
+              </span>
+              <span className="close-message" onClick={handleCloseMessage}>
+                Verbergen
+              </span>
+              <span className="close-message left-margin" onClick={handlePermanentCloseMessage}>
+                Sluiten
+              </span>
+            </div>
           </div>
+        )}
 
-		  
-        </div>
-		
-      )}
         <div className="modal-buttons">
           {existingBlock && (
             <button
