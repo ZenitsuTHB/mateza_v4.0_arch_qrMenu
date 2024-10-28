@@ -1,5 +1,12 @@
 
 
+.error-message {
+	color: orange;
+	font-size: 13px;
+	width: 200%;
+	font-weight: 500;
+	margin-top: -20px;
+}
   
   /* Switch Styling */
   .day-calendar-page .switch {

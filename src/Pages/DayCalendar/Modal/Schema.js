@@ -1,6 +1,4 @@
-// src/components/Modal/Schema.jsx
-
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/schema.css';
 
@@ -11,6 +9,7 @@ const Schema = ({
   onDeleteSchema,
   defaultStartTime,
   defaultEndTime,
+  triggerNotification, // Added prop
 }) => {
   const items = [
     { id: 'Monday', label: 'Maandag', type: 'day' },
@@ -23,6 +22,9 @@ const Schema = ({
     { id: 'period', label: 'Herhalen voor Beperkte Periode', type: 'duration' },
   ];
 
+  const [errors, setErrors] = useState({});
+  const [isSaveAttempted, setIsSaveAttempted] = useState(false);
+
   const handleToggle = (itemId) => {
     setSchemaSettings((prev) => {
       const isEnabled = prev[itemId]?.enabled;
@@ -31,8 +33,10 @@ const Schema = ({
           ...prev,
           [itemId]: {
             enabled: true,
-            startTime: prev[itemId]?.startTime || defaultStartTime,
-            endTime: prev[itemId]?.endTime || defaultEndTime,
+            startTime: prev[itemId]?.startTime || (items.find(item => item.id === itemId).type === 'day' ? defaultStartTime : ''),
+            endTime: prev[itemId]?.endTime || (items.find(item => item.id === itemId).type === 'day' ? defaultEndTime : ''),
+            startDate: prev[itemId]?.startDate || '',
+            endDate: prev[itemId]?.endDate || '',
           },
         };
       } else {
@@ -52,8 +56,52 @@ const Schema = ({
     }));
   };
 
+  const validate = () => {
+    const newErrors = {};
+
+    items.forEach((item) => {
+      if (schemaSettings[item.id]?.enabled) {
+        if (item.type === 'day') {
+          const { startTime, endTime } = schemaSettings[item.id];
+          if (!startTime || !endTime) {
+            newErrors[item.id] = {
+              ...newErrors[item.id],
+              timeEmpty: 'Start tijd en eindtijd moeten ingevuld zijn.',
+            };
+          } else if (startTime >= endTime) {
+            newErrors[item.id] = {
+              ...newErrors[item.id],
+              timeOrder: 'Start tijd moet voor eindtijd zijn.',
+            };
+          }
+        } else if (item.type === 'duration') {
+          const { startDate, endDate } = schemaSettings[item.id];
+          if (!startDate || !endDate) {
+            newErrors[item.id] = {
+              ...newErrors[item.id],
+              dateEmpty: 'Start datum en einddatum moeten ingevuld zijn.',
+            };
+          } else if (startDate > endDate) {
+            newErrors[item.id] = {
+              ...newErrors[item.id],
+              dateOrder: 'Start datum moet voor einddatum zijn.',
+            };
+          }
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSaveSchema = () => {
-    onSaveSchema();
+    setIsSaveAttempted(true);
+    if (validate()) {
+      onSaveSchema();
+    } else {
+      triggerNotification('Controleer de invulvelden', 'warning');
+    }
   };
 
   return (
@@ -114,6 +162,9 @@ const Schema = ({
                           required
                         />
                       </label>
+                      {isSaveAttempted && errors[item.id] && Object.values(errors[item.id]).map((errorMsg, index) => (
+                        <span key={index} className="error-message">{errorMsg}</span>
+                      ))}
                     </>
                   ) : (
                     <>
@@ -141,6 +192,9 @@ const Schema = ({
                           required
                         />
                       </label>
+                      {isSaveAttempted && errors[item.id] && Object.values(errors[item.id]).map((errorMsg, index) => (
+                        <span key={index} className="error-message">{errorMsg}</span>
+                      ))}
                     </>
                   )}
                 </motion.div>

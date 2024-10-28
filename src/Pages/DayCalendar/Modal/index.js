@@ -8,7 +8,7 @@ import ExceptionalDays from './Exceptions';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
 
-const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
+const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, triggerNotification }) => {
   const [schemaSettings, setSchemaSettings] = useState(
     existingBlock?.schemaSettings || {}
   );
@@ -110,6 +110,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate }) => {
           schemaSettings={schemaSettings}
           setSchemaSettings={setSchemaSettings}
           onSaveSchema={handleSaveSchema}
+          triggerNotification={triggerNotification}
         />
       ),
     },

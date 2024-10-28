@@ -81,6 +81,7 @@ const DayCalendar = () => {
             onDelete={deleteTimeBlock}
             existingBlock={editingBlock}
             selectedDate={selectedDate}
+            triggerNotification={triggerNotification}
           />
         )}
         <div className="controls">
