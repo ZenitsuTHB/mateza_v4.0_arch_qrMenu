@@ -2,7 +2,7 @@
 
 /* Existing styles... */
 
-.weekly-schedule-container {
+.day-calendar-page .weekly-schedule-container {
 	display: flex;
 	align-items: center;
 	background-color: #f0f0f0; /* Light gray background */
@@ -12,31 +12,18 @@
 	margin-bottom: 20px; /* Space below the container */
   }
   
-  .weekly-schedule-icon {
+  .day-calendar-page .weekly-schedule-icon {
 	color: #555; /* Gray color for the icon */
 	font-size: 35px;
 	margin-right: 10px; /* Space between icon and text */
   }
   
-  .weekly-schedule-container span {
+  .day-calendar-page .weekly-schedule-container span {
 	font-size: 15px;
 	font-style: italic;
 	color: #333; /* Darker text for better readability */
   }
   
-  /* Optional: Responsive adjustments */
-  @media (max-width: 600px) {
-	.weekly-schedule-container {
-	  flex-direction: column;
-	  align-items: flex-start;
-	}
-  
-	.weekly-schedule-icon {
-	  margin-bottom: 5px;
-	}
-  }
-  
-  /* Existing styles... */
   
 
   .day-calendar-page .modal-label {
