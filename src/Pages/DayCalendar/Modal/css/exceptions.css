@@ -1,38 +1,38 @@
 /* src/components/Modal/css/exceptionalDays.css */
 
-.exception-type-section {
+.day-calendar-page .exception-type-section {
 	margin-bottom: 30px;
   }
   
-  .exception-type-section h3 {
+  .day-calendar-page .exception-type-section h3 {
 	margin-bottom: 10px;
 	font-size: 18px;
   }
   
-  .exceptional-days-list {
+  .day-calendar-page .exceptional-days-list {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
   }
   
-  .exceptional-day-item {
+  .day-calendar-page .exceptional-day-item {
 	border-bottom: 1px solid #eee;
 	padding: 15px;
   }
   
-  .day-header {
+  .day-calendar-page .day-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
   }
   
-  .day-label {
+  .day-calendar-page .day-label {
 	font-size: 16px;
 	font-weight: 500;
   }
   
   /* Switch Styling */
-  .switch {
+  .day-calendar-page .switch {
 	position: relative;
 	display: inline-block;
 	width: 50px;
@@ -40,13 +40,13 @@
 	margin-left: 10px;
   }
   
-  .switch input {
+  .day-calendar-page .switch input {
 	opacity: 0;
 	width: 0;
 	height: 0;
   }
   
-  .slider {
+  .day-calendar-page .slider {
 	position: absolute;
 	cursor: pointer;
 	top: 0;
@@ -58,7 +58,7 @@
 	border-radius: 24px;
   }
   
-  .slider:before {
+  .day-calendar-page .slider:before {
 	position: absolute;
 	content: "";
 	height: 18px;
@@ -70,26 +70,26 @@
 	border-radius: 50%;
   }
   
-  .switch input:checked + .slider {
+  .day-calendar-page .switch input:checked + .slider {
 	background-color: var(--color-blue);
   }
   
-  .switch input:checked + .slider:before {
+  .day-calendar-page .switch input:checked + .slider:before {
 	transform: translateX(26px);
   }
   
-  .switch input:focus + .slider {
+  .day-calendar-page .switch input:focus + .slider {
 	box-shadow: 0 0 1px var(--color-blue);
   }
   
-  .inputs-container {
+  .day-calendar-page .inputs-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
 	margin-top: 10px;
   }
   
-  .add-exception-button {
+  .day-calendar-page .add-exception-button {
 	margin-top: 15px;
 	background: none;
 	border: none;
@@ -100,34 +100,34 @@
 	padding: 0;
   }
   
-  .add-exception-button:hover {
+  .day-calendar-page .add-exception-button:hover {
 	text-decoration: underline;
   }
   
-  .modal-label {
+  .day-calendar-page .modal-label {
 	display: flex;
 	flex-direction: column;
 	font-weight: 500;
   }
   
-  .modal-label input,
-  .modal-label select {
+  .day-calendar-page .modal-label input,
+  .day-calendar-page .modal-label select {
 	margin-top: 5px;
 	padding: 5px;
 	font-size: 14px;
   }
   
-  .modal-buttons {
+  .day-calendar-page .modal-buttons {
 	margin-top: 20px;
   }
   
 
   
-.day-label.disabled {
+  .day-calendar-page .day-label.disabled {
 	opacity: 0.5;
   }
   
-  .day-label {
+  .day-calendar-page .day-label {
 	font-size: 16px;
 	font-weight: 500;
 	flex: 1;

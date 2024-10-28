@@ -1,10 +1,10 @@
 @media (max-width: 900px) {
-	.time-inputs-container {
+	.day-calendar-page .time-inputs-container {
 	  gap: 0;
 	  grid-template-columns: 1fr;
 	}
   
-	.time-input {
+	.day-calendar-page .time-input {
 	  width: 100%;
 	}
   }
