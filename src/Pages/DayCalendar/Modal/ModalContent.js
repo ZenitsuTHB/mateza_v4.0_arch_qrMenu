@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './css/modalContent.css';
+import { FaCalendarWeek } from 'react-icons/fa'; // Import FontAwesome icon
 
 const ModalContent = ({
   formData,
@@ -41,8 +42,11 @@ const ModalContent = ({
 
   return (
     <>
-      <h2 className="secondary-title">{existingBlock ? 'Tijdsblok Bewerken' : 'Tijdsblok Toevoegen'}</h2>
-	  <form onSubmit={(e) => handleSubmit(e, false)}>
+      <h2 className="secondary-title">
+        {existingBlock ? 'Tijdsblok Bewerken' : 'Tijdsblok Toevoegen'}
+      </h2>
+
+      <form onSubmit={(e) => handleSubmit(e, false)}>
         <label className="modal-label">
           Titel:
           <input
@@ -97,6 +101,11 @@ const ModalContent = ({
             required
           />
         </label>
+		{/* New Light Gray Container with Icon and Message */}
+		<div className="weekly-schedule-container">
+        <FaCalendarWeek className="weekly-schedule-icon" />
+        <span>Deze instellen betreffen enkel het huidige tijdsblok. Je kunt wekelijkse schema's maken en openingsuren instellen in Schema.</span>
+      </div>
         <div className="modal-buttons">
           {existingBlock && (
             <button
