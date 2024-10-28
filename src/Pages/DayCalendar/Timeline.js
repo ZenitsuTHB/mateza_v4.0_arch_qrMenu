@@ -120,16 +120,19 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
               parseTime(block.endTime) - parseTime(block.startTime);
             const blockHeight = (blockDurationMinutes / 60) * hourHeight;
 
+            const isRepeated = block.dayOfWeekBlock === true;
+
             return (
               <Draggable
                 axis="y"
                 bounds="parent"
-                onStart={handleDragStart}
-                onDrag={(e, data) => handleDrag(e, data, block, setBlockPositions)}
-                onStop={(e, data) => handleDragStop(e, data, block, setBlockPositions)}
+                onStart={isRepeated ? () => false : handleDragStart}
+                onDrag={isRepeated ? null : (e, data) => handleDrag(e, data, block, setBlockPositions)}
+                onStop={isRepeated ? null : (e, data) => handleDragStop(e, data, block, setBlockPositions)}
                 key={block._id + block.startTime + block.endTime}
                 position={adjustedPosition}
                 handle=".grip-handle"
+                disabled={isRepeated} // Disable dragging for repeated blocks
               >
                 <div
                   className="time-block"
@@ -158,7 +161,13 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                       />
                     )}
                   </div>
-                  <div className="grip-handle">
+                  <div
+                    className="grip-handle"
+                    style={{
+                      opacity: isRepeated ? 0 : 1, // Hide grip for repeated blocks
+                      cursor: isRepeated ? 'default' : 'grab',
+                    }}
+                  >
                     <FaGripHorizontal />
                   </div>
                 </div>
