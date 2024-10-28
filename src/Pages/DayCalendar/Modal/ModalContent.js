@@ -1,6 +1,6 @@
 // src/components/Modal/ModalContent.jsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import './css/modalContent.css';
 import { FaCalendarWeek } from 'react-icons/fa'; // Import FontAwesome icon
 
@@ -12,6 +12,8 @@ const ModalContent = ({
   existingBlock,
   selectedDate,
 }) => {
+  const [showMessage, setShowMessage] = useState(true); // Visibility state
+
   const formatDateDutch = (date) => {
     const months = [
       'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -38,6 +40,10 @@ const ModalContent = ({
       ...prev,
       [name]: newValue,
     }));
+  };
+
+  const handleCloseMessage = () => {
+    setShowMessage(false);
   };
 
   return (
@@ -101,11 +107,26 @@ const ModalContent = ({
             required
           />
         </label>
-		{/* New Light Gray Container with Icon and Message */}
-		<div className="weekly-schedule-container">
-        <FaCalendarWeek className="weekly-schedule-icon" />
-        <span>Deze instellen betreffen enkel het huidige tijdsblok. Je kunt wekelijkse schema's maken en openingsuren instellen in Schema.</span>
-      </div>
+		{/* Conditionally Rendered Light Gray Container with Icon and Message */}
+		{showMessage && (
+        <div className="weekly-schedule-container">
+          <FaCalendarWeek className="weekly-schedule-icon" />
+          <div className="weekly-schedule-message">
+            <span>
+              <strong>Bovenstaande instellingen betreffen het huidige tijdsblok.</strong> U kunt een tijdsblok herhalen en openingsuren instellen in Schema.
+            </span>
+			<span className="close-message" onClick={handleCloseMessage}>
+              Verbergen
+            </span>
+			<span className="close-message left-margin" onClick={handleCloseMessage}>
+              Sluiten
+            </span>
+          </div>
+
+		  
+        </div>
+		
+      )}
         <div className="modal-buttons">
           {existingBlock && (
             <button
