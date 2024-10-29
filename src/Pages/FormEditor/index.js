@@ -23,11 +23,9 @@ const DragAndDropEditor = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
   const { canvasItems, setCanvasItems, loading, error, updateCanvasItemsAPI } = useCanvasItems(triggerNotification);
 
-  // Combined list including default and user-added blocks
   const [allCanvasItems, setAllCanvasItems] = useState([...defaultCanvasItems, ...canvasItems]);
 
   useEffect(() => {
-    // Update the combined list whenever canvasItems change
     setAllCanvasItems([...defaultCanvasItems, ...canvasItems]);
   }, [canvasItems]);
 
@@ -52,17 +50,14 @@ const DragAndDropEditor = () => {
     setDropPosition(null);
 
     if (!result.destination) return;
-
     const { source, destination } = result;
-
-    // If dragging from Palette to Canvas
     if (source.droppableId === 'Palette' && destination.droppableId === 'Canvas') {
       const item = blocks.find(block => block.id === result.draggableId);
       if (!item) return;
 
       const newItem = {
         ...item,
-        id: `${item.id}-${Date.now()}`, // Unique ID for user-added blocks
+        id: `${item.id}-${Date.now()}`,
         placeholder: '',
         required: false,
       };
@@ -72,7 +67,6 @@ const DragAndDropEditor = () => {
       setAllCanvasItems(newAllCanvasItems);
       updateCanvasItemsAPI(newAllCanvasItems.filter(item => !item.id.startsWith('default-')));
     }
-    // If dragging within Canvas
     else if (source.droppableId === 'Canvas' && destination.droppableId === 'Canvas') {
       const newAllCanvasItems = Array.from(allCanvasItems);
       const [movedItem] = newAllCanvasItems.splice(source.index, 1);
@@ -92,7 +86,6 @@ const DragAndDropEditor = () => {
   };
 
   const handleDelete = (id) => {
-    // Prevent deletion of default items
     if (id.startsWith('default-')) return;
 
     const newCanvasItems = allCanvasItems.filter(item => item.id !== id);
@@ -117,8 +110,8 @@ const DragAndDropEditor = () => {
         <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
           <Palette blocks={blocks} />
           <Canvas
-            items={allCanvasItems} // Pass the combined list
-            setItems={setAllCanvasItems} // Update the combined list
+            items={allCanvasItems}
+            setItems={setAllCanvasItems}
             dropPosition={dropPosition}
             onDelete={handleDelete}
           />
