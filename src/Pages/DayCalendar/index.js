@@ -9,6 +9,8 @@ import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useNotification from '../../Components/Notification/index';
 import useTimeBlocks from './Hooks/fetchTimeblocks.js';
 import useFilteredBlocks from './Hooks/useFilterBlocks.js';
+import ShiftSelector from './Buttons/ShiftSelector.js';
+import { shifts } from './Utils/constants.js';
 import './css/dayCalendar.css';
 import './css/mobile.css';
 
@@ -18,6 +20,9 @@ const DayCalendar = () => {
   const [editingBlock, setEditingBlock] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
+  const [selectedShift, setSelectedShift] = useState('');
 
   const { triggerNotification, NotificationComponent } = useNotification();
   const {
@@ -104,6 +109,15 @@ const DayCalendar = () => {
           </button>
         </div>
       </div>
+
+      {/* Shift Selector added below the DayCalendar */}
+      <ShiftSelector
+        shifts={shifts}
+        selectedShift={selectedShift}
+        setSelectedShift={setSelectedShift}
+        isShiftOptionsOpen={isShiftOptionsOpen}
+        setIsShiftOptionsOpen={setIsShiftOptionsOpen}
+      />
     </div>
   );
 };
