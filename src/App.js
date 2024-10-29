@@ -6,15 +6,8 @@ import TopBar from './Components/Structural/TopBar';
 import SecondaryTopBar from './Components/Structural/SecondaryTopBar';
 import Login from './Pages/Login';
 import WelcomeAnimation from './Pages/WelcomeAnimation';
-import './Styles/fonts.css';
-import './Styles/colors.css';
-import './Styles/buttons.css';
-import './Styles/containers.css';
-import './Styles/z-index.css';
-import './Styles/index.css';
-import './Styles/mobile.css';
+import './Styles/all-styles.js'
 
-// Set global window properties outside the component
 window.baseDomain = 'http://localhost:5000/';
 window.viewMode = 'full-screen';
 
