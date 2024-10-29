@@ -13,6 +13,7 @@ import usePagination from './Hooks/usePagination.js';
 import ShiftSelector from './Filters/ShiftSelector.js';
 import DatePickerComponent from './Filters/DatePicker.js';
 import useSortedReservations from './Hooks/useSortedReservation.js';
+import { getNewSortConfig } from './Utils/sortUtils.js'
 
 import { shifts } from './Utils/constants.js';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
@@ -73,16 +74,10 @@ const ReservationsList = () => {
     setCurrentPage(1);
   };
 
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    } else if (sortConfig.key === key && sortConfig.direction === 'desc') {
-      direction = null;
-      key = null;
-    }
-    setSortConfig({ key, direction });
-  };
+const handleSort = (key) => {
+    const newSortConfig = getNewSortConfig(sortConfig, key);
+    setSortConfig(newSortConfig);
+};
 
   return (
     <div className="reservations-page">
