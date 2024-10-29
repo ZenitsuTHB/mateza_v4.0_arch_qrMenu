@@ -15,9 +15,9 @@ import './Styles/mobile.css';
 
 function App() {
   const loginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
-  window.baseDomain = "http://localhost:5000/";
-  window.viewMode = "full-screen";
-  
+  window.baseDomain = 'http://localhost:5000/';
+  window.viewMode = 'full-screen';
+
   return loginSuccessful ? (
     <div className="app-component">
       <TopBar />
@@ -26,9 +26,7 @@ function App() {
       <ContentRouting />
     </div>
   ) : (
-    <div>
-      <Login />
-    </div>
+    <Login />
   );
 }
 

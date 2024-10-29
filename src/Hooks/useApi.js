@@ -34,8 +34,7 @@ const useApi = () => {
 
   const blockFor = (milliseconds) => {
     const start = Date.now();
-    while (Date.now() - start < milliseconds) {
-    }
+    while (Date.now() - start < milliseconds) {}
   };
 
   const get = useCallback(
@@ -84,6 +83,15 @@ const useApi = () => {
         return response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
+
+        if (error.response && error.response.status === 403) {
+          // Clear user session data
+          localStorage.removeItem('accessToken');
+          localStorage.setItem('loginSuccessful', 'false');
+          // Redirect to login page
+          window.location.href = '/login';
+        }
+
         throw error;
       }
     },
@@ -125,6 +133,15 @@ const useApi = () => {
         return response.data;
       } catch (error) {
         console.error(`Error with ${method} request:`, error);
+
+        if (error.response && error.response.status === 403) {
+          // Clear user session data
+          localStorage.removeItem('accessToken');
+          localStorage.setItem('loginSuccessful', 'false');
+          // Redirect to login page
+          window.location.href = '/login';
+        }
+
         throw error;
       }
     },
