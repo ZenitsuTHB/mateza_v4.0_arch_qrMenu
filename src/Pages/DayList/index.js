@@ -7,40 +7,29 @@ import Pagination from './Pagination.js';
 import reservationsData from './data.js';
 import SearchFilters from './SearchFilters/index.js';
 import { SearchContext } from '../../Context/SearchContext.js';
-import './css/reservationList.css';
-import './css/settingsTabs.css';
-
 import useIsMobile from './Hooks/useIsMobile.js';
 import useFilteredReservations from './Hooks/useFilteredReservations.js';
 import usePagination from './Hooks/usePagination.js';
-
 import ShiftSelector from './Filters/ShiftSelector.js';
 import DatePickerComponent from './Filters/DatePicker.js';
-
 import { shifts } from './Utils/constants.js';
-
-// Import Sort Icons
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import './css/reservationList.css';
+import './css/settingsTabs.css';
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openTooltipId, setOpenTooltipId] = useState(null);
   const isMobile = useIsMobile();
-
   const [nameSearch, setNameSearch] = useState('');
   const [guestsSearch, setGuestsSearch] = useState('');
   const [timeSearch, setTimeSearch] = useState('');
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
   const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('');
-
   const { searchQuery } = useContext(SearchContext);
   const itemsPerPage = 12;
-
-  // Sorting State: { key: 'aantalGasten' | 'tijdstip', direction: 'asc' | 'desc' }
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const filteredReservationsData = useFilteredReservations(reservationsData, {
@@ -52,18 +41,15 @@ const ReservationsList = () => {
     selectedShift,
   });
 
-  // Sorting Logic
   const sortedReservationsData = useMemo(() => {
     const sortedData = [...filteredReservationsData];
     if (sortConfig.key && sortConfig.direction) {
       sortedData.sort((a, b) => {
         if (sortConfig.key === 'aantalGasten') {
-          // Sort numerically
           return sortConfig.direction === 'asc'
             ? a.aantalGasten - b.aantalGasten
             : b.aantalGasten - a.aantalGasten;
         } else if (sortConfig.key === 'tijdstip') {
-          // Sort by time
           const timeA = a.tijdstip.split(':').map(Number);
           const timeB = b.tijdstip.split(':').map(Number);
           const dateA = new Date();
@@ -108,13 +94,12 @@ const ReservationsList = () => {
     setCurrentPage(1);
   };
 
-  // Handle Sorting
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     } else if (sortConfig.key === key && sortConfig.direction === 'desc') {
-      direction = null; // Remove sorting
+      direction = null;
       key = null;
     }
     setSortConfig({ key, direction });
@@ -129,7 +114,6 @@ const ReservationsList = () => {
         setIsDatePickerOpen={setIsDatePickerOpen}
         handleDateChange={handleDateChange}
       />
-
       <ShiftSelector
         shifts={shifts}
         selectedShift={selectedShift}
@@ -138,7 +122,6 @@ const ReservationsList = () => {
         setIsShiftOptionsOpen={setIsShiftOptionsOpen}
         setCurrentPage={setCurrentPage}
       />
-
       <SearchFilters
         nameSearch={nameSearch}
         setNameSearch={setNameSearch}
@@ -147,12 +130,10 @@ const ReservationsList = () => {
         timeSearch={timeSearch}
         setTimeSearch={setTimeSearch}
       />
-
       <div className="reservations-container">
         <div className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}>
           {!isMobile && (
             <div className="reservations-header reservation-row">
-              {/* Number of Guests Header */}
               <div
                 className="header-cell guests-header"
                 onClick={() => handleSort('aantalGasten')}
@@ -168,8 +149,6 @@ const ReservationsList = () => {
                   )}
                 </span>
               </div>
-
-              {/* Hour Header */}
               <div
                 className="header-cell hour-header"
                 onClick={() => handleSort('tijdstip')}
@@ -185,7 +164,6 @@ const ReservationsList = () => {
                   )}
                 </span>
               </div>
-
               <div>Naam</div>
               <div>Email</div>
               <div>Telefoon</div>

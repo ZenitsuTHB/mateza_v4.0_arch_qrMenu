@@ -1,4 +1,4 @@
-// src/Pages/DayCalendar/Filters/ShiftSelector.js
+// src/Buttons/ShiftSelector.js
 
 import React, { useRef, useEffect } from 'react';
 import { FaList } from 'react-icons/fa';
@@ -10,6 +10,7 @@ const ShiftSelector = ({
   setSelectedShift,
   isShiftOptionsOpen,
   setIsShiftOptionsOpen,
+  onShiftSelect, // New prop
 }) => {
   const shiftButtonRef = useRef(null);
   const shiftOptionsRef = useRef(null);
@@ -41,7 +42,9 @@ const ShiftSelector = ({
   const handleShiftSelection = (shift) => {
     setSelectedShift(shift);
     setIsShiftOptionsOpen(false);
-    // No need to reset pagination here
+    if (onShiftSelect) {
+      onShiftSelect(shift); // Call the handler passed from DayCalendar
+    }
   };
 
   const toggleShiftOptions = () => {

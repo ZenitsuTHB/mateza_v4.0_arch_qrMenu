@@ -1,6 +1,6 @@
 // src/Pages/DayCalendar/Timeline.js
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { FaGripHorizontal, FaThumbtack, FaRedo } from 'react-icons/fa';
 import useBlockPositions from './Hooks/useBlockPositions';
@@ -9,13 +9,20 @@ import useDragHandlers from './Hooks/useDragHandlers';
 import { parseTime } from './Utils/timeUtils';
 import './css/timeline.css';
 
-const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) => {
-  const [hiddenBefore, setHiddenBefore] = useState(null);
+const Timeline = ({
+  timeBlocks,
+  zoomLevel,
+  onTimeBlockClick,
+  onTimeBlockMove,
+  hiddenBefore,
+  setHiddenBefore,
+}) => {
   const scrollableRef = useRef(null);
-  
+
   const hourHeight = 60 * zoomLevel;
   const { hourInterval, snappingIntervalMinutes, hours } = useTimelineSettings(zoomLevel);
   const [blockPositions, setBlockPositions] = useBlockPositions(timeBlocks, hourHeight);
+
   const pixelOffset = hiddenBefore !== null ? hiddenBefore * hourHeight : 0;
   const getPixelOffset = () => pixelOffset;
 
@@ -26,19 +33,8 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     getPixelOffset
   );
 
-  const containerHeight = hiddenBefore !== null
-    ? (24 - hiddenBefore) * hourHeight
-    : 24 * hourHeight;
-
-  useEffect(() => {
-    const storedHiddenBefore = localStorage.getItem('hiddenBefore');
-    if (storedHiddenBefore !== null) {
-      const parsedHiddenBefore = parseInt(storedHiddenBefore, 10);
-      if (!isNaN(parsedHiddenBefore) && parsedHiddenBefore >= 0 && parsedHiddenBefore < 24) {
-        setHiddenBefore(parsedHiddenBefore);
-      }
-    }
-  }, []);
+  const containerHeight =
+    hiddenBefore !== null ? (24 - hiddenBefore) * hourHeight : 24 * hourHeight;
 
   useEffect(() => {
     if (scrollableRef.current) {
@@ -67,13 +63,13 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
     }
   };
 
-  const filteredHours = hiddenBefore !== null
-    ? hours.filter(hour => hour >= hiddenBefore)
-    : hours;
+  const filteredHours =
+    hiddenBefore !== null ? hours.filter((hour) => hour >= hiddenBefore) : hours;
 
-  const filteredTimeBlocks = hiddenBefore !== null
-    ? timeBlocks.filter(block => parseTime(block.startTime) >= hiddenBefore)
-    : timeBlocks;
+  const filteredTimeBlocks =
+    hiddenBefore !== null
+      ? timeBlocks.filter((block) => parseTime(block.startTime) >= hiddenBefore)
+      : timeBlocks;
 
   return (
     <div className="timeline">
@@ -110,14 +106,11 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
           ))}
           {filteredTimeBlocks.map((block) => {
             const position = blockPositions[block._id] || { x: 0, y: 0 };
-            const adjustedY = hiddenBefore !== null
-              ? position.y - pixelOffset
-              : position.y;
+            const adjustedY = hiddenBefore !== null ? position.y - pixelOffset : position.y;
 
             const adjustedPosition = { x: position.x, y: adjustedY };
 
-            const blockDurationMinutes =
-              parseTime(block.endTime) - parseTime(block.startTime);
+            const blockDurationMinutes = parseTime(block.endTime) - parseTime(block.startTime);
             const blockHeight = (blockDurationMinutes / 60) * hourHeight;
 
             const isRepeated = block.dayOfWeekBlock === true;
@@ -127,8 +120,16 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                 axis="y"
                 bounds="parent"
                 onStart={isRepeated ? () => false : handleDragStart}
-                onDrag={isRepeated ? null : (e, data) => handleDrag(e, data, block, setBlockPositions)}
-                onStop={isRepeated ? null : (e, data) => handleDragStop(e, data, block, setBlockPositions)}
+                onDrag={
+                  isRepeated
+                    ? null
+                    : (e, data) => handleDrag(e, data, block, setBlockPositions)
+                }
+                onStop={
+                  isRepeated
+                    ? null
+                    : (e, data) => handleDragStop(e, data, block, setBlockPositions)
+                }
                 key={block._id + block.startTime + block.endTime}
                 position={adjustedPosition}
                 handle=".grip-handle"
@@ -156,7 +157,6 @@ const Timeline = ({ timeBlocks, zoomLevel, onTimeBlockClick, onTimeBlockMove }) 
                           marginLeft: '5px',
                           verticalAlign: 'middle',
                           fontSize: '10px',
-
                         }}
                       />
                     )}

@@ -1,15 +1,15 @@
 // src/components/DayCalendar.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import Timeline from './time.js';
+import Timeline from './time.js'; // Updated import (ensure the path is correct)
 import Modal from './Modal/index.js';
 import DatePickerComponent from './Buttons/DatePicker.js';
 import { FaSearchPlus, FaSearchMinus, FaPlus } from 'react-icons/fa';
 import useNotification from '../../Components/Notification/index';
 import useTimeBlocks from './Hooks/fetchTimeblocks.js';
 import useFilteredBlocks from './Hooks/useFilterBlocks.js';
-import ShiftSelector from './Buttons/ShiftSelector.js';
+import ShiftSelector from './Buttons/ShiftSelector.js'; // Updated import
 import { shifts } from './Utils/constants.js';
 import './css/dayCalendar.css';
 import './css/mobile.css';
@@ -21,8 +21,12 @@ const DayCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
+  // State for ShiftSelector
   const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('');
+
+  // State for hiddenBefore (pinned hour)
+  const [hiddenBefore, setHiddenBefore] = useState(null);
 
   const { triggerNotification, NotificationComponent } = useNotification();
   const {
@@ -35,6 +39,17 @@ const DayCalendar = () => {
   } = useTimeBlocks(triggerNotification);
 
   const blocksForSelectedDate = useFilteredBlocks(blocks, selectedDate, formatDateKey);
+
+  // Initialize hiddenBefore from localStorage
+  useEffect(() => {
+    const storedHiddenBefore = localStorage.getItem('hiddenBefore');
+    if (storedHiddenBefore !== null) {
+      const parsedHiddenBefore = parseInt(storedHiddenBefore, 10);
+      if (!isNaN(parsedHiddenBefore) && parsedHiddenBefore >= 0 && parsedHiddenBefore < 24) {
+        setHiddenBefore(parsedHiddenBefore);
+      }
+    }
+  }, []);
 
   const openModal = () => {
     setEditingBlock(null);
@@ -58,6 +73,21 @@ const DayCalendar = () => {
     }
   };
 
+  // Handle shift selection
+  const handleShiftSelection = (shift) => {
+    setSelectedShift(shift);
+    setIsShiftOptionsOpen(false);
+
+    if (shift && shifts[shift]) {
+      const startHour = parseInt(shifts[shift].start.split(':')[0], 10);
+      setHiddenBefore(startHour);
+      localStorage.setItem('hiddenBefore', startHour);
+    } else {
+      setHiddenBefore(null);
+      localStorage.removeItem('hiddenBefore');
+    }
+  };
+
   return (
     <div className="day-calendar-page">
       <NotificationComponent />
@@ -67,6 +97,17 @@ const DayCalendar = () => {
         isDatePickerOpen={isDatePickerOpen}
         setIsDatePickerOpen={setIsDatePickerOpen}
       />
+
+      {/* Shift Selector */}
+      <ShiftSelector
+        shifts={shifts}
+        selectedShift={selectedShift}
+        setSelectedShift={setSelectedShift}
+        isShiftOptionsOpen={isShiftOptionsOpen}
+        setIsShiftOptionsOpen={setIsShiftOptionsOpen}
+        onShiftSelect={handleShiftSelection} // Pass the handler
+      />
+
       <div className="day-calendar">
         <Timeline
           timeBlocks={blocksForSelectedDate}
@@ -76,6 +117,8 @@ const DayCalendar = () => {
             setIsModalOpen(true);
           }}
           onTimeBlockMove={handleTimeBlockMove}
+          hiddenBefore={hiddenBefore} // Pass hiddenBefore to Timeline
+          setHiddenBefore={setHiddenBefore} // Pass setHiddenBefore to Timeline
         />
         {isModalOpen && (
           <Modal
@@ -109,15 +152,6 @@ const DayCalendar = () => {
           </button>
         </div>
       </div>
-
-      {/* Shift Selector added below the DayCalendar */}
-      <ShiftSelector
-        shifts={shifts}
-        selectedShift={selectedShift}
-        setSelectedShift={setSelectedShift}
-        isShiftOptionsOpen={isShiftOptionsOpen}
-        setIsShiftOptionsOpen={setIsShiftOptionsOpen}
-      />
     </div>
   );
 };
