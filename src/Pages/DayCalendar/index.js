@@ -20,12 +20,8 @@ const DayCalendar = () => {
   const [editingBlock, setEditingBlock] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
-  // State for ShiftSelector
   const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('');
-
-  // State for hiddenBefore (pinned hour)
   const [hiddenBefore, setHiddenBefore] = useState(null);
 
   const { triggerNotification, NotificationComponent } = useNotification();
@@ -40,7 +36,6 @@ const DayCalendar = () => {
 
   const blocksForSelectedDate = useFilteredBlocks(blocks, selectedDate, formatDateKey);
 
-  // Initialize hiddenBefore from localStorage
   useEffect(() => {
     const storedHiddenBefore = localStorage.getItem('hiddenBefore');
     if (storedHiddenBefore !== null) {
@@ -73,7 +68,6 @@ const DayCalendar = () => {
     }
   };
 
-  // Handle shift selection
   const handleShiftSelection = (shift) => {
     setSelectedShift(shift);
     setIsShiftOptionsOpen(false);
@@ -98,14 +92,13 @@ const DayCalendar = () => {
         setIsDatePickerOpen={setIsDatePickerOpen}
       />
 
-      {/* Shift Selector */}
       <ShiftSelector
         shifts={shifts}
         selectedShift={selectedShift}
         setSelectedShift={setSelectedShift}
         isShiftOptionsOpen={isShiftOptionsOpen}
         setIsShiftOptionsOpen={setIsShiftOptionsOpen}
-        onShiftSelect={handleShiftSelection} // Pass the handler
+        onShiftSelect={handleShiftSelection}
       />
 
       <div className="day-calendar">
@@ -117,8 +110,8 @@ const DayCalendar = () => {
             setIsModalOpen(true);
           }}
           onTimeBlockMove={handleTimeBlockMove}
-          hiddenBefore={hiddenBefore} // Pass hiddenBefore to Timeline
-          setHiddenBefore={setHiddenBefore} // Pass setHiddenBefore to Timeline
+          hiddenBefore={hiddenBefore}
+          setHiddenBefore={setHiddenBefore}
         />
         {isModalOpen && (
           <Modal
