@@ -28,8 +28,8 @@ i18n
         accountOnboarding: nlAccount,
       },
     },
-    lng: 'en', // default language
-    fallbackLng: 'en',
+    lng: 'nl', // default language
+    fallbackLng: 'nl',
     ns: ['accountOnboarding'], // Only 'account' namespace
     defaultNS: 'accountOnboarding', // Default namespace set to 'account'
     interpolation: {
