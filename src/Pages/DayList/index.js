@@ -12,6 +12,8 @@ import useFilteredReservations from './Hooks/useFilteredReservations.js';
 import usePagination from './Hooks/usePagination.js';
 import ShiftSelector from './Filters/ShiftSelector.js';
 import DatePickerComponent from './Filters/DatePicker.js';
+import useSortedReservations from './Hooks/useSortedReservation.js';
+
 import { shifts } from './Utils/constants.js';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
 import './css/reservationList.css';
@@ -41,30 +43,7 @@ const ReservationsList = () => {
     selectedShift,
   });
 
-  const sortedReservationsData = useMemo(() => {
-    const sortedData = [...filteredReservationsData];
-    if (sortConfig.key && sortConfig.direction) {
-      sortedData.sort((a, b) => {
-        if (sortConfig.key === 'aantalGasten') {
-          return sortConfig.direction === 'asc'
-            ? a.aantalGasten - b.aantalGasten
-            : b.aantalGasten - a.aantalGasten;
-        } else if (sortConfig.key === 'tijdstip') {
-          const timeA = a.tijdstip.split(':').map(Number);
-          const timeB = b.tijdstip.split(':').map(Number);
-          const dateA = new Date();
-          dateA.setHours(timeA[0], timeA[1], 0, 0);
-          const dateB = new Date();
-          dateB.setHours(timeB[0], timeB[1], 0, 0);
-          return sortConfig.direction === 'asc'
-            ? dateA - dateB
-            : dateB - dateA;
-        }
-        return 0;
-      });
-    }
-    return sortedData;
-  }, [filteredReservationsData, sortConfig]);
+  const sortedReservationsData = useSortedReservations(filteredReservationsData, sortConfig);
 
   const { currentData: currentReservations, totalPages } = usePagination(
     sortedReservationsData,
