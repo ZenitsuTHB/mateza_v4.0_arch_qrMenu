@@ -105,7 +105,7 @@ const WelcomeAnimation = () => {
   }, []);
 
   const handleButtonClick = () => {
-    localStorage.setItem('welcomeScreen', 'true');
+    localStorage.setItem('welcomeScreenShown', 'true');
     navigate('/');
     window.location.reload();
   };

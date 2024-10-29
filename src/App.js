@@ -1,33 +1,28 @@
 // App.js
 import React from 'react';
-import Sidebar from './Components/Structural/Sidebar';
-import ContentRouting from './Components/Structural/ContentRouting';
-import TopBar from './Components/Structural/TopBar';
-import SecondaryTopBar from './Components/Structural/SecondaryTopBar';
+import MainApp from './Components/MainApp';
 import Login from './Pages/Login';
 import WelcomeAnimation from './Pages/WelcomeAnimation';
-import './Styles/all-styles.js'
+import './Styles/all-styles.js';
 
 window.baseDomain = 'http://localhost:5000/';
 window.viewMode = 'full-screen';
 
 const App = () => {
-  const isLoginSuccessful = localStorage.getItem('loginSuccessful') === 'true';
-  const isWelcomeScreenShown = localStorage.getItem('welcomeScreen') === 'true';
+  const loginDone = localStorage.getItem('loginSuccessful') === 'true';
+  const animationShown = localStorage.getItem('welcomeScreenShown') === 'true';
 
-  if (isLoginSuccessful) {
-    if (isWelcomeScreenShown) {
-      return (<div className="app-component">
-        <TopBar />
-        <SecondaryTopBar />
-        <Sidebar />
-        <ContentRouting />
-      </div>);
-    }
+  if (!loginDone) {
+    return <Login />;
+  } 
+  else if (!animationShown)
+  {
     return <WelcomeAnimation />;
   }
-
-  return <Login />;
+  else 
+  {
+    return <MainApp />;
+  }
 };
 
 export default App;
