@@ -236,3 +236,45 @@
 	font-style: italic;
   }
   
+  /* Styles for the item label and arrow icon */
+.item-label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+  }
+  
+  .item-label.disabled {
+	opacity: 0.5;
+	cursor: default; /* Change cursor to default when disabled */
+  }
+  
+  /* Adjusted arrow icon positioning */
+  .item-label .arrow-icon {
+	margin-right: 10px;
+	transition: transform 0.3s;
+  }
+  
+  .item-label .arrow-icon.expanded {
+	transform: rotate(180deg);
+  }
+  
+  /* Styles for the item header */
+  .item-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+  }
+  
+  /* Item content overflow handling */
+  .item-content {
+	overflow: hidden;
+  }
+  
+  /* Remove the disabled message styling as it's no longer needed */
+  /* .disabled-message {
+	color: #888;
+	font-style: italic;
+  } */
+  
