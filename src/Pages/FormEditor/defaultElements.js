@@ -5,7 +5,6 @@ import {
   FaFont,
   FaEnvelope,
   FaPhone,
-  FaImage,
   FaList,
   FaHeading,
   FaKeyboard,
