@@ -7,6 +7,14 @@
 	font-weight: 500;
 	margin-top: -20px;
 }
+
+.error-shifts {
+	color: rgb(255, 216, 182);
+	font-size: 13px;
+	width: 200%;
+	font-weight: 500;
+	margin-top: 20px;
+}
   
   /* Switch Styling */
   .day-calendar-page .switch {
@@ -141,7 +149,7 @@
 
   /* Styles for the shift item box */
 .shift-item-box {
-  background-color: var(--color-lightblue); /* Gray background */
+  background-color: lightgray; /* Gray background */
   border-radius: 8px;
   padding: 15px;
   margin-top: 10px;
@@ -154,3 +162,25 @@
   gap: 16px;
   margin-top: 10px;
 }
+
+
+.add-shift-button {
+
+}
+
+.day-calendar-page .add-shift-button {
+	margin-top: 15px;
+	background: none;
+	border: none;
+	color: var(--color-blue);
+	cursor: pointer;
+	font-size: 16px;
+	text-align: left;
+	padding: 0;
+	text-align: center;
+	width: 100%;
+  }
+  
+  .day-calendar-page .add-shift-button:hover {
+	text-decoration: underline;
+  }

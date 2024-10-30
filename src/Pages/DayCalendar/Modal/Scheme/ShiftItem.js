@@ -1,8 +1,14 @@
-// ShiftItem.jsx
-
 import React from 'react';
 
-const ShiftItem = ({ shift, shiftIndex, itemId, handleShiftInputChange, removeShift }) => (
+const ShiftItem = ({
+  shift,
+  shiftIndex,
+  itemId,
+  handleShiftInputChange,
+  removeShift,
+  errors,
+  isSaveAttempted,
+}) => (
   <div className="shift-item shift-item-box">
     {/* Shift Inputs Grid */}
     <div className="shift-inputs-grid">
@@ -17,6 +23,12 @@ const ShiftItem = ({ shift, shiftIndex, itemId, handleShiftInputChange, removeSh
           }
           required
         />
+        {isSaveAttempted && errors?.startTime && (
+          <span className="error-shifts">{errors.startTime}</span>
+        )}
+        {isSaveAttempted && errors?.startTimeRange && (
+          <span className="error-shifts">{errors.startTimeRange}</span>
+        )}
       </label>
       <label className="modal-label shift-input">
         Shift naam:
@@ -29,6 +41,9 @@ const ShiftItem = ({ shift, shiftIndex, itemId, handleShiftInputChange, removeSh
           }
           required
         />
+        {isSaveAttempted && errors?.name && (
+          <span className="error-shifts">{errors.name}</span>
+        )}
       </label>
     </div>
     {/* Remove Shift Button */}

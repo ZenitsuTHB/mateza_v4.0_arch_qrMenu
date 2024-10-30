@@ -1,5 +1,3 @@
-// SchemeItem.jsx
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Shifts from './Shifts';
@@ -68,11 +66,13 @@ const SchemeItem = ({
                 </label>
                 {isSaveAttempted &&
                   errors[item.id] &&
-                  Object.values(errors[item.id]).map((errorMsg, index) => (
-                    <span key={index} className="error-message">
-                      {errorMsg}
-                    </span>
-                  ))}
+                  Object.values(errors[item.id])
+                    .filter((error) => typeof error === 'string')
+                    .map((errorMsg, index) => (
+                      <span key={index} className="error-shifts">
+                        {errorMsg}
+                      </span>
+                    ))}
               </>
             ) : (
               <>
@@ -103,7 +103,7 @@ const SchemeItem = ({
                 {isSaveAttempted &&
                   errors[item.id] &&
                   Object.values(errors[item.id]).map((errorMsg, index) => (
-                    <span key={index} className="error-message">
+                    <span key={index} className="error-shifts">
                       {errorMsg}
                     </span>
                   ))}
@@ -121,6 +121,8 @@ const SchemeItem = ({
           handleShiftInputChange={handleShiftInputChange}
           addShift={addShift}
           removeShift={removeShift}
+          errors={errors[item.id]?.shifts}
+          isSaveAttempted={isSaveAttempted}
         />
       )}
     </div>

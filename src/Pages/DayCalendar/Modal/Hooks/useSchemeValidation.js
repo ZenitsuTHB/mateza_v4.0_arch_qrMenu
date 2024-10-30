@@ -1,5 +1,3 @@
-// src/components/Modal/hooks/useSchemeValidation.js
-
 import { useState } from 'react';
 
 const useSchemeValidation = (items, schemeSettings) => {
@@ -10,7 +8,8 @@ const useSchemeValidation = (items, schemeSettings) => {
     items.forEach((item) => {
       if (schemeSettings[item.id]?.enabled) {
         if (item.type === 'day') {
-          const { startTime, endTime } = schemeSettings[item.id];
+          const { startTime, endTime, shiftsEnabled, shifts = [] } = schemeSettings[item.id];
+          // Existing validation for startTime and endTime
           if (!startTime || !endTime) {
             newErrors[item.id] = {
               ...newErrors[item.id],
@@ -21,6 +20,32 @@ const useSchemeValidation = (items, schemeSettings) => {
               ...newErrors[item.id],
               timeOrder: 'Start tijd moet voor eindtijd zijn.',
             };
+          }
+
+          // New validation for shifts
+          if (shiftsEnabled) {
+            shifts.forEach((shift, index) => {
+              // Initialize shift errors object
+              if (!newErrors[item.id]) newErrors[item.id] = {};
+              if (!newErrors[item.id].shifts) newErrors[item.id].shifts = {};
+              if (!newErrors[item.id].shifts[index]) newErrors[item.id].shifts[index] = {};
+
+              // Check if name and startTime are filled
+              if (!shift.name) {
+                newErrors[item.id].shifts[index].name = 'Shift naam moet ingevuld zijn.';
+              }
+              if (!shift.startTime) {
+                newErrors[item.id].shifts[index].startTime = 'Shift start tijd moet ingevuld zijn.';
+              }
+
+              // Check if shift startTime is within day's startTime and endTime
+              if (shift.startTime && startTime && endTime) {
+                if (shift.startTime < startTime || shift.startTime > endTime) {
+                  newErrors[item.id].shifts[index].startTimeRange =
+                    'Shift start tijd moet binnen de openingsuren vallen.';
+                }
+              }
+            });
           }
         } else if (item.type === 'duration') {
           const { startDate, endDate } = schemeSettings[item.id];

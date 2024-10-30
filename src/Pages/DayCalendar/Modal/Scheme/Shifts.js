@@ -1,5 +1,3 @@
-// Shifts.jsx
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ShiftItem from './ShiftItem';
@@ -12,6 +10,8 @@ const Shifts = ({
   handleShiftInputChange,
   addShift,
   removeShift,
+  errors,
+  isSaveAttempted,
 }) => {
   const shiftsEnabled = schemeSettings[itemId]?.shiftsEnabled || false;
   const shifts = schemeSettings[itemId]?.shifts || [];
@@ -42,6 +42,8 @@ const Shifts = ({
                 itemId={itemId}
                 handleShiftInputChange={handleShiftInputChange}
                 removeShift={removeShift}
+                errors={errors ? errors[shiftIndex] : {}}
+                isSaveAttempted={isSaveAttempted}
               />
             ))}
 
