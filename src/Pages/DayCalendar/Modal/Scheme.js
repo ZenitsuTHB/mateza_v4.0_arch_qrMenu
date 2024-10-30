@@ -245,8 +245,8 @@ const Scheme = ({
               )}
             </AnimatePresence>
 
-            {/* Shifts Toggle - Moved Outside of AnimatePresence */}
-            {schemeSettings[item.id]?.enabled && (
+            {/* Shifts Toggle */}
+            {schemeSettings[item.id]?.enabled && item.type === 'day' && (
               <div className="day-header">
                 <span className="day-label">Shifts aanzetten</span>
                 <label className="switch">
@@ -263,7 +263,8 @@ const Scheme = ({
             {/* Shifts Inputs */}
             <AnimatePresence>
               {schemeSettings[item.id]?.enabled &&
-                schemeSettings[item.id]?.shiftsEnabled && (
+                schemeSettings[item.id]?.shiftsEnabled &&
+                item.type === 'day' && (
                   <motion.div
                     className="shifts-container"
                     initial={{ height: 0, opacity: 0 }}
@@ -273,41 +274,45 @@ const Scheme = ({
                     layout
                   >
                     {schemeSettings[item.id]?.shifts?.map((shift, shiftIndex) => (
-                      <div key={shiftIndex} className="shift-item">
-                        <label className="modal-label shift-input">
-                          Shift naam:
-                          <input
-                            type="text"
-                            name={`shiftName-${item.id}-${shiftIndex}`}
-                            value={shift.name}
-                            onChange={(e) =>
-                              handleShiftInputChange(
-                                item.id,
-                                shiftIndex,
-                                'name',
-                                e.target.value
-                              )
-                            }
-                            required
-                          />
-                        </label>
-                        <label className="modal-label shift-input">
-                          Start tijd:
-                          <input
-                            type="time"
-                            name={`shiftStartTime-${item.id}-${shiftIndex}`}
-                            value={shift.startTime}
-                            onChange={(e) =>
-                              handleShiftInputChange(
-                                item.id,
-                                shiftIndex,
-                                'startTime',
-                                e.target.value
-                              )
-                            }
-                            required
-                          />
-                        </label>
+                      <div key={shiftIndex} className="shift-item shift-item-box">
+                        {/* Shift Inputs Grid */}
+                        <div className="shift-inputs-grid">
+                          <label className="modal-label shift-input">
+                            Start tijd:
+                            <input
+                              type="time"
+                              name={`shiftStartTime-${item.id}-${shiftIndex}`}
+                              value={shift.startTime}
+                              onChange={(e) =>
+                                handleShiftInputChange(
+                                  item.id,
+                                  shiftIndex,
+                                  'startTime',
+                                  e.target.value
+                                )
+                              }
+                              required
+                            />
+                          </label>
+                          <label className="modal-label shift-input">
+                            Shift naam:
+                            <input
+                              type="text"
+                              name={`shiftName-${item.id}-${shiftIndex}`}
+                              value={shift.name}
+                              onChange={(e) =>
+                                handleShiftInputChange(
+                                  item.id,
+                                  shiftIndex,
+                                  'name',
+                                  e.target.value
+                                )
+                              }
+                              required
+                            />
+                          </label>
+                        </div>
+                        {/* Remove Shift Button */}
                         <button
                           type="button"
                           className="remove-shift-button"
