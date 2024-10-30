@@ -121,26 +121,22 @@ const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
 	  }
 	}
   
-	// Check if the block falls within the period
 	const withinPeriod = isWithinPeriod(blockDateScheme, selectedDateObj);
 	if (!withinPeriod && blockDate !== dateKey) {
 	  console.log(`--> Outside of enabled period and block.date does not match selectedDate. Excluding block.`);
 	  return false;
 	}
   
-	// Direct date match
 	if (blockDate === dateKey) {
 	  console.log(`--> Block date matches the selected date. Adding to blocksForSelectedDate.`);
 	  block.dayOfWeekBlock = false;
 	  return true;
 	} else {
-	  // Check for weekday match
 	  const dayOfWeek = getDayOfWeek(selectedDateObj);
 	  const enabled = isDayEnabled(blockDateScheme, dayOfWeek, blockIndex);
 	  if (enabled) {
 		console.log(`--> Day is enabled. Setting block times to scheme settings and adding block to blocksForSelectedDate.`);
 		
-		// Set block startTime and endTime to match day settings
 		const daySettings = blockDateScheme[dayOfWeek];
 		block.startTime = daySettings.startTime;
 		block.endTime = daySettings.endTime;
