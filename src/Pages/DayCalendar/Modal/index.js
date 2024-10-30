@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import ModalWithTabs from './ModalWithTabs';
 import ModalContent from './ModalContent';
-import Scheme from './Scheme';
-import ExceptionalDays from './Exceptions';
+import Scheme from './Scheme/Scheme';
+import ExceptionalDays from './Exceptions/Exceptions';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
 

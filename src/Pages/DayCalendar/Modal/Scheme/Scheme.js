@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './css/scheme.css';
-import useSchemeValidation from './Hooks/useSchemeValidation'; // Import the custom hook
+import useSchemeValidation from '../Hooks/useSchemeValidation'; // Import the custom hook
 import SchemeItem from './SchemeItem';
 
 const Scheme = ({
