@@ -18,8 +18,8 @@ const getDayOfWeek = (dateObj) => {
   return dayOfWeek;
 };
 
-const isDayEnabled = (blockDateSchema, dayOfWeek, blockIndex) => {
-  const daySettings = blockDateSchema[dayOfWeek];
+const isDayEnabled = (blockDatescheme, dayOfWeek, blockIndex) => {
+  const daySettings = blockDatescheme[dayOfWeek];
   if (!daySettings) {
     console.warn(`--> Warning: No settings found for ${dayOfWeek} in Block ${blockIndex + 1}.`);
     return false;
@@ -30,16 +30,16 @@ const isDayEnabled = (blockDateSchema, dayOfWeek, blockIndex) => {
   return enabled;
 };
 
-const isWithinClosingPeriod = (blockDateSchema, selectedDateObj) => {
+const isWithinClosingPeriod = (blockDatescheme, selectedDateObj) => {
   console.log(`\n--- Checking Closing Period ---`);
   
-  if (!blockDateSchema.closing || !blockDateSchema.closing.enabled) {
-    console.log(`--> Closing is not enabled in the block schema.`);
+  if (!blockDatescheme.closing || !blockDatescheme.closing.enabled) {
+    console.log(`--> Closing is not enabled in the block scheme.`);
     return false;
   }
   console.log(`--> Closing is enabled.`);
 
-  const { startDate, endDate } = blockDateSchema.closing;
+  const { startDate, endDate } = blockDatescheme.closing;
   console.log(`--> Closing Start Date (raw): ${startDate}`);
   console.log(`--> Closing End Date (raw): ${endDate}`);
 
@@ -63,16 +63,16 @@ const isWithinClosingPeriod = (blockDateSchema, selectedDateObj) => {
   return within;
 };
 
-const isWithinPeriod = (blockDateSchema, selectedDateObj) => {
+const isWithinPeriod = (blockDatescheme, selectedDateObj) => {
   console.log(`\n--- Checking Period ---`);
 
-  if (!blockDateSchema.period || !blockDateSchema.period.enabled) {
-    console.log(`--> Period is not enabled or does not exist in the block schema.`);
+  if (!blockDatescheme.period || !blockDatescheme.period.enabled) {
+    console.log(`--> Period is not enabled or does not exist in the block scheme.`);
     return true;
   }
   console.log(`--> Period is enabled.`);
 
-  const { startDate, endDate } = blockDateSchema.period;
+  const { startDate, endDate } = blockDatescheme.period;
   console.log(`--> Period Start Date (raw): ${startDate}`);
   console.log(`--> Period End Date (raw): ${endDate}`);
 
@@ -98,19 +98,19 @@ const isWithinPeriod = (blockDateSchema, selectedDateObj) => {
 
 const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
 	const blockDate = block.date;
-	const blockDateSchema = block.schemaSettings;
+	const blockDateScheme = block.schemeSettings;
   
 	console.log(`\n--- Processing Block ${blockIndex + 1} ---`);
 	console.log(`Block Date: ${blockDate}`);
-	console.log(`Block Schema Settings:`, blockDateSchema);
+	console.log(`Block scheme Settings:`, blockDateScheme);
   
-	if (!blockDateSchema) {
-	  console.warn(`--> Warning: block.schemaSettings is undefined for Block ${blockIndex + 1}. Skipping this block.`);
+	if (!blockDateScheme) {
+	  console.warn(`--> Warning: block.schemeSettings is undefined for Block ${blockIndex + 1}. Skipping this block.`);
 	  return false;
 	}
   
 	// Check if the block falls within the closing period
-	const withinClosing = isWithinClosingPeriod(blockDateSchema, selectedDateObj);
+	const withinClosing = isWithinClosingPeriod(blockDateScheme, selectedDateObj);
 	if (withinClosing) {
 	  if (blockDate === dateKey) {
 		console.log(`--> Within closing period and block.date matches selectedDate. Adding to blocksForSelectedDate.`);
@@ -122,7 +122,7 @@ const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
 	}
   
 	// Check if the block falls within the period
-	const withinPeriod = isWithinPeriod(blockDateSchema, selectedDateObj);
+	const withinPeriod = isWithinPeriod(blockDateScheme, selectedDateObj);
 	if (!withinPeriod && blockDate !== dateKey) {
 	  console.log(`--> Outside of enabled period and block.date does not match selectedDate. Excluding block.`);
 	  return false;
@@ -136,12 +136,12 @@ const shouldIncludeBlock = (block, dateKey, selectedDateObj, blockIndex) => {
 	} else {
 	  // Check for weekday match
 	  const dayOfWeek = getDayOfWeek(selectedDateObj);
-	  const enabled = isDayEnabled(blockDateSchema, dayOfWeek, blockIndex);
+	  const enabled = isDayEnabled(blockDateScheme, dayOfWeek, blockIndex);
 	  if (enabled) {
-		console.log(`--> Day is enabled. Setting block times to schema settings and adding block to blocksForSelectedDate.`);
+		console.log(`--> Day is enabled. Setting block times to scheme settings and adding block to blocksForSelectedDate.`);
 		
 		// Set block startTime and endTime to match day settings
-		const daySettings = blockDateSchema[dayOfWeek];
+		const daySettings = blockDateScheme[dayOfWeek];
 		block.startTime = daySettings.startTime;
 		block.endTime = daySettings.endTime;
 		block.dayOfWeekBlock = true;

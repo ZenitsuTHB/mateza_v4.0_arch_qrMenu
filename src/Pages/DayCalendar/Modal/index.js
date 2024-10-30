@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import ModalWithTabs from './ModalWithTabs';
 import ModalContent from './ModalContent';
-import Schema from './Schema';
+import Scheme from './Scheme';
 import ExceptionalDays from './Exceptions';
 import { formatDateKey } from '../Utils/dateFormat';
 import './css/modalView.css';
 
 const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, triggerNotification }) => {
-  const [schemaSettings, setSchemaSettings] = useState(
-    existingBlock?.schemaSettings || {}
+  const [schemeSettings, setschemeSettings] = useState(
+    existingBlock?.schemeSettings || {}
   );
 
   const [exceptionalDays, setExceptionalDays] = useState(
@@ -69,7 +69,7 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, trigger
       _id: existingBlock ? existingBlock._id : undefined,
       date: formatDateKey(selectedDate),
       ...formData,
-      schemaSettings,
+      schemeSettings,
       exceptionalDays,
     };
     onSave(newBlock, continueToSettings);
@@ -106,10 +106,10 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, trigger
       id: 'schema',
       label: 'Schema',
       content: (
-        <Schema
-          schemaSettings={schemaSettings}
-          setSchemaSettings={setSchemaSettings}
-          onSaveSchema={handleSaveSchema}
+        <Scheme
+          schemeSettings={schemeSettings}
+          setschemeSettings={setschemeSettings}
+          onSaveScheme={handleSaveSchema}
           triggerNotification={triggerNotification}
         />
       ),

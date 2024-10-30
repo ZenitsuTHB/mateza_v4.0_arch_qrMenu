@@ -1,15 +1,15 @@
-// src/components/Modal/Schema.jsx
+// src/components/Modal/Scheme.jsx
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './css/schema.css';
-import useSchemaValidation from './Hooks/useSchemaValidation'; // Import the custom hook
+import './css/scheme.css';
+import useSchemeValidation from './Hooks/useSchemeValidation'; // Import the custom hook
 
-const Schema = ({
-  schemaSettings,
-  setSchemaSettings,
-  onSaveSchema,
-  onDeleteSchema,
+const Scheme = ({
+  schemeSettings,
+  setschemeSettings,
+  onSaveScheme,
+  onDeleteScheme,
   defaultStartTime,
   defaultEndTime,
   triggerNotification,
@@ -26,10 +26,10 @@ const Schema = ({
   ];
 
   const [isSaveAttempted, setIsSaveAttempted] = useState(false);
-  const { errors, validate } = useSchemaValidation(items, schemaSettings);
+  const { errors, validate } = useSchemeValidation(items, schemeSettings);
 
   const handleToggle = (itemId) => {
-    setSchemaSettings((prev) => {
+    setschemeSettings((prev) => {
       const isEnabled = prev[itemId]?.enabled;
       if (!isEnabled) {
         return {
@@ -58,7 +58,7 @@ const Schema = ({
   };
 
   const handleInputChange = (itemId, field, value) => {
-    setSchemaSettings((prev) => ({
+    setschemeSettings((prev) => ({
       ...prev,
       [itemId]: {
         ...prev[itemId],
@@ -67,10 +67,10 @@ const Schema = ({
     }));
   };
 
-  const handleSaveSchema = () => {
+  const handleSaveScheme = () => {
     setIsSaveAttempted(true);
     if (validate()) {
-      onSaveSchema();
+      onSaveScheme();
     } else {
       triggerNotification('Controleer de invulvelden', 'warning');
     }
@@ -79,12 +79,12 @@ const Schema = ({
   return (
     <div>
       <h2 className="secondary-title">Openingsuren</h2>
-      <div className="schema-list">
+      <div className="scheme-list">
         {items.map((item) => (
           <div
             key={item.id}
-            className={`schema-item ${
-              item.type !== 'day' ? 'schema-item-special' : ''
+            className={`scheme-item ${
+              item.type !== 'day' ? 'scheme-item-special' : ''
             }`}
           >
             <div className="day-header">
@@ -92,14 +92,14 @@ const Schema = ({
               <label className="switch">
                 <input
                   type="checkbox"
-                  checked={schemaSettings[item.id]?.enabled || false}
+                  checked={schemeSettings[item.id]?.enabled || false}
                   onChange={() => handleToggle(item.id)}
                 />
                 <span className="slider round"></span>
               </label>
             </div>
             <AnimatePresence>
-              {schemaSettings[item.id]?.enabled && (
+              {schemeSettings[item.id]?.enabled && (
                 <motion.div
                   className="time-inputs-container"
                   initial={{ height: 0, opacity: 0 }}
@@ -114,7 +114,7 @@ const Schema = ({
                         <input
                           type="time"
                           name={`startTime-${item.id}`}
-                          value={schemaSettings[item.id]?.startTime || ''}
+                          value={schemeSettings[item.id]?.startTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startTime', e.target.value)
                           }
@@ -126,7 +126,7 @@ const Schema = ({
                         <input
                           type="time"
                           name={`endTime-${item.id}`}
-                          value={schemaSettings[item.id]?.endTime || ''}
+                          value={schemeSettings[item.id]?.endTime || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endTime', e.target.value)
                           }
@@ -148,7 +148,7 @@ const Schema = ({
                         <input
                           type="date"
                           name={`startDate-${item.id}`}
-                          value={schemaSettings[item.id]?.startDate || ''}
+                          value={schemeSettings[item.id]?.startDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'startDate', e.target.value)
                           }
@@ -160,7 +160,7 @@ const Schema = ({
                         <input
                           type="date"
                           name={`endDate-${item.id}`}
-                          value={schemaSettings[item.id]?.endDate || ''}
+                          value={schemeSettings[item.id]?.endDate || ''}
                           onChange={(e) =>
                             handleInputChange(item.id, 'endDate', e.target.value)
                           }
@@ -186,7 +186,7 @@ const Schema = ({
         <button
           type="button"
           className="standard-button blue"
-          onClick={handleSaveSchema}
+          onClick={handleSaveScheme}
         >
           Opslaan
         </button>
@@ -195,4 +195,4 @@ const Schema = ({
   );
 };
 
-export default Schema;
+export default Scheme;

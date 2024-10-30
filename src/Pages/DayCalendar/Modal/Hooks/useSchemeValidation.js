@@ -1,16 +1,16 @@
-// src/components/Modal/hooks/useSchemaValidation.js
+// src/components/Modal/hooks/useSchemeValidation.js
 
 import { useState } from 'react';
 
-const useSchemaValidation = (items, schemaSettings) => {
+const useSchemeValidation = (items, schemeSettings) => {
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
     items.forEach((item) => {
-      if (schemaSettings[item.id]?.enabled) {
+      if (schemeSettings[item.id]?.enabled) {
         if (item.type === 'day') {
-          const { startTime, endTime } = schemaSettings[item.id];
+          const { startTime, endTime } = schemeSettings[item.id];
           if (!startTime || !endTime) {
             newErrors[item.id] = {
               ...newErrors[item.id],
@@ -23,7 +23,7 @@ const useSchemaValidation = (items, schemaSettings) => {
             };
           }
         } else if (item.type === 'duration') {
-          const { startDate, endDate } = schemaSettings[item.id];
+          const { startDate, endDate } = schemeSettings[item.id];
           if (!startDate || !endDate) {
             newErrors[item.id] = {
               ...newErrors[item.id],
@@ -46,4 +46,4 @@ const useSchemaValidation = (items, schemaSettings) => {
   return { errors, validate };
 };
 
-export default useSchemaValidation;
+export default useSchemeValidation;
