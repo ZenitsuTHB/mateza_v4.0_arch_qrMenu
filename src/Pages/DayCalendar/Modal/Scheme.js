@@ -48,6 +48,8 @@ const Scheme = ({
                 : ''),
             startDate: prev[itemId]?.startDate || '',
             endDate: prev[itemId]?.endDate || '',
+            shiftsEnabled: false,
+            shifts: [],
           },
         };
       } else {
@@ -55,6 +57,17 @@ const Scheme = ({
         return rest;
       }
     });
+  };
+
+  const handleShiftsToggle = (itemId) => {
+    setschemeSettings((prev) => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        shiftsEnabled: !prev[itemId]?.shiftsEnabled,
+        shifts: !prev[itemId]?.shiftsEnabled ? [] : prev[itemId].shifts,
+      },
+    }));
   };
 
   const handleInputChange = (itemId, field, value) => {
@@ -65,6 +78,54 @@ const Scheme = ({
         [field]: value,
       },
     }));
+  };
+
+  const handleShiftInputChange = (itemId, shiftIndex, field, value) => {
+    setschemeSettings((prev) => {
+      const shifts = [...(prev[itemId]?.shifts || [])];
+      shifts[shiftIndex] = {
+        ...shifts[shiftIndex],
+        [field]: value,
+      };
+      return {
+        ...prev,
+        [itemId]: {
+          ...prev[itemId],
+          shifts,
+        },
+      };
+    });
+  };
+
+  const addShift = (itemId) => {
+    setschemeSettings((prev) => {
+      const shifts = [...(prev[itemId]?.shifts || [])];
+      shifts.push({
+        name: '',
+        startTime: '',
+      });
+      return {
+        ...prev,
+        [itemId]: {
+          ...prev[itemId],
+          shifts,
+        },
+      };
+    });
+  };
+
+  const removeShift = (itemId, shiftIndex) => {
+    setschemeSettings((prev) => {
+      const shifts = [...(prev[itemId]?.shifts || [])];
+      shifts.splice(shiftIndex, 1);
+      return {
+        ...prev,
+        [itemId]: {
+          ...prev[itemId],
+          shifts,
+        },
+      };
+    });
   };
 
   const handleSaveScheme = () => {
@@ -87,6 +148,7 @@ const Scheme = ({
               item.type !== 'day' ? 'scheme-item-special' : ''
             }`}
           >
+            {/* Day Header */}
             <div className="day-header">
               <span className="day-label">{item.label}</span>
               <label className="switch">
@@ -98,6 +160,8 @@ const Scheme = ({
                 <span className="slider round"></span>
               </label>
             </div>
+
+            {/* Day Inputs */}
             <AnimatePresence>
               {schemeSettings[item.id]?.enabled && (
                 <motion.div
@@ -106,7 +170,8 @@ const Scheme = ({
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  layout>
+                  layout
+                >
                   {item.type === 'day' ? (
                     <>
                       <label className="modal-label time-input">
@@ -178,6 +243,91 @@ const Scheme = ({
                   )}
                 </motion.div>
               )}
+            </AnimatePresence>
+
+            {/* Shifts Toggle - Moved Outside of AnimatePresence */}
+            {schemeSettings[item.id]?.enabled && (
+              <div className="day-header">
+                <span className="day-label">Shifts aanzetten</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={schemeSettings[item.id]?.shiftsEnabled || false}
+                    onChange={() => handleShiftsToggle(item.id)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              </div>
+            )}
+
+            {/* Shifts Inputs */}
+            <AnimatePresence>
+              {schemeSettings[item.id]?.enabled &&
+                schemeSettings[item.id]?.shiftsEnabled && (
+                  <motion.div
+                    className="shifts-container"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    layout
+                  >
+                    {schemeSettings[item.id]?.shifts?.map((shift, shiftIndex) => (
+                      <div key={shiftIndex} className="shift-item">
+                        <label className="modal-label shift-input">
+                          Shift naam:
+                          <input
+                            type="text"
+                            name={`shiftName-${item.id}-${shiftIndex}`}
+                            value={shift.name}
+                            onChange={(e) =>
+                              handleShiftInputChange(
+                                item.id,
+                                shiftIndex,
+                                'name',
+                                e.target.value
+                              )
+                            }
+                            required
+                          />
+                        </label>
+                        <label className="modal-label shift-input">
+                          Start tijd:
+                          <input
+                            type="time"
+                            name={`shiftStartTime-${item.id}-${shiftIndex}`}
+                            value={shift.startTime}
+                            onChange={(e) =>
+                              handleShiftInputChange(
+                                item.id,
+                                shiftIndex,
+                                'startTime',
+                                e.target.value
+                              )
+                            }
+                            required
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          className="remove-shift-button"
+                          onClick={() => removeShift(item.id, shiftIndex)}
+                        >
+                          Verwijder Shift
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* Add Shift Button */}
+                    <button
+                      type="button"
+                      className="add-shift-button"
+                      onClick={() => addShift(item.id)}
+                    >
+                      + Voeg Shift Toe
+                    </button>
+                  </motion.div>
+                )}
             </AnimatePresence>
           </div>
         ))}
