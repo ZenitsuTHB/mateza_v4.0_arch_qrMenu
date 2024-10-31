@@ -21,7 +21,7 @@ import {
   overviewSecondaryTopBar,
   calendarSecondaryTopBar,
   designSecondaryTopBar,
-} from './config/secondaryTopBars';
+} from './secondaryTabConfig.js';
 
 const routesConfig = [
   {

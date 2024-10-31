@@ -3,7 +3,7 @@
 export const overviewSecondaryTopBar = [
 	{
 	  label: 'Dag',
-	  path: '/day-list',
+	  path: '/',
 	},
 	{
 	  label: 'Maand',
