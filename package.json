@@ -42,6 +42,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "ping": "node git-ping.js",
     "prebuild": "node prebuild.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
