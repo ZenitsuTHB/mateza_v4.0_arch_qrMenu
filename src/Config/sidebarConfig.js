@@ -47,7 +47,7 @@ const routesConfig = [
   },
   {
     path: '/design',
-    element: <DragAndDrop title="Ontwerp uw Pagina" />,
+    element: <DragAndDrop title="Ontwerp" />,
     label: 'Ontwerp',
     icon: FaPencilAlt,
     isMenu: true,
