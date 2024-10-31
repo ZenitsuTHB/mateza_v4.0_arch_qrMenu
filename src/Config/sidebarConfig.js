@@ -19,7 +19,7 @@ import DayList from '../Pages/DayList/index.js';
 
 const routesConfig = [
   {
-    path: '/day-list',
+    path: '/',
     element: <DayList title="Overzicht" />,
     label: 'Overzicht',
     icon: FaStar,
@@ -62,16 +62,16 @@ const routesConfig = [
     ],
   },
   {
-    path: '/',
-    element: <DragAndDrop title="Bewerken" />,
-    label: 'Bewerken',
+    path: '/editing',
+    element: <DragAndDrop title="Ontwerp uw Pagina" />,
+    label: 'Ontwerp',
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,
     isTab: false,
     secondaryTopBar: [
       {
-        label: 'Bewerken',
+        label: 'Ontwerp',
         path: '/',
       },
       {
