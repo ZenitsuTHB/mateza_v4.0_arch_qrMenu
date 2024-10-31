@@ -12,6 +12,7 @@ import {
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
 import FormSettings from '../Pages/FormEditor/FormSettings/index.js';
+import SettingsTabs from '../Pages/FormEditor/FormSettings/SettingsTabs.js';
 import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
@@ -83,6 +84,15 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: designSecondaryTopBar,
+  },
+  {
+    path: '/settings-preview',
+    element: <SettingsTabs title="" />,
+    label: 'Instellingen',
+    icon: FaCog,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
   },
   {
     path: '/profile',
