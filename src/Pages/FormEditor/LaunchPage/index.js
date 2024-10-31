@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import EmbedCodeTab from './EmbedCodeTab.js';
-import EmailSampleTab from './EmailSampleTab.js';
+import EmbedCodeTab from './EmbedCode/EmbedCodeTab.js';
+import EmailSampleTab from './EmailSample/EmailSampleTab.js';
 import './css/launchPage.css';
 import './css/mobile.css';
 
