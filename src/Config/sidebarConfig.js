@@ -6,8 +6,8 @@ import {
   FaStar,
   FaPencilAlt,
   FaCalendarAlt,
-  FaRocket, // Newly added icon for Launch
-  FaCog,    // Newly added icon for Settings
+  FaRocket,
+  FaCog,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -16,6 +16,12 @@ import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/DayList/index.js';
+
+import {
+  overviewSecondaryTopBar,
+  calendarSecondaryTopBar,
+  designSecondaryTopBar,
+} from './config/secondaryTopBars';
 
 const routesConfig = [
   {
@@ -26,20 +32,7 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: true,
-    secondaryTopBar: [
-      {
-        label: 'Dag',
-        path: '/day-list',
-      },
-      {
-        label: 'Maand',
-        path: '/month-list',
-      },
-      {
-        label: 'Tafels',
-        path: '/table',
-      },
-    ],
+    secondaryTopBar: overviewSecondaryTopBar,
   },
 
   {
@@ -50,62 +43,27 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: true,
-    secondaryTopBar: [
-      {
-        label: 'Openingsuren',
-        path: '/calendar',
-      },
-      {
-        label: 'Tafels',
-        path: '/tables',
-      },
-    ],
+    secondaryTopBar: calendarSecondaryTopBar,
   },
   {
-    path: '/editing',
+    path: '/design',
     element: <DragAndDrop title="Ontwerp uw Pagina" />,
     label: 'Ontwerp',
     icon: FaPencilAlt,
     isMenu: true,
     isMobile: true,
     isTab: false,
-    secondaryTopBar: [
-      {
-        label: 'Ontwerp',
-        path: '/',
-      },
-      {
-        label: 'Instellen',
-        path: '/settings',
-      },
-      {
-        label: 'Lanceren',
-        path: '/launch',
-      },
-    ],
+    secondaryTopBar: designSecondaryTopBar,
   },
   {
     path: '/launch',
     element: <LaunchPage title="Lanceren" />,
     label: 'Lanceren',
-    icon: FaRocket, // Added icon for Launch
+    icon: FaRocket,
     isMenu: false,
     isMobile: false,
     isTab: false,
-    secondaryTopBar: [
-      {
-        label: 'Bewerken',
-        path: '/',
-      },
-      {
-        label: 'Instellen',
-        path: '/settings',
-      },
-      {
-        label: 'Lanceren',
-        path: '/launch',
-      },
-    ],
+    secondaryTopBar: designSecondaryTopBar,
   },
   {
     path: '/new-reservation',
@@ -120,24 +78,11 @@ const routesConfig = [
     path: '/settings',
     element: <FormSettings title="Instellingen" />,
     label: 'Instellingen',
-    icon: FaCog, // Added icon for Settings
+    icon: FaCog,
     isMenu: false,
     isMobile: false,
     isTab: false,
-    secondaryTopBar: [
-      {
-        label: 'Bewerken',
-        path: '/',
-      },
-      {
-        label: 'Instellen',
-        path: '/settings',
-      },
-      {
-        label: 'Lanceren',
-        path: '/launch',
-      },
-    ],
+    secondaryTopBar: designSecondaryTopBar,
   },
   {
     path: '/profile',
