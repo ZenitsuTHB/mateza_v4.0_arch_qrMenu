@@ -13,12 +13,12 @@ const BackgroundTypeSelector = ({ backgroundType, setBackgroundType }) => {
     },
     {
       key: 'gradient',
-      label: 'Kleurovergang',
+      label: 'Kleur Overgang',
       icon: <FaGripLinesVertical size={48} />,
     },
     {
       key: 'animated',
-      label: 'Geanimeerde Achtergrond',
+      label: 'Kleur Animatie',
       icon: <FaMagic size={48} />,
     },
   ];
