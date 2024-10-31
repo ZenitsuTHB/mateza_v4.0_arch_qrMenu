@@ -22,6 +22,7 @@ const Shifts = ({
         checked={shiftsEnabled}
         onChange={() => handleShiftsToggle(itemId)}
         label="Shifts aanzetten"
+        className="shifts-header"
       />
 
       <AnimatePresence>

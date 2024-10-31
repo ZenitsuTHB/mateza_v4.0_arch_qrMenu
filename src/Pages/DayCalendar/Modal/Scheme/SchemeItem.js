@@ -35,23 +35,22 @@ const SchemeItem = ({
       key={item.id}
       className={`scheme-item ${item.type !== 'day' ? 'scheme-item-special' : ''}`}
     >
-      {/* Item header with label and toggle switch */}
-      <div className="item-header">
-        <div
-          className={`item-label ${!enabled ? 'disabled' : ''}`}
-          onClick={enabled ? () => setIsExpanded(!isExpanded) : null}
-        >
+      {/* Make the whole header clickable */}
+      <div
+        className={`item-header ${isExpanded ? 'expanded' : ''}`}
+        onClick={enabled ? () => setIsExpanded(!isExpanded) : null}
+      >
+        <div className={`item-label ${!enabled ? 'disabled' : ''}`}>
           {/* Conditionally render the chevron icon when enabled */}
           {enabled && (
             <FaChevronDown className={`arrow-icon ${isExpanded ? 'expanded' : ''}`} />
           )}
           {item.label}
         </div>
-        {/* ToggleSwitch remains on the right */}
-        <ToggleSwitch
-          checked={enabled}
-          onChange={() => handleToggle(item.id)}
-        />
+        {/* ToggleSwitch remains on the right and stops event propagation */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <ToggleSwitch checked={enabled} onChange={() => handleToggle(item.id)} />
+        </div>
       </div>
 
       <AnimatePresence>

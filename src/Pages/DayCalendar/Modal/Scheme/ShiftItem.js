@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaTrash } from 'react-icons/fa'; // Import the FaTrash icon
 
 const ShiftItem = ({
   shift,
@@ -12,6 +13,7 @@ const ShiftItem = ({
   <div className="shift-item shift-item-box">
     {/* Shift Inputs Grid */}
     <div className="shift-inputs-grid">
+      {/* Start Time Input */}
       <label className="modal-label shift-input">
         Start tijd:
         <input
@@ -30,6 +32,8 @@ const ShiftItem = ({
           <span className="error-shifts">{errors.startTimeRange}</span>
         )}
       </label>
+
+      {/* Shift Name Input */}
       <label className="modal-label shift-input">
         Shift naam:
         <input
@@ -45,15 +49,17 @@ const ShiftItem = ({
           <span className="error-shifts">{errors.name}</span>
         )}
       </label>
+
+      {/* Remove Shift Button with FaTrash Icon */}
+      <button
+        type="button"
+        className="remove-shift-button"
+        onClick={() => removeShift(itemId, shiftIndex)}
+        aria-label="Verwijder Shift" // Accessibility label
+      >
+        <FaTrash />
+      </button>
     </div>
-    {/* Remove Shift Button */}
-    <button
-      type="button"
-      className="remove-shift-button"
-      onClick={() => removeShift(itemId, shiftIndex)}
-    >
-      Verwijder Shift
-    </button>
   </div>
 );
 
