@@ -34,7 +34,6 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     secondaryTopBar: overviewSecondaryTopBar,
-    sidebarHidden: false, // Explicitly show sidebar
   },
   {
     path: '/calendar',
@@ -45,7 +44,6 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     secondaryTopBar: calendarSecondaryTopBar,
-    sidebarHidden: false, // Explicitly show sidebar
   },
   {
     path: '/design',
@@ -56,7 +54,6 @@ const routesConfig = [
     isMobile: true,
     isTab: false,
     secondaryTopBar: designSecondaryTopBar,
-    sidebarHidden: false, // Explicitly show sidebar
   },
   {
     path: '/launch',
@@ -88,7 +85,6 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: designSecondaryTopBar,
-    sidebarHidden: false, // Hide sidebar on this route
   },
   {
     path: '/settings-preview',
@@ -98,7 +94,7 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-    sidebarHidden: true, // Hide sidebar on this route
+    sidebarHidden: true,
   },
   {
     path: '/profile',
@@ -108,7 +104,6 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-    sidebarHidden: false, // Hide sidebar on this route
   },
 ];
 

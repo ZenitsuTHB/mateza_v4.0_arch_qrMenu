@@ -11,7 +11,8 @@ import routesConfig from '../../Config/sidebarConfig'; // Adjust the path if nec
 const MainApp = () => {
   const location = useLocation();
   const currentRoute = routesConfig.find((route) => route.path === location.pathname);
-  const isSidebarHidden = currentRoute ? currentRoute.sidebarHidden : false;
+
+  const isSidebarHidden = currentRoute && currentRoute.sidebarHidden ? true : false;
 
   return (
     <div className={`app-component ${isSidebarHidden ? 'sidebar-hidden' : ''}`}>
