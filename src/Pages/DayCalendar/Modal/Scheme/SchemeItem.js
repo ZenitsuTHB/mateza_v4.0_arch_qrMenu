@@ -48,7 +48,7 @@ const SchemeItem = ({
           {item.label}
         </div>
         {/* ToggleSwitch remains on the right and stops event propagation */}
-        <div onClick={(e) => e.stopPropagation()}>
+        <div className="toggle-middle" onClick={(e) => e.stopPropagation()}>
           <ToggleSwitch checked={enabled} onChange={() => handleToggle(item.id)} />
         </div>
       </div>
