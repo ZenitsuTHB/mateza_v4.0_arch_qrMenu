@@ -52,6 +52,8 @@
 	color: #777777;
 	cursor: pointer;
 	font-size: 18px;
+	background-color: transparent;
+	border: none;
   }
   
   .launch-page .link-input-container .link-icon:hover {

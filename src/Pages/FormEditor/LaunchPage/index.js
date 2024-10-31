@@ -11,7 +11,7 @@ import './css/mobile.css';
 
 const LaunchPage = () => {
   const [activeTab, setActiveTab] = useState('embedCode');
-  const reservationLink = 'https://demo.reservaties.net';
+  const reservationLink = 'http://localhost:2000/'; // Updated to local development link
   const shareMessage = 'Bekijk onze reserveringspagina!';
   const emailSubject = 'Uitnodiging voor Reservering';
   const emailBody = `${shareMessage} ${reservationLink}`;
@@ -21,6 +21,51 @@ const LaunchPage = () => {
     { id: 'embedCode', label: 'Insluitcode' },
     { id: 'emailSample', label: 'E-mailvoorbeeld' },
   ];
+
+  /**
+   * Function to handle sending the access token to the target window
+   */
+  const sendAccessToken = () => {
+    // Retrieve the access token from localStorage
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      console.error('No access token found in localStorage.');
+      alert('Er is geen toegangstoken beschikbaar.');
+      return;
+    }
+
+    // Open the target window
+    const targetOrigin = 'http://localhost:2000'; // Target origin without trailing slash
+    const newWindow = window.open(targetOrigin, '_blank');
+
+    if (!newWindow) {
+      console.error('Failed to open the target window.');
+      alert('Kan het doelvenster niet openen.');
+      return;
+    }
+
+    // Define a handler to send the token once the new window is ready
+    const handleMessage = (event) => {
+      // Verify the origin of the incoming message
+      if (event.origin !== targetOrigin) {
+        console.warn(`Unexpected origin: ${event.origin}`);
+        return;
+      }
+
+      if (event.data === 'ready') {
+        // Send the access token to the target window
+        newWindow.postMessage({ token: accessToken }, targetOrigin);
+        console.log('Access token sent to the target window.');
+
+        // Remove the event listener after sending the token
+        window.removeEventListener('message', handleMessage);
+      }
+    };
+
+    // Add an event listener to listen for the 'ready' message from the target window
+    window.addEventListener('message', handleMessage, false);
+  };
 
   return (
     <div className="launch-page">
@@ -37,14 +82,13 @@ const LaunchPage = () => {
               value={reservationLink}
               readOnly
             />
-            <a
-              href={reservationLink}
-              target="_blank"
+            <button
+              onClick={sendAccessToken}
               rel="noopener noreferrer"
               className="link-icon"
             >
               <FaExternalLinkAlt />
-            </a>
+            </button>
           </div>
         </div>
 
