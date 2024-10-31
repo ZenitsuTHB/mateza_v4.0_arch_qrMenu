@@ -22,33 +22,37 @@ const useSchemeValidation = (items, schemeSettings) => {
             itemErrors.push('Start tijd moet voor eindtijd zijn.');
           }
 
-          // Validate shifts if enabled
+          // Validate that shifts are provided if shiftsEnabled is true
           if (shiftsEnabled) {
-            shifts.forEach((shift, index) => {
-              const shiftErrors = [];
+            if (!shifts || shifts.length === 0) {
+              itemErrors.push('Er moeten minimaal één shift worden gedefinieerd wanneer shifts zijn ingeschakeld.');
+            } else {
+              shifts.forEach((shift, index) => {
+                const shiftErrors = [];
 
-              // Validate shift name
-              if (!shift.name) {
-                shiftErrors.push('Shift naam moet ingevuld zijn.');
-              }
-
-              // Validate shift startTime
-              if (!shift.startTime) {
-                shiftErrors.push('Shift start tijd moet ingevuld zijn.');
-              }
-
-              // Validate shift startTime within day's startTime and endTime
-              if (shift.startTime && startTime && endTime) {
-                if (shift.startTime < startTime || shift.startTime > endTime) {
-                  shiftErrors.push('Shift start tijd moet binnen de openingsuren vallen.');
+                // Validate shift name
+                if (!shift.name) {
+                  shiftErrors.push('Shift naam moet ingevuld zijn.');
                 }
-              }
 
-              // If there are errors for this shift, add them to newErrors
-              if (shiftErrors.length > 0) {
-                newErrors[`${item.id}.shifts.${index}`] = shiftErrors;
-              }
-            });
+                // Validate shift startTime
+                if (!shift.startTime) {
+                  shiftErrors.push('Shift start tijd moet ingevuld zijn.');
+                }
+
+                // Validate shift startTime within day's startTime and endTime
+                if (shift.startTime && startTime && endTime) {
+                  if (shift.startTime < startTime || shift.startTime > endTime) {
+                    shiftErrors.push('Shift start tijd moet binnen de openingsuren vallen.');
+                  }
+                }
+
+                // If there are errors for this shift, add them to newErrors
+                if (shiftErrors.length > 0) {
+                  newErrors[`${item.id}.shifts.${index}`] = shiftErrors;
+                }
+              });
+            }
           }
         } else if (item.type === 'duration') {
           const { startDate, endDate } = settings;
