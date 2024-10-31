@@ -96,7 +96,8 @@
 	color: var(--color-blue);
 	cursor: pointer;
 	font-size: 16px;
-	text-align: left;
+	text-align: center;
+	width: 100%;
 	padding: 0;
   }
   
