@@ -2,7 +2,7 @@
 import React from 'react';
 import MainApp from './Components/MainApp';
 import Login from './Pages/Login';
-import WelcomeAnimation from './Pages/WelcomeAnimation';
+import WelcomeAnimation from './Components/Animations/index.js';
 import './Styles/all-styles.js';
 
 window.baseDomain = 'http://localhost:5000/';
