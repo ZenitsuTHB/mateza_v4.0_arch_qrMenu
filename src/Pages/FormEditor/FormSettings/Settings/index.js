@@ -1,6 +1,6 @@
 // src/components/FormSettings/Settings.jsx
 
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useCallback, useRef } from 'react';
 import useNotification from '../../../../Components/Notification/index.js';
 import useApi from '../../../../Hooks/useApi.js';
 import SettingsForm from './SettingsForm.js';
@@ -21,6 +21,11 @@ const Settings = forwardRef((props, ref) => {
   const [selectedTheme, setSelectedTheme] = useState(null);
   const { triggerNotification, NotificationComponent } = useNotification();
   const api = useApi();
+
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
+  const saveTimeoutRef = useRef(null);
+  const expiryTimeRef = useRef(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -107,6 +112,43 @@ const Settings = forwardRef((props, ref) => {
     [isDirty]
   );
 
+  useEffect(() => {
+    if (isIframe && isDirty) {
+      const currentTime = Date.now();
+      if (saveTimeoutRef.current) {
+        // Timer is running
+        // Increase expiryTime by 2000 ms
+        expiryTimeRef.current += 2000;
+      } else {
+        // No timer running
+        expiryTimeRef.current = currentTime + 5000; // 5 seconds from now
+      }
+
+      const delay = expiryTimeRef.current - currentTime;
+
+      // Clear existing timer
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Start new timer
+      saveTimeoutRef.current = setTimeout(async () => {
+        await handleSave();
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }, delay);
+    }
+
+    // Clean up on unmount
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }
+    };
+  }, [formData, isIframe, isDirty, handleSave]);
+
   return (
     <div>
       <NotificationComponent />
@@ -122,8 +164,8 @@ const Settings = forwardRef((props, ref) => {
         setAlignment={setAlignment}
       />
 
-    <BackgroundBlurSelector
-        backgroundBlur={formData.backgroundBlur }
+      <BackgroundBlurSelector
+        backgroundBlur={formData.backgroundBlur}
         setBackgroundBlur={(value) =>
           setFormData((prevData) => ({ ...prevData, backgroundBlur: value }))
         }
@@ -138,14 +180,16 @@ const Settings = forwardRef((props, ref) => {
         />
       )}
 
-      <button
-        type="button"
-        className="button-style-3"
-        onClick={handleSave}
-        disabled={!isDirty}
-      >
-        Opslaan
-      </button>
+      {!isIframe && (
+        <button
+          type="button"
+          className="button-style-3"
+          onClick={handleSave}
+          disabled={!isDirty}
+        >
+          Opslaan
+        </button>
+      )}
     </div>
   );
 });

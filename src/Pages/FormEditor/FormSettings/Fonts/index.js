@@ -1,6 +1,6 @@
 // src/components/FormSettings/Fonts.jsx
 
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef, useMemo } from 'react';
 import useApi from '../../../../Hooks/useApi';
 import useNotification from '../../../../Components/Notification/index';
 import { sansSerifFonts, serifFonts, fontWeights } from './fontsConfig';
@@ -22,6 +22,11 @@ const Fonts = forwardRef((props, ref) => {
   const [initialFontsState, setInitialFontsState] = useState(defaultFonts);
   const { triggerNotification, NotificationComponent } = useNotification();
   const api = useApi();
+
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
+  const saveTimeoutRef = useRef(null);
+  const expiryTimeRef = useRef(null);
 
   const fontCategories = [
     { key: 'titleFont', label: 'Titel' },
@@ -119,11 +124,51 @@ const Fonts = forwardRef((props, ref) => {
     }
   };
 
-  const isDirty = JSON.stringify(fontsState) !== JSON.stringify(initialFontsState);
+  const isDirty = useMemo(
+    () => JSON.stringify(fontsState) !== JSON.stringify(initialFontsState),
+    [fontsState, initialFontsState]
+  );
 
   useImperativeHandle(ref, () => ({
     isDirty,
   }));
+
+  useEffect(() => {
+    if (isIframe && isDirty) {
+      const currentTime = Date.now();
+      if (saveTimeoutRef.current) {
+        // Timer is running
+        // Increase expiryTime by 2000 ms
+        expiryTimeRef.current += 2000;
+      } else {
+        // No timer running
+        expiryTimeRef.current = currentTime + 5000; // 5 seconds from now
+      }
+
+      const delay = expiryTimeRef.current - currentTime;
+
+      // Clear existing timer
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Start new timer
+      saveTimeoutRef.current = setTimeout(async () => {
+        await handleSave();
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }, delay);
+    }
+
+    // Clean up on unmount
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }
+    };
+  }, [fontsState, isIframe, isDirty, handleSave]);
 
   return (
     <div className="fonts-container">
@@ -143,12 +188,16 @@ const Fonts = forwardRef((props, ref) => {
         />
       ))}
 
-      <button type="button" className="secondary-button-style-3" onClick={handleReset}>
-        Reset naar Standaard
-      </button>
-      <button type="submit" className="button-style-3" onClick={handleSave} disabled={!isDirty}>
-        Opslaan
-      </button>
+      {!isIframe && (
+        <>
+          <button type="button" className="secondary-button-style-3" onClick={handleReset}>
+            Reset naar Standaard
+          </button>
+          <button type="submit" className="button-style-3" onClick={handleSave} disabled={!isDirty}>
+            Opslaan
+          </button>
+        </>
+      )}
     </div>
   );
 });

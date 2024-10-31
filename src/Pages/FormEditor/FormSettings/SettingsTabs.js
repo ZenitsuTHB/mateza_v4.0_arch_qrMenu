@@ -19,6 +19,8 @@ const SettingsTabs = () => {
   const colorsRef = useRef();
   const fontsRef = useRef();
 
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
   const tabs = [
     { id: 'formSettings', label: 'Algemeen', title: "Algemene Instellingen" },
     { id: 'appearanceSettings', label: 'Kleuren', title: "Kleuren Instellingen" },
@@ -29,7 +31,7 @@ const SettingsTabs = () => {
     e.preventDefault();
   };
 
-  const handleTabClick = (tabId, tabTitle) => {
+  const handleTabClick = async (tabId, tabTitle) => {
     let currentRef;
     if (activeTab === 'formSettings') {
       currentRef = settingsRef;
@@ -40,8 +42,19 @@ const SettingsTabs = () => {
     }
 
     if (currentRef && currentRef.current && currentRef.current.isDirty) {
-      setPendingTab({ id: tabId, title: tabTitle });
-      setShowUnsavedChangesModal(true);
+      if (isIframe) {
+        try {
+          await currentRef.current.handleSave();
+          setActiveTab(tabId);
+          setActiveTitle(tabTitle);
+        } catch (error) {
+          console.error('Error saving before tab switch:', error);
+          // Optionally show an error notification here
+        }
+      } else {
+        setPendingTab({ id: tabId, title: tabTitle });
+        setShowUnsavedChangesModal(true);
+      }
     } else {
       setActiveTab(tabId);
       setActiveTitle(tabTitle);
@@ -102,7 +115,7 @@ const SettingsTabs = () => {
         </div>
       </form>
 
-      {showUnsavedChangesModal && (
+      {!isIframe && showUnsavedChangesModal && (
         <div className="modal unsaved-changes-modal">
           <div className="modal-content">
             <h2 className='secondary-title secondary-title-small'>Wijzigingen Niet Opgeslagen</h2>

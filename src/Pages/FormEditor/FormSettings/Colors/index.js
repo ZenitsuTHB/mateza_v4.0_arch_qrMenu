@@ -1,6 +1,6 @@
 // src/components/FormSettings/Colors.jsx
 
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef, useMemo } from 'react';
 import useNotification from '../../../../Components/Notification/index';
 import ColorPicker from './ColorPicker';
 import BackgroundTypeSelector from './BackgroundTypeSelector';
@@ -26,6 +26,11 @@ const Colors = forwardRef((props, ref) => {
   const [appearanceData, setAppearanceData] = useState(defaultAppearanceData);
   const [initialAppearanceData, setInitialAppearanceData] = useState(defaultAppearanceData);
   const [loading, setLoading] = useState(true);
+
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
+  const saveTimeoutRef = useRef(null);
+  const expiryTimeRef = useRef(null);
 
   const api = useApi();
 
@@ -84,11 +89,51 @@ const Colors = forwardRef((props, ref) => {
     }
   };
 
-  const isDirty = JSON.stringify(appearanceData) !== JSON.stringify(initialAppearanceData);
+  const isDirty = useMemo(
+    () => JSON.stringify(appearanceData) !== JSON.stringify(initialAppearanceData),
+    [appearanceData, initialAppearanceData]
+  );
 
   useImperativeHandle(ref, () => ({
     isDirty,
   }));
+
+  useEffect(() => {
+    if (isIframe && isDirty) {
+      const currentTime = Date.now();
+      if (saveTimeoutRef.current) {
+        // Timer is running
+        // Increase expiryTime by 2000 ms
+        expiryTimeRef.current += 2000;
+      } else {
+        // No timer running
+        expiryTimeRef.current = currentTime + 5000; // 5 seconds from now
+      }
+
+      const delay = expiryTimeRef.current - currentTime;
+
+      // Clear existing timer
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Start new timer
+      saveTimeoutRef.current = setTimeout(async () => {
+        await handleSave();
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }, delay);
+    }
+
+    // Clean up on unmount
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+        expiryTimeRef.current = null;
+      }
+    };
+  }, [appearanceData, isIframe, isDirty, handleSave]);
 
   const { backgroundType } = appearanceData;
 
@@ -170,14 +215,16 @@ const Colors = forwardRef((props, ref) => {
         onChange={handleChange}
       />
 
-      <button
-        type="button"
-        className="button-style-3"
-        onClick={handleSave}
-        disabled={!isDirty}
-      >
-        Opslaan
-      </button>
+      {!isIframe && (
+        <button
+          type="button"
+          className="button-style-3"
+          onClick={handleSave}
+          disabled={!isDirty}
+        >
+          Opslaan
+        </button>
+      )}
     </div>
   );
 });
