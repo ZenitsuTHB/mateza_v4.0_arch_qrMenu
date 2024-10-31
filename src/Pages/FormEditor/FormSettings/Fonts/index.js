@@ -107,6 +107,7 @@ const Fonts = forwardRef((props, ref) => {
       console.error('Error saving fonts:', error);
       const errorCode = error.response?.status || 'unknown';
       triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+      throw error; // Re-throw error to handle in parent
     }
   };
 
@@ -131,7 +132,8 @@ const Fonts = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     isDirty,
-  }));
+    handleSave,
+  }), [isDirty, handleSave]);
 
   useEffect(() => {
     if (isIframe && isDirty) {
@@ -154,7 +156,11 @@ const Fonts = forwardRef((props, ref) => {
 
       // Start new timer
       saveTimeoutRef.current = setTimeout(async () => {
-        await handleSave();
+        try {
+          await handleSave();
+        } catch (error) {
+          // Handle error if needed
+        }
         saveTimeoutRef.current = null;
         expiryTimeRef.current = null;
       }, delay);

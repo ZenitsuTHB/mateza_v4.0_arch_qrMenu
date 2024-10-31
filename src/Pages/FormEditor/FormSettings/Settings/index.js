@@ -86,6 +86,7 @@ const Settings = forwardRef((props, ref) => {
       console.error('Error saving settings:', error);
       const errorCode = error.response?.status || 'unknown';
       triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+      throw error; // Re-throw the error to handle it in the parent
     }
   }, [api, formData, triggerNotification]);
 
@@ -108,8 +109,9 @@ const Settings = forwardRef((props, ref) => {
     ref,
     () => ({
       isDirty,
+      handleSave,
     }),
-    [isDirty]
+    [isDirty, handleSave]
   );
 
   useEffect(() => {
@@ -133,7 +135,11 @@ const Settings = forwardRef((props, ref) => {
 
       // Start new timer
       saveTimeoutRef.current = setTimeout(async () => {
-        await handleSave();
+        try {
+          await handleSave();
+        } catch (error) {
+          // Handle error if needed
+        }
         saveTimeoutRef.current = null;
         expiryTimeRef.current = null;
       }, delay);

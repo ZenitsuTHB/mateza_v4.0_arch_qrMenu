@@ -86,6 +86,7 @@ const Colors = forwardRef((props, ref) => {
       console.error('Error saving colors:', err);
       const errorCode = err.response?.status || 'unknown';
       triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
+      throw err; // Re-throw error to handle in parent
     }
   };
 
@@ -96,6 +97,7 @@ const Colors = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     isDirty,
+    handleSave,
   }));
 
   useEffect(() => {
@@ -119,7 +121,11 @@ const Colors = forwardRef((props, ref) => {
 
       // Start new timer
       saveTimeoutRef.current = setTimeout(async () => {
-        await handleSave();
+        try {
+          await handleSave();
+        } catch (error) {
+          // Handle error if needed
+        }
         saveTimeoutRef.current = null;
         expiryTimeRef.current = null;
       }, delay);
