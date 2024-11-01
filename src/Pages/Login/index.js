@@ -33,14 +33,12 @@ const Login = () => {
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('loginSuccessful', true);
 
-        navigate('/');
         window.location.reload();
       } else {
         throw new Error('Token not received');
       }
     } catch (err) {
       console.error('Login failed:', err);
-      setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -71,7 +69,6 @@ const Login = () => {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

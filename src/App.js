@@ -11,11 +11,12 @@ window.viewMode = 'full-screen';
 const App = () => {
   const loginDone = localStorage.getItem('loginSuccessful') === 'true';
   const animationShown = localStorage.getItem('welcomeScreenShown') === 'true';
+  const shouldShowAnimation = !animationShown && !window.isIframe;
 
   if (!loginDone) {
     return <Login />;
   } 
-  else if (!animationShown)
+  else if (shouldShowAnimation)
   {
     return <WelcomeAnimation />;
   }
