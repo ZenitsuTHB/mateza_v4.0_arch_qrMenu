@@ -1,0 +1,124 @@
+/* src/components/GiftCard/AddGiftCardSection/css/addGiftCardSection.css */
+
+:root {
+	--color-blue: #007bff;
+	--color-red: #dc3545;
+	--color-green: #28a745;
+	--color-white: #ffffff;
+	--color-gray: #6c757d;
+	--color-light-gray: #f8f9fa;
+	--border-radius: 8px;
+	--padding: 20px;
+	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--input-border: #ced4da;
+	--input-focus-border: var(--color-blue);
+  }
+  
+  .add-gift-card-section {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+  }
+  
+  .add-gift-card-section__title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: var(--color-blue);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+  }
+  
+  .add-gift-card-section__form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+  }
+  
+  .form-group {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .form-group label {
+	font-weight: bold;
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	color: var(--color-gray);
+  }
+  
+  .form-group input,
+  .form-group select {
+	padding: 10px;
+	border: 1px solid var(--input-border);
+	border-radius: var(--border-radius);
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+	border-color: var(--color-blue);
+	outline: none;
+  }
+  
+  .form-group select {
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3E%3Cpath fill='%236c757d' d='M2 0L0 2h4L2 0zM2 5L0 3h4l-2 2z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 8px 10px;
+	cursor: pointer;
+  }
+  
+  .form-error {
+	color: var(--color-red);
+	font-size: 0.9rem;
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+  
+  .form-success {
+	color: var(--color-green);
+	font-size: 0.9rem;
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+  
+  .add-gift-card-section__button {
+	padding: 12px;
+	background-color: var(--color-blue);
+	color: var(--color-white);
+	border: none;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .add-gift-card-section__button:hover {
+	background-color: #0056b3; /* Darker shade of blue */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.add-gift-card-section__form {
+	  gap: 10px;
+	}
+  
+	.add-gift-card-section__button {
+	  font-size: 1rem;
+	  padding: 10px;
+	}
+  }
+  

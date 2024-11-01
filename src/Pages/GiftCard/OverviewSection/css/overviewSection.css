@@ -1,0 +1,184 @@
+/* src/components/GiftCard/OverviewSection/css/overviewSection.css */
+
+:root {
+	--color-blue: #007bff;
+	--color-red: #dc3545;
+	--color-green: #28a745;
+	--color-white: #ffffff;
+	--color-gray: #6c757d;
+	--color-light-gray: #f8f9fa;
+	--border-radius: 8px;
+	--padding: 20px;
+	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--input-border: #ced4da;
+	--input-focus-border: var(--color-blue);
+	--button-hover-blue: #0056b3;
+	--table-header-bg: #e9ecef;
+  }
+  
+  .overview-section {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+  }
+  
+  .overview-section__title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: var(--color-blue);
+  }
+  
+  .overview-section__controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+  }
+  
+  .overview-section__search {
+	flex: 1;
+	min-width: 200px;
+	padding: 10px;
+	border: 1px solid var(--input-border);
+	border-radius: var(--border-radius);
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+  
+  .overview-section__search:focus {
+	border-color: var(--input-focus-border);
+	outline: none;
+  }
+  
+  .overview-section__export {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	padding: 10px 15px;
+	background-color: var(--color-blue);
+	color: var(--color-white);
+	border: none;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s ease;
+  }
+  
+  .overview-section__export:hover {
+	background-color: var(--button-hover-blue);
+  }
+  
+  .overview-section__table {
+	width: 100%;
+	border-collapse: collapse;
+	box-shadow: var(--box-shadow);
+  }
+  
+  .overview-section__table th,
+  .overview-section__table td {
+	padding: 12px 15px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+  }
+  
+  .overview-section__table th {
+	background-color: var(--table-header-bg);
+	cursor: pointer;
+	user-select: none;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+  
+  .overview-section__table tr:hover {
+	background-color: var(--color-light-gray);
+  }
+  
+  .status {
+	padding: 5px 10px;
+	border-radius: var(--border-radius);
+	font-weight: bold;
+	text-align: center;
+  }
+  
+  .status--used {
+	background-color: var(--color-red);
+	color: var(--color-white);
+  }
+  
+  .status--unused {
+	background-color: var(--color-green);
+	color: var(--color-white);
+  }
+  
+  .no-data {
+	text-align: center;
+	padding: 20px;
+	color: var(--color-gray);
+  }
+  
+  .overview-section__pagination {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+  }
+  
+  .pagination__info {
+	font-size: 1rem;
+	color: var(--color-gray);
+  }
+  
+  .pagination__controls {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+  
+  .pagination__button {
+	background-color: var(--color-blue);
+	color: var(--color-white);
+	border: none;
+	border-radius: var(--border-radius);
+	padding: 8px 10px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.3s ease;
+  }
+  
+  .pagination__button:disabled {
+	background-color: #6c757d;
+	cursor: not-allowed;
+  }
+  
+  .pagination__button:hover:not(:disabled) {
+	background-color: var(--button-hover-blue);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.overview-section__controls {
+	  flex-direction: column;
+	  align-items: stretch;
+	}
+  
+	.overview-section__export {
+	  width: 100%;
+	  justify-content: center;
+	}
+  
+	.overview-section__table th,
+	.overview-section__table td {
+	  padding: 8px 10px;
+	}
+  
+	.pagination__controls {
+	  justify-content: center;
+	}
+  }
+  
