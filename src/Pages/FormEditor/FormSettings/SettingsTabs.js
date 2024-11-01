@@ -49,7 +49,6 @@ const SettingsTabs = () => {
           setActiveTitle(tabTitle);
         } catch (error) {
           console.error('Error saving before tab switch:', error);
-          // Optionally show an error notification here
         }
       } else {
         setPendingTab({ id: tabId, title: tabTitle });
