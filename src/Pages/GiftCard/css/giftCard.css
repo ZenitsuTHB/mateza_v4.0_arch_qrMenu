@@ -1,0 +1,41 @@
+/* src/components/GiftCard/css/giftCard.css */
+
+.gift-card-page {
+	display: grid;
+	grid-template-rows: auto auto;
+	grid-gap: 20px;
+	margin-top: 30px;
+  }
+  
+  .gift-card-page__top-row,
+  .gift-card-page__bottom-row {
+	display: grid;
+	grid-gap: 20px;
+  }
+  
+  .gift-card-page__top-row {
+	grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .gift-card-page__bottom-row {
+	grid-template-columns: 1fr;
+  }
+  
+  .gift-card-page__section {
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.gift-card-page__top-row {
+	  grid-template-columns: 1fr;
+	}
+  
+	.gift-card-page__bottom-row {
+	  grid-template-columns: 1fr;
+	}
+  }
+  

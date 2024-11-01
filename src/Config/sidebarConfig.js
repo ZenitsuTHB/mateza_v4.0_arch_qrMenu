@@ -8,6 +8,7 @@ import {
   FaCalendarAlt,
   FaRocket,
   FaCog,
+  FaGift,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -23,6 +24,7 @@ import {
   calendarSecondaryTopBar,
   designSecondaryTopBar,
 } from './secondaryTabConfig.js';
+import GiftCard from '../Pages/GiftCard/index.js';
 
 const routesConfig = [
   {
@@ -34,6 +36,15 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     secondaryTopBar: overviewSecondaryTopBar,
+  },
+  {
+    path: '/giftcard',
+    element: <GiftCard title="Cadeaubonnen" />,
+    label: 'Cadeaubonnen',
+    icon: FaGift,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/calendar',
