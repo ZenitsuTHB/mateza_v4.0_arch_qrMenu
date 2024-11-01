@@ -14,6 +14,7 @@
 	--input-focus-border: var(--color-blue);
 	--button-hover-blue: #0056b3;
 	--table-header-bg: #e9ecef;
+	--font-size: 1rem;
   }
   
   .overview-section {
@@ -42,7 +43,7 @@
 	padding: 10px;
 	border: 1px solid var(--input-border);
 	border-radius: var(--border-radius);
-	font-size: 1rem;
+	font-size: var(--font-size);
 	transition: border-color 0.3s ease;
   }
   
@@ -61,7 +62,7 @@
 	border: none;
 	border-radius: var(--border-radius);
 	cursor: pointer;
-	font-size: 1rem;
+	font-size: var(--font-size);
 	transition: background-color 0.3s ease;
   }
   
@@ -69,10 +70,16 @@
 	background-color: var(--button-hover-blue);
   }
   
+  .overview-section__table-container {
+	width: 100%;
+	overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
+  }
+  
   .overview-section__table {
 	width: 100%;
 	border-collapse: collapse;
 	box-shadow: var(--box-shadow);
+	min-width: 600px; /* Ensures table maintains structure on smaller screens */
   }
   
   .overview-section__table th,
@@ -89,6 +96,8 @@
 	display: flex;
 	align-items: center;
 	gap: 5px;
+	font-weight: bold;
+	font-size: var(--font-size);
   }
   
   .overview-section__table tr:hover {
@@ -100,6 +109,7 @@
 	border-radius: var(--border-radius);
 	font-weight: bold;
 	text-align: center;
+	display: inline-block;
   }
   
   .status--used {
@@ -116,6 +126,7 @@
 	text-align: center;
 	padding: 20px;
 	color: var(--color-gray);
+	font-size: var(--font-size);
   }
   
   .overview-section__pagination {
@@ -127,7 +138,7 @@
   }
   
   .pagination__info {
-	font-size: 1rem;
+	font-size: var(--font-size);
 	color: var(--color-gray);
   }
   
@@ -175,6 +186,7 @@
 	.overview-section__table th,
 	.overview-section__table td {
 	  padding: 8px 10px;
+	  font-size: 0.9rem;
 	}
   
 	.pagination__controls {

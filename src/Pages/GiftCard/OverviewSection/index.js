@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import './css/overviewSection.css';
-import { FaSortUp, FaSortDown, FaSort, FaFileCsv, FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
+import {
+  FaSortUp,
+  FaSortDown,
+  FaSort,
+  FaFileCsv,
+  FaChevronLeft,
+  FaChevronRight,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+} from 'react-icons/fa';
 
 // Mock data for gift cards
 const mockGiftCards = [
@@ -23,7 +32,6 @@ const mockGiftCards = [
     email: 'jane.smith@example.com',
   },
   // Add more gift cards as needed
-  // ...
   {
     id: 3,
     status: 'Unused',
@@ -167,56 +175,58 @@ const OverviewSection = () => {
           <FaFileCsv /> Export to CSV
         </button>
       </div>
-      <table className="overview-section__table">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort('status')}>
-              Status {renderSortIcon('status')}
-            </th>
-            <th onClick={() => handleSort('customer')}>
-              Customer {renderSortIcon('customer')}
-            </th>
-            <th onClick={() => handleSort('initialValue')}>
-              Initial Value (€) {renderSortIcon('initialValue')}
-            </th>
-            <th onClick={() => handleSort('expirationDate')}>
-              Expiration Date {renderSortIcon('expirationDate')}
-            </th>
-            <th onClick={() => handleSort('email')}>
-              Email Address {renderSortIcon('email')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentGiftCards.length > 0 ? (
-            currentGiftCards.map((card) => (
-              <tr key={card.id}>
-                <td>
-                  <span
-                    className={
-                      card.status === 'Used'
-                        ? 'status status--used'
-                        : 'status status--unused'
-                    }
-                  >
-                    {card.status}
-                  </span>
-                </td>
-                <td>{card.customer}</td>
-                <td>€{card.initialValue.toFixed(2)}</td>
-                <td>{card.expirationDate}</td>
-                <td>{card.email}</td>
-              </tr>
-            ))
-          ) : (
+      <div className="overview-section__table-container">
+        <table className="overview-section__table">
+          <thead>
             <tr>
-              <td colSpan="5" className="no-data">
-                No gift cards found.
-              </td>
+              <th onClick={() => handleSort('status')}>
+                Status {renderSortIcon('status')}
+              </th>
+              <th onClick={() => handleSort('customer')}>
+                Customer {renderSortIcon('customer')}
+              </th>
+              <th onClick={() => handleSort('initialValue')}>
+                Initial Value (€) {renderSortIcon('initialValue')}
+              </th>
+              <th onClick={() => handleSort('expirationDate')}>
+                Expiration Date {renderSortIcon('expirationDate')}
+              </th>
+              <th onClick={() => handleSort('email')}>
+                Email Address {renderSortIcon('email')}
+              </th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentGiftCards.length > 0 ? (
+              currentGiftCards.map((card) => (
+                <tr key={card.id}>
+                  <td>
+                    <span
+                      className={
+                        card.status === 'Used'
+                          ? 'status status--used'
+                          : 'status status--unused'
+                      }
+                    >
+                      {card.status}
+                    </span>
+                  </td>
+                  <td>{card.customer}</td>
+                  <td>€{card.initialValue.toFixed(2)}</td>
+                  <td>{card.expirationDate}</td>
+                  <td>{card.email}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="no-data">
+                  No gift cards found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <div className="overview-section__pagination">
         <div className="pagination__info">
           Page {currentPage} of {totalPages}
