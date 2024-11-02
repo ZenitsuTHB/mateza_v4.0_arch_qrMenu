@@ -117,7 +117,7 @@ const SettingsTabs = () => {
       {!isIframe && showUnsavedChangesModal && (
         <div className="modal unsaved-changes-modal">
           <div className="modal-content">
-            <h2 className='secondary-title secondary-title-small'>Wijzigingen Niet Opgeslagen</h2>
+            <h2 className='secondary-title'>Wijzigingen Niet Opgeslagen</h2>
             <p>Wilt doorgaan zonder op te slaan?</p>
             <div className="modal-buttons">
               <button type="button" className="button cancel-button cancel" onClick={handleCancelTabChange}>Annuleren</button>
