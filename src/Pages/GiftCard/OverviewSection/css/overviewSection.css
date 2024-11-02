@@ -150,12 +150,13 @@
   }
   
   .overview-section__search {
-	padding: 8px;
+	padding: 10px;
 	width: 200px;
   }
 
   .button-export {
 	width: 200px !important;
+	padding: 10px !important;
   }
   
   .overview-section__export {
