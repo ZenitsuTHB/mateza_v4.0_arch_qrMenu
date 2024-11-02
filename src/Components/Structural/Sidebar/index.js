@@ -54,6 +54,21 @@ const Sidebar = () => {
     };
   }, [collapseTimeout]);
 
+  // New useEffect to adjust padding of .withHeader elements
+  useEffect(() => {
+    const elements = document.querySelectorAll('.withHeader');
+    elements.forEach((el) => {
+      el.style.paddingLeft = isExpanded ? '200px' : '60px'; // Adjust the padding values as needed
+    });
+
+    // Optional cleanup to remove inline styles when the component unmounts
+    return () => {
+      elements.forEach((el) => {
+        el.style.paddingLeft = ''; // Resets to original CSS
+      });
+    };
+  }, [isExpanded]);
+
   return (
     <motion.div
       className={`sidebar-component ${isExpanded ? 'expanded' : ''}`}
