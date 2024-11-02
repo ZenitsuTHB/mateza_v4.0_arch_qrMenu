@@ -1,14 +1,15 @@
 // src/components/GiftCard/ValidationSection/index.js
 
 import React, { useState } from 'react';
-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjust the import path as needed
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjusted import path
 import './css/validationSection.css';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import ValidationPopup from './ValidationPopup'; // Import the ValidationPopup component
 
 const ValidationSection = () => {
   const [code, setCode] = useState('');
   const [isValid, setIsValid] = useState(null); // null: no attempt, true: valid, false: invalid
-  const [showModal, setShowModal] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [deductValue, setDeductValue] = useState('');
   const [deductError, setDeductError] = useState('');
 
@@ -26,7 +27,7 @@ const ValidationSection = () => {
     // Simple validation logic (for demonstration)
     if (code.trim() === 'GIFT2024') {
       setIsValid(true);
-      setShowModal(true);
+      setShowPopup(true);
     } else {
       setIsValid(false);
     }
@@ -43,10 +44,9 @@ const ValidationSection = () => {
       return;
     }
     // Proceed with deduction logic (e.g., API call)
-    // For demonstration, we'll just close the modal and reset deduction state
+    // For demonstration, we'll just close the popup
     setDeductError('');
-    setDeductValue('');
-    setShowModal(false);
+    setShowPopup(false);
     alert(`$${value} has been deducted from your gift card.`);
   };
 
@@ -75,12 +75,13 @@ const ValidationSection = () => {
         </p>
       )}
 
-      {showModal && (
+      {showPopup && (
         <ModalWithoutTabs
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowPopup(false)}
           content={
-            <ValidationDetails
+            <ValidationPopup
               giftCardData={giftCardData}
+              onClose={() => setShowPopup(false)}
               deductValue={deductValue}
               setDeductValue={setDeductValue}
               deductError={deductError}
@@ -89,62 +90,6 @@ const ValidationSection = () => {
           }
         />
       )}
-    </div>
-  );
-};
-
-const ValidationDetails = ({
-  giftCardData,
-  deductValue,
-  setDeductValue,
-  deductError,
-  handleDeduct,
-}) => {
-  return (
-    <div className="validation-details__container">
-      <div className="validation-details__header">
-        <h3>Gift Card Details</h3>
-        <span className="validation-details__date">
-          Created on: {giftCardData.reservationDate}
-        </span>
-      </div>
-      <div className="validation-details__info">
-        <div className="validation-details__labels">
-          <p>Status:</p>
-          <p>Initial Value:</p>
-          <p>Available Balance:</p>
-          <p>Expiration Date:</p>
-          <p>Months Valid:</p>
-        </div>
-        <div className="validation-details__values">
-          <p>{giftCardData.status}</p>
-          <p>{giftCardData.initialValue}</p>
-          <p>${giftCardData.availableBalance}</p>
-          <p>{giftCardData.expirationDate}</p>
-          <p>{giftCardData.monthsValid} months</p>
-        </div>
-      </div>
-      <div className="validation-details__deduct">
-        <label htmlFor="deduct">Value to Deduct:</label>
-        <input
-          type="number"
-          id="deduct"
-          value={deductValue}
-          onChange={(e) => setDeductValue(e.target.value)}
-          placeholder="Enter amount"
-        />
-        {deductError && (
-          <p className="validation-details__deduct-error">
-            <FaTimesCircle /> {deductError}
-          </p>
-        )}
-      </div>
-      <button
-        className="validation-details__validate-button"
-        onClick={handleDeduct}
-      >
-        <FaCheckCircle /> Validate Gift Card!
-      </button>
     </div>
   );
 };
