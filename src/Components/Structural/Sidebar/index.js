@@ -1,16 +1,17 @@
 // Sidebar.js
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import SidebarItem from './SidebarItem';
 import { useNavigate } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
-import { FaChevronRight, FaChevronLeft } from 'react-icons/fa'; // Import chevron icons
+import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa'; // Import chevron and pin icons
 import './css/style.css';
 import './css/mobile.css';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [isExpanded, setIsExpanded] = useState(false); // State for sidebar expansion
+  const [isPinned, setIsPinned] = useState(false); // State for sidebar pin
   const [collapseTimeout, setCollapseTimeout] = useState(null); // For auto-collapse
   const navigate = useNavigate();
   const isMobile = window.innerWidth < 900;
@@ -19,8 +20,8 @@ const Sidebar = () => {
   const handleItemClick = (path) => {
     setActiveTab(path);
     navigate(path);
-    // Collapse the sidebar if it's expanded
-    if (isExpanded) {
+    // Collapse the sidebar if it's expanded and not pinned
+    if (isExpanded && !isPinned) {
       setIsExpanded(false);
     }
     // Clear any existing collapse timeout
@@ -37,6 +38,14 @@ const Sidebar = () => {
       clearTimeout(collapseTimeout);
       setCollapseTimeout(null);
     }
+    // Reset pin state when collapsing
+    if (isExpanded && isPinned) {
+      setIsPinned(false);
+    }
+  };
+
+  const togglePin = () => {
+    setIsPinned((prev) => !prev);
   };
 
   const handleMouseEnter = () => {
@@ -47,7 +56,7 @@ const Sidebar = () => {
   };
 
   const handleMouseLeave = () => {
-    if (isExpanded) {
+    if (isExpanded && !isPinned) {
       const timeout = setTimeout(() => {
         setIsExpanded(false);
       }, 5000); // Collapse after 5 seconds
@@ -64,11 +73,15 @@ const Sidebar = () => {
     };
   }, [collapseTimeout]);
 
-  // New useEffect to adjust padding of .withHeader elements
+  // Adjust padding of .withHeader elements based on sidebar expansion
   useEffect(() => {
     const elements = document.querySelectorAll('.withHeader');
     elements.forEach((el) => {
-      el.style.paddingLeft = isExpanded ? '200px' : '60px'; // Adjust the padding values as needed
+      if (isPinned) {
+        el.style.paddingLeft = '200px';
+      } else {
+        el.style.paddingLeft = isExpanded ? '200px' : '60px';
+      }
     });
 
     // Optional cleanup to remove inline styles when the component unmounts
@@ -77,7 +90,8 @@ const Sidebar = () => {
         el.style.paddingLeft = ''; // Resets to original CSS
       });
     };
-  }, [isExpanded]);
+  }, [isExpanded, isPinned, activeTab])
+  
 
   return (
     <motion.div
@@ -94,12 +108,31 @@ const Sidebar = () => {
             item={{ id: route.path, title: route.label, icon: route.icon }}
             activeTab={activeTab}
             handleItemClick={handleItemClick}
-            isExpanded={isExpanded && !isMobile} // Expanded only on non-mobile devices
+            isExpanded={isExpanded && !isMobile}
+            isPinned={isPinned}
             secondaryTopBar={route.secondaryTopBar}
           />
         ))}
-      <div className="sidebar-toggle" onClick={toggleSidebar}>
-        {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}
+      <div className="sidebar-controls">
+        <div className="sidebar-toggle-group">
+          <div className="sidebar-toggle" onClick={toggleSidebar}>
+            {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}
+          </div>
+          <AnimatePresence>
+            {isExpanded && (
+              <motion.div
+                className="sidebar-pin"
+                onClick={togglePin}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FaThumbtack color={isPinned ? 'var(--color-accent)' : 'inherit'} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );

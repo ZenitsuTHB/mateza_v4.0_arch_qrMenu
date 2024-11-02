@@ -8,15 +8,16 @@ const SidebarItem = ({
   activeTab,
   handleItemClick,
   isExpanded,
+  isPinned,
   secondaryTopBar,
 }) => {
   const [showSecondaryItems, setShowSecondaryItems] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
-  const [tooltipDisabled, setTooltipDisabled] = useState(false); // New state variable
+  const [tooltipDisabled, setTooltipDisabled] = useState(false);
   const IconComponent = item.icon;
 
   const handleMouseEnter = () => {
-    if (secondaryTopBar && isExpanded) {
+    if (secondaryTopBar && isExpanded && !isPinned) {
       const timeout = setTimeout(() => {
         setShowSecondaryItems(true);
       }, 500); // Show after 0.5 seconds
@@ -29,7 +30,9 @@ const SidebarItem = ({
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
     }
-    setShowSecondaryItems(false);
+    if (!isPinned) {
+      setShowSecondaryItems(false);
+    }
     setTooltipDisabled(false); // Reset tooltipDisabled on mouse leave
   };
 
@@ -41,6 +44,15 @@ const SidebarItem = ({
       }
     };
   }, [hoverTimeout]);
+
+  // Update showSecondaryItems based on isPinned
+  useEffect(() => {
+    if (isPinned) {
+      setShowSecondaryItems(true);
+    } else {
+      setShowSecondaryItems(false);
+    }
+  }, [isPinned]);
 
   // Variants for the secondary items container
   const containerVariants = {
@@ -54,7 +66,7 @@ const SidebarItem = ({
       height: 'auto',
       transition: {
         when: 'beforeChildren',
-        staggerChildren: 0.1, // Adjust the delay between items
+        staggerChildren: 0.1,
       },
     },
     exit: {
@@ -82,7 +94,7 @@ const SidebarItem = ({
   // Wrapper function to handle item clicks and disable tooltip if necessary
   const handleItemClickWrapper = (id) => {
     handleItemClick(id);
-    if (isExpanded) {
+    if (isExpanded && !isPinned) {
       setTooltipDisabled(true); // Disable tooltip after clicking when sidebar is expanded
     }
   };
@@ -132,7 +144,7 @@ const SidebarItem = ({
 
       {/* Secondary Items with Animation */}
       <AnimatePresence>
-        {showSecondaryItems && isExpanded && (
+        {secondaryTopBar && showSecondaryItems && isExpanded && (
           <motion.div
             className="sidebar-item__secondary"
             initial="hidden"
@@ -141,18 +153,17 @@ const SidebarItem = ({
             variants={containerVariants}
             layout
           >
-            {secondaryTopBar &&
-              secondaryTopBar.map((subItem) => (
-                <motion.div
-                  key={subItem.path}
-                  className="sidebar-item__secondary-item"
-                  onClick={() => handleItemClickWrapper(subItem.path)}
-                  variants={itemVariants}
-                  transition={{ duration: 0.2 }}
-                >
-                  {subItem.label}
-                </motion.div>
-              ))}
+            {secondaryTopBar.map((subItem) => (
+              <motion.div
+                key={subItem.path}
+                className="sidebar-item__secondary-item"
+                onClick={() => handleItemClickWrapper(subItem.path)}
+                variants={itemVariants}
+                transition={{ duration: 0.2 }}
+              >
+                {subItem.label}
+              </motion.div>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

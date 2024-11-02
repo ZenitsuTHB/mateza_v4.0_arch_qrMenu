@@ -133,3 +133,33 @@
 	color: var(--color-accent);
   }
   
+
+  /* Sidebar Controls */
+.sidebar-controls {
+	margin-top: auto; /* Pushes the controls to the bottom */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .sidebar-toggle-group {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+  }
+  
+  .sidebar-toggle,
+  .sidebar-pin {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	color: var(--color-accent);
+	padding: 10px;
+  }
+  
+  .sidebar-toggle:hover,
+  .sidebar-pin:hover {
+	color: #000;
+  }
+  
