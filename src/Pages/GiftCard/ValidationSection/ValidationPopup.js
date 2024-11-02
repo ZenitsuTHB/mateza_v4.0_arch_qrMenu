@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './css/validationPopup.css';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaTimesCircle } from 'react-icons/fa';
 
 const ValidationPopup = ({
   giftCardData,
@@ -16,6 +16,7 @@ const ValidationPopup = ({
     <div className="validation-popup__container">
       <div className="validation-popup__header">
         <h2 className="secondary-title center">Cadeaubon Details</h2>
+        <div className='validation-popup__data-bubble'>Code GIFT2024</div>
       </div>
       
       <div className="validation-popup__info">

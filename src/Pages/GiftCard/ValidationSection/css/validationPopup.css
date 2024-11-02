@@ -14,6 +14,15 @@
 	
   }
   
+  .validation-popup__data-bubble {
+	font-size: 0.8rem;
+	color: var(--color-blue);
+	text-align: center;
+	border: var(--color-blue) 1px solid;
+	border-radius: 200px;
+	padding: 6px;
+  }
+  
   .validation-popup__info {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
