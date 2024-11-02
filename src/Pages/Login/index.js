@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import useApi from '../../Hooks/useApi';
 import './css/login.css';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const api = useApi();
-  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => setUsername(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -18,7 +15,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const data = {
@@ -32,6 +28,15 @@ const Login = () => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('loginSuccessful', true);
+
+        // Set the JWT as a cookie based on the environment
+        const cookieDomain = window.isProduction ? '.reservaties.net' : 'localhost';
+        const cookieSettings = `authToken=${accessToken}; path=/; ${
+          window.isProduction ? `domain=${cookieDomain}; Secure; SameSite=None` : ''
+        }`;
+        document.cookie = cookieSettings;
+
+        console.log('Current document cookies:', document.cookie);
 
         window.location.reload();
       } else {
