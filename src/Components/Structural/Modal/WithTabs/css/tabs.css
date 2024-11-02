@@ -1,4 +1,4 @@
-.close-button {
+.modal-tab-component .close-button {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -9,12 +9,12 @@
 	color: #555;
   }
   
- .close-button:hover {
+ .modal-tab-component .close-button:hover {
 	color: #222;
   }
   
 
-  .modal-overlay {
+.modal-tab-component .modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -27,7 +27,7 @@
 	z-index: var(--z-index-modal);
   }
   
-.modal-content {
+.modal-tab-component .modal-content {
 	background-color: white;
 	border-radius: 5px;
 	padding: 20px;

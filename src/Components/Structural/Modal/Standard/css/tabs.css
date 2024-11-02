@@ -1,4 +1,4 @@
-.close-button {
+.modal-standard-component .close-button {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -9,12 +9,12 @@
 	color: #555;
   }
   
- .close-button:hover {
+ .modal-standard-component .close-button:hover {
 	color: #222;
   }
   
 
-  .modal-overlay {
+  .modal-standard-component .modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -27,7 +27,7 @@
 	z-index: var(--z-index-modal);
   }
   
-.modal-content {
+.modal-standard-component .modal-content {
 	background-color: white;
 	border-radius: 5px;
 	padding: 20px;
