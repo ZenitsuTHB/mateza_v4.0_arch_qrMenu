@@ -12,6 +12,7 @@ const SidebarItem = ({
 }) => {
   const [showSecondaryItems, setShowSecondaryItems] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [tooltipDisabled, setTooltipDisabled] = useState(false); // New state variable
   const IconComponent = item.icon;
 
   const handleMouseEnter = () => {
@@ -29,6 +30,7 @@ const SidebarItem = ({
       setHoverTimeout(null);
     }
     setShowSecondaryItems(false);
+    setTooltipDisabled(false); // Reset tooltipDisabled on mouse leave
   };
 
   useEffect(() => {
@@ -77,6 +79,14 @@ const SidebarItem = ({
     },
   };
 
+  // Wrapper function to handle item clicks and disable tooltip if necessary
+  const handleItemClickWrapper = (id) => {
+    handleItemClick(id);
+    if (isExpanded) {
+      setTooltipDisabled(true); // Disable tooltip after clicking when sidebar is expanded
+    }
+  };
+
   return (
     <motion.div
       className="sidebar-item-container"
@@ -89,7 +99,7 @@ const SidebarItem = ({
         className={clsx('sidebar-item', {
           'sidebar-item__active': activeTab === item.id,
         })}
-        onClick={() => handleItemClick(item.id)}
+        onClick={() => handleItemClickWrapper(item.id)}
       >
         {activeTab === item.id && (
           <motion.div
@@ -114,7 +124,9 @@ const SidebarItem = ({
               </motion.span>
             )}
           </AnimatePresence>
-          {!isExpanded && <span className="tooltip">{item.title}</span>}
+          {!isExpanded && !tooltipDisabled && (
+            <span className="tooltip">{item.title}</span>
+          )}
         </div>
       </motion.div>
 
@@ -134,7 +146,7 @@ const SidebarItem = ({
                 <motion.div
                   key={subItem.path}
                   className="sidebar-item__secondary-item"
-                  onClick={() => handleItemClick(subItem.path)}
+                  onClick={() => handleItemClickWrapper(subItem.path)}
                   variants={itemVariants}
                   transition={{ duration: 0.2 }}
                 >
