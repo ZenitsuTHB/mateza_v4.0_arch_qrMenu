@@ -1,7 +1,7 @@
-// src/components/GiftCard/OverviewSection/index.js
+// src/components/GiftCard/OverviewSection/OverviewSectionFlex.js
 
 import React, { useState, useEffect } from 'react';
-import './css/overviewSection.css';
+import './css/overviewSection.css'; // Consolidated CSS file
 import {
   FaSortUp,
   FaSortDown,
@@ -31,7 +31,6 @@ const mockGiftCards = [
     expirationDate: '2024-06-30',
     email: 'jane.smith@example.com',
   },
-  // Add more gift cards as needed
   {
     id: 3,
     status: 'Unused',
@@ -59,13 +58,13 @@ const mockGiftCards = [
   // ... more mock data
 ];
 
-const OverviewSection = () => {
+const OverviewSectionFlex = () => {
   const [giftCards, setGiftCards] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortedColumn, setSortedColumn] = useState(null); // e.g., 'customer', 'initialValue'
-  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' or 'desc'
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Adjust as needed
+  const itemsPerPage = 5;
 
   useEffect(() => {
     // In a real application, fetch data from API
@@ -178,8 +177,12 @@ const OverviewSection = () => {
       <div className="overview-section__table-container">
         <table className="overview-section__table">
           <thead>
-		  <tr className="table-header-row">
-              <th onClick={() => handleSort('status')}>
+            <tr className="table-header-row">
+              <th onClick={() => handleSort('status')}
+				style={{
+					width: '20%',
+				  }}
+				  >
                 Status {renderSortIcon('status')}
               </th>
               <th onClick={() => handleSort('customer')}>
@@ -199,7 +202,7 @@ const OverviewSection = () => {
           <tbody>
             {currentGiftCards.length > 0 ? (
               currentGiftCards.map((card) => (
-                <tr key={card.id}>
+                <tr key={card.id} className="table-body-row">
                   <td>
                     <span
                       className={
@@ -218,7 +221,7 @@ const OverviewSection = () => {
                 </tr>
               ))
             ) : (
-              <tr>
+              <tr className="no-data-row">
                 <td colSpan="5" className="no-data">
                   No gift cards found.
                 </td>
@@ -270,4 +273,4 @@ const OverviewSection = () => {
   );
 };
 
-export default OverviewSection;
+export default OverviewSectionFlex;

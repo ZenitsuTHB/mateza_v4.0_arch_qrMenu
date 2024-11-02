@@ -1,22 +1,6 @@
 /* src/components/GiftCard/OverviewSection/css/overviewSection.css */
 
-:root {
-	--color-blue: #007bff;
-	--color-red: #dc3545;
-	--color-green: #28a745;
-	--color-white: #ffffff;
-	--color-gray: #6c757d;
-	--color-light-gray: #f8f9fa;
-	--border-radius: 8px;
-	--padding: 20px;
-	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	--input-border: #ced4da;
-	--input-focus-border: var(--color-blue);
-	--button-hover-blue: #0056b3;
-	--table-header-bg: #e9ecef;
-	--font-size: 1rem;
-  }
-  
+
   .overview-section {
 	display: flex;
 	flex-direction: column;
@@ -86,6 +70,7 @@
   .overview-section__table td {
 	padding: 12px 15px;
 	text-align: left;
+	width: 16.6666%;
 	border-bottom: 1px solid #ddd;
   }
   
@@ -317,4 +302,6 @@
   .pagination__button:hover:not(:disabled) {
 	background-color: #1976d2;
   }
+  
+
   
