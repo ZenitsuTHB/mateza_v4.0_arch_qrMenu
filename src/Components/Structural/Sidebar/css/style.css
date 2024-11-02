@@ -113,3 +113,23 @@
 	display: none;
   }
   
+
+  /* Secondary Items */
+.sidebar-item__secondary {
+	margin-top: 5px;
+	margin-left: 20px; /* Indent */
+	font-size: 0.9em; /* Smaller font */
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .sidebar-item__secondary-item {
+	padding: 5px 0 5px 20px; /* Additional indent */
+	cursor: pointer;
+	color: var(--color-black);
+  }
+  
+  .sidebar-item__secondary-item:hover {
+	color: var(--color-accent);
+  }
+  

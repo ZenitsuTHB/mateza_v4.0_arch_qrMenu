@@ -83,8 +83,9 @@ const Sidebar = () => {
             key={route.path}
             item={{ id: route.path, title: route.label, icon: route.icon }}
             activeTab={activeTab}
-            setActiveTab={() => handleNavigation(route.path)}
+            setActiveTab={handleNavigation}
             isExpanded={isExpanded && !isMobile} // Expanded only on non-mobile devices
+            secondaryTopBar={route.secondaryTopBar}
           />
         ))}
       <div className="sidebar-toggle" onClick={toggleSidebar}>
