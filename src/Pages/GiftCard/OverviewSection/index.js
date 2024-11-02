@@ -1,12 +1,12 @@
-// src/components/GiftCard/OverviewSection/OverviewSectionFlex.js
+// OverviewSectionFlex.js
 
 import React, { useState, useEffect } from 'react';
 import './css/overviewSection.css'; // Consolidated CSS file
+import SearchBar from './SearchBar'; // Import the SearchBar component
 import {
   FaSortUp,
   FaSortDown,
   FaSort,
-  FaFileCsv,
   FaChevronLeft,
   FaChevronRight,
   FaAngleDoubleLeft,
@@ -60,7 +60,9 @@ const mockGiftCards = [
 
 const OverviewSectionFlex = () => {
   const [giftCards, setGiftCards] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [emailSearch, setEmailSearch] = useState('');
+  const [amountSearch, setAmountSearch] = useState('');
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,12 +72,6 @@ const OverviewSectionFlex = () => {
     // In a real application, fetch data from API
     setGiftCards(mockGiftCards);
   }, []);
-
-  // Handle search
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to first page on search
-  };
 
   // Handle sorting
   const handleSort = (column) => {
@@ -109,10 +105,15 @@ const OverviewSectionFlex = () => {
     return 0;
   });
 
-  // Filter gift cards based on search query
-  const filteredGiftCards = sortedGiftCards.filter((card) =>
-    card.customer.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter gift cards based on search queries
+  const filteredGiftCards = sortedGiftCards.filter((card) => {
+    const matchesCustomer = card.customer.toLowerCase().includes(customerSearch.toLowerCase());
+    const matchesEmail = card.email.toLowerCase().includes(emailSearch.toLowerCase());
+    const matchesAmount =
+      amountSearch === '' || card.initialValue.toString().includes(amountSearch);
+
+    return matchesCustomer && matchesEmail && matchesAmount;
+  });
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredGiftCards.length / itemsPerPage);
@@ -162,27 +163,39 @@ const OverviewSectionFlex = () => {
   return (
     <div className="overview-section">
       <h2 className="overview-section__title">Cadeaubon Lijst</h2>
-      <div className="overview-section__controls">
-        <input
-          type="text"
-          className="overview-section__search"
-          placeholder="Zoeken op naam?"
-          value={searchQuery}
-          onChange={handleSearch}
+
+      {/* Search Bars */}
+      <div className="search-bars-container">
+        <SearchBar
+          placeholder="Zoeken op klant"
+          value={customerSearch}
+          onChange={(e) => setCustomerSearch(e.target.value)}
+          className="search-bar"
         />
-        <button className="button-style-3 button-export" onClick={handleExport}>
-          Exporteer naar CSV
-        </button>
-      </div>
+        <SearchBar
+          placeholder="Zoeken op email"
+          value={emailSearch}
+          onChange={(e) => setEmailSearch(e.target.value)}
+          className="search-bar"
+        />
+        <SearchBar
+          placeholder="Zoeken op bedrag"
+          value={amountSearch}
+          onChange={(e) => setAmountSearch(e.target.value)}
+          className="search-bar"
+        />
+      </div>      
+
       <div className="overview-section__table-container">
         <table className="overview-section__table">
           <thead>
             <tr className="table-header-row">
-              <th onClick={() => handleSort('status')}
+              <th
+                onClick={() => handleSort('status')}
                 style={{
                   width: '20%',
                 }}
-                >
+              >
                 Status {renderSortIcon('status')}
               </th>
               <th onClick={() => handleSort('customer')}>
@@ -268,6 +281,11 @@ const OverviewSectionFlex = () => {
             <FaAngleDoubleRight />
           </button>
         </div>
+		<div className="export-button-container">
+        <button className="button-style-3 button-export" onClick={handleExport}>
+          Exporteer naar CSV
+        </button>
+      </div>
       </div>
     </div>
   );

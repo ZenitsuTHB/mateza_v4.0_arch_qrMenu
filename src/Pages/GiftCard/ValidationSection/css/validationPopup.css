@@ -13,10 +13,6 @@
 	justify-content: center; /* Optioneel: verticale centrering */
   }
   
-  .validation-popup__header .secondary-title {
-	margin-bottom: 10px; /* Ruimte tussen titel en bubbel */
-  }
-  
   .validation-popup__data-bubble {
 	font-size: 0.8rem;
 	color: var(--color-blue);

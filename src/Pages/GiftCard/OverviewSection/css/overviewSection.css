@@ -4,7 +4,6 @@
   .overview-section {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
   }
   
   .overview-section__controls {
@@ -139,10 +138,7 @@
 	padding: 20px;
   }
   
-  .overview-section__title {
-	margin-bottom: 20px;
-  }
-  
+
   .overview-section__controls {
 	display: flex;
 	justify-content: space-between;
@@ -154,20 +150,7 @@
 	width: 200px;
   }
 
-  .button-export {
-	width: 200px !important;
-	padding: 10px !important;
-  }
-  
-  .overview-section__export {
-	padding: 8px 12px;
-	background-color: var(--color-green);
-	color: white;
-	border: none;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-  }
+
   
   .overview-section__export:hover {
 	background-color: var(--color-green);
@@ -263,4 +246,23 @@
   }
   
 
+  .overview-section .search-bars-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	gap: 10px;
+	margin-top: 25px;
+	padding: 0;
+	background-color: var(--color-bg);
+  }
   
+  .overview-section .search-bar {
+	flex: 1;
+	font-size: 15px;
+	height: 40px;
+	padding: 0 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: var(--color-bg);
+  }
+
