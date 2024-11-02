@@ -9,7 +9,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
   const IconComponent = item.icon;
 
   const handleMouseEnter = () => {
-    if (secondaryTopBar) {
+    if (secondaryTopBar && isExpanded) {
       const timeout = setTimeout(() => {
         setShowSecondaryItems(true);
       }, 500); // Show after 0.5 seconds
@@ -114,7 +114,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
 
       {/* Secondary Items with Animation */}
       <AnimatePresence>
-        {showSecondaryItems && (
+        {showSecondaryItems && isExpanded && (
           <motion.div
             className="sidebar-item__secondary"
             initial="hidden"
