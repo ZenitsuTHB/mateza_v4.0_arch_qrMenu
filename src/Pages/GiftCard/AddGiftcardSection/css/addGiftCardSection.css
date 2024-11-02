@@ -1,17 +1,19 @@
+/* src/components/GiftCard/css/addGiftCardSection.css */
 
-  
-  .add-gift-card-section {
+.add-gift-card-section {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 20px;
   }
   
-
+  .add-gift-card-section__title {
+	margin-bottom: 20px;
+  }
   
   .add-gift-card-section__form {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 15px; /* Reduced gap between inputs */
   }
   
   .form-group {
@@ -19,31 +21,49 @@
 	flex-direction: column;
   }
   
-  .form-group label {
-	font-weight: bold;
-	margin-bottom: 5px;
+  .name-fields {
 	display: flex;
-	align-items: center;
-	gap: 5px;
-	color: var(--color-gray);
+	flex-wrap: nowrap;
+	flex-direction: row;
+	gap: 10px; /* Reduced gap between name fields */
   }
   
-  .form-group input,
-  .form-group select {
-	padding: 10px;
-	border: 1px solid var(--input-border);
+  .name-fields .input-container {
+	flex: 1;
+	width: 40%;
+  }
+  
+  /* Input Container with Icon Inside */
+  .input-container {
+	position: relative;
+  }
+  
+  .input-icon {
+	position: absolute;
+	top: 50%;
+	left: 10px;
+	transform: translateY(-50%);
+	color: var(--color-gray);
+	pointer-events: none;
+  }
+  
+  .input-container input,
+  .input-container select {
+	width: 100%;
+	padding: 10px 10px 10px 35px; /* Adjusted padding for icon */
+	border: 1px solid #ccc;
 	border-radius: var(--border-radius);
 	font-size: 1rem;
 	transition: border-color 0.3s ease;
   }
   
-  .form-group input:focus,
-  .form-group select:focus {
+  .input-container input:focus,
+  .input-container select:focus {
 	border-color: var(--color-blue);
 	outline: none;
   }
   
-  .form-group select {
+  .input-container select {
 	appearance: none;
 	background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3E%3Cpath fill='%236c757d' d='M2 0L0 2h4L2 0zM2 5L0 3h4l-2 2z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
@@ -52,6 +72,7 @@
 	cursor: pointer;
   }
   
+  /* Error and Success Messages */
   .form-error {
 	color: var(--color-red);
 	font-size: 0.9rem;
@@ -70,6 +91,7 @@
 	gap: 5px;
   }
   
+  /* Submit Button */
   .add-gift-card-section__button {
 	padding: 12px;
 	background-color: var(--color-blue);
@@ -91,6 +113,10 @@
   
   /* Responsive Design */
   @media (max-width: 768px) {
+	.name-fields {
+	  flex-direction: column;
+	}
+  
 	.add-gift-card-section__form {
 	  gap: 10px;
 	}
