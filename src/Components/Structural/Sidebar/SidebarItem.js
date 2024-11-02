@@ -12,7 +12,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
     if (secondaryTopBar) {
       const timeout = setTimeout(() => {
         setShowSecondaryItems(true);
-      }, 2000); // Show after 2 seconds
+      }, 500); // Show after 0.5 seconds
       setHoverTimeout(timeout);
     }
   };
@@ -34,11 +34,49 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
     };
   }, [hoverTimeout]);
 
+  // Variants for the secondary items container
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      height: 0,
+      transition: { when: 'afterChildren' },
+    },
+    visible: {
+      opacity: 1,
+      height: 'auto',
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.1, // Adjust the delay between items
+      },
+    },
+    exit: {
+      opacity: 0,
+      height: 0,
+      transition: { when: 'afterChildren' },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      x: -10,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    },
+    exit: {
+      opacity: 0,
+      x: -10,
+    },
+  };
+
   return (
-    <div
+    <motion.div
       className="sidebar-item-container"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      layout
     >
       <motion.div
         layout
@@ -74,22 +112,33 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
         </div>
       </motion.div>
 
-      {/* Secondary Items */}
-      {showSecondaryItems && (
-        <div className="sidebar-item__secondary">
-          {secondaryTopBar &&
-            secondaryTopBar.map((subItem) => (
-              <div
-                key={subItem.path}
-                className="sidebar-item__secondary-item"
-                onClick={() => setActiveTab(subItem.path)}
-              >
-                {subItem.label}
-              </div>
-            ))}
-        </div>
-      )}
-    </div>
+      {/* Secondary Items with Animation */}
+      <AnimatePresence>
+        {showSecondaryItems && (
+          <motion.div
+            className="sidebar-item__secondary"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={containerVariants}
+            layout
+          >
+            {secondaryTopBar &&
+              secondaryTopBar.map((subItem) => (
+                <motion.div
+                  key={subItem.path}
+                  className="sidebar-item__secondary-item"
+                  onClick={() => setActiveTab(subItem.path)}
+                  variants={itemVariants}
+                  transition={{ duration: 0.2 }}
+                >
+                  {subItem.label}
+                </motion.div>
+              ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

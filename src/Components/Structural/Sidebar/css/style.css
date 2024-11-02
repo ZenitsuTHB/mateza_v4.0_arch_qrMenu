@@ -114,13 +114,14 @@
   }
   
 
-  /* Secondary Items */
+/* Secondary Items */
 .sidebar-item__secondary {
 	margin-top: 5px;
 	margin-left: 20px; /* Indent */
 	font-size: 0.9em; /* Smaller font */
 	display: flex;
 	flex-direction: column;
+	overflow: hidden; /* Ensure content is hidden when height is 0 */
   }
   
   .sidebar-item__secondary-item {
@@ -131,5 +132,10 @@
   
   .sidebar-item__secondary-item:hover {
 	color: var(--color-accent);
+  }
+  
+  /* Ensure smooth height transitions */
+  .sidebar-item-container {
+	overflow: hidden;
   }
   
