@@ -25,22 +25,18 @@
   }
   
   .validation-popup__info {
-	display: flex;
-	gap: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	row-gap: 10px;
+	column-gap: 20px;
   }
   
-  .validation-popup__labels,
-  .validation-popup__values {
-	flex: 1;
+  .validation-popup__info p {
+	margin: 5px 0;
   }
   
-  .validation-popup__labels p {
+  .validation-popup__info .label {
 	font-weight: bold;
-	margin: 5px 0;
-  }
-  
-  .validation-popup__values p {
-	margin: 5px 0;
   }
   
   .validation-popup__deduct {
@@ -80,16 +76,17 @@
 	align-items: center;
 	justify-content: center;
 	transition: background-color 0.3s ease;
+	margin-left: 10px;
   }
   
   .validation-popup__validate-button:hover {
-	background-color: darken(var(--color-blue), 10%);
+	background-color: #0056b3; /* Replaced darken function with a static color */
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
 	.validation-popup__info {
-	  flex-direction: column;
+	  grid-template-columns: 1fr;
 	}
   }
   

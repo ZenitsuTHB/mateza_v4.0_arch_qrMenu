@@ -55,7 +55,7 @@ const ValidationPopup = ({
         className="validation-popup__validate-button"
         onClick={handleDeduct}
       >
-        <FaCheckCircle /> Validate Gift Card!
+        <FaCheckCircle className="validation-popup__validate-icon" /> Validate Gift Card!
       </button>
     </div>
   );
