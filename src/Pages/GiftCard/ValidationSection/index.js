@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjusted import path
 import './css/validationSection.css';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaTimesCircle } from 'react-icons/fa';
 import ValidationPopup from './ValidationPopup'; // Import the ValidationPopup component
 
 const ValidationSection = () => {
@@ -16,16 +16,16 @@ const ValidationSection = () => {
   // Mock data for demonstration purposes
   const giftCardData = {
     status: 'Active',
-    initialValue: '$100',
+    initialValue: '€100', // Aangepast naar Euro-teken
     availableBalance: 100,
-    expirationDate: '2025-12-31',
+    expirationDate: '31-12-2025', // Formaat aangepast indien nodig
     monthsValid: 24,
-    reservationDate: '2024-04-27',
+    reservationDate: '27-04-2024', // Formaat aangepast indien nodig
   };
 
   const handleValidateCode = () => {
     // Simple validation logic (for demonstration)
-    if (code.trim() === 'GIFT2024') {
+    if (code.trim().toUpperCase() === 'GIFT2024') { // Case-insensitive vergelijking
       setIsValid(true);
       setShowPopup(true);
     } else {
@@ -64,7 +64,7 @@ const ValidationSection = () => {
         onChange={(e) => setCode(e.target.value)}
       />
       <button
-        className="button-style-3"
+        className="validation-section__button"
         onClick={handleValidateCode}
       >
         Code Valideren
@@ -81,6 +81,7 @@ const ValidationSection = () => {
           content={
             <ValidationPopup
               giftCardData={giftCardData}
+              code={code} // Nieuwe prop toegevoegd
               onClose={() => setShowPopup(false)}
               deductValue={deductValue}
               setDeductValue={setDeductValue}

@@ -6,6 +6,7 @@ import { FaTimesCircle } from 'react-icons/fa';
 
 const ValidationPopup = ({
   giftCardData,
+  code, // Nieuwe prop toegevoegd
   onClose,
   deductValue,
   setDeductValue,
@@ -16,7 +17,7 @@ const ValidationPopup = ({
     <div className="validation-popup__container">
       <div className="validation-popup__header">
         <h2 className="secondary-title center">Cadeaubon Details</h2>
-        <div className='validation-popup__data-bubble'>Code GIFT2024</div>
+        <div className='validation-popup__data-bubble'>Code {code}</div> {/* Dynamische weergave van de code */}
       </div>
       
       <div className="validation-popup__info">
