@@ -68,8 +68,8 @@ const routesConfig = [
   },
   {
     path: '/new-reservation',
-    element: <Profile title="Nieuwe Reservatie" />,
-    label: 'Nieuwe Reservatie',
+    element: <Profile title="Reserveren" />,
+    label: 'Reserveren',
     icon: FaPlus,
     isMenu: true,
     isMobile: true,

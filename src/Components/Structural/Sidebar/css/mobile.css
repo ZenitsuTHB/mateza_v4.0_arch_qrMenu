@@ -11,5 +11,9 @@
 		border-radius: 0;
 		background-color: var(--color-white);
 	}
+
+	.sidebar-toggle {
+		display: none;
+	}
 }
   
