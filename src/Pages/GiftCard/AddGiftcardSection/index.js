@@ -1,8 +1,7 @@
-// src/components/GiftCard/AddGiftCardSection/index.js
-
 import React, { useState } from 'react';
 import './css/addGiftCardSection.css';
-import { FaEuroSign, FaUser, FaEnvelope, FaImage, FaPlus } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaImage, FaPlus } from 'react-icons/fa';
+import ValueSelector from './ValueSelector';
 
 const AddGiftCardSection = () => {
   const [formData, setFormData] = useState({
@@ -85,25 +84,11 @@ const AddGiftCardSection = () => {
       <h2 className="add-gift-card-section__title">Cadeaubon Toevoegen</h2>
       <form className="add-gift-card-section__form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
-          <div className="input-container">
-            <FaEuroSign className="input-icon" />
-            <input
-              type="number"
-              id="value"
-              name="value"
-              placeholder="Waarde in Euro, bijv. 50"
-              value={formData.value}
-              onChange={handleChange}
-              min="1"
-              step="0.01"
-            />
-          </div>
+          <ValueSelector value={formData.value} onChange={handleChange} />
           {errors.value && <p className="form-error">{errors.value}</p>}
         </div>
 
-        {/* Name Fields on the Same Row */}
-       
-			 <div className="form-group">
+        <div className="form-group">
           <div className="input-container">
             <FaUser className="input-icon" />
             <input
@@ -114,11 +99,11 @@ const AddGiftCardSection = () => {
               value={formData.firstName}
               onChange={handleChange}
             />
-            {errors.firstName && <p className="form-error">{errors.firstName}</p>}
           </div>
-		  </div>
+          {errors.firstName && <p className="form-error">{errors.firstName}</p>}
+        </div>
 
-		  <div className="form-group">
+        <div className="form-group">
           <div className="input-container">
             <FaUser className="input-icon" />
             <input
@@ -129,12 +114,11 @@ const AddGiftCardSection = () => {
               value={formData.lastName}
               onChange={handleChange}
             />
-            {errors.lastName && <p className="form-error">{errors.lastName}</p>}
           </div>
-		  </div>
+          {errors.lastName && <p className="form-error">{errors.lastName}</p>}
+        </div>
 
-		  <div className="form-group">
-
+        <div className="form-group">
           <div className="input-container">
             <FaEnvelope className="input-icon" />
             <input
