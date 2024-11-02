@@ -6,7 +6,6 @@ import ModalContent from './ModalContent';
 import Scheme from './Scheme';
 import ExceptionalDays from './Exceptions/Exceptions';
 import { formatDateKey } from '../Utils/dateFormat';
-import './css/modalView.css';
 
 const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, triggerNotification }) => {
   const [schemeSettings, setschemeSettings] = useState(
