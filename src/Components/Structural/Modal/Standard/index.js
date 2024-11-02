@@ -3,11 +3,10 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { IoCloseOutline } from 'react-icons/io5';
-import './css/tabs.css'; // Create a separate CSS file for modal styles or reuse existing styles
+import './css/tabs.css';
 
 const ModalWithoutTabs = ({ content, onClose }) => {
   useEffect(() => {
-    // Prevent background scrolling when modal is open
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'auto';
