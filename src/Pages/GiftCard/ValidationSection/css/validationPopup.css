@@ -8,10 +8,13 @@
   
   .validation-popup__header {
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: center;
-	
+	flex-direction: column; /* Wijziging: kolomrichting */
+	align-items: center;    /* Wijziging: items centreren */
+	justify-content: center; /* Optioneel: verticale centrering */
+  }
+  
+  .validation-popup__header .secondary-title {
+	margin-bottom: 10px; /* Ruimte tussen titel en bubbel */
   }
   
   .validation-popup__data-bubble {
@@ -20,7 +23,9 @@
 	text-align: center;
 	border: var(--color-blue) 1px solid;
 	border-radius: 200px;
-	padding: 6px;
+	margin-bottom: 10px;
+	padding: 6px 12px; /* Optioneel: wat meer padding voor betere weergave */
+	background-color: #f0f8ff; /* Optioneel: lichte achtergrondkleur voor contrast */
   }
   
   .validation-popup__info {
@@ -34,13 +39,12 @@
 	margin: 5px 0;
   }
   
-
   .validation-popup__deduct {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
   }
-
+  
   .validation-popup__deduct input {
 	padding: 8px;
 	border: 1px solid #ccc;
@@ -56,24 +60,6 @@
 	gap: 5px;
   }
   
-  .validation-popup__validate-button {
-	padding: 10px;
-	background-color: var(--color-blue);
-	color: #ffffff;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	font-size: 1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: background-color 0.3s ease;
-  }
-  
-  .validation-popup__validate-button:hover {
-	background-color: #0056b3; /* Replaced darken function with a static color */
-  }
-  
   /* Responsive Design */
   @media (max-width: 768px) {
 	.validation-popup__info {
@@ -84,3 +70,4 @@
   .validation-popup__validate-icon {
 	margin-right: 5px;
   }
+  
