@@ -1,7 +1,7 @@
 // src/components/Modal/index.js
 
 import React, { useState, useEffect } from 'react';
-import ModalWithTabs from './ModalWithTabs';
+import ModalWithTabs from '../../../Components/Structural/Modal/WithTabs';
 import ModalContent from './ModalContent';
 import Scheme from './Scheme';
 import ExceptionalDays from './Exceptions/Exceptions';
