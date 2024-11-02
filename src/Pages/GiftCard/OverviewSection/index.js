@@ -128,7 +128,7 @@ const OverviewSectionFlex = () => {
 
   // Handle Export to CSV
   const handleExport = () => {
-    const headers = ['Status', 'Customer', 'Initial Value (€)', 'Expiration Date', 'Email Address'];
+    const headers = ['Status', 'Klant', 'Initieel Bedrag (€)', 'Vervaldatum', 'E-mailadres'];
     const rows = filteredGiftCards.map((card) => [
       card.status,
       card.customer,
@@ -144,7 +144,7 @@ const OverviewSectionFlex = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'gift_cards.csv');
+    link.setAttribute('download', 'cadeaubonnen.csv'); // Vertaalde bestandsnaam
     document.body.appendChild(link); // Required for FF
 
     link.click();
@@ -161,17 +161,17 @@ const OverviewSectionFlex = () => {
 
   return (
     <div className="overview-section">
-      <h2 className="overview-section__title">Gift Card List</h2>
+      <h2 className="overview-section__title">Cadeaubon Lijst</h2>
       <div className="overview-section__controls">
         <input
           type="text"
           className="overview-section__search"
-          placeholder="Search by name?"
+          placeholder="Zoeken op naam?"
           value={searchQuery}
           onChange={handleSearch}
         />
         <button className="overview-section__export" onClick={handleExport}>
-          <FaFileCsv /> Export to CSV
+          <FaFileCsv /> Exporteer naar CSV
         </button>
       </div>
       <div className="overview-section__table-container">
@@ -179,23 +179,23 @@ const OverviewSectionFlex = () => {
           <thead>
             <tr className="table-header-row">
               <th onClick={() => handleSort('status')}
-				style={{
-					width: '20%',
-				  }}
-				  >
+                style={{
+                  width: '20%',
+                }}
+                >
                 Status {renderSortIcon('status')}
               </th>
               <th onClick={() => handleSort('customer')}>
-                Customer {renderSortIcon('customer')}
+                Klant {renderSortIcon('customer')}
               </th>
               <th onClick={() => handleSort('initialValue')}>
-                Initial Value (€) {renderSortIcon('initialValue')}
+                Initieel Bedrag (€) {renderSortIcon('initialValue')}
               </th>
               <th onClick={() => handleSort('expirationDate')}>
-                Expiration Date {renderSortIcon('expirationDate')}
+                Vervaldatum {renderSortIcon('expirationDate')}
               </th>
               <th onClick={() => handleSort('email')}>
-                Email Address {renderSortIcon('email')}
+                E-mailadres {renderSortIcon('email')}
               </th>
             </tr>
           </thead>
@@ -223,7 +223,7 @@ const OverviewSectionFlex = () => {
             ) : (
               <tr className="no-data-row">
                 <td colSpan="5" className="no-data">
-                  No gift cards found.
+                  Geen cadeaubonnen gevonden.
                 </td>
               </tr>
             )}
@@ -232,14 +232,14 @@ const OverviewSectionFlex = () => {
       </div>
       <div className="overview-section__pagination">
         <div className="pagination__info">
-          Page {currentPage} of {totalPages}
+          Pagina {currentPage} van {totalPages}
         </div>
         <div className="pagination__controls">
           <button
             onClick={goToFirstPage}
             disabled={currentPage === 1}
             className="pagination__button"
-            title="First Page"
+            title="Eerste Pagina"
           >
             <FaAngleDoubleLeft />
           </button>
@@ -247,7 +247,7 @@ const OverviewSectionFlex = () => {
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
             className="pagination__button"
-            title="Previous Page"
+            title="Vorige Pagina"
           >
             <FaChevronLeft />
           </button>
@@ -255,7 +255,7 @@ const OverviewSectionFlex = () => {
             onClick={goToNextPage}
             disabled={currentPage === totalPages}
             className="pagination__button"
-            title="Next Page"
+            title="Volgende Pagina"
           >
             <FaChevronRight />
           </button>
@@ -263,7 +263,7 @@ const OverviewSectionFlex = () => {
             onClick={goToLastPage}
             disabled={currentPage === totalPages}
             className="pagination__button"
-            title="Last Page"
+            title="Laatste Pagina"
           >
             <FaAngleDoubleRight />
           </button>

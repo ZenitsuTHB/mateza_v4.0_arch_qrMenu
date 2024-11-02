@@ -36,30 +36,30 @@ const ValidationSection = () => {
   const handleDeduct = () => {
     const value = parseFloat(deductValue);
     if (isNaN(value) || value <= 0) {
-      setDeductError('Please enter a valid amount.');
+      setDeductError('Voer een geldig bedrag in.');
       return;
     }
     if (value > giftCardData.availableBalance) {
-      setDeductError('Deduction exceeds available balance.');
+      setDeductError('Afschrijving overschrijdt beschikbaar saldo.');
       return;
     }
     // Proceed with deduction logic (e.g., API call)
     // For demonstration, we'll just close the popup
     setDeductError('');
     setShowPopup(false);
-    alert(`$${value} has been deducted from your gift card.`);
+    alert(`€${value} is afgeschreven van uw cadeaubon.`);
   };
 
   return (
     <div className="validation-section">
-      <h2 className="validation-section__title">Validate</h2>
+      <h2 className="validation-section__title">Valideer</h2>
       <p className="validation-section__description">
-        Enter your gift card code here
+        Voer hier uw cadeaubon code in
       </p>
       <input
         type="text"
         className="validation-section__input"
-        placeholder="Enter Gift Card Code"
+        placeholder="Voer Cadeaubon Code in"
         value={code}
         onChange={(e) => setCode(e.target.value)}
       />
@@ -67,11 +67,11 @@ const ValidationSection = () => {
         className="validation-section__button"
         onClick={handleValidateCode}
       >
-        Validate Code
+        Code Valideren
       </button>
       {isValid === false && (
         <p className="validation-section__error">
-          <FaTimesCircle /> Please enter a valid code
+          <FaTimesCircle /> Voer een geldige code in
         </p>
       )}
 

@@ -17,10 +17,10 @@ const AddGiftCardSection = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   const giftCardDesigns = [
-    { value: '', label: 'Select Design' },
-    { value: 'design1', label: 'Classic' },
+    { value: '', label: 'Selecteer Ontwerp' },
+    { value: 'design1', label: 'Klassiek' },
     { value: 'design2', label: 'Modern' },
-    { value: 'design3', label: 'Festive' },
+    { value: 'design3', label: 'Feestelijk' },
     // Add more designs as needed
   ];
 
@@ -36,25 +36,25 @@ const AddGiftCardSection = () => {
     const newErrors = {};
 
     if (!formData.value || isNaN(formData.value) || parseFloat(formData.value) <= 0) {
-      newErrors.value = 'Please enter a valid amount in Euro.';
+      newErrors.value = 'Voer een geldig bedrag in Euro in.';
     }
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required.';
+      newErrors.firstName = 'Voornaam is verplicht.';
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required.';
+      newErrors.lastName = 'Achternaam is verplicht.';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email address is required.';
+      newErrors.email = 'E-mailadres is verplicht.';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = 'Voer een geldig e-mailadres in.';
     }
 
     if (!formData.design) {
-      newErrors.design = 'Please select a design for the card.';
+      newErrors.design = 'Selecteer een ontwerp voor de kaart.';
     }
 
     return newErrors;
@@ -68,8 +68,8 @@ const AddGiftCardSection = () => {
       setErrors(validationErrors);
     } else {
       // Handle form submission (e.g., API call)
-      console.log('Gift Card Created:', formData);
-      setSuccessMessage('Gift Card successfully created!');
+      console.log('Cadeaubon Aangemaakt:', formData);
+      setSuccessMessage('Cadeaubon succesvol aangemaakt!');
       // Reset form
       setFormData({
         value: '',
@@ -84,18 +84,18 @@ const AddGiftCardSection = () => {
 
   return (
     <div className="add-gift-card-section">
-      <h2 className="add-gift-card-section__title">Add New Gift Card</h2>
+      <h2 className="add-gift-card-section__title">Nieuwe Cadeaubon Toevoegen</h2>
       <form className="add-gift-card-section__form" onSubmit={handleSubmit} noValidate>
-        {/* Value in Euro */}
+        {/* Waarde in Euro */}
         <div className="form-group">
           <label htmlFor="value">
-            <FaEuroSign /> Value in Euro
+            <FaEuroSign /> Waarde in Euro
           </label>
           <input
             type="number"
             id="value"
             name="value"
-            placeholder="e.g., 50"
+            placeholder="bijv., 50"
             value={formData.value}
             onChange={handleChange}
             min="1"
@@ -104,58 +104,58 @@ const AddGiftCardSection = () => {
           {errors.value && <p className="form-error">{errors.value}</p>}
         </div>
 
-        {/* Recipient First Name */}
+        {/* Voornaam Ontvanger */}
         <div className="form-group">
           <label htmlFor="firstName">
-            <FaUser /> Recipient First Name
+            <FaUser /> Voornaam Ontvanger
           </label>
           <input
             type="text"
             id="firstName"
             name="firstName"
-            placeholder="First Name"
+            placeholder="Voornaam"
             value={formData.firstName}
             onChange={handleChange}
           />
           {errors.firstName && <p className="form-error">{errors.firstName}</p>}
         </div>
 
-        {/* Recipient Last Name */}
+        {/* Achternaam Ontvanger */}
         <div className="form-group">
           <label htmlFor="lastName">
-            <FaUser /> Recipient Last Name
+            <FaUser /> Achternaam Ontvanger
           </label>
           <input
             type="text"
             id="lastName"
             name="lastName"
-            placeholder="Last Name"
+            placeholder="Achternaam"
             value={formData.lastName}
             onChange={handleChange}
           />
           {errors.lastName && <p className="form-error">{errors.lastName}</p>}
         </div>
 
-        {/* Recipient Email */}
+        {/* E-mail Ontvanger */}
         <div className="form-group">
           <label htmlFor="email">
-            <FaEnvelope /> Recipient Email
+            <FaEnvelope /> E-mail Ontvanger
           </label>
           <input
             type="email"
             id="email"
             name="email"
-            placeholder="email@example.com"
+            placeholder="email@voorbeeld.com"
             value={formData.email}
             onChange={handleChange}
           />
           {errors.email && <p className="form-error">{errors.email}</p>}
         </div>
 
-        {/* Select Design for the Card */}
+        {/* Selecteer Ontwerp voor de Kaart */}
         <div className="form-group">
           <label htmlFor="design">
-            <FaImage /> Select Design for the Card
+            <FaImage /> Selecteer Ontwerp voor de Kaart
           </label>
           <select
             id="design"
@@ -173,11 +173,11 @@ const AddGiftCardSection = () => {
         </div>
 
         {/* Success Message */}
-        {successMessage && <p className="form-success"><FaCheckIcon /> {successMessage}</p>}
+        {successMessage && <p className="form-success"><FaPlus /> {successMessage}</p>}
 
         {/* Create Button */}
-        <button type="submit" className="add-gift-card-section__button">
-          <FaPlus /> Create!
+        <button type="submit" className="button-style-3">
+          <FaPlus /> Aanmaken
         </button>
       </form>
     </div>
