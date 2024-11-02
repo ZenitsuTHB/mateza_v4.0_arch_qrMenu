@@ -178,7 +178,7 @@ const OverviewSection = () => {
       <div className="overview-section__table-container">
         <table className="overview-section__table">
           <thead>
-            <tr>
+		  <tr className="table-header-row">
               <th onClick={() => handleSort('status')}>
                 Status {renderSortIcon('status')}
               </th>

@@ -194,3 +194,127 @@
 	}
   }
   
+/* src/components/GiftCard/OverviewSection/css/overviewSectionFlex.css */
+
+.overview-section {
+	padding: 20px;
+	font-family: Arial, sans-serif;
+  }
+  
+  .overview-section__title {
+	margin-bottom: 20px;
+  }
+  
+  .overview-section__controls {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+  }
+  
+  .overview-section__search {
+	padding: 8px;
+	width: 200px;
+  }
+  
+  .overview-section__export {
+	padding: 8px 12px;
+	background-color: #4caf50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+  }
+  
+  .overview-section__export:hover {
+	background-color: #45a049;
+  }
+  
+  .overview-section__table-container {
+	overflow-x: auto;
+  }
+  
+  .overview-section__table {
+	width: 100%;
+	border-collapse: collapse;
+  }
+  
+  .table-header-row {
+	display: flex;
+	flex-wrap: nowrap;
+  }
+  
+  .table-header-row th {
+	flex: 1;
+	padding: 12px;
+	background-color: #f2f2f2;
+	cursor: pointer;
+	text-align: left;
+	white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .table-header-row th:hover {
+	background-color: #e0e0e0;
+  }
+  
+  .overview-section__table tbody tr {
+	display: flex;
+	flex-wrap: nowrap;
+  }
+  
+  .overview-section__table tbody td {
+	flex: 1;
+	padding: 12px;
+	border-top: 1px solid #ddd;
+	white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .status {
+	padding: 4px 8px;
+	border-radius: 4px;
+	color: white;
+	font-weight: bold;
+  }
+  
+  .status--used {
+	background-color: #f44336; /* Red */
+  }
+  
+  .status--unused {
+	background-color: #4caf50; /* Green */
+  }
+  
+  .no-data {
+	text-align: center;
+	padding: 20px;
+  }
+  
+  .overview-section__pagination {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+  }
+  
+  .pagination__controls {
+	display: flex;
+	gap: 8px;
+  }
+  
+  .pagination__button {
+	padding: 8px 12px;
+	background-color: #2196f3;
+	color: white;
+	border: none;
+	cursor: pointer;
+  }
+  
+  .pagination__button:disabled {
+	background-color: #90caf9;
+	cursor: not-allowed;
+  }
+  
+  .pagination__button:hover:not(:disabled) {
+	background-color: #1976d2;
+  }
+  
