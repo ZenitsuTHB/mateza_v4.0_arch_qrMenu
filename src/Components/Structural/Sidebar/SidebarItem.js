@@ -99,6 +99,11 @@ const SidebarItem = ({
     }
   };
 
+  // Determine if the main item is active
+  const isActive =
+    activeTab === item.id ||
+    (secondaryTopBar && secondaryTopBar.some((subItem) => subItem.path === activeTab));
+
   return (
     <motion.div
       className="sidebar-item-container"
@@ -109,11 +114,11 @@ const SidebarItem = ({
       <motion.div
         layout
         className={clsx('sidebar-item', {
-          'sidebar-item__active': activeTab === item.id,
+          'sidebar-item__active': isActive,
         })}
         onClick={() => handleItemClickWrapper(item.id)}
       >
-        {activeTab === item.id && (
+        {isActive && (
           <motion.div
             layoutId="sidebar-item-indicator"
             className="sidebar-item__active-bg"
@@ -156,7 +161,9 @@ const SidebarItem = ({
             {secondaryTopBar.map((subItem) => (
               <motion.div
                 key={subItem.path}
-                className="sidebar-item__secondary-item"
+                className={clsx('sidebar-item__secondary-item', {
+                  'sidebar-item__secondary-item--active': activeTab === subItem.path,
+                })}
                 onClick={() => handleItemClickWrapper(subItem.path)}
                 variants={itemVariants}
                 transition={{ duration: 0.2 }}
