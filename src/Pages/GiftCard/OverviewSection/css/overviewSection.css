@@ -56,14 +56,14 @@
   
   .overview-section__table-container {
 	width: 100%;
-	overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
+	overflow-x: auto;
   }
   
   .overview-section__table {
 	width: 100%;
 	border-collapse: collapse;
 	box-shadow: var(--box-shadow);
-	min-width: 600px; /* Ensures table maintains structure on smaller screens */
+	min-width: 600px;
   }
   
   .overview-section__table th,
@@ -137,7 +137,7 @@
 	background-color: var(--color-blue);
 	color: var(--color-white);
 	border: none;
-	border-radius: var(--border-radius);
+	border-radius: 5px;
 	padding: 8px 10px;
 	cursor: pointer;
 	font-size: 0.9rem;
@@ -156,7 +156,6 @@
 	background-color: var(--button-hover-blue);
   }
   
-  /* Responsive Design */
   @media (max-width: 768px) {
 	.overview-section__controls {
 	  flex-direction: column;
@@ -179,11 +178,9 @@
 	}
   }
   
-/* src/components/GiftCard/OverviewSection/css/overviewSectionFlex.css */
 
 .overview-section {
 	padding: 20px;
-	font-family: Arial, sans-serif;
   }
   
   .overview-section__title {
@@ -203,7 +200,7 @@
   
   .overview-section__export {
 	padding: 8px 12px;
-	background-color: #4caf50;
+	background-color: var(--color-green);
 	color: white;
 	border: none;
 	cursor: pointer;
@@ -212,7 +209,7 @@
   }
   
   .overview-section__export:hover {
-	background-color: #45a049;
+	background-color: var(--color-green);
   }
   
   .overview-section__table-container {
@@ -235,7 +232,7 @@
 	background-color: #f2f2f2;
 	cursor: pointer;
 	text-align: left;
-	white-space: nowrap; /* Prevent text from wrapping */
+	white-space: nowrap;
   }
   
   .table-header-row th:hover {
@@ -251,7 +248,7 @@
 	flex: 1;
 	padding: 12px;
 	border-top: 1px solid #ddd;
-	white-space: nowrap; /* Prevent text from wrapping */
+	white-space: nowrap;
   }
   
   .status {
@@ -262,11 +259,11 @@
   }
   
   .status--used {
-	background-color: #f44336; /* Red */
+	background-color: var(--color-red);
   }
   
   .status--unused {
-	background-color: #4caf50; /* Green */
+	background-color: var(--color-green);
   }
   
   .no-data {
@@ -288,19 +285,20 @@
   
   .pagination__button {
 	padding: 8px 12px;
-	background-color: #2196f3;
+	background-color: var(--color-blue);
 	color: white;
 	border: none;
 	cursor: pointer;
   }
   
   .pagination__button:disabled {
-	background-color: #90caf9;
+	background-color: var(--color-blue);
+	opacity: 0.5;
 	cursor: not-allowed;
   }
   
   .pagination__button:hover:not(:disabled) {
-	background-color: #1976d2;
+	background-color: var(--color-blue);
   }
   
 

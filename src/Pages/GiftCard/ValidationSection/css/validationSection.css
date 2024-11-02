@@ -1,188 +1,174 @@
-/* src/components/GiftCard/ValidationSection/css/validationSection.css */
-
-:root {
-	--color-blue: #007bff;
-	--color-red: #dc3545;
-	--color-white: #ffffff;
-	--color-gray: #6c757d;
-	--color-light-gray: #f8f9fa;
-	--border-radius: 8px;
-	--padding: 20px;
-	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Main Validation Section */
-  .validation-section {
+/* Main Validation Section */
+.validation-section {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
-  }
-  
-  .validation-section__title {
+}
+
+.validation-section__title {
 	font-size: 1.5rem;
 	font-weight: bold;
-  }
-  
-  .validation-section__description {
+}
+
+.validation-section__description {
 	font-size: 0.9rem;
 	font-style: italic;
-	color: var(--color-gray);
-  }
-  
-  .validation-section__input {
+	color: #6c757d;
+}
+
+.validation-section__input {
 	padding: 10px;
 	border: 1px solid #ccc;
-	border-radius: var(--border-radius);
+	border-radius: 8px;
 	font-size: 1rem;
-  }
-  
-  .validation-section__button {
+}
+
+.validation-section__button {
 	padding: 10px;
 	background-color: var(--color-blue);
-	color: var(--color-white);
+	color: #ffffff;
 	border: none;
-	border-radius: var(--border-radius);
+	border-radius: 8px;
 	cursor: pointer;
 	font-size: 1rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: background-color 0.3s ease;
-  }
-  
-  .validation-section__button:hover {
+}
+
+.validation-section__button:hover {
 	background-color: darken(var(--color-blue), 10%);
-  }
-  
-  .validation-section__error {
-	color: var(--color-red);
+}
+
+.validation-section__error {
+	color: #dc3545;
 	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
 	gap: 5px;
-  }
-  
-  /* Validation Popup */
-  .validation-popup {
+}
+
+/* Validation Popup */
+.validation-popup {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	z-index: 1000;
-  }
-  
-  .validation-popup__overlay {
+}
+
+.validation-popup__overlay {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .validation-popup__content {
+}
+
+.validation-popup__content {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	width: 90%;
 	max-width: 500px;
-	background-color: var(--color-white);
-	border-radius: var(--border-radius);
-	padding: var(--padding);
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 20px;
 	transform: translate(-50%, -50%);
-	box-shadow: var(--box-shadow);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
-  }
-  
-  .validation-popup__header {
+}
+
+.validation-popup__header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  }
-  
-  .validation-popup__header h3 {
+}
+
+.validation-popup__header h3 {
 	margin: 0;
 	display: flex;
 	align-items: center;
 	gap: 5px;
-  }
-  
-  .validation-popup__date {
+}
+
+.validation-popup__date {
 	font-size: 0.8rem;
-	color: var(--color-gray);
-  }
-  
-  .validation-popup__info {
+	color: #6c757d;
+}
+
+.validation-popup__info {
 	display: flex;
 	gap: 10px;
-  }
-  
-  .validation-popup__labels,
-  .validation-popup__values {
+}
+
+.validation-popup__labels,
+.validation-popup__values {
 	flex: 1;
-  }
-  
-  .validation-popup__labels p {
+}
+
+.validation-popup__labels p {
 	font-weight: bold;
 	margin: 5px 0;
-  }
-  
-  .validation-popup__values p {
+}
+
+.validation-popup__values p {
 	margin: 5px 0;
-  }
-  
-  .validation-popup__deduct {
+}
+
+.validation-popup__deduct {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-  }
-  
-  .validation-popup__deduct label {
+}
+
+.validation-popup__deduct label {
 	font-weight: bold;
-  }
-  
-  .validation-popup__deduct input {
+}
+
+.validation-popup__deduct input {
 	padding: 8px;
 	border: 1px solid #ccc;
-	border-radius: var(--border-radius);
+	border-radius: 8px;
 	font-size: 1rem;
-  }
-  
-  .validation-popup__deduct-error {
-	color: var(--color-red);
+}
+
+.validation-popup__deduct-error {
+	color: #dc3545;
 	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
 	gap: 5px;
-  }
-  
-  .validation-popup__validate-button {
+}
+
+.validation-popup__validate-button {
 	padding: 10px;
 	background-color: var(--color-blue);
-	color: var(--color-white);
+	color: #ffffff;
 	border: none;
-	border-radius: var(--border-radius);
+	border-radius: 8px;
 	cursor: pointer;
 	font-size: 1rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: background-color 0.3s ease;
-  }
-  
-  .validation-popup__validate-button:hover {
+}
+
+.validation-popup__validate-button:hover {
 	background-color: darken(var(--color-blue), 10%);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
 	.validation-popup__content {
-	  width: 95%;
+		width: 95%;
 	}
-  
+
 	.validation-popup__info {
-	  flex-direction: column;
+		flex-direction: column;
 	}
-  }
-  
+}
