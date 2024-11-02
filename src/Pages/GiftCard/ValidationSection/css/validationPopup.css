@@ -35,20 +35,13 @@
 	margin: 5px 0;
   }
   
-  .validation-popup__info .label {
-	font-weight: bold;
-  }
-  
+
   .validation-popup__deduct {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
   }
-  
-  .validation-popup__deduct label {
-	font-weight: bold;
-  }
-  
+
   .validation-popup__deduct input {
 	padding: 8px;
 	border: 1px solid #ccc;
@@ -76,7 +69,6 @@
 	align-items: center;
 	justify-content: center;
 	transition: background-color 0.3s ease;
-	margin-left: 10px;
   }
   
   .validation-popup__validate-button:hover {
@@ -90,3 +82,6 @@
 	}
   }
   
+  .validation-popup__validate-icon {
+	margin-right: 5px;
+  }
