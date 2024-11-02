@@ -8,20 +8,10 @@
   
   .validation-popup__header {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-  }
-  
-  .validation-popup__header h3 {
-	margin: 0;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-  }
-  
-  .validation-popup__date {
-	font-size: 0.8rem;
-	color: #6c757d;
+	
   }
   
   .validation-popup__info {

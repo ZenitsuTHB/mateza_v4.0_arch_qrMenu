@@ -21,9 +21,14 @@ h2 {
 
 .secondary-title {
 	text-align: center;
+  width: 100%;
 	margin-bottom: 20px;
 }
 
 p {
+  font-size: 15px;
+}
+
+label {
   font-size: 15px;
 }

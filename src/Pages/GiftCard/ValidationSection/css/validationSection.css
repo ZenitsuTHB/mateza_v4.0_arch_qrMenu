@@ -19,49 +19,15 @@
 	font-size: 1rem;
 }
 
-.validation-section__button {
-	padding: 10px;
-	background-color: var(--color-blue);
-	color: #ffffff;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	font-size: 1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: background-color 0.3s ease;
-}
-
-.validation-section__button:hover {
-	background-color: darken(var(--color-blue), 10%);
-}
-
 .validation-section__error {
-	color: #dc3545;
+	color: var(--color-red);
 	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
 	gap: 5px;
 }
 
-/* Validation Popup */
-.validation-popup {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 1000;
-}
 
-.validation-popup__overlay {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: var(--z-index-foreground) !important;
-	background-color: rgba(0, 0, 0, 0.5);
-}
 
 .validation-popup__content {
 	position: absolute;

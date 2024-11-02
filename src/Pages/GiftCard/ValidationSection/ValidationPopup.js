@@ -15,11 +15,9 @@ const ValidationPopup = ({
   return (
     <div className="validation-popup__container">
       <div className="validation-popup__header">
-        <h3>Cadeaubon Details</h3>
-        <span className="validation-popup__date">
-          Aangemaakt op: {giftCardData.reservationDate}
-        </span>
+        <h2 className="secondary-title center">Cadeaubon Details</h2>
       </div>
+      
       <div className="validation-popup__info">
         <div className="validation-popup__labels">
           <p>Status:</p>
@@ -27,6 +25,7 @@ const ValidationPopup = ({
           <p>Beschikbaar Saldo:</p>
           <p>Vervaldatum:</p>
           <p>Geldig voor maanden:</p>
+          <p>Aanmaakdatum:</p>
         </div>
         <div className="validation-popup__values">
           <p>{giftCardData.status}</p>
@@ -34,10 +33,11 @@ const ValidationPopup = ({
           <p>€{giftCardData.availableBalance}</p>
           <p>{giftCardData.expirationDate}</p>
           <p>{giftCardData.monthsValid} maanden</p>
+          <p>{giftCardData.reservationDate}</p>
         </div>
       </div>
       <div className="validation-popup__deduct">
-        <label htmlFor="deduct">Bedrag om af te schrijven:</label>
+        <label htmlFor="deduct">Cadeaubon Verminderen</label>
         <input
           type="number"
           id="deduct"
@@ -55,7 +55,7 @@ const ValidationPopup = ({
         className="button-style-3"
         onClick={handleDeduct}
       >
-        Valideer Cadeaubon
+        Bedrag Afschrijven Cadeaubon
       </button>
     </div>
   );

@@ -177,14 +177,12 @@ const AddGiftCardSection = () => {
 
         {/* Create Button */}
         <button type="submit" className="button-style-3">
-          <FaPlus /> Aanmaken
+        	Aanmaken
         </button>
       </form>
     </div>
   );
 };
 
-// FaCheckIcon Component for Success Message
-const FaCheckIcon = () => <FaPlus />; // Replace with FaCheckCircle or another appropriate icon
 
 export default AddGiftCardSection;

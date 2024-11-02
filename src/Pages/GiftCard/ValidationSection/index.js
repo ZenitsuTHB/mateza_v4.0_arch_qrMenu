@@ -64,7 +64,7 @@ const ValidationSection = () => {
         onChange={(e) => setCode(e.target.value)}
       />
       <button
-        className="validation-section__button"
+        className="button-style-3"
         onClick={handleValidateCode}
       >
         Code Valideren
