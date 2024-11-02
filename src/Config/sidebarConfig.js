@@ -8,6 +8,7 @@ import {
   FaCalendarAlt,
   FaRocket,
   FaCog,
+  FaGift,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -17,6 +18,7 @@ import LaunchPage from '../Pages/FormEditor/LaunchPage/index.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/DayList/index.js';
+import GiftCard from '../Pages/GiftCard/index.js'
 
 import {
   overviewSecondaryTopBar,
@@ -65,6 +67,15 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: designSecondaryTopBar,
     sidebarHidden: false, // Hide sidebar on this route
+  },
+  {
+    path: '/giftcard',
+    element: <GiftCard title="Cadeaubonnen" />,
+    label: 'Cadeaubonnen',
+    icon: FaGift,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/new-reservation',
