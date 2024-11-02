@@ -7,12 +7,6 @@
 	gap: 20px;
   }
   
-  .overview-section__title {
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: var(--color-blue);
-  }
-  
   .overview-section__controls {
 	display: flex;
 	justify-content: space-between;
@@ -36,23 +30,7 @@
 	outline: none;
   }
   
-  .overview-section__export {
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	padding: 10px 15px;
-	background-color: var(--color-blue);
-	color: var(--color-white);
-	border: none;
-	border-radius: var(--border-radius);
-	cursor: pointer;
-	font-size: var(--font-size);
-	transition: background-color 0.3s ease;
-  }
-  
-  .overview-section__export:hover {
-	background-color: var(--button-hover-blue);
-  }
+
   
   .overview-section__table-container {
 	width: 100%;
@@ -156,28 +134,6 @@
 	background-color: var(--button-hover-blue);
   }
   
-  @media (max-width: 768px) {
-	.overview-section__controls {
-	  flex-direction: column;
-	  align-items: stretch;
-	}
-  
-	.overview-section__export {
-	  width: 100%;
-	  justify-content: center;
-	}
-  
-	.overview-section__table th,
-	.overview-section__table td {
-	  padding: 8px 10px;
-	  font-size: 0.9rem;
-	}
-  
-	.pagination__controls {
-	  justify-content: center;
-	}
-  }
-  
 
 .overview-section {
 	padding: 20px;
@@ -196,6 +152,10 @@
   .overview-section__search {
 	padding: 8px;
 	width: 200px;
+  }
+
+  .button-export {
+	width: 200px !important;
   }
   
   .overview-section__export {

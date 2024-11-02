@@ -170,8 +170,8 @@ const OverviewSectionFlex = () => {
           value={searchQuery}
           onChange={handleSearch}
         />
-        <button className="overview-section__export" onClick={handleExport}>
-          <FaFileCsv /> Exporteer naar CSV
+        <button className="button-style-3 button-export" onClick={handleExport}>
+          Exporteer naar CSV
         </button>
       </div>
       <div className="overview-section__table-container">

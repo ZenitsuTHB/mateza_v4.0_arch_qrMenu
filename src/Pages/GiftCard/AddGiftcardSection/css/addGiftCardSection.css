@@ -1,18 +1,4 @@
-/* src/components/GiftCard/AddGiftCardSection/css/addGiftCardSection.css */
 
-:root {
-	--color-blue: #007bff;
-	--color-red: #dc3545;
-	--color-green: #28a745;
-	--color-white: #ffffff;
-	--color-gray: #6c757d;
-	--color-light-gray: #f8f9fa;
-	--border-radius: 8px;
-	--padding: 20px;
-	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	--input-border: #ced4da;
-	--input-focus-border: var(--color-blue);
-  }
   
   .add-gift-card-section {
 	display: flex;
@@ -20,14 +6,7 @@
 	gap: 15px;
   }
   
-  .add-gift-card-section__title {
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: var(--color-blue);
-	display: flex;
-	align-items: center;
-	gap: 10px;
-  }
+
   
   .add-gift-card-section__form {
 	display: flex;
