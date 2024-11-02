@@ -7,30 +7,17 @@
 	margin-top: 30px;
   }
   
-  .gift-card-page__top-row,
-  .gift-card-page__bottom-row {
+  .gift-card-page .gift-card-page__top-row,
+  .gift-card-page .gift-card-page__bottom-row {
 	display: grid;
 	grid-gap: 20px;
   }
   
-  .gift-card-page__top-row {
+  .gift-card-page .gift-card-page__top-row {
 	grid-template-columns: repeat(2, 1fr);
   }
   
-  .gift-card-page__bottom-row {
+  .gift-card-page .gift-card-page__bottom-row {
 	grid-template-columns: 1fr;
-  }
-  
-
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-	.gift-card-page__top-row {
-	  grid-template-columns: 1fr;
-	}
-  
-	.gift-card-page__bottom-row {
-	  grid-template-columns: 1fr;
-	}
   }
   

@@ -1,12 +1,12 @@
 /* src/components/GiftCard/OverviewSection/css/overviewSection.css */
 
 
-  .overview-section {
+  .gift-card-page .overview-section {
 	display: flex;
 	flex-direction: column;
   }
 
-  .bubble-style {
+  .gift-card-page .bubble-style {
 	font-size: 0.8rem;
 	color: var(--color-blue);
 	text-align: center;
@@ -18,12 +18,12 @@
 
   }
 
-  .bold-customer-name {
+  .gift-card-page .bold-customer-name {
     font-weight: bold;
 }
 
   
-  .overview-section__controls {
+  .gift-card-page .overview-section__controls {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -31,7 +31,7 @@
 	gap: 10px;
   }
   
-  .overview-section__search {
+  .gift-card-page .overview-section__search {
 	flex: 1;
 	min-width: 200px;
 	padding: 10px;
@@ -41,34 +41,34 @@
 	transition: border-color 0.3s ease;
   }
   
-  .overview-section__search:focus {
+  .gift-card-page .overview-section__search:focus {
 	border-color: var(--input-focus-border);
 	outline: none;
   }
   
 
   
-  .overview-section__table-container {
+  .gift-card-page .overview-section__table-container {
 	width: 100%;
 	overflow-x: auto;
   }
   
-  .overview-section__table {
+  .gift-card-page .overview-section__table {
 	width: 100%;
 	border-collapse: collapse;
 	box-shadow: var(--box-shadow);
 	min-width: 600px;
   }
   
-  .overview-section__table th,
-  .overview-section__table td {
+  .gift-card-page .overview-section__table th,
+  .gift-card-page .overview-section__table td {
 	padding: 12px 15px;
 	text-align: left;
 	width: 16.6666%;
 	border-bottom: 1px solid #ddd;
   }
   
-  .overview-section__table th {
+  .gift-card-page .overview-section__table th {
 	background-color: var(--table-header-bg);
 	cursor: pointer;
 	user-select: none;
@@ -79,11 +79,11 @@
 	font-size: var(--font-size);
   }
   
-  .overview-section__table tr:hover {
+  .gift-card-page .overview-section__table tr:hover {
 	background-color: var(--color-light-gray);
   }
   
-  .status {
+  .gift-card-page .status {
 	padding: 5px 10px;
 	border-radius: var(--border-radius);
 	font-weight: bold;
@@ -91,24 +91,24 @@
 	display: inline-block;
   }
   
-  .status--used {
+  .gift-card-page .status--used {
 	background-color: var(--color-red);
 	color: var(--color-white);
   }
   
-  .status--unused {
+  .gift-card-page .status--unused {
 	background-color: var(--color-green);
 	color: var(--color-white);
   }
   
-  .no-data {
+  .gift-card-page .no-data {
 	text-align: center;
 	padding: 20px;
 	color: var(--color-gray);
 	font-size: var(--font-size);
   }
   
-  .overview-section__pagination {
+  .gift-card-page .overview-section__pagination {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -116,18 +116,18 @@
 	gap: 10px;
   }
   
-  .pagination__info {
+  .gift-card-page .pagination__info {
 	font-size: var(--font-size);
 	color: var(--color-gray);
   }
   
-  .pagination__controls {
+  .gift-card-page .pagination__controls {
 	display: flex;
 	align-items: center;
 	gap: 5px;
   }
   
-  .pagination__button {
+  .gift-card-page .pagination__button {
 	background-color: var(--color-blue);
 	color: var(--color-white);
 	border: none;
@@ -141,53 +141,53 @@
 	transition: background-color 0.3s ease;
   }
   
-  .pagination__button:disabled {
+  .gift-card-page .pagination__button:disabled {
 	background-color: #6c757d;
 	cursor: not-allowed;
   }
   
-  .pagination__button:hover:not(:disabled) {
+  .gift-card-page .pagination__button:hover:not(:disabled) {
 	background-color: var(--button-hover-blue);
   }
   
 
-.overview-section {
+.gift-card-page .overview-section {
 	padding: 20px;
   }
   
 
-  .overview-section__controls {
+  .gift-card-page .overview-section__controls {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
   }
   
-  .overview-section__search {
+  .gift-card-page .overview-section__search {
 	padding: 10px;
 	width: 200px;
   }
 
 
   
-  .overview-section__export:hover {
+  .gift-card-page .overview-section__export:hover {
 	background-color: var(--color-green);
   }
   
-  .overview-section__table-container {
+  .gift-card-page .overview-section__table-container {
 	overflow-x: auto;
   }
   
-  .overview-section__table {
+  .gift-card-page .overview-section__table {
 	width: 100%;
 	border-collapse: collapse;
   }
   
-  .table-header-row {
+  .gift-card-page .table-header-row {
 	display: flex;
 	flex-wrap: nowrap;
   }
   
-  .table-header-row th {
+  .gift-card-page .table-header-row th {
 	flex: 1;
 	padding: 12px;
 	background-color: #f2f2f2;
@@ -196,55 +196,55 @@
 	white-space: nowrap;
   }
   
-  .table-header-row th:hover {
+  .gift-card-page .table-header-row th:hover {
 	background-color: #e0e0e0;
   }
   
-  .overview-section__table tbody tr {
+  .gift-card-page .overview-section__table tbody tr {
 	display: flex;
 	flex-wrap: nowrap;
   }
   
-  .overview-section__table tbody td {
+  .gift-card-page .overview-section__table tbody td {
 	flex: 1;
 	padding: 12px;
 	border-top: 1px solid #ddd;
 	white-space: nowrap;
   }
   
-  .status {
+  .gift-card-page .status {
 	padding: 4px 8px;
 	border-radius: 4px;
 	color: white;
 	font-weight: bold;
   }
   
-  .status--used {
+  .gift-card-page .status--used {
 	background-color: var(--color-red);
   }
   
-  .status--unused {
+  .gift-card-page .status--unused {
 	background-color: var(--color-green);
   }
   
-  .no-data {
+  .gift-card-page .no-data {
 	text-align: center;
 	padding: 20px;
   }
   
-  .overview-section__pagination {
+  .gift-card-page .overview-section__pagination {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-top: 20px;
   }
   
-  .pagination__controls {
+  .gift-card-page .pagination__controls {
 	display: flex;
 	gap: 8px;
   }
   
-  .pagination__button {
+  .gift-card-page .pagination__button {
 	padding: 8px 12px;
 	background-color: var(--color-blue);
 	color: white;
@@ -252,18 +252,18 @@
 	cursor: pointer;
   }
   
-  .pagination__button:disabled {
+  .gift-card-page .pagination__button:disabled {
 	background-color: var(--color-blue);
 	opacity: 0.5;
 	cursor: not-allowed;
   }
   
-  .pagination__button:hover:not(:disabled) {
+  .gift-card-page .pagination__button:hover:not(:disabled) {
 	background-color: var(--color-blue);
   }
   
 
-  .overview-section .search-bars-container {
+  .gift-card-page .overview-section .search-bars-container {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
@@ -273,7 +273,7 @@
 	background-color: var(--color-bg);
   }
   
-  .overview-section .search-bar {
+  .gift-card-page .overview-section .search-bar {
 	flex: 1;
 	font-size: 15px;
 	height: 40px;
