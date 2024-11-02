@@ -5,6 +5,23 @@
 	display: flex;
 	flex-direction: column;
   }
+
+  .bubble-style {
+	font-size: 0.8rem;
+	color: var(--color-blue);
+	text-align: center;
+	border: var(--color-blue) 1px solid;
+	border-radius: 200px;
+	margin-bottom: 10px;
+	padding: 6px 12px; /* Optioneel: wat meer padding voor betere weergave */
+	background-color: #f0f8ff; /* Optioneel: lichte achtergrondkleur voor contrast */
+
+  }
+
+  .bold-customer-name {
+    font-weight: bold;
+}
+
   
   .overview-section__controls {
 	display: flex;

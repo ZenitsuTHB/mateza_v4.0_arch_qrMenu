@@ -131,7 +131,7 @@ const OverviewSectionFlex = () => {
   const handleExport = () => {
     const headers = ['Status', 'Klant', 'Initieel Bedrag (€)', 'Vervaldatum', 'E-mailadres'];
     const rows = filteredGiftCards.map((card) => [
-      card.status,
+      card.status === 'Used' ? 'Gebruikt' : 'Niet Gebruikt',
       card.customer,
       card.initialValue,
       card.expirationDate,
@@ -145,7 +145,7 @@ const OverviewSectionFlex = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'cadeaubonnen.csv'); // Vertaalde bestandsnaam
+    link.setAttribute('download', 'cadeaubonnen.csv'); // Translated filename
     document.body.appendChild(link); // Required for FF
 
     link.click();
@@ -158,6 +158,13 @@ const OverviewSectionFlex = () => {
       return <FaSort />;
     }
     return sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />;
+  };
+
+  // Status mapping
+  const statusMapping = {
+    'Used': 'Gebruikt',
+    'Unused': 'Niet Gebruikt',
+    // Add more mappings if necessary
   };
 
   return (
@@ -218,13 +225,9 @@ const OverviewSectionFlex = () => {
                 <tr key={card.id} className="table-body-row">
                   <td>
                     <span
-                      className={
-                        card.status === 'Used'
-                          ? 'status status--used'
-                          : 'status status--unused'
-                      }
+                      className={`bubble-style`}
                     >
-                      {card.status}
+                      {statusMapping[card.status]}
                     </span>
                   </td>
                   <td>{card.customer}</td>
@@ -281,11 +284,11 @@ const OverviewSectionFlex = () => {
             <FaAngleDoubleRight />
           </button>
         </div>
-		<div className="export-button-container">
-        <button className="button-style-3 button-export" onClick={handleExport}>
-          Exporteer naar CSV
-        </button>
-      </div>
+        <div className="export-button-container">
+          <button className="button-style-3 button-export" onClick={handleExport}>
+            Exporteer naar CSV
+          </button>
+        </div>
       </div>
     </div>
   );
