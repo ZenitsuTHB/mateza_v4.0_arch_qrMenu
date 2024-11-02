@@ -97,7 +97,7 @@ const ValidationPopup = ({
 }) => {
   return (
     <div className="validation-popup">
-      <div className="validation-popup__overlay" onClick={onClose}></div>
+      <div className="modal-overlay" onClick={onClose}></div>
       <div className="validation-popup__content">
         <div className="validation-popup__header">
           <h3>Validate</h3>
