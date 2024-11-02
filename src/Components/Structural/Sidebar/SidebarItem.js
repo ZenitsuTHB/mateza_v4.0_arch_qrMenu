@@ -3,7 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 
-const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBar }) => {
+const SidebarItem = ({
+  item,
+  activeTab,
+  handleItemClick,
+  isExpanded,
+  secondaryTopBar,
+}) => {
   const [showSecondaryItems, setShowSecondaryItems] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const IconComponent = item.icon;
@@ -83,7 +89,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
         className={clsx('sidebar-item', {
           'sidebar-item__active': activeTab === item.id,
         })}
-        onClick={() => setActiveTab(item.id)}
+        onClick={() => handleItemClick(item.id)}
       >
         {activeTab === item.id && (
           <motion.div
@@ -128,7 +134,7 @@ const SidebarItem = ({ item, activeTab, setActiveTab, isExpanded, secondaryTopBa
                 <motion.div
                   key={subItem.path}
                   className="sidebar-item__secondary-item"
-                  onClick={() => setActiveTab(subItem.path)}
+                  onClick={() => handleItemClick(subItem.path)}
                   variants={itemVariants}
                   transition={{ duration: 0.2 }}
                 >

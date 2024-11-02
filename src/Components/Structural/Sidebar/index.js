@@ -15,9 +15,19 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const isMobile = window.innerWidth < 900;
 
-  const handleNavigation = (path) => {
+  // Function to handle item clicks
+  const handleItemClick = (path) => {
     setActiveTab(path);
     navigate(path);
+    // Collapse the sidebar if it's expanded
+    if (isExpanded) {
+      setIsExpanded(false);
+    }
+    // Clear any existing collapse timeout
+    if (collapseTimeout) {
+      clearTimeout(collapseTimeout);
+      setCollapseTimeout(null);
+    }
   };
 
   const toggleSidebar = () => {
@@ -83,7 +93,7 @@ const Sidebar = () => {
             key={route.path}
             item={{ id: route.path, title: route.label, icon: route.icon }}
             activeTab={activeTab}
-            setActiveTab={handleNavigation}
+            handleItemClick={handleItemClick}
             isExpanded={isExpanded && !isMobile} // Expanded only on non-mobile devices
             secondaryTopBar={route.secondaryTopBar}
           />
