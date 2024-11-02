@@ -230,7 +230,7 @@ const OverviewSectionFlex = () => {
                       {statusMapping[card.status]}
                     </span>
                   </td>
-                  <td>{card.customer}</td>
+                  <td className='bold-customer-name'>{card.customer}</td>
                   <td>€{card.initialValue.toFixed(2)}</td>
                   <td>{card.expirationDate}</td>
                   <td>{card.email}</td>
