@@ -55,60 +55,36 @@
     width: 100%;
     border-collapse: collapse;
     box-shadow: var(--box-shadow);
+    table-layout: fixed; /* Ensures fixed layout */
 }
 
 .gift-card-page .overview-section__table th,
 .gift-card-page .overview-section__table td {
     padding: 12px 15px;
     text-align: left;
-    width: 14.2857142857%;
     border-bottom: 1px solid #ddd;
+    width: 12.5%; /* 100% / 8 columns */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .gift-card-page .overview-section__table th {
     background-color: var(--table-header-bg);
     cursor: pointer;
     user-select: none;
-    display: flex;
-    align-items: center;
-    gap: 5px;
     font-weight: bold;
     font-size: var(--font-size);
-    
+    position: relative; /* For sort icons positioning */
+}
+
+.gift-card-page .overview-section__table th .sort-icon {
+    margin-left: 5px;
+    display: inline-block;
 }
 
 .gift-card-page .overview-section__table tr:hover {
     background-color: var(--color-light-gray);
-}
-
-.gift-card-page .table-header-row {
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.gift-card-page .table-header-row th {
-    flex: 1;
-    padding: 12px;
-    background-color: #f2f2f2;
-    cursor: pointer;
-    text-align: left;
-    white-space: nowrap;
-}
-
-.gift-card-page .table-header-row th:hover {
-    background-color: #e0e0e0;
-}
-
-.gift-card-page .overview-section__table tbody tr {
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.gift-card-page .overview-section__table tbody td {
-    flex: 1;
-    padding: 12px;
-    border-top: 1px solid #ddd;
-    white-space: nowrap;
 }
 
 .gift-card-page .status {
@@ -201,4 +177,13 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: var(--color-bg);
+}
+
+/* Optional: Responsive adjustments */
+@media (max-width: 768px) {
+    .gift-card-page .overview-section__table th,
+    .gift-card-page .overview-section__table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
 }
