@@ -4,7 +4,6 @@ import React from 'react';
 import { withHeader } from '../../Components/Structural/Header';
 import ProfileImage from './ProfileImage';
 import ProfileBio from './ProfileBio';
-import Language from './Language';
 import AccountManage from './AccountManage'; // Import the new component
 import useProfile from './Hooks/useProfile';
 import './css/style.css';
@@ -23,7 +22,6 @@ const Profile = (props) => {
         <ProfileBio name={name} bio={bio} interests={interests} />
         <AccountManage /> {/* Add the new component here */}
 
-        <Language />
       </div>
     </div>
   );
