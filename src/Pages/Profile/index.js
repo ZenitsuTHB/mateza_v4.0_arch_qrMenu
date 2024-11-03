@@ -21,9 +21,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const data = await api.get(window.baseDomain + 'api/account', { noCache: true });
-
-        
+        const data = await api.get(`${window.baseDomain}api/account`, { noCache: true });
         setAccountData(data);
         setLoading(false);
       } catch (error) {
@@ -64,13 +62,14 @@ const Profile = () => {
   }
 
   // Derive full name
-  const fullName = `${accountData.voornaam} ${accountData.achternaam}`.trim();
+  const fullName = `${accountData.first_name} ${accountData.last_name}`.trim();
 
   return (
     <div className="profile-page">
       <div className="profile-page__container">
         <NotificationComponent />
         
+        {/*
         <ProfileImage
           profileImage={accountData.imageId ? avatarMapping[accountData.imageId] : defaultAvatar}
           avatarMapping={accountData.avatarMapping}
@@ -80,13 +79,13 @@ const Profile = () => {
         />
 
         <ProfileBio
-          name={fullName || 'Gebruiker'} // Fallback to 'Gebruiker' if name is empty
+          name={fullName || 'Gebruiker'}
           bio={accountData.bio}
           interests={accountData.interests || []}
           api={api}
           updateAccountData={updateAccountData}
-          naamRestaurant={accountData.naamRestaurant} // Pass naamRestaurant prop
-        />
+          restaurant_name={accountData.restaurant_name}
+        />*/}
 
         <AccountManage
           accountData={accountData}

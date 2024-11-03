@@ -88,38 +88,33 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     if (!formData.restaurant_name.trim()) {
       newErrors.restaurant_name = 'Naam restaurant is verplicht.';
     }
-
-    // Add more validations if necessary
-
     return newErrors;
   };
 
   const handleSave = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
-      try {
-        setLoading(true);
-        let responseData;
-        // Determine whether to POST or PUT based on whether account exists
-        if (accountData._id) {
-          responseData = await api.put(`${window.baseDomain}api/account`, formData);
-          triggerNotification('Account bijgewerkt', 'success');
-        } else {
-          responseData = await api.put(`${window.baseDomain}api/account`, formData);
-          triggerNotification('Gegevens toegevoegd', 'success');
-        }
-        setLoading(false);
-        setAccountData(responseData); // Update the central account data
-      } catch (error) {
-        setLoading(false);
-        triggerNotification('Fout bij het opslaan', 'error');
-      }
-    }
-  };
+	e.preventDefault();
+	const validationErrors = validate();
+  
+	if (Object.keys(validationErrors).length > 0) {
+	  setErrors(validationErrors);
+	} else {
+	  try {
+		setLoading(true);
+		let responseData;
+		if (accountData._id) {
+		  responseData = await api.put(`${window.baseDomain}api/account`, formData);
+		  triggerNotification('Account bijgewerkt', 'success');
+		} else {
+		  responseData = await api.post(`${window.baseDomain}api/account`, formData);
+		  triggerNotification('Gegevens toegevoegd', 'success');
+		}
+		setLoading(false);
+	  } catch (error) {
+		setLoading(false);
+		triggerNotification('Fout bij het opslaan', 'error');
+	  }
+	}
+  };  
 
   return (
     <div className="profile-page">
