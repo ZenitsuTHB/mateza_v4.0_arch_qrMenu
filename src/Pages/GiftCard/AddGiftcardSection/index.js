@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import './css/addGiftCardSection.css';
 import { FaUser, FaEnvelope, FaImage, FaPlus } from 'react-icons/fa';
 import ValueSelector from './ValueSelector';
+import useApi from '../../../Hooks/useApi';
 
 const AddGiftCardSection = () => {
+  const api = useApi();
+
   const [formData, setFormData] = useState({
     value: '',
     firstName: '',
@@ -57,25 +60,49 @@ const AddGiftCardSection = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const generateUniqueCode = () => {
+    // Simple code generation logic (you can make it more complex if needed)
+    return Math.random().toString(36).substr(2, 8).toUpperCase();
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Handle form submission (e.g., API call)
-      console.log('Cadeaubon Aangemaakt:', formData);
-      setSuccessMessage('Cadeaubon succesvol aangemaakt!');
-      // Reset form
-      setFormData({
-        value: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        design: '',
-      });
-      setErrors({});
+      try {
+        const uniqueCode = generateUniqueCode(); // Generate the unique code here
+
+        const giftCardData = {
+          code: uniqueCode, // Include the code in the data sent to the server
+          value: parseFloat(formData.value),
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          email: formData.email.trim(),
+          design: formData.design,
+        };
+
+        const response = await api.post(window.baseDomain + '/api/giftcards', giftCardData);
+
+        if (response) {
+          setSuccessMessage(`Cadeaubon succesvol aangemaakt! Uw code is: ${uniqueCode}`);
+          setFormData({
+            value: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            design: '',
+          });
+          setErrors({});
+        } else {
+          setErrors({ server: 'Er is een fout opgetreden bij het aanmaken van de cadeaubon.' });
+        }
+      } catch (error) {
+        console.error(error);
+        setErrors({ server: 'Er is een fout opgetreden bij het aanmaken van de cadeaubon.' });
+      }
     }
   };
 
