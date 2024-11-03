@@ -22,7 +22,7 @@
   }
   
   .breadcrumb-component .breadcrumb-link-blue {
-	color: var(--color-blue); /* Ensure --color-blue is defined in your CSS variables */
+	color: var(--color-blue);
   }
   
   .breadcrumb-component .breadcrumb-separator {

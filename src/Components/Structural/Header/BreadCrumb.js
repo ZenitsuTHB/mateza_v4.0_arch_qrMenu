@@ -40,6 +40,7 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
   let displayedBreadcrumbs = [];
 
   if (breadcrumbs.length === 0) {
+    // On root path, show only 'Mateza Booking'
     displayedBreadcrumbs = [
       {
         label: 'Mateza Booking',
@@ -47,6 +48,7 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
       },
     ];
   } else if (breadcrumbs.length === 1) {
+    // Single segment path: Root + segment
     displayedBreadcrumbs = [
       {
         label: 'Mateza Booking',
@@ -55,6 +57,7 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
       breadcrumbs[0],
     ];
   } else {
+    // Multi-segment path: Show last two segments
     displayedBreadcrumbs = breadcrumbs.slice(-2);
   }
 
@@ -64,6 +67,7 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
         {displayedBreadcrumbs.map((crumb, index) => {
           const isLast = index === displayedBreadcrumbs.length - 1;
           const isFirst = index === 0;
+          const isRoot = breadcrumbs.length === 0; // Determine if on root path
 
           return (
             <span key={crumb.path} className="breadcrumb-item">
@@ -78,7 +82,10 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
                   <span className="breadcrumb-separator">/</span>
                 </>
               ) : (
-                <span className="breadcrumb-current">{title}</span> // Use title prop here
+                // If on root path, use crumb.label; otherwise, use title prop
+                <span className="breadcrumb-current">
+                  {isRoot ? crumb.label : title}
+                </span>
               )}
             </span>
           );
