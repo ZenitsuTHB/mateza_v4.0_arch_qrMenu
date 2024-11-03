@@ -21,7 +21,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const data = await api.get(window.baseDomain + '/api/account');
+        const data = await api.get(window.baseDomain + 'api/account', { noCache: true });
+
+        
         setAccountData(data);
         setLoading(false);
       } catch (error) {

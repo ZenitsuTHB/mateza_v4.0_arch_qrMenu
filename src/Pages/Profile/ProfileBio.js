@@ -27,7 +27,7 @@ const ProfileBio = ({ name, bio, interests, api, updateAccountData, naamRestaura
     setIsEditing(false);
     if (editableBio !== bio) {
       try {
-        const updatedData = await api.put(window.baseDomain + '/api/account', { bio: editableBio });
+        const updatedData = await api.put(window.baseDomain + 'api/account', { bio: editableBio });
         updateAccountData(updatedData);
         triggerNotification('Bio succesvol bewerkt', 'success');
       } catch (error) {

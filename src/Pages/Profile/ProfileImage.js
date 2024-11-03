@@ -24,7 +24,7 @@ const ProfileImage = ({
   const handleAvatarSelectInternal = async (avatarKey) => {
     setShowAvatarModal(false);
     try {
-      const updatedData = await api.put(window.baseDomain + '/api/account', { imageId: avatarKey });
+      const updatedData = await api.put(window.baseDomain + 'api/account', { imageId: avatarKey });
       updateAccountData(updatedData);
       dispatch(setAvatar(avatarKey));
       triggerNotification('Profiel aangepast', 'success');

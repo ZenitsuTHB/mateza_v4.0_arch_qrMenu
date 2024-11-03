@@ -7,6 +7,14 @@ const TEN_MINUTES = 60 * 10 * 1000;
 const CACHE_EXPIRY = TEN_MINUTES;
 
 const useApi = () => {
+  const isProduction = window.isProduction === true;
+
+  const log = useCallback((...args) => {
+    if (!isProduction) {
+      console.log(...args);
+    }
+  }, [isProduction]);
+
   const generateCacheKey = useCallback((endpoint) => `cache_${endpoint}`, []);
 
   const getJwtToken = useCallback(() => {
@@ -57,12 +65,13 @@ const useApi = () => {
         const cachedItem = JSON.parse(localStorage.getItem(cacheKey));
 
         if (cachedItem && Date.now() - cachedItem.timestamp < CACHE_EXPIRY) {
-          console.log('Returning Cache');
+          log('Returning Cache for:', endpoint, cachedItem);
           return cachedItem.data;
         }
       }
 
       try {
+        log('Making GET request to:', endpoint, 'with config:', axiosConfig);
         const response = await axios.get(endpoint, {
           ...axiosConfig,
           headers: {
@@ -70,24 +79,28 @@ const useApi = () => {
             Authorization: `Bearer ${getJwtToken()}`,
           },
         });
-        console.log('New Request');
+        log('Received response for GET:', endpoint, 'Status:', response.status, 'Data:', response.data);
+
         if (!noCache) {
           localStorage.setItem(
             cacheKey,
             JSON.stringify({ data: response.data, timestamp: Date.now() })
           );
+          log('Cached response for:', endpoint);
         }
 
         updateStoredNumber();
 
         return response.data;
       } catch (error) {
+        log('Error fetching data from GET:', endpoint, 'Error:', error);
         console.error('Error fetching data:', error);
 
         if (error.response && error.response.status === 403) {
           // Clear user session data
           localStorage.removeItem('accessToken');
           localStorage.setItem('loginSuccessful', 'false');
+          log('403 Forbidden: Redirecting to login.');
           // Redirect to login page
           window.location.href = '/login';
         }
@@ -95,7 +108,7 @@ const useApi = () => {
         throw error;
       }
     },
-    [generateCacheKey, getJwtToken, updateStoredNumber]
+    [generateCacheKey, getJwtToken, updateStoredNumber, log]
   );
 
   const mutate = useCallback(
@@ -116,6 +129,8 @@ const useApi = () => {
         const storedNumber = updateStoredNumber();
         const modifiedData = { ...data, storedNumber };
 
+        log(`${method} request to:`, endpoint, 'Data:', modifiedData, 'Config:', config);
+
         const response = await axios({
           method,
           url: endpoint,
@@ -127,17 +142,22 @@ const useApi = () => {
           },
         });
 
+        log(`Received response for ${method}:`, endpoint, 'Status:', response.status, 'Data:', response.data);
+
         const cacheKey = generateCacheKey(endpoint);
         localStorage.removeItem(cacheKey);
+        log('Cleared cache for:', endpoint);
 
         return response.data;
       } catch (error) {
+        log(`Error with ${method} request to:`, endpoint, 'Error:', error);
         console.error(`Error with ${method} request:`, error);
 
         if (error.response && error.response.status === 403) {
           // Clear user session data
           localStorage.removeItem('accessToken');
           localStorage.setItem('loginSuccessful', 'false');
+          log(`${method} 403 Forbidden: Redirecting to login.`);
           // Redirect to login page
           window.location.href = '/login';
         }
@@ -145,7 +165,7 @@ const useApi = () => {
         throw error;
       }
     },
-    [generateCacheKey, getJwtToken, updateStoredNumber]
+    [generateCacheKey, getJwtToken, updateStoredNumber, log]
   );
 
   const apiMethods = useMemo(
