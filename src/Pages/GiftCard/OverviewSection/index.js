@@ -1,8 +1,6 @@
-// OverviewSectionFlex.js
-
 import React, { useState, useEffect } from 'react';
-import './css/overviewSection.css'; // Consolidated CSS file
-import SearchBar from './SearchBar'; // Import the SearchBar component
+import './css/overviewSection.css';
+import SearchBar from './SearchBar';
 import {
   FaSortUp,
   FaSortDown,
@@ -12,53 +10,11 @@ import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
 } from 'react-icons/fa';
-
-// Mock data for gift cards
-const mockGiftCards = [
-  {
-    id: 1,
-    status: 'Unused',
-    customer: 'John Doe',
-    initialValue: 100,
-    expirationDate: '2025-12-31',
-    email: 'john.doe@example.com',
-  },
-  {
-    id: 2,
-    status: 'Used',
-    customer: 'Jane Smith',
-    initialValue: 50,
-    expirationDate: '2024-06-30',
-    email: 'jane.smith@example.com',
-  },
-  {
-    id: 3,
-    status: 'Unused',
-    customer: 'Alice Johnson',
-    initialValue: 75,
-    expirationDate: '2025-03-15',
-    email: 'alice.johnson@example.com',
-  },
-  {
-    id: 4,
-    status: 'Used',
-    customer: 'Bob Brown',
-    initialValue: 200,
-    expirationDate: '2023-11-20',
-    email: 'bob.brown@example.com',
-  },
-  {
-    id: 5,
-    status: 'Unused',
-    customer: 'Charlie Davis',
-    initialValue: 150,
-    expirationDate: '2024-08-10',
-    email: 'charlie.davis@example.com',
-  },
-  // ... more mock data
-];
+import useApi from '../../../Hooks/useApi';
 
 const OverviewSectionFlex = () => {
+  const api = useApi();
+
   const [giftCards, setGiftCards] = useState([]);
   const [customerSearch, setCustomerSearch] = useState('');
   const [emailSearch, setEmailSearch] = useState('');
@@ -69,9 +25,23 @@ const OverviewSectionFlex = () => {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    // In a real application, fetch data from API
-    setGiftCards(mockGiftCards);
-  }, []);
+    const fetchGiftCards = async () => {
+      try {
+        const data = await api.get(window.baseDomain + 'api/giftcards', { noCache: true });
+
+        if (Array.isArray(data)) {
+          setGiftCards(data);
+        } else {
+          console.error('Expected an array of gift cards, but received:', data);
+          setGiftCards([]);
+        }
+      } catch (error) {
+        console.error('Error fetching gift cards:', error);
+        setGiftCards([]); // Set to empty array on error
+      }
+    };
+    fetchGiftCards();
+  }, [api]);
 
   // Handle sorting
   const handleSort = (column) => {
@@ -85,41 +55,68 @@ const OverviewSectionFlex = () => {
   };
 
   // Sort gift cards based on sortedColumn and sortDirection
-  const sortedGiftCards = [...giftCards].sort((a, b) => {
-    if (!sortedColumn) return 0;
-    let aVal = a[sortedColumn];
-    let bVal = b[sortedColumn];
+  const getSortedGiftCards = (cards) => {
+    if (!Array.isArray(cards)) return [];
 
-    // If sorting by initialValue, ensure numeric comparison
-    if (sortedColumn === 'initialValue') {
-      aVal = parseFloat(aVal);
-      bVal = parseFloat(bVal);
-    } else {
-      // For other fields, convert to lowercase string for comparison
-      aVal = aVal.toString().toLowerCase();
-      bVal = bVal.toString().toLowerCase();
-    }
+    if (!sortedColumn) return cards;
 
-    if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
-    if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
-    return 0;
-  });
+    return [...cards].sort((a, b) => {
+      let aVal = a[sortedColumn];
+      let bVal = b[sortedColumn];
+
+      // Handle undefined values
+      if (aVal === undefined || aVal === null) aVal = '';
+      if (bVal === undefined || bVal === null) bVal = '';
+
+      // Numeric comparison for specific columns
+      if (sortedColumn === 'value' || sortedColumn === 'availableBalance') {
+        aVal = parseFloat(aVal) || 0;
+        bVal = parseFloat(bVal) || 0;
+      } else if (sortedColumn === 'creationDate' || sortedColumn === 'expirationDate') {
+        // Date comparison
+        aVal = new Date(aVal);
+        bVal = new Date(bVal);
+      } else {
+        // String comparison
+        aVal = aVal.toString().toLowerCase();
+        bVal = bVal.toString().toLowerCase();
+      }
+
+      if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
 
   // Filter gift cards based on search queries
-  const filteredGiftCards = sortedGiftCards.filter((card) => {
-    const matchesCustomer = card.customer.toLowerCase().includes(customerSearch.toLowerCase());
-    const matchesEmail = card.email.toLowerCase().includes(emailSearch.toLowerCase());
-    const matchesAmount =
-      amountSearch === '' || card.initialValue.toString().includes(amountSearch);
+  const getFilteredGiftCards = (cards) => {
+    if (!Array.isArray(cards)) return [];
 
-    return matchesCustomer && matchesEmail && matchesAmount;
-  });
+    return cards.filter((card) => {
+      const firstName = card.firstName || '';
+      const lastName = card.lastName || '';
+      const email = card.email || '';
+      const value = card.value !== undefined ? card.value.toString() : '';
+
+      const customerName = `${firstName} ${lastName}`.toLowerCase();
+      const matchesCustomer = customerName.includes(customerSearch.toLowerCase());
+      const matchesEmail = email.toLowerCase().includes(emailSearch.toLowerCase());
+      const matchesAmount =
+        amountSearch === '' || value.includes(amountSearch);
+
+      return matchesCustomer && matchesEmail && matchesAmount;
+    });
+  };
+
+  // Get the processed gift cards
+  const sortedGiftCards = getSortedGiftCards(giftCards);
+  const processedGiftCards = getFilteredGiftCards(sortedGiftCards);
 
   // Pagination calculations
-  const totalPages = Math.ceil(filteredGiftCards.length / itemsPerPage);
+  const totalPages = Math.ceil(processedGiftCards.length / itemsPerPage) || 1;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentGiftCards = filteredGiftCards.slice(indexOfFirstItem, indexOfLastItem);
+  const currentGiftCards = processedGiftCards.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page navigation
   const goToFirstPage = () => setCurrentPage(1);
@@ -129,24 +126,58 @@ const OverviewSectionFlex = () => {
 
   // Handle Export to CSV
   const handleExport = () => {
-    const headers = ['Status', 'Klant', 'Initieel Bedrag (€)', 'Vervaldatum', 'E-mailadres'];
-    const rows = filteredGiftCards.map((card) => [
-      card.status === 'Used' ? 'Gebruikt' : 'Niet Gebruikt',
-      card.customer,
-      card.initialValue,
-      card.expirationDate,
-      card.email,
-    ]);
+    const headers = [
+      'Status',
+      'Voornaam',
+      'Achternaam',
+      'Bedrag (€)',
+      'Beschikbaar Saldo (€)',
+      'Aanmaakdatum',
+      'Vervaldatum',
+      'E-mailadres'
+    ];
+    const rows = processedGiftCards.map((card) => {
+      // Calculate expiration date by adding one year to creationDate
+      let expirationDate = 'N.v.t.';
+      if (card.creationDate) {
+        // Parse creationDate and add one year
+        const [year, month, day] = card.creationDate.split('-').map(Number);
+        const creationDateObj = new Date(year, month - 1, day);
+        creationDateObj.setFullYear(creationDateObj.getFullYear() + 1);
+        // Format expiration date as YYYY-MM-DD
+        const options = {
+          timeZone: 'Europe/Amsterdam',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        };
+        const formatter = new Intl.DateTimeFormat('nl-NL', options);
+        const formattedExpirationDate = formatter.format(creationDateObj);
+        const [expDay, expMonth, expYear] = formattedExpirationDate.split('-');
+        expirationDate = `${expYear}-${expMonth}-${expDay}`;
+      }
 
-    let csvContent =
+      return [
+        statusMapping[card.status] || card.status,
+        card.firstName || '',
+        card.lastName || '',
+        card.value || '',
+        card.availableBalance || '',
+        card.creationDate || 'N.v.t.',
+        expirationDate,
+        card.email || '',
+      ];
+    });
+
+    const csvContent =
       'data:text/csv;charset=utf-8,' +
       [headers, ...rows].map((e) => e.join(',')).join('\n');
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'cadeaubonnen.csv'); // Translated filename
-    document.body.appendChild(link); // Required for FF
+    link.setAttribute('download', 'cadeaubonnen.csv');
+    document.body.appendChild(link);
 
     link.click();
     document.body.removeChild(link);
@@ -162,8 +193,9 @@ const OverviewSectionFlex = () => {
 
   // Status mapping
   const statusMapping = {
-    'Used': 'Gebruikt',
-    'Unused': 'Niet Gebruikt',
+    Used: 'Gebruikt',
+    Unused: 'Niet Gebruikt',
+    'Admin Cadeaubon': 'Admin Cadeaubon',
     // Add more mappings if necessary
   };
 
@@ -191,7 +223,7 @@ const OverviewSectionFlex = () => {
           onChange={(e) => setAmountSearch(e.target.value)}
           className="search-bar"
         />
-      </div>      
+      </div>
 
       <div className="overview-section__table-container">
         <table className="overview-section__table">
@@ -199,17 +231,24 @@ const OverviewSectionFlex = () => {
             <tr className="table-header-row">
               <th
                 onClick={() => handleSort('status')}
-                style={{
-                  width: '20%',
-                }}
+                style={{ width: '15%' }}
               >
                 Status {renderSortIcon('status')}
               </th>
-              <th onClick={() => handleSort('customer')}>
-                Klant {renderSortIcon('customer')}
+              <th onClick={() => handleSort('firstName')}>
+                Voornaam {renderSortIcon('firstName')}
               </th>
-              <th onClick={() => handleSort('initialValue')}>
-                Initieel Bedrag (€) {renderSortIcon('initialValue')}
+              <th onClick={() => handleSort('lastName')}>
+                Achternaam {renderSortIcon('lastName')}
+              </th>
+              <th onClick={() => handleSort('value')}>
+                Bedrag (€) {renderSortIcon('value')}
+              </th>
+              <th onClick={() => handleSort('availableBalance')}>
+                Beschikbaar Saldo (€) {renderSortIcon('availableBalance')}
+              </th>
+              <th onClick={() => handleSort('creationDate')}>
+                Aanmaakdatum {renderSortIcon('creationDate')}
               </th>
               <th onClick={() => handleSort('expirationDate')}>
                 Vervaldatum {renderSortIcon('expirationDate')}
@@ -221,24 +260,47 @@ const OverviewSectionFlex = () => {
           </thead>
           <tbody>
             {currentGiftCards.length > 0 ? (
-              currentGiftCards.map((card) => (
-                <tr key={card.id} className="table-body-row">
-                  <td>
-                    <span
-                      className={`bubble-style`}
-                    >
-                      {statusMapping[card.status]}
-                    </span>
-                  </td>
-                  <td className='bold-customer-name'>{card.customer}</td>
-                  <td>€{card.initialValue.toFixed(2)}</td>
-                  <td>{card.expirationDate}</td>
-                  <td>{card.email}</td>
-                </tr>
-              ))
+              currentGiftCards.map((card) => {
+                // Calculate expiration date by adding one year to creationDate
+                let expirationDate = 'N.v.t.';
+                if (card.creationDate) {
+                  // Parse creationDate and add one year
+                  const [year, month, day] = card.creationDate.split('-').map(Number);
+                  const creationDateObj = new Date(year, month - 1, day);
+                  creationDateObj.setFullYear(creationDateObj.getFullYear() + 1);
+                  // Format expiration date as YYYY-MM-DD
+                  const options = {
+                    timeZone: 'Europe/Amsterdam',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  };
+                  const formatter = new Intl.DateTimeFormat('nl-NL', options);
+                  const formattedExpirationDate = formatter.format(creationDateObj);
+                  const [expDay, expMonth, expYear] = formattedExpirationDate.split('-');
+                  expirationDate = `${expYear}-${expMonth}-${expDay}`;
+                }
+
+                return (
+                  <tr key={card._id} className="table-body-row">
+                    <td>
+                      <span className="bubble-style">
+                        {statusMapping[card.status] || card.status}
+                      </span>
+                    </td>
+                    <td>{card.firstName || ''}</td>
+                    <td>{card.lastName || ''}</td>
+                    <td>€{parseFloat(card.value || 0).toFixed(2)}</td>
+                    <td>€{parseFloat(card.availableBalance || 0).toFixed(2)}</td>
+                    <td>{card.creationDate || 'N.v.t.'}</td>
+                    <td>{expirationDate}</td>
+                    <td>{card.email || ''}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr className="no-data-row">
-                <td colSpan="5" className="no-data">
+                <td colSpan="8" className="no-data">
                   Geen cadeaubonnen gevonden.
                 </td>
               </tr>
@@ -285,7 +347,10 @@ const OverviewSectionFlex = () => {
           </button>
         </div>
         <div className="export-button-container">
-          <button className="button-style-3 button-export" onClick={handleExport}>
+          <button
+            className="button-style-3 button-export"
+            onClick={handleExport}
+          >
             Exporteer naar CSV
           </button>
         </div>

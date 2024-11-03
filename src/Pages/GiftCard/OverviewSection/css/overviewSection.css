@@ -55,14 +55,13 @@
     width: 100%;
     border-collapse: collapse;
     box-shadow: var(--box-shadow);
-    min-width: 600px;
 }
 
 .gift-card-page .overview-section__table th,
 .gift-card-page .overview-section__table td {
     padding: 12px 15px;
     text-align: left;
-    width: 16.6666%;
+    width: 14.2857142857%;
     border-bottom: 1px solid #ddd;
 }
 
@@ -75,6 +74,7 @@
     gap: 5px;
     font-weight: bold;
     font-size: var(--font-size);
+    
 }
 
 .gift-card-page .overview-section__table tr:hover {

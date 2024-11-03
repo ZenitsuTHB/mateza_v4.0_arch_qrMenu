@@ -75,6 +75,21 @@ const AddGiftCardSection = () => {
       try {
         const uniqueCode = generateUniqueCode(); // Generate the unique code here
 
+        // Get current date in CEST and format as YYYY-MM-DD
+        const creationDate = new Date();
+        const options = {
+          timeZone: 'Europe/Amsterdam', // CEST timezone
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        };
+        const formatter = new Intl.DateTimeFormat('nl-NL', options);
+        const formattedDate = formatter.format(creationDate); // Gives DD-MM-YYYY
+
+        // Reformat to YYYY-MM-DD
+        const [day, month, year] = formattedDate.split('-');
+        const formattedCreationDate = `${year}-${month}-${day}`;
+
         const giftCardData = {
           code: uniqueCode, // Include the code in the data sent to the server
           value: parseFloat(formData.value),
@@ -82,9 +97,11 @@ const AddGiftCardSection = () => {
           lastName: formData.lastName.trim(),
           email: formData.email.trim(),
           design: formData.design,
+          status: 'Admin Cadeaubon', // Set the status to "Admin Cadeaubon"
+          creationDate: formattedCreationDate, // Include the creation date
         };
 
-        const response = await api.post(window.baseDomain + '/api/giftcards', giftCardData);
+        const response = await api.post(window.baseDomain + 'api/giftcards', giftCardData);
 
         if (response) {
           setSuccessMessage(`Cadeaubon succesvol aangemaakt! Uw code is: ${uniqueCode}`);
