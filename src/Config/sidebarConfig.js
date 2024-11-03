@@ -135,7 +135,10 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
-  {
+];
+
+
+  /*{
     path: '/giftcard',
     element: <GiftCard title="Cadeaubonnen" />,
     label: 'Cadeaubonnen',
@@ -154,7 +157,6 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: giftCardSecondaryTopBar,
-  },
-];
+  },*/
 
 export default routesConfig;
