@@ -18,7 +18,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     postcode: accountData.postcode || '',
     bio: accountData.bio || '',
     imageId: accountData.imageId || '',
-    naamRestaurant: accountData.naamRestaurant || '', // Added naamRestaurant
+    naamRestaurant: accountData.naamRestaurant || '', // Updated naamRestaurant
   });
 
   const [errors, setErrors] = useState({});
@@ -64,11 +64,11 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
 
     if (!formData.postcode.trim()) {
       newErrors.postcode = 'Postcode is verplicht.';
-    } else if (!/^\d{4}\s?[A-Za-z]{2}$/.test(formData.postcode)) {
-      newErrors.postcode = 'Voer een geldige postcode in.';
-    }
+    } if (!/^[1-9]\d{3}$/.test(formData.postcode)) {
+		newErrors.postcode = 'Voer een geldige Belgische postcode in.';
+	  }
 
-    if (!formData.naamRestaurant.trim()) { // Added validation for naamRestaurant
+    if (!formData.naamRestaurant.trim()) { // Validation remains
       newErrors.naamRestaurant = 'Naam restaurant is verplicht.';
     }
 
@@ -90,10 +90,10 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
         // Determine whether to POST or PUT based on whether account exists
         if (accountData._id) {
           responseData = await api.put(window.baseDomain + '/api/account', formData);
-          triggerNotification('Account succesvol bijgewerkt', 'success');
+          triggerNotification('Account bijgewerkt', 'success');
         } else {
           responseData = await api.post(window.baseDomain + '/api/account', formData);
-          triggerNotification('Account succesvol aangemaakt', 'success');
+          triggerNotification('Gegevens toegevoegd', 'success');
         }
         setLoading(false);
         setAccountData(responseData); // Update the central account data

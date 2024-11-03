@@ -61,13 +61,16 @@ const Profile = () => {
     );
   }
 
+  // Derive full name
+  const fullName = `${accountData.voornaam} ${accountData.achternaam}`.trim();
+
   return (
     <div className="profile-page">
       <div className="profile-page__container">
         <NotificationComponent />
         
         <ProfileImage
-          profileImage={accountData.imageId ? accountData.avatarMapping[accountData.imageId] : defaultAvatar}
+          profileImage={accountData.imageId ? avatarMapping[accountData.imageId] : defaultAvatar}
           avatarMapping={accountData.avatarMapping}
           imageId={accountData.imageId}
           api={api}
@@ -75,11 +78,12 @@ const Profile = () => {
         />
 
         <ProfileBio
-          name={`${accountData.voornaam} ${accountData.achternaam}`}
+          name={fullName || 'Gebruiker'} // Fallback to 'Gebruiker' if name is empty
           bio={accountData.bio}
           interests={accountData.interests || []}
           api={api}
           updateAccountData={updateAccountData}
+          naamRestaurant={accountData.naamRestaurant} // Pass naamRestaurant prop
         />
 
         <AccountManage

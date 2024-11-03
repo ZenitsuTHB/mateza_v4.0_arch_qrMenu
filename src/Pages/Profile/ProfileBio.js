@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import useNotification from '../../Components/Notification/index';
 import './css/style.css';
 
-const ProfileBio = ({ name, bio, interests, api, updateAccountData }) => {
+const ProfileBio = ({ name, bio, interests, api, updateAccountData, naamRestaurant }) => { // Added naamRestaurant prop
   const [editableBio, setEditableBio] = useState(bio);
   const [isEditing, setIsEditing] = useState(false);
   const bioRef = useRef(null);
@@ -64,7 +64,7 @@ const ProfileBio = ({ name, bio, interests, api, updateAccountData }) => {
     >
       <NotificationComponent />
       <div className="profile-page__bio-container">
-        <h2 className="profile-page__name">{name}</h2>
+        <h2 className="profile-page__name">{naamRestaurant || 'Uw Restaurant'}</h2>
 
         <div
           className="profile-page__bio-clickable"
