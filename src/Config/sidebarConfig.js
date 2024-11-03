@@ -32,6 +32,7 @@ import {
 } from './secondaryTabConfig.js';
 import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
 import Language from '../Pages/Profile/Language/index.js';
+import NewReservation from '../Pages/NewReservation/index.js';
 
 const routesConfig = [
   {
@@ -87,7 +88,7 @@ const routesConfig = [
   },
   {
     path: '/new-reservation',
-    element: <Profile title="Reserveren" />,
+    element: <NewReservation title="Reserveren" />,
     label: 'Reserveren',
     icon: FaPlus,
     isMenu: true,
