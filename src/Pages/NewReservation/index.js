@@ -1,22 +1,14 @@
-// src/components/ReservationForm/ReservationForm.jsx
+// src/components/ReservationForm/NewReservation.jsx
 
 import React, { useState } from 'react';
-import {
-  FaUser,
-  FaPhone,
-  FaInfoCircle,
-  FaCalendarAlt,
-  FaClock,
-  FaUsers,
-  FaEnvelope,
-} from 'react-icons/fa';
-import FormField from './FormField';
 import './css/newReservation.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
-import useApi from '../../Hooks/useApi'; // Import the useApi hook
+import useApi from '../../Hooks/useApi';
+import ReservationStepOne from './ReservationStepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
 
 const NewReservation = () => {
-  const api = useApi(); // Initialize the API methods
+  const api = useApi();
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
@@ -85,7 +77,6 @@ const NewReservation = () => {
     } else {
       setErrors({});
       setIsSubmitting(true);
-      // Prepare the data to be submitted
       const submissionData = {
         numberOfGuests: formData.numberOfGuests,
         date: formData.date,
@@ -98,9 +89,7 @@ const NewReservation = () => {
       };
 
       try {
-        // Use the useApi hook's post method
-        await api.post(window.baseDomain + 'api/auth-reservations/', submissionData);
-        // Handle success (e.g., show a success message or redirect)
+        await api.post('api/auth-reservations/', submissionData);
         alert('Reservatie succesvol ingediend!');
         setIsModalOpen(false);
         setFormData({
@@ -114,7 +103,6 @@ const NewReservation = () => {
           extraInfo: '',
         });
       } catch (error) {
-        // Handle errors
         if (error.response && error.response.data && error.response.data.message) {
           alert('Er is een fout opgetreden: ' + error.response.data.message);
         } else {
@@ -130,113 +118,34 @@ const NewReservation = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // Clear error for this field
     setErrors({ ...errors, [name]: '' });
   };
-
-  const modalContent = (
-    <div>
-      <h2 className='modal-title'>Vul uw gegevens in</h2>
-      <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
-        <FormField
-          label="Voornaam"
-          name="firstName"
-          placeholder="Voornaam"
-          value={formData.firstName}
-          onChange={handleChange}
-          error={errors.firstName}
-          icon={FaUser}
-        />
-        <FormField
-          label="Achternaam"
-          name="lastName"
-          placeholder="Achternaam"
-          value={formData.lastName}
-          onChange={handleChange}
-          error={errors.lastName}
-          icon={FaUser}
-        />
-        <FormField
-          label="E-mail"
-          name="email"
-          type="email"
-          placeholder="E-mailadres"
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
-          icon={FaEnvelope}
-        />
-        <FormField
-          label="Telefoonnummer"
-          name="phone"
-          type="tel"
-          placeholder="Telefoonnummer"
-          value={formData.phone}
-          onChange={handleChange}
-          error={errors.phone}
-          icon={FaPhone}
-        />
-        <FormField
-          label="Extra info"
-          name="extraInfo"
-          type="textarea"
-          placeholder="Extra informatie"
-          value={formData.extraInfo}
-          onChange={handleChange}
-          error={errors.extraInfo}
-          icon={FaInfoCircle}
-        />
-        <button type="submit" className="account-manage__button" disabled={isSubmitting}>
-          {isSubmitting ? 'Verzenden...' : 'Reserveren'}
-        </button>
-      </form>
-    </div>
-  );
 
   return (
     <div className="profile-page">
       <h2 className="account-manage-title">Reserveren</h2>
       <div className="account-manage-container">
-        <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
-          <FormField
-            label="Aantal gasten"
-            name="numberOfGuests"
-            type="number"
-            placeholder="Aantal gasten"
-            value={formData.numberOfGuests}
-            onChange={handleChange}
-            error={errors.numberOfGuests}
-            icon={FaUsers}
-          />
-          <FormField
-            label="Datum"
-            name="date"
-            type="date"
-            placeholder="Datum"
-            value={formData.date}
-            onChange={handleChange}
-            error={errors.date}
-            icon={FaCalendarAlt}
-          />
-          <FormField
-            label="Tijd"
-            name="time"
-            type="time"
-            placeholder="Tijd"
-            value={formData.time}
-            onChange={handleChange}
-            error={errors.time}
-            icon={FaClock}
-          />
-          <button type="submit" className="account-manage__button">
-            Verder
-          </button>
-        </form>
+        <ReservationStepOne
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
+          handleStepOneSubmit={handleStepOneSubmit}
+        />
       </div>
 
-      {/* Modal for additional information */}
       {isModalOpen && (
-        <ModalWithoutTabs content={modalContent} onClose={() => setIsModalOpen(false)} />
+        <ModalWithoutTabs
+          content={
+            <ReservationStepTwoModal
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleFinalSubmit={handleFinalSubmit}
+              isSubmitting={isSubmitting}
+            />
+          }
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </div>
   );
