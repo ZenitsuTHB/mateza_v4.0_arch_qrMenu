@@ -46,14 +46,16 @@ export const overviewSecondaryTopBar = [
 	  label: 'Profiel',
 	  path: '/account/',
 	},
+	/*
 	{
 	  label: 'Taal',
 	  path: '/account/language',
 	},
+	
 	{
 	  label: 'Beveilinging',
 	  path: '/account/security',
-	},
+	},*/
   ];
   
   export const giftCardSecondaryTopBar = [
