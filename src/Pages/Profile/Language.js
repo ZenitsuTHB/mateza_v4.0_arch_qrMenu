@@ -18,7 +18,7 @@ const languageOptions = [
   { code: 'de', name: 'Deutsch', flag: germanFlag },
 ];
 
-const LanguageSelector = () => {
+const Language = () => {
   const { i18n } = useTranslation();
   const { triggerNotification, NotificationComponent } = useNotification();
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
@@ -90,4 +90,4 @@ const LanguageSelector = () => {
   );
 };
 
-export default LanguageSelector;
+export default Language;
