@@ -24,7 +24,9 @@ import {
   overviewSecondaryTopBar,
   calendarSecondaryTopBar,
   designSecondaryTopBar,
+  giftCardSecondaryTopBar,
 } from './secondaryTabConfig.js';
+import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
 
 const routesConfig = [
   {
@@ -69,15 +71,6 @@ const routesConfig = [
     sidebarHidden: false, // Hide sidebar on this route
   },
   {
-    path: '/giftcard',
-    element: <GiftCard title="Cadeaubonnen" />,
-    label: 'Cadeaubonnen',
-    icon: FaGift,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-  },
-  {
     path: '/new-reservation',
     element: <Profile title="Reserveren" />,
     label: 'Reserveren',
@@ -115,6 +108,26 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
+  },
+  {
+    path: '/giftcard',
+    element: <GiftCard title="Cadeaubonnen" />,
+    label: 'Cadeaubonnen',
+    icon: FaGift,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: giftCardSecondaryTopBar,
+  },
+  {
+    path: '/giftcardEditor',
+    element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
+    label: 'Cadeaubonnen Ontwerpenr',
+    icon: FaPencilAlt,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: giftCardSecondaryTopBar,
   },
 ];
 

@@ -41,3 +41,17 @@ export const overviewSecondaryTopBar = [
 	},
   ];
   
+  export const giftCardSecondaryTopBar = [
+	{
+	  label: 'Overzicht',
+	  path: '/giftcard/',
+	},
+	{
+	  label: 'Ontwerpen',
+	  path: '/giftcardEditor',
+	},
+	{
+	  label: 'Instellingen',
+	  path: '/giftcardSettings',
+	},
+  ];
