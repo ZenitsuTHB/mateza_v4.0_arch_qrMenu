@@ -86,7 +86,7 @@ const Colors = forwardRef((props, ref) => {
       console.error('Error saving colors:', err);
       const errorCode = err.response?.status || 'unknown';
       triggerNotification(`Fout bij opslaan. Code: ${errorCode}`, 'error');
-      throw err; // Re-throw error to handle in parent
+      throw err;
     }
   };
 
@@ -104,34 +104,25 @@ const Colors = forwardRef((props, ref) => {
     if (isIframe && isDirty) {
       const currentTime = Date.now();
       if (saveTimeoutRef.current) {
-        // Timer is running
-        // Increase expiryTime by 2000 ms
         expiryTimeRef.current += 2000;
       } else {
-        // No timer running
-        expiryTimeRef.current = currentTime + 5000; // 5 seconds from now
+        expiryTimeRef.current = currentTime + 5000;
       }
 
       const delay = expiryTimeRef.current - currentTime;
-
-      // Clear existing timer
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
-
-      // Start new timer
       saveTimeoutRef.current = setTimeout(async () => {
         try {
           await handleSave();
         } catch (error) {
-          // Handle error if needed
         }
         saveTimeoutRef.current = null;
         expiryTimeRef.current = null;
       }, delay);
     }
 
-    // Clean up on unmount
     return () => {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);

@@ -33,11 +33,11 @@ export const overviewSecondaryTopBar = [
 	},
 	{
 	  label: 'Instellen',
-	  path: '/settings',
+	  path: '/design/settings',
 	},
 	{
 	  label: 'Lanceren',
-	  path: '/launch',
+	  path: 'design/launch',
 	},
   ];
   
