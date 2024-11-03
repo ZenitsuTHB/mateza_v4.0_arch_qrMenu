@@ -9,6 +9,9 @@ import {
   FaRocket,
   FaCog,
   FaGift,
+  FaFlag,
+  FaShieldAlt,
+  FaUser,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -25,8 +28,10 @@ import {
   calendarSecondaryTopBar,
   designSecondaryTopBar,
   giftCardSecondaryTopBar,
+  accountSecondaryTopBar,
 } from './secondaryTabConfig.js';
 import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
+import Language from '../Pages/Profile/Language/index.js';
 
 const routesConfig = [
   {
@@ -101,13 +106,34 @@ const routesConfig = [
     sidebarHidden: true,
   },
   {
-    path: '/profile',
+    path: '/account',
     element: <Profile title="Account" />,
     label: 'Account',
-    icon: FaChartPie,
+    icon: FaUser,
     isMenu: false,
     isMobile: false,
     isTab: false,
+    secondaryTopBar: accountSecondaryTopBar,
+  },
+  {
+    path: '/account/language',
+    element: <Language title="Taal" />,
+    label: 'Taal',
+    icon: FaFlag,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: accountSecondaryTopBar,
+  },
+  {
+    path: '/account/security',
+    element: <Profile title="Beveiliging" />,
+    label: 'Beveiliging',
+    icon: FaShieldAlt,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: accountSecondaryTopBar,
   },
   {
     path: '/giftcard',

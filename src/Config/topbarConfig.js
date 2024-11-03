@@ -19,7 +19,7 @@ const topBarConfig = [
   {
     label: 'Account',
     icon: FaUser,
-    path: '/profile',
+    path: '/account',
   },
 ];
 

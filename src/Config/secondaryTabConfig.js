@@ -40,6 +40,21 @@ export const overviewSecondaryTopBar = [
 	  path: 'design/launch',
 	},
   ];
+
+  export const accountSecondaryTopBar = [
+	{
+	  label: 'Profiel',
+	  path: '/account/',
+	},
+	{
+	  label: 'Taal',
+	  path: '/account/language',
+	},
+	{
+	  label: 'Beveilinging',
+	  path: '/account/security',
+	},
+  ];
   
   export const giftCardSecondaryTopBar = [
 	{
