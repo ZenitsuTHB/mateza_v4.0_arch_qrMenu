@@ -68,7 +68,7 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: designSecondaryTopBar,
-    sidebarHidden: false, // Hide sidebar on this route
+    sidebarHidden: false,
   },
   {
     path: 'design/settings',
@@ -88,7 +88,7 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: true,
-    sidebarHidden: false, // Explicitly show sidebar
+    sidebarHidden: false,
   },
   {
     path: '/settings-preview',
