@@ -2,21 +2,22 @@
 
 import React from 'react';
 import FormField from './FormField';
-import { FaCalendarAlt, FaClock, FaUsers } from 'react-icons/fa';
+import { FaCalendarAlt, FaClock } from 'react-icons/fa';
+import ValueSelectorGuests from './ValueSelector'; // Import the guests value selector
+import './css/newReservation.css'; // Ensure CSS is imported
 
 const ReservationStepOne = ({ formData, errors, handleChange, handleStepOneSubmit }) => {
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
-      <FormField
-        label="Aantal gasten"
-        name="numberOfGuests"
-        type="number"
-        placeholder="Aantal gasten"
+      
+      {/* Iteration 1: Value Selector for Aantal Gasten */}
+      <ValueSelectorGuests
         value={formData.numberOfGuests}
         onChange={handleChange}
         error={errors.numberOfGuests}
-        icon={FaUsers}
       />
+
+      {/* Other form fields */}
       <FormField
         label="Datum"
         name="date"
@@ -37,6 +38,7 @@ const ReservationStepOne = ({ formData, errors, handleChange, handleStepOneSubmi
         error={errors.time}
         icon={FaClock}
       />
+
       <button type="submit" className="account-manage__button">
         Verder
       </button>
