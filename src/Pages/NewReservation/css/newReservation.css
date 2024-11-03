@@ -1,156 +1,23 @@
 /* src/components/ReservationForm/css/reservationForm.css */
 
+
+
+
 .account-manage-container {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 30px;
-	width: 100%;
-  }
-  
-  .account-manage-title {
-	margin-top: 30px;
-	margin-bottom: 30px;
-  }
-  
-  .account-manage-form {
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-  }
-  
-  .form-group {
-	display: flex;
-	flex-direction: column;
-  }
-  
-  .input-container {
-	position: relative;
-  }
-  
-  .input-icon {
-	position: absolute;
-	top: 50%;
-	left: 10px;
-	transform: translateY(-50%);
-	color: #6c757d;
-	pointer-events: none;
-  }
-  
-  .input-container input,
-  .input-container textarea {
-	width: 100%;
-	padding: 10px 10px 10px 35px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	font-size: 1rem;
-	transition: border-color 0.3s ease;
-  }
-  
-  .input-container input:focus,
-  .input-container textarea:focus {
-	border-color: #0056b3;
-	outline: none;
-  }
-  
-  .form-row {
-	display: flex;
-	justify-content: space-between;
-	gap: 10px;
-  }
-  
-  .half-width {
-	width: 48%;
-  }
-  
-  .form-error {
-	color: #dc3545;
-	font-size: 0.9rem;
-	margin-top: 5px;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-  }
-  
-  .profile-page .account-manage__button {
-	padding: 12px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 1.1rem;
-	display: flex;
-	align-items: center;
 	justify-content: center;
-	gap: 10px;
-	transition: background-color 0.3s ease;
-  }
-  
-  .profile-page .account-manage__button:hover {
-	background-color: #0056b3;
-  }
-  
-  /* Modal styles */
-  .modal {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 30px;
-	max-width: 600px;
-	margin: 50px auto;
+	align-items: center;
+	flex-direction: column;
 	position: relative;
+	width: 100%;
+	max-width: 600px;
+	text-align: center;
+	background-color: white;
   }
-  
-  .overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.75);
-  }
-  
-  .modal h2 {
-	margin-top: 0;
+
+
+  .modal-title {
+	text-align: center;
+	width: 100%;
+	margin-top: 20px;
 	margin-bottom: 20px;
   }
-  
-  .modal-close-button {
-	margin-top: 20px;
-	padding: 12px;
-	background-color: #dc3545;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 1.1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	transition: background-color 0.3s ease;
-  }
-  
-  .modal-close-button:hover {
-	background-color: #c82333;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-	.profile-page .form-row {
-	  flex-direction: column;
-	}
-  
-	.profile-page .half-width {
-	  width: 100%;
-	}
-  
-	.profile-page .account-manage-form {
-	  gap: 10px;
-	}
-  
-	.profile-page .account-manage__button {
-	  font-size: 1rem;
-	  padding: 10px;
-	}
-  }
-  

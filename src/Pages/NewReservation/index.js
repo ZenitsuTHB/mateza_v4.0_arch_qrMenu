@@ -136,7 +136,7 @@ const NewReservation = () => {
 
   const modalContent = (
     <div>
-      <h2>Vul uw gegevens in</h2>
+      <h2 className='modal-title'>Vul uw gegevens in</h2>
       <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
         <FormField
           label="Voornaam"
