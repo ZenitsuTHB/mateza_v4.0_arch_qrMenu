@@ -1,26 +1,26 @@
 /* Main Validation Section */
-.validation-section {
+.gift-card-page .validation-section {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 }
 
 
-.validation-section__description {
+.gift-card-page .validation-section__description {
 	font-size: 0.9rem;
 	font-style: italic;
 	color: #6c757d;
 	margin-top: -8px;
 }
 
-.validation-section__input {
+.gift-card-page .validation-section__input {
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
 	font-size: 1rem;
 }
 
-.validation-section__error {
+.gift-card-page .validation-section__error {
 	color: var(--color-red);
 	font-size: 0.9rem;
 	display: flex;
