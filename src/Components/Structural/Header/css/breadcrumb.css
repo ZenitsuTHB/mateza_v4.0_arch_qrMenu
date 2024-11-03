@@ -21,12 +21,16 @@
 	color: var(--color-blue);
   }
   
+  .breadcrumb-component .breadcrumb-link-blue {
+	color: var(--color-blue); /* Ensure --color-blue is defined in your CSS variables */
+  }
+  
   .breadcrumb-component .breadcrumb-separator {
 	margin: 0 5px;
 	color: #777777;
   }
   
-  .breadcrumb-component .breadcrumb-path .breadcrumb-current {
-	color: var(--color-blue);
+  .breadcrumb-component .breadcrumb-current {
+	color: #777
   }
   
