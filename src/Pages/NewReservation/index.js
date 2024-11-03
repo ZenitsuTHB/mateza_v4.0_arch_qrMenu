@@ -1,12 +1,22 @@
 // src/components/ReservationForm/ReservationForm.jsx
 
 import React, { useState } from 'react';
-import { FaUser, FaPhone, FaInfoCircle, FaCalendarAlt, FaClock, FaUsers, FaEnvelope } from 'react-icons/fa';
+import {
+  FaUser,
+  FaPhone,
+  FaInfoCircle,
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+  FaEnvelope,
+} from 'react-icons/fa';
 import FormField from './FormField';
 import './css/newReservation.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import useApi from '../../Hooks/useApi'; // Import the useApi hook
 
 const NewReservation = () => {
+  const api = useApi(); // Initialize the API methods
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
@@ -75,48 +85,45 @@ const NewReservation = () => {
     } else {
       setErrors({});
       setIsSubmitting(true);
-      // Submit data to api/reservations/
+      // Prepare the data to be submitted
+      const submissionData = {
+        numberOfGuests: formData.numberOfGuests,
+        date: formData.date,
+        time: formData.time,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        extraInfo: formData.extraInfo,
+      };
+
       try {
-        const response = await fetch(`${window.baseDomain}api/reservations/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            numberOfGuests: formData.numberOfGuests,
-            date: formData.date,
-            time: formData.time,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            extraInfo: formData.extraInfo,
-          }),
+        // Use the useApi hook's post method
+        await api.post(window.baseDomain + 'api/auth-reservations/', submissionData);
+        // Handle success (e.g., show a success message or redirect)
+        alert('Reservatie succesvol ingediend!');
+        setIsModalOpen(false);
+        setFormData({
+          numberOfGuests: '',
+          date: '',
+          time: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          extraInfo: '',
         });
-        if (response.ok) {
-          // Handle success (e.g., show a success message or redirect)
-          alert('Reservatie succesvol ingediend!');
-          setIsModalOpen(false);
-          setFormData({
-            numberOfGuests: '',
-            date: '',
-            time: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            extraInfo: '',
-          });
-        } else {
-          // Handle server errors
-          const errorData = await response.json();
-          alert('Er is een fout opgetreden: ' + errorData.message);
-        }
       } catch (error) {
+        // Handle errors
+        if (error.response && error.response.data && error.response.data.message) {
+          alert('Er is een fout opgetreden: ' + error.response.data.message);
+        } else {
+          alert('Er is een fout opgetreden bij het indienen van de reservatie.');
+        }
         console.error('Error submitting reservation:', error);
-        alert('Er is een fout opgetreden bij het indienen van de reservatie.');
+      } finally {
+        setIsSubmitting(false);
       }
-      setIsSubmitting(false);
     }
   };
 
