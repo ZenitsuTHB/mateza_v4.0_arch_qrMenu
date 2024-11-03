@@ -60,7 +60,7 @@ const routesConfig = [
     secondaryTopBar: designSecondaryTopBar,
   },
   {
-    path: '/launch',
+    path: '/design/launch',
     element: <LaunchPage title="Lanceren" />,
     label: 'Lanceren',
     icon: FaRocket,
@@ -71,6 +71,16 @@ const routesConfig = [
     sidebarHidden: false, // Hide sidebar on this route
   },
   {
+    path: 'design/settings',
+    element: <FormSettings title="Instellingen" />,
+    label: 'Instellingen',
+    icon: FaCog,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: designSecondaryTopBar,
+  },
+  {
     path: '/new-reservation',
     element: <Profile title="Reserveren" />,
     label: 'Reserveren',
@@ -79,16 +89,6 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     sidebarHidden: false, // Explicitly show sidebar
-  },
-  {
-    path: '/settings',
-    element: <FormSettings title="Instellingen" />,
-    label: 'Instellingen',
-    icon: FaCog,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: designSecondaryTopBar,
   },
   {
     path: '/settings-preview',
@@ -120,7 +120,7 @@ const routesConfig = [
     secondaryTopBar: giftCardSecondaryTopBar,
   },
   {
-    path: '/giftcardEditor',
+    path: '/giftcard/editor',
     element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
     label: 'Cadeaubonnen Ontwerpenr',
     icon: FaPencilAlt,
