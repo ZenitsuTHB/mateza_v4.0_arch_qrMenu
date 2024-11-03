@@ -1,7 +1,7 @@
 // src/components/Profile/AccountManage.jsx
 
 import React, { useState } from 'react';
-import { FaUser, FaPhone, FaHome, FaCity, FaMapPin } from 'react-icons/fa';
+import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils } from 'react-icons/fa'; // Added FaUtensils
 import useNotification from '../../Components/Notification';
 import './css/accountManage.css';
 
@@ -18,6 +18,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     postcode: accountData.postcode || '',
     bio: accountData.bio || '',
     imageId: accountData.imageId || '',
+    naamRestaurant: accountData.naamRestaurant || '', // Added naamRestaurant
   });
 
   const [errors, setErrors] = useState({});
@@ -65,6 +66,10 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
       newErrors.postcode = 'Postcode is verplicht.';
     } else if (!/^\d{4}\s?[A-Za-z]{2}$/.test(formData.postcode)) {
       newErrors.postcode = 'Voer een geldige postcode in.';
+    }
+
+    if (!formData.naamRestaurant.trim()) { // Added validation for naamRestaurant
+      newErrors.naamRestaurant = 'Naam restaurant is verplicht.';
     }
 
     // Add more validations if necessary
@@ -218,6 +223,22 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
               </div>
               {errors.postcode && <p className="form-error">{errors.postcode}</p>}
             </div>
+          </div>
+
+          {/* Naam Restaurant */}
+          <div className="form-group">
+            <div className="input-container">
+              <FaUtensils className="input-icon" /> {/* Added icon for Naam restaurant */}
+              <input
+                type="text"
+                name="naamRestaurant"
+                placeholder="Naam restaurant"
+                value={formData.naamRestaurant}
+                onChange={handleChange}
+                aria-label="Naam restaurant"
+              />
+            </div>
+            {errors.naamRestaurant && <p className="form-error">{errors.naamRestaurant}</p>}
           </div>
 
           <button type="submit" className="account-manage__button" disabled={loading}>
