@@ -102,8 +102,8 @@ const routesConfig = [
   },
   {
     path: '/profile',
-    element: <Profile title="Profiel" />,
-    label: 'Profiel',
+    element: <Profile title="Account" />,
+    label: 'Account',
     icon: FaChartPie,
     isMenu: false,
     isMobile: false,

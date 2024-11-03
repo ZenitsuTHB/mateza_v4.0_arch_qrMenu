@@ -4,23 +4,15 @@
 	background-color: #fff;
 	border-radius: 10px;
 	padding: 30px;
-	margin-top: 40px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
   }
-  
+
   .account-manage-title {
-	font-size: 24px;
-	font-weight: bold;
-	color: #333;
-	margin-bottom: 10px;
+	margin-top: 30px;
+	margin-bottom: 30px;
   }
   
-  .account-manage-subtitle {
-	font-size: 16px;
-	color: #666;
-	margin-bottom: 20px;
-  }
-  
+
   .account-manage-form {
 	display: flex;
 	flex-direction: column;
@@ -126,10 +118,4 @@
 	}
   }
   
-
-  /* Nieuwe klasse voor de <h2> titel */
-.account-manage-title {
-	margin-top: 0;
-	margin-bottom: 30px;
-  }
   

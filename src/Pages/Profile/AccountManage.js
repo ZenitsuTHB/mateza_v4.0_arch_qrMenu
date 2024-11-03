@@ -22,7 +22,7 @@ const AccountManage = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    // Load saved account data from localStorage or another source
+    // Laad opgeslagen accountgegevens uit localStorage of een andere bron
     const savedData = localStorage.getItem('accountData');
     if (savedData) {
       setFormData(JSON.parse(savedData));
@@ -84,7 +84,7 @@ const AccountManage = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Save to localStorage or send to server
+      // Opslaan naar localStorage of verzenden naar server
       localStorage.setItem('accountData', JSON.stringify(formData));
       triggerNotification('Account succesvol bijgewerkt', 'success');
       setSuccessMessage('Account succesvol bijgewerkt!');
@@ -93,134 +93,138 @@ const AccountManage = () => {
   };
 
   return (
-    <div className="account-manage-container">
-      <NotificationComponent />
-      <h2 className="secondary-title">Account beheren</h2>
-      <form className="account-manage-form" onSubmit={handleSave} noValidate>
-        {/* Voornaam */}
-        <div className="form-group">
-          <div className="input-container">
-            <FaUser className="input-icon" />
-            <input
-              type="text"
-              name="voornaam"
-              placeholder="Voornaam"
-              value={formData.voornaam}
-              onChange={handleChange}
-              aria-label="Voornaam"
-            />
-          </div>
-          {errors.voornaam && <p className="form-error">{errors.voornaam}</p>}
-        </div>
-
-        {/* Achternaam */}
-        <div className="form-group">
-          <div className="input-container">
-            <FaUser className="input-icon" />
-            <input
-              type="text"
-              name="achternaam"
-              placeholder="Achternaam"
-              value={formData.achternaam}
-              onChange={handleChange}
-              aria-label="Achternaam"
-            />
-          </div>
-          {errors.achternaam && <p className="form-error">{errors.achternaam}</p>}
-        </div>
-
-        {/* Telefoonnummer */}
-        <div className="form-group">
-          <div className="input-container">
-            <FaPhone className="input-icon" />
-            <input
-              type="tel"
-              name="telefoonnummer"
-              placeholder="Telefoonnummer"
-              value={formData.telefoonnummer}
-              onChange={handleChange}
-              aria-label="Telefoonnummer"
-            />
-          </div>
-          {errors.telefoonnummer && <p className="form-error">{errors.telefoonnummer}</p>}
-        </div>
-
-        {/* Straat en Huisnummer */}
-        <div className="form-row">
-          <div className="form-group half-width">
+    <div className="profile-page">
+      {/* Verplaatsde <h2> buiten de container */}
+      <h2 className="account-manage-title">Account beheren</h2>
+      
+      <div className="account-manage-container">
+        <NotificationComponent />
+        <form className="account-manage-form" onSubmit={handleSave} noValidate>
+          {/* Voornaam */}
+          <div className="form-group">
             <div className="input-container">
-              <FaHome className="input-icon" />
+              <FaUser className="input-icon" />
               <input
                 type="text"
-                name="straat"
-                placeholder="Straat"
-                value={formData.straat}
+                name="voornaam"
+                placeholder="Voornaam"
+                value={formData.voornaam}
                 onChange={handleChange}
-                aria-label="Straat"
+                aria-label="Voornaam"
               />
             </div>
-            {errors.straat && <p className="form-error">{errors.straat}</p>}
+            {errors.voornaam && <p className="form-error">{errors.voornaam}</p>}
           </div>
 
-          <div className="form-group half-width">
+          {/* Achternaam */}
+          <div className="form-group">
             <div className="input-container">
-              <FaHome className="input-icon" />
+              <FaUser className="input-icon" />
               <input
                 type="text"
-                name="huisnummer"
-                placeholder="Huisnummer"
-                value={formData.huisnummer}
+                name="achternaam"
+                placeholder="Achternaam"
+                value={formData.achternaam}
                 onChange={handleChange}
-                aria-label="Huisnummer"
+                aria-label="Achternaam"
               />
             </div>
-            {errors.huisnummer && <p className="form-error">{errors.huisnummer}</p>}
+            {errors.achternaam && <p className="form-error">{errors.achternaam}</p>}
           </div>
-        </div>
 
-        {/* Stad en Postcode */}
-        <div className="form-row">
-          <div className="form-group half-width">
+          {/* Telefoonnummer */}
+          <div className="form-group">
             <div className="input-container">
-              <FaCity className="input-icon" />
+              <FaPhone className="input-icon" />
               <input
-                type="text"
-                name="stad"
-                placeholder="Stad"
-                value={formData.stad}
+                type="tel"
+                name="telefoonnummer"
+                placeholder="Telefoonnummer"
+                value={formData.telefoonnummer}
                 onChange={handleChange}
-                aria-label="Stad"
+                aria-label="Telefoonnummer"
               />
             </div>
-            {errors.stad && <p className="form-error">{errors.stad}</p>}
+            {errors.telefoonnummer && <p className="form-error">{errors.telefoonnummer}</p>}
           </div>
 
-          <div className="form-group half-width">
-            <div className="input-container">
-              <FaMapPin className="input-icon" />
-              <input
-                type="text"
-                name="postcode"
-                placeholder="Postcode"
-                value={formData.postcode}
-                onChange={handleChange}
-                aria-label="Postcode"
-              />
+          {/* Straat en Huisnummer */}
+          <div className="form-row">
+            <div className="form-group half-width">
+              <div className="input-container">
+                <FaHome className="input-icon" />
+                <input
+                  type="text"
+                  name="straat"
+                  placeholder="Straat"
+                  value={formData.straat}
+                  onChange={handleChange}
+                  aria-label="Straat"
+                />
+              </div>
+              {errors.straat && <p className="form-error">{errors.straat}</p>}
             </div>
-            {errors.postcode && <p className="form-error">{errors.postcode}</p>}
+
+            <div className="form-group half-width">
+              <div className="input-container">
+                <FaHome className="input-icon" />
+                <input
+                  type="text"
+                  name="huisnummer"
+                  placeholder="Huisnummer"
+                  value={formData.huisnummer}
+                  onChange={handleChange}
+                  aria-label="Huisnummer"
+                />
+              </div>
+              {errors.huisnummer && <p className="form-error">{errors.huisnummer}</p>}
+            </div>
           </div>
-        </div>
 
-        {successMessage && (
-          <p className="form-success">
-            {successMessage}
-          </p>
-        )}
+          {/* Stad en Postcode */}
+          <div className="form-row">
+            <div className="form-group half-width">
+              <div className="input-container">
+                <FaCity className="input-icon" />
+                <input
+                  type="text"
+                  name="stad"
+                  placeholder="Stad"
+                  value={formData.stad}
+                  onChange={handleChange}
+                  aria-label="Stad"
+                />
+              </div>
+              {errors.stad && <p className="form-error">{errors.stad}</p>}
+            </div>
 
-        <button type="submit" className="account-manage__button">
-          Opslaan
-        </button>
-      </form>
+            <div className="form-group half-width">
+              <div className="input-container">
+                <FaMapPin className="input-icon" />
+                <input
+                  type="text"
+                  name="postcode"
+                  placeholder="Postcode"
+                  value={formData.postcode}
+                  onChange={handleChange}
+                  aria-label="Postcode"
+                />
+              </div>
+              {errors.postcode && <p className="form-error">{errors.postcode}</p>}
+            </div>
+          </div>
+
+          {successMessage && (
+            <p className="form-success">
+              {successMessage}
+            </p>
+          )}
+
+          <button type="submit" className="account-manage__button">
+            Opslaan
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
