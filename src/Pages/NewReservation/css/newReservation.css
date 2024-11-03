@@ -3,7 +3,7 @@
 
 
 
-.account-manage-container {
+.profile-page .account-manage-container {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
@@ -15,7 +15,7 @@
   }
 
 
-  .modal-title {
+  .profile-page .modal-title {
 	text-align: center;
 	width: 100%;
 	margin-top: 20px;
