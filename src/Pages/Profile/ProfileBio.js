@@ -1,40 +1,40 @@
+// src/components/Profile/ProfileBio.jsx
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import useNotification from '../../Components/Notification/index';
 import './css/style.css';
 
-const ProfileBio = ({ name, interests }) => {
-  const [bio, setBio] = useState('');
+const ProfileBio = ({ name, bio, interests, api, updateAccountData }) => {
+  const [editableBio, setEditableBio] = useState(bio);
   const [isEditing, setIsEditing] = useState(false);
   const bioRef = useRef(null);
   const editIconId = useRef(uuidv4());
   const { triggerNotification, NotificationComponent } = useNotification();
 
   useEffect(() => {
-    const storedBio = localStorage.getItem('profileBio');
-    if (storedBio) {
-      setBio(storedBio);
-    } else {
-      setBio(
-        'We zijn erg trots op ons restaurant!'
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('profileBio', bio);
+    setEditableBio(bio);
   }, [bio]);
 
   const handleInputChange = (e) => {
     if (e.target.value.length <= 1000) {
-      setBio(e.target.value);
+      setEditableBio(e.target.value);
     }
   };
 
-  const handleBioBlur = () => {
+  const handleBioBlur = async () => {
     setIsEditing(false);
-    triggerNotification('Bio succesvol bewerkt', 'success');
+    if (editableBio !== bio) {
+      try {
+        const updatedData = await api.put(window.baseDomain + '/api/account', { bio: editableBio });
+        updateAccountData(updatedData);
+        triggerNotification('Bio succesvol bewerkt', 'success');
+      } catch (error) {
+        triggerNotification('Fout bij het bijwerken van bio', 'error');
+        setEditableBio(bio); // Revert to original bio on error
+      }
+    }
   };
 
   const handleEditClick = () => {
@@ -75,7 +75,7 @@ const ProfileBio = ({ name, interests }) => {
             <textarea
               ref={bioRef}
               className="profile-page__bio"
-              value={bio}
+              value={editableBio}
               onChange={handleInputChange}
               onBlur={handleBioBlur}
               maxLength="1000"

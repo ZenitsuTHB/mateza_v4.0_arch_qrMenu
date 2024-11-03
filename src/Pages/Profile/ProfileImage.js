@@ -1,10 +1,19 @@
+// src/components/Profile/ProfileImage.jsx
+
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAvatar } from '../../Redux/actions/avatarActions';
 import useNotification from '../../Components/Notification/index';
+import './css/style.css';
 
-const ProfileImage = ({ profileImage, avatarMapping, onAvatarSelect }) => {
-const dispatch = useDispatch();
+const ProfileImage = ({
+  profileImage,
+  avatarMapping,
+  imageId,
+  api,
+  updateAccountData,
+}) => {
+  const dispatch = useDispatch();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const { triggerNotification, NotificationComponent } = useNotification();
 
@@ -12,25 +21,39 @@ const dispatch = useDispatch();
     setShowAvatarModal(true);
   };
 
-  const handleAvatarSelect = (avatarKey) => {
-    onAvatarSelect(avatarKey);
+  const handleAvatarSelectInternal = async (avatarKey) => {
     setShowAvatarModal(false);
-	dispatch(setAvatar(avatarKey));
-	triggerNotification('Profiel aangepast', 'success');
+    try {
+      const updatedData = await api.put(window.baseDomain + '/api/account', { imageId: avatarKey });
+      updateAccountData(updatedData);
+      dispatch(setAvatar(avatarKey));
+      triggerNotification('Profiel aangepast', 'success');
+    } catch (error) {
+      triggerNotification('Fout bij het bijwerken van profiel', 'error');
+    }
   };
+
+  // Determine the current profile image based on imageId
+  const currentProfileImage = imageId && avatarMapping[imageId] ? avatarMapping[imageId] : profileImage;
 
   return (
     <div>
-		<NotificationComponent/>
+      <NotificationComponent />
       <div
         className="profile-page__image-container"
         onClick={handleAvatarClick}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') handleAvatarClick();
+        }}
+        aria-label="Change profile image"
       >
-        <img src={profileImage} alt="Profile" className="profile-page__image" />
+        <img src={currentProfileImage} alt="Profile" className="profile-page__image" />
       </div>
 
       {showAvatarModal && (
-        <div className="profile-page__modal">
+        <div className="profile-page__modal" role="dialog" aria-modal="true">
           <div className="profile-page__modal-content">
             <h2>Kies een Avatar</h2>
             <div className="profile-page__avatar-grid">
@@ -41,7 +64,13 @@ const dispatch = useDispatch();
                   alt={key}
                   className="profile-page__avatar-option"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => handleAvatarSelect(key)}
+                  onClick={() => handleAvatarSelectInternal(key)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleAvatarSelectInternal(key);
+                  }}
+                  aria-label={`Selecteer avatar ${key}`}
                 />
               ))}
             </div>

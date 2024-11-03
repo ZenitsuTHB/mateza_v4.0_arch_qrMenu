@@ -1,33 +1,27 @@
 // src/components/Profile/AccountManage.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaUser, FaPhone, FaHome, FaCity, FaMapPin } from 'react-icons/fa';
 import useNotification from '../../Components/Notification';
 import './css/accountManage.css';
 
-const AccountManage = () => {
+const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const [formData, setFormData] = useState({
-    voornaam: '',
-    achternaam: '',
-    telefoonnummer: '',
-    straat: '',
-    huisnummer: '',
-    stad: '',
-    postcode: '',
+    voornaam: accountData.voornaam || '',
+    achternaam: accountData.achternaam || '',
+    telefoonnummer: accountData.telefoonnummer || '',
+    straat: accountData.straat || '',
+    huisnummer: accountData.huisnummer || '',
+    stad: accountData.stad || '',
+    postcode: accountData.postcode || '',
+    bio: accountData.bio || '',
+    imageId: accountData.imageId || '',
   });
 
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState('');
-
-  useEffect(() => {
-    // Laad opgeslagen accountgegevens uit localStorage of een andere bron
-    const savedData = localStorage.getItem('accountData');
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
-    }
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +30,6 @@ const AccountManage = () => {
       [name]: value,
     }));
     setErrors({ ...errors, [name]: '' });
-    setSuccessMessage('');
   };
 
   const validate = () => {
@@ -74,29 +67,42 @@ const AccountManage = () => {
       newErrors.postcode = 'Voer een geldige postcode in.';
     }
 
+    // Add more validations if necessary
+
     return newErrors;
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Opslaan naar localStorage of verzenden naar server
-      localStorage.setItem('accountData', JSON.stringify(formData));
-      triggerNotification('Account succesvol bijgewerkt', 'success');
-      setSuccessMessage('Account succesvol bijgewerkt!');
-      setErrors({});
+      try {
+        setLoading(true);
+        let responseData;
+        // Determine whether to POST or PUT based on whether account exists
+        if (accountData._id) {
+          responseData = await api.put(window.baseDomain + '/api/account', formData);
+          triggerNotification('Account succesvol bijgewerkt', 'success');
+        } else {
+          responseData = await api.post(window.baseDomain + '/api/account', formData);
+          triggerNotification('Account succesvol aangemaakt', 'success');
+        }
+        setLoading(false);
+        setAccountData(responseData); // Update the central account data
+      } catch (error) {
+        setLoading(false);
+        triggerNotification('Fout bij het opslaan van accountgegevens', 'error');
+      }
     }
   };
 
   return (
     <div className="profile-page">
-      {/* Verplaatsde <h2> buiten de container */}
       <h2 className="account-manage-title">Account beheren</h2>
-      
+
       <div className="account-manage-container">
         <NotificationComponent />
         <form className="account-manage-form" onSubmit={handleSave} noValidate>
@@ -214,14 +220,8 @@ const AccountManage = () => {
             </div>
           </div>
 
-          {successMessage && (
-            <p className="form-success">
-              {successMessage}
-            </p>
-          )}
-
-          <button type="submit" className="account-manage__button">
-            Opslaan
+          <button type="submit" className="account-manage__button" disabled={loading}>
+            {loading ? 'Opslaan...' : 'Opslaan'}
           </button>
         </form>
       </div>
