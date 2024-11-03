@@ -1,7 +1,7 @@
 // src/components/Profile/AccountManage.jsx
 
-import React, { useState } from 'react';
-import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils } from 'react-icons/fa'; // Added FaUtensils
+import React, { useState, useEffect } from 'react';
+import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils } from 'react-icons/fa';
 import useNotification from '../../Components/Notification';
 import './css/accountManage.css';
 
@@ -9,20 +9,36 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const [formData, setFormData] = useState({
-    voornaam: accountData.voornaam || '',
-    achternaam: accountData.achternaam || '',
-    telefoonnummer: accountData.telefoonnummer || '',
-    straat: accountData.straat || '',
-    huisnummer: accountData.huisnummer || '',
-    stad: accountData.stad || '',
-    postcode: accountData.postcode || '',
+    first_name: accountData.first_name || '',
+    last_name: accountData.last_name || '',
+    phone_number: accountData.phone_number || '',
+    street: accountData.street || '',
+    house_number: accountData.house_number || '',
+    city: accountData.city || '',
+    postal_code: accountData.postal_code || '',
     bio: accountData.bio || '',
     imageId: accountData.imageId || '',
-    naamRestaurant: accountData.naamRestaurant || '', // Updated naamRestaurant
+    restaurant_name: accountData.restaurant_name || '',
   });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  // Update formData when accountData changes
+  useEffect(() => {
+    setFormData({
+      first_name: accountData.first_name || '',
+      last_name: accountData.last_name || '',
+      phone_number: accountData.phone_number || '',
+      street: accountData.street || '',
+      house_number: accountData.house_number || '',
+      city: accountData.city || '',
+      postal_code: accountData.postal_code || '',
+      bio: accountData.bio || '',
+      imageId: accountData.imageId || '',
+      restaurant_name: accountData.restaurant_name || '',
+    });
+  }, [accountData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,40 +52,41 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.voornaam.trim()) {
-      newErrors.voornaam = 'Voornaam is verplicht.';
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = 'Voornaam is verplicht.';
     }
 
-    if (!formData.achternaam.trim()) {
-      newErrors.achternaam = 'Achternaam is verplicht.';
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = 'Achternaam is verplicht.';
     }
 
-    if (!formData.telefoonnummer.trim()) {
-      newErrors.telefoonnummer = 'Telefoonnummer is verplicht.';
-    } else if (!/^\+?\d{10,15}$/.test(formData.telefoonnummer)) {
-      newErrors.telefoonnummer = 'Voer een geldig telefoonnummer in.';
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = 'Telefoonnummer is verplicht.';
+    } else if (!/^\+?\d{10,15}$/.test(formData.phone_number)) {
+      newErrors.phone_number = 'Voer een geldig telefoonnummer in.';
     }
 
-    if (!formData.straat.trim()) {
-      newErrors.straat = 'Straat is verplicht.';
+    if (!formData.street.trim()) {
+      newErrors.street = 'Straat is verplicht.';
     }
 
-    if (!formData.huisnummer.trim()) {
-      newErrors.huisnummer = 'Huisnummer is verplicht.';
+    if (!formData.house_number.trim()) {
+      newErrors.house_number = 'Huisnummer is verplicht.';
     }
 
-    if (!formData.stad.trim()) {
-      newErrors.stad = 'Stad is verplicht.';
+    if (!formData.city.trim()) {
+      newErrors.city = 'Stad is verplicht.';
     }
 
-    if (!formData.postcode.trim()) {
-      newErrors.postcode = 'Postcode is verplicht.';
-    } if (!/^[1-9]\d{3}$/.test(formData.postcode)) {
-		newErrors.postcode = 'Voer een geldige Belgische postcode in.';
-	  }
+    if (!formData.postal_code.trim()) {
+      newErrors.postal_code = 'Postcode is verplicht.';
+    } 
+    if (!/^[1-9]\d{3}$/.test(formData.postal_code)) {
+      newErrors.postal_code = 'Voer een geldige Belgische postcode in.';
+    }
 
-    if (!formData.naamRestaurant.trim()) { // Validation remains
-      newErrors.naamRestaurant = 'Naam restaurant is verplicht.';
+    if (!formData.restaurant_name.trim()) {
+      newErrors.restaurant_name = 'Naam restaurant is verplicht.';
     }
 
     // Add more validations if necessary
@@ -89,17 +106,17 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
         let responseData;
         // Determine whether to POST or PUT based on whether account exists
         if (accountData._id) {
-          responseData = await api.put(window.baseDomain + 'api/account', formData);
+          responseData = await api.put(`${window.baseDomain}api/account`, formData);
           triggerNotification('Account bijgewerkt', 'success');
         } else {
-          responseData = await api.post(window.baseDomain + 'api/account', formData);
+          responseData = await api.put(`${window.baseDomain}api/account`, formData);
           triggerNotification('Gegevens toegevoegd', 'success');
         }
         setLoading(false);
         setAccountData(responseData); // Update the central account data
       } catch (error) {
         setLoading(false);
-        triggerNotification('Fout bij het opslaan van accountgegevens', 'error');
+        triggerNotification('Fout bij het opslaan', 'error');
       }
     }
   };
@@ -111,69 +128,69 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
       <div className="account-manage-container">
         <NotificationComponent />
         <form className="account-manage-form" onSubmit={handleSave} noValidate>
-          {/* Voornaam */}
+          {/* First Name */}
           <div className="form-group">
             <div className="input-container">
               <FaUser className="input-icon" />
               <input
                 type="text"
-                name="voornaam"
+                name="first_name"
                 placeholder="Voornaam"
-                value={formData.voornaam}
+                value={formData.first_name}
                 onChange={handleChange}
                 aria-label="Voornaam"
               />
             </div>
-            {errors.voornaam && <p className="form-error">{errors.voornaam}</p>}
+            {errors.first_name && <p className="form-error">{errors.first_name}</p>}
           </div>
 
-          {/* Achternaam */}
+          {/* Last Name */}
           <div className="form-group">
             <div className="input-container">
               <FaUser className="input-icon" />
               <input
                 type="text"
-                name="achternaam"
+                name="last_name"
                 placeholder="Achternaam"
-                value={formData.achternaam}
+                value={formData.last_name}
                 onChange={handleChange}
                 aria-label="Achternaam"
               />
             </div>
-            {errors.achternaam && <p className="form-error">{errors.achternaam}</p>}
+            {errors.last_name && <p className="form-error">{errors.last_name}</p>}
           </div>
 
-          {/* Telefoonnummer */}
+          {/* Phone Number */}
           <div className="form-group">
             <div className="input-container">
               <FaPhone className="input-icon" />
               <input
                 type="tel"
-                name="telefoonnummer"
+                name="phone_number"
                 placeholder="Telefoonnummer"
-                value={formData.telefoonnummer}
+                value={formData.phone_number}
                 onChange={handleChange}
                 aria-label="Telefoonnummer"
               />
             </div>
-            {errors.telefoonnummer && <p className="form-error">{errors.telefoonnummer}</p>}
+            {errors.phone_number && <p className="form-error">{errors.phone_number}</p>}
           </div>
 
-          {/* Straat en Huisnummer */}
+          {/* Street and House Number */}
           <div className="form-row">
             <div className="form-group half-width">
               <div className="input-container">
                 <FaHome className="input-icon" />
                 <input
                   type="text"
-                  name="straat"
+                  name="street"
                   placeholder="Straat"
-                  value={formData.straat}
+                  value={formData.street}
                   onChange={handleChange}
                   aria-label="Straat"
                 />
               </div>
-              {errors.straat && <p className="form-error">{errors.straat}</p>}
+              {errors.street && <p className="form-error">{errors.street}</p>}
             </div>
 
             <div className="form-group half-width">
@@ -181,32 +198,32 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
                 <FaHome className="input-icon" />
                 <input
                   type="text"
-                  name="huisnummer"
+                  name="house_number"
                   placeholder="Huisnummer"
-                  value={formData.huisnummer}
+                  value={formData.house_number}
                   onChange={handleChange}
                   aria-label="Huisnummer"
                 />
               </div>
-              {errors.huisnummer && <p className="form-error">{errors.huisnummer}</p>}
+              {errors.house_number && <p className="form-error">{errors.house_number}</p>}
             </div>
           </div>
 
-          {/* Stad en Postcode */}
+          {/* City and Postal Code */}
           <div className="form-row">
             <div className="form-group half-width">
               <div className="input-container">
                 <FaCity className="input-icon" />
                 <input
                   type="text"
-                  name="stad"
+                  name="city"
                   placeholder="Stad"
-                  value={formData.stad}
+                  value={formData.city}
                   onChange={handleChange}
                   aria-label="Stad"
                 />
               </div>
-              {errors.stad && <p className="form-error">{errors.stad}</p>}
+              {errors.city && <p className="form-error">{errors.city}</p>}
             </div>
 
             <div className="form-group half-width">
@@ -214,31 +231,31 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
                 <FaMapPin className="input-icon" />
                 <input
                   type="text"
-                  name="postcode"
+                  name="postal_code"
                   placeholder="Postcode"
-                  value={formData.postcode}
+                  value={formData.postal_code}
                   onChange={handleChange}
                   aria-label="Postcode"
                 />
               </div>
-              {errors.postcode && <p className="form-error">{errors.postcode}</p>}
+              {errors.postal_code && <p className="form-error">{errors.postal_code}</p>}
             </div>
           </div>
 
-          {/* Naam Restaurant */}
+          {/* Restaurant Name */}
           <div className="form-group">
             <div className="input-container">
-              <FaUtensils className="input-icon" /> {/* Added icon for Naam restaurant */}
+              <FaUtensils className="input-icon" />
               <input
                 type="text"
-                name="naamRestaurant"
+                name="restaurant_name"
                 placeholder="Naam restaurant"
-                value={formData.naamRestaurant}
+                value={formData.restaurant_name}
                 onChange={handleChange}
                 aria-label="Naam restaurant"
               />
             </div>
-            {errors.naamRestaurant && <p className="form-error">{errors.naamRestaurant}</p>}
+            {errors.restaurant_name && <p className="form-error">{errors.restaurant_name}</p>}
           </div>
 
           <button type="submit" className="account-manage__button" disabled={loading}>
