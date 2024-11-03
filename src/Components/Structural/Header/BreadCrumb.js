@@ -82,7 +82,6 @@ const Breadcrumb = ({ title }) => { // Destructure title from props
                   <span className="breadcrumb-separator">/</span>
                 </>
               ) : (
-                // If on root path, use crumb.label; otherwise, use title prop
                 <span className="breadcrumb-current">
                   {isRoot ? crumb.label : title}
                 </span>

@@ -22,7 +22,7 @@
   }
   
   .breadcrumb-component .breadcrumb-link-blue {
-	color: var(--color-blue);
+		color: #777777
   }
   
   .breadcrumb-component .breadcrumb-separator {
@@ -31,6 +31,6 @@
   }
   
   .breadcrumb-component .breadcrumb-current {
-	color: #777
+	color: var(--color-blue)
   }
   
