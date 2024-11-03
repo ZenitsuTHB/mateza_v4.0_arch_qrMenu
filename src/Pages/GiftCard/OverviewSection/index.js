@@ -131,10 +131,10 @@ const OverviewSectionFlex = () => {
       'Voornaam',
       'Achternaam',
       'Bedrag (€)',
-      'Beschikbaar Saldo (€)',
-      'Aanmaakdatum',
-      'Vervaldatum',
-      'E-mailadres'
+      'Saldo (€)',
+      'Aanmaak',
+      'Verval',
+      'Email'
     ];
     const rows = processedGiftCards.map((card) => {
       // Calculate expiration date by adding one year to creationDate
