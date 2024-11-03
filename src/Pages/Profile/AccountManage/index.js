@@ -6,6 +6,7 @@ import useNotification from '../../../Components/Notification';
 import { validateAccountData } from './Utils/validationUtils';
 import FormField from './FormField';
 import './css/accountManage.css';
+import './css/mobile.css';
 
 const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();

@@ -16,7 +16,7 @@
   .profile-page .account-manage-form {
 	display: flex;
 	flex-direction: column;
-	gap: 15px; /* Consistent with AddGiftCardSection */
+	gap: 15px;
   }
   
   .profile-page .form-group {
@@ -33,21 +33,21 @@
 	top: 50%;
 	left: 10px;
 	transform: translateY(-50%);
-	color: #6c757d; /* Equivalent to var(--color-gray) */
+	color: #6c757d;
 	pointer-events: none;
   }
   
   .profile-page .input-container input {
 	width: 100%;
-	padding: 10px 10px 10px 35px; /* Padding to accommodate the icon */
+	padding: 10px 10px 10px 35px;
 	border: 1px solid #ccc;
-	border-radius: 5px; /* Consistent with AddGiftCardSection's --border-radius */
+	border-radius: 5px;
 	font-size: 1rem;
 	transition: border-color 0.3s ease;
   }
   
   .profile-page .input-container input:focus {
-	border-color: #0056b3; /* Equivalent to var(--color-blue) */
+	border-color: #0056b3;
 	outline: none;
   }
   
@@ -62,7 +62,7 @@
   }
   
   .profile-page .form-error {
-	color: #dc3545; /* Equivalent to var(--color-red) */
+	color: #dc3545;
 	font-size: 0.9rem;
 	margin-top: 5px;
 	display: flex;
@@ -71,7 +71,7 @@
   }
   
   .profile-page.form-success {
-	color: #28a745; /* Equivalent to var(--color-green) */
+	color: #28a745;
 	font-size: 0.9rem;
 	margin-top: 5px;
 	display: flex;
@@ -81,10 +81,10 @@
   
   .profile-page .account-manage__button {
 	padding: 12px;
-	background-color: #007bff; /* Equivalent to var(--color-blue) */
-	color: #fff; /* Equivalent to var(--color-white) */
+	background-color: #007bff;
+	color: #fff;
 	border: none;
-	border-radius: 5px; /* Consistent with AddGiftCardSection's --border-radius */
+	border-radius: 5px;
 	cursor: pointer;
 	font-size: 1.1rem;
 	display: flex;
@@ -95,27 +95,8 @@
   }
   
   .profile-page .account-manage__button:hover {
-	background-color: #0056b3; /* Darker shade on hover */
+	background-color: #0056b3;
   }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
-	.profile-page .form-row {
-	  flex-direction: column;
-	}
-  
-	.profile-page .half-width {
-	  width: 100%;
-	}
-  
-	.profile-page .account-manage-form {
-	  gap: 10px;
-	}
-  
-	.profile-page .account-manage__button {
-	  font-size: 1rem;
-	  padding: 10px;
-	}
-  }
-  
+
   
