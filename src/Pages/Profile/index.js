@@ -17,7 +17,6 @@ const Profile = () => {
   const [accountData, setAccountData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch account data once
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
@@ -31,10 +30,8 @@ const Profile = () => {
     };
 
     fetchAccountData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handler to update account data after mutations
   const updateAccountData = (updatedData) => {
     setAccountData(updatedData);
   };
