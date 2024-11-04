@@ -6,6 +6,7 @@ import CalendarGrid from './CalendarGrid';
 import ReservationDetailsModal from './ReservationDetailsModal';
 import reservations from './reservationData';
 import './css/calendarComponent.css';
+import { withHeader } from '../../Components/Structural/Header';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -77,4 +78,4 @@ const CalendarComponent = () => {
   );
 };
 
-export default CalendarComponent;
+export default withHeader(CalendarComponent);

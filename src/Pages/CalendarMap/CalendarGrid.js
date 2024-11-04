@@ -9,12 +9,12 @@ const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap 
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const numDays = endDate.getDate();
 
-  const prevMonthDays = startDate.getDay(); // Number of days from previous month to show
+  const prevMonthDays = (startDate.getDay() + 6) % 7; // Adjusted for Dutch week starting on Monday
 
   const dates = [];
 
   // Fill in dates from previous month
-  for (let i = prevMonthDays -1; i >= 0; i--) {
+  for (let i = prevMonthDays - 1; i >= 0; i--) {
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), -i);
     dates.push({ date, currentMonth: false });
   }
@@ -43,16 +43,14 @@ const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap 
     maxOccupation = Math.max(...occupations);
   }
 
+  const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo']; // Dutch day names
+
   return (
     <div className="calendar-grid">
       <div className="calendar-grid-header">
-        <div>Sun</div>
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
+        {dayNames.map((day, index) => (
+          <div key={index}>{day}</div>
+        ))}
       </div>
       <div className="calendar-grid-body">
         {dates.map(({ date, currentMonth }, index) => (

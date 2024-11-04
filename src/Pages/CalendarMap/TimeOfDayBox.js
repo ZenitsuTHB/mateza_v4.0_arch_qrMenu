@@ -4,8 +4,8 @@ import React from 'react';
 import './css/timeOfDay.css';
 
 const TimeOfDayBox = ({ timeSlot, totalGuests, isPastDate }) => {
-  const timeSlotNames = ['Morning', 'Afternoon', 'Evening'];
-  const timeSlotColors = ['#FFA500', '#00BFFF', '#8A2BE2']; // Orange, DeepSkyBlue, BlueViolet
+  const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
+  const timeSlotColors = ['#28a745', '#17a2b8', '#007BFF']; // Green, Cyan, Blue
   const backgroundColor = timeSlotColors[timeSlot];
   const opacity = isPastDate ? 0.5 : 1;
 

@@ -1,20 +1,30 @@
-/* CalendarHeader.css */
+/* ./css/calendar-header.css */
 
 .calendar-header {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	margin-bottom: 10px;
+	width: 100%;
+	max-width: 800px;
   }
   
   .calendar-header h2 {
-	margin: 0 20px;
+	margin: 0;
+	text-align: center;
+	flex-grow: 1;
   }
   
-  .calendar-header button {
-	padding: 5px 10px;
+  .calendar-header .standard-button {
+	margin: 0 5px;
   }
   
-  .heatmap-button {
-	margin-left: auto;
+  .calendar-header .header-buttons {
+	display: flex;
+	align-items: center;
+  }
+  
+  .calendar-header .heatmap-button {
+	margin-right: 5px;
   }
   

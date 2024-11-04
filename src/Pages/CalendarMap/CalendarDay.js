@@ -14,7 +14,7 @@ const CalendarDay = ({
 }) => {
   const dateString = date.toISOString().split('T')[0];
   const reservations = reservationsByDate[dateString] || [];
-  
+
   const totalGuestsByTimeSlot = [0, 0, 0]; // Morning, Afternoon, Evening
 
   reservations.forEach((reservation) => {
@@ -36,7 +36,7 @@ const CalendarDay = ({
   }
 
   const heatmapStyle = isHeatmap
-    ? { backgroundColor: `rgba(255, 0, 0, ${heatmapIntensity})` }
+    ? { backgroundColor: `rgba(0, 123, 255, ${heatmapIntensity})` } // var(--color-blue)
     : {};
 
   return (
@@ -46,20 +46,24 @@ const CalendarDay = ({
       style={heatmapStyle}
     >
       <div className="calendar-day-number">{date.getDate()}</div>
-      {!isHeatmap && totalGuestsByTimeSlot.map((totalGuests, index) => {
-        if (totalGuests > 0) {
-          return (
-            <TimeOfDayBox
-              key={index}
-              timeSlot={index}
-              totalGuests={totalGuests}
-              isPastDate={isPastDate}
-            />
-          );
-        } else {
-          return null;
-        }
-      })}
+      {!isHeatmap && (
+        <div className="time-of-day-boxes">
+          {totalGuestsByTimeSlot.map((totalGuests, index) => {
+            if (totalGuests > 0) {
+              return (
+                <TimeOfDayBox
+                  key={index}
+                  timeSlot={index}
+                  totalGuests={totalGuests}
+                  isPastDate={isPastDate}
+                />
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      )}
     </div>
   );
 };

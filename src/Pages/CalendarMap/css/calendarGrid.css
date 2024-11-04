@@ -1,8 +1,13 @@
-/* CalendarGrid.css */
+/* ./css/calendar-grid.css */
 
 .calendar-grid {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	max-width: 800px;
+	border: 1px solid #ccc;
+	border-radius: 10px; /* Rounded corners for the calendar edge */
+	overflow: hidden; /* Ensure child elements don't overflow the rounded corners */
   }
   
   .calendar-grid-header,
