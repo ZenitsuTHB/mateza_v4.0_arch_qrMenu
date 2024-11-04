@@ -5,7 +5,7 @@ import './css/timeOfDay.css';
 
 const TimeOfDayBox = ({ timeSlot, totalGuests, isPastDate }) => {
   const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
-  const timeSlotColors = ['#28a745', '#17a2b8', '#007BFF']; // Green, Cyan, Blue
+  const timeSlotColors = ['#182825', '#016FB9', '#22AED1']; // Green, Cyan, Blue
   const backgroundColor = timeSlotColors[timeSlot];
   const opacity = isPastDate ? 0.5 : 1;
 
