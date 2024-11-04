@@ -1,6 +1,6 @@
 // CalendarGrid.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import CalendarDay from './CalendarDay';
 import './css/calendarGrid.css';
 import { motion } from 'framer-motion';
@@ -12,6 +12,8 @@ const CalendarGrid = ({
   isHeatmap,
   selectedShift,
 }) => {
+  const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
+
   const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const numDays = endDate.getDate();
@@ -34,7 +36,11 @@ const CalendarGrid = ({
 
   // Fill in dates for next month to complete the grid
   while (dates.length % 7 !== 0) {
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, dates.length - numDays - prevMonthDays + 1);
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      dates.length - numDays - prevMonthDays + 1
+    );
     dates.push({ date, currentMonth: false });
   }
 
@@ -47,7 +53,12 @@ const CalendarGrid = ({
       let totalGuests = 0;
 
       reservations.forEach((res) => {
-        if (selectedShift === 'Volledige Dag' || res.shiftName === selectedShift) {
+        if (
+          selectedShift === 'Volledige Dag' ||
+          (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
+          (selectedShift === 'Middag' && res.timeSlot === 1) ||
+          (selectedShift === 'Avond' && res.timeSlot === 2)
+        ) {
           totalGuests += res.aantalGasten;
         }
       });
@@ -80,7 +91,7 @@ const CalendarGrid = ({
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      key={currentDate.toString()} // Re-trigger animation on month change
+      key={`${currentDate.toString()}-${isHeatmap}-${selectedShift}`}
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
@@ -98,6 +109,10 @@ const CalendarGrid = ({
               isHeatmap={isHeatmap}
               maxOccupation={maxOccupation}
               selectedShift={selectedShift}
+              isHovered={hoveredDayIndex === index}
+              onMouseEnter={() => setHoveredDayIndex(index)}
+              onMouseLeave={() => setHoveredDayIndex(null)}
+              fadeOut={hoveredDayIndex !== null && hoveredDayIndex !== index}
             />
           </motion.div>
         ))}

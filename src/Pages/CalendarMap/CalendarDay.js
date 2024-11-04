@@ -1,6 +1,6 @@
 // CalendarDay.js
 
-import React, { useState } from 'react';
+import React from 'react';
 import TimeOfDayBox from './TimeOfDayBox';
 import './css/calendarDay.css';
 
@@ -12,6 +12,10 @@ const CalendarDay = ({
   isHeatmap,
   maxOccupation,
   selectedShift,
+  isHovered,
+  onMouseEnter,
+  onMouseLeave,
+  fadeOut,
 }) => {
   const dateString = date.toISOString().split('T')[0];
   const reservations = reservationsByDate[dateString] || [];
@@ -31,9 +35,7 @@ const CalendarDay = ({
 
   const today = new Date();
   const isToday = date.toDateString() === today.toDateString();
-  const isPastDate = date < today;
-
-  const [isHovered, setIsHovered] = useState(false);
+  const isPastDate = date < today && !isToday;
 
   const handleClick = () => {
     if (reservations.length > 0) {
@@ -48,19 +50,34 @@ const CalendarDay = ({
     heatmapIntensity = totalGuests / maxOccupation;
   }
 
-  const heatmapStyle = isHeatmap
-    ? { backgroundColor: `rgba(0, 123, 255, ${heatmapIntensity})` } // var(--color-blue)
-    : {};
+  // Adjust background color for shift
+  let heatmapColor = 'rgba(0, 123, 255,'; // default blue
+  if (isHeatmap) {
+    if (selectedShift === 'Ochtend') {
+      heatmapColor = 'rgba(24, 40, 37,'; // '#182825'
+    } else if (selectedShift === 'Middag') {
+      heatmapColor = 'rgba(1, 111, 185,'; // '#016FB9'
+    } else if (selectedShift === 'Avond') {
+      heatmapColor = 'rgba(34, 174, 209,'; // '#22AED1'
+    } else {
+      heatmapColor = 'rgba(0, 123, 255,'; // default blue
+    }
+  }
 
-  const opacity = isHovered ? 1 : 1;
+  const opacity = fadeOut ? 0.5 : 1;
 
   return (
     <div
-      className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${isPastDate && !isToday ? 'calendar-day--past' : ''} ${isToday ? 'calendar-day--today' : ''}`}
+      className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${
+        isPastDate ? 'calendar-day--past' : ''
+      } ${isToday ? 'calendar-day--today' : ''} ${isHeatmap ? 'heatmap-mode' : ''}`}
       onClick={handleClick}
-      style={{ ...heatmapStyle, opacity }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        backgroundColor: isHeatmap ? `${heatmapColor} ${heatmapIntensity})` : '',
+        opacity,
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className="calendar-day-number">{date.getDate()}</div>
       {isHeatmap && isHovered && totalGuests > 0 && (
@@ -83,7 +100,7 @@ const CalendarDay = ({
                     key={index}
                     timeSlot={index}
                     totalGuests={totalGuests}
-                    isPastDate={isPastDate && !isToday}
+                    isPastDate={isPastDate}
                   />
                 );
               }

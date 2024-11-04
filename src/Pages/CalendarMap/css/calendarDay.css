@@ -1,7 +1,7 @@
 /* ./css/calendarDay.css */
 
 .calendar-day {
-	border: 1px solid #ccc;
+	/* border: 1px solid #ccc; */
 	min-height: 100px;
 	padding: 5px;
 	box-sizing: border-box;
@@ -10,16 +10,21 @@
 	transition: transform 0.2s ease, opacity 0.2s ease;
   }
   
+  .calendar-day:not(.heatmap-mode) {
+	border: 1px solid #ccc;
+  }
+  
+  .calendar-day.heatmap-mode {
+	border: none;
+  }
+  
   .calendar-day:hover {
 	transform: scale(1.05);
   }
   
   .calendar-grid-body .calendar-day {
 	opacity: 1;
-  }
-  
-  .calendar-grid-body .calendar-day:hover {
-	opacity: 1;
+	transition: opacity 0.3s ease;
   }
   
   .calendar-day-number {
@@ -48,7 +53,7 @@
   
   .heatmap-total-guests {
 	position: absolute;
-	top: 40%;
+	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	color: white;
