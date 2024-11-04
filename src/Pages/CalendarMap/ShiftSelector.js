@@ -48,6 +48,7 @@ const ShiftSelector = ({
   };
 
   return (
+	<div className="shift-selector-calendar-map">
     <div className="shift-selector">
       <button
         onClick={toggleShiftOptions}
@@ -72,6 +73,7 @@ const ShiftSelector = ({
         </div>
       )}
     </div>
+	</div>
   );
 };
 

@@ -2,17 +2,13 @@
 
 export const overviewSecondaryTopBar = [
 	{
-	  label: 'Dag',
+	  label: 'Maandoverzicht',
 	  path: '/',
 	},
 	{
-	  label: 'Maand',
-	  path: '/month-list',
-	},
-	{
-	  label: 'Tafels',
-	  path: '/table',
-	},
+	  label: 'Dagoverzicht',
+	  path: '/day',
+	}
   ];
   
   export const calendarSecondaryTopBar = [

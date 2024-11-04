@@ -38,10 +38,11 @@ import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import CalendarComponent from '../Pages/CalendarMap/index.js';
 
 const routesConfig = [
+  
   {
     path: '/',
-    element: <DayList title="Overzicht" />,
-    label: 'Overzicht',
+    element: <CalendarComponent title="Maandoverzicht" />,
+    label: 'Maandoverzicht',
     icon: FaStar,
     isMenu: true,
     isMobile: true,
@@ -49,13 +50,14 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
-    path: '/list',
-    element: <CalendarComponent title="Overzicht" />,
-    label: 'Overzicht',
+    path: '/day',
+    element: <DayList title="Dagoverzicht" />,
+    label: 'Dagoverzicht',
     icon: FaStar,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: overviewSecondaryTopBar,
   },
   {
     path: '/scheme',
