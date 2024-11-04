@@ -12,7 +12,7 @@
   .reservation-row {
 	border-bottom: 1px solid #ccc;
 	padding: 10px 0;
-	font-size: 14px; /* Decreased font size */
+	font-size: 15px; /* Increased font size by 1px */
   }
   
   .reservation-main-info {

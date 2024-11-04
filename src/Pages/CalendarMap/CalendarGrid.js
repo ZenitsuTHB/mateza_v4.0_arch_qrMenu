@@ -5,7 +5,13 @@ import CalendarDay from './CalendarDay';
 import './css/calendarGrid.css';
 import { motion } from 'framer-motion';
 
-const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap }) => {
+const CalendarGrid = ({
+  currentDate,
+  reservationsByDate,
+  onDateClick,
+  isHeatmap,
+  selectedShift,
+}) => {
   const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const numDays = endDate.getDate();
@@ -38,7 +44,14 @@ const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap 
     const occupations = dates.map(({ date }) => {
       const dateString = date.toISOString().split('T')[0];
       const reservations = reservationsByDate[dateString] || [];
-      const totalGuests = reservations.reduce((sum, res) => sum + res.aantalGasten, 0);
+      let totalGuests = 0;
+
+      reservations.forEach((res) => {
+        if (selectedShift === 'Volledige Dag' || res.shiftName === selectedShift) {
+          totalGuests += res.aantalGasten;
+        }
+      });
+
       return totalGuests;
     });
     maxOccupation = Math.max(...occupations);
@@ -67,6 +80,7 @@ const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap 
       initial="hidden"
       animate="visible"
       variants={containerVariants}
+      key={currentDate.toString()} // Re-trigger animation on month change
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
@@ -83,6 +97,7 @@ const CalendarGrid = ({ currentDate, reservationsByDate, onDateClick, isHeatmap 
               onDateClick={onDateClick}
               isHeatmap={isHeatmap}
               maxOccupation={maxOccupation}
+              selectedShift={selectedShift}
             />
           </motion.div>
         ))}

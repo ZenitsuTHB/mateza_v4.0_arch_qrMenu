@@ -14,11 +14,11 @@
 	transform: scale(1.05);
   }
   
-  .calendar-grid-body:hover .calendar-day {
-	opacity: 0.5;
+  .calendar-grid-body .calendar-day {
+	opacity: 1;
   }
   
-  .calendar-day:hover {
+  .calendar-grid-body .calendar-day:hover {
 	opacity: 1;
   }
   
@@ -39,9 +39,26 @@
   .calendar-day--today {
 	background-color: lightblue;
 	border: 2px solid var(--color-blue);
+	opacity: 1 !important;
   }
   
   .time-of-day-boxes {
 	margin-top: 25px; /* Increased margin between date number and boxes */
+  }
+  
+  .heatmap-total-guests {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+  }
+  
+  .calendar-day:hover .heatmap-total-guests {
+	opacity: 1;
   }
   

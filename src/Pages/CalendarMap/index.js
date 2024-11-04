@@ -13,6 +13,7 @@ const CalendarComponent = () => {
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
   const [isHeatmap, setIsHeatmap] = useState(false);
+  const [selectedShift, setSelectedShift] = useState('Volledige Dag'); // Default to 'Volledige Dag'
 
   useEffect(() => {
     // Organize reservations by date
@@ -61,12 +62,15 @@ const CalendarComponent = () => {
         onNextMonth={handleNextMonth}
         isHeatmap={isHeatmap}
         toggleHeatmap={toggleHeatmap}
+        selectedShift={selectedShift}
+        setSelectedShift={setSelectedShift}
       />
       <CalendarGrid
         currentDate={currentDate}
         reservationsByDate={reservationsByDate}
         onDateClick={handleDateClick}
         isHeatmap={isHeatmap}
+        selectedShift={selectedShift}
       />
       {selectedDateReservations && (
         <ReservationDetailsModal

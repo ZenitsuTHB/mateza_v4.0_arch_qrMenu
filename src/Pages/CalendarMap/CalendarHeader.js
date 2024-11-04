@@ -3,8 +3,17 @@
 import React from 'react';
 import './css/calendarHeader.css';
 import { FaChevronLeft, FaChevronRight, FaFire } from 'react-icons/fa';
+import ShiftSelector from './ShiftSelector';
 
-const CalendarHeader = ({ currentDate, onPrevMonth, onNextMonth, isHeatmap, toggleHeatmap }) => {
+const CalendarHeader = ({
+  currentDate,
+  onPrevMonth,
+  onNextMonth,
+  isHeatmap,
+  toggleHeatmap,
+  selectedShift,
+  setSelectedShift,
+}) => {
   const monthNames = [
     'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
     'augustus', 'september', 'oktober', 'november', 'december'
@@ -19,6 +28,10 @@ const CalendarHeader = ({ currentDate, onPrevMonth, onNextMonth, isHeatmap, togg
       </button>
       <h2>{month} {year}</h2>
       <div className="header-buttons">
+        <ShiftSelector
+          selectedShift={selectedShift}
+          setSelectedShift={setSelectedShift}
+        />
         <button className="standard-button blue heatmap-button" onClick={toggleHeatmap}>
           <FaFire style={{ marginRight: '5px' }} />
           {isHeatmap ? 'Normaal' : 'Heatmap'}
