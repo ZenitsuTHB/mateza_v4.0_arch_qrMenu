@@ -13,7 +13,7 @@ const ReservationStepTwoModal = ({
 }) => {
   return (
     <div>
-      <h2 className="modal-title">Vul uw gegevens in</h2>
+      <h2 className="modal-title">Persoonlijke Informatie</h2>
       <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
         <FormField
           label="Voornaam"
