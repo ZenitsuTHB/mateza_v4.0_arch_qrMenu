@@ -35,6 +35,7 @@ import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservation from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
+import CalendarComponent from '../Pages/CalendarMap/index.js';
 
 const routesConfig = [
   {
@@ -46,6 +47,15 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     secondaryTopBar: overviewSecondaryTopBar,
+  },
+  {
+    path: '/list',
+    element: <CalendarComponent title="Overzicht" />,
+    label: 'Overzicht',
+    icon: FaStar,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/scheme',

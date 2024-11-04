@@ -1,0 +1,25 @@
+/* CalendarDay.css */
+
+.calendar-day {
+	border: 1px solid #ccc;
+	min-height: 100px;
+	padding: 5px;
+	box-sizing: border-box;
+	cursor: pointer;
+	position: relative;
+  }
+  
+  .calendar-day-number {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+  }
+  
+  .calendar-day--disabled {
+	background-color: #e0e0e0;
+  }
+  
+  .calendar-day--past {
+	opacity: 0.5;
+  }
+  

@@ -1,0 +1,47 @@
+/* ReservationDetailsModal.css */
+
+.reservation-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .reservation-modal {
+	background-color: #fff;
+	padding: 20px;
+	width: 80%;
+	max-width: 600px;
+	max-height: 80%;
+	overflow-y: auto;
+	position: relative;
+  }
+  
+  .reservation-modal h2 {
+	margin-top: 0;
+  }
+  
+  .close-button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+  }
+  
+  .reservation-table {
+	margin-top: 20px;
+  }
+  
+  .reservation-row {
+	border-bottom: 1px solid #ccc;
+	padding: 10px 0;
+  }
+  
+  .reservation-main-info {
+	font-weight: bold;
+  }
+  

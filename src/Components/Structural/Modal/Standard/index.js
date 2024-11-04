@@ -1,4 +1,4 @@
-// src/components/ModalWithTabs/ModalWithoutTabs.js
+// src/Components/Standard/index.js
 
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';

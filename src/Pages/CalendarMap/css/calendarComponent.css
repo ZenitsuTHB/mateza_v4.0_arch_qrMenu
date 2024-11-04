@@ -1,0 +1,8 @@
+/* CalendarComponent.css */
+
+.calendar-component {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
