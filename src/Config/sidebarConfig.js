@@ -12,6 +12,7 @@ import {
   FaFlag,
   FaShieldAlt,
   FaUser,
+  FaTable,
 } from 'react-icons/fa';
 
 import DragAndDrop from '../Pages/FormEditor/index.js';
@@ -33,6 +34,7 @@ import {
 import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservation from '../Pages/NewReservation/index.js';
+import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 
 const routesConfig = [
   {
@@ -46,13 +48,24 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
-    path: '/calendar',
-    element: <DayCalendar title="Openingsuren" />,
+    path: '/scheme',
+    element: <SchemeStandalone title="Openingsuren" />,
     label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: true,
     isMobile: true,
     isTab: true,
+    sidebarHidden: false,
+    secondaryTopBar: calendarSecondaryTopBar,
+  },
+  {
+    path: '/scheme/calendar',
+    element: <DayCalendar title="Openingskalender" />,
+    label: 'Openingskalender',
+    icon: FaTable,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
     secondaryTopBar: calendarSecondaryTopBar,
   },
   {

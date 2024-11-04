@@ -1,5 +1,12 @@
+.scheme-container {
+	max-width: 600px;
+	padding: 20px; /* Adds padding inside the container */
+	border-radius: 12px; /* Adds rounded corners */
+	margin: 0px auto; /* Centers the container horizontally and adds top margin */
+  }
 
 
+  
 .error-message {
 	color: rgb(255, 123, 0);
 	font-size: 13px;
@@ -143,6 +150,7 @@
 .date-input input {
 	padding: 5px;
   }
+
   
 
   .scheme-item-special {

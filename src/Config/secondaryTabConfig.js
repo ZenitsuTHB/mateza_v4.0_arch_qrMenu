@@ -18,11 +18,11 @@ export const overviewSecondaryTopBar = [
   export const calendarSecondaryTopBar = [
 	{
 	  label: 'Openingsuren',
-	  path: '/calendar',
+	  path: '/scheme',
 	},
 	{
-	  label: 'Tafels',
-	  path: '/tables',
+	  label: 'Kalender',
+	  path: '/scheme/calendar',
 	},
   ];
   
