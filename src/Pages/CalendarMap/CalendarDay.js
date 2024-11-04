@@ -11,8 +11,10 @@ const CalendarDay = ({
   reservationsByDate,
   onDateClick,
   maxOccupation,
+  maxPrediction,
   selectedShift,
   selectedViewMode,
+  predictionsByDate,
   isHovered,
   onMouseEnter,
   onMouseLeave,
@@ -93,6 +95,24 @@ const CalendarDay = ({
         <strong>{occupancyRate.toFixed(1)}%</strong>
       </div>
     );
+  } else if (selectedViewMode === 'Voorspelling') {
+    const prediction = predictionsByDate[dateString] || 0;
+
+    let predictionIntensity = 0;
+    if (maxPrediction > 0) {
+      predictionIntensity = prediction / maxPrediction;
+    }
+
+    let predictionColor = 'rgba(255, 0, 0,'; // shades of red
+    backgroundColor = `${predictionColor} ${predictionIntensity})`;
+
+    if (isHovered && prediction > 0) {
+      content = (
+        <div className="prediction-total-guests">
+          <strong>{prediction.toFixed(1)}</strong>
+        </div>
+      );
+    }
   }
 
   const opacity =
@@ -100,7 +120,7 @@ const CalendarDay = ({
       ? 1
       : fadeOut
       ? 0.5
-      : selectedViewMode === 'Heatmap'
+      : selectedViewMode === 'Heatmap' || selectedViewMode === 'Voorspelling'
       ? 1
       : isPastDate && !isHovered
       ? 0.5

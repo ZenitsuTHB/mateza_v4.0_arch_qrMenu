@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
 import ReservationDetailsModal from './ReservationDetailsModal';
-import reservations from './reservationData';
+import reservations, { maxCapacity } from './reservationData';
 import './css/calendarComponent.css';
 import { withHeader } from '../../Components/Structural/Header';
 
@@ -12,13 +12,13 @@ const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
-  const [selectedShift, setSelectedShift] = useState('Hele Dag'); // Default to 'Hele Dag'
-  const [selectedViewMode, setSelectedViewMode] = useState('Normaal'); // 'Normaal', 'Heatmap', 'Bezettingsgraad'
+  const [selectedShift, setSelectedShift] = useState('Hele Dag'); // Changed from 'Volledige Dag' to 'Hele Dag'
+  const [selectedViewMode, setSelectedViewMode] = useState('Normaal'); // 'Normaal', 'Heatmap', 'Bezetting', 'Voorspelling'
 
   useEffect(() => {
     // Organize reservations by date
     const resByDate = {};
-    reservations.forEach(reservation => {
+    reservations.forEach((reservation) => {
       const date = reservation.date;
       if (!resByDate[date]) {
         resByDate[date] = [];
@@ -29,11 +29,11 @@ const CalendarComponent = () => {
   }, []);
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() -1, 1));
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() +1, 1));
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
   const handleDateClick = (date) => {

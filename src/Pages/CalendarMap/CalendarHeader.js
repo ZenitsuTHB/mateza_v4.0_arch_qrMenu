@@ -16,8 +16,18 @@ const CalendarHeader = ({
   setSelectedViewMode,
 }) => {
   const monthNames = [
-    'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
-    'augustus', 'september', 'oktober', 'november', 'december'
+    'januari',
+    'februari',
+    'maart',
+    'april',
+    'mei',
+    'juni',
+    'juli',
+    'augustus',
+    'september',
+    'oktober',
+    'november',
+    'december',
   ];
   const month = monthNames[currentDate.getMonth()];
   const year = currentDate.getFullYear();

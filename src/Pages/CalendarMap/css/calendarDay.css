@@ -54,7 +54,8 @@
   }
   
   .heatmap-total-guests,
-  .occupancy-percentage {
+  .occupancy-percentage,
+  .prediction-total-guests {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -65,7 +66,8 @@
 	transition: opacity 0.3s ease;
   }
   
-  .calendar-day:hover .heatmap-total-guests {
+  .calendar-day:hover .heatmap-total-guests,
+  .calendar-day:hover .prediction-total-guests {
 	opacity: 1;
   }
   
