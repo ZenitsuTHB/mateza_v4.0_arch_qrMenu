@@ -21,7 +21,7 @@ const CalendarGrid = ({
   // Parameters for prediction algorithm weights
   const WEIGHT_MEDIAN14 = 1; // Weight for 14-day median (including zeros)
   const WEIGHT_MEDIAN20 = 0.9; // Weight for 20-day median (excluding zeros)
-  const WEIGHT_AVERAGE90 = 1.7; // Weight for 90-day average of day of week
+  const WEIGHT_AVERAGE90 = 1.66; // Weight for 90-day average of day of week
   const WEIGHT_CURRENT_RESERVATIONS = 0.2; // Weight for current reservations (divided by 5)
   const MULTIPLIER_BASE_PREDICTION = 1; // Multiplier for base prediction (sum of medians and average)
 
