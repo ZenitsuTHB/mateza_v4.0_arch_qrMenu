@@ -31,13 +31,3 @@
 	align-items: center;
   }
   
-  .calendar-header .heatmap-button {
-	margin-right: 10px; /* Increased margin from the arrow */
-	display: flex;
-	align-items: center;
-  }
-  
-  .calendar-header .heatmap-button .fa-icon {
-	margin-right: 5px;
-  }
-  

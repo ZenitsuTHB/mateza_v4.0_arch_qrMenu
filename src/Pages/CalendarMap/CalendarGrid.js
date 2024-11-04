@@ -9,8 +9,8 @@ const CalendarGrid = ({
   currentDate,
   reservationsByDate,
   onDateClick,
-  isHeatmap,
   selectedShift,
+  selectedViewMode,
 }) => {
   const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
 
@@ -46,7 +46,7 @@ const CalendarGrid = ({
 
   // Calculate max occupation for heatmap
   let maxOccupation = 0;
-  if (isHeatmap) {
+  if (selectedViewMode === 'Heatmap' || selectedViewMode === 'Bezettingsgraad') {
     const occupations = dates.map(({ date }) => {
       const dateString = date.toISOString().split('T')[0];
       const reservations = reservationsByDate[dateString] || [];
@@ -91,7 +91,7 @@ const CalendarGrid = ({
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      key={`${currentDate.toString()}-${isHeatmap}-${selectedShift}`}
+      key={`${currentDate.toString()}-${selectedViewMode}-${selectedShift}`}
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
@@ -106,9 +106,9 @@ const CalendarGrid = ({
               currentMonth={currentMonth}
               reservationsByDate={reservationsByDate}
               onDateClick={onDateClick}
-              isHeatmap={isHeatmap}
               maxOccupation={maxOccupation}
               selectedShift={selectedShift}
+              selectedViewMode={selectedViewMode}
               isHovered={hoveredDayIndex === index}
               onMouseEnter={() => setHoveredDayIndex(index)}
               onMouseLeave={() => setHoveredDayIndex(null)}

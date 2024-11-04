@@ -3,15 +3,16 @@
 import React from 'react';
 import TimeOfDayBox from './TimeOfDayBox';
 import './css/calendarDay.css';
+import { maxCapacity } from './reservationData';
 
 const CalendarDay = ({
   date,
   currentMonth,
   reservationsByDate,
   onDateClick,
-  isHeatmap,
   maxOccupation,
   selectedShift,
+  selectedViewMode,
   isHovered,
   onMouseEnter,
   onMouseLeave,
@@ -43,49 +44,81 @@ const CalendarDay = ({
     }
   };
 
-  let heatmapIntensity = 0;
-  let totalGuests = 0;
-  if (isHeatmap && maxOccupation > 0) {
-    totalGuests = totalGuestsByTimeSlot.reduce((a, b) => a + b, 0);
-    heatmapIntensity = totalGuests / maxOccupation;
-  }
+  let totalGuests = totalGuestsByTimeSlot.reduce((a, b) => a + b, 0);
 
-  // Adjust background color for shift
-  let heatmapColor = 'rgba(0, 123, 255,'; // default blue
-  if (isHeatmap) {
+  // Adjust background color and data based on selectedViewMode
+  let backgroundColor = '';
+  let content = null;
+
+  if (selectedViewMode === 'Heatmap') {
+    let heatmapIntensity = 0;
+    if (maxOccupation > 0) {
+      heatmapIntensity = totalGuests / maxOccupation;
+    }
+
+    // Adjust background color for shift
+    let heatmapColor = 'rgba(0, 123, 255,'; // default blue
+    let textColor = 'white';
     if (selectedShift === 'Ochtend') {
       heatmapColor = 'rgba(24, 40, 37,'; // '#182825'
+      textColor = 'white';
     } else if (selectedShift === 'Middag') {
       heatmapColor = 'rgba(1, 111, 185,'; // '#016FB9'
+      textColor = 'black';
     } else if (selectedShift === 'Avond') {
       heatmapColor = 'rgba(34, 174, 209,'; // '#22AED1'
+      textColor = 'black';
     } else {
       heatmapColor = 'rgba(0, 123, 255,'; // default blue
+      textColor = 'white';
     }
+
+    backgroundColor = `${heatmapColor} ${heatmapIntensity})`;
+
+    if (isHovered && totalGuests > 0) {
+      content = (
+        <div className="heatmap-total-guests" style={{ color: textColor }}>
+          <strong>{totalGuests}</strong>
+        </div>
+      );
+    }
+  } else if (selectedViewMode === 'Bezettingsgraad') {
+    let occupancyRate = 0;
+    if (maxCapacity > 0) {
+      occupancyRate = (totalGuests / maxCapacity) * 100;
+    }
+    backgroundColor = 'white'; // or any default color
+    content = (
+      <div className="occupancy-percentage">
+        <strong>{occupancyRate.toFixed(1)}%</strong>
+      </div>
+    );
   }
 
-  const opacity = fadeOut ? 0.5 : 1;
+  const opacity = isHovered
+    ? 1
+    : fadeOut
+    ? 0.5
+    : isPastDate && !isHovered
+    ? 0.5
+    : 1;
 
   return (
     <div
       className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${
         isPastDate ? 'calendar-day--past' : ''
-      } ${isToday ? 'calendar-day--today' : ''} ${isHeatmap ? 'heatmap-mode' : ''}`}
+      } ${isToday ? 'calendar-day--today' : ''} ${selectedViewMode !== 'Normaal' ? 'special-mode' : ''}`}
       onClick={handleClick}
       style={{
-        backgroundColor: isHeatmap ? `${heatmapColor} ${heatmapIntensity})` : '',
+        backgroundColor,
         opacity,
       }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <div className="calendar-day-number">{date.getDate()}</div>
-      {isHeatmap && isHovered && totalGuests > 0 && (
-        <div className="heatmap-total-guests">
-          <strong>{totalGuests}</strong>
-        </div>
-      )}
-      {!isHeatmap && (
+      {content}
+      {selectedViewMode === 'Normaal' && (
         <div className="time-of-day-boxes">
           {totalGuestsByTimeSlot.map((totalGuests, index) => {
             if (totalGuests > 0) {

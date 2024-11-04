@@ -6,14 +6,13 @@ import CalendarGrid from './CalendarGrid';
 import ReservationDetailsModal from './ReservationDetailsModal';
 import reservations from './reservationData';
 import './css/calendarComponent.css';
-import { withHeader } from '../../Components/Structural/Header';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
-  const [isHeatmap, setIsHeatmap] = useState(false);
   const [selectedShift, setSelectedShift] = useState('Volledige Dag'); // Default to 'Volledige Dag'
+  const [selectedViewMode, setSelectedViewMode] = useState('Normaal'); // 'Normaal', 'Heatmap', 'Bezettingsgraad'
 
   useEffect(() => {
     // Organize reservations by date
@@ -50,27 +49,23 @@ const CalendarComponent = () => {
     setSelectedDateReservations(null);
   };
 
-  const toggleHeatmap = () => {
-    setIsHeatmap(!isHeatmap);
-  };
-
   return (
     <div className="calendar-component">
       <CalendarHeader
         currentDate={currentDate}
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
-        isHeatmap={isHeatmap}
-        toggleHeatmap={toggleHeatmap}
         selectedShift={selectedShift}
         setSelectedShift={setSelectedShift}
+        selectedViewMode={selectedViewMode}
+        setSelectedViewMode={setSelectedViewMode}
       />
       <CalendarGrid
         currentDate={currentDate}
         reservationsByDate={reservationsByDate}
         onDateClick={handleDateClick}
-        isHeatmap={isHeatmap}
         selectedShift={selectedShift}
+        selectedViewMode={selectedViewMode}
       />
       {selectedDateReservations && (
         <ReservationDetailsModal
@@ -82,4 +77,4 @@ const CalendarComponent = () => {
   );
 };
 
-export default withHeader(CalendarComponent);
+export default CalendarComponent;

@@ -2,17 +2,18 @@
 
 import React from 'react';
 import './css/calendarHeader.css';
-import { FaChevronLeft, FaChevronRight, FaFire } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ShiftSelector from './ShiftSelector';
+import ViewModeSelector from './ViewModeSelector';
 
 const CalendarHeader = ({
   currentDate,
   onPrevMonth,
   onNextMonth,
-  isHeatmap,
-  toggleHeatmap,
   selectedShift,
   setSelectedShift,
+  selectedViewMode,
+  setSelectedViewMode,
 }) => {
   const monthNames = [
     'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
@@ -32,10 +33,10 @@ const CalendarHeader = ({
           selectedShift={selectedShift}
           setSelectedShift={setSelectedShift}
         />
-        <button className="standard-button blue heatmap-button" onClick={toggleHeatmap}>
-          <FaFire style={{ marginRight: '5px' }} />
-          {isHeatmap ? 'Normaal' : 'Heatmap'}
-        </button>
+        <ViewModeSelector
+          selectedViewMode={selectedViewMode}
+          setSelectedViewMode={setSelectedViewMode}
+        />
         <button className="nav-button" onClick={onNextMonth}>
           <FaChevronRight size={24} />
         </button>

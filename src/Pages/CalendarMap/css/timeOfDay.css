@@ -11,3 +11,16 @@
 	font-weight: bold; /* Make text bold */
   }
   
+  /* ./css/timeOfDay.css */
+
+.time-of-day-box {
+	width: 100%;
+	border-radius: 5px;
+	color: #fff;
+	padding: 8px 5px; /* Increased padding for larger boxes */
+	margin-bottom: 5px; /* Added margin between boxes */
+	text-align: left; /* Align text to the left */
+	font-size: 14px; /* Slightly increased font size */
+	font-weight: bold; /* Make text bold */
+  }
+  
