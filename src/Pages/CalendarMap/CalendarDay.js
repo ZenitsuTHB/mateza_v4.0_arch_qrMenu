@@ -25,7 +25,7 @@ const CalendarDay = ({
 
   reservations.forEach((reservation) => {
     if (
-      selectedShift === 'Volledige Dag' ||
+      selectedShift === 'Hele Dag' ||
       (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
       (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
       (selectedShift === 'Avond' && reservation.timeSlot === 2)
@@ -82,7 +82,7 @@ const CalendarDay = ({
         </div>
       );
     }
-  } else if (selectedViewMode === 'Bezettingsgraad') {
+  } else if (selectedViewMode === 'Bezetting') {
     let occupancyRate = 0;
     if (maxCapacity > 0) {
       occupancyRate = (totalGuests / maxCapacity) * 100;
@@ -95,19 +95,24 @@ const CalendarDay = ({
     );
   }
 
-  const opacity = isHovered
-    ? 1
-    : fadeOut
-    ? 0.5
-    : isPastDate && !isHovered
-    ? 0.5
-    : 1;
+  const opacity =
+    isHovered
+      ? 1
+      : fadeOut
+      ? 0.5
+      : selectedViewMode === 'Heatmap'
+      ? 1
+      : isPastDate && !isHovered
+      ? 0.5
+      : 1;
 
   return (
     <div
       className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${
         isPastDate ? 'calendar-day--past' : ''
-      } ${isToday ? 'calendar-day--today' : ''} ${selectedViewMode !== 'Normaal' ? 'special-mode' : ''}`}
+      } ${isToday ? 'calendar-day--today' : ''} ${
+        selectedViewMode !== 'Normaal' ? 'special-mode' : ''
+      }`}
       onClick={handleClick}
       style={{
         backgroundColor,
@@ -123,7 +128,7 @@ const CalendarDay = ({
           {totalGuestsByTimeSlot.map((totalGuests, index) => {
             if (totalGuests > 0) {
               if (
-                selectedShift === 'Volledige Dag' ||
+                selectedShift === 'Hele Dag' ||
                 (selectedShift === 'Ochtend' && index === 0) ||
                 (selectedShift === 'Middag' && index === 1) ||
                 (selectedShift === 'Avond' && index === 2)

@@ -46,7 +46,7 @@ const CalendarGrid = ({
 
   // Calculate max occupation for heatmap
   let maxOccupation = 0;
-  if (selectedViewMode === 'Heatmap' || selectedViewMode === 'Bezettingsgraad') {
+  if (selectedViewMode === 'Heatmap' || selectedViewMode === 'Bezetting') {
     const occupations = dates.map(({ date }) => {
       const dateString = date.toISOString().split('T')[0];
       const reservations = reservationsByDate[dateString] || [];
@@ -54,7 +54,7 @@ const CalendarGrid = ({
 
       reservations.forEach((res) => {
         if (
-          selectedShift === 'Volledige Dag' ||
+          selectedShift === 'Hele Dag' ||
           (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
           (selectedShift === 'Middag' && res.timeSlot === 1) ||
           (selectedShift === 'Avond' && res.timeSlot === 2)

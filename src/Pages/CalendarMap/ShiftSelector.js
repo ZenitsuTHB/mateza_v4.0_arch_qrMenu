@@ -12,7 +12,7 @@ const ShiftSelector = ({
   const shiftButtonRef = useRef(null);
   const shiftOptionsRef = useRef(null);
 
-  const shifts = ['Volledige Dag', 'Ochtend', 'Middag', 'Avond'];
+  const shifts = ['Hele Dag', 'Ochtend', 'Middag', 'Avond'];
 
   // Handle Click Outside for Shift Options
   useEffect(() => {

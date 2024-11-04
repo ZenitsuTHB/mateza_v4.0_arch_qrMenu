@@ -6,12 +6,13 @@ import CalendarGrid from './CalendarGrid';
 import ReservationDetailsModal from './ReservationDetailsModal';
 import reservations from './reservationData';
 import './css/calendarComponent.css';
+import { withHeader } from '../../Components/Structural/Header';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
-  const [selectedShift, setSelectedShift] = useState('Volledige Dag'); // Default to 'Volledige Dag'
+  const [selectedShift, setSelectedShift] = useState('Hele Dag'); // Default to 'Hele Dag'
   const [selectedViewMode, setSelectedViewMode] = useState('Normaal'); // 'Normaal', 'Heatmap', 'Bezettingsgraad'
 
   useEffect(() => {
@@ -77,4 +78,4 @@ const CalendarComponent = () => {
   );
 };
 
-export default CalendarComponent;
+export default withHeader(CalendarComponent);
