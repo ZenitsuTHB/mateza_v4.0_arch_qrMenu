@@ -114,7 +114,6 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
-    secondaryTopBar: accountSecondaryTopBar,
   },
   {
     path: '/account/language',

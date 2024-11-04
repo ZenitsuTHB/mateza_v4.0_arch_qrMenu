@@ -6,6 +6,7 @@ import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './ReservationStepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
+import { withHeader } from '../../Components/Structural/Header';
 
 const NewReservation = () => {
   const api = useApi();
@@ -123,7 +124,7 @@ const NewReservation = () => {
 
   return (
     <div className="profile-page">
-      <h2 className="account-manage-title">Reserveren</h2>
+      <h2 className="account-manage-title">Admin Reservaties</h2>
       <div className="account-manage-container">
         <ReservationStepOne
           formData={formData}
@@ -151,4 +152,4 @@ const NewReservation = () => {
   );
 };
 
-export default NewReservation;
+export default withHeader(NewReservation);
