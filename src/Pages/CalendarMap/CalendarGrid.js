@@ -19,11 +19,11 @@ const CalendarGrid = ({
   const [maxPrediction, setMaxPrediction] = useState(0);
 
   // Parameters for prediction algorithm weights
-  const WEIGHT_MEDIAN14 = 0.5; // Weight for 14-day median (including zeros)
-  const WEIGHT_MEDIAN20 = 0.5; // Weight for 20-day median (excluding zeros)
-  const WEIGHT_AVERAGE90 = 1; // Weight for 90-day average of day of week
+  const WEIGHT_MEDIAN14 = 1; // Weight for 14-day median (including zeros)
+  const WEIGHT_MEDIAN20 = 0.9; // Weight for 20-day median (excluding zeros)
+  const WEIGHT_AVERAGE90 = 1.7; // Weight for 90-day average of day of week
   const WEIGHT_CURRENT_RESERVATIONS = 0.2; // Weight for current reservations (divided by 5)
-  const MULTIPLIER_BASE_PREDICTION = 0.8; // Multiplier for base prediction (sum of medians and average)
+  const MULTIPLIER_BASE_PREDICTION = 1; // Multiplier for base prediction (sum of medians and average)
 
   const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
