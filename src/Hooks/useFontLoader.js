@@ -1,5 +1,3 @@
-// src/hooks/useDynamicFontLoader.js
-
 import { useEffect } from 'react';
 
 const useDynamicFontLoader = (fontsState) => {
@@ -7,7 +5,7 @@ const useDynamicFontLoader = (fontsState) => {
     const fontWeightMap = {};
 
     Object.values(fontsState)
-      .filter(({ font }) => font)
+      .filter(item => item && item.font)
       .forEach(({ font, weight }) => {
         if (!fontWeightMap[font]) {
           fontWeightMap[font] = new Set();
@@ -15,13 +13,19 @@ const useDynamicFontLoader = (fontsState) => {
         fontWeightMap[font].add(weight);
       });
 
-    const fontsToImport = Object.entries(fontWeightMap).map(([font, weightsSet]) => {
-      const weightsArray = Array.from(weightsSet);
-      return `family=${encodeURIComponent(font)}:wght@${weightsArray.join(';')}`;
-    });
+    const fontsToImport = Object.entries(fontWeightMap).map(
+      ([font, weightsSet]) => {
+        const weightsArray = Array.from(weightsSet);
+        return `family=${encodeURIComponent(font)}:wght@${weightsArray.join(
+          ';'
+        )}`;
+      }
+    );
 
     if (fontsToImport.length > 0) {
-      const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsToImport.join('&')}&display=swap`;
+      const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsToImport.join(
+        '&'
+      )}&display=swap`;
 
       let linkElement = document.getElementById('dynamic-fonts-import');
       if (!linkElement) {
