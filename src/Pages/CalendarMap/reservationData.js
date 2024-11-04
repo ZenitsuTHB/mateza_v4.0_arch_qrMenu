@@ -13,6 +13,12 @@ const firstNames = [
 	'Martens', 'Laurens', 'Van Dijk', 'Van den Berg', 'De Groot'
   ];
   
+  const extraOptions = [
+	'Vegetarisch menu', 'Extra broodjes', 'Babystoel nodig',
+	'Geen extra', 'Geen extra', 'Geen extra',
+	'Geen extra', 'Geen extra', 'Geen extra', null
+  ];
+  
   const reservations = [];
   
   const now = new Date();
@@ -52,6 +58,12 @@ const firstNames = [
 	const minute = Math.random() < 0.5 ? '00' : '30';
 	const tijdstip = `${hour.toString().padStart(2, '0')}:${minute}`;
   
+	let extra = extraOptions[Math.floor(Math.random() * extraOptions.length)];
+  
+	if (extra === 'Geen extra') {
+	  extra = null;
+	}
+  
 	reservations.push({
 	  id: i,
 	  date: formattedDate,
@@ -60,6 +72,7 @@ const firstNames = [
 	  email,
 	  phone,
 	  aantalGasten,
+	  extra,
 	  timeSlot: timeSlot, // 0: Morning, 1: Afternoon, 2: Evening
 	});
   }

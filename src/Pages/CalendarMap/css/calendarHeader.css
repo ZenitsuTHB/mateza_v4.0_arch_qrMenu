@@ -1,4 +1,4 @@
-/* ./css/calendar-header.css */
+/* ./css/calendarHeader.css */
 
 .calendar-header {
 	display: flex;
@@ -15,8 +15,15 @@
 	flex-grow: 1;
   }
   
-  .calendar-header .standard-button {
-	margin: 0 5px;
+  .calendar-header .nav-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #000;
+  }
+  
+  .calendar-header .nav-button:hover {
+	color: var(--color-blue);
   }
   
   .calendar-header .header-buttons {
@@ -25,6 +32,12 @@
   }
   
   .calendar-header .heatmap-button {
+	margin-right: 5px;
+	display: flex;
+	align-items: center;
+  }
+  
+  .calendar-header .heatmap-button .fa-icon {
 	margin-right: 5px;
   }
   

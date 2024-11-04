@@ -21,7 +21,9 @@ const CalendarDay = ({
     totalGuestsByTimeSlot[reservation.timeSlot] += reservation.aantalGasten;
   });
 
-  const isPastDate = date < new Date();
+  const today = new Date();
+  const isToday = date.toDateString() === today.toDateString();
+  const isPastDate = date < today;
 
   const handleClick = () => {
     if (reservations.length > 0) {
@@ -41,7 +43,7 @@ const CalendarDay = ({
 
   return (
     <div
-      className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${isPastDate ? 'calendar-day--past' : ''}`}
+      className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${isPastDate ? 'calendar-day--past' : ''} ${isToday ? 'calendar-day--today' : ''}`}
       onClick={handleClick}
       style={heatmapStyle}
     >

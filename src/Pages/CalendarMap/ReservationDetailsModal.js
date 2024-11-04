@@ -1,20 +1,23 @@
 // ReservationDetailsModal.js
 
 import React, { useState } from 'react';
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard/index.js'; // Adjust the import path as needed
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Adjust the import path as needed
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
-import './css/reservationsDetailModal.css';
+import './css/reservationDetailsModal.css';
+import { format } from 'date-fns';
+import { nl } from 'date-fns/locale';
 
 const ReservationDetailsModal = ({ reservationsData, onClose }) => {
   const { date, reservations } = reservationsData;
+  const formattedDate = format(new Date(date), 'd MMMM yyyy', { locale: nl });
 
   return (
     <ModalWithoutTabs
       onClose={onClose}
       content={
         <div className="reservation-modal-content">
-          <h2>Reserveringen voor {date}</h2>
+          <h2>Reservaties - {formattedDate}</h2>
           <div className="reservation-table">
             {reservations.map((reservation, index) => (
               <ReservationRow key={index} reservation={reservation} />
@@ -33,7 +36,9 @@ const ReservationRow = ({ reservation }) => {
     <div className="reservation-row">
       <div className="reservation-main-info" onClick={() => setIsExpanded(!isExpanded)}>
         <FaChevronDown className={`arrow-icon ${isExpanded ? 'expanded' : ''}`} />
-        <strong>{reservation.aantalGasten} gasten - {reservation.time} - {reservation.fullName}</strong>
+        <span>
+          <strong>{reservation.aantalGasten} gasten - {reservation.time}</strong> - {reservation.fullName}
+        </span>
       </div>
       <AnimatePresence>
         {isExpanded && (
@@ -46,6 +51,11 @@ const ReservationRow = ({ reservation }) => {
           >
             <div>Email: {reservation.email}</div>
             <div>Telefoon: {reservation.phone}</div>
+            {reservation.extra && <div>Extra: {reservation.extra}</div>}
+            <div className="reservation-buttons">
+              <button className="standard-button red">Verwijderen</button>
+              <button className="standard-button blue">Bewerken</button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
