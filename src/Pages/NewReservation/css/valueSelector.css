@@ -37,6 +37,7 @@
   
   .profile-page .slider {
 	flex: 1;
+	appearance: none;
 	-webkit-appearance: none;
 	height: 5px;
 	background: #ddd;
