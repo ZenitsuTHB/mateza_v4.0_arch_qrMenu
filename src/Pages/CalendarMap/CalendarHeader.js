@@ -32,11 +32,19 @@ const CalendarHeader = ({
   const month = monthNames[currentDate.getMonth()];
   const year = currentDate.getFullYear();
 
+  // Determine if we are at the current month and in 'Voorspelling' view
+  const today = new Date();
+  const isCurrentMonth =
+    currentDate.getFullYear() === today.getFullYear() &&
+    currentDate.getMonth() === today.getMonth();
+
   return (
     <div className="calendar-header">
-      <button className="nav-button" onClick={onPrevMonth}>
-        <FaChevronLeft size={24} />
-      </button>
+      {!(selectedViewMode === 'Voorspelling' && isCurrentMonth) && (
+        <button className="nav-button" onClick={onPrevMonth}>
+          <FaChevronLeft size={24} />
+        </button>
+      )}
       <h2>{month} {year}</h2>
       <div className="header-buttons">
         <ShiftSelector

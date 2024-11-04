@@ -18,6 +18,13 @@ const CalendarGrid = ({
   const [maxOccupation, setMaxOccupation] = useState(0);
   const [maxPrediction, setMaxPrediction] = useState(0);
 
+  // Parameters for prediction algorithm weights
+  const WEIGHT_MEDIAN14 = 1; // Weight for 14-day median (including zeros)
+  const WEIGHT_MEDIAN20 = 1; // Weight for 20-day median (excluding zeros)
+  const WEIGHT_AVERAGE90 = 1; // Weight for 90-day average of day of week
+  const WEIGHT_CURRENT_RESERVATIONS = 0.2; // Weight for current reservations (divided by 5)
+  const MULTIPLIER_BASE_PREDICTION = 0.8; // Multiplier for base prediction (sum of medians and average)
+
   const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const numDays = endDate.getDate();
@@ -140,6 +147,14 @@ const CalendarGrid = ({
     // Start predictions from tomorrow
     const startIndex = datesArray.findIndex((date) => date > today);
 
+    // If no future dates are found, return empty predictions
+    if (startIndex === -1) {
+      return predictions;
+    }
+
+    // Use a copy of historicalData to avoid mutating the original during prediction
+    const extendedHistoricalData = [...historicalData];
+
     for (let i = startIndex; i < datesArray.length; i++) {
       const currentDate = datesArray[i];
       const currentDateStr = currentDate.toISOString().split('T')[0];
@@ -147,11 +162,11 @@ const CalendarGrid = ({
       const currentTotalGuests = currentReservations.reduce((sum, res) => sum + res.aantalGasten, 0);
 
       // Collect data for medians and average
-      const past14Days = historicalData.slice(Math.max(0, i - 14), i);
-      const past20Days = historicalData
+      const past14Days = extendedHistoricalData.slice(Math.max(0, i - 14), i);
+      const past20Days = extendedHistoricalData
         .slice(Math.max(0, i - 20), i)
         .filter((data) => data.totalGuests > 0);
-      const past90DaysSameDay = historicalData.filter((data) => {
+      const past90DaysSameDay = extendedHistoricalData.filter((data) => {
         return (
           data.date.getDay() === currentDate.getDay() &&
           data.date < currentDate &&
@@ -183,10 +198,16 @@ const CalendarGrid = ({
       const average90 = average90Values.length ? mean(average90Values) : 0;
 
       // Adjust if no data is available
-      const factors = [median14, median20, average90].filter((v) => v !== 0);
+      const factors = [];
+      if (median14) factors.push(median14 * WEIGHT_MEDIAN14);
+      if (median20) factors.push(median20 * WEIGHT_MEDIAN20);
+      if (average90) factors.push(average90 * WEIGHT_AVERAGE90);
+
       const factorsCount = factors.length || 1;
-      const basePrediction = (factors.reduce((a, b) => a + b, 0) / factorsCount) * 0.8;
-      const adjustedCurrentReservations = (currentTotalGuests / 5) * 0.2;
+      const basePrediction =
+        (factors.reduce((a, b) => a + b, 0) / factorsCount) * MULTIPLIER_BASE_PREDICTION;
+
+      const adjustedCurrentReservations = (currentTotalGuests / 5) * WEIGHT_CURRENT_RESERVATIONS;
 
       let prediction = basePrediction + adjustedCurrentReservations;
 
@@ -208,7 +229,7 @@ const CalendarGrid = ({
       predictions[currentDateStr] = prediction;
 
       // Update historical data for future dates
-      historicalData.push({ date: currentDate, totalGuests: prediction });
+      extendedHistoricalData.push({ date: currentDate, totalGuests: prediction });
     }
 
     return predictions;
