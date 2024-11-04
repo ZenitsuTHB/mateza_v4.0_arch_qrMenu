@@ -174,7 +174,7 @@ const routesConfig = [
   {
     path: '/giftcard/editor',
     element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
-    label: 'Cadeaubonnen Ontwerpenr',
+    label: 'Cadeaubonnen Ontwerpen',
     icon: FaPencilAlt,
     isMenu: false,
     isMobile: false,
