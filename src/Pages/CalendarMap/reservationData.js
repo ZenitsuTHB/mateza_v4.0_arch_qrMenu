@@ -1,6 +1,6 @@
 // reservationData.js
 
-export const maxCapacity = 25; // Define the maximum capacity
+export const maxCapacity = 50; // Define the maximum capacity
 
 const firstNames = [
   'Jan', 'Maria', 'Peter', 'Linda', 'Mark',
