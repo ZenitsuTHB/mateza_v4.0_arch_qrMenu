@@ -43,6 +43,12 @@ const CalendarComponent = () => {
         date: dateString,
         reservations: reservationsByDate[dateString],
       });
+    } else {
+      // Optionally, handle dates with no reservations
+      setSelectedDateReservations({
+        date: dateString,
+        reservations: [],
+      });
     }
   };
 

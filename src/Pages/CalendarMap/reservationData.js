@@ -25,6 +25,35 @@ const reservations = [];
 
 const now = new Date();
 
+// Helper function to get a weighted day offset
+function getWeightedDayOffset() {
+  const pastDays = 30;
+  const futureDays = 30;
+  
+  const pastWeight = pastDays; // Each past day has weight 1
+  const futureWeightTotal = 15.5; // Sum of weights for future days
+  const totalWeight = pastWeight + futureWeightTotal; // 45.5
+
+  const rand = Math.random() * totalWeight;
+
+  if (rand < pastWeight) {
+    // Past date: Uniform distribution
+    return -pastDays + Math.floor(Math.random() * pastDays);
+  } else {
+    // Future date: Weighted distribution
+    const futureRand = rand - pastWeight;
+    let cumulative = 0;
+    for (let d = 1; d <= futureDays; d++) {
+      const weight = (31 - d) / 30; // Linearly decreasing weight
+      cumulative += weight;
+      if (futureRand < cumulative) {
+        return d;
+      }
+    }
+    return futureDays; // Fallback to the last day
+  }
+}
+
 for (let i = 1; i <= 500; i++) {
   const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -33,9 +62,10 @@ for (let i = 1; i <= 500; i++) {
   const phone = `06${Math.floor(10000000 + Math.random() * 90000000)}`;
   const aantalGasten = Math.floor(Math.random() * 4) + 2;
 
-  // Random date within +/- 1 month from current date
+  // Get weighted day offset
+  const daysOffset = getWeightedDayOffset();
+
   const reservationDate = new Date(now);
-  const daysOffset = Math.floor(Math.random() * 60) - 30;
   reservationDate.setDate(now.getDate() + daysOffset);
 
   const year = reservationDate.getFullYear();

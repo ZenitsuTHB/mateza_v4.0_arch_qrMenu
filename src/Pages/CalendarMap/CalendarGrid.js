@@ -18,12 +18,12 @@ const CalendarGrid = ({
   const [maxOccupation, setMaxOccupation] = useState(0);
   const [maxPrediction, setMaxPrediction] = useState(0);
 
-  // Parameters for prediction algorithm weights
-  const WEIGHT_MEDIAN14 = 1; // Weight for 14-day median (including zeros)
-  const WEIGHT_MEDIAN20 = 0.9; // Weight for 20-day median (excluding zeros)
-  const WEIGHT_AVERAGE90 = 1.66; // Weight for 90-day average of day of week
-  const WEIGHT_CURRENT_RESERVATIONS = 0.2; // Weight for current reservations (divided by 5)
-  const MULTIPLIER_BASE_PREDICTION = 1; // Multiplier for base prediction (sum of medians and average)
+  // Removed obsolete weight parameters
+  // const WEIGHT_MEDIAN14 = 1;
+  // const WEIGHT_MEDIAN20 = 1;
+  // const WEIGHT_AVERAGE90 = 1;
+  // const WEIGHT_CURRENT_RESERVATIONS = 0.2;
+  // const MULTIPLIER_BASE_PREDICTION = 0.8;
 
   const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -82,12 +82,11 @@ const CalendarGrid = ({
       });
       setMaxOccupation(Math.max(...occupations));
 
-      // For Voorspelling, calculate predictions
+      // For Voorspelling (Prediction), calculate predictions
       if (selectedViewMode === 'Voorspelling') {
         const predictions = calculatePredictions(
           dates.map((d) => d.date),
-          reservationsByDate,
-          selectedShift
+          reservationsByDate
         );
         setPredictionsByDate(predictions);
         setMaxPrediction(Math.max(...Object.values(predictions)));
@@ -115,122 +114,75 @@ const CalendarGrid = ({
     visible: { opacity: 1 },
   };
 
-  // Function to calculate predictions
-  function calculatePredictions(datesArray, reservationsByDate, selectedShift) {
+  // Function to calculate predictions based on average guests per day of week
+  function calculatePredictions(datesArray, reservationsByDate) {
     const predictions = {};
     const today = new Date();
+    const oneDayMs = 24 * 60 * 60 * 1000;
 
-    // Helper function to get reservations for a date
-    const getReservationsForDate = (dateStr) => {
-      const reservations = reservationsByDate[dateStr] || [];
-      return reservations.filter((res) => {
-        return (
-          selectedShift === 'Hele Dag' ||
-          (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
-          (selectedShift === 'Middag' && res.timeSlot === 1) ||
-          (selectedShift === 'Avond' && res.timeSlot === 2)
-        );
-      });
+    // Step 1: Calculate average guests per day of the week from past data
+    const dayOfWeekGuests = {
+      1: [], // Monday
+      2: [], // Tuesday
+      3: [], // Wednesday
+      4: [], // Thursday
+      5: [], // Friday
+      6: [], // Saturday
+      0: [], // Sunday
     };
 
-    // Prepare historical data
-    const historicalData = [];
-
-    // Build historical data for past dates
     datesArray.forEach((date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      const reservations = getReservationsForDate(dateStr);
-      const totalGuests = reservations.reduce((sum, res) => sum + res.aantalGasten, 0);
-      historicalData.push({ date, totalGuests });
+      if (date < today) {
+        const day = date.getDay(); // 0 (Sunday) to 6 (Saturday)
+        const dateStr = date.toISOString().split('T')[0];
+        const reservations = reservationsByDate[dateStr] || [];
+        const totalGuests = reservations.reduce((sum, res) => sum + res.aantalGasten, 0);
+        dayOfWeekGuests[day].push(totalGuests);
+      }
     });
 
-    // Start predictions from tomorrow
-    const startIndex = datesArray.findIndex((date) => date > today);
-
-    // If no future dates are found, return empty predictions
-    if (startIndex === -1) {
-      return predictions;
+    // Compute average guests per day of the week
+    const averageGuestsPerDay = {};
+    for (let day = 0; day < 7; day++) {
+      const guests = dayOfWeekGuests[day];
+      const total = guests.reduce((sum, val) => sum + val, 0);
+      const average = guests.length ? total / guests.length : 0;
+      averageGuestsPerDay[day] = average;
     }
 
-    // Use a copy of historicalData to avoid mutating the original during prediction
-    const extendedHistoricalData = [...historicalData];
+    // Step 2: Predict for future dates
+    datesArray.forEach((date) => {
+      if (date > today) {
+        const day = date.getDay();
+        const dateStr = date.toISOString().split('T')[0];
+        const reservations = reservationsByDate[dateStr] || [];
+        const currentGuests = reservations.reduce((sum, res) => sum + res.aantalGasten, 0);
 
-    for (let i = startIndex; i < datesArray.length; i++) {
-      const currentDate = datesArray[i];
-      const currentDateStr = currentDate.toISOString().split('T')[0];
-      const currentReservations = getReservationsForDate(currentDateStr);
-      const currentTotalGuests = currentReservations.reduce((sum, res) => sum + res.aantalGasten, 0);
+        // Calculate days in the future
+        const diffTime = date - today;
+        const daysInFuture = Math.ceil(diffTime / oneDayMs);
 
-      // Collect data for medians and average
-      const past14Days = extendedHistoricalData.slice(Math.max(0, i - 14), i);
-      const past20Days = extendedHistoricalData
-        .slice(Math.max(0, i - 20), i)
-        .filter((data) => data.totalGuests > 0);
-      const past90DaysSameDay = extendedHistoricalData.filter((data) => {
-        return (
-          data.date.getDay() === currentDate.getDay() &&
-          data.date < currentDate &&
-          (currentDate - data.date) / (1000 * 60 * 60 * 24) <= 90
-        );
-      });
+        // Define a decay factor (e.g., the farther in the future, the less influence current reservations have)
+        // Here, we'll use a linear decay where influence decreases by 1% per day in the future, capping at 50%
+        const maxDecayFactor = 0.5;
+        const decayFactor = Math.max(maxDecayFactor, 1 - 0.01 * daysInFuture);
 
-      // Calculate medians and average
-      const median = (values) => {
-        if (values.length === 0) return 0;
-        values.sort((a, b) => a - b);
-        const half = Math.floor(values.length / 2);
-        if (values.length % 2) return values[half];
-        return (values[half - 1] + values[half]) / 2.0;
-      };
+        // Prediction is average guests for the day of the week plus adjusted current reservations
+        let prediction = averageGuestsPerDay[day] + currentGuests * decayFactor;
 
-      const mean = (values) => {
-        if (values.length === 0) return 0;
-        return values.reduce((a, b) => a + b, 0) / values.length;
-      };
+        // Ensure prediction is at least the current reservations
+        prediction = Math.max(prediction, currentGuests);
 
-      const median14Values = past14Days.map((d) => d.totalGuests);
-      const median14 = median14Values.length ? median(median14Values) : 0;
+        // Cap prediction at maxCapacity
+        prediction = Math.min(prediction, maxCapacity);
 
-      const median20Values = past20Days.map((d) => d.totalGuests);
-      const median20 = median20Values.length ? median(median20Values) : 0;
+        // Round prediction to the nearest integer
+        prediction = Math.round(prediction);
 
-      const average90Values = past90DaysSameDay.map((d) => d.totalGuests);
-      const average90 = average90Values.length ? mean(average90Values) : 0;
-
-      // Adjust if no data is available
-      const factors = [];
-      if (median14) factors.push(median14 * WEIGHT_MEDIAN14);
-      if (median20) factors.push(median20 * WEIGHT_MEDIAN20);
-      if (average90) factors.push(average90 * WEIGHT_AVERAGE90);
-
-      const factorsCount = factors.length || 1;
-      const basePrediction =
-        (factors.reduce((a, b) => a + b, 0) / factorsCount) * MULTIPLIER_BASE_PREDICTION;
-
-      const adjustedCurrentReservations = (currentTotalGuests / 5) * WEIGHT_CURRENT_RESERVATIONS;
-
-      let prediction = basePrediction + adjustedCurrentReservations;
-
-      // Use max between prediction and current reservations
-      if (prediction < currentTotalGuests) {
-        prediction = currentTotalGuests;
+        // Assign prediction
+        predictions[dateStr] = prediction;
       }
-
-      // Cap prediction at maxCapacity
-      if (prediction > maxCapacity) {
-        prediction = maxCapacity;
-      }
-
-      // Round prediction
-      if (prediction < 1) {
-        prediction = 0;
-      }
-
-      predictions[currentDateStr] = prediction;
-
-      // Update historical data for future dates
-      extendedHistoricalData.push({ date: currentDate, totalGuests: prediction });
-    }
+    });
 
     return predictions;
   }
@@ -245,7 +197,9 @@ const CalendarGrid = ({
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
-          <div key={index}>{day}</div>
+          <div key={index} className="calendar-grid-header-day">
+            {day}
+          </div>
         ))}
       </div>
       <div className="calendar-grid-body">
