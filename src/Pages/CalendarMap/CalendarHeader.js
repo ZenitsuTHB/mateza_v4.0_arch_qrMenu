@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './css/calendarHeader.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaChartBar } from 'react-icons/fa';
 import ShiftSelector from './ShiftSelector';
 import ViewModeSelector from './ViewModeSelector';
 
@@ -14,6 +14,8 @@ const CalendarHeader = ({
   setSelectedShift,
   selectedViewMode,
   setSelectedViewMode,
+  isChartView,
+  toggleChartView,
 }) => {
   const monthNames = [
     'januari',
@@ -32,18 +34,18 @@ const CalendarHeader = ({
   const month = monthNames[currentDate.getMonth()];
   const year = currentDate.getFullYear();
 
-  // Determine if we are at the current month and in 'Voorspelling' view
-  const today = new Date();
-  const isCurrentMonth =
-    currentDate.getFullYear() === today.getFullYear() &&
-    currentDate.getMonth() === today.getMonth();
+  const isAtCurrentMonth =
+    currentDate.getFullYear() === new Date().getFullYear() &&
+    currentDate.getMonth() === new Date().getMonth();
 
   return (
     <div className="calendar-header">
-      {!(selectedViewMode === 'Voorspelling' && isCurrentMonth) && (
+      {!(selectedViewMode === 'Voorspelling' && isAtCurrentMonth) ? (
         <button className="nav-button" onClick={onPrevMonth}>
           <FaChevronLeft size={24} />
         </button>
+      ) : (
+        <div style={{ width: '24px' }}></div>
       )}
       <h2>{month} {year}</h2>
       <div className="header-buttons">
@@ -51,6 +53,12 @@ const CalendarHeader = ({
           selectedShift={selectedShift}
           setSelectedShift={setSelectedShift}
         />
+        <button
+          onClick={toggleChartView}
+          className="standard-button blue chart-toggle-button"
+        >
+          <FaChartBar size={16} />
+        </button>
         <ViewModeSelector
           selectedViewMode={selectedViewMode}
           setSelectedViewMode={setSelectedViewMode}

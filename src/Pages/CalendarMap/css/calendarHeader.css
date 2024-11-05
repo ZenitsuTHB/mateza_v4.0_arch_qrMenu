@@ -4,7 +4,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	width: 100%;
 	max-width: 800px;
   }
@@ -29,5 +29,12 @@
   .calendar-header .header-buttons {
 	display: flex;
 	align-items: center;
+  }
+  
+  .chart-toggle-button {
+	margin-right: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
   }
   

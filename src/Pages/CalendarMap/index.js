@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
+import BarChartView from './BarChartView'; // Import the new BarChartView component
 import ReservationDetailsModal from './ReservationDetailsModal';
 import reservations, { maxCapacity } from './reservationData';
 import './css/calendarComponent.css';
@@ -12,8 +13,10 @@ const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
-  const [selectedShift, setSelectedShift] = useState('Hele Dag'); // Changed from 'Volledige Dag' to 'Hele Dag'
-  const [selectedViewMode, setSelectedViewMode] = useState('Normaal'); // 'Normaal', 'Heatmap', 'Bezetting', 'Voorspelling'
+  const [selectedShift, setSelectedShift] = useState('Hele Dag');
+  const [selectedViewMode, setSelectedViewMode] = useState('Normaal');
+  const [isChartView, setIsChartView] = useState(false); // State to toggle between calendar and chart view
+  const [predictionsByDate, setPredictionsByDate] = useState({}); // State for predictions
 
   useEffect(() => {
     // Organize reservations by date
@@ -56,6 +59,10 @@ const CalendarComponent = () => {
     setSelectedDateReservations(null);
   };
 
+  const toggleChartView = () => {
+    setIsChartView(!isChartView);
+  };
+
   return (
     <div className="calendar-component">
       <CalendarHeader
@@ -66,14 +73,30 @@ const CalendarComponent = () => {
         setSelectedShift={setSelectedShift}
         selectedViewMode={selectedViewMode}
         setSelectedViewMode={setSelectedViewMode}
+        isChartView={isChartView}
+        toggleChartView={toggleChartView} // Pass the toggle function to the header
       />
-      <CalendarGrid
-        currentDate={currentDate}
-        reservationsByDate={reservationsByDate}
-        onDateClick={handleDateClick}
-        selectedShift={selectedShift}
-        selectedViewMode={selectedViewMode}
-      />
+      {isChartView ? (
+        <BarChartView
+          currentDate={currentDate}
+          reservationsByDate={reservationsByDate}
+          selectedShift={selectedShift}
+          selectedViewMode={selectedViewMode}
+          maxCapacity={maxCapacity}
+          predictionsByDate={predictionsByDate}
+          setPredictionsByDate={setPredictionsByDate} // Pass predictions state
+        />
+      ) : (
+        <CalendarGrid
+          currentDate={currentDate}
+          reservationsByDate={reservationsByDate}
+          onDateClick={handleDateClick}
+          selectedShift={selectedShift}
+          selectedViewMode={selectedViewMode}
+          predictionsByDate={predictionsByDate}
+          setPredictionsByDate={setPredictionsByDate} // Pass predictions state
+        />
+      )}
       {selectedDateReservations && (
         <ReservationDetailsModal
           reservationsData={selectedDateReservations}
