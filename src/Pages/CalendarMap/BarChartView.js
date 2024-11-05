@@ -30,8 +30,8 @@ const BarChartView = ({
     const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
     const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
 
-    if (selectedViewMode === 'Normaal' && selectedShift === 'Hele Dag') {
-      // Stacked bar chart for 'Normaal' view with 'Hele Dag' shift
+    if (selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag') {
+      // Stacked bar chart for 'Algemeen' view with 'Hele Dag' shift
       const dataByTimeSlot = [[], [], []]; // [Ochtend, Middag, Avond]
 
       for (let i = 1; i <= numDays; i++) {
@@ -88,8 +88,8 @@ const BarChartView = ({
           });
         }
 
-        if (selectedViewMode === 'Bezetting') {
-          // Calculate occupancy percentage
+        if (selectedViewMode === 'Bezettingspercentage') {
+          // Calculate occupancy Bezettingspercentage
           const occupancyRate = (totalGuests / maxCapacity) * 100;
           data.push(parseFloat(occupancyRate.toFixed(1)));
         } else {
@@ -99,9 +99,9 @@ const BarChartView = ({
 
       // Determine background color based on selectedViewMode and selectedShift
       let backgroundColor = '';
-      if (selectedViewMode === 'Bezetting') {
+      if (selectedViewMode === 'Bezettingspercentage') {
         backgroundColor = '#28a745'; // Green
-      } else if (selectedViewMode === 'Heatmap') {
+      } else if (selectedViewMode === 'Bezettingsgraad') {
         if (selectedShift === 'Ochtend') {
           backgroundColor = '#182825';
         } else if (selectedShift === 'Middag') {
@@ -114,7 +114,7 @@ const BarChartView = ({
       } else if (selectedViewMode === 'Voorspelling') {
         backgroundColor = '#ff0000'; // Red for predictions
       } else {
-        // 'Normaal' view with specific shift
+        // 'Algemeen' view with specific shift
         if (selectedShift === 'Ochtend') {
           backgroundColor = '#182825';
         } else if (selectedShift === 'Middag') {
@@ -129,8 +129,8 @@ const BarChartView = ({
       datasets = [
         {
           label:
-            selectedViewMode === 'Bezetting'
-              ? 'Bezetting (%)'
+            selectedViewMode === 'Bezettingspercentage'
+              ? 'Bezettingsgraad (%)'
               : selectedViewMode === 'Voorspelling'
               ? 'Voorspelling Aantal Gasten'
               : 'Aantal Gasten',
@@ -168,7 +168,7 @@ const BarChartView = ({
       tooltip: {
         callbacks: {
           label: function (context) {
-            if (selectedViewMode === 'Bezetting') {
+            if (selectedViewMode === 'Bezettingspercentage') {
               return `${context.parsed.y}%`;
             } else {
               return `${context.parsed.y} gasten`;
@@ -180,19 +180,19 @@ const BarChartView = ({
     scales: {
       y: {
         beginAtZero: true,
-        max: selectedViewMode === 'Bezetting' ? 100 : undefined,
+        max: selectedViewMode === 'Bezettingspercentage' ? 100 : undefined,
         title: {
           display: true,
-          text: selectedViewMode === 'Bezetting' ? 'Bezetting (%)' : 'Aantal Gasten',
+          text: selectedViewMode === 'Bezettingspercentage' ? 'Bezettingsgraad (%)' : 'Aantal Gasten',
         },
-        stacked: selectedViewMode === 'Normaal' && selectedShift === 'Hele Dag',
+        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag',
       },
       x: {
         title: {
           display: true,
           text: 'Dag van de Maand',
         },
-        stacked: selectedViewMode === 'Normaal' && selectedShift === 'Hele Dag',
+        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag',
       },
     },
   };

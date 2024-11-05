@@ -14,7 +14,7 @@ const CalendarComponent = () => {
   const [reservationsByDate, setReservationsByDate] = useState({});
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
   const [selectedShift, setSelectedShift] = useState('Hele Dag');
-  const [selectedViewMode, setSelectedViewMode] = useState('Normaal');
+  const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
   const [predictionsByDate, setPredictionsByDate] = useState({});
 

@@ -52,7 +52,7 @@ const CalendarDay = ({
   let backgroundColor = '';
   let content = null;
 
-  if (selectedViewMode === 'Heatmap') {
+  if (selectedViewMode === 'Bezettingsgraad') {
     let heatmapIntensity = 0;
     if (maxOccupation > 0) {
       heatmapIntensity = totalGuests / maxOccupation;
@@ -84,7 +84,7 @@ const CalendarDay = ({
         </div>
       );
     }
-  } else if (selectedViewMode === 'Bezetting') {
+  } else if (selectedViewMode === 'Bezettingspercentage') {
     let occupancyRate = 0;
     if (maxCapacity > 0) {
       occupancyRate = (totalGuests / maxCapacity) * 100;
@@ -120,7 +120,7 @@ const CalendarDay = ({
       ? 1
       : fadeOut
       ? 0.5
-      : selectedViewMode === 'Heatmap' || selectedViewMode === 'Voorspelling'
+      : selectedViewMode === 'Bezettingsgraad' || selectedViewMode === 'Voorspelling'
       ? 1
       : isPastDate && !isHovered
       ? 0.5
@@ -131,7 +131,7 @@ const CalendarDay = ({
       className={`calendar-day ${currentMonth ? '' : 'calendar-day--disabled'} ${
         isPastDate ? 'calendar-day--past' : ''
       } ${isToday ? 'calendar-day--today' : ''} ${
-        selectedViewMode !== 'Normaal' ? 'special-mode' : ''
+        selectedViewMode !== 'Algemeen' ? 'special-mode' : ''
       }`}
       onClick={handleClick}
       style={{
@@ -143,7 +143,7 @@ const CalendarDay = ({
     >
       <div className="calendar-day-number">{date.getDate()}</div>
       {content}
-      {selectedViewMode === 'Normaal' && (
+      {selectedViewMode === 'Algemeen' && (
         <div className="time-of-day-boxes">
           {totalGuestsByTimeSlot.map((totalGuests, index) => {
             if (totalGuests > 0) {

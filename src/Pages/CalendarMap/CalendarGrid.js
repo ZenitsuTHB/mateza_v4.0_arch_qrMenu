@@ -47,11 +47,11 @@ const CalendarGrid = ({
     dates.push({ date, currentMonth: false });
   }
 
-  // Calculate max occupation for heatmap and prediction
+  // Calculate max occupation for Bezettingsgraad and prediction
   useEffect(() => {
     if (
-      selectedViewMode === 'Heatmap' ||
-      selectedViewMode === 'Bezetting' ||
+      selectedViewMode === 'Bezettingsgraad' ||
+      selectedViewMode === 'Bezettingspercentage' ||
       selectedViewMode === 'Voorspelling'
     ) {
       const occupations = dates.map(({ date }) => {
