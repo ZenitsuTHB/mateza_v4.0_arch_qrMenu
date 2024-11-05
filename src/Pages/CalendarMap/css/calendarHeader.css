@@ -36,5 +36,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 38px; /* Adjust to match other buttons */
   }
   

@@ -3,6 +3,7 @@
 .bar-chart-view {
 	width: 100%;
 	max-width: 800px;
+	height: 600px; /* Same height as calendar grid */
 	margin: 0 auto;
   }
   

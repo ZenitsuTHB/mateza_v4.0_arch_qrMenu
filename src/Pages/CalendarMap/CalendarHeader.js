@@ -47,18 +47,21 @@ const CalendarHeader = ({
       ) : (
         <div style={{ width: '24px' }}></div>
       )}
-      <h2>{month} {year}</h2>
+      <h2>
+        {month} {year}
+      </h2>
       <div className="header-buttons">
+        <button
+          onClick={toggleChartView}
+          className="standard-button blue chart-toggle-button"
+          title={isChartView ? 'Terug naar Kalender' : 'Bekijk Bar Chart'}
+        >
+          <FaChartBar size={16} />
+        </button>
         <ShiftSelector
           selectedShift={selectedShift}
           setSelectedShift={setSelectedShift}
         />
-        <button
-          onClick={toggleChartView}
-          className="standard-button blue chart-toggle-button"
-        >
-          <FaChartBar size={16} />
-        </button>
         <ViewModeSelector
           selectedViewMode={selectedViewMode}
           setSelectedViewMode={setSelectedViewMode}
