@@ -1,13 +1,13 @@
 /* src/components/css/walls.css */
 
-.walls-container {
+.table-plan-page .walls-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: 10px;
   }
   
-  .wall {
+  .table-plan-page .wall {
 	width: 100%;
 	height: 100%;
 	background-color: #8b4513; /* SaddleBrown color for walls */

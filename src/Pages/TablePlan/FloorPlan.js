@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
-import FloorPlanElement from './FloorPlanElement';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -98,14 +97,7 @@ const FloorPlan = () => {
     >
       <div id="floor-plan-container" className="floor-plan" ref={drop}>
         {/* Render all elements */}
-        {elements.map((el) => (
-          <FloorPlanElement
-            key={el.id}
-            element={el}
-            updateElement={updateElement}
-            removeElement={removeElement}
-          />
-        ))}
+       
       </div>
     </ResizableBox>
   );

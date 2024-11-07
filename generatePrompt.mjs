@@ -140,7 +140,20 @@ async function generatePrompt() {
     const fileContents = getFileContents(allFiles, selectedSubfolderPath);
 
     // Prepare the prompt content
-    const promptContent = `File Contents:\n${fileContents}\n\nDirectory Structure for "${selectedSubfolderPath}":\n\n${selectedDirectoryTree}\n\nList of Files:\n${allFiles.join('\n')}`;
+    let promptContent = `File Contents:\n${fileContents}\n\nDirectory Structure for "${selectedSubfolderPath}":\n\n${selectedDirectoryTree}\n\nList of Files:\n${allFiles.join('\n')}`;
+
+    // Determine the encapsulating class based on folder selection
+    const isPagesFolder = answers.selectedFolder.toLowerCase() === 'pages';
+    const encapsulatingClass = isPagesFolder ? '.component-name-page' : '.component-name-component';
+
+    // Append fixed instructions based on folder selection
+    if (isPagesFolder) {
+        promptContent += `\n\n**Instruction:**\n1. Please encapsulate the main component in index.js inside the \`${encapsulatingClass}\` class.\n2. Prefix all CSS classes with the \`${encapsulatingClass}\` class.\n\n**Examples:**\n\n*Encapsulation in index.js:*\n\`\`\`jsx\n<div className="profile-page">\n    <h2 className="account-manage-title">Admin Reservaties</h2>\n    <div className="account-manage-container">\n        {/* ... */}\n        onClose={() => setIsModalOpen(false)}\n    </div>\n</div>\n\`\`\`\n\n*Prefixed CSS Classes:*\n\`\`\`css\n.profile-page .account-manage-container {\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n    position: relative;\n    width: 100%;\n    max-width: 600px;\n    text-align: center;\n    background-color: white;\n}\n\n.profile-page .modal-title {\n    text-align: center;\n    width: 100%;\n    margin-top: 20px;\n    margin-bottom: 40px;\n}\n\`\`\``;
+    } else {
+        promptContent += `\n\n**Instruction:**\n1. Please encapsulate the main component in index.js inside the \`${encapsulatingClass}\` class.\n2. Prefix all CSS classes with the \`${encapsulatingClass}\` class.\n\n**Examples:**\n\n*Encapsulation in index.js:*\n\`\`\`jsx\n<div className="profile-component">\n    <h2 className="account-manage-title">Admin Reservaties</h2>\n    <div className="account-manage-container">\n        {/* ... */}\n        onClose={() => setIsModalOpen(false)}\n    </div>\n</div>\n\`\`\`\n\n*Prefixed CSS Classes:*\n\`\`\`css\n.component-name-component .account-manage-container {\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n    position: relative;\n    width: 100%;\n    max-width: 600px;\n    text-align: center;\n    background-color: white;\n}\n\n.component-name-component .modal-title {\n    text-align: center;\n    width: 100%;\n    margin-top: 20px;\n    margin-bottom: 40px;\n}\n\`\`\``;
+    }
+
+    promptContent += "Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all commments and don't write any extra comments."
 
     // Write the prompt to a text file
     const outputFilePath = path.join(__dirname, `${path.basename(selectedSubfolderPath)}-prompt.txt`);

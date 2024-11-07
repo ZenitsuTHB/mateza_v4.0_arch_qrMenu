@@ -1,8 +1,12 @@
-// src/components/App.jsx
+// src/components/index.js
 
 import React from 'react';
+import FloorPlan from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
 import { withHeader } from '../../Components/Structural/Header/index.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import './css/app.css'; // Import the new CSS for layout
 
 const TablePlan = () => {
   // Sample data for tables
@@ -27,10 +31,17 @@ const TablePlan = () => {
   ];
 
   return (
-    <div className="app-container">
-      {/* Sidebar */}
-      <Sidebar tables={tables} walls={walls} />
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="table-plan-page">
+        <div className="app-container">
+          {/* FloorPlan on the left */}
+          <FloorPlan />
+
+          {/* Sidebar on the right */}
+          <Sidebar tables={tables} walls={walls} />
+        </div>
+      </div>
+    </DndProvider>
   );
 };
 
