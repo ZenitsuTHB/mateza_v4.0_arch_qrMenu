@@ -7,13 +7,17 @@ const FloorPlanElement = ({
   element,
   moveElement,
   floorPlanSize,
-  onDrag,
-  onDragEnd,
-  snappedPosition,
+  // Removed onDrag and onDragEnd props
 }) => {
   const [position, setPosition] = useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const snapToGrid = (x, y, gridSize = 50) => {
+    const snappedX = Math.round(x / gridSize) * gridSize;
+    const snappedY = Math.round(y / gridSize) * gridSize;
+    return [snappedX, snappedY];
+  };
 
   const handleMouseDown = (e) => {
     e.preventDefault(); // Prevent text selection
@@ -39,10 +43,7 @@ const FloorPlanElement = ({
           y: newY,
         });
 
-        // Report current dragging position for alignment
-        if (onDrag) {
-          onDrag(element.id, newX, newY, element.width, element.height);
-        }
+        // No alignment or snapping during dragging
       }
     };
 
@@ -50,20 +51,20 @@ const FloorPlanElement = ({
       if (isDragging) {
         setIsDragging(false);
 
-        // Apply snapped position only if not a wall and snappedPosition.x is available
-        if (snappedPosition.x !== null && element.type !== 'wall') {
-          setPosition((prev) => ({
-            x: snappedPosition.x,
-            y: prev.y, // y remains unchanged
-          }));
-          moveElement(element.id, snappedPosition.x, position.y);
+        // Apply snapping on mouse release for non-wall elements
+        if (element.type !== 'wall') {
+          const [snappedX, snappedY] = snapToGrid(position.x, position.y);
+          const finalX = Math.max(0, Math.min(snappedX, floorPlanSize.width - element.width));
+          const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
+
+          setPosition({ x: finalX, y: finalY });
+          moveElement(element.id, finalX, finalY);
         } else {
+          // For walls, no snapping
           moveElement(element.id, position.x, position.y);
         }
 
-        if (onDragEnd) {
-          onDragEnd();
-        }
+        // Removed onDragEnd call
       }
     };
 
@@ -83,10 +84,7 @@ const FloorPlanElement = ({
     floorPlanSize,
     element.width,
     element.height,
-    onDrag,
-    onDragEnd,
-    snappedPosition,
-    element.type, // Ensure element.type is included as a dependency
+    element.type,
   ]);
 
   useEffect(() => {

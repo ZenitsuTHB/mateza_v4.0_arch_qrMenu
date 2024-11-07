@@ -13,10 +13,7 @@ const FloorPlan = () => {
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
 
-  // State for alignment lines (only vertical)
-  const [alignmentLines, setAlignmentLines] = useState({
-    vertical: [],
-  });
+  // Removed alignmentLines state and related logic
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -61,11 +58,7 @@ const FloorPlan = () => {
     return [snappedX, snappedY];
   };
 
-  const snapSize = (size, gridSize = 50) => {
-    const snappedWidth = Math.round(size.width / gridSize) * gridSize;
-    const snappedHeight = Math.round(size.height / gridSize) * gridSize;
-    return { width: snappedWidth, height: snappedHeight };
-  };
+  // Removed snapSize function and snapping logic from onResizeStop
 
   const [, drop] = useDrop({
     accept: 'ITEM',
@@ -113,51 +106,11 @@ const FloorPlan = () => {
     },
   });
 
-  // Function to handle dragging positions from FloorPlanElement
-  const handleDragging = useCallback(
-    (draggingId, currentX, currentY, elementWidth, elementHeight) => {
-      const draggingElement = elements.find(el => el.id === draggingId);
-      if (draggingElement.type === 'wall') {
-        // Do not apply alignment or snapping for walls
-        setAlignmentLines({ vertical: [] });
-        setSnappedPosition({ x: null });
-        return;
-      }
+  // Removed handleDragging and alignment logic
 
-      const lines = { vertical: [] };
-      let snappedX = currentX;
+  // Removed snappedPosition state
 
-      elements.forEach((el) => {
-        if (el.id === draggingId || el.type === 'wall') return; // Skip the element being dragged and walls
-
-        // Vertical Alignments - Only Left Edge
-        if (Math.abs(currentX - el.x) <= ALIGN_THRESHOLD) {
-          lines.vertical.push({
-            x: el.x,
-            yStart: 0,
-            yEnd: floorPlanSize.height,
-          });
-          snappedX = el.x;
-        }
-      });
-
-      // Update alignment lines
-      setAlignmentLines(lines);
-
-      // Implement snapping by updating the position
-      setSnappedPosition({ x: snappedX });
-    },
-    [elements, floorPlanSize.height]
-  );
-
-  // State to hold snapped position (only x)
-  const [snappedPosition, setSnappedPosition] = useState({ x: null });
-
-  // Function to clear alignment lines when not dragging
-  const clearAlignmentLines = useCallback(() => {
-    setAlignmentLines({ vertical: [] });
-    setSnappedPosition({ x: null });
-  }, []);
+  // Removed clearAlignmentLines function
 
   return (
     <ResizableBox
@@ -167,8 +120,8 @@ const FloorPlan = () => {
       maxConstraints={[1600, 1200]}
       className="table-plan-component resizable-floor-plan"
       onResizeStop={(e, data) => {
-        const { width, height } = snapSize(data.size);
-        setFloorPlanSize({ width, height });
+        // Directly set the new size without snapping
+        setFloorPlanSize({ width: data.size.width, height: data.size.height });
       }}
       resizeHandles={['se']} // Optional: specify resize handles if needed
     >
@@ -181,18 +134,7 @@ const FloorPlan = () => {
         }}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        {/* Render Vertical Alignment Lines */}
-        {alignmentLines.vertical.map((line, index) => (
-          <div
-            key={`v-line-${index}`}
-            className="alignment-line vertical-line"
-            style={{
-              left: `${line.x}px`,
-              top: `${line.yStart}px`,
-              height: `${line.yEnd - line.yStart}px`,
-            }}
-          />
-        ))}
+        {/* Removed alignment lines rendering */}
 
         {elements.map((el) => (
           <FloorPlanElement
@@ -200,9 +142,7 @@ const FloorPlan = () => {
             element={el}
             moveElement={moveElement}
             floorPlanSize={floorPlanSize}
-            onDrag={handleDragging}
-            onDragEnd={clearAlignmentLines}
-            snappedPosition={snappedPosition}
+            // Removed onDrag and onDragEnd props
           />
         ))}
       </div>
