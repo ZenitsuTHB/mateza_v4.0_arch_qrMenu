@@ -4,8 +4,7 @@ import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
-import Table from './Table.js';
-import Walls from './Walls.js';
+import FloorPlanElement from './FloorPlanElement.js';
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
@@ -14,23 +13,18 @@ const FloorPlan = () => {
     setElements((prevElements) => [...prevElements, element]);
   };
 
-  const updateElement = useCallback((id, x, y, updatedProps = {}) => {
+  const moveElement = useCallback((id, x, y) => {
     setElements((prevElements) =>
       prevElements.map((el) =>
         el.id === id
           ? {
               ...el,
-              x: x !== undefined ? x : el.x,
-              y: y !== undefined ? y : el.y,
-              ...updatedProps,
+              x,
+              y,
             }
           : el
       )
     );
-  }, []);
-
-  const removeElement = useCallback((id) => {
-    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
   }, []);
 
   const snapToGrid = (x, y, gridSize = 50) => {
@@ -40,7 +34,7 @@ const FloorPlan = () => {
   };
 
   const [, drop] = useDrop({
-    accept: ['TABLE', 'DECORATION', 'TABLE_ON_FLOOR', 'DECORATION_ON_FLOOR'],
+    accept: 'ITEM',
     drop: (item, monitor) => {
       const offset = monitor.getClientOffset();
       const floorPlanRect = document
@@ -54,9 +48,10 @@ const FloorPlan = () => {
       x = Math.max(0, Math.min(snappedX, floorPlanRect.width - item.width));
       y = Math.max(0, Math.min(snappedY, floorPlanRect.height - item.height));
 
-      if (item.type === 'TABLE' || item.type === 'DECORATION') {
+      if (item.id) {
+        moveElement(item.id, x, y);
+      } else {
         const id = Date.now();
-
         addElement({
           id,
           type: item.elementType,
@@ -67,15 +62,13 @@ const FloorPlan = () => {
           height: item.height,
           capacity: item.capacity,
           name:
-            item.type === 'TABLE'
+            item.elementType === 'table'
               ? `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Table ${id}`
               : `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Decoration ${id}`,
           minCapacity: item.minCapacity || 1,
           maxCapacity: item.maxCapacity || 10,
           priority: 'Medium',
         });
-      } else if (item.type === 'TABLE_ON_FLOOR' || item.type === 'DECORATION_ON_FLOOR') {
-        updateElement(item.id, x, y);
       }
     },
   });
@@ -89,24 +82,9 @@ const FloorPlan = () => {
       className="table-plan-component resizable-floor-plan"
     >
       <div id="floor-plan-container" className="table-plan-component floor-plan" ref={drop}>
-        {elements.map((el) => {
-          const style = {
-            position: 'absolute',
-            left: el.x,
-            top: el.y,
-            width: el.width,
-            height: el.height,
-          };
-          return el.type === 'table' ? (
-            <div key={el.id} style={style}>
-              <Table numberOfGuests={el.capacity} />
-            </div>
-          ) : el.type === 'wall' ? (
-            <div key={el.id} style={style}>
-              <Walls length={el.width / 20 + 1} />
-            </div>
-          ) : null;
-        })}
+        {elements.map((el) => (
+          <FloorPlanElement key={el.id} element={el} />
+        ))}
       </div>
     </ResizableBox>
   );

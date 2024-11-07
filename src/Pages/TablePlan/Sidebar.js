@@ -8,8 +8,14 @@ import './css/sidebar.css';
 
 const TableItem = ({ table }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'TABLE',
-    item: { type: 'TABLE', elementType: 'table', subtype: 'round', width: 70, height: 70, capacity: table.numberOfGuests },
+    type: 'ITEM',
+    item: {
+      elementType: 'table',
+      subtype: 'round',
+      width: 70,
+      height: 70,
+      capacity: table.numberOfGuests,
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -28,8 +34,13 @@ const TableItem = ({ table }) => {
 
 const WallItem = ({ wall }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'DECORATION',
-    item: { type: 'DECORATION', elementType: 'wall', subtype: 'wall', width: wall.length * 20, height: 20 },
+    type: 'ITEM',
+    item: {
+      elementType: 'wall',
+      subtype: 'wall',
+      width: wall.length * 20,
+      height: 20,
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
