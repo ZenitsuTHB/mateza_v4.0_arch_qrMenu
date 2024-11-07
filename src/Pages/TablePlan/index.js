@@ -1,21 +1,22 @@
-// src/components/TablePlanCreator.jsx
-
+// src/App.js
 import React from 'react';
-import FloorPlan from './FloorPlan';
-import Sidebar from './Sidebar';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import './css/tablePlanCreator.css'; // Correct path with lowerCamelCase
+import ParentComponent from './components/ParentComponent';
+import './css/app.css'
 
-const TablePlanCreator = () => {
+function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="table-plan-creator">
-        <FloorPlan />
-        <Sidebar />
+    <div className="app-container">
+      <div className="main-content">
+        {/* Main content can be customized as needed */}
+        <h1>Welcome to the Restaurant</h1>
+        <p>Select a table from the sidebar to see details.</p>
       </div>
-    </DndProvider>
+      <div className="sidebar">
+        <h2>Available Tables</h2>
+        <ParentComponent />
+      </div>
+    </div>
   );
-};
+}
 
-export default TablePlanCreator;
+export default App;

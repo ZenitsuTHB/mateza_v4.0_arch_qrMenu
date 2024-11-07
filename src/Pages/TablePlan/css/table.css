@@ -1,0 +1,48 @@
+.table-container {
+	position: relative;
+	margin: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 80px; /* 70px table height + 80px for chairs */
+  }
+  
+  .table {
+	background-color: #f5f5dc; /* Light Beige */
+	border: 2px solid #d2b48c; /* Beige Border */
+	border-radius: 8px;
+	position: absolute;
+	top: 50%; /* Center the table vertically */
+	left: 50%;
+	transform: translate(-50%, -50%); /* Center the table both horizontally and vertically */
+	z-index: 2; /* Higher z-index to appear above chairs */
+  }
+  
+  .chairs {
+	display: flex;
+	justify-content: center;
+	gap: 10px; /* Spacing between chairs */
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1; /* Lower z-index to appear below table */
+  }
+  
+  .top-chairs {
+	top: 0;
+	transform: translate(-50%, 150%); /* Center horizontally and shift upwards */
+  }
+  
+  .bottom-chairs {
+	bottom: 0;
+	transform: translate(-50%, -150%); /* Center horizontally and shift downwards */
+  }
+  
+  .chair {
+	width: 20px;
+	height: 20px;
+	background-color: #f5f5dc; /* Light Beige */
+	border: 2px solid #d2b48c; /* Beige Border */
+	border-radius: 50%;
+  }
+  

@@ -1,0 +1,24 @@
+/* src/css/floorPlan.css */
+
+/* Floor Plan Container */
+.floor-plan {
+	position: relative;
+	width: 100%; /* Fill ResizableBox */
+	height: 100%; /* Fill ResizableBox */
+	background-color: #ffffff;
+	border: 2px solid #ccc;
+	box-sizing: border-box;
+	overflow: hidden;
+	background-image:
+	  linear-gradient(to right, #ddd 1px, transparent 1px),
+	  linear-gradient(to bottom, #ddd 1px, transparent 1px);
+	background-size: 50px 50px; /* Grid size */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	transition: width 0.2s, height 0.2s;
+  }
+  
+  .resizable-floor-plan {
+	position: relative;
+  }
+  

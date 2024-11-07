@@ -36,7 +36,7 @@ import Language from '../Pages/Profile/Language/index.js';
 import NewReservation from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import CalendarComponent from '../Pages/CalendarMap/index.js';
-import TablePlanCreator from '../Pages/TablePlan/index.js';
+import TablePlanCreator from '../Pages/TablePlan/ParentComponent.js';
 
 const routesConfig = [
   
@@ -160,6 +160,15 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
+  },
+  {
+    path: '/table-plan',
+    element: <TablePlanCreator title="Tafelplan" />,
+    label: 'Tafelplan',
+    icon: FaTable,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
 
   {
