@@ -6,10 +6,17 @@ import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
 
+const ALIGN_THRESHOLD = 10; // Threshold in pixels for alignment detection
+
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+
+  // State for alignment lines (only vertical)
+  const [alignmentLines, setAlignmentLines] = useState({
+    vertical: [],
+  });
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -60,8 +67,9 @@ const FloorPlan = () => {
       const offset = monitor.getClientOffset();
       const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
 
-      let x = offset.x - floorPlanRect.left - item.width / 2;
-      let y = offset.y - floorPlanRect.top - item.height / 2;
+      // Position based on top-left corner
+      let x = offset.x - floorPlanRect.left;
+      let y = offset.y - floorPlanRect.top;
 
       const [snappedX, snappedY] = snapToGrid(x, y);
       x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
@@ -92,6 +100,44 @@ const FloorPlan = () => {
     },
   });
 
+  // Function to handle dragging positions from FloorPlanElement
+  const handleDragging = useCallback(
+    (draggingId, currentX, currentY, elementWidth, elementHeight) => {
+      const lines = { vertical: [] };
+      let snappedX = currentX;
+
+      elements.forEach((el) => {
+        if (el.id === draggingId) return; // Skip the element being dragged
+
+        // Vertical Alignments - Only Left Edge
+        if (Math.abs(currentX - el.x) <= ALIGN_THRESHOLD) {
+          lines.vertical.push({
+            x: el.x,
+            yStart: 0,
+            yEnd: floorPlanSize.height,
+          });
+          snappedX = el.x;
+        }
+      });
+
+      // Update alignment lines
+      setAlignmentLines(lines);
+
+      // Implement snapping by updating the position
+      setSnappedPosition({ x: snappedX });
+    },
+    [elements, floorPlanSize.height]
+  );
+
+  // State to hold snapped position (only x)
+  const [snappedPosition, setSnappedPosition] = useState({ x: null });
+
+  // Function to clear alignment lines when not dragging
+  const clearAlignmentLines = useCallback(() => {
+    setAlignmentLines({ vertical: [] });
+    setSnappedPosition({ x: null });
+  }, []);
+
   return (
     <ResizableBox
       width={800}
@@ -115,12 +161,28 @@ const FloorPlan = () => {
         }}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
+        {/* Render Vertical Alignment Lines */}
+        {alignmentLines.vertical.map((line, index) => (
+          <div
+            key={`v-line-${index}`}
+            className="alignment-line vertical-line"
+            style={{
+              left: `${line.x}px`,
+              top: `${line.yStart}px`,
+              height: `${line.yEnd - line.yStart}px`,
+            }}
+          />
+        ))}
+
         {elements.map((el) => (
           <FloorPlanElement
             key={el.id}
             element={el}
             moveElement={moveElement}
             floorPlanSize={floorPlanSize}
+            onDrag={handleDragging}
+            onDragEnd={clearAlignmentLines}
+            snappedPosition={snappedPosition}
           />
         ))}
       </div>

@@ -3,7 +3,14 @@ import React, { useState, useEffect } from 'react';
 import Table from './Table.js';
 import Walls from './Walls.js';
 
-const FloorPlanElement = ({ element, moveElement, floorPlanSize }) => {
+const FloorPlanElement = ({
+  element,
+  moveElement,
+  floorPlanSize,
+  onDrag,
+  onDragEnd,
+  snappedPosition,
+}) => {
   const [position, setPosition] = useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -31,13 +38,32 @@ const FloorPlanElement = ({ element, moveElement, floorPlanSize }) => {
           x: newX,
           y: newY,
         });
+
+        // Report current dragging position for alignment
+        if (onDrag) {
+          onDrag(element.id, newX, newY, element.width, element.height);
+        }
       }
     };
 
     const handleMouseUp = () => {
       if (isDragging) {
         setIsDragging(false);
-        moveElement(element.id, position.x, position.y);
+
+        // Apply snapped position if available (only x)
+        if (snappedPosition.x !== null) {
+          setPosition((prev) => ({
+            x: snappedPosition.x,
+            y: prev.y, // y remains unchanged
+          }));
+          moveElement(element.id, snappedPosition.x, position.y);
+        } else {
+          moveElement(element.id, position.x, position.y);
+        }
+
+        if (onDragEnd) {
+          onDragEnd();
+        }
       }
     };
 
@@ -48,7 +74,19 @@ const FloorPlanElement = ({ element, moveElement, floorPlanSize }) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, offset, position, moveElement, element.id, floorPlanSize, element.width, element.height]);
+  }, [
+    isDragging,
+    offset,
+    position,
+    moveElement,
+    element.id,
+    floorPlanSize,
+    element.width,
+    element.height,
+    onDrag,
+    onDragEnd,
+    snappedPosition,
+  ]);
 
   useEffect(() => {
     setPosition({ x: element.x, y: element.y });
@@ -56,10 +94,10 @@ const FloorPlanElement = ({ element, moveElement, floorPlanSize }) => {
 
   const style = {
     position: 'absolute',
-    left: position.x,
-    top: position.y,
-    width: element.width,
-    height: element.height,
+    left: `${position.x}px`,
+    top: `${position.y}px`,
+    width: `${element.width}px`,
+    height: `${element.height}px`,
     opacity: isDragging ? 0.5 : 1,
     cursor: 'move',
     transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
