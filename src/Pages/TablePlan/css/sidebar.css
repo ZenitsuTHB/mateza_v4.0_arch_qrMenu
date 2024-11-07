@@ -1,8 +1,8 @@
 /* sidebar.css */
 .table-plan-page .sidebar {
 	width: 350px;
-	height: auto;
 	position: fixed;
+	height: calc(100% - 60px);
 	right: 0;
 	top: 60px;
 	background-color: rgb(220, 220, 220);
