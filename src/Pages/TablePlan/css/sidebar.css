@@ -1,11 +1,11 @@
-/* css/sidebar.css */
+/* sidebar.css */
 .table-plan-page .sidebar {
 	width: 350px;
 	height: auto;
 	position: fixed;
 	right: 0;
 	top: 60px;
-	background-color: var(--color-white);
+	background-color: rgb(220, 220, 220);
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 	padding: 20px;
 	overflow-y: auto;
@@ -17,7 +17,7 @@
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 	max-width: 800px;
 	margin: 0 auto;
 }
@@ -58,6 +58,7 @@
 
 .table-plan-page .search-bar {
 	margin-bottom: 20px;
+	margin-top: 20px;
 }
 
 .table-plan-page .search-bar input {

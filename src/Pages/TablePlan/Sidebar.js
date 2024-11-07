@@ -16,8 +16,8 @@ const Sidebar = ({ tables, walls }) => {
   const isIframe = typeof window !== 'undefined' && window.isIframe;
 
   const tabs = [
-    { id: 'tables', label: 'Tables', title: "Manage Tables" },
-    { id: 'walls', label: 'Walls', title: "Manage Walls" },
+    { id: 'tables', label: 'Tafels', title: "Beheer Tafels" },
+    { id: 'walls', label: 'Muren', title: "Beheer Muren" },
   ];
 
   const filteredTables = tables.filter(
@@ -86,10 +86,10 @@ const Sidebar = ({ tables, walls }) => {
       <div className="search-bar">
         <input
           type="text"
-          placeholder={`Search ${activeTab}...`}
+          placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label={`Search ${activeTab}`}
+          aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
         />
       </div>
       <div className="items-list">
@@ -99,8 +99,8 @@ const Sidebar = ({ tables, walls }) => {
               <div key={table.id} className="item">
                 <Table numberOfGuests={table.numberOfGuests} ref={tablesRef} />
                 <div className="item-info">
-                  <p>Table {table.id}</p>
-                  <p>Guests: {table.numberOfGuests}</p>
+                  <p>Tafel {table.id}</p>
+                  <p>Gasten: {table.numberOfGuests}</p>
                 </div>
               </div>
             ))}
@@ -111,14 +111,14 @@ const Sidebar = ({ tables, walls }) => {
               <div key={wall.id} className="item">
                 <Walls length={wall.length} ref={wallsRef} />
                 <div className="item-info">
-                  <p>Wall {wall.id}</p>
-                  <p>Length: {wall.length} units</p>
+                  <p>Muur {wall.id}</p>
+                  <p>Lengte: {wall.length} eenheden</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="no-results">No {activeTab} found.</p>
+          <p className="no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-/* css/app.css */
+/* app.css */
 .table-plan-page .app-container {
 	display: flex;
 	flex-direction: row;
@@ -6,7 +6,6 @@
 	width: 100vw;
 	box-sizing: border-box;
 	padding: 20px;
-	background-color: #f0f2f5;
 }
 
 .table-plan-page .floor-plan {

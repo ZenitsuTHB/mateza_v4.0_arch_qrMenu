@@ -1,5 +1,4 @@
-// src/components/index.js
-
+// index.js
 import React from 'react';
 import FloorPlan from './FloorPlan.js';
 import Sidebar from './Sidebar.js';

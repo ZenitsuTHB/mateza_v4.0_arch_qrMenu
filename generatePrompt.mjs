@@ -155,6 +155,8 @@ async function generatePrompt() {
 
     promptContent += "Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all commments and don't write any extra comments."
 
+    promptContent += "Only print the code with changes. Print the codes in full. Don't skip anything print them full."
+
     // Write the prompt to a text file
     const outputFilePath = path.join(__dirname, `${path.basename(selectedSubfolderPath)}-prompt.txt`);
     fs.writeFileSync(outputFilePath, promptContent, 'utf8');
