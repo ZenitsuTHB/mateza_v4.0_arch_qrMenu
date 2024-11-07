@@ -118,8 +118,8 @@ const Sidebar = ({ tables, walls }) => {
   const isIframe = typeof window !== 'undefined' && window.isIframe;
 
   const tabs = [
-    { id: 'tables', label: 'Tables', title: "Manage Tables" },
-    { id: 'walls', label: 'Walls', title: "Manage Walls" },
+    { id: 'tables', label: 'Tafels', title: "Beheer Tafels" },
+    { id: 'walls', label: 'Muren', title: "Beheer Muren" },
   ];
 
   const filteredTables = tables.filter(
@@ -188,10 +188,10 @@ const Sidebar = ({ tables, walls }) => {
       <div className="search-bar">
         <input
           type="text"
-          placeholder={`Search ${activeTab}...`}
+          placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label={`Search ${activeTab}`}
+          aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
         />
       </div>
       <div className="items-list">
@@ -201,8 +201,8 @@ const Sidebar = ({ tables, walls }) => {
               <div key={table.id} className="item">
                 <Table numberOfGuests={table.numberOfGuests} ref={tablesRef} />
                 <div className="item-info">
-                  <p>Table {table.id}</p>
-                  <p>Guests: {table.numberOfGuests}</p>
+                  <p>Tafel {table.id}</p>
+                  <p>Gasten: {table.numberOfGuests}</p>
                 </div>
               </div>
             ))}
@@ -213,14 +213,14 @@ const Sidebar = ({ tables, walls }) => {
               <div key={wall.id} className="item">
                 <Walls length={wall.length} ref={wallsRef} />
                 <div className="item-info">
-                  <p>Wall {wall.id}</p>
-                  <p>Length: {wall.length} units</p>
+                  <p>Muur {wall.id}</p>
+                  <p>Lengte: {wall.length} eenheden</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="no-results">No {activeTab} found.</p>
+          <p className="no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
         )}
       </div>
     </div>
@@ -313,7 +313,7 @@ export default Walls;
 
 
 --- css/app.css ---
-/* css/app.css */
+/* app.css */
 .table-plan-page .app-container {
 	display: flex;
 	flex-direction: row;
@@ -321,7 +321,6 @@ export default Walls;
 	width: 100vw;
 	box-sizing: border-box;
 	padding: 20px;
-	background-color: #f0f2f5;
 }
 
 .table-plan-page .floor-plan {
@@ -335,7 +334,7 @@ export default Walls;
 
 
 --- css/floorPlan.css ---
-/* css/floorPlan.css */
+/* floorPlan.css */
 .table-plan-page .floor-plan {
 	position: relative;
 	width: 100%;
@@ -361,14 +360,14 @@ export default Walls;
 
 
 --- css/sidebar.css ---
-/* css/sidebar.css */
+/* sidebar.css */
 .table-plan-page .sidebar {
 	width: 350px;
 	height: auto;
 	position: fixed;
 	right: 0;
 	top: 60px;
-	background-color: var(--color-white);
+	background-color: rgb(220, 220, 220);
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 	padding: 20px;
 	overflow-y: auto;
@@ -380,7 +379,7 @@ export default Walls;
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 	max-width: 800px;
 	margin: 0 auto;
 }
@@ -421,6 +420,7 @@ export default Walls;
 
 .table-plan-page .search-bar {
 	margin-bottom: 20px;
+	margin-top: 20px;
 }
 
 .table-plan-page .search-bar input {
@@ -529,7 +529,7 @@ export default Walls;
 
 
 --- css/table.css ---
-/* css/table.css */
+/* table.css */
 .table-plan-page .table-container {
 	position: relative;
 	display: flex;
@@ -579,27 +579,25 @@ export default Walls;
 
 
 --- css/walls.css ---
-/* src/components/css/walls.css */
-
+/* walls.css */
 .table-plan-page .walls-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: 10px;
-  }
-  
-  .table-plan-page .wall {
+}
+
+.table-plan-page .wall {
 	width: 100%;
 	height: 100%;
 	background-color: #8b4513;
 	border: 2px solid #654321;
 	border-radius: 4px;
-  }
-  
+}
+
 
 --- index.js ---
-// src/components/index.js
-
+// index.js
 import React from 'react';
 import FloorPlan from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
@@ -705,4 +703,4 @@ index.js
     margin-top: 20px;
     margin-bottom: 40px;
 }
-```Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all commments and don't write any extra comments.
+```Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all commments and don't write any extra comments.Only print the code with changes. Print the codes in full. Don't skip anything print them full.

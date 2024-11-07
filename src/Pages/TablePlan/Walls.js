@@ -3,7 +3,7 @@ import React from 'react';
 import './css/walls.css';
 
 const Walls = ({ length }) => {
-  const wallWidth = 100 + (length - 1) * 50;
+  const wallWidth = 0 + (length - 1) * 20;
   const wallHeight = 20;
 
   return (
