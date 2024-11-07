@@ -1,13 +1,26 @@
-// src/components/Sidebar.jsx
+// src/components/Sidebar.js
 
-import React, { useState } from 'react';
-import './css/sidebar.css';
+import React, { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Table from './Table.js';
 import Walls from './Walls.js';
+import './css/sidebar.css';
 
 const Sidebar = ({ tables, walls }) => {
   const [activeTab, setActiveTab] = useState('tables');
   const [searchTerm, setSearchTerm] = useState('');
+  const [pendingTab, setPendingTab] = useState(null);
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
+
+  const tablesRef = useRef();
+  const wallsRef = useRef();
+
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
+  const tabs = [
+    { id: 'tables', label: 'Tables', title: "Manage Tables" },
+    { id: 'walls', label: 'Walls', title: "Manage Walls" },
+  ];
 
   // Filter tables and walls based on search term
   const filteredTables = tables.filter(
@@ -22,30 +35,71 @@ const Sidebar = ({ tables, walls }) => {
       wall.length.toString().includes(searchTerm)
   );
 
+  const handleTabClick = async (tabId, tabTitle) => {
+    let currentRef;
+    if (activeTab === 'tables') {
+      currentRef = tablesRef;
+    } else if (activeTab === 'walls') {
+      currentRef = wallsRef;
+    }
+
+    if (currentRef && currentRef.current && currentRef.current.isDirty) {
+      if (isIframe) {
+        try {
+          await currentRef.current.handleSave();
+          setActiveTab(tabId);
+        } catch (error) {
+          console.error('Error saving before tab switch:', error);
+        }
+      } else {
+        setPendingTab({ id: tabId, title: tabTitle });
+        setShowUnsavedChangesModal(true);
+      }
+    } else {
+      setActiveTab(tabId);
+    }
+  };
+
+  const handleDiscardChanges = () => {
+    setShowUnsavedChangesModal(false);
+    if (pendingTab) {
+      setActiveTab(pendingTab.id);
+      setPendingTab(null);
+    }
+  };
+
+  const handleCancelTabChange = () => {
+    setShowUnsavedChangesModal(false);
+    setPendingTab(null);
+  };
+
   return (
     <div className="sidebar">
       {/* Tabs */}
       <div className="tabs">
-        <button
-          className={`tab-button ${activeTab === 'tables' ? 'active' : ''}`}
-          onClick={() => {
-            setActiveTab('tables');
-            setSearchTerm('');
-          }}
-          aria-label="Tables Tab"
-        >
-          Tables
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'walls' ? 'active' : ''}`}
-          onClick={() => {
-            setActiveTab('walls');
-            setSearchTerm('');
-          }}
-          aria-label="Walls Tab"
-        >
-          Walls
-        </button>
+        <div className="buttons-container">
+          {tabs.map((tab) => (
+            <motion.button
+              key={tab.id}
+              type="button"
+              className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => handleTabClick(tab.id, tab.title)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="tab-label">{tab.label}</span>
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="underline-sidebar-tabs"
+                  className="tab-underline"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -65,7 +119,7 @@ const Sidebar = ({ tables, walls }) => {
           <div className="grid-container">
             {filteredTables.map((table) => (
               <div key={table.id} className="item">
-                <Table numberOfGuests={table.numberOfGuests} />
+                <Table numberOfGuests={table.numberOfGuests} ref={tablesRef} />
                 <div className="item-info">
                   <p>Table {table.id}</p>
                   <p>Guests: {table.numberOfGuests}</p>
@@ -77,7 +131,7 @@ const Sidebar = ({ tables, walls }) => {
           <div className="grid-container">
             {filteredWalls.map((wall) => (
               <div key={wall.id} className="item">
-                <Walls length={wall.length} />
+                <Walls length={wall.length} ref={wallsRef} />
                 <div className="item-info">
                   <p>Wall {wall.id}</p>
                   <p>Length: {wall.length} units</p>
