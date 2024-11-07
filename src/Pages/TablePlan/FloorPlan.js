@@ -6,7 +6,7 @@ import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
 
-const ALIGN_THRESHOLD = 10; // Threshold in pixels for alignment detection
+const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
@@ -61,6 +61,12 @@ const FloorPlan = () => {
     return [snappedX, snappedY];
   };
 
+  const snapSize = (size, gridSize = 50) => {
+    const snappedWidth = Math.round(size.width / gridSize) * gridSize;
+    const snappedHeight = Math.round(size.height / gridSize) * gridSize;
+    return { width: snappedWidth, height: snappedHeight };
+  };
+
   const [, drop] = useDrop({
     accept: 'ITEM',
     drop: (item, monitor) => {
@@ -71,9 +77,16 @@ const FloorPlan = () => {
       let x = offset.x - floorPlanRect.left;
       let y = offset.y - floorPlanRect.top;
 
-      const [snappedX, snappedY] = snapToGrid(x, y);
-      x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
-      y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
+      // Apply snapping only if the element is not a wall
+      if (item.elementType !== 'wall') {
+        const [snappedX, snappedY] = snapToGrid(x, y);
+        x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+        y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
+      } else {
+        // For walls, ensure they stay within boundaries without snapping
+        x = Math.max(0, Math.min(x, floorPlanSize.width - item.width));
+        y = Math.max(0, Math.min(y, floorPlanSize.height - item.height));
+      }
 
       if (item.id) {
         moveElement(item.id, x, y);
@@ -103,11 +116,19 @@ const FloorPlan = () => {
   // Function to handle dragging positions from FloorPlanElement
   const handleDragging = useCallback(
     (draggingId, currentX, currentY, elementWidth, elementHeight) => {
+      const draggingElement = elements.find(el => el.id === draggingId);
+      if (draggingElement.type === 'wall') {
+        // Do not apply alignment or snapping for walls
+        setAlignmentLines({ vertical: [] });
+        setSnappedPosition({ x: null });
+        return;
+      }
+
       const lines = { vertical: [] };
       let snappedX = currentX;
 
       elements.forEach((el) => {
-        if (el.id === draggingId) return; // Skip the element being dragged
+        if (el.id === draggingId || el.type === 'wall') return; // Skip the element being dragged and walls
 
         // Vertical Alignments - Only Left Edge
         if (Math.abs(currentX - el.x) <= ALIGN_THRESHOLD) {
@@ -145,12 +166,11 @@ const FloorPlan = () => {
       minConstraints={[400, 300]}
       maxConstraints={[1600, 1200]}
       className="table-plan-component resizable-floor-plan"
-      onResizeStop={() => {
-        if (floorPlanRef.current) {
-          const { width, height } = floorPlanRef.current.getBoundingClientRect();
-          setFloorPlanSize({ width, height });
-        }
+      onResizeStop={(e, data) => {
+        const { width, height } = snapSize(data.size);
+        setFloorPlanSize({ width, height });
       }}
+      resizeHandles={['se']} // Optional: specify resize handles if needed
     >
       <div
         id="floor-plan-container"

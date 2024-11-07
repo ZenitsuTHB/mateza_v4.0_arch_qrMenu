@@ -50,8 +50,8 @@ const FloorPlanElement = ({
       if (isDragging) {
         setIsDragging(false);
 
-        // Apply snapped position if available (only x)
-        if (snappedPosition.x !== null) {
+        // Apply snapped position only if not a wall and snappedPosition.x is available
+        if (snappedPosition.x !== null && element.type !== 'wall') {
           setPosition((prev) => ({
             x: snappedPosition.x,
             y: prev.y, // y remains unchanged
@@ -86,6 +86,7 @@ const FloorPlanElement = ({
     onDrag,
     onDragEnd,
     snappedPosition,
+    element.type, // Ensure element.type is included as a dependency
   ]);
 
   useEffect(() => {
