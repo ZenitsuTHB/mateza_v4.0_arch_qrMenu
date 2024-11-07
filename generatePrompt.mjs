@@ -161,7 +161,7 @@ async function generatePrompt() {
     promptContent += "Only print the code with changes. Print the codes in full. Don't skip anything print them full.";
 
     // Write the prompt to a text file
-    const outputFilePath = path.join(__dirname, `${path.basename(selectedFolderPath)}-prompt.txt`);
+    const outputFilePath = path.join(__dirname, `prompts/${path.basename(selectedFolderPath)}-prompt.txt`);
     fs.writeFileSync(outputFilePath, promptContent, 'utf8');
 
     console.log(`\nPrompt generated successfully at ${outputFilePath}`);
