@@ -5,19 +5,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 
-// Helper to get __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Path to store the last used folder
 const configFilePath = path.join(__dirname, 'lastFolder.json');
 
-/**
- * Recursively traverses a directory and builds a directory tree.
- * @param {string} dir - The directory to traverse.
- * @param {string} prefix - The prefix for formatting.
- * @returns {string} - The formatted directory tree.
- */
 function buildDirectoryTree(dir, prefix = '') {
     const items = fs.readdirSync(dir, { withFileTypes: true });
     let tree = '';
@@ -36,13 +27,6 @@ function buildDirectoryTree(dir, prefix = '') {
     return tree;
 }
 
-/**
- * Recursively collects all files in a directory.
- * @param {string} dir - The directory to traverse.
- * @param {string} baseDir - The base directory for relative paths.
- * @param {Array} fileList - The accumulator for file paths.
- * @returns {Array} - The list of file paths.
- */
 function collectFiles(dir, baseDir, fileList = []) {
     const items = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -59,12 +43,6 @@ function collectFiles(dir, baseDir, fileList = []) {
     return fileList;
 }
 
-/**
- * Reads and returns the content of each file in the specified folder.
- * @param {Array} files - The list of file paths.
- * @param {string} baseDir - The base directory for relative paths.
- * @returns {string} - The concatenated content of all files.
- */
 function getFileContents(files, baseDir) {
     let content = '';
     files.forEach(file => {
@@ -75,19 +53,11 @@ function getFileContents(files, baseDir) {
     return content;
 }
 
-/**
- * Saves the last used folder path to the config file.
- * @param {string} folderPath - The folder path to save.
- */
 function saveLastFolder(folderPath) {
     const data = { lastFolder: folderPath };
     fs.writeFileSync(configFilePath, JSON.stringify(data), 'utf8');
 }
 
-/**
- * Retrieves the last used folder path from the config file.
- * @returns {string|null} - The last folder path or null if not found.
- */
 function getLastFolder() {
     if (fs.existsSync(configFilePath)) {
         const data = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
@@ -96,60 +66,38 @@ function getLastFolder() {
     return null;
 }
 
-/**
- * Main function to generate the prompt.
- */
 async function generatePrompt() {
     const srcPath = path.join(__dirname, 'src');
-
-    // Check if src directory exists
     if (!fs.existsSync(srcPath)) {
         console.error('Error: "src" directory does not exist.');
         process.exit(1);
     }
-
-    // Determine if 'c' parameter is provided
     const args = process.argv.slice(2);
     const hasCParameter = args.includes('c');
 
     let selectedFolderPath;
 
     if (!hasCParameter) {
-        // Attempt to retrieve the last used folder
         const lastFolder = getLastFolder();
         if (lastFolder && fs.existsSync(lastFolder)) {
             selectedFolderPath = lastFolder;
             console.log(`Using the last selected folder: ${selectedFolderPath}\n`);
         } else {
-            // No last folder stored or path does not exist, proceed to prompt
             selectedFolderPath = await promptForFolder(srcPath);
         }
     } else {
-        // 'c' parameter is present, prompt the user
         selectedFolderPath = await promptForFolder(srcPath);
     }
-
-    // Save the selected folder as the last used folder
     saveLastFolder(selectedFolderPath);
-
-    // Build the directory tree for the selected (sub)folder
     const selectedDirectoryTree = buildDirectoryTree(selectedFolderPath);
-
-    // Collect all files in the selected (sub)folder
     const allFiles = collectFiles(selectedFolderPath, selectedFolderPath);
-
-    // Read the content of each file
     const fileContents = getFileContents(allFiles, selectedFolderPath);
-
-    // Prepare the prompt content
     let promptContent = `File Contents:\n${fileContents}\n\nDirectory Structure for "${selectedFolderPath}":\n\n${selectedDirectoryTree}\n\nList of Files:\n${allFiles.join('\n')}`;
 
-    // Determine the encapsulating class based on folder selection
     const selectedFolderName = path.basename(selectedFolderPath);
     const isPagesFolder = selectedFolderName.toLowerCase() === 'pages';
     const encapsulatingClass = isPagesFolder ? '.component-name-page' : '.component-name-component';
 
-    // Append fixed instructions based on folder selection
     if (isPagesFolder) {
         promptContent += `\n\n**Instruction:**\n1. Please encapsulate the main component in index.js inside the \`${encapsulatingClass}\` class.\n2. Prefix all CSS classes with the \`${encapsulatingClass}\` class.\n\n**Examples:**\n\n*Encapsulation in index.js:*\n\`\`\`jsx\n<div className="profile-page">\n    <h2 className="account-manage-title">Admin Reservaties</h2>\n    <div className="account-manage-container">\n        {/* ... */}\n        onClose={() => setIsModalOpen(false)}\n    </div>\n</div>\n\`\`\`\n\n*Prefixed CSS Classes:*\n\`\`\`css\n.profile-page .account-manage-container {\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n    position: relative;\n    width: 100%;\n    max-width: 600px;\n    text-align: center;\n    background-color: white;\n}\n\n.profile-page .modal-title {\n    text-align: center;\n    width: 100%;\n    margin-top: 20px;\n    margin-bottom: 40px;\n}\n\`\`\``;
     } else {
@@ -157,28 +105,18 @@ async function generatePrompt() {
     }
 
     promptContent += "Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.";
-
     promptContent += "Only print the code with changes. Print the codes in full. Don't skip anything print them full.";
 
-    // Write the prompt to a text file
     const outputFilePath = path.join(__dirname, `prompts/${path.basename(selectedFolderPath)}-prompt.txt`);
     fs.writeFileSync(outputFilePath, promptContent, 'utf8');
 
     console.log(`\nPrompt generated successfully at ${outputFilePath}`);
 }
 
-/**
- * Prompts the user to select a folder and subfolder.
- * @param {string} srcPath - The source directory path.
- * @returns {string} - The selected (sub)folder path.
- */
 async function promptForFolder(srcPath) {
-    // Build and display the directory tree
     console.log('DIRECTORY STRUCTURE OF src:\n');
     const directoryTree = buildDirectoryTree(srcPath);
     console.log(directoryTree);
-
-    // Get the list of top-level folders in src
     const topLevelItems = fs.readdirSync(srcPath, { withFileTypes: true });
     const folders = topLevelItems.filter(item => item.isDirectory()).map(folder => folder.name);
 
@@ -186,8 +124,6 @@ async function promptForFolder(srcPath) {
         console.log('No folders found in src.');
         process.exit(0);
     }
-
-    // Prompt the user to select a folder, defaulting to "Pages"
     const answers = await inquirer.prompt([
         {
             type: 'list',
@@ -199,12 +135,8 @@ async function promptForFolder(srcPath) {
     ]);
 
     const selectedFolderPath = path.join(srcPath, answers.selectedFolder);
-
-    // Get subfolders within the selected folder
     const subItems = fs.readdirSync(selectedFolderPath, { withFileTypes: true });
     const subFolders = subItems.filter(item => item.isDirectory()).map(subFolder => subFolder.name);
-
-    // Prompt the user to select a subfolder, if any are available
     let selectedSubfolderPath = selectedFolderPath;
     if (subFolders.length > 0) {
         const subAnswer = await inquirer.prompt([
@@ -222,5 +154,4 @@ async function promptForFolder(srcPath) {
     return selectedSubfolderPath;
 }
 
-// Execute the main function
 generatePrompt();
