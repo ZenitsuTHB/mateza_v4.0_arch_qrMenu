@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import SearchBar from './SearchBar';
+import DraggableComponentsList from './DraggableComponentsList';
+import './css/sidebar.css';
 
 const Sidebar = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
     <div className="sidebar">
-      {/* Sidebar content (search bar, draggable components) will be added here */}
-      <p>Sidebar Area</p>
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <DraggableComponentsList searchQuery={searchQuery} />
     </div>
   );
 };

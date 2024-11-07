@@ -1,23 +1,24 @@
-/* Common Table Styles */
+/* Common Table Styles for FloorPlan and Sidebar */
 .table {
-	width: 100%;
-	height: 100%;
-	background-color: #ffebcd; /* Blanched Almond */
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background-color: #ffebcd; /* Blanched Almond */
+	border: 2px solid #d2b48c; /* Tan */
 	position: relative;
   }
   
-  /* Round-Cornered Table */
   .table.round {
 	border-radius: 50%;
-	border: 2px solid #d2b48c; /* Tan */
   }
   
-  /* Square-Cornered Table */
   .table.square {
 	border-radius: 8px;
-	border: 2px solid #d2b48c; /* Tan */
+  }
+  
+  /* Capacity Indicator */
+  .capacity {
+	font-size: 10px;
+	color: #555;
   }
   
