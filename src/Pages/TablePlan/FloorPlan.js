@@ -1,4 +1,3 @@
-// FloorPlan.js
 import React, { useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
@@ -83,7 +82,7 @@ const FloorPlan = () => {
     >
       <div id="floor-plan-container" className="table-plan-component floor-plan" ref={drop}>
         {elements.map((el) => (
-          <FloorPlanElement key={el.id} element={el} />
+          <FloorPlanElement key={el.id} element={el} moveElement={moveElement} />
         ))}
       </div>
     </ResizableBox>

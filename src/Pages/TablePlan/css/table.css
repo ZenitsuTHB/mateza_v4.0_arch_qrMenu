@@ -1,48 +1,46 @@
-/* css/table.css */
 .table-plan-component .table-container {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 80px;
-  }
-  
-  .table-plan-component .table {
-	background-color: #f5f5dc;
-	border: 2px solid #d2b48c;
-	border-radius: 8px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 2;
-  }
-  
-  .table-plan-component .chairs {
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1;
-  }
-  
-  .table-plan-component .top-chairs {
-	top: 0;
-	transform: translate(-50%, 150%);
-  }
-  
-  .table-plan-component .bottom-chairs {
-	bottom: 0;
-	transform: translate(-50%, -150%);
-  }
-  
-  .table-plan-component .chair {
-	width: 20px;
-	height: 20px;
-	background-color: #f5f5dc;
-	border: 2px solid #d2b48c;
-	border-radius: 50%;
-  }
-  
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+}
+
+.table-plan-component .table {
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.table-plan-component .chairs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.table-plan-component .top-chairs {
+  top: 0;
+  transform: translate(-50%, 150%);
+}
+
+.table-plan-component .bottom-chairs {
+  bottom: 0;
+  transform: translate(-50%, -150%);
+}
+
+.table-plan-component .chair {
+  width: 20px;
+  height: 20px;
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 50%;
+}

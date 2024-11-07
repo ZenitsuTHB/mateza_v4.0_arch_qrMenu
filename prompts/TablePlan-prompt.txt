@@ -1,6 +1,11 @@
-File Contents:
+**File Markers Instructions:**
+- Each file should start with `START-FILE-(path:relative/path/to/file)` where `relative/path/to/file` is the actual relative path to the file.
+  - *Example:* `START-FILE-(path:components/Button/index.js)`
+- Each file should end with `END-FILE`.
+- Ensure these patterns are included exactly as specified.
 
---- FloorPlan.js ---
+**File Contents:**
+START-FILE-(path:FloorPlan.js)
 // FloorPlan.js
 import React, { useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
@@ -95,8 +100,8 @@ const FloorPlan = () => {
 
 export default FloorPlan;
 
-
---- FloorPlanElement.js ---
+END-FILE
+START-FILE-(path:FloorPlanElement.js)
 // FloorPlanElement.js (Optional: If you want to handle different element types differently)
 import React from 'react';
 import { useDrag } from 'react-dnd';
@@ -142,8 +147,8 @@ const FloorPlanElement = ({ element }) => {
 
 export default FloorPlanElement;
 
-
---- Sidebar.js ---
+END-FILE
+START-FILE-(path:Sidebar.js)
 // Sidebar.js
 import React, { useState, useRef } from 'react';
 import { useDrag } from 'react-dnd';
@@ -313,8 +318,8 @@ const Sidebar = ({ tables, walls }) => {
 
 export default Sidebar;
 
-
---- Table.js ---
+END-FILE
+START-FILE-(path:Table.js)
 // Table.js
 import React from 'react';
 import './css/table.css';
@@ -373,8 +378,8 @@ const Table = ({ numberOfGuests }) => {
 
 export default Table;
 
-
---- Walls.js ---
+END-FILE
+START-FILE-(path:Walls.js)
 // Walls.js
 import React from 'react';
 import './css/walls.css';
@@ -395,8 +400,8 @@ const Walls = ({ length }) => {
 
 export default Walls;
 
-
---- css/app.css ---
+END-FILE
+START-FILE-(path:css/app.css)
 /* css/app.css */
 .table-plan-component .app-container {
 	display: flex;
@@ -416,8 +421,8 @@ export default Walls;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-
---- css/floorPlan.css ---
+END-FILE
+START-FILE-(path:css/floorPlan.css)
 /* css/floorPlan.css */
 .table-plan-component .floor-plan {
 	position: relative;
@@ -442,8 +447,8 @@ export default Walls;
 	height: 100%;
   }
   
-
---- css/sidebar.css ---
+END-FILE
+START-FILE-(path:css/sidebar.css)
 /* css/sidebar.css */
 .table-plan-component .sidebar {
 	width: 350px;
@@ -611,8 +616,8 @@ export default Walls;
 	}
   }
   
-
---- css/table.css ---
+END-FILE
+START-FILE-(path:css/table.css)
 /* css/table.css */
 .table-plan-component .table-container {
 	position: relative;
@@ -661,8 +666,8 @@ export default Walls;
 	border-radius: 50%;
   }
   
-
---- css/walls.css ---
+END-FILE
+START-FILE-(path:css/walls.css)
 /* css/walls.css */
 .table-plan-component .walls-container {
 	display: flex;
@@ -679,8 +684,8 @@ export default Walls;
 	border-radius: 4px;
   }
   
-
---- index.js ---
+END-FILE
+START-FILE-(path:index.js)
 // index.js
 import React from 'react';
 import FloorPlan from './FloorPlan.js';
@@ -722,9 +727,10 @@ const TablePlan = () => {
 
 export default withHeader(TablePlan);
 
+END-FILE
 
 
-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/TablePlan":
+**Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/TablePlan":**
 
 ├── FloorPlan.js
 ├── FloorPlanElement.js
@@ -740,7 +746,7 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 └── index.js
 
 
-List of Files:
+**List of Files:**
 FloorPlan.js
 FloorPlanElement.js
 Sidebar.js
@@ -789,4 +795,10 @@ index.js
     margin-top: 20px;
     margin-bottom: 40px;
 }
-```Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.Only print the code with changes. Print the codes in full. Don't skip anything print them full.Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them.Only print every file once.
+```
+
+Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.
+Only print the code with changes. Print the codes in full. Don't skip anything; print them in full.
+Only print every file once.
+Before printing a file print START-FILE-(path:index.js). This shouldn't be as a comment, it should be outside of the file.
+After printing a file print END-FILE. This shouldn't be as a comment, it should be outside of the file.

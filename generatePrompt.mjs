@@ -153,8 +153,11 @@ async function generatePrompt() {
     // Append additional instructions
     promptContent += "\n\nSometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.";
     promptContent += "\nOnly print the code with changes. Print the codes in full. Don't skip anything; print them in full.";
-    promptContent += "\nMark all changed files with `CHANGED` before printing the file; else mark them with `--unchanged` and don't print them.";
     promptContent += "\nOnly print every file once.";
+    promptContent += "\nBefore printing a file print START-FILE-(path:index.js). This shouldn't be as a comment, it should be outside of the file.";
+    promptContent += "\nAfter printing a file print END-FILE. This shouldn't be as a comment, it should be outside of the file.";
+
+
 
     const outputFilePath = path.join(__dirname, `prompts/${path.basename(selectedFolderPath)}-prompt.txt`);
     fs.writeFileSync(outputFilePath, promptContent, 'utf8');

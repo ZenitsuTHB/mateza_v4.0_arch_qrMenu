@@ -1,4 +1,3 @@
-// Sidebar.js
 import React, { useState, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { motion } from 'framer-motion';
