@@ -7,7 +7,7 @@ import inquirer from 'inquirer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const configFilePath = path.join(__dirname, 'lastFolder.json');
+const configFilePath = path.join(__dirname, 'prompts/lastFolder.json');
 
 function buildDirectoryTree(dir, prefix = '') {
     const items = fs.readdirSync(dir, { withFileTypes: true });
