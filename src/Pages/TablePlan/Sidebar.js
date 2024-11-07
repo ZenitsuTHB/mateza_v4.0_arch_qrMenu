@@ -1,9 +1,50 @@
 // Sidebar.js
 import React, { useState, useRef } from 'react';
+import { useDrag } from 'react-dnd';
 import { motion } from 'framer-motion';
 import Table from './Table.js';
 import Walls from './Walls.js';
 import './css/sidebar.css';
+
+const TableItem = ({ table }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'TABLE',
+    item: { type: 'TABLE', elementType: 'table', subtype: 'round', width: 70, height: 70, capacity: table.numberOfGuests },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [table]);
+
+  return (
+    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <Table numberOfGuests={table.numberOfGuests} />
+      <div className="table-plan-component item-info">
+        <p>Tafel {table.id}</p>
+        <p>Gasten: {table.numberOfGuests}</p>
+      </div>
+    </div>
+  );
+};
+
+const WallItem = ({ wall }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'DECORATION',
+    item: { type: 'DECORATION', elementType: 'wall', subtype: 'wall', width: wall.length * 20, height: 20 },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [wall]);
+
+  return (
+    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <Walls length={wall.length} />
+      <div className="table-plan-component item-info">
+        <p>Muur {wall.id}</p>
+        <p>Lengte: {wall.length} eenheden</p>
+      </div>
+    </div>
+  );
+};
 
 const Sidebar = ({ tables, walls }) => {
   const [activeTab, setActiveTab] = useState('tables');
@@ -57,23 +98,23 @@ const Sidebar = ({ tables, walls }) => {
   };
 
   return (
-    <div className="sidebar">
-      <div className="tabs">
-        <div className="buttons-container">
+    <div className="table-plan-component sidebar">
+      <div className="table-plan-component tabs">
+        <div className="table-plan-component buttons-container">
           {tabs.map((tab) => (
             <motion.button
               key={tab.id}
               type="button"
-              className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+              className={`table-plan-component tab-button ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => handleTabClick(tab.id, tab.title)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="tab-label">{tab.label}</span>
+              <span className="table-plan-component tab-label">{tab.label}</span>
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="underline-sidebar-tabs"
-                  className="tab-underline"
+                  className="table-plan-component tab-underline"
                   initial={false}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
@@ -83,7 +124,7 @@ const Sidebar = ({ tables, walls }) => {
           ))}
         </div>
       </div>
-      <div className="search-bar">
+      <div className="table-plan-component search-bar">
         <input
           type="text"
           placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
@@ -92,33 +133,21 @@ const Sidebar = ({ tables, walls }) => {
           aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
         />
       </div>
-      <div className="items-list">
+      <div className="table-plan-component items-list">
         {activeTab === 'tables' && filteredTables.length > 0 ? (
-          <div className="grid-container">
+          <div className="table-plan-component grid-container">
             {filteredTables.map((table) => (
-              <div key={table.id} className="item">
-                <Table numberOfGuests={table.numberOfGuests} ref={tablesRef} />
-                <div className="item-info">
-                  <p>Tafel {table.id}</p>
-                  <p>Gasten: {table.numberOfGuests}</p>
-                </div>
-              </div>
+              <TableItem key={table.id} table={table} />
             ))}
           </div>
         ) : activeTab === 'walls' && filteredWalls.length > 0 ? (
-          <div className="grid-container">
+          <div className="table-plan-component grid-container">
             {filteredWalls.map((wall) => (
-              <div key={wall.id} className="item">
-                <Walls length={wall.length} ref={wallsRef} />
-                <div className="item-info">
-                  <p>Muur {wall.id}</p>
-                  <p>Lengte: {wall.length} eenheden</p>
-                </div>
-              </div>
+              <WallItem key={wall.id} wall={wall} />
             ))}
           </div>
         ) : (
-          <p className="no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
+          <p className="table-plan-component no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
         )}
       </div>
     </div>

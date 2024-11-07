@@ -4,6 +4,8 @@ import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import Table from './Table.js';
+import Walls from './Walls.js';
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
@@ -84,10 +86,27 @@ const FloorPlan = () => {
       height={600}
       minConstraints={[400, 300]}
       maxConstraints={[1600, 1200]}
-      className="resizable-floor-plan"
+      className="table-plan-component resizable-floor-plan"
     >
-      <div id="floor-plan-container" className="floor-plan" ref={drop}>
-       
+      <div id="floor-plan-container" className="table-plan-component floor-plan" ref={drop}>
+        {elements.map((el) => {
+          const style = {
+            position: 'absolute',
+            left: el.x,
+            top: el.y,
+            width: el.width,
+            height: el.height,
+          };
+          return el.type === 'table' ? (
+            <div key={el.id} style={style}>
+              <Table numberOfGuests={el.capacity} />
+            </div>
+          ) : el.type === 'wall' ? (
+            <div key={el.id} style={style}>
+              <Walls length={el.width / 20 + 1} />
+            </div>
+          ) : null;
+        })}
       </div>
     </ResizableBox>
   );

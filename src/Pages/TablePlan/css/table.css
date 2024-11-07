@@ -1,13 +1,13 @@
-/* table.css */
-.table-plan-page .table-container {
+/* css/table.css */
+.table-plan-component .table-container {
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 80px;
-}
-
-.table-plan-page .table {
+  }
+  
+  .table-plan-component .table {
 	background-color: #f5f5dc;
 	border: 2px solid #d2b48c;
 	border-radius: 8px;
@@ -16,9 +16,9 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	z-index: 2;
-}
-
-.table-plan-page .chairs {
+  }
+  
+  .table-plan-component .chairs {
 	display: flex;
 	justify-content: center;
 	gap: 10px;
@@ -26,22 +26,23 @@
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 1;
-}
-
-.table-plan-page .top-chairs {
+  }
+  
+  .table-plan-component .top-chairs {
 	top: 0;
 	transform: translate(-50%, 150%);
-}
-
-.table-plan-page .bottom-chairs {
+  }
+  
+  .table-plan-component .bottom-chairs {
 	bottom: 0;
 	transform: translate(-50%, -150%);
-}
-
-.table-plan-page .chair {
+  }
+  
+  .table-plan-component .chair {
 	width: 20px;
 	height: 20px;
 	background-color: #f5f5dc;
 	border: 2px solid #d2b48c;
 	border-radius: 50%;
-}
+  }
+  

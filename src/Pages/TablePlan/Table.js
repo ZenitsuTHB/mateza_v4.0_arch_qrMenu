@@ -20,34 +20,34 @@ const Table = ({ numberOfGuests }) => {
 
   return (
     <div
-      className="table-container"
+      className="table-plan-component table-container"
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
     >
       <div
-        className="chairs top-chairs"
+        className="table-plan-component chairs top-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
         {topChairs.slice(0, Math.floor(numberOfGuests / 2)).map((chair, index) => (
-          <div key={`top-${index}`} className="chair"></div>
+          <div key={`top-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
       <div
-        className="table"
+        className="table-plan-component table"
         style={{
           width: `${tableWidth}px`,
           height: `${tableHeight}px`,
         }}
       ></div>
       <div
-        className="chairs bottom-chairs"
+        className="table-plan-component chairs bottom-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
         {bottomChairs.slice(0, Math.ceil(numberOfGuests / 2)).map((chair, index) => (
-          <div key={`bottom-${index}`} className="chair"></div>
+          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
     </div>

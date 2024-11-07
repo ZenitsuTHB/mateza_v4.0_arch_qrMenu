@@ -27,7 +27,7 @@ const TablePlan = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="table-plan-page">
+      <div className="table-plan-component">
         <div className="app-container">
           <FloorPlan />
           <Sidebar tables={tables} walls={walls} />

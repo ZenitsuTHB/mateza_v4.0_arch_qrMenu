@@ -1,5 +1,5 @@
-/* sidebar.css */
-.table-plan-page .sidebar {
+/* css/sidebar.css */
+.table-plan-component .sidebar {
 	width: 350px;
 	position: fixed;
 	height: calc(100% - 60px);
@@ -10,9 +10,9 @@
 	padding: 20px;
 	overflow-y: auto;
 	z-index: 1000;
-}
-
-.table-plan-page .tabs {
+  }
+  
+  .table-plan-component .tabs {
 	width: 100%;
 	align-items: center;
 	justify-content: center;
@@ -20,13 +20,13 @@
 	margin-bottom: 30px;
 	max-width: 800px;
 	margin: 0 auto;
-}
-
-.table-plan-page .tabs .buttons-container {
+  }
+  
+  .table-plan-component .tabs .buttons-container {
 	display: flex;
-}
-
-.table-plan-page .tabs .tab-button {
+  }
+  
+  .table-plan-component .tabs .tab-button {
 	position: relative;
 	padding: 10px 20px;
 	background: none;
@@ -36,17 +36,17 @@
 	font-size: 16px;
 	color: #333;
 	transition: color 0.3s;
-}
-
-.table-plan-page .tabs .tab-button.active {
+  }
+  
+  .table-plan-component .tabs .tab-button.active {
 	color: var(--color-blue, #007bff);
-}
-
-.table-plan-page .tabs .tab-button:hover {
+  }
+  
+  .table-plan-component .tabs .tab-button:hover {
 	color: #555;
-}
-
-.table-plan-page .tabs .tab-underline {
+  }
+  
+  .table-plan-component .tabs .tab-underline {
 	position: absolute;
 	bottom: -2px;
 	left: 0;
@@ -54,34 +54,34 @@
 	height: 2px;
 	background-color: var(--color-blue, #007bff);
 	border-radius: 5px;
-}
-
-.table-plan-page .search-bar {
+  }
+  
+  .table-plan-component .search-bar {
 	margin-bottom: 20px;
 	margin-top: 20px;
-}
-
-.table-plan-page .search-bar input {
+  }
+  
+  .table-plan-component .search-bar input {
 	width: 100%;
 	padding: 8px 12px;
 	border: 1px solid #cccccc;
 	border-radius: 4px;
 	font-size: 14px;
-}
-
-.table-plan-page .items-list {
+  }
+  
+  .table-plan-component .items-list {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-}
-
-.table-plan-page .grid-container {
+  }
+  
+  .table-plan-component .grid-container {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 20px;
-}
-
-.table-plan-page .item {
+  }
+  
+  .table-plan-component .item {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -90,30 +90,30 @@
 	border-radius: 8px;
 	background-color: #fafafa;
 	transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.table-plan-page .item:hover {
+  }
+  
+  .table-plan-component .item:hover {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transform: translateY(-2px);
-}
-
-.table-plan-page .item-info {
+  }
+  
+  .table-plan-component .item-info {
 	margin-top: 10px;
 	text-align: center;
-}
-
-.table-plan-page .item-info p {
+  }
+  
+  .table-plan-component .item-info p {
 	margin: 2px 0;
 	font-size: 14px;
 	color: #555555;
-}
-
-.table-plan-page .no-results {
+  }
+  
+  .table-plan-component .no-results {
 	text-align: center;
 	color: #888888;
-}
-
-.table-plan-page .unsaved-changes-modal {
+  }
+  
+  .table-plan-component .unsaved-changes-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -123,44 +123,45 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-content {
+  }
+  
+  .table-plan-component .unsaved-changes-modal .modal-content {
 	background-color: #fff;
 	padding: 30px 20px;
 	border-radius: 5px;
 	width: 90%;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-content p {
+  }
+  
+  .table-plan-component .unsaved-changes-modal .modal-content p {
 	font-size: 16px;
 	margin-bottom: 30px;
 	text-align: center;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-buttons {
+  }
+  
+  .table-plan-component .unsaved-changes-modal .modal-buttons {
 	display: flex;
 	justify-content: center;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button,
-.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
+  }
+  
+  .table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button,
+  .table-plan-component .unsaved-changes-modal .modal-buttons .discard-button {
 	padding: 10px 20px;
 	font-size: 16px;
 	cursor: pointer;
 	border: none;
 	position: relative;
 	border-radius: 5px;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button {
+  }
+  
+  .table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button {
 	margin-right: 10px;
 	background-color: #f0f0f0;
 	color: #333333;
-}
-
-@media (max-width: 768px) {
-	.table-plan-page .grid-container {
+  }
+  
+  @media (max-width: 768px) {
+	.table-plan-component .grid-container {
 	  grid-template-columns: 1fr;
 	}
-}
+  }
+  
