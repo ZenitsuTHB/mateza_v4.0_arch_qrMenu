@@ -106,6 +106,9 @@ async function generatePrompt() {
 
     promptContent += "Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.";
     promptContent += "Only print the code with changes. Print the codes in full. Don't skip anything print them full.";
+    promptContent += "Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them.";
+    promptContent += "Only print every file once.";
+
 
     const outputFilePath = path.join(__dirname, `prompts/${path.basename(selectedFolderPath)}-prompt.txt`);
     fs.writeFileSync(outputFilePath, promptContent, 'utf8');
