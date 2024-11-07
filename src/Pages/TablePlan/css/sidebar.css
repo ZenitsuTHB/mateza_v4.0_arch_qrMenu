@@ -158,29 +158,6 @@
 	color: #333333;
 }
 
-.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
-	margin-left: 20px;
-	background-color: #e0e0e0;
-	color: #333333;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button::after {
-	content: '';
-	position: absolute;
-	top: -4px;
-	left: -4px;
-	bottom: -4px;
-	right: -4px;
-	border: 2px solid var(--color-red, #b71c1c);
-	pointer-events: none;
-	border-radius: 10px;
-}
-
-.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button:hover {
-	background-color: #b71c1c;
-	color: #ffffff;
-}
-
 @media (max-width: 768px) {
 	.table-plan-page .grid-container {
 	  grid-template-columns: 1fr;

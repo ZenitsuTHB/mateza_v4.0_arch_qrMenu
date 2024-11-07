@@ -9,7 +9,6 @@ const Sidebar = ({ tables, walls }) => {
   const [activeTab, setActiveTab] = useState('tables');
   const [searchTerm, setSearchTerm] = useState('');
   const [pendingTab, setPendingTab] = useState(null);
-  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
 
   const tablesRef = useRef();
   const wallsRef = useRef();
@@ -51,24 +50,10 @@ const Sidebar = ({ tables, walls }) => {
         }
       } else {
         setPendingTab({ id: tabId, title: tabTitle });
-        setShowUnsavedChangesModal(true);
       }
     } else {
       setActiveTab(tabId);
     }
-  };
-
-  const handleDiscardChanges = () => {
-    setShowUnsavedChangesModal(false);
-    if (pendingTab) {
-      setActiveTab(pendingTab.id);
-      setPendingTab(null);
-    }
-  };
-
-  const handleCancelTabChange = () => {
-    setShowUnsavedChangesModal(false);
-    setPendingTab(null);
   };
 
   return (
