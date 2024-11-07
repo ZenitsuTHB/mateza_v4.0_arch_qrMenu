@@ -1,3 +1,5 @@
+/* src/components/css/sidebar.css */
+
 /* Sidebar Container */
 .sidebar {
 	position: fixed;
@@ -15,28 +17,41 @@
   /* Tabs */
   .tabs {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	margin-bottom: 20px;
   }
   
   .tab-button {
 	flex: 1;
-	padding: 10px;
+	padding: 10px 0;
 	margin: 0 5px;
 	background-color: #f0f0f0;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
-	transition: background-color 0.3s;
+	font-size: 16px;
+	color: #333333;
+	transition: background-color 0.3s, color 0.3s;
+	position: relative;
   }
   
   .tab-button.active {
-	background-color: #d2b48c; /* Highlight active tab */
+	background-color: var(--color-blue, #007bff); /* Default to blue if --color-blue is not defined */
 	color: #ffffff;
   }
   
   .tab-button:hover {
 	background-color: #e0e0e0;
+  }
+  
+  .tab-button.active::after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: #ffffff;
   }
   
   /* Search Bar */
@@ -62,7 +77,7 @@
   /* Grid Container for Two Items Per Row */
   .grid-container {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	grid-template-columns: repeat(2, 1fr);
 	gap: 20px;
   }
   
@@ -75,6 +90,12 @@
 	padding: 10px;
 	border-radius: 8px;
 	background-color: #fafafa;
+	transition: box-shadow 0.2s, transform 0.2s;
+  }
+  
+  .item:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
   }
   
   /* Item Information */
@@ -93,5 +114,12 @@
   .no-results {
 	text-align: center;
 	color: #888888;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+	.grid-container {
+	  grid-template-columns: 1fr; /* Single column on small screens */
+	}
   }
   
