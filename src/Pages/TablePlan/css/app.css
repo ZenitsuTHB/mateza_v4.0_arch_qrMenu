@@ -1,28 +1,13 @@
-/* src/css/app.css */
-
+/* Main App Container */
 .app-container {
-  display: flex;
-  height: 100vh; /* Full viewport height */
-  font-family: Arial, sans-serif;
-}
-
-.main-content {
-  flex: 1;
-  padding: 20px;
-  background-color: #fff; /* White background for main content */
-  overflow-y: auto;
-}
-
-.sidebar {
-  width: 300px; /* Fixed width for sidebar */
-  background-color: #f8f9fa; /* Light gray background */
-  padding: 20px;
-  border-left: 1px solid #dee2e6; /* Subtle left border */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-  overflow-y: auto; /* Enable scrolling if content overflows */
-}
-
-.sidebar h2 {
-  margin-top: 0;
-  color: #343a40; /* Darker text for headings */
-}
+	display: flex;
+	flex-direction: row;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+	flex: 1;
+	padding: 20px;
+	margin-right: 300px; /* Same as sidebar width to prevent overlap */
+  }
+  

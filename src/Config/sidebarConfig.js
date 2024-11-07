@@ -37,6 +37,7 @@ import NewReservation from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import CalendarComponent from '../Pages/CalendarMap/index.js';
 import TablePlanCreator from '../Pages/TablePlan/ParentComponent.js';
+import App from '../Pages/TablePlan/index.js';
 
 const routesConfig = [
   
@@ -163,7 +164,7 @@ const routesConfig = [
   },
   {
     path: '/table-plan',
-    element: <TablePlanCreator title="Tafelplan" />,
+    element: <App title="Tafelplan" />,
     label: 'Tafelplan',
     icon: FaTable,
     isMenu: true,

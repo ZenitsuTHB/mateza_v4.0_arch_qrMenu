@@ -1,22 +1,29 @@
-// src/App.js
 import React from 'react';
-import ParentComponent from './components/ParentComponent';
-import './css/app.css'
+import Sidebar from './Sidebar';
+import './css/app.css'; // Your main app CSS
 
-function App() {
+const App = () => {
+  // Sample data for tables
+  const tables = [
+    { id: 1, numberOfGuests: 4 },
+    { id: 2, numberOfGuests: 6 },
+    { id: 3, numberOfGuests: 2 },
+    { id: 4, numberOfGuests: 8 },
+    // Add more tables as needed
+  ];
+
   return (
     <div className="app-container">
+      {/* Main Content */}
       <div className="main-content">
-        {/* Main content can be customized as needed */}
         <h1>Welcome to the Restaurant</h1>
-        <p>Select a table from the sidebar to see details.</p>
+        {/* Your main content goes here */}
       </div>
-      <div className="sidebar">
-        <h2>Available Tables</h2>
-        <ParentComponent />
-      </div>
+
+      {/* Sidebar */}
+      <Sidebar tables={tables} />
     </div>
   );
-}
+};
 
 export default App;
