@@ -1,0 +1,67 @@
+/* Parent container styling */
+.table-plan-creator {
+	display: flex;
+	height: 100vh; /* Full viewport height */
+	width: 100%;
+	box-sizing: border-box;
+  }
+  
+  /* Floor Plan Area */
+  .floor-plan {
+	flex: 4; /* Approximately 70-80% of the width */
+	background-color: #f0f0f0; /* Light grey background for visibility */
+	border-right: 1px solid #ccc; /* Subtle border to separate from sidebar */
+	position: relative; /* For absolute positioning of child elements */
+	overflow: auto; /* Enable scrolling if content overflows */
+	padding: 20px;
+  }
+  
+  /* Sidebar Area */
+  .sidebar {
+	flex: 1; /* Approximately 20-30% of the width */
+	background-color: #ffffff; /* White background for clarity */
+	padding: 20px;
+	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	overflow-y: auto; /* Vertical scroll if content overflows */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.table-plan-creator {
+	  flex-direction: column;
+	}
+  
+	.floor-plan, .sidebar {
+	  flex: none;
+	  width: 100%;
+	  height: 50vh; /* Adjust heights for smaller screens */
+	}
+  
+	.sidebar {
+	  box-shadow: none;
+	  border-top: 1px solid #ccc;
+	}
+  }
+  
+  /* Add a resizer between Floor Plan and Sidebar */
+.table-plan-creator {
+	display: flex;
+	height: 100vh;
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+  }
+  
+  /* Resizer styling */
+  .resizer {
+	width: 5px;
+	background-color: #ccc;
+	cursor: col-resize;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 80%; /* Initial position */
+	transform: translateX(-50%);
+	z-index: 1;
+  }
+  

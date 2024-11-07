@@ -1,0 +1,34 @@
+/* Floor Plan Container */
+.floor-plan {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: #eaeaea;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	overflow: hidden;
+  }
+  
+  /* Grid Overlay */
+  .grid-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image:
+	  linear-gradient(to right, #ddd 1px, transparent 1px),
+	  linear-gradient(to bottom, #ddd 1px, transparent 1px);
+	background-size: 50px 50px;
+	pointer-events: none; /* Allows elements to be interactive */
+  }
+  
+  /* Floor Plan Element (Container) */
+  .floor-plan-element {
+	position: absolute;
+	cursor: move;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
