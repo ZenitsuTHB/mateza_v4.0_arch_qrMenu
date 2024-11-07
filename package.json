@@ -15,6 +15,7 @@
     "gsap": "^3.12.5",
     "html2canvas": "^1.4.1",
     "i18next": "^23.15.2",
+    "inquirer": "^8.2.6",
     "jspdf": "^2.5.2",
     "moment-timezone": "^0.5.46",
     "p5": "^1.11.0",
@@ -48,6 +49,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "generate-prompt": "node generatePrompt.mjs",
     "ping": "node git-ping.js",
     "prebuild": "node prebuild.js",
     "reset": "git reset --hard HEAD~1",
