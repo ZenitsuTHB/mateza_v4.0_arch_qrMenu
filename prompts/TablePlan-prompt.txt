@@ -1,47 +1,9 @@
-START-FILE-(path:index.js)
-import React from 'react';
-import FloorPlan from './FloorPlan.js';
-import Sidebar from './Sidebar.js';
-import { withHeader } from '../../Components/Structural/Header/index.js';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import './css/app.css';
+File Contents:
 
-const TablePlan = () => {
-  const tables = [
-    { id: 1, numberOfGuests: 4 },
-    { id: 2, numberOfGuests: 6 },
-    { id: 3, numberOfGuests: 2 },
-    { id: 4, numberOfGuests: 8 },
-    { id: 5, numberOfGuests: 4 },
-    { id: 6, numberOfGuests: 5 },
-  ];
-
-  const walls = [
-    { id: 1, length: 3 },
-    { id: 2, length: 5 },
-    { id: 3, length: 2 },
-    { id: 4, length: 4 },
-    { id: 5, length: 6 },
-  ];
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="table-plan-component">
-        <div className="table-plan-component app-container">
-          <FloorPlan />
-          <Sidebar tables={tables} walls={walls} />
-        </div>
-      </div>
-    </DndProvider>
-  );
-};
-
-export default withHeader(TablePlan);
-END-FILE
-START-FILE-(path:FloorPlan.js)
-import React, { useState, useCallback } from 'react';
-import { useDrop, useDragLayer } from 'react-dnd';
+--- FloorPlan.js ---
+// FloorPlan.js
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -49,6 +11,27 @@ import FloorPlanElement from './FloorPlanElement.js';
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
+  const floorPlanRef = useRef(null);
+  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+
+  // Update floor plan size on mount and when resized
+  useEffect(() => {
+    const updateSize = () => {
+      if (floorPlanRef.current) {
+        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+        setFloorPlanSize({ width, height });
+      }
+    };
+
+    // Initial size
+    updateSize();
+
+    // Update size on window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const addElement = (element) => {
     setElements((prevElements) => [...prevElements, element]);
@@ -68,10 +51,6 @@ const FloorPlan = () => {
     );
   }, []);
 
-  const removeElement = useCallback((id) => {
-    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
-  }, []);
-
   const snapToGrid = (x, y, gridSize = 50) => {
     const snappedX = Math.round(x / gridSize) * gridSize;
     const snappedY = Math.round(y / gridSize) * gridSize;
@@ -82,16 +61,14 @@ const FloorPlan = () => {
     accept: 'ITEM',
     drop: (item, monitor) => {
       const offset = monitor.getClientOffset();
-      const floorPlanRect = document
-        .getElementById('floor-plan-container')
-        .getBoundingClientRect();
+      const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
 
       let x = offset.x - floorPlanRect.left - item.width / 2;
       let y = offset.y - floorPlanRect.top - item.height / 2;
 
       const [snappedX, snappedY] = snapToGrid(x, y);
-      x = Math.max(0, Math.min(snappedX, floorPlanRect.width - item.width));
-      y = Math.max(0, Math.min(snappedY, floorPlanRect.height - item.height));
+      x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+      y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
 
       if (item.id) {
         moveElement(item.id, x, y);
@@ -118,23 +95,6 @@ const FloorPlan = () => {
     },
   });
 
-  const { isDragging } = useDragLayer((monitor) => ({
-    isDragging: monitor.isDragging(),
-  }));
-
-  const [{ isOverTrash, canDropTrash }, dropTrash] = useDrop({
-    accept: 'ITEM',
-    drop: (item) => {
-      if (item.id) {
-        removeElement(item.id);
-      }
-    },
-    collect: (monitor) => ({
-      isOverTrash: monitor.isOver(),
-      canDropTrash: monitor.canDrop(),
-    }),
-  });
-
   return (
     <ResizableBox
       width={800}
@@ -142,43 +102,51 @@ const FloorPlan = () => {
       minConstraints={[400, 300]}
       maxConstraints={[1600, 1200]}
       className="table-plan-component resizable-floor-plan"
+      onResizeStop={() => {
+        if (floorPlanRef.current) {
+          const { width, height } = floorPlanRef.current.getBoundingClientRect();
+          setFloorPlanSize({ width, height });
+        }
+      }}
     >
       <div
         id="floor-plan-container"
         className="table-plan-component floor-plan"
-        ref={drop}
+        ref={(node) => {
+          drop(node);
+          floorPlanRef.current = node;
+        }}
+        style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         {elements.map((el) => (
-          <FloorPlanElement key={el.id} element={el} moveElement={moveElement} />
+          <FloorPlanElement
+            key={el.id}
+            element={el}
+            moveElement={moveElement}
+            floorPlanSize={floorPlanSize}
+          />
         ))}
-        {isDragging && (
-          <div
-            className={`table-plan-component trash-container ${
-              isOverTrash && canDropTrash ? 'active' : ''
-            }`}
-            ref={dropTrash}
-          >
-            🗑️
-          </div>
-        )}
       </div>
     </ResizableBox>
   );
 };
 
 export default FloorPlan;
-END-FILE
-START-FILE-(path:FloorPlanElement.js)
+
+
+--- FloorPlanElement.js ---
+// FloorPlanElement.js
 import React, { useState, useEffect } from 'react';
 import Table from './Table.js';
 import Walls from './Walls.js';
 
-const FloorPlanElement = ({ element, moveElement }) => {
+const FloorPlanElement = ({ element, moveElement, floorPlanSize }) => {
   const [position, setPosition] = useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = (e) => {
+    e.preventDefault(); // Prevent text selection
     setIsDragging(true);
     setOffset({
       x: e.clientX - position.x,
@@ -189,9 +157,16 @@ const FloorPlanElement = ({ element, moveElement }) => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (isDragging) {
+        let newX = e.clientX - offset.x;
+        let newY = e.clientY - offset.y;
+
+        // Constrain within floor plan boundaries
+        newX = Math.max(0, Math.min(newX, floorPlanSize.width - element.width));
+        newY = Math.max(0, Math.min(newY, floorPlanSize.height - element.height));
+
         setPosition({
-          x: e.clientX - offset.x,
-          y: e.clientY - offset.y,
+          x: newX,
+          y: newY,
         });
       }
     };
@@ -210,7 +185,7 @@ const FloorPlanElement = ({ element, moveElement }) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, offset, position, moveElement, element.id]);
+  }, [isDragging, offset, position, moveElement, element.id, floorPlanSize, element.width, element.height]);
 
   useEffect(() => {
     setPosition({ x: element.x, y: element.y });
@@ -225,10 +200,15 @@ const FloorPlanElement = ({ element, moveElement }) => {
     opacity: isDragging ? 0.5 : 1,
     cursor: 'move',
     transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
+    zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
   };
 
   return (
-    <div className="table-plan-component floor-plan-element" onMouseDown={handleMouseDown} style={style}>
+    <div
+      className="table-plan-component floor-plan-element"
+      onMouseDown={handleMouseDown}
+      style={style}
+    >
       {element.type === 'table' ? (
         <Table numberOfGuests={element.capacity} />
       ) : element.type === 'wall' ? (
@@ -239,8 +219,9 @@ const FloorPlanElement = ({ element, moveElement }) => {
 };
 
 export default FloorPlanElement;
-END-FILE
-START-FILE-(path:Sidebar.js)
+
+
+--- Sidebar.js ---
 import React, { useState, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { motion } from 'framer-motion';
@@ -257,7 +238,6 @@ const TableItem = ({ table }) => {
       width: 70,
       height: 70,
       capacity: table.numberOfGuests,
-      id: table.id,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -283,7 +263,6 @@ const WallItem = ({ wall }) => {
       subtype: 'wall',
       width: wall.length * 20,
       height: 20,
-      id: wall.id,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -410,8 +389,8 @@ const Sidebar = ({ tables, walls }) => {
 };
 
 export default Sidebar;
-END-FILE
-START-FILE-(path:Table.js)
+
+--- Table.js ---
 import React from 'react';
 import './css/table.css';
 
@@ -468,8 +447,8 @@ const Table = ({ numberOfGuests }) => {
 };
 
 export default Table;
-END-FILE
-START-FILE-(path:Walls.js)
+
+--- Walls.js ---
 import React from 'react';
 import './css/walls.css';
 
@@ -488,8 +467,8 @@ const Walls = ({ length }) => {
 };
 
 export default Walls;
-END-FILE
-START-FILE-(path:css/app.css)
+
+--- css/app.css ---
 .table-plan-component .app-container {
   display: flex;
   flex-direction: row;
@@ -508,13 +487,7 @@ START-FILE-(path:css/app.css)
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.table-plan-component .resizable-floor-plan {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-END-FILE
-START-FILE-(path:css/floorPlan.css)
+--- css/floorPlan.css ---
 .table-plan-component .floor-plan {
   position: relative;
   width: 100%;
@@ -538,33 +511,7 @@ START-FILE-(path:css/floorPlan.css)
   height: 100%;
 }
 
-.table-plan-component .trash-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  background-color: white;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.8;
-  transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
-}
-
-.table-plan-component .trash-container.active {
-  background-color: #ffe6e6;
-  border-color: red;
-  transform: scale(1.2);
-}
-
-.table-plan-component .trash-container:hover {
-  cursor: pointer;
-}
-END-FILE
-START-FILE-(path:css/sidebar.css)
+--- css/sidebar.css ---
 .table-plan-component .sidebar {
   width: 350px;
   position: fixed;
@@ -730,8 +677,8 @@ START-FILE-(path:css/sidebar.css)
     grid-template-columns: 1fr;
   }
 }
-END-FILE
-START-FILE-(path:css/table.css)
+
+--- css/table.css ---
 .table-plan-component .table-container {
   position: relative;
   display: flex;
@@ -778,8 +725,8 @@ START-FILE-(path:css/table.css)
   border: 2px solid #d2b48c;
   border-radius: 50%;
 }
-END-FILE
-START-FILE-(path:css/walls.css)
+
+--- css/walls.css ---
 .table-plan-component .walls-container {
   display: flex;
   align-items: center;
@@ -794,4 +741,112 @@ START-FILE-(path:css/walls.css)
   border: 2px solid #654321;
   border-radius: 4px;
 }
-END-FILE
+
+--- index.js ---
+import React from 'react';
+import FloorPlan from './FloorPlan.js';
+import Sidebar from './Sidebar.js';
+import { withHeader } from '../../Components/Structural/Header/index.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import './css/app.css';
+
+const TablePlan = () => {
+  const tables = [
+    { id: 1, numberOfGuests: 4 },
+    { id: 2, numberOfGuests: 6 },
+    { id: 3, numberOfGuests: 2 },
+    { id: 4, numberOfGuests: 8 },
+    { id: 5, numberOfGuests: 4 },
+    { id: 6, numberOfGuests: 5 },
+  ];
+
+  const walls = [
+    { id: 1, length: 3 },
+    { id: 2, length: 5 },
+    { id: 3, length: 2 },
+    { id: 4, length: 4 },
+    { id: 5, length: 6 },
+  ];
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="table-plan-component">
+        <div className="app-container">
+          <FloorPlan />
+          <Sidebar tables={tables} walls={walls} />
+        </div>
+      </div>
+    </DndProvider>
+  );
+};
+
+export default withHeader(TablePlan);
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/TablePlan":
+
+├── FloorPlan.js
+├── FloorPlanElement.js
+├── Sidebar.js
+├── Table.js
+├── Walls.js
+├── css
+│   ├── app.css
+│   ├── floorPlan.css
+│   ├── sidebar.css
+│   ├── table.css
+│   └── walls.css
+└── index.js
+
+
+List of Files:
+FloorPlan.js
+FloorPlanElement.js
+Sidebar.js
+Table.js
+Walls.js
+css/app.css
+css/floorPlan.css
+css/sidebar.css
+css/table.css
+css/walls.css
+index.js
+
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+**Examples:**
+
+*Encapsulation in index.js:*
+```jsx
+<div className="profile-component">
+    <h2 className="account-manage-title">Admin Reservaties</h2>
+    <div className="account-manage-container">
+        {/* ... */}
+        onClose={() => setIsModalOpen(false)}
+    </div>
+</div>
+```
+
+*Prefixed CSS Classes:*
+```css
+.component-name-component .account-manage-container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background-color: white;
+}
+
+.component-name-component .modal-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+```Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.Only print the code with changes. Print the codes in full. Don't skip anything print them full.Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them.Only print every file once.

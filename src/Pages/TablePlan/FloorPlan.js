@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+// FloorPlan.js
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
@@ -7,6 +8,27 @@ import FloorPlanElement from './FloorPlanElement.js';
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
+  const floorPlanRef = useRef(null);
+  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+
+  // Update floor plan size on mount and when resized
+  useEffect(() => {
+    const updateSize = () => {
+      if (floorPlanRef.current) {
+        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+        setFloorPlanSize({ width, height });
+      }
+    };
+
+    // Initial size
+    updateSize();
+
+    // Update size on window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const addElement = (element) => {
     setElements((prevElements) => [...prevElements, element]);
@@ -36,16 +58,14 @@ const FloorPlan = () => {
     accept: 'ITEM',
     drop: (item, monitor) => {
       const offset = monitor.getClientOffset();
-      const floorPlanRect = document
-        .getElementById('floor-plan-container')
-        .getBoundingClientRect();
+      const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
 
       let x = offset.x - floorPlanRect.left - item.width / 2;
       let y = offset.y - floorPlanRect.top - item.height / 2;
 
       const [snappedX, snappedY] = snapToGrid(x, y);
-      x = Math.max(0, Math.min(snappedX, floorPlanRect.width - item.width));
-      y = Math.max(0, Math.min(snappedY, floorPlanRect.height - item.height));
+      x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+      y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
 
       if (item.id) {
         moveElement(item.id, x, y);
@@ -79,10 +99,29 @@ const FloorPlan = () => {
       minConstraints={[400, 300]}
       maxConstraints={[1600, 1200]}
       className="table-plan-component resizable-floor-plan"
+      onResizeStop={() => {
+        if (floorPlanRef.current) {
+          const { width, height } = floorPlanRef.current.getBoundingClientRect();
+          setFloorPlanSize({ width, height });
+        }
+      }}
     >
-      <div id="floor-plan-container" className="table-plan-component floor-plan" ref={drop}>
+      <div
+        id="floor-plan-container"
+        className="table-plan-component floor-plan"
+        ref={(node) => {
+          drop(node);
+          floorPlanRef.current = node;
+        }}
+        style={{ position: 'relative', width: '100%', height: '100%' }}
+      >
         {elements.map((el) => (
-          <FloorPlanElement key={el.id} element={el} moveElement={moveElement} />
+          <FloorPlanElement
+            key={el.id}
+            element={el}
+            moveElement={moveElement}
+            floorPlanSize={floorPlanSize}
+          />
         ))}
       </div>
     </ResizableBox>
