@@ -161,15 +161,6 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
-  {
-    path: '/giftcard',
-    element: <TablePlanCreator title="Tafelplan" />,
-    label: 'Tafelplan',
-    icon: FaTable,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-  },
 
   {
     path: '/giftcard',
