@@ -50,6 +50,7 @@
   "scripts": {
     "start": "react-scripts start",
     "generate-prompt": "node generatePrompt.mjs",
+    "new-prompt": "node generatePrompt.mjs c",
     "ping": "node git-ping.js",
     "prebuild": "node prebuild.js",
     "reset": "git reset --hard HEAD~1",
