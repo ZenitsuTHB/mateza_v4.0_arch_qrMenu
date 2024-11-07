@@ -6,10 +6,9 @@ import Sidebar from './Sidebar.js';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import './css/app.css'; // Import the new CSS for layout
+import './css/app.css';
 
 const TablePlan = () => {
-  // Sample data for tables
   const tables = [
     { id: 1, numberOfGuests: 4 },
     { id: 2, numberOfGuests: 6 },
@@ -17,27 +16,21 @@ const TablePlan = () => {
     { id: 4, numberOfGuests: 8 },
     { id: 5, numberOfGuests: 4 },
     { id: 6, numberOfGuests: 5 },
-    // Add more tables as needed
   ];
 
-  // Sample data for walls
   const walls = [
     { id: 1, length: 3 },
     { id: 2, length: 5 },
     { id: 3, length: 2 },
     { id: 4, length: 4 },
     { id: 5, length: 6 },
-    // Add more walls as needed
   ];
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="table-plan-page">
         <div className="app-container">
-          {/* FloorPlan on the left */}
           <FloorPlan />
-
-          {/* Sidebar on the right */}
           <Sidebar tables={tables} walls={walls} />
         </div>
       </div>
