@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from 'react';
+// src/components/FloorPlan.jsx
+
+import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import FloorPlanElement from './FloorPlanElement';
 import './css/floorPlan.css';

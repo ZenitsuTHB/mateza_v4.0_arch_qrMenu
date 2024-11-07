@@ -1,3 +1,5 @@
+// src/components/Sidebar.jsx
+
 import React, { useState } from 'react';
 import SearchBar from './SearchBar';
 import DraggableComponentsList from './DraggableComponentsList';

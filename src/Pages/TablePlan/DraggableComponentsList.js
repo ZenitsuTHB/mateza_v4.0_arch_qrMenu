@@ -1,3 +1,5 @@
+// src/components/DraggableComponentsList.jsx
+
 import React from 'react';
 import DraggableItem from './DraggableItem';
 import './css/draggableComponentsList.css';

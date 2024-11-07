@@ -1,3 +1,5 @@
+// src/components/Wall.jsx
+
 import React from 'react';
 import './css/wall.css';
 

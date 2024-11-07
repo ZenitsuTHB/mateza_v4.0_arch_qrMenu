@@ -1,3 +1,5 @@
+// src/components/DraggableItem.jsx
+
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import './css/draggableItem.css';

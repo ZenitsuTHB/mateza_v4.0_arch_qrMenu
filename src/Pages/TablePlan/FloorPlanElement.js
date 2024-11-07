@@ -1,5 +1,7 @@
+// src/components/FloorPlanElement.jsx
+
 import React, { useState } from 'react';
-import { useDrag, useDragLayer } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 import { ResizableBox } from 'react-resizable';
 import Table from './Table';
 import Wall from './Wall';
