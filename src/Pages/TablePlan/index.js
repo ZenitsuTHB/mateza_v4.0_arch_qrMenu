@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Sidebar from './Sidebar.js';
-import './css/app.css'; // Import the main app CSS
+import { withHeader } from '../../Components/Structural/Header/index.js';
 
-const App = () => {
+const TablePlan = () => {
   // Sample data for tables
   const tables = [
     { id: 1, numberOfGuests: 4 },
@@ -28,16 +28,10 @@ const App = () => {
 
   return (
     <div className="app-container">
-      {/* Main Content */}
-      <div className="main-content">
-        <h1>Welcome to the Restaurant</h1>
-        {/* Your main content goes here */}
-      </div>
-
       {/* Sidebar */}
       <Sidebar tables={tables} walls={walls} />
     </div>
   );
 };
 
-export default App;
+export default withHeader(TablePlan);
