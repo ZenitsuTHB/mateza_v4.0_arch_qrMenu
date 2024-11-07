@@ -1,24 +1,16 @@
-/* src/components/css/sidebar.css */
-
-/* Sidebar Container */
+/* css/sidebar.css */
 .table-plan-page .sidebar {
-	/* Remove fixed positioning */
-	/* position: fixed; */
-	/* top: 60px; */
-	width: 350px; /* Adjust as needed */
-	height: auto; /* Let height be determined by content */
+	width: 350px;
+	height: auto;
 	background-color: #ffffff;
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 	padding: 20px;
-	overflow-y: auto; /* Enable scrolling if content exceeds height */
-	z-index: 1000; /* Ensure the sidebar is on top */
-	border-radius: 8px; /* Optional: Add some rounding */
-  }
-  
-  /* Adjust other styles as necessary */
-  
-  /* Tabs */
-  .table-plan-page .tabs {
+	overflow-y: auto;
+	z-index: 1000;
+	border-radius: 8px;
+}
+
+.table-plan-page .tabs {
 	width: 100%;
 	align-items: center;
 	justify-content: center;
@@ -26,19 +18,13 @@
 	margin-bottom: 20px;
 	max-width: 800px;
 	margin: 0 auto;
-  }
-  
-  .table-plan-page .tabs .tab-menu {
+}
+
+.table-plan-page .tabs .buttons-container {
 	display: flex;
-	justify-content: center;
-	margin-bottom: 20px;
-  }
-  
-  .table-plan-page .tabs .buttons-container {
-	display: flex;
-  }
-  
-  .table-plan-page .tabs .tab-button {
+}
+
+.table-plan-page .tabs .tab-button {
 	position: relative;
 	padding: 10px 20px;
 	background: none;
@@ -48,17 +34,17 @@
 	font-size: 16px;
 	color: #333;
 	transition: color 0.3s;
-  }
-  
-  .table-plan-page .tabs .tab-button.active {
+}
+
+.table-plan-page .tabs .tab-button.active {
 	color: var(--color-blue, #007bff);
-  }
-  
-  .table-plan-page .tabs .tab-button:hover {
+}
+
+.table-plan-page .tabs .tab-button:hover {
 	color: #555;
-  }
-  
-  .table-plan-page .tabs .tab-underline {
+}
+
+.table-plan-page .tabs .tab-underline {
 	position: absolute;
 	bottom: -2px;
 	left: 0;
@@ -66,37 +52,33 @@
 	height: 2px;
 	background-color: var(--color-blue, #007bff);
 	border-radius: 5px;
-  }
-  
-  /* Search Bar */
-  .table-plan-page .search-bar {
+}
+
+.table-plan-page .search-bar {
 	margin-bottom: 20px;
-  }
-  
-  .table-plan-page .search-bar input {
+}
+
+.table-plan-page .search-bar input {
 	width: 100%;
 	padding: 8px 12px;
 	border: 1px solid #cccccc;
 	border-radius: 4px;
 	font-size: 14px;
-  }
-  
-  /* Items List */
-  .table-plan-page .items-list {
+}
+
+.table-plan-page .items-list {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-  }
-  
-  /* Grid Container for Two Items Per Row */
-  .table-plan-page .grid-container {
+}
+
+.table-plan-page .grid-container {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 20px;
-  }
-  
-  /* Individual Item */
-  .table-plan-page .item {
+}
+
+.table-plan-page .item {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -105,33 +87,30 @@
 	border-radius: 8px;
 	background-color: #fafafa;
 	transition: box-shadow 0.2s, transform 0.2s;
-  }
-  
-  .table-plan-page .item:hover {
+}
+
+.table-plan-page .item:hover {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transform: translateY(-2px);
-  }
-  
-  /* Item Information */
-  .table-plan-page .item-info {
+}
+
+.table-plan-page .item-info {
 	margin-top: 10px;
 	text-align: center;
-  }
-  
-  .table-plan-page .item-info p {
+}
+
+.table-plan-page .item-info p {
 	margin: 2px 0;
 	font-size: 14px;
 	color: #555555;
-  }
-  
-  /* No Results Message */
-  .table-plan-page .no-results {
+}
+
+.table-plan-page .no-results {
 	text-align: center;
 	color: #888888;
-  }
-  
-  /* Unsaved Changes Modal */
-  .table-plan-page .unsaved-changes-modal {
+}
+
+.table-plan-page .unsaved-changes-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -141,49 +120,49 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-content {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-content {
 	background-color: #fff;
 	padding: 30px 20px;
 	border-radius: 5px;
 	width: 90%;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-content p {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-content p {
 	font-size: 16px;
 	margin-bottom: 30px;
 	text-align: center;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons {
 	display: flex;
 	justify-content: center;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button,
-  .table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button,
+.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
 	padding: 10px 20px;
 	font-size: 16px;
 	cursor: pointer;
 	border: none;
 	position: relative;
 	border-radius: 5px;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons .cancel-button {
 	margin-right: 10px;
 	background-color: #f0f0f0;
 	color: #333333;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button {
 	margin-left: 20px;
 	background-color: #e0e0e0;
 	color: #333333;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons .discard-button::after {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button::after {
 	content: '';
 	position: absolute;
 	top: -4px;
@@ -193,17 +172,15 @@
 	border: 2px solid var(--color-red, #b71c1c);
 	pointer-events: none;
 	border-radius: 10px;
-  }
-  
-  .table-plan-page .unsaved-changes-modal .modal-buttons .discard-button:hover {
+}
+
+.table-plan-page .unsaved-changes-modal .modal-buttons .discard-button:hover {
 	background-color: #b71c1c;
 	color: #ffffff;
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
 	.table-plan-page .grid-container {
-	  grid-template-columns: 1fr; /* Single column on small screens */
+	  grid-template-columns: 1fr;
 	}
-  }
-  
+}

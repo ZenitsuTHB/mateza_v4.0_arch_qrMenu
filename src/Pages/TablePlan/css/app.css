@@ -1,25 +1,19 @@
-/* src/components/css/app.css */
-
-/* Layout Container */
+/* css/app.css */
 .table-plan-page .app-container {
 	display: flex;
 	flex-direction: row;
-	height: 100vh; /* Full viewport height */
-	width: 100vw;  /* Full viewport width */
+	height: 100vh;
+	width: 100vw;
 	box-sizing: border-box;
 	padding: 20px;
-	background-color: #f0f2f5; /* Light background color */
-  }
-  
-  /* FloorPlan Styling */
-  .table-plan-page .floor-plan {
-	flex: 3; /* Takes up 75% of the width */
-	margin-right: 20px; /* Space between FloorPlan and Sidebar */
+	background-color: #f0f2f5;
+}
+
+.table-plan-page .floor-plan {
+	flex: 3;
+	margin-right: 20px;
 	background-color: #ffffff;
 	border-radius: 8px;
 	overflow: hidden;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Sidebar Styling is already defined in sidebar.css */
-  
+}

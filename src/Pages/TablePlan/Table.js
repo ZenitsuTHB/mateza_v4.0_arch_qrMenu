@@ -1,20 +1,15 @@
-// src/components/Table.jsx
-
+// Table.js
 import React from 'react';
 import './css/table.css';
 
 const Table = ({ numberOfGuests }) => {
-  // Determine if the table is square
   const isSquare = numberOfGuests === 4;
 
-  // Calculate table dimensions
-  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15; // Adjust width for more guests
+  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
   const tableHeight = 70;
 
-  // Calculate number of chairs per side
   const chairsPerSide = Math.ceil(numberOfGuests / 2);
 
-  // Generate arrays for top and bottom chairs
   const topChairs = [];
   const bottomChairs = [];
 
@@ -26,9 +21,8 @@ const Table = ({ numberOfGuests }) => {
   return (
     <div
       className="table-container"
-      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }} // Increased height to accommodate chairs
+      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
     >
-      {/* Chairs - Top */}
       <div
         className="chairs top-chairs"
         style={{
@@ -39,8 +33,6 @@ const Table = ({ numberOfGuests }) => {
           <div key={`top-${index}`} className="chair"></div>
         ))}
       </div>
-
-      {/* Table */}
       <div
         className="table"
         style={{
@@ -48,8 +40,6 @@ const Table = ({ numberOfGuests }) => {
           height: `${tableHeight}px`,
         }}
       ></div>
-
-      {/* Chairs - Bottom */}
       <div
         className="chairs bottom-chairs"
         style={{

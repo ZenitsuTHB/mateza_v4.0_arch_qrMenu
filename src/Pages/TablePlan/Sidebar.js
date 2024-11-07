@@ -1,5 +1,4 @@
-// src/components/Sidebar.js
-
+// Sidebar.js
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Table from './Table.js';
@@ -22,7 +21,6 @@ const Sidebar = ({ tables, walls }) => {
     { id: 'walls', label: 'Walls', title: "Manage Walls" },
   ];
 
-  // Filter tables and walls based on search term
   const filteredTables = tables.filter(
     (table) =>
       table.id.toString().includes(searchTerm) ||
@@ -75,7 +73,6 @@ const Sidebar = ({ tables, walls }) => {
 
   return (
     <div className="sidebar">
-      {/* Tabs */}
       <div className="tabs">
         <div className="buttons-container">
           {tabs.map((tab) => (
@@ -101,8 +98,6 @@ const Sidebar = ({ tables, walls }) => {
           ))}
         </div>
       </div>
-
-      {/* Search Bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -112,8 +107,6 @@ const Sidebar = ({ tables, walls }) => {
           aria-label={`Search ${activeTab}`}
         />
       </div>
-
-      {/* Items List */}
       <div className="items-list">
         {activeTab === 'tables' && filteredTables.length > 0 ? (
           <div className="grid-container">
