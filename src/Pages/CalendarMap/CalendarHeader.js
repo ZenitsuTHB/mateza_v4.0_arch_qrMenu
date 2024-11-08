@@ -1,8 +1,8 @@
 // CalendarHeader.js
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
-import { FaChevronLeft, FaChevronRight, FaChartBar } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown } from 'react-icons/fa';
 import ShiftSelector from './ShiftSelector';
 import ViewModeSelector from './ViewModeSelector';
 
@@ -38,6 +38,40 @@ const CalendarHeader = ({
     currentDate.getFullYear() === new Date().getFullYear() &&
     currentDate.getMonth() === new Date().getMonth();
 
+  // New state for view options dropdown
+  const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false);
+  const viewOptionsRef = useRef(null);
+  const viewButtonRef = useRef(null);
+
+  // Handle Click Outside for View Options
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        viewOptionsRef.current &&
+        !viewOptionsRef.current.contains(event.target) &&
+        viewButtonRef.current &&
+        !viewButtonRef.current.contains(event.target)
+      ) {
+        setIsViewOptionsOpen(false);
+      }
+    };
+
+    if (isViewOptionsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isViewOptionsOpen]);
+
+  // Function to handle view option selection
+  const handleViewOptionSelection = (option) => {
+    setIsViewOptionsOpen(false);
+  };
+
   return (
     <div className="calendar-header">
       {!(selectedViewMode === 'Voorspelling' && isAtCurrentMonth) ? (
@@ -47,19 +81,44 @@ const CalendarHeader = ({
       ) : (
         <div style={{ width: '24px' }}></div>
       )}
-      <h2>
-        {month} {year}
-      </h2>
-	  <button className="nav-button" onClick={onNextMonth}
-	  style={{ marginRight: '24px' }}
-	  >
-          <FaChevronRight size={24} />
+      <div className="header-title-container">
+        <h2>
+          {month} {year}
+        </h2>
+        <button
+          className="view-options-button"
+          onClick={() => setIsViewOptionsOpen(!isViewOptionsOpen)}
+          ref={viewButtonRef}
+          aria-label="Toggle view options"
+        >
+          <FaChevronDown size={16} />
         </button>
-		
+        {isViewOptionsOpen && (
+          <div className="view-options-container" ref={viewOptionsRef}>
+            <div
+              className="view-option"
+              onClick={() => handleViewOptionSelection('week')}
+            >
+              Week
+            </div>
+			<div
+              className="view-option"
+              onClick={() => handleViewOptionSelection('maand')}
+            >
+              Maand
+            </div>
+          </div>
+        )}
+      </div>
+      <button
+        className="nav-button"
+        onClick={onNextMonth}
+        style={{ marginRight: '24px' }}
+      >
+        <FaChevronRight size={24} />
+      </button>
+
       <div className="header-buttons">
-
-
-
         <button
           onClick={toggleChartView}
           className="standard-button blue chart-toggle-button"
@@ -67,7 +126,7 @@ const CalendarHeader = ({
         >
           <FaChartBar size={16} />
         </button>
-		
+
         <ShiftSelector
           selectedShift={selectedShift}
           setSelectedShift={setSelectedShift}
@@ -76,7 +135,6 @@ const CalendarHeader = ({
           selectedViewMode={selectedViewMode}
           setSelectedViewMode={setSelectedViewMode}
         />
-        
       </div>
     </div>
   );

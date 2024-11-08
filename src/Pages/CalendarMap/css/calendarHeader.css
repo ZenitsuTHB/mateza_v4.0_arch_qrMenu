@@ -39,3 +39,82 @@
 	height: 38px; /* Adjust to match other buttons */
   }
   
+
+  /* calendarHeader.css */
+
+/* Existing styles... */
+
+  
+  .nav-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .nav-button:hover {
+	background-color: #e0e0e0;
+  }
+  
+  .header-title-container {
+	display: flex;
+	align-items: center;
+	position: relative;
+  }
+  
+  .header-title-container h2 {
+	margin: 0;
+	font-size: 1.5rem;
+  }
+  
+  .view-options-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin-left: 8px;
+	display: flex;
+	align-items: center;
+	padding: 4px;
+	border-radius: 4px;
+	opacity: 0;
+	transition: all 0.3s ease;
+  }
+  
+  .view-options-button:hover {
+	opacity: 1;
+  }
+  
+  .view-options-container {
+	position: absolute;
+	top: 40px;
+	left: 70px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 1000;
+	width: 120px;
+	padding: 10px 0;
+  }
+  
+  .view-option {
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .view-option:hover {
+	background-color: #f1f1f1;
+  }
+  
+  .view-option.selected {
+	background-color: #e0e0e0;
+  }
+  
+  /* Existing styles for .header-buttons and other elements... */
+  .header-buttons {
+	display: flex;
+	align-items: center;
+  }
