@@ -1,5 +1,3 @@
-// CalendarHeader.js
-
 import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
 import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown } from 'react-icons/fa';
@@ -31,19 +29,22 @@ const CalendarHeader = ({
     'november',
     'december',
   ];
-  const month = monthNames[currentDate.getMonth()];
-  const year = currentDate.getFullYear();
 
-  const isAtCurrentMonth =
-    currentDate.getFullYear() === new Date().getFullYear() &&
-    currentDate.getMonth() === new Date().getMonth();
+  // Utility function to get the Monday of the week for a given date
+  const getMonday = (date) => {
+    const d = new Date(date);
+    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0); // Reset time to midnight
+    return d;
+  };
 
-  // New state for view options dropdown
+  const [currentWeekStart, setCurrentWeekStart] = useState(getMonday(currentDate));
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false);
   const viewOptionsRef = useRef(null);
   const viewButtonRef = useRef(null);
 
-  // Handle Click Outside for View Options
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -67,23 +68,69 @@ const CalendarHeader = ({
     };
   }, [isViewOptionsOpen]);
 
-  // Function to handle view option selection
+  useEffect(() => {
+    if (selectedViewMode === 'week') {
+      setCurrentWeekStart(getMonday(currentDate));
+    }
+  }, [currentDate, selectedViewMode]);
+
+  const getWeekTitle = () => {
+    const start = new Date(currentWeekStart);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6); // End on Sunday
+
+    const startDay = start.getDate();
+    const endDay = end.getDate();
+    const startMonth = monthNames[start.getMonth()];
+    const endMonth = monthNames[end.getMonth()];
+    const year = start.getFullYear();
+
+    if (start.getMonth() === end.getMonth()) {
+      return `${startDay} - ${endDay} ${startMonth} ${year}`;
+    } else {
+      return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`;
+    }
+  };
+
+  const handlePrev = () => {
+    if (selectedViewMode === 'week') {
+      setCurrentWeekStart((prev) => {
+        const newStart = new Date(prev);
+        newStart.setDate(prev.getDate() - 7);
+        return getMonday(newStart);
+      });
+    } else {
+      onPrevMonth();
+    }
+  };
+
+  const handleNext = () => {
+    if (selectedViewMode === 'week') {
+      setCurrentWeekStart((prev) => {
+        const newStart = new Date(prev);
+        newStart.setDate(prev.getDate() + 7);
+        return getMonday(newStart);
+      });
+    } else {
+      onNextMonth();
+    }
+  };
+
   const handleViewOptionSelection = (option) => {
+    setSelectedViewMode(option);
     setIsViewOptionsOpen(false);
   };
 
   return (
     <div className="calendar-header">
-      {!(selectedViewMode === 'Voorspelling' && isAtCurrentMonth) ? (
-        <button className="nav-button" onClick={onPrevMonth}>
-          <FaChevronLeft size={24} />
-        </button>
-      ) : (
-        <div style={{ width: '24px' }}></div>
-      )}
+      <button className="nav-button" onClick={handlePrev}>
+        <FaChevronLeft size={24} />
+      </button>
       <div className="header-title-container">
         <h2>
-          {month} {year}
+          {selectedViewMode === 'week'
+            ? getWeekTitle()
+            : `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
         </h2>
         <button
           className="view-options-button"
@@ -101,7 +148,7 @@ const CalendarHeader = ({
             >
               Week
             </div>
-			<div
+            <div
               className="view-option"
               onClick={() => handleViewOptionSelection('maand')}
             >
@@ -112,7 +159,7 @@ const CalendarHeader = ({
       </div>
       <button
         className="nav-button"
-        onClick={onNextMonth}
+        onClick={handleNext}
         style={{ marginRight: '24px' }}
       >
         <FaChevronRight size={24} />
