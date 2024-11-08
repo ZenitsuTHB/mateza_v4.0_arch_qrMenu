@@ -1,10 +1,10 @@
-// WeekReport.js
+// MonthReport.js
 
 import React, { useState, useEffect } from 'react';
-import './css/weekReport.css';
+import './css/weekReport.css'; // Reuse the CSS or create a new one for monthReport.css
 import { motion } from 'framer-motion';
 
-const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = false }) => {
+const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = false }) => {
   const [reportGenerated, setReportGenerated] = useState(autoGenerate);
   const [loading, setLoading] = useState(false);
   const [totalGuestsByShift, setTotalGuestsByShift] = useState([0, 0, 0]); // [Morning, Afternoon, Evening]
@@ -93,8 +93,8 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
   const calculateAverage = (numbers) =>
     numbers.reduce((acc, val) => acc + val, 0) / numbers.length;
 
-  const getDutchDayName = (date) =>
-    date.toLocaleDateString('nl-NL', { weekday: 'long' });
+  const getDutchDateString = (date) =>
+    date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
 
   // Animation variants
   const containerVariants = {
@@ -130,11 +130,11 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
           animate="visible"
           variants={containerVariants}
         >
-          <div className="calendar-report-title">Weekrapport</div>
+          <div className="calendar-report-title">Maandrapport</div>
           <table>
             <thead>
               <tr>
-                <th>Dag</th>
+                <th>Datum</th>
                 <th>Ochtend</th>
                 <th>Middag</th>
                 <th>Avond</th>
@@ -142,17 +142,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
               </tr>
             </thead>
             <tbody>
-              
-              {dailyTotals.map(({ date, shiftTotals, total }, index) => (
-                <motion.tr key={index} variants={rowVariants}>
-                  <td>{getDutchDayName(date)}</td>
-                  <td>{shiftTotals[0]}</td>
-                  <td>{shiftTotals[1]}</td>
-                  <td>{shiftTotals[2]}</td>
-                  <td>{total}</td>
-                </motion.tr>
-              ))}
-			  <motion.tr variants={rowVariants} className='totals-styled'>
+              <motion.tr variants={rowVariants}>
                 <td>
                   <strong>Totaal</strong>
                 </td>
@@ -161,6 +151,15 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
                 <td>{totalGuestsByShift[2]}</td>
                 <td>{totalGuestsByShift.reduce((a, b) => a + b, 0)}</td>
               </motion.tr>
+              {dailyTotals.map(({ date, shiftTotals, total }, index) => (
+                <motion.tr key={index} variants={rowVariants}>
+                  <td>{getDutchDateString(date)}</td>
+                  <td>{shiftTotals[0]}</td>
+                  <td>{shiftTotals[1]}</td>
+                  <td>{shiftTotals[2]}</td>
+                  <td>{total}</td>
+                </motion.tr>
+              ))}
             </tbody>
           </table>
 
@@ -179,7 +178,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
                     <td>{statLabels[key]}</td>
                     <td>
                       {key.includes('Day') && value
-                        ? getDutchDayName(value)
+                        ? getDutchDateString(value)
                         : value}
                     </td>
                   </motion.tr>
@@ -202,4 +201,4 @@ const statLabels = {
   highestDay: 'Hoogste dag',
 };
 
-export default WeekReport;
+export default MonthReport;

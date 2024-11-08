@@ -18,6 +18,7 @@ const CalendarHeader = ({
   toggleChartView,
   weekOrMonthView,
   setWeekOrMonthView,
+  onGenerateReport, // Added prop
 }) => {
   const monthNames = [
     'januari',
@@ -151,10 +152,10 @@ const CalendarHeader = ({
 
       <div className="header-buttons">
 
-	  <button
-          onClick={toggleChartView}
+        <button
+          onClick={onGenerateReport} // Updated onClick handler
           className="standard-button blue toggle-button"
-          title={isChartView ? 'Terug naar Kalender' : 'Bekijk Bar Chart'}
+          title="Bekijk Rapport"
         >
           <FaFile size={16} />
         </button>

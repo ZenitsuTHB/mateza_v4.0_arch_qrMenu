@@ -9,6 +9,9 @@ import './css/calendarComponent.css';
 import { withHeader } from '../../Components/Structural/Header';
 import useReservations from './Hooks/useReservations';
 import usePredictions from './Hooks/usePredictions';
+import WeekReport from './WeekReport';
+import MonthReport from './MonthReport'; // Import MonthReport
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Import ModalWithoutTabs
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -17,6 +20,7 @@ const CalendarComponent = () => {
   const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
   const [weekOrMonthView, setWeekOrMonthView] = useState('month');
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // State for report modal
 
   const reservationsByDate = useReservations();
   const predictionsByDate = usePredictions(
@@ -34,6 +38,53 @@ const CalendarComponent = () => {
     d.setHours(0, 0, 0, 0); // Reset time to midnight
     return d;
   };
+
+  // Generate dates based on the view
+  const generateDates = () => {
+    let dates = [];
+
+    if (weekOrMonthView === 'month') {
+      const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      const numDays = endDate.getDate();
+
+      const prevMonthDays = (startDate.getDay() + 6) % 7; // Adjusted for Dutch week starting on Monday
+
+      // Fill in dates from previous month
+      for (let i = prevMonthDays - 1; i >= 0; i--) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), -i);
+        dates.push({ date, currentMonth: false });
+      }
+
+      // Dates in current month
+      for (let i = 1; i <= numDays; i++) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+        dates.push({ date, currentMonth: true });
+      }
+
+      // Fill in dates for next month to complete the grid
+      while (dates.length % 7 !== 0) {
+        const date = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          dates.length - numDays - prevMonthDays + 1
+        );
+        dates.push({ date, currentMonth: false });
+      }
+    } else if (weekOrMonthView === 'week') {
+      const currentWeekStart = getMonday(currentDate);
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(currentWeekStart);
+        date.setDate(currentWeekStart.getDate() + i);
+        const currentMonth = date.getMonth() === currentDate.getMonth();
+        dates.push({ date, currentMonth });
+      }
+    }
+
+    return dates;
+  };
+
+  const dates = generateDates(); // Get dates
 
   const handlePrev = () => {
     if (weekOrMonthView === 'week') {
@@ -86,6 +137,14 @@ const CalendarComponent = () => {
     setIsChartView(!isChartView);
   };
 
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
+
   return (
     <div className="calendar-component">
       <CalendarHeader
@@ -100,6 +159,7 @@ const CalendarComponent = () => {
         toggleChartView={toggleChartView}
         weekOrMonthView={weekOrMonthView}
         setWeekOrMonthView={setWeekOrMonthView}
+        onGenerateReport={openReportModal} // Pass the function
       />
       {isChartView ? (
         <BarChartView
@@ -111,6 +171,7 @@ const CalendarComponent = () => {
         />
       ) : (
         <CalendarGrid
+          dates={dates} // Pass dates to CalendarGrid
           currentDate={currentDate}
           reservationsByDate={reservationsByDate}
           onDateClick={handleDateClick}
@@ -124,6 +185,29 @@ const CalendarComponent = () => {
         <ReservationDetailsModal
           reservationsData={selectedDateReservations}
           onClose={handleCloseModal}
+        />
+      )}
+
+      {isReportModalOpen && (
+        <ModalWithoutTabs
+          content={
+            weekOrMonthView === 'week' ? (
+              <WeekReport
+                dates={dates}
+                reservationsByDate={reservationsByDate}
+                selectedShift={selectedShift}
+                autoGenerate={true} // Automatically generate the report
+              />
+            ) : (
+              <MonthReport
+                dates={dates}
+                reservationsByDate={reservationsByDate}
+                selectedShift={selectedShift}
+                autoGenerate={true} // Automatically generate the report
+              />
+            )
+          }
+          onClose={closeReportModal}
         />
       )}
     </div>
