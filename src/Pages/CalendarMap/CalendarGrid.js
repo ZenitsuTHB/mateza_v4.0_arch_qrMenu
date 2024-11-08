@@ -1,4 +1,4 @@
-// CalendarGrid.js
+// /src/Components/Calendar/CalendarGrid.js
 
 import React, { useState, useEffect } from 'react';
 import CalendarDay from './CalendarDay';
@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 
 const CalendarGrid = ({
   currentDate,
+  weekOrMonthView, // Received from props
   reservationsByDate,
   onDateClick,
   selectedShift,
@@ -17,34 +18,53 @@ const CalendarGrid = ({
   const [maxOccupation, setMaxOccupation] = useState(0);
   const [maxPrediction, setMaxPrediction] = useState(0);
 
-  const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-  const numDays = endDate.getDate();
-
-  const prevMonthDays = (startDate.getDay() + 6) % 7; // Adjusted for Dutch week starting on Monday
+  // Utility function to get the Monday of the week for a given date
+  const getMonday = (date) => {
+    const d = new Date(date);
+    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0); // Reset time to midnight
+    return d;
+  };
 
   const dates = [];
 
-  // Fill in dates from previous month
-  for (let i = prevMonthDays - 1; i >= 0; i--) {
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), -i);
-    dates.push({ date, currentMonth: false });
-  }
+  if (weekOrMonthView === 'week') {
+    const startDate = getMonday(currentDate);
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      dates.push({ date, currentMonth: true });
+    }
+  } else {
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const numDays = endDate.getDate();
 
-  // Dates in current month
-  for (let i = 1; i <= numDays; i++) {
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-    dates.push({ date, currentMonth: true });
-  }
+    const prevMonthDays = (startDate.getDay() + 6) % 7; // Adjusted for Dutch week starting on Monday
 
-  // Fill in dates for next month to complete the grid
-  while (dates.length % 7 !== 0) {
-    const date = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      dates.length - numDays - prevMonthDays + 1
-    );
-    dates.push({ date, currentMonth: false });
+    // Fill in dates from previous month
+    for (let i = prevMonthDays - 1; i >= 0; i--) {
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), -i);
+      dates.push({ date, currentMonth: false });
+    }
+
+    // Dates in current month
+    for (let i = 1; i <= numDays; i++) {
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      dates.push({ date, currentMonth: true });
+    }
+
+    // Fill in dates for next month to complete the grid
+    while (dates.length % 7 !== 0) {
+      const date = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        dates.length - numDays - prevMonthDays + 1
+      );
+      dates.push({ date, currentMonth: false });
+    }
   }
 
   // Calculate max occupation for Bezettingsgraad and prediction
@@ -72,11 +92,15 @@ const CalendarGrid = ({
 
         return totalGuests;
       });
-      setMaxOccupation(Math.max(...occupations));
+      setMaxOccupation(Math.max(...occupations, 0));
 
       // For Voorspelling, set maxPrediction
       if (selectedViewMode === 'Voorspelling') {
-        setMaxPrediction(Math.max(...Object.values(predictionsByDate)));
+        const predictions = dates.map(({ date }) => {
+          const dateString = date.toISOString().split('T')[0];
+          return predictionsByDate[dateString] || 0;
+        });
+        setMaxPrediction(Math.max(...predictions, 0));
       } else {
         setMaxPrediction(0);
       }
@@ -107,7 +131,7 @@ const CalendarGrid = ({
       animate="visible"
       variants={containerVariants}
       key={`${currentDate.toString()}-${selectedViewMode}-${selectedShift}`}
-      style={{ height: '600px' }} // Ensure consistent height with BarChartView
+      style={{ height: weekOrMonthView === 'month' ? '600px' : '100px' }} // Adjust height based on view
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
