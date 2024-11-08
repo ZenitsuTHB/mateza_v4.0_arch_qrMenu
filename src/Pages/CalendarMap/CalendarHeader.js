@@ -40,12 +40,19 @@ const CalendarHeader = ({
     return d;
   };
 
+  // Utility function to get the first and last day of the month
+  const getMonthStartEnd = (date) => {
+    const start = new Date(date.getFullYear(), date.getMonth(), 1);
+    const end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return { start, end };
+  };
+
   const [currentWeekStart, setCurrentWeekStart] = useState(getMonday(currentDate));
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false);
   const viewOptionsRef = useRef(null);
   const viewButtonRef = useRef(null);
   const [weekOrMonthView, setWeekOrMonthView] = useState("month");
-
+  const [{ start: monthStart, end: monthEnd }, setMonthRange] = useState(getMonthStartEnd(currentDate));
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,6 +80,8 @@ const CalendarHeader = ({
   useEffect(() => {
     if (weekOrMonthView === 'week') {
       setCurrentWeekStart(getMonday(currentDate));
+    } else {
+      setMonthRange(getMonthStartEnd(currentDate));
     }
   }, [currentDate, weekOrMonthView]);
 
@@ -93,6 +102,14 @@ const CalendarHeader = ({
       return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`;
     }
   };
+
+  const getMonthTitle = () => {
+	const month = monthNames[monthStart.getMonth()];
+	const year = monthStart.getFullYear();
+  
+	return `${month} ${year}`;
+  };
+  
 
   const handlePrev = () => {
     if (weekOrMonthView === 'week') {
@@ -119,7 +136,7 @@ const CalendarHeader = ({
   };
 
   const handleViewOptionSelection = (option) => {
-	setWeekOrMonthView(option);
+    setWeekOrMonthView(option);
     setIsViewOptionsOpen(false);
   };
 
@@ -132,7 +149,7 @@ const CalendarHeader = ({
         <h2>
           {weekOrMonthView === 'week'
             ? getWeekTitle()
-            : `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+            : getMonthTitle()}
         </h2>
         <button
           className="view-options-button"
@@ -152,7 +169,7 @@ const CalendarHeader = ({
             </div>
             <div
               className="view-option"
-              onClick={() => handleViewOptionSelection('maand')}
+              onClick={() => handleViewOptionSelection('month')}
             >
               Maand
             </div>
