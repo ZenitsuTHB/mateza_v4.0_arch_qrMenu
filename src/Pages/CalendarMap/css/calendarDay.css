@@ -1,6 +1,6 @@
 /* ./css/calendarDay.css */
 
-.calendar-day {
+.calendar-component .calendar-day {
 	min-height: 100px;
 	padding: 5px;
 	box-sizing: border-box;
@@ -9,53 +9,53 @@
 	transition: transform 0.2s ease, opacity 0.2s ease;
   }
   
-  .calendar-day:not(.special-mode) {
+  .calendar-component .calendar-day:not(.special-mode) {
 	border: 1px solid #ccc;
   }
   
-  .calendar-day.special-mode {
+  .calendar-component .calendar-day.special-mode {
 	border: none;
   }
   
-  .calendar-day:hover {
+  .calendar-component .calendar-day:hover {
 	transform: scale(1.05);
   }
   
-  .calendar-grid-body .calendar-day {
+  .calendar-component .calendar-grid-body .calendar-day {
 	opacity: 1;
 	transition: opacity 0.3s ease;
   }
   
-  .calendar-grid-body .calendar-day.fade-out {
+  .calendar-component .calendar-grid-body .calendar-day.fade-out {
 	opacity: 0.5;
   }
   
-  .calendar-day-number {
+  .calendar-component .calendar-day-number {
 	position: absolute;
 	top: 5px;
 	right: 5px;
   }
   
-  .calendar-day--disabled {
+  .calendar-component .calendar-day--disabled {
 	background-color: #e0e0e0;
   }
   
-  .calendar-day--past {
+  .calendar-component .calendar-day--past {
 	opacity: 0.5;
   }
   
-  .calendar-day--today {
+  .calendar-component .calendar-day--today {
 	background-color: lightblue;
 	border: 2px solid var(--color-blue);
   }
   
-  .time-of-day-boxes {
+  .calendar-component .time-of-day-boxes {
 	margin-top: 25px; /* Increased margin between date number and boxes */
   }
   
-  .heatmap-total-guests,
-  .occupancy-percentage,
-  .prediction-total-guests {
+  .calendar-component .heatmap-total-guests,
+  .calendar-component .occupancy-percentage,
+  .calendar-component .prediction-total-guests {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -66,12 +66,12 @@
 	transition: opacity 0.3s ease;
   }
   
-  .calendar-day:hover .heatmap-total-guests,
-  .calendar-day:hover .prediction-total-guests {
+  .calendar-component .calendar-day:hover .heatmap-total-guests,
+  .calendar-component .calendar-day:hover .prediction-total-guests {
 	opacity: 1;
   }
   
-  .calendar-day .occupancy-percentage {
+  .calendar-component .calendar-day .occupancy-percentage {
 	opacity: 1;
 	color: black;
   }

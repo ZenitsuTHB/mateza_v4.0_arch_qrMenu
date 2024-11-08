@@ -1,21 +1,21 @@
 /* ./css/viewModeSelector.css */
 
-.view-mode-selector {
+.calendar-component .view-mode-selector {
 	position: relative;
 	display: inline-block;
 	margin-right: 10px;
   }
   
-  .view-mode-button {
+  .calendar-component .view-mode-button {
 	display: flex;
 	align-items: center;
   }
   
-  .view-mode-button-icon {
+  .calendar-component .view-mode-button-icon {
 	margin-right: 5px;
   }
   
-  .view-mode-options-container {
+  .calendar-component .view-mode-options-container {
 	position: absolute;
 	top: 50px;
 	right: 0;
@@ -28,13 +28,13 @@
 	padding: 10px 0;
   }
   
-  .view-mode-option {
+  .calendar-component .view-mode-option {
 	padding: 10px 20px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
   }
   
-  .view-mode-option:hover {
+  .calendar-component .view-mode-option:hover {
 	background-color: #f1f1f1;
   }
   

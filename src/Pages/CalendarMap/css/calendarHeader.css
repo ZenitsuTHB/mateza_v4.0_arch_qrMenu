@@ -1,6 +1,6 @@
 /* ./css/calendarHeader.css */
 
-.calendar-header {
+.calendar-component .calendar-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -9,43 +9,37 @@
 	max-width: 800px;
   }
   
-  .calendar-header h2 {
+  .calendar-component .calendar-header h2 {
 	margin: 0;
 	text-align: center;
 	flex-grow: 1;
   }
   
-  .calendar-header .nav-button {
+  .calendar-component .calendar-header .nav-button {
 	background: none;
 	border: none;
 	cursor: pointer;
 	color: #000;
   }
   
-  .calendar-header .nav-button:hover {
+  .calendar-component .calendar-header .nav-button:hover {
 	color: var(--color-blue);
   }
   
-  .calendar-header .header-buttons {
+  .calendar-component .calendar-header .header-buttons {
 	display: flex;
 	align-items: center;
   }
   
-  .chart-toggle-button {
+  .calendar-component .chart-toggle-button {
 	margin-right: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 38px; /* Adjust to match other buttons */
+	height: 38px;
   }
-  
 
-  /* calendarHeader.css */
-
-/* Existing styles... */
-
-  
-  .nav-button {
+.calendar-component .nav-button {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -54,22 +48,22 @@
 	transition: background-color 0.3s ease;
   }
   
-  .nav-button:hover {
+  .calendar-component .nav-button:hover {
 	background-color: #e0e0e0;
   }
   
-  .header-title-container {
+  .calendar-component .header-title-container {
 	display: flex;
 	align-items: center;
 	position: relative;
   }
   
-  .header-title-container h2 {
+  .calendar-component .header-title-container h2 {
 	margin: 0;
 	font-size: 1.5rem;
   }
   
-  .view-options-button {
+  .calendar-component .view-options-button {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -82,11 +76,11 @@
 	transition: all 0.3s ease;
   }
   
-  .view-options-button:hover {
+  .calendar-component .view-options-button:hover {
 	opacity: 1;
   }
   
-  .view-options-container {
+  .calendar-component .view-options-container {
 	position: absolute;
 	top: 40px;
 	left: 70px;
@@ -99,22 +93,21 @@
 	padding: 10px 0;
   }
   
-  .view-option {
+  .calendar-component .view-option {
 	padding: 10px 20px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
   }
   
-  .view-option:hover {
+  .calendar-component .view-option:hover {
 	background-color: #f1f1f1;
   }
   
-  .view-option.selected {
+  .calendar-component .view-option.selected {
 	background-color: #e0e0e0;
   }
   
-  /* Existing styles for .header-buttons and other elements... */
-  .header-buttons {
+  .calendar-component .header-buttons {
 	display: flex;
 	align-items: center;
   }
