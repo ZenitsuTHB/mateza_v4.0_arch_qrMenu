@@ -50,7 +50,16 @@ const CalendarHeader = ({
       <h2>
         {month} {year}
       </h2>
+	  <button className="nav-button" onClick={onNextMonth}
+	  style={{ marginRight: '24px' }}
+	  >
+          <FaChevronRight size={24} />
+        </button>
+		
       <div className="header-buttons">
+
+
+
         <button
           onClick={toggleChartView}
           className="standard-button blue chart-toggle-button"
@@ -58,6 +67,7 @@ const CalendarHeader = ({
         >
           <FaChartBar size={16} />
         </button>
+		
         <ShiftSelector
           selectedShift={selectedShift}
           setSelectedShift={setSelectedShift}
@@ -66,9 +76,7 @@ const CalendarHeader = ({
           selectedViewMode={selectedViewMode}
           setSelectedViewMode={setSelectedViewMode}
         />
-        <button className="nav-button" onClick={onNextMonth}>
-          <FaChevronRight size={24} />
-        </button>
+        
       </div>
     </div>
   );
