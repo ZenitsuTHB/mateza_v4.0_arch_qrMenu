@@ -1,84 +1,94 @@
 /* ./css/calendarGrid.css */
 
 .calendar-component .calendar-grid {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	max-width: 800px;
-	margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
 
-  }
-  
-  .calendar-component .calendar-grid-header,
-  .calendar-component .calendar-grid-body {
-	display: grid;
-	grid-template-columns: repeat(7, 1fr);
-  }
-  
-  .calendar-component .calendar-grid-header div {
-	text-align: center;
-	font-weight: bold;
-	padding: 5px 0;
-  }
+.calendar-component .calendar-grid-header,
+.calendar-component .calendar-grid-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
 
-  .calendar-component .calendar-grid-header {
-	border-bottom: none;
-	border-radius: 10px 10px 0px 0px;
-  }
-  
+.calendar-component .calendar-grid-header div {
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+    background-color: #f0f0f0;
+}
 
-  /* ./css/calendarGrid.css */
+.calendar-component .calendar-grid-header {
+    border-bottom: none;
+    border-radius: 10px 10px 0px 0px;
+}
 
-.calendar-component .calendar-grid {
-	border: 1px solid #ccc;
-  }
-  
-  .calendar-component .calendar-grid-header div {
-	background-color: #f0f0f0;
-  }
-  
+.calendar-grid-totals {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Added spacing above the report */
+}
 
-  .calendar-grid-totals {
-	display: flex;
-	justify-content: center;
-  }
+.calendar-report-table {
+    width: 100%;
+    max-width: 600px;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .calendar-bold {
-	font-weight: bold;
-  }
+.calendar-report-table th,
+.calendar-report-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
 
-  .totals-content {
-	background-color: #ffffff; /* White background for the box */
-	padding: 20px 30px; /* Adequate padding for content */
-	border-radius: 15px; /* Rounded corners for the box */
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-	text-align: center; /* Center the text inside the box */
-	max-width: 200px; /* Optional: Set a max width */
-	width: 100%;
-	margin-top: 30px;
-  }
-  
-  .totals-content .calendar-bold {
-	font-size: 1em; /* Slightly larger font for the "Totaal" label */
-	margin-bottom: 10px; /* Space below the label */
-	color: #333; /* Darker color for emphasis */
-  }
-  
-  .totals-content div {
-	font-size: 0.9em; /* Consistent font size for totals */
-	color: #555; /* Softer color for the text */
-	margin: 5px 0; /* Space between each line */
-  }
+.calendar-report-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}
 
-  /* Specific font colors for each time slot */
+.calendar-report-table td {
+    color: #555;
+}
+
+.calendar-report-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #333;
+}
+
+/* Specific font colors for each time slot */
 .calendar-grid-totals .ochtend {
-	color: #182825; /* Ochtend color */
-  }
-  
-  .calendar-grid-totals .middag {
-	color: #016FB9; /* Middag color */
-  }
-  
-  .calendar-grid-totals .avond {
-	color: #22AED1; /* Avond color */
-  }
+    color: #182825; /* Ochtend color */
+}
+
+.calendar-grid-totals .middag {
+    color: #016FB9; /* Middag color */
+}
+
+.calendar-grid-totals .avond {
+    color: #22AED1; /* Avond color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .calendar-report-table {
+        padding: 10px 15px;
+    }
+
+    .calendar-report-table th,
+    .calendar-report-table td {
+        padding: 6px;
+    }
+}
