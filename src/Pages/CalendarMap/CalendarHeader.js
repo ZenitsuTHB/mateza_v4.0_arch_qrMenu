@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
-import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown, FaFile } from 'react-icons/fa';
 import ShiftSelector from './ShiftSelector';
 import ViewModeSelector from './ViewModeSelector';
 
@@ -150,9 +150,18 @@ const CalendarHeader = ({
       </div>
 
       <div className="header-buttons">
+
+	  <button
+          onClick={toggleChartView}
+          className="standard-button blue toggle-button"
+          title={isChartView ? 'Terug naar Kalender' : 'Bekijk Bar Chart'}
+        >
+          <FaFile size={16} />
+        </button>
+
         <button
           onClick={toggleChartView}
-          className="standard-button blue chart-toggle-button"
+          className="standard-button blue toggle-button"
           title={isChartView ? 'Terug naar Kalender' : 'Bekijk Bar Chart'}
         >
           <FaChartBar size={16} />

@@ -38,7 +38,7 @@
 	margin: auto;
   }
   
-  .calendar-component .chart-toggle-button {
+  .calendar-component .toggle-button {
 	margin-right: 10px;
 	display: flex;
 	align-items: center;
