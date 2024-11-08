@@ -37,3 +37,12 @@
 	background-color: #f0f0f0;
   }
   
+
+  .calendar-grid-totals {
+	display: flex;
+	justify-content: center;
+  }
+
+  .calendar-bold {
+	font-weight: bold;
+  }

@@ -17,7 +17,9 @@ const CalendarGrid = ({
   const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
   const [maxOccupation, setMaxOccupation] = useState(0);
   const [maxPrediction, setMaxPrediction] = useState(0);
+  const [totalGuestsByShift, setTotalGuestsByShift] = useState([0, 0, 0]); // [Morning, Afternoon, Evening]
 
+  // Helper function to get the Monday of the current week
   const getMonday = (date) => {
     const d = new Date(date);
     const day = d.getDay(); // 0 (Sun) to 6 (Sat)
@@ -103,6 +105,31 @@ const CalendarGrid = ({
     }
   }, [dates, reservationsByDate, selectedShift, selectedViewMode, predictionsByDate]);
 
+  // Calculate total guests by shift when in week view
+  useEffect(() => {
+    if (weekOrMonthView === 'week') {
+      let totals = [0, 0, 0]; // [Morning, Afternoon, Evening]
+
+      dates.forEach(({ date }) => {
+        const dateString = date.toISOString().split('T')[0];
+        const reservations = reservationsByDate[dateString] || [];
+
+        reservations.forEach((reservation) => {
+          if (
+            selectedShift === 'Hele Dag' ||
+            (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
+            (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
+            (selectedShift === 'Avond' && reservation.timeSlot === 2)
+          ) {
+            totals[reservation.timeSlot] += reservation.aantalGasten;
+          }
+        });
+      });
+
+      setTotalGuestsByShift(totals);
+    }
+  }, [dates, reservationsByDate, selectedShift, weekOrMonthView, selectedViewMode, predictionsByDate]);
+
   const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo']; // Dutch day names
 
   // Animation variants
@@ -129,11 +156,14 @@ const CalendarGrid = ({
       key={`${currentDate.toString()}-${selectedViewMode}-${selectedShift}`}
       style={{ height: '600px' }} // Ensure consistent height with BarChartView
     >
+      {/* Calendar Header */}
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (
           <div key={index}>{day}</div>
         ))}
       </div>
+
+      {/* Calendar Body */}
       <div className="calendar-grid-body">
         {dates.map(({ date, currentMonth }, index) => (
           <motion.div key={index} variants={itemVariants}>
@@ -155,6 +185,18 @@ const CalendarGrid = ({
           </motion.div>
         ))}
       </div>
+
+      {/* Totals Row for Week View */}
+      {weekOrMonthView === 'week' && (
+        <div className="calendar-grid-totals">
+          <div className="totals-content">
+		 	 <div className="calendar-bold">Totaal</div>
+            <div>Ochtend: {totalGuestsByShift[0]}</div>
+            <div>Middag: {totalGuestsByShift[1]}</div>
+            <div>Avond: {totalGuestsByShift[2]}</div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };
