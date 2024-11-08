@@ -142,8 +142,17 @@ const CalendarHeader = ({
 
   return (
     <div className="calendar-header">
+		
+		<div className='header-titles'>
       <button className="nav-button" onClick={handlePrev}>
         <FaChevronLeft size={24} />
+      </button>
+	  <button
+        className="nav-button"
+        onClick={handleNext}
+        style={{ marginRight: '24px' }}
+      >
+        <FaChevronRight size={24} />
       </button>
       <div className="header-title-container">
         <h2>
@@ -176,13 +185,8 @@ const CalendarHeader = ({
           </div>
         )}
       </div>
-      <button
-        className="nav-button"
-        onClick={handleNext}
-        style={{ marginRight: '24px' }}
-      >
-        <FaChevronRight size={24} />
-      </button>
+      
+	  </div>
 
       <div className="header-buttons">
         <button

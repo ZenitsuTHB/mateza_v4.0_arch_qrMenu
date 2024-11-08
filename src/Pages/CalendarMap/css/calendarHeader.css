@@ -30,6 +30,13 @@
 	display: flex;
 	align-items: center;
   }
+
+  .calendar-component .calendar-header .header-titles {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+  }
   
   .calendar-component .chart-toggle-button {
 	margin-right: 10px;
@@ -72,7 +79,7 @@
 	align-items: center;
 	padding: 4px;
 	border-radius: 4px;
-	opacity: 0;
+	opacity: 0.5;
 	transition: all 0.3s ease;
   }
   
@@ -83,7 +90,7 @@
   .calendar-component .view-options-container {
 	position: absolute;
 	top: 40px;
-	left: 70px;
+	left: 100px;
 	background-color: #ffffff;
 	border: 1px solid #ccc;
 	border-radius: 8px;
