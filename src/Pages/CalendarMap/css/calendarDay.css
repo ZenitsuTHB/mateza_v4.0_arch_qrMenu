@@ -9,10 +9,6 @@
 	transition: transform 0.2s ease, opacity 0.2s ease;
   }
   
-  .calendar-component .calendar-day:not(.special-mode) {
-	border: 1px solid #ccc;
-  }
-  
   .calendar-component .calendar-day.special-mode {
 	border: none;
   }
