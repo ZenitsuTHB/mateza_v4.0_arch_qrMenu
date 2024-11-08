@@ -1,3 +1,5 @@
+// CalendarHeader.js
+
 import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
 import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown } from 'react-icons/fa';
@@ -6,14 +8,16 @@ import ViewModeSelector from './ViewModeSelector';
 
 const CalendarHeader = ({
   currentDate,
-  onPrevMonth,
-  onNextMonth,
+  onPrev,
+  onNext,
   selectedShift,
   setSelectedShift,
   selectedViewMode,
   setSelectedViewMode,
   isChartView,
   toggleChartView,
+  weekOrMonthView,
+  setWeekOrMonthView,
 }) => {
   const monthNames = [
     'januari',
@@ -40,19 +44,11 @@ const CalendarHeader = ({
     return d;
   };
 
-  // Utility function to get the first and last day of the month
-  const getMonthStartEnd = (date) => {
-    const start = new Date(date.getFullYear(), date.getMonth(), 1);
-    const end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    return { start, end };
-  };
+  const currentWeekStart = getMonday(currentDate);
 
-  const [currentWeekStart, setCurrentWeekStart] = useState(getMonday(currentDate));
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false);
   const viewOptionsRef = useRef(null);
   const viewButtonRef = useRef(null);
-  const [weekOrMonthView, setWeekOrMonthView] = useState("month");
-  const [{ start: monthStart, end: monthEnd }, setMonthRange] = useState(getMonthStartEnd(currentDate));
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -77,14 +73,6 @@ const CalendarHeader = ({
     };
   }, [isViewOptionsOpen]);
 
-  useEffect(() => {
-    if (weekOrMonthView === 'week') {
-      setCurrentWeekStart(getMonday(currentDate));
-    } else {
-      setMonthRange(getMonthStartEnd(currentDate));
-    }
-  }, [currentDate, weekOrMonthView]);
-
   const getWeekTitle = () => {
     const start = new Date(currentWeekStart);
     const end = new Date(start);
@@ -104,35 +92,10 @@ const CalendarHeader = ({
   };
 
   const getMonthTitle = () => {
-	const month = monthNames[monthStart.getMonth()];
-	const year = monthStart.getFullYear();
-  
-	return `${month} ${year}`;
-  };
-  
+    const month = monthNames[currentDate.getMonth()];
+    const year = currentDate.getFullYear();
 
-  const handlePrev = () => {
-    if (weekOrMonthView === 'week') {
-      setCurrentWeekStart((prev) => {
-        const newStart = new Date(prev);
-        newStart.setDate(prev.getDate() - 7);
-        return getMonday(newStart);
-      });
-    } else {
-      onPrevMonth();
-    }
-  };
-
-  const handleNext = () => {
-    if (weekOrMonthView === 'week') {
-      setCurrentWeekStart((prev) => {
-        const newStart = new Date(prev);
-        newStart.setDate(prev.getDate() + 7);
-        return getMonday(newStart);
-      });
-    } else {
-      onNextMonth();
-    }
+    return `${month} ${year}`;
   };
 
   const handleViewOptionSelection = (option) => {
@@ -142,51 +105,49 @@ const CalendarHeader = ({
 
   return (
     <div className="calendar-header">
-		
-		<div className='header-titles'>
-      <button className="nav-button" onClick={handlePrev}>
-        <FaChevronLeft size={24} />
-      </button>
-	  <button
-        className="nav-button"
-        onClick={handleNext}
-        style={{ marginRight: '24px' }}
-      >
-        <FaChevronRight size={24} />
-      </button>
-      <div className="header-title-container">
-        <h2>
-          {weekOrMonthView === 'week'
-            ? getWeekTitle()
-            : getMonthTitle()}
-        </h2>
-        <button
-          className="view-options-button"
-          onClick={() => setIsViewOptionsOpen(!isViewOptionsOpen)}
-          ref={viewButtonRef}
-          aria-label="Toggle view options"
-        >
-          <FaChevronDown size={16} />
+      <div className='header-titles'>
+        <button className="nav-button" onClick={onPrev}>
+          <FaChevronLeft size={24} />
         </button>
-        {isViewOptionsOpen && (
-          <div className="view-options-container" ref={viewOptionsRef}>
-            <div
-              className="view-option"
-              onClick={() => handleViewOptionSelection('week')}
-            >
-              Week
+        <button
+          className="nav-button"
+          onClick={onNext}
+          style={{ marginRight: '24px' }}
+        >
+          <FaChevronRight size={24} />
+        </button>
+        <div className="header-title-container">
+          <h2>
+            {weekOrMonthView === 'week'
+              ? getWeekTitle()
+              : getMonthTitle()}
+          </h2>
+          <button
+            className="view-options-button"
+            onClick={() => setIsViewOptionsOpen(!isViewOptionsOpen)}
+            ref={viewButtonRef}
+            aria-label="Toggle view options"
+          >
+            <FaChevronDown size={16} />
+          </button>
+          {isViewOptionsOpen && (
+            <div className="view-options-container" ref={viewOptionsRef}>
+              <div
+                className="view-option"
+                onClick={() => handleViewOptionSelection('week')}
+              >
+                Week
+              </div>
+              <div
+                className="view-option"
+                onClick={() => handleViewOptionSelection('month')}
+              >
+                Maand
+              </div>
             </div>
-            <div
-              className="view-option"
-              onClick={() => handleViewOptionSelection('month')}
-            >
-              Maand
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-      
-	  </div>
 
       <div className="header-buttons">
         <button

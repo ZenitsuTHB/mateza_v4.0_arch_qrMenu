@@ -1,4 +1,4 @@
-// /src/Components/Calendar/CalendarGrid.js
+// CalendarGrid.js
 
 import React, { useState, useEffect } from 'react';
 import CalendarDay from './CalendarDay';
@@ -7,18 +7,17 @@ import { motion } from 'framer-motion';
 
 const CalendarGrid = ({
   currentDate,
-  weekOrMonthView, // Received from props
   reservationsByDate,
   onDateClick,
   selectedShift,
   selectedViewMode,
   predictionsByDate,
+  weekOrMonthView,
 }) => {
   const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
   const [maxOccupation, setMaxOccupation] = useState(0);
   const [maxPrediction, setMaxPrediction] = useState(0);
 
-  // Utility function to get the Monday of the week for a given date
   const getMonday = (date) => {
     const d = new Date(date);
     const day = d.getDay(); // 0 (Sun) to 6 (Sat)
@@ -28,16 +27,9 @@ const CalendarGrid = ({
     return d;
   };
 
-  const dates = [];
+  let dates = [];
 
-  if (weekOrMonthView === 'week') {
-    const startDate = getMonday(currentDate);
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      dates.push({ date, currentMonth: true });
-    }
-  } else {
+  if (weekOrMonthView === 'month') {
     const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
     const numDays = endDate.getDate();
@@ -64,6 +56,14 @@ const CalendarGrid = ({
         dates.length - numDays - prevMonthDays + 1
       );
       dates.push({ date, currentMonth: false });
+    }
+  } else if (weekOrMonthView === 'week') {
+    const currentWeekStart = getMonday(currentDate);
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentWeekStart);
+      date.setDate(currentWeekStart.getDate() + i);
+      const currentMonth = date.getMonth() === currentDate.getMonth();
+      dates.push({ date, currentMonth });
     }
   }
 
@@ -92,15 +92,11 @@ const CalendarGrid = ({
 
         return totalGuests;
       });
-      setMaxOccupation(Math.max(...occupations, 0));
+      setMaxOccupation(Math.max(...occupations));
 
       // For Voorspelling, set maxPrediction
       if (selectedViewMode === 'Voorspelling') {
-        const predictions = dates.map(({ date }) => {
-          const dateString = date.toISOString().split('T')[0];
-          return predictionsByDate[dateString] || 0;
-        });
-        setMaxPrediction(Math.max(...predictions, 0));
+        setMaxPrediction(Math.max(...Object.values(predictionsByDate)));
       } else {
         setMaxPrediction(0);
       }
@@ -131,7 +127,7 @@ const CalendarGrid = ({
       animate="visible"
       variants={containerVariants}
       key={`${currentDate.toString()}-${selectedViewMode}-${selectedShift}`}
-      style={{ height: weekOrMonthView === 'month' ? '600px' : '100px' }} // Adjust height based on view
+      style={{ height: '600px' }} // Ensure consistent height with BarChartView
     >
       <div className="calendar-grid-header">
         {dayNames.map((day, index) => (

@@ -26,3 +26,28 @@
 	border-radius: 10px 10px 0px 0px;
   }
   
+
+  /* ./css/calendarGrid.css */
+
+.calendar-component .calendar-grid {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 800px;
+	margin-top: 10px;
+	border: 1px solid #ccc;
+  }
+  
+  .calendar-component .calendar-grid-header,
+  .calendar-component .calendar-grid-body {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+  }
+  
+  .calendar-component .calendar-grid-header div {
+	text-align: center;
+	font-weight: bold;
+	padding: 5px 0;
+	background-color: #f0f0f0;
+  }
+  

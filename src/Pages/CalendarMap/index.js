@@ -1,4 +1,4 @@
-// /src/Components/Calendar/CalendarComponent.js
+// CalendarComponent.js
 
 import React, { useState } from 'react';
 import CalendarHeader from './CalendarHeader';
@@ -16,6 +16,7 @@ const CalendarComponent = () => {
   const [selectedShift, setSelectedShift] = useState('Hele Dag');
   const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
+  const [weekOrMonthView, setWeekOrMonthView] = useState('month');
 
   const reservationsByDate = useReservations();
   const predictionsByDate = usePredictions(
@@ -25,16 +26,41 @@ const CalendarComponent = () => {
     selectedViewMode
   );
 
-  const handlePrevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-    );
+  const getMonday = (date) => {
+    const d = new Date(date);
+    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0); // Reset time to midnight
+    return d;
   };
 
-  const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-    );
+  const handlePrev = () => {
+    if (weekOrMonthView === 'week') {
+      setCurrentDate((prev) => {
+        const newDate = new Date(prev);
+        newDate.setDate(prev.getDate() - 7);
+        return newDate;
+      });
+    } else {
+      setCurrentDate(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+      );
+    }
+  };
+
+  const handleNext = () => {
+    if (weekOrMonthView === 'week') {
+      setCurrentDate((prev) => {
+        const newDate = new Date(prev);
+        newDate.setDate(prev.getDate() + 7);
+        return newDate;
+      });
+    } else {
+      setCurrentDate(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+      );
+    }
   };
 
   const handleDateClick = (date) => {
@@ -64,14 +90,16 @@ const CalendarComponent = () => {
     <div className="calendar-component">
       <CalendarHeader
         currentDate={currentDate}
-        onPrevMonth={handlePrevMonth}
-        onNextMonth={handleNextMonth}
+        onPrev={handlePrev}
+        onNext={handleNext}
         selectedShift={selectedShift}
         setSelectedShift={setSelectedShift}
         selectedViewMode={selectedViewMode}
         setSelectedViewMode={setSelectedViewMode}
         isChartView={isChartView}
         toggleChartView={toggleChartView}
+        weekOrMonthView={weekOrMonthView}
+        setWeekOrMonthView={setWeekOrMonthView}
       />
       {isChartView ? (
         <BarChartView
@@ -89,6 +117,7 @@ const CalendarComponent = () => {
           selectedShift={selectedShift}
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
+          weekOrMonthView={weekOrMonthView}
         />
       )}
       {selectedDateReservations && (
