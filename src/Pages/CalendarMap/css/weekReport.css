@@ -1,5 +1,39 @@
 /* weekReport.css */
 
+
+.calendar-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 15px;
+}
+
+.calendar-report-table th,
+.calendar-report-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.calendar-report-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}
+
+.calendar-report-table td {
+    color: #555;
+}
+
+.calendar-report-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    color: #333;
+}
+
+
 .week-report .generate-report-text {
 	color: var(--color-blue);
 	cursor: pointer;
@@ -36,7 +70,7 @@
   
   .calendar-report-title {
 	font-size: 1.5em;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
   }
   
   .statistical-data {
