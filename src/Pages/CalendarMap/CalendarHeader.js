@@ -44,6 +44,8 @@ const CalendarHeader = ({
   const [isViewOptionsOpen, setIsViewOptionsOpen] = useState(false);
   const viewOptionsRef = useRef(null);
   const viewButtonRef = useRef(null);
+  const [weekOrMonthView, setWeekOrMonthView] = useState("month");
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -69,10 +71,10 @@ const CalendarHeader = ({
   }, [isViewOptionsOpen]);
 
   useEffect(() => {
-    if (selectedViewMode === 'week') {
+    if (weekOrMonthView === 'week') {
       setCurrentWeekStart(getMonday(currentDate));
     }
-  }, [currentDate, selectedViewMode]);
+  }, [currentDate, weekOrMonthView]);
 
   const getWeekTitle = () => {
     const start = new Date(currentWeekStart);
@@ -93,7 +95,7 @@ const CalendarHeader = ({
   };
 
   const handlePrev = () => {
-    if (selectedViewMode === 'week') {
+    if (weekOrMonthView === 'week') {
       setCurrentWeekStart((prev) => {
         const newStart = new Date(prev);
         newStart.setDate(prev.getDate() - 7);
@@ -105,7 +107,7 @@ const CalendarHeader = ({
   };
 
   const handleNext = () => {
-    if (selectedViewMode === 'week') {
+    if (weekOrMonthView === 'week') {
       setCurrentWeekStart((prev) => {
         const newStart = new Date(prev);
         newStart.setDate(prev.getDate() + 7);
@@ -117,7 +119,7 @@ const CalendarHeader = ({
   };
 
   const handleViewOptionSelection = (option) => {
-    setSelectedViewMode(option);
+	setWeekOrMonthView(option);
     setIsViewOptionsOpen(false);
   };
 
@@ -128,7 +130,7 @@ const CalendarHeader = ({
       </button>
       <div className="header-title-container">
         <h2>
-          {selectedViewMode === 'week'
+          {weekOrMonthView === 'week'
             ? getWeekTitle()
             : `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
         </h2>
