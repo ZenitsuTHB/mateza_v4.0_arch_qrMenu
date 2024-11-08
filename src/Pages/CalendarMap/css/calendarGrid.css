@@ -46,3 +46,39 @@
   .calendar-bold {
 	font-weight: bold;
   }
+
+  .totals-content {
+	background-color: #ffffff; /* White background for the box */
+	padding: 20px 30px; /* Adequate padding for content */
+	border-radius: 15px; /* Rounded corners for the box */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	text-align: center; /* Center the text inside the box */
+	max-width: 200px; /* Optional: Set a max width */
+	width: 100%;
+	margin-top: 30px;
+  }
+  
+  .totals-content .calendar-bold {
+	font-size: 1em; /* Slightly larger font for the "Totaal" label */
+	margin-bottom: 10px; /* Space below the label */
+	color: #333; /* Darker color for emphasis */
+  }
+  
+  .totals-content div {
+	font-size: 0.9em; /* Consistent font size for totals */
+	color: #555; /* Softer color for the text */
+	margin: 5px 0; /* Space between each line */
+  }
+
+  /* Specific font colors for each time slot */
+.calendar-grid-totals .ochtend {
+	color: #182825; /* Ochtend color */
+  }
+  
+  .calendar-grid-totals .middag {
+	color: #016FB9; /* Middag color */
+  }
+  
+  .calendar-grid-totals .avond {
+	color: #22AED1; /* Avond color */
+  }
