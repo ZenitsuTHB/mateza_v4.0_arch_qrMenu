@@ -2,7 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
-import { FaChevronLeft, FaChevronRight, FaChartBar, FaChevronDown, FaFile } from 'react-icons/fa';
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaChartBar,
+  FaChevronDown,
+  FaFile,
+  FaCalendarAlt, // Added for calendar icon in tooltip
+} from 'react-icons/fa';
 import ShiftSelector from './ShiftSelector';
 import ViewModeSelector from './ViewModeSelector';
 
@@ -107,74 +114,102 @@ const CalendarHeader = ({
   return (
     <div className="calendar-header">
       <div className="header-titles">
-        <button className="nav-button" onClick={onPrev}>
-          <FaChevronLeft size={24} />
-        </button>
-        <button
-          className="nav-button"
-          onClick={onNext}
-          style={{ marginRight: '24px' }}
-        >
-          <FaChevronRight size={24} />
-        </button>
+        {/* Previous Button */}
+        <div className="button-with-tooltip">
+          <button className="nav-button" onClick={onPrev}>
+            <FaChevronLeft size={24} />
+          </button>
+        </div>
+
+        {/* Next Button */}
+        <div className="button-with-tooltip">
+          <button className="nav-button" onClick={onNext} style={{ marginRight: '24px' }}>
+            <FaChevronRight size={24} />
+          </button>
+        </div>
+
+        {/* Title and View Options */}
         <div className="header-title-container">
           <h2>
-            {weekOrMonthView === 'week'
-              ? getWeekTitle()
-              : getMonthTitle()}
+            {weekOrMonthView === 'week' ? getWeekTitle() : getMonthTitle()}
           </h2>
-          <button
-            className="view-options-button"
-            onClick={() => setIsViewOptionsOpen(!isViewOptionsOpen)}
-            ref={viewButtonRef}
-            aria-label="Toggle view options"
-          >
-            <FaChevronDown size={16} />
-          </button>
-          {isViewOptionsOpen && (
-            <div className="view-options-container" ref={viewOptionsRef}>
-              <div
-                className="view-option"
-                onClick={() => handleViewOptionSelection('week')}
-              >
-                Week
+          <div className="button-with-tooltip">
+            <button
+              className="view-options-button"
+              onClick={() => setIsViewOptionsOpen(!isViewOptionsOpen)}
+              ref={viewButtonRef}
+              aria-label="Toggle view options"
+            >
+              <FaChevronDown size={16} />
+            </button>
+            {isViewOptionsOpen && (
+              <div className="view-options-container" ref={viewOptionsRef}>
+                <div
+                  className="view-option"
+                  onClick={() => handleViewOptionSelection('week')}
+                >
+                  Week
+                </div>
+                <div
+                  className="view-option"
+                  onClick={() => handleViewOptionSelection('month')}
+                >
+                  Maand
+                </div>
               </div>
-              <div
-                className="view-option"
-                onClick={() => handleViewOptionSelection('month')}
-              >
-                Maand
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
       <div className="header-buttons">
-        <button
-          onClick={onGenerateReport}
-          className="standard-button blue toggle-button button-with-tooltip"
-          data-tooltip="Bekijk Rapport"
-        >
-          <FaFile size={16} />
-        </button>
+        {/* Generate Report Button */}
+        <div className="button-with-tooltip">
+          <button
+            onClick={onGenerateReport}
+            className="standard-button blue toggle-button"
+          >
+            <FaFile size={16} />
+          </button>
+          <div className="tooltip">
+            Bekijk Rapport
+          </div>
+        </div>
 
-        <button
-          onClick={toggleChartView}
-          className="standard-button blue toggle-button button-with-tooltip"
-          data-tooltip={isChartView ? 'Terug naar Kalender' : 'Bekijk Diagram'}
-        >
-          <FaChartBar size={16} />
-        </button>
+        {/* Toggle Chart View Button */}
+        <div className="button-with-tooltip">
+          <button
+            onClick={toggleChartView}
+            className="standard-button blue toggle-button"
+          >
+            <FaChartBar size={16} />
+          </button>
+          <div className="tooltip">
+            {isChartView ? 'Terug naar Kalender' : 'Bekijk Diagram'}
+          </div>
+        </div>
 
-        <ShiftSelector
-          selectedShift={selectedShift}
-          setSelectedShift={setSelectedShift}
-        />
-        <ViewModeSelector
-          selectedViewMode={selectedViewMode}
-          setSelectedViewMode={setSelectedViewMode}
-        />
+        {/* Shift Selector */}
+        <div className="button-with-tooltip">
+          <ShiftSelector
+            selectedShift={selectedShift}
+            setSelectedShift={setSelectedShift}
+          />
+          <div className="tooltip">
+            Selecteer Shift
+          </div>
+        </div>
+
+        {/* View Mode Selector */}
+        <div className="button-with-tooltip">
+          <ViewModeSelector
+            selectedViewMode={selectedViewMode}
+            setSelectedViewMode={setSelectedViewMode}
+          />
+          <div className="tooltip">
+            Selecteer Weergave
+          </div>
+        </div>
       </div>
     </div>
   );

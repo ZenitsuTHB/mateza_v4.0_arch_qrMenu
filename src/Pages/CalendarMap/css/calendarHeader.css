@@ -90,7 +90,7 @@
   .calendar-component .view-options-container {
 	position: absolute;
 	top: 40px;
-	left: 100px;
+	right: 0px;
 	background-color: #ffffff;
 	border: 1px solid #ccc;
 	border-radius: 8px;
@@ -122,27 +122,45 @@
   /* Tooltip styles */
   .calendar-component .button-with-tooltip {
 	position: relative;
+	display: inline-block;
+	margin-right: 10px;
   }
   
-  .calendar-component .button-with-tooltip::after {
-	content: attr(data-tooltip);
+  .calendar-component .button-with-tooltip .tooltip {
+	display: none;
 	position: absolute;
-	bottom: 110%; /* Position above the button */
+	bottom: 125%;
 	left: 50%;
-	transform: translateX(-50%) translateY(0px);
+	transform: translateX(-50%);
 	background-color: black;
 	color: white;
 	padding: 6px 8px;
 	border-radius: 4px;
 	white-space: nowrap;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+	font-size: 14px;
 	z-index: 1000;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   }
   
-  .calendar-component .button-with-tooltip:hover::after {
+  .calendar-component .button-with-tooltip .tooltip::before {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+  }
+  
+  .calendar-component .button-with-tooltip:hover .tooltip {
+	display: block;
 	opacity: 1;
 	transform: translateX(-50%) translateY(-5px);
+  }
+  
+  .calendar-component .header-buttons .button-with-tooltip {
+	margin-right: 10px;
   }
   
