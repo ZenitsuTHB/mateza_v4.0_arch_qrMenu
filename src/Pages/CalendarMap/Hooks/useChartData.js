@@ -1,4 +1,4 @@
-// useChartData.js
+// Hooks/useChartData.js
 
 import { useEffect, useState } from 'react';
 import { getMonday } from '../Utils/dateUtils';
@@ -15,6 +15,7 @@ const useChartData = ({
   gemiddeldeDuurCouvert,
   predictionsByDate,
   weekOrMonthView,
+  weatherDataByDate,
 }) => {
   const [chartData, setChartData] = useState({
     labels: [],
@@ -36,11 +37,42 @@ const useChartData = ({
     }
 
     const dateArray = [];
-    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    for (
+      let d = new Date(startDate);
+      d <= endDate;
+      d.setDate(d.getDate() + 1)
+    ) {
       dateArray.push(new Date(d));
     }
 
-    if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
+    if (selectedViewMode === 'Weer') {
+      const data = []; // Corrected: use 'data' array to store temperature values
+
+      dateArray.forEach((date) => {
+        const dateString = date.toISOString().split('T')[0];
+        labels.push(
+          weekOrMonthView === 'month'
+            ? date.getDate()
+            : date.toLocaleDateString('nl-NL', { weekday: 'short' })
+        );
+
+        const temp = weatherDataByDate[dateString];
+        data.push(temp !== undefined ? temp : null);
+      });
+
+      datasets = [
+        {
+          label: 'Temperatuur (°C)',
+          data: data,
+          backgroundColor: '#FF8C00', // Orange color
+        },
+      ];
+
+      setChartData({
+        labels,
+        datasets,
+      });
+    } else if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
       const dataByTimeSlot = [[], [], []];
 
       dateArray.forEach((date) => {
@@ -68,6 +100,8 @@ const useChartData = ({
         data: dataByTimeSlot[index],
         backgroundColor: timeSlotColors[index],
       }));
+
+      setChartData({ labels, datasets });
     } else {
       const data = [];
 
@@ -176,9 +210,9 @@ const useChartData = ({
             : new Array(data.length).fill(backgroundColor),
         },
       ];
-    }
 
-    setChartData({ labels, datasets });
+      setChartData({ labels, datasets });
+    }
   }, [
     currentDate,
     reservationsByDate,
@@ -188,6 +222,7 @@ const useChartData = ({
     gemiddeldeDuurCouvert,
     predictionsByDate,
     weekOrMonthView,
+    weatherDataByDate,
   ]);
 
   return chartData;
