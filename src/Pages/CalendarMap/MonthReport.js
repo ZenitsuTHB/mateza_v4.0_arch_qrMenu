@@ -9,6 +9,7 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
   const [loading, setLoading] = useState(false);
   const [weeks, setWeeks] = useState([]); // Array of weeks, each week is an array of dates
   const [stats, setStats] = useState({});
+  const [totalGuests, setTotalGuests] = useState(0); // Total guests over the month
 
   useEffect(() => {
     if (autoGenerate) {
@@ -41,6 +42,7 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
   const generateReportData = () => {
     let totals = [0, 0, 0]; // [Morning, Afternoon, Evening]
     let dailyTotalsTemp = []; // To store total guests per day
+    let totalGuestsTemp = 0; // Total guests over the month
 
     dates.forEach(({ date }) => {
       const dateString = date.toISOString().split('T')[0];
@@ -61,12 +63,16 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
         }
       });
 
+      totalGuestsTemp += dayTotal;
+
       dailyTotalsTemp.push({
         date,
         total: dayTotal,
         shiftTotals,
       });
     });
+
+    setTotalGuests(totalGuestsTemp);
 
     // Calculate statistical data
     if (dailyTotalsTemp.length > 0) {
@@ -110,6 +116,9 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
     return squaredDiffs.reduce((acc, val) => acc + val, 0) / numbers.length;
   };
 
+  const getDutchDateString = (date) =>
+    date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+
   const getDutchDayName = (date) =>
     date.toLocaleDateString('nl-NL', { weekday: 'long' });
 
@@ -140,6 +149,14 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
         </div>
       )}
 
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <div className="progress-bar"></div>
+          <div>Laden...</div>
+        </div>
+      )}
+
       {(reportGenerated || autoGenerate) && (
         <motion.div
           className="calendar-report-table"
@@ -148,6 +165,22 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
           variants={containerVariants}
         >
           <div className="calendar-report-title">Maandrapport</div>
+
+          {/* Render collapsible blocks for each week */}
+          <div className="weeks-container">
+            {weeks.map((weekDates, weekIndex) => (
+              <CollapsibleBlock
+                key={weekIndex}
+                weekNumber={weekIndex + 1}
+                dates={weekDates}
+                reservationsByDate={reservationsByDate}
+                selectedShift={selectedShift}
+              />
+            ))}
+          </div>
+
+          {/* Add margin between weeks and statistics */}
+          <div className="statistics-separator"></div>
 
           {/* Render statistical data for the entire month */}
           <div className="statistical-data">
@@ -169,21 +202,12 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
                     </td>
                   </motion.tr>
                 ))}
+                <motion.tr variants={rowVariants} className="totals-styled">
+                  <td><strong>Totaal aantal gasten</strong></td>
+                  <td>{totalGuests}</td>
+                </motion.tr>
               </tbody>
             </table>
-          </div>
-
-          {/* Render collapsible blocks for each week */}
-          <div className="weeks-container">
-            {weeks.map((weekDates, weekIndex) => (
-              <CollapsibleBlock
-                key={weekIndex}
-                weekNumber={weekIndex + 1}
-                dates={weekDates}
-                reservationsByDate={reservationsByDate}
-                selectedShift={selectedShift}
-              />
-            ))}
           </div>
         </motion.div>
       )}
@@ -217,6 +241,11 @@ const CollapsibleBlock = ({ weekNumber, dates, reservationsByDate, selectedShift
 
     return totalGuests;
   };
+
+  // Calculate total guests for the week
+  const totalGuestsForWeek = dates.reduce((total, day) => {
+    return total + calculateDailyGuests(day.date);
+  }, 0);
 
   return (
     <div className="collapsible-block">
@@ -254,6 +283,11 @@ const CollapsibleBlock = ({ weekNumber, dates, reservationsByDate, selectedShift
                     <td>{calculateDailyGuests(day.date)}</td>
                   </tr>
                 ))}
+                <tr className="totals-styled">
+                  <td><strong>Totaal</strong></td>
+                  <td></td>
+                  <td><strong>{totalGuestsForWeek}</strong></td>
+                </tr>
               </tbody>
             </table>
           </motion.div>
