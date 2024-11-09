@@ -3,7 +3,6 @@
 import React from 'react';
 import TimeOfDayBox from './TimeOfDayBox';
 import './css/calendarDay.css';
-import { maxCapacity } from './reservationData';
 
 const CalendarDay = ({
   date,
@@ -19,22 +18,11 @@ const CalendarDay = ({
   onMouseEnter,
   onMouseLeave,
   fadeOut,
+  maxCapacity,
+  gemiddeldeDuurCouvert,
 }) => {
   const dateString = date.toISOString().split('T')[0];
   const reservations = reservationsByDate[dateString] || [];
-
-  const totalGuestsByTimeSlot = [0, 0, 0]; // Morning, Afternoon, Evening
-
-  reservations.forEach((reservation) => {
-    if (
-      selectedShift === 'Dag' ||
-      (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
-      (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
-      (selectedShift === 'Avond' && reservation.timeSlot === 2)
-    ) {
-      totalGuestsByTimeSlot[reservation.timeSlot] += reservation.aantalGasten;
-    }
-  });
 
   const today = new Date();
   const isToday = date.toDateString() === today.toDateString();
@@ -46,7 +34,18 @@ const CalendarDay = ({
     }
   };
 
-  let totalGuests = totalGuestsByTimeSlot.reduce((a, b) => a + b, 0);
+  let totalGuests = 0;
+
+  reservations.forEach((reservation) => {
+    if (
+      selectedShift === 'Dag' ||
+      (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
+      (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
+      (selectedShift === 'Avond' && reservation.timeSlot === 2)
+    ) {
+      totalGuests += reservation.aantalGasten;
+    }
+  });
 
   // Adjust background color and data based on selectedViewMode
   let backgroundColor = '';
@@ -85,16 +84,48 @@ const CalendarDay = ({
       );
     }
   } else if (selectedViewMode === 'Bezettingspercentage') {
-    let occupancyRate = 0;
-    if (maxCapacity > 0) {
-      occupancyRate = (totalGuests / maxCapacity) * 100;
+    // Occupancy Rate Calculation
+    const maxCapacityNum = parseInt(maxCapacity, 10);
+    const gemiddeldeDuurCouvertNum = parseInt(gemiddeldeDuurCouvert, 10);
+
+    if (maxCapacityNum > 0 && gemiddeldeDuurCouvertNum > 0) {
+      const totalIntervalsPerDay = (12 * 60) / 5; // 144 intervals
+      const totalCapacityPerDay = maxCapacityNum * totalIntervalsPerDay;
+
+      let totalOccupiedSlots = 0;
+
+      reservations.forEach((reservation) => {
+        if (
+          selectedShift === 'Dag' ||
+          (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
+          (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
+          (selectedShift === 'Avond' && reservation.timeSlot === 2)
+        ) {
+          const occupiedSlotsPerReservation =
+            reservation.aantalGasten * (gemiddeldeDuurCouvertNum / 5);
+          totalOccupiedSlots += occupiedSlotsPerReservation;
+        }
+      });
+
+      let occupancyRate = (totalOccupiedSlots / totalCapacityPerDay) * 100;
+
+      // Ensure occupancy rate is between 0 and 100
+      occupancyRate = Math.min(Math.max(occupancyRate, 0), 100);
+
+      backgroundColor = 'white'; // or any default color
+      content = (
+        <div className="occupancy-percentage">
+          <strong>{occupancyRate.toFixed(1)}%</strong>
+        </div>
+      );
+    } else {
+      backgroundColor = 'white';
+      content = (
+        <div className="occupancy-percentage">
+          <strong>N/A</strong>
+        </div>
+      );
     }
-    backgroundColor = 'white'; // or any default color
-    content = (
-      <div className="occupancy-percentage">
-        <strong>{occupancyRate.toFixed(1)}%</strong>
-      </div>
-    );
   } else if (selectedViewMode === 'Voorspelling') {
     const prediction = predictionsByDate[dateString] || 0;
 
@@ -145,23 +176,21 @@ const CalendarDay = ({
       {content}
       {selectedViewMode === 'Algemeen' && (
         <div className="time-of-day-boxes">
-          {totalGuestsByTimeSlot.map((totalGuests, index) => {
-            if (totalGuests > 0) {
-              if (
-                selectedShift === 'Dag' ||
-                (selectedShift === 'Ochtend' && index === 0) ||
-                (selectedShift === 'Middag' && index === 1) ||
-                (selectedShift === 'Avond' && index === 2)
-              ) {
-                return (
-                  <TimeOfDayBox
-                    key={index}
-                    timeSlot={index}
-                    totalGuests={totalGuests}
-                    isPastDate={isPastDate}
-                  />
-                );
-              }
+          {reservations.map((reservation, index) => {
+            if (
+              selectedShift === 'Dag' ||
+              (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
+              (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
+              (selectedShift === 'Avond' && reservation.timeSlot === 2)
+            ) {
+              return (
+                <TimeOfDayBox
+                  key={index}
+                  timeSlot={reservation.timeSlot}
+                  totalGuests={reservation.aantalGasten}
+                  isPastDate={isPastDate}
+                />
+              );
             }
             return null;
           })}

@@ -26,7 +26,7 @@ const CalendarComponent = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const [maxCapacityInput, setMaxCapacityInput] = useState(initialMaxCapacity);
-  const [gemiddeldeDuurCouvertInput, setGemiddeldeDuurCouvertInput] = useState('');
+  const [gemiddeldeDuurCouvertInput, setGemiddeldeDuurCouvertInput] = useState(60); // Default value
 
   const reservationsByDate = useReservations();
   const predictionsByDate = usePredictions(
@@ -98,19 +98,6 @@ const CalendarComponent = () => {
     setGemiddeldeDuurCouvertInput(e.target.value);
   };
 
-  const handleHerberekenen = () => {
-    if (maxCapacityInput < 1 || gemiddeldeDuurCouvertInput < 1) {
-      alert('Voer geldige positieve nummers in voor capaciteit en duur.');
-      return;
-    }
-
-    console.log('Herberekenen clicked');
-    console.log('Max Capacity:', maxCapacityInput);
-    console.log('Gemiddelde Duur Couvert:', gemiddeldeDuurCouvertInput);
-
-    alert('Herberekeningen zijn succesvol uitgevoerd.');
-  };
-
   return (
     <div className="calendar-component">
       <CalendarHeader
@@ -134,7 +121,6 @@ const CalendarComponent = () => {
           gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
           onMaxCapacityChange={handleMaxCapacityChange}
           onGemiddeldeDuurCouvertChange={handleGemiddeldeDuurCouvertChange}
-          onHerberekenen={handleHerberekenen}
         />
       )}
 
@@ -147,6 +133,7 @@ const CalendarComponent = () => {
           predictionsByDate={predictionsByDate}
           weekOrMonthView={weekOrMonthView}
           maxCapacity={maxCapacityInput}
+          gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
         />
       ) : (
         <CalendarGrid
@@ -159,6 +146,7 @@ const CalendarComponent = () => {
           predictionsByDate={predictionsByDate}
           weekOrMonthView={weekOrMonthView}
           maxCapacity={maxCapacityInput}
+          gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
         />
       )}
       {selectedDateReservations && (

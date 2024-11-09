@@ -12,6 +12,7 @@ const useChartData = ({
   selectedShift,
   selectedViewMode,
   maxCapacity,
+  gemiddeldeDuurCouvert,
   predictionsByDate,
   weekOrMonthView,
 }) => {
@@ -78,28 +79,60 @@ const useChartData = ({
             : date.toLocaleDateString('nl-NL', { weekday: 'short' })
         );
 
-        let totalGuests = 0;
-
-        if (selectedViewMode === 'Voorspelling') {
-          totalGuests = predictionsByDate[dateString] || 0;
-        } else {
-          const reservations = reservationsByDate[dateString] || [];
-          reservations.forEach((res) => {
-            if (
-              selectedShift === 'Dag' ||
-              (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
-              (selectedShift === 'Middag' && res.timeSlot === 1) ||
-              (selectedShift === 'Avond' && res.timeSlot === 2)
-            ) {
-              totalGuests += res.aantalGasten;
-            }
-          });
-        }
-
         if (selectedViewMode === 'Bezettingspercentage') {
-          const occupancyRate = (totalGuests / maxCapacity) * 100;
-          data.push(parseFloat(occupancyRate.toFixed(1)));
+          // Occupancy Rate Calculation
+          const maxCapacityNum = parseInt(maxCapacity, 10);
+          const gemiddeldeDuurCouvertNum = parseInt(gemiddeldeDuurCouvert, 10);
+
+          if (maxCapacityNum > 0 && gemiddeldeDuurCouvertNum > 0) {
+            const totalIntervalsPerDay = (12 * 60) / 5; // 144 intervals
+            const totalCapacityPerDay = maxCapacityNum * totalIntervalsPerDay;
+
+            const reservations = reservationsByDate[dateString] || [];
+
+            let totalOccupiedSlots = 0;
+
+            reservations.forEach((reservation) => {
+              if (
+                selectedShift === 'Dag' ||
+                (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
+                (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
+                (selectedShift === 'Avond' && reservation.timeSlot === 2)
+              ) {
+                const occupiedSlotsPerReservation =
+                  reservation.aantalGasten * (gemiddeldeDuurCouvertNum / 5);
+                totalOccupiedSlots += occupiedSlotsPerReservation;
+              }
+            });
+
+            let occupancyRate = (totalOccupiedSlots / totalCapacityPerDay) * 100;
+
+            // Ensure occupancy rate is between 0 and 100
+            occupancyRate = Math.min(Math.max(occupancyRate, 0), 100);
+
+            data.push(parseFloat(occupancyRate.toFixed(1)));
+          } else {
+            data.push(0);
+          }
         } else {
+          let totalGuests = 0;
+
+          if (selectedViewMode === 'Voorspelling') {
+            totalGuests = predictionsByDate[dateString] || 0;
+          } else {
+            const reservations = reservationsByDate[dateString] || [];
+            reservations.forEach((res) => {
+              if (
+                selectedShift === 'Dag' ||
+                (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
+                (selectedShift === 'Middag' && res.timeSlot === 1) ||
+                (selectedShift === 'Avond' && res.timeSlot === 2)
+              ) {
+                totalGuests += res.aantalGasten;
+              }
+            });
+          }
+
           data.push(totalGuests);
         }
       });
@@ -152,6 +185,7 @@ const useChartData = ({
     selectedShift,
     selectedViewMode,
     maxCapacity,
+    gemiddeldeDuurCouvert,
     predictionsByDate,
     weekOrMonthView,
   ]);

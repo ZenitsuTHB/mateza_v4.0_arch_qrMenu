@@ -6,7 +6,7 @@ import './css/calendarGrid.css';
 import { motion } from 'framer-motion';
 
 const CalendarGrid = ({
-  dates, // Receive dates from props
+  dates,
   currentDate,
   reservationsByDate,
   onDateClick,
@@ -14,6 +14,8 @@ const CalendarGrid = ({
   selectedViewMode,
   predictionsByDate,
   weekOrMonthView,
+  maxCapacity,
+  gemiddeldeDuurCouvert,
 }) => {
   const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
   const [maxOccupation, setMaxOccupation] = useState(0);
@@ -105,6 +107,8 @@ const CalendarGrid = ({
               onMouseEnter={() => setHoveredDayIndex(index)}
               onMouseLeave={() => setHoveredDayIndex(null)}
               fadeOut={hoveredDayIndex !== null && hoveredDayIndex !== index}
+              maxCapacity={maxCapacity}
+              gemiddeldeDuurCouvert={gemiddeldeDuurCouvert}
             />
           </motion.div>
         ))}

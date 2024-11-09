@@ -12,6 +12,7 @@ const BarChartView = ({
   selectedShift,
   selectedViewMode,
   maxCapacity,
+  gemiddeldeDuurCouvert,
   predictionsByDate,
   weekOrMonthView,
 }) => {
@@ -21,6 +22,7 @@ const BarChartView = ({
     selectedShift,
     selectedViewMode,
     maxCapacity,
+    gemiddeldeDuurCouvert,
     predictionsByDate,
     weekOrMonthView,
   });
@@ -30,7 +32,7 @@ const BarChartView = ({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
+        display: selectedShift === 'Dag' && selectedViewMode === 'Algemeen',
         position: 'top',
       },
       tooltip: {
@@ -56,7 +58,7 @@ const BarChartView = ({
               ? 'Bezettingsgraad (%)'
               : 'Aantal Gasten',
         },
-        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
+        stacked: selectedShift === 'Dag' && selectedViewMode === 'Algemeen',
       },
       x: {
         title: {
@@ -64,7 +66,7 @@ const BarChartView = ({
           text:
             weekOrMonthView === 'week' ? 'Dag van de Week' : 'Dag van de Maand',
         },
-        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
+        stacked: selectedShift === 'Dag' && selectedViewMode === 'Algemeen',
       },
     },
   };

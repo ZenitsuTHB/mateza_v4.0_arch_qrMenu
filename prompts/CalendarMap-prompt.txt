@@ -3,11 +3,11 @@ File Contents:
 --- BarChartView.js ---
 // BarChartView.js
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './css/barChartView.css';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { maxCapacity } from './reservationData'; // Adjust the import path as needed
+import useChartData from './Hooks/useChartData';
 
 const BarChartView = ({
   currentDate,
@@ -16,185 +16,17 @@ const BarChartView = ({
   selectedViewMode,
   maxCapacity,
   predictionsByDate,
-  weekOrMonthView, // New prop
+  weekOrMonthView,
 }) => {
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [],
-  });
-
-  useEffect(() => {
-    let startDate, endDate;
-    const labels = [];
-    let datasets = [];
-
-    // Define time slot names and colors
-    const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
-    const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
-
-    // Consistent getMonday function
-    const getMonday = (date) => {
-      const d = new Date(date);
-      const day = d.getDay(); // 0 (Sun) to 6 (Sat)
-      const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
-      d.setDate(d.getDate() + diff);
-      d.setHours(0, 0, 0, 0); // Reset time to midnight
-      return d;
-    };
-
-    // Determine the date range based on the current view
-    if (weekOrMonthView === 'month') {
-      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    } else if (weekOrMonthView === 'week') {
-      startDate = getMonday(currentDate);
-      endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + 6);
-    }
-
-    // Generate an array of dates within the selected range without mutating the same date object
-    const dateArray = [];
-    for (
-      let d = new Date(startDate);
-      d <= endDate;
-      d.setDate(d.getDate() + 1)
-    ) {
-      dateArray.push(new Date(d));
-    }
-
-    if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
-      // Stacked bar chart for 'Algemeen' view with 'Dag' shift
-      const dataByTimeSlot = [[], [], []]; // [Ochtend, Middag, Avond]
-
-      dateArray.forEach((date) => {
-        const dateString = date.toISOString().split('T')[0];
-        if (weekOrMonthView === 'month') {
-          labels.push(date.getDate());
-        } else if (weekOrMonthView === 'week') {
-          labels.push(date.toLocaleDateString('nl-NL', { weekday: 'short' }));
-        }
-
-        const reservations = reservationsByDate[dateString] || [];
-
-        const totalGuestsByTimeSlot = [0, 0, 0]; // Ochtend, Middag, Avond
-
-        reservations.forEach((res) => {
-          totalGuestsByTimeSlot[res.timeSlot] += res.aantalGasten;
-        });
-
-        // Push the data for each time slot
-        for (let timeSlot = 0; timeSlot < 3; timeSlot++) {
-          dataByTimeSlot[timeSlot].push(totalGuestsByTimeSlot[timeSlot]);
-        }
-      });
-
-      // Create datasets for each time slot
-      datasets = timeSlotNames.map((name, index) => ({
-        label: name,
-        data: dataByTimeSlot[index],
-        backgroundColor: timeSlotColors[index],
-      }));
-    } else {
-      // Other view modes
-      const data = [];
-
-      dateArray.forEach((date) => {
-        const dateString = date.toISOString().split('T')[0];
-        if (weekOrMonthView === 'month') {
-          labels.push(date.getDate());
-        } else if (weekOrMonthView === 'week') {
-          labels.push(date.toLocaleDateString('nl-NL', { weekday: 'short' }));
-        }
-
-        let totalGuests = 0;
-
-        if (selectedViewMode === 'Voorspelling') {
-          // Use predictions
-          totalGuests = predictionsByDate[dateString] || 0;
-        } else {
-          const reservations = reservationsByDate[dateString] || [];
-          // Calculate total guests based on selectedShift
-          reservations.forEach((res) => {
-            if (
-              selectedShift === 'Dag' ||
-              (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
-              (selectedShift === 'Middag' && res.timeSlot === 1) ||
-              (selectedShift === 'Avond' && res.timeSlot === 2)
-            ) {
-              totalGuests += res.aantalGasten;
-            }
-          });
-        }
-
-        if (selectedViewMode === 'Bezettingspercentage') {
-          // Calculate occupancy percentage
-          const occupancyRate = (totalGuests / maxCapacity) * 100;
-          data.push(parseFloat(occupancyRate.toFixed(1)));
-        } else {
-          data.push(totalGuests);
-        }
-      });
-
-      // Determine background color based on selectedViewMode and selectedShift
-      let backgroundColor = '';
-      if (selectedViewMode === 'Bezettingspercentage') {
-        backgroundColor = '#28a745'; // Green
-      } else if (selectedViewMode === 'Bezettingsgraad') {
-        if (selectedShift === 'Ochtend') {
-          backgroundColor = '#182825';
-        } else if (selectedShift === 'Middag') {
-          backgroundColor = '#016FB9';
-        } else if (selectedShift === 'Avond') {
-          backgroundColor = '#22AED1';
-        } else {
-          backgroundColor = '#007bff';
-        }
-      } else if (selectedViewMode === 'Voorspelling') {
-        backgroundColor = '#ff0000'; // Red for predictions
-      } else {
-        // 'Algemeen' view with specific shift
-        if (selectedShift === 'Ochtend') {
-          backgroundColor = '#182825';
-        } else if (selectedShift === 'Middag') {
-          backgroundColor = '#016FB9';
-        } else if (selectedShift === 'Avond') {
-          backgroundColor = '#22AED1';
-        } else {
-          backgroundColor = '#007bff';
-        }
-      }
-
-      datasets = [
-        {
-          label:
-            selectedViewMode === 'Bezettingspercentage'
-              ? 'Bezettingsgraad (%)'
-              : selectedViewMode === 'Voorspelling'
-              ? 'Voorspelling Aantal Gasten'
-              : 'Aantal Gasten',
-          data: data,
-          backgroundColor: Array.isArray(backgroundColor)
-            ? backgroundColor
-            : new Array(data.length).fill(backgroundColor),
-        },
-      ];
-    }
-
-    const chartData = {
-      labels: labels,
-      datasets: datasets,
-    };
-
-    setChartData(chartData);
-  }, [
+  const chartData = useChartData({
     currentDate,
     reservationsByDate,
     selectedShift,
     selectedViewMode,
     maxCapacity,
     predictionsByDate,
-    weekOrMonthView, // Added to dependencies
-  ]);
+    weekOrMonthView,
+  });
 
   const options = {
     responsive: true,
@@ -248,6 +80,73 @@ const BarChartView = ({
 };
 
 export default BarChartView;
+
+
+--- BezettingspercentageForm.js ---
+// BezettingspercentageForm.js
+
+import React from 'react';
+import { FaUsers, FaClock } from 'react-icons/fa'; // Import relevant icons
+import './css/bezettingspercentageForm.css';
+
+const BezettingspercentageForm = ({
+  maxCapacity,
+  gemiddeldeDuurCouvert,
+  onMaxCapacityChange,
+  onGemiddeldeDuurCouvertChange,
+  onHerberekenen,
+}) => {
+  return (
+    <div className="bezettingspercentage-form-container">
+      <div className="form-group">
+        <label htmlFor="maxCapacity" className="form-label">
+          Max. Capaciteit:
+        </label>
+        <div className="input-container">
+          <FaUsers className="input-icon" />
+          <input
+            type="number"
+            id="maxCapacity"
+            name="maxCapacity"
+            placeholder="Voer max. capaciteit in"
+            value={maxCapacity}
+            onChange={onMaxCapacityChange}
+            className="standard-input"
+            min="1"
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="gemiddeldeDuurCouvert" className="form-label">
+          Duur Couvert (min):
+        </label>
+        <div className="input-container">
+          <FaClock className="input-icon" />
+          <input
+            type="number"
+            id="gemiddeldeDuurCouvert"
+            name="gemiddeldeDuurCouvert"
+            placeholder="Voer duur couvert in minuten"
+            value={gemiddeldeDuurCouvert}
+            onChange={onGemiddeldeDuurCouvertChange}
+            className="standard-input"
+            min="1"
+          />
+        </div>
+      </div>
+
+        <button
+          onClick={onHerberekenen}
+          className="standard-button blue"
+        >
+          Herberekenen
+        </button>
+    </div>
+  );
+};
+
+export default BezettingspercentageForm;
 
 
 --- CalendarDay.js ---
@@ -730,6 +629,239 @@ const CalendarHeader = ({
 };
 
 export default CalendarHeader;
+
+
+--- Hooks/useChartData.js ---
+// useChartData.js
+
+import { useEffect, useState } from 'react';
+import { getMonday } from '../Utils/dateUtils';
+
+const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
+const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
+
+const useChartData = ({
+  currentDate,
+  reservationsByDate,
+  selectedShift,
+  selectedViewMode,
+  maxCapacity,
+  predictionsByDate,
+  weekOrMonthView,
+}) => {
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [],
+  });
+
+  useEffect(() => {
+    let startDate, endDate;
+    const labels = [];
+    let datasets = [];
+
+    if (weekOrMonthView === 'month') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    } else if (weekOrMonthView === 'week') {
+      startDate = getMonday(currentDate);
+      endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 6);
+    }
+
+    const dateArray = [];
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      dateArray.push(new Date(d));
+    }
+
+    if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
+      const dataByTimeSlot = [[], [], []];
+
+      dateArray.forEach((date) => {
+        const dateString = date.toISOString().split('T')[0];
+        labels.push(
+          weekOrMonthView === 'month'
+            ? date.getDate()
+            : date.toLocaleDateString('nl-NL', { weekday: 'short' })
+        );
+
+        const reservations = reservationsByDate[dateString] || [];
+        const totalGuestsByTimeSlot = [0, 0, 0];
+
+        reservations.forEach((res) => {
+          totalGuestsByTimeSlot[res.timeSlot] += res.aantalGasten;
+        });
+
+        for (let timeSlot = 0; timeSlot < 3; timeSlot++) {
+          dataByTimeSlot[timeSlot].push(totalGuestsByTimeSlot[timeSlot]);
+        }
+      });
+
+      datasets = timeSlotNames.map((name, index) => ({
+        label: name,
+        data: dataByTimeSlot[index],
+        backgroundColor: timeSlotColors[index],
+      }));
+    } else {
+      const data = [];
+
+      dateArray.forEach((date) => {
+        const dateString = date.toISOString().split('T')[0];
+        labels.push(
+          weekOrMonthView === 'month'
+            ? date.getDate()
+            : date.toLocaleDateString('nl-NL', { weekday: 'short' })
+        );
+
+        let totalGuests = 0;
+
+        if (selectedViewMode === 'Voorspelling') {
+          totalGuests = predictionsByDate[dateString] || 0;
+        } else {
+          const reservations = reservationsByDate[dateString] || [];
+          reservations.forEach((res) => {
+            if (
+              selectedShift === 'Dag' ||
+              (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
+              (selectedShift === 'Middag' && res.timeSlot === 1) ||
+              (selectedShift === 'Avond' && res.timeSlot === 2)
+            ) {
+              totalGuests += res.aantalGasten;
+            }
+          });
+        }
+
+        if (selectedViewMode === 'Bezettingspercentage') {
+          const occupancyRate = (totalGuests / maxCapacity) * 100;
+          data.push(parseFloat(occupancyRate.toFixed(1)));
+        } else {
+          data.push(totalGuests);
+        }
+      });
+
+      let backgroundColor = '';
+      if (selectedViewMode === 'Bezettingspercentage') {
+        backgroundColor = '#28a745';
+      } else if (selectedViewMode === 'Bezettingsgraad') {
+        backgroundColor =
+          selectedShift === 'Ochtend'
+            ? '#182825'
+            : selectedShift === 'Middag'
+            ? '#016FB9'
+            : selectedShift === 'Avond'
+            ? '#22AED1'
+            : '#007bff';
+      } else if (selectedViewMode === 'Voorspelling') {
+        backgroundColor = '#ff0000';
+      } else {
+        backgroundColor =
+          selectedShift === 'Ochtend'
+            ? '#182825'
+            : selectedShift === 'Middag'
+            ? '#016FB9'
+            : selectedShift === 'Avond'
+            ? '#22AED1'
+            : '#007bff';
+      }
+
+      datasets = [
+        {
+          label:
+            selectedViewMode === 'Bezettingspercentage'
+              ? 'Bezettingsgraad (%)'
+              : selectedViewMode === 'Voorspelling'
+              ? 'Voorspelling Aantal Gasten'
+              : 'Aantal Gasten',
+          data: data,
+          backgroundColor: Array.isArray(backgroundColor)
+            ? backgroundColor
+            : new Array(data.length).fill(backgroundColor),
+        },
+      ];
+    }
+
+    setChartData({ labels, datasets });
+  }, [
+    currentDate,
+    reservationsByDate,
+    selectedShift,
+    selectedViewMode,
+    maxCapacity,
+    predictionsByDate,
+    weekOrMonthView,
+  ]);
+
+  return chartData;
+};
+
+export default useChartData;
+
+
+--- Hooks/useDates.js ---
+// useDates.js
+
+import { useMemo } from 'react';
+import { getMonday } from '../Utils/dateUtils';
+
+const useDates = (currentDate, weekOrMonthView) => {
+  return useMemo(() => {
+    let dates = [];
+
+    if (weekOrMonthView === 'month') {
+      const startDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+      );
+      const endDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+      );
+      const numDays = endDate.getDate();
+
+      const prevMonthDays = (startDate.getDay() + 6) % 7;
+
+      for (let i = prevMonthDays - 1; i >= 0; i--) {
+        const date = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          -i
+        );
+        dates.push({ date, currentMonth: false });
+      }
+
+      for (let i = 1; i <= numDays; i++) {
+        const date = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          i
+        );
+        dates.push({ date, currentMonth: true });
+      }
+
+      while (dates.length % 7 !== 0) {
+        const date = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          dates.length - numDays - prevMonthDays + 1
+        );
+        dates.push({ date, currentMonth: false });
+      }
+    } else if (weekOrMonthView === 'week') {
+      const currentWeekStart = getMonday(currentDate);
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(currentWeekStart);
+        date.setDate(currentWeekStart.getDate() + i);
+        const currentMonth = date.getMonth() === currentDate.getMonth();
+        dates.push({ date, currentMonth });
+      }
+    }
+
+    return dates;
+  }, [currentDate, weekOrMonthView]);
+};
+
+export default useDates;
 
 
 --- Hooks/usePredictions.js ---
@@ -1419,6 +1551,14 @@ export const generateDatesArray = (start, end) => {
   return dates;
 };
 
+export const getMonday = (date) => {
+	const d = new Date(date);
+	const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+	const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+	d.setDate(d.getDate() + diff);
+	d.setHours(0, 0, 0, 0); // Reset time to midnight
+	return d;
+  };
 
 --- Utils/predictionUtils.js ---
 // /src/Components/Calendar/Utils/predictionUtils.js
@@ -1762,6 +1902,70 @@ export default WeekReport;
 	max-width: 800px;
 	height: 600px; /* Same height as calendar grid */
 	margin: 0 auto;
+  }
+  
+
+--- css/bezettingspercentageForm.css ---
+/* bezettingspercentageForm.css */
+
+.bezettingspercentage-form-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px;
+	width: 100%;
+	border-bottom: 1px solid #e0e0e0; /* Optional: bottom border */
+	gap: 16px;
+  }
+
+  .form-label {
+	margin-bottom: 20px;
+	font-size: 1rem;
+	font-weight: 500;
+	color: #333; /* Darker color for better readability */
+  }
+  
+  .input-container {
+	position: relative;
+	flex: 1;
+	display: flex;
+	align-items: center;
+  }
+  
+  .input-container:not(:last-child) {
+	margin-right: 16px;
+  }
+  
+  .input-icon {
+	position: absolute;
+	left: 10px;
+	color: #6c757d; /* Gray color */
+	pointer-events: none;
+  }
+
+  .form-group {
+	width: 100% !important;
+  }
+  
+  .standard-input {
+	width: 100%;
+	padding: 10px 10px 10px 35px; /* Padding left to accommodate icon */
+	border: 1px solid #ccc;
+	border-radius: var(--border-radius); /* Match var(--border-radius) if defined */
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+	background-color: var(--color-white);
+  }
+  
+  .standard-input:focus {
+	border-color: #007bff; /* Match var(--color-blue) */
+	outline: none;
+  }
+  
+  .button-container {
+	flex: 1;
+	display: flex;
+	justify-content: flex-end;
   }
   
 
@@ -2320,9 +2524,11 @@ import { withHeader } from '../../Components/Structural/Header';
 import useReservations from './Hooks/useReservations';
 import usePredictions from './Hooks/usePredictions';
 import WeekReport from './WeekReport';
-import MonthReport from './MonthReport'; // Import MonthReport
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Import ModalWithoutTabs
-import { maxCapacity } from './reservationData'; // Adjust the path as necessary
+import MonthReport from './MonthReport';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import { maxCapacity as initialMaxCapacity } from './reservationData';
+import BezettingspercentageForm from './BezettingspercentageForm';
+import useDates from './Hooks/useDates';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -2331,7 +2537,10 @@ const CalendarComponent = () => {
   const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
   const [weekOrMonthView, setWeekOrMonthView] = useState('month');
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // State for report modal
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+  const [maxCapacityInput, setMaxCapacityInput] = useState(initialMaxCapacity);
+  const [gemiddeldeDuurCouvertInput, setGemiddeldeDuurCouvertInput] = useState('');
 
   const reservationsByDate = useReservations();
   const predictionsByDate = usePredictions(
@@ -2341,61 +2550,7 @@ const CalendarComponent = () => {
     selectedViewMode
   );
 
-  const getMonday = (date) => {
-    const d = new Date(date);
-    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
-    const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
-    d.setDate(d.getDate() + diff);
-    d.setHours(0, 0, 0, 0); // Reset time to midnight
-    return d;
-  };
-
-  // Generate dates based on the view
-  const generateDates = () => {
-    let dates = [];
-
-    if (weekOrMonthView === 'month') {
-      const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      const numDays = endDate.getDate();
-
-      const prevMonthDays = (startDate.getDay() + 6) % 7; // Adjusted for Dutch week starting on Monday
-
-      // Fill in dates from previous month
-      for (let i = prevMonthDays - 1; i >= 0; i--) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), -i);
-        dates.push({ date, currentMonth: false });
-      }
-
-      // Dates in current month
-      for (let i = 1; i <= numDays; i++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-        dates.push({ date, currentMonth: true });
-      }
-
-      // Fill in dates for next month to complete the grid
-      while (dates.length % 7 !== 0) {
-        const date = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth() + 1,
-          dates.length - numDays - prevMonthDays + 1
-        );
-        dates.push({ date, currentMonth: false });
-      }
-    } else if (weekOrMonthView === 'week') {
-      const currentWeekStart = getMonday(currentDate);
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(currentWeekStart);
-        date.setDate(currentWeekStart.getDate() + i);
-        const currentMonth = date.getMonth() === currentDate.getMonth();
-        dates.push({ date, currentMonth });
-      }
-    }
-
-    return dates;
-  };
-
-  const dates = generateDates(); // Get dates
+  const dates = useDates(currentDate, weekOrMonthView);
 
   const handlePrev = () => {
     if (weekOrMonthView === 'week') {
@@ -2427,17 +2582,10 @@ const CalendarComponent = () => {
 
   const handleDateClick = (date) => {
     const dateString = date.toISOString().split('T')[0];
-    if (reservationsByDate[dateString]) {
-      setSelectedDateReservations({
-        date: dateString,
-        reservations: reservationsByDate[dateString],
-      });
-    } else {
-      setSelectedDateReservations({
-        date: dateString,
-        reservations: [],
-      });
-    }
+    setSelectedDateReservations({
+      date: dateString,
+      reservations: reservationsByDate[dateString] || [],
+    });
   };
 
   const handleCloseModal = () => {
@@ -2456,6 +2604,27 @@ const CalendarComponent = () => {
     setIsReportModalOpen(false);
   };
 
+  const handleMaxCapacityChange = (e) => {
+    setMaxCapacityInput(e.target.value);
+  };
+
+  const handleGemiddeldeDuurCouvertChange = (e) => {
+    setGemiddeldeDuurCouvertInput(e.target.value);
+  };
+
+  const handleHerberekenen = () => {
+    if (maxCapacityInput < 1 || gemiddeldeDuurCouvertInput < 1) {
+      alert('Voer geldige positieve nummers in voor capaciteit en duur.');
+      return;
+    }
+
+    console.log('Herberekenen clicked');
+    console.log('Max Capacity:', maxCapacityInput);
+    console.log('Gemiddelde Duur Couvert:', gemiddeldeDuurCouvertInput);
+
+    alert('Herberekeningen zijn succesvol uitgevoerd.');
+  };
+
   return (
     <div className="calendar-component">
       <CalendarHeader
@@ -2470,8 +2639,19 @@ const CalendarComponent = () => {
         toggleChartView={toggleChartView}
         weekOrMonthView={weekOrMonthView}
         setWeekOrMonthView={setWeekOrMonthView}
-        onGenerateReport={openReportModal} // Pass the function
+        onGenerateReport={openReportModal}
       />
+
+      {selectedViewMode === 'Bezettingspercentage' && (
+        <BezettingspercentageForm
+          maxCapacity={maxCapacityInput}
+          gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
+          onMaxCapacityChange={handleMaxCapacityChange}
+          onGemiddeldeDuurCouvertChange={handleGemiddeldeDuurCouvertChange}
+          onHerberekenen={handleHerberekenen}
+        />
+      )}
+
       {isChartView ? (
         <BarChartView
           currentDate={currentDate}
@@ -2479,12 +2659,12 @@ const CalendarComponent = () => {
           selectedShift={selectedShift}
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
-          weekOrMonthView={weekOrMonthView} // Pass this prop
-          maxCapacity={maxCapacity} // Pass maxCapacity if needed
+          weekOrMonthView={weekOrMonthView}
+          maxCapacity={maxCapacityInput}
         />
       ) : (
         <CalendarGrid
-          dates={dates} // Pass dates to CalendarGrid
+          dates={dates}
           currentDate={currentDate}
           reservationsByDate={reservationsByDate}
           onDateClick={handleDateClick}
@@ -2492,6 +2672,7 @@ const CalendarComponent = () => {
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
           weekOrMonthView={weekOrMonthView}
+          maxCapacity={maxCapacityInput}
         />
       )}
       {selectedDateReservations && (
@@ -2509,14 +2690,14 @@ const CalendarComponent = () => {
                 dates={dates}
                 reservationsByDate={reservationsByDate}
                 selectedShift={selectedShift}
-                autoGenerate={true} // Automatically generate the report
+                autoGenerate={true}
               />
             ) : (
               <MonthReport
                 dates={dates}
                 reservationsByDate={reservationsByDate}
                 selectedShift={selectedShift}
-                autoGenerate={true} // Automatically generate the report
+                autoGenerate={true}
               />
             )
           }
@@ -2619,14 +2800,18 @@ export default reservations;
 Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/CalendarMap":
 
 ├── BarChartView.js
+├── BezettingspercentageForm.js
 ├── CalendarDay.js
 ├── CalendarGrid.js
 ├── CalendarHeader.js
 ├── Hooks
+│   ├── useChartData.js
+│   ├── useDates.js
 │   ├── usePredictions.js
 │   ├── useReportData.js
 │   └── useReservations.js
 ├── MonthReport.js
+├── Reports
 ├── ReservationDetailsModal.js
 ├── ShiftSelector.js
 ├── TimeOfDayBox.js
@@ -2638,6 +2823,7 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 ├── WeekReport.js
 ├── css
 │   ├── barChartView.css
+│   ├── bezettingspercentageForm.css
 │   ├── calendarComponent.css
 │   ├── calendarDay.css
 │   ├── calendarGrid.css
@@ -2653,9 +2839,12 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 
 List of Files:
 BarChartView.js
+BezettingspercentageForm.js
 CalendarDay.js
 CalendarGrid.js
 CalendarHeader.js
+Hooks/useChartData.js
+Hooks/useDates.js
 Hooks/usePredictions.js
 Hooks/useReportData.js
 Hooks/useReservations.js
@@ -2669,6 +2858,7 @@ Utils/reportUtils.js
 ViewModeSelector.js
 WeekReport.js
 css/barChartView.css
+css/bezettingspercentageForm.css
 css/calendarComponent.css
 css/calendarDay.css
 css/calendarGrid.css
