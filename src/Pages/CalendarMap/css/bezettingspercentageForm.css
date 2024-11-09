@@ -31,6 +31,7 @@
   .input-icon {
 	position: absolute;
 	left: 10px;
+	margin-top: 5px;
 	color: #6c757d; /* Gray color */
 	pointer-events: none;
   }
@@ -41,6 +42,7 @@
   
   .standard-input {
 	width: 100%;
+	margin-top: 5px;
 	padding: 10px 10px 10px 35px; /* Padding left to accommodate icon */
 	border: 1px solid #ccc;
 	border-radius: var(--border-radius); /* Match var(--border-radius) if defined */

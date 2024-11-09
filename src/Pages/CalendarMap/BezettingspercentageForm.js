@@ -50,13 +50,6 @@ const BezettingspercentageForm = ({
           />
         </div>
       </div>
-
-        <button
-          onClick={onHerberekenen}
-          className="standard-button blue"
-        >
-          Herberekenen
-        </button>
     </div>
   );
 };
