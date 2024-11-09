@@ -1,5 +1,3 @@
-// CalendarHeader.js
-
 import React, { useState, useRef, useEffect } from 'react';
 import './css/calendarHeader.css';
 import {
@@ -182,7 +180,7 @@ const CalendarHeader = ({
             onClick={toggleChartView}
             className="standard-button blue toggle-button"
           >
-            <FaChartBar size={16} />
+            {isChartView ? <FaCalendarAlt size={16} /> : <FaChartBar size={16} />}
           </button>
           <div className="tooltip">
             {isChartView ? 'Terug naar Kalender' : 'Bekijk Diagram'}
