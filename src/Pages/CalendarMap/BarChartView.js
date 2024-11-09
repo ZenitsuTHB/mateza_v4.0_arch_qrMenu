@@ -29,25 +29,33 @@ const BarChartView = ({
     const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
     const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
 
+    // Consistent getMonday function
+    const getMonday = (date) => {
+      const d = new Date(date);
+      const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+      const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+      d.setDate(d.getDate() + diff);
+      d.setHours(0, 0, 0, 0); // Reset time to midnight
+      return d;
+    };
+
     // Determine the date range based on the current view
     if (weekOrMonthView === 'month') {
       startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
       endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
     } else if (weekOrMonthView === 'week') {
-      const getMonday = (date) => {
-        const d = new Date(date);
-        const day = d.getDay();
-        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-        return new Date(d.setDate(diff));
-      };
       startDate = getMonday(currentDate);
       endDate = new Date(startDate);
       endDate.setDate(endDate.getDate() + 6);
     }
 
-    // Generate an array of dates within the selected range
+    // Generate an array of dates within the selected range without mutating the same date object
     const dateArray = [];
-    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    for (
+      let d = new Date(startDate);
+      d <= endDate;
+      d.setDate(d.getDate() + 1)
+    ) {
       dateArray.push(new Date(d));
     }
 
@@ -221,7 +229,8 @@ const BarChartView = ({
       x: {
         title: {
           display: true,
-          text: weekOrMonthView === 'week' ? 'Dag van de Week' : 'Dag van de Maand',
+          text:
+            weekOrMonthView === 'week' ? 'Dag van de Week' : 'Dag van de Maand',
         },
         stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
       },
