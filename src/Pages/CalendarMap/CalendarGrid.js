@@ -16,6 +16,7 @@ const CalendarGrid = ({
   weekOrMonthView,
   maxCapacity,
   gemiddeldeDuurCouvert,
+  weatherDataByDate,
 }) => {
   const [hoveredDayIndex, setHoveredDayIndex] = useState(null);
   const [maxOccupation, setMaxOccupation] = useState(0);
@@ -109,6 +110,7 @@ const CalendarGrid = ({
               fadeOut={hoveredDayIndex !== null && hoveredDayIndex !== index}
               maxCapacity={maxCapacity}
               gemiddeldeDuurCouvert={gemiddeldeDuurCouvert}
+              weatherDataByDate={weatherDataByDate}
             />
           </motion.div>
         ))}

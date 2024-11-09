@@ -1,6 +1,6 @@
 // CalendarComponent.js
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
 import BarChartView from './BarChartView';
@@ -15,6 +15,8 @@ import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import { maxCapacity as initialMaxCapacity } from './reservationData';
 import BezettingspercentageForm from './BezettingspercentageForm';
 import useDates from './Hooks/useDates';
+import useWeatherData from './Hooks/useWeatherData';
+import { getMonday } from './Utils/dateUtils';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -37,6 +39,22 @@ const CalendarComponent = () => {
   );
 
   const dates = useDates(currentDate, weekOrMonthView);
+
+  // Memoize startDate and endDate to prevent re-creation on every render
+  const { startDate, endDate } = useMemo(() => {
+    let startDate, endDate;
+    if (weekOrMonthView === 'month') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    } else if (weekOrMonthView === 'week') {
+      startDate = getMonday(currentDate);
+      endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 6);
+    }
+    return { startDate, endDate };
+  }, [currentDate, weekOrMonthView]);
+
+  const weatherDataByDate = useWeatherData(startDate, endDate, selectedViewMode === 'Weer');
 
   const handlePrev = () => {
     if (weekOrMonthView === 'week') {
@@ -134,6 +152,7 @@ const CalendarComponent = () => {
           weekOrMonthView={weekOrMonthView}
           maxCapacity={maxCapacityInput}
           gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
+          weatherDataByDate={weatherDataByDate}
         />
       ) : (
         <CalendarGrid
@@ -147,6 +166,7 @@ const CalendarComponent = () => {
           weekOrMonthView={weekOrMonthView}
           maxCapacity={maxCapacityInput}
           gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
+          weatherDataByDate={weatherDataByDate}
         />
       )}
       {selectedDateReservations && (

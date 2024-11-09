@@ -15,6 +15,7 @@ const BarChartView = ({
   gemiddeldeDuurCouvert,
   predictionsByDate,
   weekOrMonthView,
+  weatherDataByDate,
 }) => {
   const chartData = useChartData({
     currentDate,
@@ -25,6 +26,7 @@ const BarChartView = ({
     gemiddeldeDuurCouvert,
     predictionsByDate,
     weekOrMonthView,
+    weatherDataByDate,
   });
 
   const options = {
@@ -40,6 +42,8 @@ const BarChartView = ({
           label: function (context) {
             if (selectedViewMode === 'Bezettingspercentage') {
               return `${context.parsed.y}%`;
+            } else if (selectedViewMode === 'Weer') {
+              return `${context.parsed.y}°C`;
             } else {
               return `${context.parsed.y} gasten`;
             }
@@ -56,6 +60,8 @@ const BarChartView = ({
           text:
             selectedViewMode === 'Bezettingspercentage'
               ? 'Bezettingsgraad (%)'
+              : selectedViewMode === 'Weer'
+              ? 'Temperatuur (°C)'
               : 'Aantal Gasten',
         },
         stacked: selectedShift === 'Dag' && selectedViewMode === 'Algemeen',
