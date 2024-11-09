@@ -123,6 +123,14 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
         </div>
       )}
 
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <div className="progress-bar"></div>
+          <div>Laden...</div>
+        </div>
+      )}
+
       {(reportGenerated || autoGenerate) && (
         <motion.div
           className="calendar-report-table"
@@ -130,7 +138,11 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
           animate="visible"
           variants={containerVariants}
         >
-          <div className="calendar-report-title">Weekrapport</div>
+          {/* Updated Title Section */}
+          <div className="calendar-report-title">
+            Weekrapport {selectedShift !== 'Dag' && `- ${selectedShift}`}
+          </div>
+
           <table>
             <thead>
               <tr>
@@ -142,7 +154,6 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
               </tr>
             </thead>
             <tbody>
-              
               {dailyTotals.map(({ date, shiftTotals, total }, index) => (
                 <motion.tr key={index} variants={rowVariants}>
                   <td>{getDutchDayName(date)}</td>
@@ -152,7 +163,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
                   <td>{total}</td>
                 </motion.tr>
               ))}
-			  <motion.tr variants={rowVariants} className='totals-styled'>
+              <motion.tr variants={rowVariants} className='totals-styled'>
                 <td>
                   <strong>Totaal</strong>
                 </td>
