@@ -10,9 +10,10 @@ import { withHeader } from '../../Components/Structural/Header';
 import useReservations from './Hooks/useReservations';
 import usePredictions from './Hooks/usePredictions';
 import WeekReport from './WeekReport';
-import MonthReport from './MonthReport'; // Import MonthReport
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Import ModalWithoutTabs
-import { maxCapacity } from './reservationData'; // Adjust the path as necessary
+import MonthReport from './MonthReport';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import { maxCapacity as initialMaxCapacity } from './reservationData';
+import BezettingspercentageForm from './BezettingspercentageForm'; // Import the new component
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -21,7 +22,11 @@ const CalendarComponent = () => {
   const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
   const [weekOrMonthView, setWeekOrMonthView] = useState('month');
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // State for report modal
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+  // State variables for Bezettingspercentage
+  const [maxCapacityInput, setMaxCapacityInput] = useState(initialMaxCapacity);
+  const [gemiddeldeDuurCouvertInput, setGemiddeldeDuurCouvertInput] = useState('');
 
   const reservationsByDate = useReservations();
   const predictionsByDate = usePredictions(
@@ -146,6 +151,31 @@ const CalendarComponent = () => {
     setIsReportModalOpen(false);
   };
 
+  // Handlers for Bezettingspercentage inputs and button
+  const handleMaxCapacityChange = (e) => {
+    setMaxCapacityInput(e.target.value);
+  };
+
+  const handleGemiddeldeDuurCouvertChange = (e) => {
+    setGemiddeldeDuurCouvertInput(e.target.value);
+  };
+
+  const handleHerberekenen = () => {
+    // Implement the recalculation logic here
+    if (maxCapacityInput < 1 || gemiddeldeDuurCouvertInput < 1) {
+      alert('Voer geldige positieve nummers in voor capaciteit en duur.');
+      return;
+    }
+
+    // Example recalculation logic
+    console.log('Herberekenen clicked');
+    console.log('Max Capacity:', maxCapacityInput);
+    console.log('Gemiddelde Duur Couvert:', gemiddeldeDuurCouvertInput);
+
+    // TODO: Implement actual recalculation logic
+    alert('Herberekeningen zijn succesvol uitgevoerd.');
+  };
+
   return (
     <div className="calendar-component">
       <CalendarHeader
@@ -160,8 +190,20 @@ const CalendarComponent = () => {
         toggleChartView={toggleChartView}
         weekOrMonthView={weekOrMonthView}
         setWeekOrMonthView={setWeekOrMonthView}
-        onGenerateReport={openReportModal} // Pass the function
+        onGenerateReport={openReportModal}
       />
+
+      {/* Conditional Rendering for Bezettingspercentage Inputs */}
+      {selectedViewMode === 'Bezettingspercentage' && (
+        <BezettingspercentageForm
+          maxCapacity={maxCapacityInput}
+          gemiddeldeDuurCouvert={gemiddeldeDuurCouvertInput}
+          onMaxCapacityChange={handleMaxCapacityChange}
+          onGemiddeldeDuurCouvertChange={handleGemiddeldeDuurCouvertChange}
+          onHerberekenen={handleHerberekenen}
+        />
+      )}
+
       {isChartView ? (
         <BarChartView
           currentDate={currentDate}
@@ -169,12 +211,12 @@ const CalendarComponent = () => {
           selectedShift={selectedShift}
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
-          weekOrMonthView={weekOrMonthView} // Pass this prop
-          maxCapacity={maxCapacity} // Pass maxCapacity if needed
+          weekOrMonthView={weekOrMonthView}
+          maxCapacity={maxCapacityInput} 
         />
       ) : (
         <CalendarGrid
-          dates={dates} // Pass dates to CalendarGrid
+          dates={dates}
           currentDate={currentDate}
           reservationsByDate={reservationsByDate}
           onDateClick={handleDateClick}
@@ -182,6 +224,7 @@ const CalendarComponent = () => {
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
           weekOrMonthView={weekOrMonthView}
+          maxCapacity={maxCapacityInput}
         />
       )}
       {selectedDateReservations && (
@@ -199,14 +242,14 @@ const CalendarComponent = () => {
                 dates={dates}
                 reservationsByDate={reservationsByDate}
                 selectedShift={selectedShift}
-                autoGenerate={true} // Automatically generate the report
+                autoGenerate={true}
               />
             ) : (
               <MonthReport
                 dates={dates}
                 reservationsByDate={reservationsByDate}
                 selectedShift={selectedShift}
-                autoGenerate={true} // Automatically generate the report
+                autoGenerate={true}
               />
             )
           }
