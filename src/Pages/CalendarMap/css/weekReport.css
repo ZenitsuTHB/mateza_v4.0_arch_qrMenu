@@ -93,3 +93,38 @@
   .totals-styled {
 	font-weight: bold;
   }
+
+  .collapsible-block {
+	border: 1px solid var(--color-gray);
+	border-radius: 8px;
+	margin-bottom: 15px;
+	overflow: hidden;
+	background-color: #f9f9f9;
+  }
+  
+  .block-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background-color: #e0e0e0;
+	cursor: pointer;
+  }
+  
+  .block-title {
+	font-weight: bold;
+	color: #333;
+  }
+  
+  .chevron-icon {
+	transition: transform 0.3s ease;
+  }
+  
+  .chevron-icon.expanded {
+	transform: rotate(180deg);
+  }
+  
+  .block-content {
+	background-color: #ffffff;
+  }
+  
