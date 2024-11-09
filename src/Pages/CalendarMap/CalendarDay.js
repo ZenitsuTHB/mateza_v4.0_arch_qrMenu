@@ -65,7 +65,7 @@ const CalendarDay = ({
     backgroundColor = 'white'; // Or any default background color
     content = (
       <div className="occupancy-percentage">
-        <strong>{temperature !== undefined ? `${temperature}°C` : 'N/A'}</strong>
+        <strong>{temperature !== undefined ? `${temperature}°C` : ''}</strong>
       </div>
     );
   } else if (selectedViewMode === 'Bezettingsgraad') {
@@ -139,7 +139,7 @@ const CalendarDay = ({
       backgroundColor = 'white';
       content = (
         <div className="occupancy-percentage">
-          <strong>N/A</strong>
+          <strong></strong>
         </div>
       );
     }
