@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import {
   calculateMedian,
   calculateAverage,
-  calculateVariance,
 } from '../Utils/reportUtils';
 
 /**
@@ -80,7 +79,6 @@ const useReportData = (dates, reservationsByDate, selectedShift, autoGenerate) =
       const max = Math.max(...guestCounts);
       const median = calculateMedian(guestCounts);
       const average = calculateAverage(guestCounts);
-      const variance = calculateVariance(guestCounts, average);
       const highest = dailyTotalsTemp.find((day) => day.total === max);
       const lowest = dailyTotalsTemp.find((day) => day.total === min);
 
@@ -89,7 +87,6 @@ const useReportData = (dates, reservationsByDate, selectedShift, autoGenerate) =
         maxGuests: max,
         medianGuests: median,
         averageGuests: average.toFixed(2),
-        varianceGuests: variance.toFixed(2),
         lowestDay: lowest ? lowest.date : null,
         highestDay: highest ? highest.date : null,
       });
