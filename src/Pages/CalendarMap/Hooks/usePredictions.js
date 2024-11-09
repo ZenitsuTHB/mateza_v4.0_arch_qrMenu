@@ -1,4 +1,4 @@
-// /src/Components/Calendar/Hooks/usePredictions.js
+// src/components/Calendar/Hooks/usePredictions.js
 
 import { useState, useEffect } from 'react';
 import { median, mean } from '../Utils/predictionUtils';

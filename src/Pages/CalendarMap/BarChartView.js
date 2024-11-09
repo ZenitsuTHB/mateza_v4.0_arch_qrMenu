@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import './css/barChartView.css';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { maxCapacity } from './reservationData'; // Adjust the import path as needed
 
 const BarChartView = ({
   currentDate,
@@ -12,6 +13,7 @@ const BarChartView = ({
   selectedViewMode,
   maxCapacity,
   predictionsByDate,
+  weekOrMonthView, // New prop
 }) => {
   const [chartData, setChartData] = useState({
     labels: [],
@@ -19,25 +21,47 @@ const BarChartView = ({
   });
 
   useEffect(() => {
-    // Prepare data for the chart
-    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const numDays = endDate.getDate();
-
+    let startDate, endDate;
     const labels = [];
     let datasets = [];
 
+    // Define time slot names and colors
     const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
     const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
+
+    // Determine the date range based on the current view
+    if (weekOrMonthView === 'month') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    } else if (weekOrMonthView === 'week') {
+      const getMonday = (date) => {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
+      };
+      startDate = getMonday(currentDate);
+      endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 6);
+    }
+
+    // Generate an array of dates within the selected range
+    const dateArray = [];
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      dateArray.push(new Date(d));
+    }
 
     if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
       // Stacked bar chart for 'Algemeen' view with 'Dag' shift
       const dataByTimeSlot = [[], [], []]; // [Ochtend, Middag, Avond]
 
-      for (let i = 1; i <= numDays; i++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      dateArray.forEach((date) => {
         const dateString = date.toISOString().split('T')[0];
-        labels.push(i);
+        if (weekOrMonthView === 'month') {
+          labels.push(date.getDate());
+        } else if (weekOrMonthView === 'week') {
+          labels.push(date.toLocaleDateString('nl-NL', { weekday: 'short' }));
+        }
 
         const reservations = reservationsByDate[dateString] || [];
 
@@ -51,9 +75,9 @@ const BarChartView = ({
         for (let timeSlot = 0; timeSlot < 3; timeSlot++) {
           dataByTimeSlot[timeSlot].push(totalGuestsByTimeSlot[timeSlot]);
         }
-      }
+      });
 
-      // Create datasets
+      // Create datasets for each time slot
       datasets = timeSlotNames.map((name, index) => ({
         label: name,
         data: dataByTimeSlot[index],
@@ -63,10 +87,13 @@ const BarChartView = ({
       // Other view modes
       const data = [];
 
-      for (let i = 1; i <= numDays; i++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      dateArray.forEach((date) => {
         const dateString = date.toISOString().split('T')[0];
-        labels.push(i);
+        if (weekOrMonthView === 'month') {
+          labels.push(date.getDate());
+        } else if (weekOrMonthView === 'week') {
+          labels.push(date.toLocaleDateString('nl-NL', { weekday: 'short' }));
+        }
 
         let totalGuests = 0;
 
@@ -89,13 +116,13 @@ const BarChartView = ({
         }
 
         if (selectedViewMode === 'Bezettingspercentage') {
-          // Calculate occupancy Bezettingspercentage
+          // Calculate occupancy percentage
           const occupancyRate = (totalGuests / maxCapacity) * 100;
           data.push(parseFloat(occupancyRate.toFixed(1)));
         } else {
           data.push(totalGuests);
         }
-      }
+      });
 
       // Determine background color based on selectedViewMode and selectedShift
       let backgroundColor = '';
@@ -155,6 +182,7 @@ const BarChartView = ({
     selectedViewMode,
     maxCapacity,
     predictionsByDate,
+    weekOrMonthView, // Added to dependencies
   ]);
 
   const options = {
@@ -183,14 +211,17 @@ const BarChartView = ({
         max: selectedViewMode === 'Bezettingspercentage' ? 100 : undefined,
         title: {
           display: true,
-          text: selectedViewMode === 'Bezettingspercentage' ? 'Bezettingsgraad (%)' : 'Aantal Gasten',
+          text:
+            selectedViewMode === 'Bezettingspercentage'
+              ? 'Bezettingsgraad (%)'
+              : 'Aantal Gasten',
         },
         stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
       },
       x: {
         title: {
           display: true,
-          text: 'Dag van de Maand',
+          text: weekOrMonthView === 'week' ? 'Dag van de Week' : 'Dag van de Maand',
         },
         stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
       },

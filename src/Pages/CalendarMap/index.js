@@ -12,6 +12,7 @@ import usePredictions from './Hooks/usePredictions';
 import WeekReport from './WeekReport';
 import MonthReport from './MonthReport'; // Import MonthReport
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Import ModalWithoutTabs
+import { maxCapacity } from './reservationData'; // Adjust the path as necessary
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -168,6 +169,8 @@ const CalendarComponent = () => {
           selectedShift={selectedShift}
           selectedViewMode={selectedViewMode}
           predictionsByDate={predictionsByDate}
+          weekOrMonthView={weekOrMonthView} // Pass this prop
+          maxCapacity={maxCapacity} // Pass maxCapacity if needed
         />
       ) : (
         <CalendarGrid

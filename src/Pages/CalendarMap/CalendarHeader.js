@@ -38,10 +38,10 @@ const CalendarHeader = ({
   // Utility function to get the Monday of the week for a given date
   const getMonday = (date) => {
     const d = new Date(date);
-    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
-    const diff = day === 0 ? -6 : 1 - day; // Adjust when day is Sunday
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
     d.setDate(d.getDate() + diff);
-    d.setHours(0, 0, 0, 0); // Reset time to midnight
+    d.setHours(0, 0, 0, 0);
     return d;
   };
 
@@ -106,7 +106,7 @@ const CalendarHeader = ({
 
   return (
     <div className="calendar-header">
-      <div className='header-titles'>
+      <div className="header-titles">
         <button className="nav-button" onClick={onPrev}>
           <FaChevronLeft size={24} />
         </button>
@@ -151,7 +151,6 @@ const CalendarHeader = ({
       </div>
 
       <div className="header-buttons">
-
         <button
           onClick={onGenerateReport} // Updated onClick handler
           className="standard-button blue toggle-button"
