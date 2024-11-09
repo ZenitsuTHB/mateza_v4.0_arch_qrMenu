@@ -164,7 +164,10 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
           animate="visible"
           variants={containerVariants}
         >
-          <div className="calendar-report-title">Maandrapport</div>
+          {/* Updated Title Section */}
+          <div className="calendar-report-title">
+            Maandrapport {selectedShift !== 'Dag' && `- ${selectedShift}`}
+          </div>
 
           {/* Render collapsible blocks for each week */}
           <div className="weeks-container">
