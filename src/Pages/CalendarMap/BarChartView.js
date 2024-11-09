@@ -30,8 +30,8 @@ const BarChartView = ({
     const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
     const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
 
-    if (selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag') {
-      // Stacked bar chart for 'Algemeen' view with 'Hele Dag' shift
+    if (selectedViewMode === 'Algemeen' && selectedShift === 'Dag') {
+      // Stacked bar chart for 'Algemeen' view with 'Dag' shift
       const dataByTimeSlot = [[], [], []]; // [Ochtend, Middag, Avond]
 
       for (let i = 1; i <= numDays; i++) {
@@ -78,7 +78,7 @@ const BarChartView = ({
           // Calculate total guests based on selectedShift
           reservations.forEach((res) => {
             if (
-              selectedShift === 'Hele Dag' ||
+              selectedShift === 'Dag' ||
               (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
               (selectedShift === 'Middag' && res.timeSlot === 1) ||
               (selectedShift === 'Avond' && res.timeSlot === 2)
@@ -185,14 +185,14 @@ const BarChartView = ({
           display: true,
           text: selectedViewMode === 'Bezettingspercentage' ? 'Bezettingsgraad (%)' : 'Aantal Gasten',
         },
-        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag',
+        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
       },
       x: {
         title: {
           display: true,
           text: 'Dag van de Maand',
         },
-        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Hele Dag',
+        stacked: selectedViewMode === 'Algemeen' && selectedShift === 'Dag',
       },
     },
   };

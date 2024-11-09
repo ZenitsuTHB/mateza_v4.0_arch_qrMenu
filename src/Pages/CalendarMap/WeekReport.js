@@ -39,7 +39,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
 
       reservations.forEach((reservation) => {
         if (
-          selectedShift === 'Hele Dag' ||
+          selectedShift === 'Dag' ||
           (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
           (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
           (selectedShift === 'Avond' && reservation.timeSlot === 2)

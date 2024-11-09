@@ -52,7 +52,7 @@ const MonthReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = 
 
       reservations.forEach((reservation) => {
         if (
-          selectedShift === 'Hele Dag' ||
+          selectedShift === 'Dag' ||
           (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
           (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
           (selectedShift === 'Avond' && reservation.timeSlot === 2)
@@ -230,7 +230,7 @@ const CollapsibleBlock = ({ weekNumber, dates, reservationsByDate, selectedShift
 
     reservations.forEach((reservation) => {
       if (
-        selectedShift === 'Hele Dag' ||
+        selectedShift === 'Dag' ||
         (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
         (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
         (selectedShift === 'Avond' && reservation.timeSlot === 2)

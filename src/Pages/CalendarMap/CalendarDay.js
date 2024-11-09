@@ -27,7 +27,7 @@ const CalendarDay = ({
 
   reservations.forEach((reservation) => {
     if (
-      selectedShift === 'Hele Dag' ||
+      selectedShift === 'Dag' ||
       (selectedShift === 'Ochtend' && reservation.timeSlot === 0) ||
       (selectedShift === 'Middag' && reservation.timeSlot === 1) ||
       (selectedShift === 'Avond' && reservation.timeSlot === 2)
@@ -148,7 +148,7 @@ const CalendarDay = ({
           {totalGuestsByTimeSlot.map((totalGuests, index) => {
             if (totalGuests > 0) {
               if (
-                selectedShift === 'Hele Dag' ||
+                selectedShift === 'Dag' ||
                 (selectedShift === 'Ochtend' && index === 0) ||
                 (selectedShift === 'Middag' && index === 1) ||
                 (selectedShift === 'Avond' && index === 2)

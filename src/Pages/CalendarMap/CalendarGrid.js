@@ -33,7 +33,7 @@ const CalendarGrid = ({
 
         reservations.forEach((res) => {
           if (
-            selectedShift === 'Hele Dag' ||
+            selectedShift === 'Dag' ||
             (selectedShift === 'Ochtend' && res.timeSlot === 0) ||
             (selectedShift === 'Middag' && res.timeSlot === 1) ||
             (selectedShift === 'Avond' && res.timeSlot === 2)

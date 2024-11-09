@@ -16,7 +16,7 @@ import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Im
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
-  const [selectedShift, setSelectedShift] = useState('Hele Dag');
+  const [selectedShift, setSelectedShift] = useState('Dag');
   const [selectedViewMode, setSelectedViewMode] = useState('Algemeen');
   const [isChartView, setIsChartView] = useState(false);
   const [weekOrMonthView, setWeekOrMonthView] = useState('month');
