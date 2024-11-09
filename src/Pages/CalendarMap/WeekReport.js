@@ -26,6 +26,18 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
     }, 2000); // Simulate 2 seconds loading time
   };
 
+  // Define the available shifts
+  const shifts = [
+    { label: 'Ochtend', timeSlot: 0 },
+    { label: 'Middag', timeSlot: 1 },
+    { label: 'Avond', timeSlot: 2 },
+  ];
+
+  // Determine which shifts to display based on the selectedShift prop
+  const visibleShifts = selectedShift === 'Dag'
+    ? shifts
+    : shifts.filter(shift => shift.label === selectedShift);
+
   // Function to generate the report data
   const generateReportData = () => {
     let totals = [0, 0, 0]; // [Morning, Afternoon, Evening]
@@ -147,9 +159,9 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
             <thead>
               <tr>
                 <th>Dag</th>
-                <th>Ochtend</th>
-                <th>Middag</th>
-                <th>Avond</th>
+                {visibleShifts.map((shift) => (
+                  <th key={shift.timeSlot}>{shift.label}</th>
+                ))}
                 <th>Totaal</th>
               </tr>
             </thead>
@@ -157,9 +169,9 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
               {dailyTotals.map(({ date, shiftTotals, total }, index) => (
                 <motion.tr key={index} variants={rowVariants}>
                   <td>{getDutchDayName(date)}</td>
-                  <td>{shiftTotals[0]}</td>
-                  <td>{shiftTotals[1]}</td>
-                  <td>{shiftTotals[2]}</td>
+                  {visibleShifts.map((shift) => (
+                    <td key={shift.timeSlot}>{shiftTotals[shift.timeSlot]}</td>
+                  ))}
                   <td>{total}</td>
                 </motion.tr>
               ))}
@@ -167,10 +179,19 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
                 <td>
                   <strong>Totaal</strong>
                 </td>
-                <td>{totalGuestsByShift[0]}</td>
-                <td>{totalGuestsByShift[1]}</td>
-                <td>{totalGuestsByShift[2]}</td>
-                <td>{totalGuestsByShift.reduce((a, b) => a + b, 0)}</td>
+                {visibleShifts.map((shift) => (
+                  <td key={shift.timeSlot}>
+                    {totalGuestsByShift[shift.timeSlot]}
+                  </td>
+                ))}
+                <td>
+                  <strong>
+                    {visibleShifts.reduce(
+                      (sum, shift) => sum + totalGuestsByShift[shift.timeSlot],
+                      0
+                    )}
+                  </strong>
+                </td>
               </motion.tr>
             </tbody>
           </table>
