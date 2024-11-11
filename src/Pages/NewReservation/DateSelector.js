@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Calendar from './Calendar';
-import { generateAvailableDates } from './Utils/generateAvailableDates';
+import { generateAvailableDates } from './Utils/generateDates';
 
 const DateSelector = ({
   formData,
@@ -15,17 +15,14 @@ const DateSelector = ({
   const [availableDates, setAvailableDates] = useState([]);
 
   useEffect(() => {
-    const dates = generateAvailableDates(timeblocks);
-    setAvailableDates(dates);
+    if (timeblocks && Array.isArray(timeblocks)) {
+      const dates = generateAvailableDates(timeblocks);
+      setAvailableDates(dates);
+    } else {
+      console.error("timeblocks is undefined or not an array:", timeblocks);
+      setAvailableDates([]);
+    }
   }, [timeblocks]);
-
-  const formatDateForFilter = (date) => {
-    if (!date) return '';
-    const year = date.getFullYear();
-    const month = (`0${date.getMonth() + 1}`).slice(-2);
-    const day = (`0${date.getDate()}`).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
 
   const handleDateSelect = (date) => {
     handleChange({

@@ -8,7 +8,6 @@ const TimeSelector = ({
   handleChange,
   field,
   selectedDate,
-  timeblocks,
   expanded,
   setCurrentExpandedField,
 }) => {
@@ -18,12 +17,12 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate) {
-      const times = generateAvailableTimesForDate(selectedDate, timeblocks);
+      const times = generateAvailableTimesForDate(selectedDate);
       setAvailableTimes(times);
     } else {
       setAvailableTimes([]);
     }
-  }, [selectedDate, timeblocks]);
+  }, [selectedDate]);
 
   const handleTimeSelect = (timeValue) => {
     handleChange({

@@ -27,23 +27,13 @@ const NewReservationAdmin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dummyTimeblocks = [
-    {
-      date: '2023-10-20',
-      startTime: '09:00',
-      endTime: '17:00',
-    },
-    {
-      date: '2023-10-21',
-      startTime: '10:00',
-      endTime: '18:00',
-    },
-    {
-      date: '2023-10-22',
-      startTime: '11:00',
-      endTime: '16:00',
-    },
-  ];
+  // Check if restaurantData is loaded
+  if (!restaurantData) {
+    return <div>Loading...</div>;
+  }
+
+  // Extract timeblocks from restaurantData
+  const { timeblocks } = restaurantData;
 
   // Validation functions
   const validateStepOne = () => {
@@ -153,7 +143,7 @@ const NewReservationAdmin = () => {
             handleChange={handleChange}
             handleStepOneSubmit={handleStepOneSubmit}
             setFormData={setFormData}
-            timeblocks={dummyTimeblocks}
+            timeblocks={timeblocks} // Pass timeblocks from restaurantData
           />
         </div>
 

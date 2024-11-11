@@ -34,7 +34,7 @@ const ReservationStepOne = ({
         formData={formData}
         handleChange={handleChange}
         resetFormDataFields={resetFormDataFields}
-        timeblocks={timeblocks}
+        timeblocks={timeblocks} // Pass timeblocks here
         expanded={false}
         setCurrentExpandedField={() => {}}
       />
@@ -44,7 +44,6 @@ const ReservationStepOne = ({
         handleChange={handleChange}
         field={{ id: 'time', label: 'Tijd' }}
         selectedDate={formData.date}
-        timeblocks={timeblocks}
         expanded={false}
         setCurrentExpandedField={() => {}}
       />

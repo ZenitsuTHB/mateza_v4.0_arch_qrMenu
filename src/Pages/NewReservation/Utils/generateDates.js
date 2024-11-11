@@ -1,4 +1,4 @@
-// src/components/ReservationForm/Utils/generateAvailableDates.js
+// Calendar/generateDates.js
 
 import { DateTime } from 'luxon';
 
