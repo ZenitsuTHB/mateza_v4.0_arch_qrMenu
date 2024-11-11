@@ -1,17 +1,22 @@
 // src/components/ReservationForm/NewReservationAdmin.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './ReservationStepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
-import useFetchRestaurantData from './Hooks/useFetchRestaurantData';
 
 const NewReservationAdmin = () => {
   const api = useApi();
-  const restaurantData = useFetchRestaurantData();
+
+  // State for restaurant data
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [loadingRestaurantData, setLoadingRestaurantData] = useState(true);
+  const [restaurantDataError, setRestaurantDataError] = useState(null);
+
+  // Form state
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
@@ -23,17 +28,34 @@ const NewReservationAdmin = () => {
     extraInfo: '',
   });
 
+  // Error state
   const [errors, setErrors] = useState({});
+
+  // Modal and submission states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if restaurantData is loaded
-  if (!restaurantData) {
-    return <div>Loading...</div>;
-  }
-
   // Extract timeblocks from restaurantData
-  const { timeblocks } = restaurantData;
+  const timeblocks = restaurantData?.timeblocks || [];
+
+  console.log("timeblocks", timeblocks);
+
+  // Fetch restaurant data on component mount
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
+        setRestaurantData(data);
+      } catch (err) {
+        setRestaurantDataError(err);
+        console.error('Error fetching restaurant data:', err);
+      } finally {
+        setLoadingRestaurantData(false);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [api]);
 
   // Validation functions
   const validateStepOne = () => {
@@ -69,6 +91,7 @@ const NewReservationAdmin = () => {
     return errors;
   };
 
+  // Handle submission of Step One
   const handleStepOneSubmit = (e) => {
     e.preventDefault();
     const stepOneErrors = validateStepOne();
@@ -80,6 +103,7 @@ const NewReservationAdmin = () => {
     }
   };
 
+  // Handle final submission of the reservation
   const handleFinalSubmit = async (e) => {
     e.preventDefault();
     const stepTwoErrors = validateStepTwo();
@@ -100,7 +124,7 @@ const NewReservationAdmin = () => {
       };
 
       try {
-        await api.post('api/auth-reservations/', submissionData);
+        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
         alert('Reservatie succesvol ingediend!');
         setIsModalOpen(false);
         setFormData({
@@ -126,11 +150,22 @@ const NewReservationAdmin = () => {
     }
   };
 
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: '' });
   };
+
+  // Render loading state
+  if (loadingRestaurantData) {
+    return <div>Loading restaurant data...</div>;
+  }
+
+  // Render error state
+  if (restaurantDataError) {
+    return <div>Error loading restaurant data: {restaurantDataError.message}</div>;
+  }
 
   return (
     <div className="new-reservation-admin-component">

@@ -22,6 +22,9 @@ const ReservationStepOne = ({
     setFormData(newFormData);
   };
 
+  console.log("timeblocks");
+  console.log(timeblocks);
+
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests

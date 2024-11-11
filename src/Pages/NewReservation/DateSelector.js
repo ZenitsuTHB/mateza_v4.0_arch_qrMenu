@@ -14,6 +14,9 @@ const DateSelector = ({
 }) => {
   const [availableDates, setAvailableDates] = useState([]);
 
+  console.log("timeblocks");
+  console.log(timeblocks);
+
   useEffect(() => {
     if (timeblocks && Array.isArray(timeblocks)) {
       const dates = generateAvailableDates(timeblocks);
