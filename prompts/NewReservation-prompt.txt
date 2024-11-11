@@ -1,0 +1,555 @@
+File Contents:
+
+--- FormField.js ---
+// src/components/Profile/FormField.jsx
+
+import React from 'react';
+
+const FormField = ({ label, name, type = 'text', icon: Icon, value, onChange, error, placeholder, halfWidth }) => (
+  <div className={`form-group ${halfWidth ? 'half-width' : ''}`}>
+    <div className="input-container">
+      {Icon && <Icon className="input-icon" />}
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        aria-label={label}
+      />
+    </div>
+    {error && <p className="form-error">{error}</p>}
+  </div>
+);
+
+export default FormField;
+
+
+--- ReservationStepOne.js ---
+// src/components/ReservationForm/ReservationStepOne.jsx
+
+import React from 'react';
+import FormField from './FormField';
+import { FaCalendarAlt, FaClock } from 'react-icons/fa';
+import ValueSelectorGuests from './ValueSelector'; // Import the guests value selector
+import './css/newReservation.css'; // Ensure CSS is imported
+
+const ReservationStepOne = ({ formData, errors, handleChange, handleStepOneSubmit }) => {
+  return (
+    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
+      
+      {/* Iteration 1: Value Selector for Aantal Gasten */}
+      <ValueSelectorGuests
+        value={formData.numberOfGuests}
+        onChange={handleChange}
+        error={errors.numberOfGuests}
+      />
+
+      {/* Other form fields */}
+      <FormField
+        label="Datum"
+        name="date"
+        type="date"
+        placeholder="Datum"
+        value={formData.date}
+        onChange={handleChange}
+        error={errors.date}
+        icon={FaCalendarAlt}
+      />
+      <FormField
+        label="Tijd"
+        name="time"
+        type="time"
+        placeholder="Tijd"
+        value={formData.time}
+        onChange={handleChange}
+        error={errors.time}
+        icon={FaClock}
+      />
+
+      <button type="submit" className="account-manage__button">
+        Verder
+      </button>
+    </form>
+  );
+};
+
+export default ReservationStepOne;
+
+
+--- ReservationStepTwoModal.js ---
+// src/components/ReservationForm/ReservationStepTwoModal.jsx
+
+import React from 'react';
+import FormField from './FormField';
+import { FaUser, FaPhone, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
+
+const ReservationStepTwoModal = ({
+  formData,
+  errors,
+  handleChange,
+  handleFinalSubmit,
+  isSubmitting,
+}) => {
+  return (
+    <div>
+      <h2 className="modal-title">Persoonlijke Informatie</h2>
+      <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
+        <FormField
+          label="Voornaam"
+          name="firstName"
+          placeholder="Voornaam"
+          value={formData.firstName}
+          onChange={handleChange}
+          error={errors.firstName}
+          icon={FaUser}
+        />
+        <FormField
+          label="Achternaam"
+          name="lastName"
+          placeholder="Achternaam"
+          value={formData.lastName}
+          onChange={handleChange}
+          error={errors.lastName}
+          icon={FaUser}
+        />
+        <FormField
+          label="E-mail"
+          name="email"
+          type="email"
+          placeholder="E-mailadres"
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+          icon={FaEnvelope}
+        />
+        <FormField
+          label="Telefoonnummer"
+          name="phone"
+          type="tel"
+          placeholder="Telefoonnummer"
+          value={formData.phone}
+          onChange={handleChange}
+          error={errors.phone}
+          icon={FaPhone}
+        />
+        <FormField
+          label="Extra info"
+          name="extraInfo"
+          type="textarea"
+          placeholder="Extra informatie"
+          value={formData.extraInfo}
+          onChange={handleChange}
+          error={errors.extraInfo}
+          icon={FaInfoCircle}
+        />
+        <button type="submit" className="account-manage__button" disabled={isSubmitting}>
+          {isSubmitting ? 'Verzenden...' : 'Reserveren'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default ReservationStepTwoModal;
+
+
+--- ValueSelector.js ---
+// ValueSelectorGuests.jsx
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion
+import './css/valueSelector.css'; // Use the same CSS as ValueSelector
+
+const ValueSelectorGuests = ({ value, onChange }) => {
+  const predefinedValues = [1, 2, 3, '4+ Gasten'];
+  const [selectedValue, setSelectedValue] = useState(value || '');
+  const [showSlider, setShowSlider] = useState(false);
+
+  const handlePredefinedValueClick = (val) => {
+    if (val === '4+ Gasten') {
+      setShowSlider(true);
+      setSelectedValue(4);
+      onChange({ target: { name: 'numberOfGuests', value: 4 } });
+    } else {
+      setShowSlider(false);
+      setSelectedValue(val);
+      onChange({ target: { name: 'numberOfGuests', value: val } });
+    }
+  };
+
+  const handleSliderChange = (e) => {
+    const val = e.target.value;
+    setSelectedValue(val);
+    onChange({ target: { name: 'numberOfGuests', value: val } });
+  };
+
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setSelectedValue(val);
+    onChange({ target: { name: 'numberOfGuests', value: val } });
+  };
+
+  return (
+    <div className="value-selector">
+      <div className="predefined-values">
+        {predefinedValues.map((val) => (
+          <button
+            key={val}
+            type="button"
+            className={`predefined-value-button ${
+              selectedValue == val || (val === '4+ Gasten' && showSlider) ? 'active' : ''
+            }`}
+            onClick={() => handlePredefinedValueClick(val)}
+          >
+            {val === '4+ Gasten' ? '4+ Gasten' : `${val} ${val === 1 ? 'Gast' : 'Gasten'}`}
+          </button>
+        ))}
+      </div>
+      <AnimatePresence>
+        {showSlider && (
+          <motion.div
+            className="slider-container"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <input
+              type="range"
+              min="4"
+              max="15"
+              step="1"
+              value={selectedValue}
+              onChange={handleSliderChange}
+              className="slider"
+            />
+            <input
+              type="number"
+              name="numberOfGuests"
+              value={selectedValue}
+              onChange={handleInputChange}
+              className="value-input"
+              min="4"
+              max="100"
+              step="1"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default ValueSelectorGuests;
+
+
+--- css/newReservationAdmin.css ---
+/* src/components/ReservationForm/css/reservationForm.css */
+
+
+
+
+.profile-page .account-manage-container {
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+	text-align: center;
+	background-color: white;
+  }
+
+
+  .profile-page .modal-title {
+	text-align: center;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 40px;
+  }
+
+
+--- css/valueSelector.css ---
+/* Use the same CSS provided, adjusted for the value selector */
+
+.profile-page .value-selector {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-bottom: 20px;
+  }
+  
+  .profile-page .predefined-values {
+	display: flex;
+	gap: 10px;
+  }
+  
+  .profile-page .predefined-value-button {
+	flex: 1;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: var(--border-radius);
+	background-color: var(--color-white);
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s ease;
+  }
+  
+  .profile-page .predefined-value-button.active,
+  .profile-page .predefined-value-button:hover {
+	background-color: var(--color-blue);
+	color: var(--color-white);
+  }
+  
+  .profile-page .slider-container {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+  }
+  
+  .profile-page .slider {
+	flex: 1;
+	appearance: none;
+	-webkit-appearance: none;
+	height: 5px;
+	background: #ddd;
+	border-radius: 5px;
+	outline: none;
+  }
+  
+  .profile-page .slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	background: var(--color-blue);
+	cursor: pointer;
+	border-radius: 50%;
+  }
+  
+  .profile-page .value-input {
+	width: 80px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: var(--border-radius);
+	font-size: 1rem;
+  }
+  
+
+--- index.js ---
+// src/components/ReservationForm/NewReservation.jsx
+
+import React, { useState } from 'react';
+import './css/newReservationAdmin.css';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import useApi from '../../Hooks/useApi';
+import ReservationStepOne from './ReservationStepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
+import { withHeader } from '../../Components/Structural/Header';
+
+const NewReservationAdmin = () => {
+  const api = useApi();
+  const [formData, setFormData] = useState({
+    numberOfGuests: '',
+    date: '',
+    time: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    extraInfo: '',
+  });
+
+  const [errors, setErrors] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Validation functions
+  const validateStepOne = () => {
+    const errors = {};
+    if (!formData.numberOfGuests) {
+      errors.numberOfGuests = 'Aantal gasten is verplicht';
+    }
+    if (!formData.date) {
+      errors.date = 'Datum is verplicht';
+    }
+    if (!formData.time) {
+      errors.time = 'Tijd is verplicht';
+    }
+    return errors;
+  };
+
+  const validateStepTwo = () => {
+    const errors = {};
+    if (!formData.firstName) {
+      errors.firstName = 'Voornaam is verplicht';
+    }
+    if (!formData.lastName) {
+      errors.lastName = 'Achternaam is verplicht';
+    }
+    if (!formData.email) {
+      errors.email = 'E-mail is verplicht';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'E-mail is ongeldig';
+    }
+    if (!formData.phone) {
+      errors.phone = 'Telefoonnummer is verplicht';
+    }
+    return errors;
+  };
+
+  const handleStepOneSubmit = (e) => {
+    e.preventDefault();
+    const stepOneErrors = validateStepOne();
+    if (Object.keys(stepOneErrors).length > 0) {
+      setErrors(stepOneErrors);
+    } else {
+      setErrors({});
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    const stepTwoErrors = validateStepTwo();
+    if (Object.keys(stepTwoErrors).length > 0) {
+      setErrors(stepTwoErrors);
+    } else {
+      setErrors({});
+      setIsSubmitting(true);
+      const submissionData = {
+        numberOfGuests: formData.numberOfGuests,
+        date: formData.date,
+        time: formData.time,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        extraInfo: formData.extraInfo,
+      };
+
+      try {
+        await api.post('api/auth-reservations/', submissionData);
+        alert('Reservatie succesvol ingediend!');
+        setIsModalOpen(false);
+        setFormData({
+          numberOfGuests: '',
+          date: '',
+          time: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          extraInfo: '',
+        });
+      } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          alert('Er is een fout opgetreden: ' + error.response.data.message);
+        } else {
+          alert('Er is een fout opgetreden bij het indienen van de reservatie.');
+        }
+        console.error('Error submitting reservation:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  return (
+    <div className="profile-page">
+      <h2 className="account-manage-title">Admin Reservaties</h2>
+      <div className="account-manage-container">
+        <ReservationStepOne
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
+          handleStepOneSubmit={handleStepOneSubmit}
+        />
+      </div>
+
+      {isModalOpen && (
+        <ModalWithoutTabs
+          content={
+            <ReservationStepTwoModal
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleFinalSubmit={handleFinalSubmit}
+              isSubmitting={isSubmitting}
+            />
+          }
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default withHeader(NewReservationAdmin);
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/NewReservation":
+
+├── FormField.js
+├── ReservationStepOne.js
+├── ReservationStepTwoModal.js
+├── ValueSelector.js
+├── css
+│   ├── newReservationAdmin.css
+│   └── valueSelector.css
+└── index.js
+
+
+List of Files:
+FormField.js
+ReservationStepOne.js
+ReservationStepTwoModal.js
+ValueSelector.js
+css/newReservationAdmin.css
+css/valueSelector.css
+index.js
+
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+**Examples:**
+
+*Encapsulation in index.js:*
+```jsx
+<div className="profile-component">
+    <h2 className="account-manage-title">Admin Reservaties</h2>
+    <div className="account-manage-container">
+        {/* ... */}
+        onClose={() => setIsModalOpen(false)}
+    </div>
+</div>
+```
+
+*Prefixed CSS Classes:*
+```css
+.component-name-component .account-manage-container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background-color: white;
+}
+
+.component-name-component .modal-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+```Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments.Only print the code with changes. Print the codes in full. Don't skip anything print them full.Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them.Only print every file once.

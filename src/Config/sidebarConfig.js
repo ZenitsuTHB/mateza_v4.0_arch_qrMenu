@@ -33,7 +33,7 @@ import {
 } from './secondaryTabConfig.js';
 import GiftcardEditor from '../Pages/GiftcardEditor/index.js';
 import Language from '../Pages/Profile/Language/index.js';
-import NewReservation from '../Pages/NewReservation/index.js';
+import NewReservationAdmin from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import CalendarComponent from '../Pages/CalendarMap/index.js';
 import TablePlan from '../Pages/TablePlan/index.js';
@@ -114,7 +114,7 @@ const routesConfig = [
   },
   {
     path: '/new-reservation',
-    element: <NewReservation title="Reserveren" />,
+    element: <NewReservationAdmin title="Reserveren" />,
     label: 'Reserveren',
     icon: FaPlus,
     isMenu: true,

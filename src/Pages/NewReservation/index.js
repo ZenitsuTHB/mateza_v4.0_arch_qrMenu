@@ -1,14 +1,14 @@
-// src/components/ReservationForm/NewReservation.jsx
+// src/components/ReservationForm/NewReservationAdmin.jsx
 
 import React, { useState } from 'react';
-import './css/newReservation.css';
+import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './ReservationStepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
 
-const NewReservation = () => {
+const NewReservationAdmin = () => {
   const api = useApi();
   const [formData, setFormData] = useState({
     numberOfGuests: '',
@@ -24,6 +24,24 @@ const NewReservation = () => {
   const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dummyTimeblocks = [
+    {
+      date: '2023-10-20',
+      startTime: '09:00',
+      endTime: '17:00',
+    },
+    {
+      date: '2023-10-21',
+      startTime: '10:00',
+      endTime: '18:00',
+    },
+    {
+      date: '2023-10-22',
+      startTime: '11:00',
+      endTime: '16:00',
+    },
+  ];
 
   // Validation functions
   const validateStepOne = () => {
@@ -123,33 +141,37 @@ const NewReservation = () => {
   };
 
   return (
-    <div className="profile-page">
-      <h2 className="account-manage-title">Admin Reservaties</h2>
-      <div className="account-manage-container">
-        <ReservationStepOne
-          formData={formData}
-          errors={errors}
-          handleChange={handleChange}
-          handleStepOneSubmit={handleStepOneSubmit}
-        />
-      </div>
+    <div className="new-reservation-admin-component">
+      <div className="profile-page">
+        <h2 className="account-manage-title">Admin Reservaties</h2>
+        <div className="account-manage-container">
+          <ReservationStepOne
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleStepOneSubmit={handleStepOneSubmit}
+            setFormData={setFormData}
+            timeblocks={dummyTimeblocks}
+          />
+        </div>
 
-      {isModalOpen && (
-        <ModalWithoutTabs
-          content={
-            <ReservationStepTwoModal
-              formData={formData}
-              errors={errors}
-              handleChange={handleChange}
-              handleFinalSubmit={handleFinalSubmit}
-              isSubmitting={isSubmitting}
-            />
-          }
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+        {isModalOpen && (
+          <ModalWithoutTabs
+            content={
+              <ReservationStepTwoModal
+                formData={formData}
+                errors={errors}
+                handleChange={handleChange}
+                handleFinalSubmit={handleFinalSubmit}
+                isSubmitting={isSubmitting}
+              />
+            }
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
-export default withHeader(NewReservation);
+export default withHeader(NewReservationAdmin);

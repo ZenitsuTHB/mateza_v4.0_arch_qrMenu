@@ -1,42 +1,52 @@
 // src/components/ReservationForm/ReservationStepOne.jsx
 
 import React from 'react';
-import FormField from './FormField';
-import { FaCalendarAlt, FaClock } from 'react-icons/fa';
 import ValueSelectorGuests from './ValueSelector'; // Import the guests value selector
-import './css/newReservation.css'; // Ensure CSS is imported
+import DateSelector from './DateSelector';
+import TimeSelector from './TimeSelector';
+import './css/newReservationAdmin.css'; // Ensure CSS is imported
 
-const ReservationStepOne = ({ formData, errors, handleChange, handleStepOneSubmit }) => {
+const ReservationStepOne = ({
+  formData,
+  errors,
+  handleChange,
+  handleStepOneSubmit,
+  setFormData,
+  timeblocks,
+}) => {
+  const resetFormDataFields = (fieldsToReset) => {
+    const newFormData = { ...formData };
+    fieldsToReset.forEach((field) => {
+      newFormData[field] = '';
+    });
+    setFormData(newFormData);
+  };
+
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
-      
-      {/* Iteration 1: Value Selector for Aantal Gasten */}
       <ValueSelectorGuests
         value={formData.numberOfGuests}
         onChange={handleChange}
         error={errors.numberOfGuests}
       />
 
-      {/* Other form fields */}
-      <FormField
-        label="Datum"
-        name="date"
-        type="date"
-        placeholder="Datum"
-        value={formData.date}
-        onChange={handleChange}
-        error={errors.date}
-        icon={FaCalendarAlt}
+      <DateSelector
+        formData={formData}
+        handleChange={handleChange}
+        resetFormDataFields={resetFormDataFields}
+        timeblocks={timeblocks}
+        expanded={false}
+        setCurrentExpandedField={() => {}}
       />
-      <FormField
-        label="Tijd"
-        name="time"
-        type="time"
-        placeholder="Tijd"
-        value={formData.time}
-        onChange={handleChange}
-        error={errors.time}
-        icon={FaClock}
+
+      <TimeSelector
+        formData={formData}
+        handleChange={handleChange}
+        field={{ id: 'time', label: 'Tijd' }}
+        selectedDate={formData.date}
+        timeblocks={timeblocks}
+        expanded={false}
+        setCurrentExpandedField={() => {}}
       />
 
       <button type="submit" className="account-manage__button">
