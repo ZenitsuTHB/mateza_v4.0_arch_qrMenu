@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { generateAvailableTimesForDate } from './Utils/generateAvailableTimesForDate';
+import './css/timeSelector.css'
 
 const TimeSelector = ({
   formData,
