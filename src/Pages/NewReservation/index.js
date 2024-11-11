@@ -7,9 +7,11 @@ import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './ReservationStepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
+import useFetchRestaurantData from './Hooks/useFetchRestaurantData';
 
 const NewReservationAdmin = () => {
   const api = useApi();
+  const restaurantData = useFetchRestaurantData();
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
