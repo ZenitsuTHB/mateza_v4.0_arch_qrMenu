@@ -1,5 +1,3 @@
-// src/components/ReservationForm/Utils/generateAvailableTimesForDate.js
-
 import moment from 'moment-timezone';
 
 export const generateAvailableTimesForDate = (selectedDate) => {
@@ -14,7 +12,7 @@ export const generateAvailableTimesForDate = (selectedDate) => {
     return [];
   }
 
-  const times = [];
+  const timesSet = new Set();
   const intervalMinutes = 30; // Adjust as needed
 
   timeEntries.forEach((entry) => {
@@ -23,13 +21,18 @@ export const generateAvailableTimesForDate = (selectedDate) => {
 
     let currentTime = startTime.clone();
     while (currentTime.isBefore(endTime)) {
-      times.push({
-        label: currentTime.format('HH:mm'),
-        value: currentTime.format('HH:mm'),
-      });
+      const timeStr = currentTime.format('HH:mm');
+      timesSet.add(timeStr);
       currentTime.add(intervalMinutes, 'minutes');
     }
   });
+
+  const times = Array.from(timesSet)
+    .sort((a, b) => moment(a, 'HH:mm') - moment(b, 'HH:mm'))
+    .map((timeStr) => ({
+      label: timeStr,
+      value: timeStr,
+    }));
 
   return times;
 };
