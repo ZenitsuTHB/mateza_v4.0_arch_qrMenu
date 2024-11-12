@@ -1,7 +1,8 @@
 // src/components/ReservationForm/ReservationStepOne.jsx
 
-import React from 'react';
-import ValueSelectorGuests from './ValueSelector'; // Import the guests value selector
+import React, { useState, useEffect } from 'react';
+import useApi from '../../../Hooks/useApi';
+import ValueSelectorGuests from './ValueSelector';
 import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
 
@@ -11,17 +12,48 @@ const ReservationStepOne = ({
   handleChange,
   handleStepOneSubmit,
   setFormData,
-  timeblocks,
 }) => {
+  const api = useApi();
+
+  // State for timeblocks
+  const [timeblocks, setTimeblocks] = useState([]);
+  const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
+  const [timeblocksError, setTimeblocksError] = useState(null);
+
+  // Fetch timeblocks on component mount
+  useEffect(() => {
+    const fetchTimeblocks = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
+        setTimeblocks(data.timeblocks || []);
+      } catch (err) {
+        setTimeblocksError(err);
+        console.error('Error fetching timeblocks:', err);
+      } finally {
+        setLoadingTimeblocks(false);
+      }
+    };
+
+    fetchTimeblocks();
+  }, [api]);
+
   const resetFormDataFields = (fieldsToReset) => {
-    const newFormData = { ...formData };
-    fieldsToReset.forEach((field) => {
-      newFormData[field] = '';
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData };
+      fieldsToReset.forEach((field) => {
+        newFormData[field] = '';
+      });
+      return newFormData;
     });
-    setFormData(newFormData);
   };
 
-  console.log("timeblocks:", timeblocks);
+  if (loadingTimeblocks) {
+    return <div>Loading timeblocks...</div>;
+  }
+
+  if (timeblocksError) {
+    return <div>Error loading timeblocks: {timeblocksError.message}</div>;
+  }
 
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
@@ -37,9 +69,7 @@ const ReservationStepOne = ({
           formData={formData}
           handleChange={handleChange}
           resetFormDataFields={resetFormDataFields}
-          timeblocks={timeblocks} // Pass timeblocks here
-          expanded={false}
-          setCurrentExpandedField={() => {}}
+          timeblocks={timeblocks} // Use fetched timeblocks
         />
       )}
 
@@ -50,8 +80,6 @@ const ReservationStepOne = ({
           handleChange={handleChange}
           field={{ id: 'time', label: 'Tijd' }}
           selectedDate={formData.date}
-          expanded={false}
-          setCurrentExpandedField={() => {}}
         />
       )}
 

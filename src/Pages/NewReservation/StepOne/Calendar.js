@@ -10,14 +10,12 @@ moment.locale('nl'); // Set moment to Dutch locale
 
 const Calendar = ({
   availableDates,
-  // Remove selectedDate and onSelectDate props
-  // selectedDate,
-  // onSelectDate,
+  selectedDate,
+  onSelectDate,
   autoExpand,
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const [startDate, setStartDate] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null); // Internal state
   const calendarRef = useRef(null);
 
   const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
@@ -78,8 +76,7 @@ const Calendar = ({
   const handleDateClick = (day) => {
     if (day.isAvailable && !day.isPast && !day.isFuture) {
       const formattedDate = day.date.format('YYYY-MM-DD');
-      setSelectedDate(formattedDate); // Update internal state
-      console.log('Selected date:', formattedDate); // Log the selected date
+      onSelectDate(formattedDate); // Notify parent
       setIsExpanded(false);
     } else {
       console.log('Date is not available for selection.');

@@ -10,13 +10,11 @@ const DateSelector = ({
   handleChange,
   resetFormDataFields,
   timeblocks,
-  expanded,
-  setCurrentExpandedField,
 }) => {
   const [availableDates, setAvailableDates] = useState([]);
 
   useEffect(() => {
-    if (timeblocks && Array.isArray(timeblocks)) {
+    if (Array.isArray(timeblocks)) {
       const dates = generateAvailableDates(timeblocks);
       setAvailableDates(dates);
     } else {
@@ -27,14 +25,11 @@ const DateSelector = ({
 
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
-    console.log('Selected date:', formattedDate); // Log the selected date
+    console.log('Selected date:', formattedDate);
     handleChange({
       target: { name: 'date', value: formattedDate },
     });
     resetFormDataFields(['time']);
-    if (setCurrentExpandedField) {
-      setCurrentExpandedField('time');
-    }
   };
 
   return (
@@ -44,9 +39,9 @@ const DateSelector = ({
       </label>
       <Calendar
         availableDates={availableDates}
-        selectedDate={formData.date ? formData.date : null}
+        selectedDate={formData.date || null}
         onSelectDate={handleDateSelect}
-        autoExpand={expanded}
+        autoExpand={false}
       />
     </div>
   );

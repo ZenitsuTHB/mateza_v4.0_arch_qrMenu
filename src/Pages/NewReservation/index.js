@@ -1,20 +1,13 @@
-// src/components/ReservationForm/NewReservationAdmin.jsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
-import ReservationStepOne from './StepOne';
+import ReservationStepOne from './StepOne'; // Adjusted import to match your file
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
 
 const NewReservationAdmin = () => {
   const api = useApi();
-
-  // State for restaurant data
-  const [restaurantData, setRestaurantData] = useState(null);
-  const [loadingRestaurantData, setLoadingRestaurantData] = useState(true);
-  const [restaurantDataError, setRestaurantDataError] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -34,28 +27,6 @@ const NewReservationAdmin = () => {
   // Modal and submission states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Extract timeblocks from restaurantData
-  const timeblocks = restaurantData?.timeblocks || [];
-
-  console.log("timeblocks", timeblocks);
-
-  // Fetch restaurant data on component mount
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
-        setRestaurantData(data);
-      } catch (err) {
-        setRestaurantDataError(err);
-        console.error('Error fetching restaurant data:', err);
-      } finally {
-        setLoadingRestaurantData(false);
-      }
-    };
-
-    fetchRestaurantData();
-  }, [api]);
 
   // Validation functions
   const validateStepOne = () => {
@@ -157,16 +128,6 @@ const NewReservationAdmin = () => {
     setErrors({ ...errors, [name]: '' });
   };
 
-  // Render loading state
-  if (loadingRestaurantData) {
-    return <div>Loading restaurant data...</div>;
-  }
-
-  // Render error state
-  if (restaurantDataError) {
-    return <div>Error loading restaurant data: {restaurantDataError.message}</div>;
-  }
-
   return (
     <div className="new-reservation-admin-component">
       <div className="profile-page">
@@ -178,7 +139,6 @@ const NewReservationAdmin = () => {
             handleChange={handleChange}
             handleStepOneSubmit={handleStepOneSubmit}
             setFormData={setFormData}
-            timeblocks={timeblocks} // Pass timeblocks from restaurantData
           />
         </div>
 
