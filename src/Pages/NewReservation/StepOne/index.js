@@ -56,6 +56,7 @@ const ReservationStepOne = ({
   }
 
   return (
+    
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests
         value={formData.numberOfGuests}
@@ -63,17 +64,15 @@ const ReservationStepOne = ({
         error={errors.numberOfGuests}
       />
 
-      {/* Only show DateSelector after numberOfGuests is selected */}
       {formData.numberOfGuests && (
         <DateSelector
           formData={formData}
           handleChange={handleChange}
           resetFormDataFields={resetFormDataFields}
-          timeblocks={timeblocks} // Use fetched timeblocks
+          timeblocks={timeblocks} 
         />
       )}
 
-      {/* Only show TimeSelector after date is selected */}
       {formData.date && (
         <TimeSelector
           formData={formData}

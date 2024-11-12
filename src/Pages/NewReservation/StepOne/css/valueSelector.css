@@ -1,18 +1,18 @@
 /* Use the same CSS provided, adjusted for the value selector */
 
-.profile-page .value-selector {
+.new-reservation-page .value-selector {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 	margin-bottom: 20px;
   }
   
-  .profile-page .predefined-values {
+  .new-reservation-page .predefined-values {
 	display: flex;
 	gap: 10px;
   }
   
-  .profile-page .predefined-value-button {
+  .new-reservation-page .predefined-value-button {
 	flex: 1;
 	padding: 12px;
 	border: 1px solid #ccc;
@@ -23,19 +23,19 @@
 	transition: background-color 0.3s ease;
   }
   
-  .profile-page .predefined-value-button.active,
-  .profile-page .predefined-value-button:hover {
+  .new-reservation-page .predefined-value-button.active,
+  .new-reservation-page .predefined-value-button:hover {
 	background-color: var(--color-blue);
 	color: var(--color-white);
   }
   
-  .profile-page .slider-container {
+  .new-reservation-page .slider-container {
 	display: flex;
 	align-items: center;
 	gap: 15px;
   }
   
-  .profile-page .slider {
+  .new-reservation-page .slider {
 	flex: 1;
 	appearance: none;
 	-webkit-appearance: none;
@@ -45,7 +45,7 @@
 	outline: none;
   }
   
-  .profile-page .slider::-webkit-slider-thumb {
+  .new-reservation-page .slider::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	width: 20px;
@@ -55,7 +55,7 @@
 	border-radius: 50%;
   }
   
-  .profile-page .value-input {
+  .new-reservation-page .value-input {
 	width: 80px;
 	padding: 10px;
 	border: 1px solid #ccc;

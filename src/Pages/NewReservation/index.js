@@ -5,6 +5,7 @@ import ReservationStepOne from './StepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import ReservationSummary from './ReservationSummary';
 import { withHeader } from '../../Components/Structural/Header';
+import './css/newReservationAdmin.css'
 
 const NewReservationAdmin = () => {
   const api = useApi();
@@ -107,8 +108,7 @@ const NewReservationAdmin = () => {
   };
 
   return (
-    <div className="new-reservation-admin-component">
-      <div className="profile-page">
+    <div className="new-reservation-page">
         <h2 className="account-manage-title">Admin Reservaties</h2>
         <div className="account-manage-container">
           {reservationSubmitted ? (
@@ -156,7 +156,6 @@ const NewReservationAdmin = () => {
           )}
         </div>
       </div>
-    </div>
   );
 };
 
