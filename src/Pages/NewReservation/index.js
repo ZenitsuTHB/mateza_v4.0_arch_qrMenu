@@ -3,13 +3,12 @@ import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './StepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
-import ReservationSummary from './ReservationSummary'; // Import the new component
+import ReservationSummary from './ReservationSummary';
 import { withHeader } from '../../Components/Structural/Header';
 
 const NewReservationAdmin = () => {
   const api = useApi();
 
-  // Form state
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
@@ -21,15 +20,12 @@ const NewReservationAdmin = () => {
     extraInfo: '',
   });
 
-  // Error state
   const [errors, setErrors] = useState({});
 
-  // Modal and submission states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reservationSubmitted, setReservationSubmitted] = useState(false); // New state variable
 
-  // Validation functions
   const validateStepOne = () => {
     const errors = {};
     if (!formData.numberOfGuests) {
@@ -63,7 +59,6 @@ const NewReservationAdmin = () => {
     return errors;
   };
 
-  // Handle submission of Step One
   const handleStepOneSubmit = (e) => {
     e.preventDefault();
     const stepOneErrors = validateStepOne();
@@ -75,7 +70,6 @@ const NewReservationAdmin = () => {
     }
   };
 
-  // Handle final submission of the reservation
   const handleFinalSubmit = async (e) => {
     e.preventDefault();
     const stepTwoErrors = validateStepTwo();
@@ -98,16 +92,14 @@ const NewReservationAdmin = () => {
       try {
         await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
         setIsModalOpen(false);
-        setReservationSubmitted(true); // Set the new state variable to true
+        setReservationSubmitted(true);
       } catch (error) {
-        // ... existing error handling ...
       } finally {
         setIsSubmitting(false);
       }
     }
   };
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
