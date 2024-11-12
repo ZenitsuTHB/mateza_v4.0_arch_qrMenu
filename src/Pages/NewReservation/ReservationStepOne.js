@@ -22,8 +22,7 @@ const ReservationStepOne = ({
     setFormData(newFormData);
   };
 
-  console.log("timeblocks");
-  console.log(timeblocks);
+  console.log("timeblocks:", timeblocks);
 
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
@@ -33,23 +32,29 @@ const ReservationStepOne = ({
         error={errors.numberOfGuests}
       />
 
-      <DateSelector
-        formData={formData}
-        handleChange={handleChange}
-        resetFormDataFields={resetFormDataFields}
-        timeblocks={timeblocks} // Pass timeblocks here
-        expanded={false}
-        setCurrentExpandedField={() => {}}
-      />
+      {/* Only show DateSelector after numberOfGuests is selected */}
+      {formData.numberOfGuests && (
+        <DateSelector
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          timeblocks={timeblocks} // Pass timeblocks here
+          expanded={false}
+          setCurrentExpandedField={() => {}}
+        />
+      )}
 
-      <TimeSelector
-        formData={formData}
-        handleChange={handleChange}
-        field={{ id: 'time', label: 'Tijd' }}
-        selectedDate={formData.date}
-        expanded={false}
-        setCurrentExpandedField={() => {}}
-      />
+      {/* Only show TimeSelector after date is selected */}
+      {formData.date && (
+        <TimeSelector
+          formData={formData}
+          handleChange={handleChange}
+          field={{ id: 'time', label: 'Tijd' }}
+          selectedDate={formData.date}
+          expanded={false}
+          setCurrentExpandedField={() => {}}
+        />
+      )}
 
       <button type="submit" className="account-manage__button">
         Verder

@@ -1,6 +1,8 @@
 File Contents:
 
 --- Calendar.js ---
+// src/components/ReservationForm/Calendar.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/nl';
@@ -231,7 +233,7 @@ export default Calendar;
 
 import React, { useEffect, useState } from 'react';
 import Calendar from './Calendar';
-import { generateAvailableDates } from './Utils/generateAvailableDates';
+import { generateAvailableDates } from './Utils/generateDates';
 
 const DateSelector = ({
   formData,
@@ -243,18 +245,18 @@ const DateSelector = ({
 }) => {
   const [availableDates, setAvailableDates] = useState([]);
 
-  useEffect(() => {
-    const dates = generateAvailableDates(timeblocks);
-    setAvailableDates(dates);
-  }, [timeblocks]);
+  console.log("timeblocks");
+  console.log(timeblocks);
 
-  const formatDateForFilter = (date) => {
-    if (!date) return '';
-    const year = date.getFullYear();
-    const month = (`0${date.getMonth() + 1}`).slice(-2);
-    const day = (`0${date.getDate()}`).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
+  useEffect(() => {
+    if (timeblocks && Array.isArray(timeblocks)) {
+      const dates = generateAvailableDates(timeblocks);
+      setAvailableDates(dates);
+    } else {
+      console.error("timeblocks is undefined or not an array:", timeblocks);
+      setAvailableDates([]);
+    }
+  }, [timeblocks]);
 
   const handleDateSelect = (date) => {
     handleChange({
@@ -310,29 +312,34 @@ export default FormField;
 
 
 --- Hooks/useFetchRestaurantData.js ---
-// src/Hooks/useRestaurantData.js
+// src/Hooks/useFetchRestaurantData.js
 
 import { useState, useEffect } from 'react';
+import useApi from '../../../Hooks/useApi';
 
 const useFetchRestaurantData = () => {
   const [restaurantData, setRestaurantData] = useState(null);
+  const api = useApi();
+
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch(window.baseDomain + 'api/auth-restaurant/');
-        const data = await response.json();
-        window.restaurantData = data;
-        setRestaurantData(data);
+        const endpoint = `${window.baseDomain}api/auth-restaurant/`;
+        const response = await api.get(endpoint);
 
-        console.log(window.restaurantData);
+
+        if (response) {
+          setRestaurantData(response);
+        }
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
+        const errorCode = error.response?.status || 'unknown';
       }
     };
 
     fetchRestaurantData();
-  }, []);
+  }, [api]);
 
   return restaurantData;
 };
@@ -365,6 +372,9 @@ const ReservationStepOne = ({
     setFormData(newFormData);
   };
 
+  console.log("timeblocks");
+  console.log(timeblocks);
+
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests
@@ -377,7 +387,7 @@ const ReservationStepOne = ({
         formData={formData}
         handleChange={handleChange}
         resetFormDataFields={resetFormDataFields}
-        timeblocks={timeblocks}
+        timeblocks={timeblocks} // Pass timeblocks here
         expanded={false}
         setCurrentExpandedField={() => {}}
       />
@@ -387,7 +397,6 @@ const ReservationStepOne = ({
         handleChange={handleChange}
         field={{ id: 'time', label: 'Tijd' }}
         selectedDate={formData.date}
-        timeblocks={timeblocks}
         expanded={false}
         setCurrentExpandedField={() => {}}
       />
@@ -484,13 +493,13 @@ export default ReservationStepTwoModal;
 
 import React, { useState, useEffect, useRef } from 'react';
 import { generateAvailableTimesForDate } from './Utils/generateAvailableTimesForDate';
+import './css/timeSelector.css'
 
 const TimeSelector = ({
   formData,
   handleChange,
   field,
   selectedDate,
-  timeblocks,
   expanded,
   setCurrentExpandedField,
 }) => {
@@ -500,12 +509,12 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate) {
-      const times = generateAvailableTimesForDate(selectedDate, timeblocks);
+      const times = generateAvailableTimesForDate(selectedDate);
       setAvailableTimes(times);
     } else {
       setAvailableTimes([]);
     }
-  }, [selectedDate, timeblocks]);
+  }, [selectedDate]);
 
   const handleTimeSelect = (timeValue) => {
     handleChange({
@@ -600,7 +609,7 @@ export default TimeSelector;
 
 
 --- Utils/dateUtils.js ---
-// Utils/dateUtils.js
+// src/components/ReservationForm/Utils/dateUtils.js
 
 import moment from 'moment-timezone';
 
@@ -613,43 +622,188 @@ export const isWeekInPast = (weekStartDate) => {
 export const isSameDay = (date1, date2) => date1.isSame(date2, 'day');
 
 
---- Utils/generateAvailableDates.js ---
-// src/components/ReservationForm/Utils/generateAvailableDates.js
-
-export const generateAvailableDates = (timeblocks) => {
-	const availableDates = timeblocks.map((block) => block.date);
-	const uniqueDates = Array.from(new Set(availableDates)).sort();
-	return uniqueDates;
-  };
-  
-
 --- Utils/generateAvailableTimesForDate.js ---
 // src/components/ReservationForm/Utils/generateAvailableTimesForDate.js
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
-export const generateAvailableTimesForDate = (selectedDate, timeblocks) => {
+export const generateAvailableTimesForDate = (selectedDate) => {
   if (!selectedDate) {
     return [];
   }
+
   const selectedDateStr = moment(selectedDate).format('YYYY-MM-DD');
-  const block = timeblocks.find((tb) => tb.date === selectedDateStr);
-  if (!block) {
+  const timeEntries = window.dateDictionary[selectedDateStr];
+
+  if (!timeEntries || timeEntries.length === 0) {
     return [];
   }
-  const startTime = moment(block.startTime, 'HH:mm');
-  const endTime = moment(block.endTime, 'HH:mm');
+
   const times = [];
-  const intervalMinutes = 30;
-  let currentTime = startTime.clone();
-  while (currentTime.isBefore(endTime)) {
-    times.push({
-      label: currentTime.format('HH:mm'),
-      value: currentTime.format('HH:mm'),
-    });
-    currentTime.add(intervalMinutes, 'minutes');
-  }
+  const intervalMinutes = 30; // Adjust as needed
+
+  timeEntries.forEach((entry) => {
+    const startTime = moment(entry.startTime, 'HH:mm');
+    const endTime = moment(entry.endTime, 'HH:mm');
+
+    let currentTime = startTime.clone();
+    while (currentTime.isBefore(endTime)) {
+      times.push({
+        label: currentTime.format('HH:mm'),
+        value: currentTime.format('HH:mm'),
+      });
+      currentTime.add(intervalMinutes, 'minutes');
+    }
+  });
+
   return times;
+};
+
+
+--- Utils/generateDates.js ---
+// Calendar/generateDates.js
+
+import { DateTime } from 'luxon';
+
+const getOrInitializeArray = (dict, key) => {
+    if (!Array.isArray(dict[key])) {
+        dict[key] = [];
+    }
+    return dict[key];
+};
+
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+
+const processTimeblock = (block) => {
+    if (!block.date) {
+        return;
+    }
+
+    const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+
+    if (!window.dateDictionary[dateString]) {
+        window.dateDictionary[dateString] = [];
+    }
+    window.dateDictionary[dateString].push({
+        startTime: block.startTime || null,
+        endTime: block.endTime || null
+    });
+
+    if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        block.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift => 
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+const getBlockSettingsDates = (timeblocks) => {
+    initializeDictionaries();
+    const dates = [];
+
+    timeblocks.forEach((block) => {
+        processTimeblock(block);
+        if (block.date) {
+            const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+            dates.push(dateString);
+        }
+    });
+
+    return dates;
+};
+
+const isWithinPeriod = (currentDate, endDate) => {
+    return currentDate <= endDate;
+};
+
+const processDaySetting = (dateString, daySetting) => {
+    if (!window.dateDictionary[dateString]) {
+        window.dateDictionary[dateString] = [];
+    }
+    window.dateDictionary[dateString].push({
+        startTime: daySetting.startTime || null,
+        endTime: daySetting.endTime || null,
+    });
+
+    if (daySetting.shiftsEnabled && Array.isArray(daySetting.shifts) && daySetting.shifts.length > 0) {
+        console.log(`[processDaySetting] Processing shifts for ${dateString}`);
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        daySetting.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift => 
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+const getSchemeSettingsDates = (timeblocks) => {
+    console.log(`[getSchemeSettingsDates] Starting processing of scheme settings dates.`);
+    initializeDictionaries();
+    const dates = [];
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    timeblocks.forEach((block) => {
+        if (!block.schemeSettings) {
+            return;
+        }
+
+        const { schemeSettings } = block;
+        let currentDate = DateTime.now().setZone("Europe/Brussels").startOf('day');
+        let endDate = currentDate.plus({ days: 365 }).startOf('day');
+
+        if (schemeSettings.period && schemeSettings.period.enabled) {
+            const { startDate, endDate: periodEndDate } = schemeSettings.period;
+            if (startDate && periodEndDate) {
+                currentDate = DateTime.fromISO(startDate, { zone: "Europe/Brussels" }).startOf('day');
+                endDate = DateTime.fromISO(periodEndDate, { zone: "Europe/Brussels" }).endOf('day');
+            }
+        }
+
+        while (isWithinPeriod(currentDate, endDate)) {
+            const dayOfWeek = currentDate.weekday % 7;
+            const dayName = dayNames[dayOfWeek];
+            const daySetting = schemeSettings[dayName];
+            if (daySetting && daySetting.enabled) {
+                const dateString = currentDate.toISODate();
+                dates.push(dateString);
+                processDaySetting(dateString, daySetting);
+            }
+
+            currentDate = currentDate.plus({ days: 1 });
+        }
+    });
+    return dates;
+};
+
+export const generateAvailableDates = (timeblocks) => {
+    initializeDictionaries();
+
+    const blockDates = getBlockSettingsDates(timeblocks);
+    const schemeDates = getSchemeSettingsDates(timeblocks);
+    const combinedDates = [...blockDates, ...schemeDates];
+    const uniqueDates = Array.from(new Set(combinedDates)).sort();
+    return uniqueDates;
 };
 
 
@@ -745,18 +899,23 @@ export default ValueSelectorGuests;
 --- index.js ---
 // src/components/ReservationForm/NewReservationAdmin.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
 import ReservationStepOne from './ReservationStepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
-import useFetchRestaurantData from './Hooks/useFetchRestaurantData';
 
 const NewReservationAdmin = () => {
   const api = useApi();
-  const restaurantData = useFetchRestaurantData();
+
+  // State for restaurant data
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [loadingRestaurantData, setLoadingRestaurantData] = useState(true);
+  const [restaurantDataError, setRestaurantDataError] = useState(null);
+
+  // Form state
   const [formData, setFormData] = useState({
     numberOfGuests: '',
     date: '',
@@ -768,27 +927,34 @@ const NewReservationAdmin = () => {
     extraInfo: '',
   });
 
+  // Error state
   const [errors, setErrors] = useState({});
+
+  // Modal and submission states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dummyTimeblocks = [
-    {
-      date: '2023-10-20',
-      startTime: '09:00',
-      endTime: '17:00',
-    },
-    {
-      date: '2023-10-21',
-      startTime: '10:00',
-      endTime: '18:00',
-    },
-    {
-      date: '2023-10-22',
-      startTime: '11:00',
-      endTime: '16:00',
-    },
-  ];
+  // Extract timeblocks from restaurantData
+  const timeblocks = restaurantData?.timeblocks || [];
+
+  console.log("timeblocks", timeblocks);
+
+  // Fetch restaurant data on component mount
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
+        setRestaurantData(data);
+      } catch (err) {
+        setRestaurantDataError(err);
+        console.error('Error fetching restaurant data:', err);
+      } finally {
+        setLoadingRestaurantData(false);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [api]);
 
   // Validation functions
   const validateStepOne = () => {
@@ -824,6 +990,7 @@ const NewReservationAdmin = () => {
     return errors;
   };
 
+  // Handle submission of Step One
   const handleStepOneSubmit = (e) => {
     e.preventDefault();
     const stepOneErrors = validateStepOne();
@@ -835,6 +1002,7 @@ const NewReservationAdmin = () => {
     }
   };
 
+  // Handle final submission of the reservation
   const handleFinalSubmit = async (e) => {
     e.preventDefault();
     const stepTwoErrors = validateStepTwo();
@@ -855,7 +1023,7 @@ const NewReservationAdmin = () => {
       };
 
       try {
-        await api.post('api/auth-reservations/', submissionData);
+        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
         alert('Reservatie succesvol ingediend!');
         setIsModalOpen(false);
         setFormData({
@@ -881,11 +1049,22 @@ const NewReservationAdmin = () => {
     }
   };
 
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: '' });
   };
+
+  // Render loading state
+  if (loadingRestaurantData) {
+    return <div>Loading restaurant data...</div>;
+  }
+
+  // Render error state
+  if (restaurantDataError) {
+    return <div>Error loading restaurant data: {restaurantDataError.message}</div>;
+  }
 
   return (
     <div className="new-reservation-admin-component">
@@ -898,7 +1077,7 @@ const NewReservationAdmin = () => {
             handleChange={handleChange}
             handleStepOneSubmit={handleStepOneSubmit}
             setFormData={setFormData}
-            timeblocks={dummyTimeblocks}
+            timeblocks={timeblocks} // Pass timeblocks from restaurantData
           />
         </div>
 
@@ -937,12 +1116,13 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 ├── TimeSelector.js
 ├── Utils
 │   ├── dateUtils.js
-│   ├── generateAvailableDates.js
-│   └── generateAvailableTimesForDate.js
+│   ├── generateAvailableTimesForDate.js
+│   └── generateDates.js
 ├── ValueSelector.js
 ├── css
 │   ├── calendar.css
 │   ├── newReservationAdmin.css
+│   ├── timeSelector.css
 │   └── valueSelector.css
 └── index.js
 
@@ -956,8 +1136,8 @@ ReservationStepOne.js
 ReservationStepTwoModal.js
 TimeSelector.js
 Utils/dateUtils.js
-Utils/generateAvailableDates.js
 Utils/generateAvailableTimesForDate.js
+Utils/generateDates.js
 ValueSelector.js
 index.js
 

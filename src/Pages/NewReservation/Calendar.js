@@ -6,16 +6,18 @@ import 'moment/locale/nl';
 import { isWeekInPast, isSameDay } from './Utils/dateUtils';
 import './css/calendar.css';
 
-moment.locale('nl');
+moment.locale('nl'); // Set moment to Dutch locale
 
 const Calendar = ({
   availableDates,
-  selectedDate,
-  onSelectDate,
+  // Remove selectedDate and onSelectDate props
+  // selectedDate,
+  // onSelectDate,
   autoExpand,
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const [startDate, setStartDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null); // Internal state
   const calendarRef = useRef(null);
 
   const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
@@ -75,7 +77,9 @@ const Calendar = ({
 
   const handleDateClick = (day) => {
     if (day.isAvailable && !day.isPast && !day.isFuture) {
-      onSelectDate(day.date.toDate());
+      const formattedDate = day.date.format('YYYY-MM-DD');
+      setSelectedDate(formattedDate); // Update internal state
+      console.log('Selected date:', formattedDate); // Log the selected date
       setIsExpanded(false);
     } else {
       console.log('Date is not available for selection.');
@@ -98,24 +102,22 @@ const Calendar = ({
 
   const formatDisplayDate = () => {
     if (!selectedDate) {
-      return 'Selecteer een datum';
+      return 'Selecteer een datum'; // "Select a date" in Dutch
     }
 
-    const selectedMoment = moment(selectedDate)
+    const selectedMoment = moment(selectedDate, 'YYYY-MM-DD')
       .tz('Europe/Amsterdam')
       .startOf('day');
     const today = moment().tz('Europe/Amsterdam').startOf('day');
-    const tomorrow = moment()
-      .tz('Europe/Amsterdam')
-      .add(1, 'day')
-      .startOf('day');
+    const tomorrow = moment().tz('Europe/Amsterdam').add(1, 'day').startOf('day');
 
     if (selectedMoment.isSame(today, 'day')) {
-      return 'Vandaag';
+      return 'Vandaag'; // "Today" in Dutch
     } else if (selectedMoment.isSame(tomorrow, 'day')) {
-      return 'Morgen';
+      return 'Morgen'; // "Tomorrow" in Dutch
     } else {
-      return selectedMoment.format('DD MMMM YYYY');
+      // Format: e.g., "Maandag 1 Januari 2023"
+      return selectedMoment.format('dddd D MMMM YYYY');
     }
   };
 
@@ -182,7 +184,7 @@ const Calendar = ({
                           selectedDate &&
                           isSameDay(
                             dayObj.date,
-                            moment(selectedDate).tz('Europe/Amsterdam')
+                            moment(selectedDate, 'YYYY-MM-DD').tz('Europe/Amsterdam')
                           );
                         const classNames = [];
                         if (dayObj.isPast) {

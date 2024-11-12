@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from './Calendar';
 import { generateAvailableDates } from './Utils/generateDates';
+import moment from 'moment';
 
 const DateSelector = ({
   formData,
@@ -13,9 +14,6 @@ const DateSelector = ({
   setCurrentExpandedField,
 }) => {
   const [availableDates, setAvailableDates] = useState([]);
-
-  console.log("timeblocks");
-  console.log(timeblocks);
 
   useEffect(() => {
     if (timeblocks && Array.isArray(timeblocks)) {
@@ -28,8 +26,10 @@ const DateSelector = ({
   }, [timeblocks]);
 
   const handleDateSelect = (date) => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    console.log('Selected date:', formattedDate); // Log the selected date
     handleChange({
-      target: { name: 'date', value: date },
+      target: { name: 'date', value: formattedDate },
     });
     resetFormDataFields(['time']);
     if (setCurrentExpandedField) {
