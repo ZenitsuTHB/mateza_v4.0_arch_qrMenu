@@ -79,9 +79,8 @@
 	align-items: center;
 	gap: 5px;
   }
-  
 
-  
+
   .new-reservation-page .account-manage__button {
 	padding: 12px;
 	background-color: #007bff;
@@ -96,4 +95,4 @@
 	gap: 10px;
 	transition: background-color 0.3s ease;
   }
-  
+

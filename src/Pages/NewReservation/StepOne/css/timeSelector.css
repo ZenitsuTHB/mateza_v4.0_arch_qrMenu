@@ -1,10 +1,10 @@
 /* src/components/NewReservation/css/timeSelector.css */
 
-.time-selector-container {
+.new-reservation-page .time-selector-container {
 	position: relative;
   }
   
-  .time-display {
+  .new-reservation-page .time-display {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -18,11 +18,11 @@
 	border-radius: 5px;
   }
   
-  .time-display span:first-child {
+  .new-reservation-page .time-display span:first-child {
 	flex-grow: 1;
   }
   
-  .time-selector {
+  .new-reservation-page .time-selector {
 	position: absolute;
 	z-index: 1000;
 	width: 100%;
@@ -46,22 +46,22 @@
 	}
   }
   
-  .time-period {
+  .new-reservation-page .time-period {
 	margin-bottom: 15px;
   }
   
-  .time-period-label {
+  .new-reservation-page .time-period-label {
 	font-weight: bold;
 	margin-bottom: 5px;
   }
   
-  .time-options {
+  .new-reservation-page .time-options {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 5px;
   }
   
-  .time-option {
+  .new-reservation-page .time-option {
 	padding: 8px 12px;
 	background-color: #ccffcc; /* Green background for available times */
 	color: #006600;
@@ -70,21 +70,21 @@
 	transition: background-color 0.2s ease;
   }
   
-  .time-option:hover {
+  .new-reservation-page .time-option:hover {
 	background-color: #b3ffb3;
   }
   
-  .time-option.selected {
+  .new-reservation-page .time-option.selected {
 	background-color: #006600;
 	color: #ccffcc;
   }
   
-  .info-text {
+  .new-reservation-page .info-text {
 	color: #666;
 	font-style: italic;
   }
   
-  .arrow {
+  .new-reservation-page .arrow {
 	margin-left: auto;
 	color: gray;
 	display: flex;
@@ -92,7 +92,7 @@
   }
   
   @media screen and (max-width: 480px) {
-	.time-option {
+	.new-reservation-page .time-option {
 	  padding: 6px 10px;
 	  font-size: 14px;
 	}

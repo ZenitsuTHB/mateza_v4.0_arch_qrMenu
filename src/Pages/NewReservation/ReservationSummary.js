@@ -6,8 +6,7 @@ import './css/reservationSummary.css'; // Import the CSS file
 const ReservationSummary = ({ formData, onNewReservation }) => {
   return (
     <div className="reservation-summary">
-      <h2 className="modal-title">Reservatie Succesvol Ingediend!</h2>
-      <p>Bedankt voor uw reservatie. Hieronder vindt u een samenvatting:</p>
+      <h2 className="modal-title">Reservatie Aangemaakt!</h2>
       <ul className="reservation-details">
         <li><strong>Aantal gasten:</strong> {formData.numberOfGuests}</li>
         <li><strong>Datum:</strong> {formData.date}</li>
@@ -20,7 +19,7 @@ const ReservationSummary = ({ formData, onNewReservation }) => {
           <li><strong>Extra informatie:</strong> {formData.extraInfo}</li>
         )}
       </ul>
-      <button className="account-manage__button" onClick={onNewReservation}>
+      <button className="button-style-3" onClick={onNewReservation}>
         Nieuwe Reservatie Maken
       </button>
     </div>
