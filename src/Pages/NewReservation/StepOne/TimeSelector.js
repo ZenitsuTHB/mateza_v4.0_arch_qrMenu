@@ -1,7 +1,7 @@
 // src/components/ReservationForm/TimeSelector.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import { generateAvailableTimesForDate } from './Utils/generateAvailableTimesForDate';
+import { generateAvailableTimesForDate } from './Utils/generateTimes';
 import './css/timeSelector.css'
 
 const TimeSelector = ({

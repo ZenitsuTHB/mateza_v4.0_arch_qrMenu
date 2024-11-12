@@ -4,7 +4,6 @@ import React from 'react';
 import ValueSelectorGuests from './ValueSelector'; // Import the guests value selector
 import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
-import './css/newReservationAdmin.css'; // Ensure CSS is imported
 
 const ReservationStepOne = ({
   formData,

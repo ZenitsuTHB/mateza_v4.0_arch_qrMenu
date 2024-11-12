@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
-import ReservationStepOne from './ReservationStepOne';
+import ReservationStepOne from './StepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import { withHeader } from '../../Components/Structural/Header';
 
