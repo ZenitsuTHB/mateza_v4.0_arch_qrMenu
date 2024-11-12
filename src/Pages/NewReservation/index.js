@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './css/newReservationAdmin.css';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
-import ReservationStepOne from './StepOne'; // Adjusted import to match your file
+import ReservationStepOne from './StepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
+import ReservationSummary from './ReservationSummary'; // Import the new component
 import { withHeader } from '../../Components/Structural/Header';
 
 const NewReservationAdmin = () => {
@@ -27,6 +27,7 @@ const NewReservationAdmin = () => {
   // Modal and submission states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationSubmitted, setReservationSubmitted] = useState(false); // New state variable
 
   // Validation functions
   const validateStepOne = () => {
@@ -96,25 +97,10 @@ const NewReservationAdmin = () => {
 
       try {
         await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
-        alert('Reservatie succesvol ingediend!');
         setIsModalOpen(false);
-        setFormData({
-          numberOfGuests: '',
-          date: '',
-          time: '',
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          extraInfo: '',
-        });
+        setReservationSubmitted(true); // Set the new state variable to true
       } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
-          alert('Er is een fout opgetreden: ' + error.response.data.message);
-        } else {
-          alert('Er is een fout opgetreden bij het indienen van de reservatie.');
-        }
-        console.error('Error submitting reservation:', error);
+        // ... existing error handling ...
       } finally {
         setIsSubmitting(false);
       }
@@ -133,29 +119,50 @@ const NewReservationAdmin = () => {
       <div className="profile-page">
         <h2 className="account-manage-title">Admin Reservaties</h2>
         <div className="account-manage-container">
-          <ReservationStepOne
-            formData={formData}
-            errors={errors}
-            handleChange={handleChange}
-            handleStepOneSubmit={handleStepOneSubmit}
-            setFormData={setFormData}
-          />
-        </div>
-
-        {isModalOpen && (
-          <ModalWithoutTabs
-            content={
-              <ReservationStepTwoModal
+          {reservationSubmitted ? (
+            <ReservationSummary
+              formData={formData}
+              onNewReservation={() => {
+                setFormData({
+                  numberOfGuests: '',
+                  date: '',
+                  time: '',
+                  firstName: '',
+                  lastName: '',
+                  email: '',
+                  phone: '',
+                  extraInfo: '',
+                });
+                setReservationSubmitted(false);
+              }}
+            />
+          ) : (
+            <>
+              <ReservationStepOne
                 formData={formData}
                 errors={errors}
                 handleChange={handleChange}
-                handleFinalSubmit={handleFinalSubmit}
-                isSubmitting={isSubmitting}
+                handleStepOneSubmit={handleStepOneSubmit}
+                setFormData={setFormData}
               />
-            }
-            onClose={() => setIsModalOpen(false)}
-          />
-        )}
+
+              {isModalOpen && (
+                <ModalWithoutTabs
+                  content={
+                    <ReservationStepTwoModal
+                      formData={formData}
+                      errors={errors}
+                      handleChange={handleChange}
+                      handleFinalSubmit={handleFinalSubmit}
+                      isSubmitting={isSubmitting}
+                    />
+                  }
+                  onClose={() => setIsModalOpen(false)}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

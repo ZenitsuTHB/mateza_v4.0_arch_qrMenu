@@ -1,6 +1,6 @@
 /* ./css/barChartView.css */
 
-.calendar-component .bar-chart-view {
+.calendar-page .bar-chart-view {
 	width: 100%;
 	max-width: 800px;
 	height: 600px; /* Same height as calendar grid */

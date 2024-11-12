@@ -1,6 +1,6 @@
 /* bezettingspercentageForm.css */
 
-.bezettingspercentage-form-container {
+.calendar-page .bezettingspercentage-form-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -10,25 +10,25 @@
 	gap: 16px;
   }
 
-  .form-label {
+  .calendar-page .form-label {
 	margin-bottom: 20px;
 	font-size: 1rem;
 	font-weight: 500;
 	color: #333; /* Darker color for better readability */
   }
   
-  .input-container {
+  .calendar-page .input-container {
 	position: relative;
 	flex: 1;
 	display: flex;
 	align-items: center;
   }
   
-  .input-container:not(:last-child) {
+  .calendar-page .input-container:not(:last-child) {
 	margin-right: 16px;
   }
   
-  .input-icon {
+  .calendar-page .input-icon {
 	position: absolute;
 	left: 10px;
 	margin-top: 5px;
@@ -36,11 +36,11 @@
 	pointer-events: none;
   }
 
-  .form-group {
+  .calendar-page .form-group {
 	width: 100% !important;
   }
   
-  .standard-input {
+  .calendar-page .standard-input {
 	width: 100%;
 	margin-top: 5px;
 	padding: 10px 10px 10px 35px; /* Padding left to accommodate icon */
@@ -51,12 +51,12 @@
 	background-color: var(--color-white);
   }
   
-  .standard-input:focus {
+  .calendar-page .standard-input:focus {
 	border-color: #007bff; /* Match var(--color-blue) */
 	outline: none;
   }
   
-  .button-container {
+  .calendar-page .button-container {
 	flex: 1;
 	display: flex;
 	justify-content: flex-end;

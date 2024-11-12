@@ -1,6 +1,6 @@
 /* ./css/calendarHeader.css */
 
-.calendar-component .calendar-header {
+.calendar-page .calendar-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -9,36 +9,36 @@
 	max-width: 800px;
   }
   
-  .calendar-component .calendar-header h2 {
+  .calendar-page .calendar-header h2 {
 	margin: 0;
 	text-align: center;
 	flex-grow: 1;
   }
   
-  .calendar-component .calendar-header .nav-button {
+  .calendar-page .calendar-header .nav-button {
 	background: none;
 	border: none;
 	cursor: pointer;
 	color: #000;
   }
   
-  .calendar-component .calendar-header .nav-button:hover {
+  .calendar-page .calendar-header .nav-button:hover {
 	color: var(--color-blue);
   }
   
-  .calendar-component .calendar-header .header-buttons {
+  .calendar-page .calendar-header .header-buttons {
 	display: flex;
 	align-items: center;
   }
   
-  .calendar-component .calendar-header .header-titles {
+  .calendar-page .calendar-header .header-titles {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: auto;
   }
   
-  .calendar-component .toggle-button {
+  .calendar-page .toggle-button {
 	margin-right: 10px;
 	display: flex;
 	align-items: center;
@@ -46,7 +46,7 @@
 	height: 38px;
   }
   
-  .calendar-component .nav-button {
+  .calendar-page .nav-button {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -55,22 +55,22 @@
 	transition: background-color 0.3s ease;
   }
   
-  .calendar-component .nav-button:hover {
+  .calendar-page .nav-button:hover {
 	background-color: #e0e0e0;
   }
   
-  .calendar-component .header-title-container {
+  .calendar-page .header-title-container {
 	display: flex;
 	align-items: center;
 	position: relative;
   }
   
-  .calendar-component .header-title-container h2 {
+  .calendar-page .header-title-container h2 {
 	margin: 0;
 	font-size: 1.5rem;
   }
   
-  .calendar-component .view-options-button {
+  .calendar-page .view-options-button {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -83,11 +83,11 @@
 	transition: all 0.3s ease;
   }
   
-  .calendar-component .view-options-button:hover {
+  .calendar-page .view-options-button:hover {
 	opacity: 1;
   }
   
-  .calendar-component .view-options-container {
+  .calendar-page .view-options-container {
 	position: absolute;
 	top: 40px;
 	right: 0px;
@@ -100,33 +100,33 @@
 	padding: 10px 0;
   }
   
-  .calendar-component .view-option {
+  .calendar-page .view-option {
 	padding: 10px 20px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
   }
   
-  .calendar-component .view-option:hover {
+  .calendar-page .view-option:hover {
 	background-color: #f1f1f1;
   }
   
-  .calendar-component .view-option.selected {
+  .calendar-page .view-option.selected {
 	background-color: #e0e0e0;
   }
   
-  .calendar-component .header-buttons {
+  .calendar-page .header-buttons {
 	display: flex;
 	align-items: center;
   }
   
   /* Tooltip styles */
-  .calendar-component .button-with-tooltip {
+  .calendar-page .button-with-tooltip {
 	position: relative;
 	display: inline-block;
 	margin-right: 10px;
   }
   
-  .calendar-component .button-with-tooltip .tooltip {
+  .calendar-page .button-with-tooltip .tooltip {
 	display: none;
 	position: absolute;
 	bottom: 125%;
@@ -143,7 +143,7 @@
 	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   }
   
-  .calendar-component .button-with-tooltip .tooltip::before {
+  .calendar-page .button-with-tooltip .tooltip::before {
 	content: '';
 	position: absolute;
 	top: 100%;
@@ -154,13 +154,13 @@
 	border-color: black transparent transparent transparent;
   }
   
-  .calendar-component .button-with-tooltip:hover .tooltip {
+  .calendar-page .button-with-tooltip:hover .tooltip {
 	display: block;
 	opacity: 1;
 	transform: translateX(-50%) translateY(-5px);
   }
   
-  .calendar-component .header-buttons .button-with-tooltip {
+  .calendar-page .header-buttons .button-with-tooltip {
 	margin-right: 10px;
   }
   

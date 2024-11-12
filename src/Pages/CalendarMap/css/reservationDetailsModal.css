@@ -1,62 +1,62 @@
 /* ./css/reservationDetailsModal.css */
 
-.calendar-component .reservation-modal-content h2 {
+.calendar-page .reservation-modal-content h2 {
 	text-align: center;
 	margin: 20px 0;
   }
   
-  .calendar-component .reservation-table {
+  .calendar-page .reservation-table {
 	margin-top: 20px;
   }
   
-  .calendar-component .reservation-row {
+  .calendar-page .reservation-row {
 	border-bottom: 1px solid #ccc;
 	padding: 10px 0;
 	font-size: 15px; /* Increased font size by 1px */
   }
   
-  .calendar-component .reservation-main-info {
+  .calendar-page .reservation-main-info {
 	display: flex;
 	align-items: center;
 	cursor: pointer;
 	margin-bottom: 10px; /* Increased margin between items */
   }
   
-  .calendar-component .reservation-main-info .arrow-icon {
+  .calendar-page .reservation-main-info .arrow-icon {
 	margin-right: 10px;
 	transition: transform 0.3s;
   }
   
-  .calendar-component .reservation-main-info .arrow-icon.expanded {
+  .calendar-page .reservation-main-info .arrow-icon.expanded {
 	transform: rotate(180deg);
   }
   
-  .calendar-component .reservation-details {
+  .calendar-page .reservation-details {
 	padding-left: 30px;
 	overflow: hidden;
   }
   
-  .calendar-component .reservation-details > div {
+  .calendar-page .reservation-details > div {
 	margin-bottom: 5px;
   }
   
-  .calendar-component .reservation-buttons {
+  .calendar-page .reservation-buttons {
 	display: flex;
 	gap: 10px;
 	margin-top: 10px;
   }
   
-  .calendar-component .reservation-buttons .standard-button {
+  .calendar-page .reservation-buttons .standard-button {
 	font-size: 12px;
 	padding: 5px 10px;
   }
   
-  .calendar-component .reservation-buttons .standard-button.red {
+  .calendar-page .reservation-buttons .standard-button.red {
 	background-color: var(--color-red);
 	color: #fff;
   }
   
-  .calendar-component .reservation-buttons .standard-button.blue {
+  .calendar-page .reservation-buttons .standard-button.blue {
 	background-color: var(--color-blue);
 	color: #fff;
   }

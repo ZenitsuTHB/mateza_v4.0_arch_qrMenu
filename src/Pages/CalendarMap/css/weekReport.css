@@ -1,7 +1,7 @@
 /* weekReport.css */
 
 
-.calendar-report-table {
+.calendar-page .calendar-report-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
@@ -9,24 +9,24 @@
     border-radius: 15px;
 }
 
-.calendar-report-table th,
-.calendar-report-table td {
+.calendar-page .calendar-report-table th,
+.calendar-page .calendar-page .calendar-report-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.calendar-report-table th {
+.calendar-page .calendar-report-table th {
     background-color: #f0f0f0;
     font-weight: bold;
     color: #333;
 }
 
-.calendar-report-table td {
+.calendar-page .calendar-report-table td {
     color: #555;
 }
 
-.calendar-report-title {
+.calendar-page .calendar-report-title {
     font-weight: bold;
     font-size: 1.2em;
     text-align: center;
@@ -34,16 +34,16 @@
 }
 
 
-.week-report .generate-report-text {
+.calendar-page .week-report .generate-report-text {
 	color: var(--color-blue);
 	cursor: pointer;
   }
   
-  .week-report {
+  .calendar-page .week-report {
 	width: 100%;
   }
   
-  .loading-container {
+  .calendar-page .loading-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -51,50 +51,50 @@
   
 
   /* Additional styles for report */
-  .calendar-report-table {
+  .calendar-page .calendar-report-table {
 	margin-top: 20px;
 	width: 100%; /* Make the table span the full width */
   }
   
-  .calendar-report-table table {
+  .calendar-page .calendar-report-table table {
 	width: 100%; /* Make the table span the full width */
 	border-collapse: collapse;
   }
   
-  .calendar-report-table th,
-  .calendar-report-table td {
+  .calendar-page .calendar-report-table th,
+  .calendar-page .calendar-report-table td {
 	border: 1px solid var(--color-gray);
 	padding: 8px;
 	text-align: center;
   }
   
-  .calendar-report-title {
+  .calendar-page .calendar-report-title {
 	font-size: 1.5em;
 	margin-bottom: 20px;
   }
   
-  .statistical-data {
+  .calendar-page .statistical-data {
 	margin-top: 20px;
 	width: 100%; /* Make the table span the full width */
   }
   
-  .statistical-data table {
+  .calendar-page .statistical-data table {
 	width: 100%; /* Make the table span the full width */
 	border-collapse: collapse;
   }
   
-  .statistical-data th,
-  .statistical-data td {
+  .calendar-page .statistical-data th,
+  .calendar-page .statistical-data td {
 	border: 1px solid var(--color-gray);
 	padding: 8px;
 	text-align: left;
   }
   
-  .totals-styled {
+  .calendar-page .totals-styled {
 	font-weight: bold;
   }
 
-  .collapsible-block {
+  .calendar-page .collapsible-block {
 	border: 1px solid var(--color-gray);
 	border-radius: 8px;
 	margin-bottom: 15px;
@@ -102,7 +102,7 @@
 	background-color: #f9f9f9;
   }
   
-  .block-header {
+  .calendar-page .block-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -111,20 +111,20 @@
 	cursor: pointer;
   }
   
-  .block-title {
+  .calendar-page .block-title {
 	font-weight: bold;
 	color: #333;
   }
   
-  .chevron-icon {
+  .calendar-page .chevron-icon {
 	transition: transform 0.3s ease;
   }
   
-  .chevron-icon.expanded {
+  .calendar-page .chevron-icon.expanded {
 	transform: rotate(180deg);
   }
   
-  .block-content {
+  .calendar-page .block-content {
 	background-color: #ffffff;
   }
   

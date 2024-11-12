@@ -117,7 +117,7 @@ const CalendarComponent = () => {
   };
 
   return (
-    <div className="calendar-component">
+    <div className="calendar-page">
       <CalendarHeader
         currentDate={currentDate}
         onPrev={handlePrev}
