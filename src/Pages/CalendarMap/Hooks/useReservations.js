@@ -1,13 +1,16 @@
-// src/Components/Calendar/Hooks/useReservations.js
-
 import { useState, useEffect } from 'react';
-import useApi from '../../../Hooks/useApi'; // Adjust the import path as needed
+import useApi from '../../../Hooks/useApi';
 
-const useReservations = (currentDate) => {
+const useReservations = (currentDate = new Date('2024-10-01')) => {
   const [reservationsByDate, setReservationsByDate] = useState({});
   const api = useApi();
 
   useEffect(() => {
+    if (!currentDate) {
+      console.error('currentDate is undefined in useReservations');
+      return;
+    }
+
     const fetchReservations = async () => {
       try {
         // Calculate start and end dates for the month
@@ -19,8 +22,8 @@ const useReservations = (currentDate) => {
         const endDateString = endDate.toISOString().split('T')[0];
 
         // Make API request to fetch reservations for the date range
-        const endpoint = window.baseDomain + `/api/reservations?startDate=${startDateString}&endDate=${endDateString}`;
-        const data = await api.get(endpoint, { noCache: true });
+        const endpoint = `${window.baseDomain}api/reservations?startDate=${startDateString}&endDate=${endDateString}`;
+        const data = await api.get(endpoint);
 
         console.log('Data received from server:', data);
 
@@ -28,7 +31,6 @@ const useReservations = (currentDate) => {
         const resByDate = {};
 
         data.forEach((reservation) => {
-          // Convert MongoDB extended JSON to standard types
           const date = reservation.date;
           const numberOfPeople = parseInt(
             reservation.numberOfPeople?.$numberInt || reservation.numberOfPeople,
@@ -36,7 +38,6 @@ const useReservations = (currentDate) => {
           );
           const _id = reservation._id?.$oid || reservation._id;
 
-          // Create a new reservation object with required fields
           const formattedReservation = {
             id: _id,
             date,
@@ -44,9 +45,8 @@ const useReservations = (currentDate) => {
             fullName: `${reservation.firstName} ${reservation.lastName}`,
             email: reservation.email,
             phone: reservation.phone,
-            aantalGasten: 3,
+            aantalGasten: numberOfPeople,
             extra: reservation.extraInfo || null,
-            // Include additional fields if needed
           };
 
           if (!resByDate[date]) {
@@ -58,7 +58,6 @@ const useReservations = (currentDate) => {
         setReservationsByDate(resByDate);
       } catch (error) {
         console.error('Error fetching reservations:', error);
-        // Handle error appropriately
       }
     };
 
