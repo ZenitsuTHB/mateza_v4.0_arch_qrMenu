@@ -11,7 +11,7 @@ import './css/mobile.css';
 
 const LaunchPage = () => {
   const [activeTab, setActiveTab] = useState('embedCode');
-  const reservationLink = 'http://localhost:2000/';
+  const reservationLink = 'https://book.reservaties.net/';
   const shareMessage = 'Bekijk onze reserveringspagina!';
   const emailSubject = 'Uitnodiging voor Reservering';
   const emailBody = `${shareMessage} ${reservationLink}`;
