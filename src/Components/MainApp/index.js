@@ -6,18 +6,25 @@ import TopBar from '../Structural/TopBar';
 import SecondaryTopBar from '../Structural/SecondaryTopBar';
 import Sidebar from '../Structural/Sidebar';
 import ContentRouting from '../Structural/ContentRouting';
-import routesConfig from '../../Config/sidebarConfig'; // Adjust the path if necessary
+import routesConfig from '../../Config/sidebarConfig';
 
 const MainApp = () => {
   const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
   const currentRoute = routesConfig.find((route) => route.path === location.pathname);
 
   const isSidebarHidden = currentRoute && currentRoute.sidebarHidden ? true : false;
 
+  // Determine whether to show the SecondaryTopBar
+  const showSecondaryTopBar = !(
+    location.pathname === '/' && query.has('preview')
+  );
+
   return (
     <div className={`app-component ${isSidebarHidden ? 'sidebar-hidden' : ''}`}>
       <TopBar />
-      <SecondaryTopBar />
+      {showSecondaryTopBar && <SecondaryTopBar />}
       {!isSidebarHidden && <Sidebar />}
       <ContentRouting />
     </div>

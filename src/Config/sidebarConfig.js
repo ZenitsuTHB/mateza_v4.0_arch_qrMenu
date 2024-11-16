@@ -37,18 +37,28 @@ import NewReservationAdmin from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import CalendarComponent from '../Pages/CalendarMap/index.js';
 import TablePlan from '../Pages/TablePlan/index.js';
+import RootComponent from './RootComponent.js';
 
 const routesConfig = [
-  
   {
     path: '/',
-    element: <CalendarComponent title="Maandoverzicht" />,
+    element: <RootComponent />, // Use RootComponent here
     label: 'Maandoverzicht',
     icon: FaStar,
     isMenu: true,
     isMobile: true,
     isTab: true,
     secondaryTopBar: overviewSecondaryTopBar,
+  },
+  {
+    path: '/preview',
+    element: <SettingsTabs title="" />,
+    label: 'Instellingen',
+    icon: FaCog,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    sidebarHidden: true,
   },
   {
     path: '/day',
@@ -121,16 +131,6 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     sidebarHidden: false,
-  },
-  {
-    path: '/settings-preview',
-    element: <SettingsTabs title="" />,
-    label: 'Instellingen',
-    icon: FaCog,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    sidebarHidden: true,
   },
   {
     path: '/account',
