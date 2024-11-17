@@ -5,7 +5,7 @@ import ReservationStepOne from './StepOne';
 import ReservationStepTwoModal from './ReservationStepTwoModal';
 import ReservationSummary from './ReservationSummary';
 import { withHeader } from '../../Components/Structural/Header';
-import './css/newReservationAdmin.css'
+import './css/newReservationAdmin.css';
 
 const NewReservationAdmin = () => {
   const api = useApi();
@@ -43,20 +43,11 @@ const NewReservationAdmin = () => {
 
   const validateStepTwo = () => {
     const errors = {};
-    if (!formData.firstName) {
-      errors.firstName = 'Voornaam is verplicht';
-    }
-    if (!formData.lastName) {
-      errors.lastName = 'Achternaam is verplicht';
-    }
-    if (!formData.email) {
-      errors.email = 'E-mail is verplicht';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = 'E-mail is ongeldig';
     }
-    if (!formData.phone) {
-      errors.phone = 'Telefoonnummer is verplicht';
-    }
+
     return errors;
   };
 
@@ -95,6 +86,8 @@ const NewReservationAdmin = () => {
         setIsModalOpen(false);
         setReservationSubmitted(true);
       } catch (error) {
+        // Handle error appropriately
+        console.error('Error submitting reservation:', error);
       } finally {
         setIsSubmitting(false);
       }
@@ -109,53 +102,53 @@ const NewReservationAdmin = () => {
 
   return (
     <div className="new-reservation-page">
-        <h2 className="account-manage-title">Admin Reservaties</h2>
-        <div className="account-manage-container">
-          {reservationSubmitted ? (
-            <ReservationSummary
+      <h2 className="account-manage-title">Admin Reservaties</h2>
+      <div className="account-manage-container">
+        {reservationSubmitted ? (
+          <ReservationSummary
+            formData={formData}
+            onNewReservation={() => {
+              setFormData({
+                numberOfGuests: '',
+                date: '',
+                time: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                extraInfo: '',
+              });
+              setReservationSubmitted(false);
+            }}
+          />
+        ) : (
+          <>
+            <ReservationStepOne
               formData={formData}
-              onNewReservation={() => {
-                setFormData({
-                  numberOfGuests: '',
-                  date: '',
-                  time: '',
-                  firstName: '',
-                  lastName: '',
-                  email: '',
-                  phone: '',
-                  extraInfo: '',
-                });
-                setReservationSubmitted(false);
-              }}
+              errors={errors}
+              handleChange={handleChange}
+              handleStepOneSubmit={handleStepOneSubmit}
+              setFormData={setFormData}
             />
-          ) : (
-            <>
-              <ReservationStepOne
-                formData={formData}
-                errors={errors}
-                handleChange={handleChange}
-                handleStepOneSubmit={handleStepOneSubmit}
-                setFormData={setFormData}
-              />
 
-              {isModalOpen && (
-                <ModalWithoutTabs
-                  content={
-                    <ReservationStepTwoModal
-                      formData={formData}
-                      errors={errors}
-                      handleChange={handleChange}
-                      handleFinalSubmit={handleFinalSubmit}
-                      isSubmitting={isSubmitting}
-                    />
-                  }
-                  onClose={() => setIsModalOpen(false)}
-                />
-              )}
-            </>
-          )}
-        </div>
+            {isModalOpen && (
+              <ModalWithoutTabs
+                content={
+                  <ReservationStepTwoModal
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleFinalSubmit={handleFinalSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                }
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+          </>
+        )}
       </div>
+    </div>
   );
 };
 
