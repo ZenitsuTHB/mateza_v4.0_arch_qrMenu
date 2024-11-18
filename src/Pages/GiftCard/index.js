@@ -15,7 +15,7 @@ const GiftCard = () => {
           <ValidationSection />
         </div>
         <div className="gift-card-page__section">
-			<AddGiftCardSection/>
+			    <AddGiftCardSection/>
         </div>
       </div>
       <div className="gift-card-page__bottom-row">
