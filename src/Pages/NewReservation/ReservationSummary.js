@@ -8,7 +8,7 @@ const ReservationSummary = ({ formData, onNewReservation }) => {
     <div className="reservation-summary">
       <h2 className="modal-title">Reservatie Aangemaakt!</h2>
       <ul className="reservation-details">
-        <li><strong>Aantal gasten:</strong> {formData.numberOfGuests}</li>
+        <li><strong>Aantal gasten:</strong> {formData.guests}</li>
         <li><strong>Datum:</strong> {formData.date}</li>
         <li><strong>Tijd:</strong> {formData.time}</li>
         <li><strong>Voornaam:</strong> {formData.firstName}</li>
