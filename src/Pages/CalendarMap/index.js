@@ -1,4 +1,4 @@
-// CalendarComponent.js
+// src/Components/Calendar/CalendarComponent.js
 
 import React, { useState, useMemo } from 'react';
 import CalendarHeader from './CalendarHeader';
@@ -12,7 +12,6 @@ import usePredictions from './Hooks/usePredictions';
 import WeekReport from './WeekReport';
 import MonthReport from './MonthReport';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
-import { maxCapacity as initialMaxCapacity } from './reservationData';
 import BezettingspercentageForm from './BezettingspercentageForm';
 import useDates from './Hooks/useDates';
 import useWeatherData from './Hooks/useWeatherData';
@@ -27,10 +26,10 @@ const CalendarComponent = () => {
   const [weekOrMonthView, setWeekOrMonthView] = useState('month');
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
-  const [maxCapacityInput, setMaxCapacityInput] = useState(initialMaxCapacity);
+  const [maxCapacityInput, setMaxCapacityInput] = useState(50); // Default max capacity
   const [gemiddeldeDuurCouvertInput, setGemiddeldeDuurCouvertInput] = useState(60); // Default value
 
-  const reservationsByDate = useReservations();
+  const reservationsByDate = useReservations(); // Fetch reservations using the new hook
   const predictionsByDate = usePredictions(
     currentDate,
     reservationsByDate,
