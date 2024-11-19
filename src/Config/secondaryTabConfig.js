@@ -24,16 +24,16 @@ export const overviewSecondaryTopBar = [
   
   export const designSecondaryTopBar = [
 	{
+	  label: 'Beheer',
+	  path: '/settings',
+	},
+	{
 	  label: 'Ontwerp',
-	  path: '/design',
+	  path: '/settings/design',
 	},
 	{
-	  label: 'Instellen',
-	  path: '/design/settings',
-	},
-	{
-	  label: 'Lanceren',
-	  path: 'design/launch',
+	  label: 'Bekijken',
+	  path: 'settings/launch',
 	},
   ];
 
