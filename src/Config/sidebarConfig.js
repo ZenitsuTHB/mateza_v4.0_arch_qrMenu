@@ -43,7 +43,7 @@ const routesConfig = [
   {
     path: '/',
     element: <RootComponent />, // Use RootComponent here
-    label: 'Maandoverzicht',
+    label: 'Dashboard',
     icon: FaStar,
     isMenu: true,
     isMobile: true,
@@ -161,6 +161,11 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
+];
+
+
+/*
+
   {
     path: '/table-plan',
     element: <TablePlan title="Tafelplan" />,
@@ -191,8 +196,8 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: giftCardSecondaryTopBar,
   }
-];
 
+*/
 
 
 export default routesConfig;

@@ -11,7 +11,7 @@ const RootComponent = () => {
   if (query.has('preview')) {
     return <SettingsTabs title="" />;
   } else {
-    return <CalendarComponent title="Maandoverzicht" />;
+    return <CalendarComponent title="Dashboard" />;
   }
 };
 
