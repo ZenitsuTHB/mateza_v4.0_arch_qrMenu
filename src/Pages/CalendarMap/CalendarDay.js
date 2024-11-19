@@ -7,6 +7,15 @@ import './css/calendarDay.css';
 const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
 const timeSlotColors = ['rgba(24, 40, 37,', 'rgba(1, 111, 185,', 'rgba(34, 174, 209,'];
 
+// Date formatting function to prevent time zone issues
+const formatDateForFilter = (date) => {
+  if (!date) return '';
+  const year = date.getFullYear();
+  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
+  const day = (`0${date.getDate()}`).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
 const CalendarDay = ({
   date,
   currentMonth,
@@ -25,7 +34,7 @@ const CalendarDay = ({
   gemiddeldeDuurCouvert,
   weatherDataByDate,
 }) => {
-  const dateString = date.toISOString().split('T')[0];
+  const dateString = formatDateForFilter(date); // Use the custom date formatter
   const reservations = reservationsByDate[dateString] || [];
 
   const today = new Date();
