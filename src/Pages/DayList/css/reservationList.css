@@ -62,4 +62,21 @@
 	color: #555;
   }
   
+  .reservations-page .no-reservations-row {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	font-size: 0.9em;
+	color: #555;
+  }
+  
+  .reservations-page .no-reservations-desktop {
+	grid-column: span 6;
+  }
+  
+  .reservations-page .no-reservations-mobile {
+	width: 100%;
+	text-align: center;
+  }
   

@@ -172,22 +172,38 @@ const ReservationsList = () => {
                 </div>
               )}
 
-              {currentReservations.map((reservation) => (
-                <ReservationRow
-                  key={reservation.id}
-                  reservation={reservation}
-                  isMobile={isMobile}
-                  isTooltipOpen={openTooltipId === reservation.id}
-                  onTooltipToggle={handleTooltipToggle}
-                  onTooltipClose={handleTooltipClose}
-                />
-              ))}
+              {currentReservations.length > 0 ? (
+                currentReservations.map((reservation) => (
+                  <ReservationRow
+                    key={reservation.id}
+                    reservation={reservation}
+                    isMobile={isMobile}
+                    isTooltipOpen={openTooltipId === reservation.id}
+                    onTooltipToggle={handleTooltipToggle}
+                    onTooltipClose={handleTooltipClose}
+                  />
+                ))
+              ) : (
+                <div
+                  className={`no-reservations-row ${
+                    isMobile ? 'no-reservations-mobile' : 'no-reservations-desktop'
+                  }`}
+                >
+                  <span>
+                    {selectedShift === "Dag"
+                      ? 'Geen reservaties voor deze dag.'
+                      : 'Geen reservaties voor deze shift.'}
+                  </span>
+                </div>
+              )}
             </div>
-            <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              handlePageClick={handlePageClick}
-            />
+            {currentReservations.length > 0 && (
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                handlePageClick={handlePageClick}
+              />
+            )}
           </>
         )}
       </div>
