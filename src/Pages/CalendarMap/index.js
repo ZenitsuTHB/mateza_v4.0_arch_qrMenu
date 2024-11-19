@@ -17,6 +17,15 @@ import useDates from './Hooks/useDates';
 import useWeatherData from './Hooks/useWeatherData';
 import { getMonday } from './Utils/dateUtils';
 
+const formatDateForFilter = (date) => {
+  if (!date) return '';
+  const year = date.getFullYear();
+  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
+  const day = (`0${date.getDate()}`).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
+
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDateReservations, setSelectedDateReservations] = useState(null);
@@ -84,7 +93,7 @@ const CalendarComponent = () => {
   };
 
   const handleDateClick = (date) => {
-    const dateString = date.toISOString().split('T')[0];
+    const dateString = formatDateForFilter(date);
     setSelectedDateReservations({
       date: dateString,
       reservations: reservationsByDate[dateString] || [],

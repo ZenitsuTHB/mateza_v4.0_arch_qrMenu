@@ -5,12 +5,13 @@ import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Ad
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 import './css/reservationDetailsModal.css';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns'; // Import parseISO
 import { nl } from 'date-fns/locale';
 
 const ReservationDetailsModal = ({ reservationsData, onClose }) => {
   const { date, reservations } = reservationsData;
-  const formattedDate = format(new Date(date), 'd MMMM yyyy', { locale: nl });
+  const parsedDate = parseISO(date); // Use parseISO to parse the date string
+  const formattedDate = format(parsedDate, 'd MMMM yyyy', { locale: nl });
 
   return (
     <ModalWithoutTabs
@@ -37,7 +38,10 @@ const ReservationRow = ({ reservation }) => {
       <div className="reservation-main-info" onClick={() => setIsExpanded(!isExpanded)}>
         <FaChevronDown className={`arrow-icon ${isExpanded ? 'expanded' : ''}`} />
         <span>
-          <strong>{reservation.aantalGasten} gasten - {reservation.time}</strong> - {reservation.fullName}
+          <strong>
+            {reservation.aantalGasten} gasten - {reservation.time}
+          </strong>{' '}
+          - {reservation.fullName}
         </span>
       </div>
       <AnimatePresence>
