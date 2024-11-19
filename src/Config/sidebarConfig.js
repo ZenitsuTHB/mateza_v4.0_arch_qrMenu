@@ -11,7 +11,6 @@ import {
   FaTable,
 } from 'react-icons/fa';
 
-import SettingsTabs from '../Pages/FormEditor/FormSettings/SettingsTabs.js';
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/DayList/index.js';
@@ -25,6 +24,7 @@ import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
+import Settings from '../Pages/GeneralSettings/index.js';
 
 const routesConfig = [
   {
@@ -36,16 +36,6 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
     secondaryTopBar: overviewSecondaryTopBar,
-  },
-  {
-    path: '/preview',
-    element: <SettingsTabs title="" />,
-    label: 'Instellingen',
-    icon: FaCog,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    sidebarHidden: true,
   },
   {
     path: '/day',
@@ -77,6 +67,15 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: calendarSecondaryTopBar,
+  },
+  {
+    path: '/settings',
+    element: <Settings />,
+    label: 'Instellingen',
+    icon: FaCog,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/new-reservation',

@@ -1,4 +1,4 @@
-import { FaPlus, FaChartLine, FaLock, FaUser } from 'react-icons/fa';
+import { FaPlus, FaChartLine, FaLock, FaUser, FaCog } from 'react-icons/fa';
 
 const topBarConfig = [
   {
@@ -6,16 +6,7 @@ const topBarConfig = [
     icon: FaPlus,
     path: '/new-reservation',
   },
-  {
-    label: 'Analytics',
-    icon: FaChartLine,
-    path: '/analytics',
-  },
-  {
-    label: 'Lock',
-    icon: FaLock,
-    path: '/lock',
-  },
+
   {
     label: 'Account',
     icon: FaUser,
