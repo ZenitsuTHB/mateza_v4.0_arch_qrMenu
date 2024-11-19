@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './css/generalSettings.css';
+import { withHeader } from '../../Components/Structural/Header';
 
 const Settings = () => {
   // State variables for the initial settings
@@ -94,4 +95,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default withHeader(Settings);

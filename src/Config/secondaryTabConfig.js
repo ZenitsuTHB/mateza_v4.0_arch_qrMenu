@@ -10,6 +10,18 @@ export const overviewSecondaryTopBar = [
 	  path: '/day',
 	}
   ];
+
+  export const settingsSecondaryTopBar = [
+	{
+	  label: 'Reservaties',
+	  path: '/settings',
+	},
+	{
+	  label: 'Email',
+	  path: '/settings/email',
+	}
+  ];
+  
   
   export const calendarSecondaryTopBar = [
 	{

@@ -9,6 +9,7 @@ import {
   FaShieldAlt,
   FaUser,
   FaTable,
+  FaMailBulk,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -19,6 +20,7 @@ import {
   overviewSecondaryTopBar,
   calendarSecondaryTopBar,
   accountSecondaryTopBar,
+  settingsSecondaryTopBar
 } from './secondaryTabConfig.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
@@ -70,12 +72,24 @@ const routesConfig = [
   },
   {
     path: '/settings',
-    element: <Settings />,
+    element: <Settings title="Instellingen" />,
     label: 'Instellingen',
     icon: FaCog,
     isMenu: true,
     isMobile: true,
     isTab: true,
+    secondaryTopBar: settingsSecondaryTopBar,
+  },
+
+  {
+    path: '/settings/email',
+    element: <Settings title="Email" />,
+    label: 'Email',
+    icon: FaMailBulk,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: settingsSecondaryTopBar,
   },
   {
     path: '/new-reservation',
