@@ -125,34 +125,38 @@ const EmailSettingsTabs = () => {
           </div>
         </div>
 
-        <div className="email-settings-grid">
-          {/* Email Preview */}
-          <div className="preview-container">
-            <EmailPreview settings={settings} />
-          </div>
+        {/* Conditional Rendering Based on Active Tab */}
+        {activeTab === 'algemeen' && (
+          <div className="email-settings-grid">
+            {/* Email Preview */}
+            <div className="preview-container">
+              <EmailPreview settings={settings} />
+            </div>
 
-          {/* Settings Form */}
-          <div className="settings-container">
-            <div className="tab-content">
-              {activeTab === 'algemeen' && (
+            {/* Settings Form */}
+            <div className="settings-container">
+              <div className="tab-content">
                 <GeneralSettings
                   settings={settings}
                   handleChange={handleChange}
                   handleSave={handleSave}
                   isDirty={isDirty}
                 />
-              )}
-              {activeTab === 'meldingen' && (
-                <NotificationSettings
-                  settings={settings}
-                  handleChange={handleChange}
-                  handleSave={handleSave}
-                  isDirty={isDirty}
-                />
-              )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {activeTab === 'meldingen' && (
+          <div className="meldingen-container">
+            <NotificationSettings
+              settings={settings}
+              handleChange={handleChange}
+              handleSave={handleSave}
+              isDirty={isDirty}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
