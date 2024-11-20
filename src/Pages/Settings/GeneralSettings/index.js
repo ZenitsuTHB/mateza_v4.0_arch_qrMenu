@@ -53,11 +53,11 @@ const Settings = () => {
     e.preventDefault();
     try {
       await api.put(window.baseDomain + 'api/general-settings', settings);
-      triggerNotification('Instellingen opgeslagen!', 'success');
+      triggerNotification('Instellingen opgeslagen', 'success');
       setInitialSettings(settings);
     } catch (err) {
       console.error('Error saving general settings:', err);
-      triggerNotification('Fout bij het opslaan van instellingen.', 'error');
+      triggerNotification('Fout bij het opslaan', 'error');
     }
   };
 

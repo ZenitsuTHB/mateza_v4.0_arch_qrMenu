@@ -1,21 +1,31 @@
+// src/components/EmailSettings/EmailSettingsTabs.jsx
+
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import './css/emailSettings.css';
 import { withHeader } from '../../../Components/Structural/Header';
 import useNotification from '../../../Components/Notification';
 import useApi from '../../../Hooks/useApi';
+import AlgemeenSettings from './GeneralSettings';
+import MeldingenSettings from './NotificationSettings';
 
-const EmailSettings = () => {
+const EmailSettingsTabs = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const defaultSettings = {
     aanpassingenDoorKlant: 'Geen notificatie',
     annulatieDoorKlant: 'Geen notificatie',
+    antwoordEmail: '',
+    groetNaam: '',
+    emailInhoud: '',
+    toonTabel: 'Toon tabel',
+    reservatieBewerken: 'Reservatie Bewerken Toestaan',
   };
 
   const [settings, setSettings] = useState(defaultSettings);
   const [initialSettings, setInitialSettings] = useState(defaultSettings);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('algemeen');
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -30,8 +40,6 @@ const EmailSettings = () => {
         triggerNotification('Fout bij het ophalen van email instellingen.', 'error');
         setSettings(defaultSettings);
         setInitialSettings(defaultSettings);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -50,11 +58,11 @@ const EmailSettings = () => {
     e.preventDefault();
     try {
       await api.put(window.baseDomain + 'api/email-settings', settings);
-      triggerNotification('Email instellingen opgeslagen!', 'success');
+      triggerNotification('Instellingen opgeslagen', 'success');
       setInitialSettings(settings);
     } catch (err) {
       console.error('Error saving email settings:', err);
-      triggerNotification('Fout bij het opslaan van email instellingen.', 'error');
+      triggerNotification('Fout bij het opslaan', 'error');
     }
   };
 
@@ -63,47 +71,70 @@ const EmailSettings = () => {
     [settings, initialSettings]
   );
 
+  const tabs = [
+    { id: 'algemeen', label: 'Algemeen', title: 'Email' },
+    { id: 'meldingen', label: 'Meldingen', title: 'Email' },
+  ];
+
+  const handleTabClick = (tabId, tabTitle) => {
+    setActiveTab(tabId);
+  };
+
   return (
     <div className="email-settings-page">
       <NotificationComponent />
-      <h2 className="settings-title">Beheer Email</h2>
-      <div className="settings-container">
-        <form className="settings-form" onSubmit={handleSave} noValidate>
-          <div className="form-group">
-            <label>Bewerking door klant</label>
-            <div className="input-container">
-              <select
-                name="aanpassingenDoorKlant"
-                value={settings.aanpassingenDoorKlant}
-                onChange={handleChange}
-              >
-                <option value="Geen notificatie">Geen notificatie</option>
-                <option value="email">Email</option>
-              </select>
-            </div>
-          </div>
+      <h2 className="settings-title">
+        {tabs.find((tab) => tab.id === activeTab).title}
+      </h2>
 
-          <div className="form-group">
-            <label>Annulatie door klant</label>
-            <div className="input-container">
-              <select
-                name="annulatieDoorKlant"
-                value={settings.annulatieDoorKlant}
-                onChange={handleChange}
+      <div className="settings-tabs">
+        <div className="tab-menu">
+          <div className="buttons-container">
+            {tabs.map((tab) => (
+              <motion.button
+                key={tab.id}
+                type="button"
+                className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => handleTabClick(tab.id)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <option value="Geen notificatie">Geen notificatie</option>
-                <option value="email">Email</option>
-              </select>
-            </div>
+                <span className="tab-label">{tab.label}</span>
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="underline-settings-tabs"
+                    className="tab-underline"
+                    initial={false}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </motion.button>
+            ))}
           </div>
+        </div>
 
-          <button type="submit" className="settings-button" disabled={!isDirty}>
-            Opslaan
-          </button>
-        </form>
+        <div className="tab-content">
+          {activeTab === 'algemeen' && (
+            <AlgemeenSettings
+              settings={settings}
+              handleChange={handleChange}
+              handleSave={handleSave}
+              isDirty={isDirty}
+            />
+          )}
+          {activeTab === 'meldingen' && (
+            <MeldingenSettings
+              settings={settings}
+              handleChange={handleChange}
+              handleSave={handleSave}
+              isDirty={isDirty}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default withHeader(EmailSettings);
+export default withHeader(EmailSettingsTabs);

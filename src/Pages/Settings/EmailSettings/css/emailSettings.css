@@ -1,3 +1,5 @@
+/* src/components/EmailSettings/css/emailSettings.css */
+
 .email-settings-page {
 	display: flex;
 	justify-content: center;
@@ -22,14 +24,13 @@
   }
   
   .email-settings-page .settings-title {
-	margin-top: 30px;
+	margin-top: 0;
 	margin-bottom: 30px;
   }
   
   .email-settings-page .settings-form {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
   }
   
   .email-settings-page .form-group {
@@ -41,7 +42,9 @@
 	position: relative;
   }
   
-  .email-settings-page .input-container select {
+  .email-settings-page .input-container select,
+  .email-settings-page .input-container input,
+  .email-settings-page .input-container textarea {
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -50,7 +53,9 @@
 	transition: border-color 0.3s ease;
   }
   
-  .email-settings-page .input-container select:focus {
+  .email-settings-page .input-container select:focus,
+  .email-settings-page .input-container input:focus,
+  .email-settings-page .input-container textarea:focus {
 	border-color: #0056b3;
 	outline: none;
   }
@@ -72,5 +77,88 @@
   
   .email-settings-page .settings-button:hover {
 	background-color: #0056b3;
+  }
+  
+  /* Additional styling for textarea */
+  .email-settings-page .input-container textarea {
+	resize: vertical;
+	min-height: 100px;
+  }
+  
+  /* Tabs styling */
+  .email-settings-page .settings-tabs {
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 30px;
+	width: 100%;
+	position: relative;
+	max-width: 600px;
+	text-align: center;
+  }
+  
+  .email-settings-page .tab-menu {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+  }
+  
+  .email-settings-page .buttons-container {
+	display: flex;
+	gap: 10px; /* Adds space between tab buttons */
+  }
+  
+  .email-settings-page .tab-button {
+	position: relative;
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 16px;
+	color: #333;
+	transition: color 0.3s ease;
+  }
+  
+  .email-settings-page .tab-button.active {
+	color: #007bff; /* Changed to hex for consistency */
+  }
+  
+  .email-settings-page .tab-underline {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: #007bff; /* Changed to hex for consistency */
+	border-radius: 5px;
+  }
+  
+  .email-settings-page .tab-content {
+	width: 100%;
+  }
+  
+  .email-settings-page .label-small {
+	font-size: 0.9em;
+	color: #777;
+	margin-top: -5px;
+	margin-bottom: 10px;
+  }
+  
+  /* Responsive Design (Optional) */
+  @media (max-width: 600px) {
+	.email-settings-page .settings-container {
+	  padding: 20px;
+	}
+  
+	.email-settings-page .tab-button {
+	  padding: 8px 16px;
+	  font-size: 14px;
+	}
+  
+	.email-settings-page .settings-button {
+	  font-size: 1rem;
+	  padding: 10px;
+	}
   }
   
