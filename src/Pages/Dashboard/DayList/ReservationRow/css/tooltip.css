@@ -95,3 +95,30 @@
 	border-color: #333 transparent transparent transparent; /* Arrow pointing down */
   }
   
+
+  a.no-style {
+    /* Remove text decoration (e.g., underline) */
+    text-decoration: none;
+
+    /* Inherit the text color from the parent element */
+    color: inherit;
+
+    /* Remove any background color */
+    background: none;
+
+    /* Remove borders */
+    border: none;
+
+    /* Reset padding and margin */
+    padding: 0;
+    margin: 0;
+
+    /* Make the <a> behave like a block-level element */
+    display: block;
+
+    /* Optional: Change the cursor to default arrow instead of pointer */
+    cursor: default;
+
+    /* Optional: Remove any default font styles if needed */
+    font: inherit;
+}

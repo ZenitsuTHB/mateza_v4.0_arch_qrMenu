@@ -85,7 +85,7 @@ const Tooltip = ({
     'anniversaire',                      // French
     'geburtstag', 'jahrestag',           // German
     'jarig', 'verjaardag', 'jubileum',   // Dutch
-    'cumpleaños', 'aniversario',          // Spanish
+    'cumpleaños', 'aniversario',         // Spanish
   ];
 
   let iconToUse = FaStickyNote;
@@ -98,6 +98,10 @@ const Tooltip = ({
       iconToUse = FaBirthdayCake;
     }
   }
+
+  // Construct the external URL with reservationId
+  const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(reservationId)}`;
+  const deleteUrl = `https://view.reservaties.net/?action=delete&reservationId=${encodeURIComponent(reservationId)}`;
 
   return (
     <div className="extra-column" ref={tooltipRef}>
@@ -124,15 +128,25 @@ const Tooltip = ({
           <FaEllipsisV className="ellipsis-icon" onClick={handleEllipsisClick} />
           {isTooltipOpen && (
             <div className="tooltip-container">
-              <div className="tooltip-item">
+              <a
+                href={editUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tooltip-item no-style"
+              >
                 <FaPencilAlt className="tooltip-icon" />
                 Bewerken
-              </div>
+              </a>
               <div className="tooltip-separator"></div>
-              <div className="tooltip-item delete-item">
+              <a
+                href={deleteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tooltip-item delete-item no-style"
+              >
                 <FaTrashAlt className="tooltip-icon" />
                 Verwijderen
-              </div>
+              </a>
             </div>
           )}
         </div>
