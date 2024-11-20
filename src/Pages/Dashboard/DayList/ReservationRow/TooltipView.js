@@ -1,7 +1,7 @@
 // Tooltip.js
 
 import React, { useEffect, useRef, useState } from 'react';
-import { FaEllipsisV, FaPencilAlt, FaTrashAlt, FaStickyNote } from 'react-icons/fa';
+import { FaEllipsisV, FaPencilAlt, FaTrashAlt, FaStickyNote, FaBirthdayCake } from 'react-icons/fa';
 import './css/tooltip.css';
 
 const Tooltip = ({
@@ -79,6 +79,26 @@ const Tooltip = ({
 
   const isExtraTooltipOpen = (isIconHovered || isParentHovered) && !isTooltipOpen && !isEllipsisHovered;
 
+  // List of words to check for birthday or anniversary in 5 languages
+  const birthdayWords = [
+    'birthday', 'anniversary',           // English
+    'anniversaire',                      // French
+    'geburtstag', 'jahrestag',           // German
+    'jarig', 'verjaardag', 'jubileum',   // Dutch
+    'cumpleaños', 'aniversario',          // Spanish
+  ];
+
+  let iconToUse = FaStickyNote;
+
+  if (shouldShowExtraIcon) {
+    const extraInfoLower = extraInfo.toLowerCase();
+    const containsBirthdayWord = birthdayWords.some(word => extraInfoLower.includes(word));
+
+    if (containsBirthdayWord) {
+      iconToUse = FaBirthdayCake;
+    }
+  }
+
   return (
     <div className="extra-column" ref={tooltipRef}>
       <div className="icons-container">
@@ -88,7 +108,7 @@ const Tooltip = ({
             onMouseEnter={handleExtraIconMouseEnter}
             onMouseLeave={handleExtraIconMouseLeave}
           >
-            <FaStickyNote className="extra-icon" />
+            {React.createElement(iconToUse, { className: 'extra-icon' })}
             {isExtraTooltipOpen && (
               <div className="extra-tooltip">
                 {extraInfo}
