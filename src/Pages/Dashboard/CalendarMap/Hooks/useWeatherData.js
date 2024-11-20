@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useApi from '../../../Hooks/useApi';
+import useApi from '../../../../Hooks/useApi';
 
 // Global cache for session-based storage
 const weatherDataCache = {}; // dateString => temperature

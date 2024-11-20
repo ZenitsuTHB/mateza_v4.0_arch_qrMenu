@@ -1,7 +1,7 @@
 // src/components/GiftCard/ValidationSection/index.js
 
 import React, { useState } from 'react';
-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjusted import path
+import ModalWithoutTabs from '../../../../Components/Structural/Modal/Standard'; // Adjusted import path
 import './css/validationSection.css';
 import { FaTimesCircle } from 'react-icons/fa';
 import ValidationPopup from './ValidationPopup'; // Import the ValidationPopup component

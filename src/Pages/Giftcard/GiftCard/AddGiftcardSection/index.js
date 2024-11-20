@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './css/addGiftCardSection.css';
 import { FaUser, FaEnvelope, FaImage, FaPlus } from 'react-icons/fa';
 import ValueSelector from './ValueSelector';
-import useApi from '../../../Hooks/useApi';
+import useApi from '../../../../Hooks/useApi';
 
 const AddGiftCardSection = () => {
   const api = useApi();

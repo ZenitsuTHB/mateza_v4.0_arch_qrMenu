@@ -1,11 +1,11 @@
 // src/Components/ReservationsList/ReservationsList.js
 
 import React, { useState, useContext } from 'react';
-import { withHeader } from '../../Components/Structural/Header/index.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
 import ReservationRow from './ReservationRow/index.js';
 import Pagination from './Pagination.js';
 import SearchFilters from './SearchFilters/index.js';
-import { SearchContext } from '../../Context/SearchContext.js';
+import { SearchContext } from '../../../Context/SearchContext.js';
 import useIsMobile from './Hooks/useIsMobile.js';
 import useFilteredReservations from './Hooks/useFilteredReservations.js';
 import usePagination from './Hooks/usePagination.js';

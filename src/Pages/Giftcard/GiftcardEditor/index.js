@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { withHeader } from '../../Components/Structural/Header';
+import { withHeader } from '../../../Components/Structural/Header';
 
 const GiftcardEditor = () => {
   useEffect(() => {

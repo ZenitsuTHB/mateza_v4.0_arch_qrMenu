@@ -1,7 +1,7 @@
 // ReservationDetailsModal.js
 
 import React, { useState } from 'react';
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Adjust the import path as needed
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjust the import path as needed
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 import './css/reservationDetailsModal.css';

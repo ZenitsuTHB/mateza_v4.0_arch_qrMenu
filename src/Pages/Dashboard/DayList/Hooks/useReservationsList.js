@@ -1,7 +1,7 @@
 // src/Components/ReservationsList/Hooks/useReservationsList.js
 
 import { useState, useEffect } from 'react';
-import useApi from '../../../Hooks/useApi';
+import useApi from '../../../../Hooks/useApi';
 
 const useReservationsList = () => {
   const [reservationsData, setReservationsData] = useState([]);

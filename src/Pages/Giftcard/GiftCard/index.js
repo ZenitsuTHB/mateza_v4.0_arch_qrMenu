@@ -1,7 +1,7 @@
 // src/components/GiftCard/index.js
 
 import React from 'react';
-import { withHeader } from '../../Components/Structural/Header/index.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
 import './css/giftCard.css';
 import ValidationSection from './ValidationSection/index.js';
 import OverviewSection from './OverviewSection/index.js';

@@ -14,7 +14,7 @@ import {
 
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
-import DayList from '../Pages/DayList/index.js';
+import DayList from '../Pages/Dashboard/DayList/index.js';
 
 import {
   overviewSecondaryTopBar,
@@ -26,8 +26,8 @@ import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
-import Settings from '../Pages/GeneralSettings/index.js';
-import EmailSettings from '../Pages/EmailSettings/index.js';
+import Settings from '../Pages/Settings/GeneralSettings/index.js';
+import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
 
 
 const routesConfig = [

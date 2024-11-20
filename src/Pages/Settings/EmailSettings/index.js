@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './css/emailSettings.css';
-import { withHeader } from '../../Components/Structural/Header';
+import { withHeader } from '../../../Components/Structural/Header';
 
 const EmailSettings = () => {
   // State variables for email notification settings
@@ -29,7 +29,6 @@ const EmailSettings = () => {
               >
                 <option value="Geen notificatie">Geen notificatie</option>
                 <option value="email">Email</option>
-                <option value="Email & online platform">Email & online platform</option>
               </select>
             </div>
           </div>

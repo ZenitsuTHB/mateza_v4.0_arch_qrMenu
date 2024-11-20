@@ -1,7 +1,7 @@
 // useFilteredReservations.js
 
 import { useMemo } from 'react';
-import { formatDateForFilter, timeToMinutes } from '../../../Utils/dateUtils.js';
+import { formatDateForFilter, timeToMinutes } from '../../../../Utils/dateUtils.js';
 import { shifts } from '../Utils/constants.js';
 
 const useFilteredReservations = (reservationsData, filters) => {
