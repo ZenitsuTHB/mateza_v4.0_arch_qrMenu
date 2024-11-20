@@ -46,7 +46,7 @@ const EmailPreview = ({ settings }) => {
           /* Container Styles */
           .email-preview-container {
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
             background: #ffffff;
             border: 1px solid #dddddd;
             border-radius: 8px;
@@ -55,28 +55,21 @@ const EmailPreview = ({ settings }) => {
             overflow: hidden;
           }
 
-          /* Email Header Styles */
-          .email-preview-container .email-header {
+          /* Sender Info Styles */
+          .sender-info {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             margin-bottom: 20px;
           }
 
-          .email-preview-container .email-header .email-header-item {
+          .sender-info .info-box {
             border: 1px solid #cccccc;
             border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            color: #777777;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-          }
-
-          .email-preview-container .email-header .email-header-item span:last-child {
-            font-weight: bold;
-            color: #333333;
+            padding: 5px 10px;
+            color: #666666;
+            margin-bottom: 5px;
+            text-align: right;
           }
 
           /* Email Body Styles */
@@ -138,15 +131,13 @@ const EmailPreview = ({ settings }) => {
         `}
       </style>
 
-      {/* Email Header */}
-      <div className="email-header">
-        <div className="email-header-item">
-          <span>Naam Verstuurder:</span>
-          <span>{settings.groetNaam || 'Het Team'}</span>
+      {/* Sender Info */}
+      <div className="sender-info">
+        <div className="info-box">
+          Verzender: {settings.groetNaam || 'Het Team'}
         </div>
-        <div className="email-header-item">
-          <span>Antwoordadres:</span>
-          <span>{settings.antwoordEmail || 'noreply@example.com'}</span>
+        <div className="info-box">
+          Antwoord naar: {settings.antwoordEmail || 'noreply@example.com'}
         </div>
       </div>
 

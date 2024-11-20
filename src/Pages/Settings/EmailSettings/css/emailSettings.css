@@ -4,52 +4,98 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 100%;
-	padding: 20px;
   }
   
   .email-settings-page .settings-title {
-	margin-top: 0;
-	margin-bottom: 30px;
-	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
   }
   
-  .general-settings-container {
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	gap: 20px;
+  .email-settings-page .settings-tabs {
 	width: 100%;
+	max-width: 1200px;
   }
   
-  .settings-form {
-	flex: 1;
-	max-width: 600px;
+  .email-settings-page .tab-menu {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+  }
+  
+  .email-settings-page .buttons-container {
+	display: flex;
+	gap: 10px;
+  }
+  
+  .email-settings-page .tab-button {
+	position: relative;
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 16px;
+	color: #333;
+	transition: color 0.3s ease;
+  }
+  
+  .email-settings-page .tab-button.active {
+	color: #007bff;
+  }
+  
+  .email-settings-page .tab-underline {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: #007bff;
+	border-radius: 5px;
+  }
+  
+  .email-settings-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+  }
+  
+  .settings-container,
+  .preview-container {
 	background-color: #fff;
 	border-radius: 10px;
 	padding: 30px;
-	position: relative;
   }
   
-  .settings-form label {
+  .settings-container {
+	grid-column: 2 / 3;
+  }
+  
+  .preview-container {
+	grid-column: 1 / 2;
+  }
+  
+  .settings-form {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .form-group {
+	margin-bottom: 20px;
+  }
+  
+  .form-group label {
 	text-align: left;
 	margin-bottom: 5px;
 	font-weight: 500;
   }
   
-  .settings-form .form-group {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 15px;
-  }
-  
-  .settings-form .input-container {
+  .input-container {
 	position: relative;
   }
   
-  .settings-form .input-container select,
-  .settings-form .input-container input,
-  .settings-form .input-container textarea {
+  .input-container select,
+  .input-container input,
+  .input-container textarea {
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -58,21 +104,14 @@
 	transition: border-color 0.3s ease;
   }
   
-  .settings-form .input-container select:focus,
-  .settings-form .input-container input:focus,
-  .settings-form .input-container textarea:focus {
+  .input-container select:focus,
+  .input-container input:focus,
+  .input-container textarea:focus {
 	border-color: #0056b3;
 	outline: none;
   }
   
-  /* Additional styling for textarea */
-  .settings-form .input-container textarea {
-	resize: vertical;
-	min-height: 100px;
-  }
-  
-  /* Save Button */
-  .settings-form .settings-button {
+  .settings-button {
 	padding: 12px;
 	background-color: #007bff;
 	color: #fff;
@@ -80,15 +119,10 @@
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 1.1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
 	transition: background-color 0.3s ease;
-	margin-top: 20px;
   }
   
-  .settings-form .settings-button:hover {
+  .settings-button:hover {
 	background-color: #0056b3;
   }
   
@@ -100,15 +134,18 @@
   }
   
   /* Responsive Design */
-  @media (max-width: 1200px) {
-	.general-settings-container {
-	  flex-direction: column;
-	  align-items: center;
+  @media (max-width: 768px) {
+	.email-settings-grid {
+	  grid-template-columns: 1fr;
 	}
   
-	.settings-form,
-	.email-preview-container {
-	  max-width: 100%;
+	.settings-container,
+	.preview-container {
+	  grid-column: 1 / -1;
+	}
+  
+	.preview-container {
+	  margin-top: 20px;
 	}
   }
   

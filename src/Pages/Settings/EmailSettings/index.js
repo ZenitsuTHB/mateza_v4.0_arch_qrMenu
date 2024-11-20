@@ -6,8 +6,9 @@ import './css/emailSettings.css';
 import { withHeader } from '../../../Components/Structural/Header';
 import useNotification from '../../../Components/Notification';
 import useApi from '../../../Hooks/useApi';
-import AlgemeenSettings from './GeneralSettings';
-import MeldingenSettings from './NotificationSettings';
+import GeneralSettings from './GeneralSettings';
+import NotificationSettings from './NotificationSettings';
+import EmailPreview from './EmailPreview';
 
 const EmailSettingsTabs = () => {
   const api = useApi();
@@ -21,8 +22,8 @@ const EmailSettingsTabs = () => {
     emailInhoud: '',
     toonTabel: 'Toon tabel',
     reservatieBewerken: 'Reservatie Bewerken Toestaan',
-    startGreeting: 'Beste', // Toegevoegd
-    endGreeting: 'Met vriendelijke groeten,', // Toegevoegd
+    startGreeting: 'Beste',
+    endGreeting: 'Met vriendelijke groeten,',
   };
 
   const [settings, setSettings] = useState(defaultSettings);
@@ -32,21 +33,27 @@ const EmailSettingsTabs = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await api.get(window.baseDomain + 'api/email-settings', { noCache: true });
+        const response = await api.get(
+          window.baseDomain + 'api/email-settings',
+          { noCache: true }
+        );
         const data = response || {};
         const mergedData = { ...defaultSettings, ...data };
         setSettings(mergedData);
         setInitialSettings(mergedData);
       } catch (err) {
         console.error('Error fetching email settings:', err);
-        triggerNotification('Fout bij het ophalen van email instellingen.', 'error');
+        triggerNotification(
+          'Fout bij het ophalen van email instellingen.',
+          'error'
+        );
         setSettings(defaultSettings);
         setInitialSettings(defaultSettings);
       }
     };
 
     fetchSettings();
-  }, [api]);
+  }, []); // Empty dependency array to prevent infinite calls
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,7 +85,7 @@ const EmailSettingsTabs = () => {
     { id: 'meldingen', label: 'Meldingen', title: 'Email' },
   ];
 
-  const handleTabClick = (tabId, tabTitle) => {
+  const handleTabClick = (tabId) => {
     setActiveTab(tabId);
   };
 
@@ -96,7 +103,9 @@ const EmailSettingsTabs = () => {
               <motion.button
                 key={tab.id}
                 type="button"
-                className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                className={`tab-button ${
+                  activeTab === tab.id ? 'active' : ''
+                }`}
                 onClick={() => handleTabClick(tab.id)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -116,23 +125,33 @@ const EmailSettingsTabs = () => {
           </div>
         </div>
 
-        <div className="tab-content">
-          {activeTab === 'algemeen' && (
-            <AlgemeenSettings
-              settings={settings}
-              handleChange={handleChange}
-              handleSave={handleSave}
-              isDirty={isDirty}
-            />
-          )}
-          {activeTab === 'meldingen' && (
-            <MeldingenSettings
-              settings={settings}
-              handleChange={handleChange}
-              handleSave={handleSave}
-              isDirty={isDirty}
-            />
-          )}
+        <div className="email-settings-grid">
+          {/* Settings Form */}
+          <div className="settings-container">
+            <div className="tab-content">
+              {activeTab === 'algemeen' && (
+                <GeneralSettings
+                  settings={settings}
+                  handleChange={handleChange}
+                  handleSave={handleSave}
+                  isDirty={isDirty}
+                />
+              )}
+              {activeTab === 'meldingen' && (
+                <NotificationSettings
+                  settings={settings}
+                  handleChange={handleChange}
+                  handleSave={handleSave}
+                  isDirty={isDirty}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Email Preview */}
+          <div className="preview-container">
+            <EmailPreview settings={settings} />
+          </div>
         </div>
       </div>
     </div>
