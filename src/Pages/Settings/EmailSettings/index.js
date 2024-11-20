@@ -21,6 +21,8 @@ const EmailSettingsTabs = () => {
     emailInhoud: '',
     toonTabel: 'Toon tabel',
     reservatieBewerken: 'Reservatie Bewerken Toestaan',
+    startGreeting: 'Beste', // Toegevoegd
+    endGreeting: 'Met vriendelijke groeten,', // Toegevoegd
   };
 
   const [settings, setSettings] = useState(defaultSettings);

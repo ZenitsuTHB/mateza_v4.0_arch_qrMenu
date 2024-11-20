@@ -1,4 +1,4 @@
-// src/components/EmailSettings/AlgemeenSettings.jsx
+// src/components/EmailSettings/GeneralSettings.jsx
 
 import React from 'react';
 
@@ -6,7 +6,8 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
   return (
     <form className="settings-form" onSubmit={handleSave} noValidate>
 
-	  <div className="form-group">
+      {/* Naam Verstuurder */}
+      <div className="form-group">
         <label>Naam Verstuurder</label>
         <div className="input-container">
           <input
@@ -20,6 +21,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
+      {/* Antwoorden Doorsturen naar Email */}
       <div className="form-group">
         <label>Antwoorden Doorsturen naar Email</label>
         <div className="input-container">
@@ -34,6 +36,25 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
+	        {/* Startgroet */}
+			<div className="form-group">
+        <label>Startgroet</label>
+        <div className="input-container">
+          <select
+            name="startGreeting"
+            value={settings.startGreeting}
+            onChange={handleChange}
+            required
+          >
+            <option value="Hallo">Hallo</option>
+            <option value="Hey">Hey</option>
+            <option value="Beste">Beste</option>
+            <option value="Geachte">Geachte</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Email Inhoud */}
       <div className="form-group">
         <label>Email Inhoud</label>
         <label className="label-small">
@@ -50,7 +71,26 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
+	  {/* Eindgroet */}
+      <div className="form-group">
+        <label>Eindgroet</label>
+        <div className="input-container">
+          <select
+            name="endGreeting"
+            value={settings.endGreeting}
+            onChange={handleChange}
+            required
+          >
+            <option value="Met vriendelijke groeten,">Met vriendelijke groeten,</option>
+            <option value="Hartelijk bedankt,">Hartelijk bedankt,</option>
+            <option value="Tot snel!">Tot snel!</option>
+            <option value="Warme groeten,">Warme groeten,</option>
+          </select>
+        </div>
+      </div>
 
+
+      {/* Reservatieoverzicht Tabel Weergave */}
       <div className="form-group">
         <label>Reservatieoverzicht Tabel Weergave</label>
         <div className="input-container">
@@ -65,6 +105,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
+      {/* Reservatie Bewerken */}
       <div className="form-group">
         <label>Reservatie Bewerken</label>
         <div className="input-container">
@@ -83,6 +124,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
+      {/* Opslaan Button */}
       <button type="submit" className="settings-button" disabled={!isDirty}>
         Opslaan
       </button>
