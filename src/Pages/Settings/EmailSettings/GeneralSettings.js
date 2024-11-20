@@ -46,6 +46,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
             onChange={handleChange}
             required
           >
+			<option value="Hallo">Dag</option>
             <option value="Hallo">Hallo</option>
             <option value="Hey">Hey</option>
             <option value="Beste">Beste</option>
