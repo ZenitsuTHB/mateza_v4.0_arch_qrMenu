@@ -27,6 +27,8 @@ import NewReservationAdmin from '../Pages/NewReservation/index.js';
 import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
 import Settings from '../Pages/GeneralSettings/index.js';
+import EmailSettings from '../Pages/EmailSettings/index.js';
+
 
 const routesConfig = [
   {
@@ -72,8 +74,8 @@ const routesConfig = [
   },
   {
     path: '/settings',
-    element: <Settings title="Instellingen" />,
-    label: 'Instellingen',
+    element: <Settings title="Administratie" />,
+    label: 'Administratie',
     icon: FaCog,
     isMenu: true,
     isMobile: true,
@@ -83,8 +85,8 @@ const routesConfig = [
 
   {
     path: '/settings/email',
-    element: <Settings title="Email" />,
-    label: 'Email',
+    element: <EmailSettings title="Administratie" />,
+    label: 'Email Notificaties',
     icon: FaMailBulk,
     isMenu: false,
     isMobile: false,

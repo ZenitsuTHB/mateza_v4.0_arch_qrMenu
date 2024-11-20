@@ -18,11 +18,11 @@ const Settings = () => {
 
   return (
     <div className="general-settings-page">
-      <h2 className="settings-title">Instellingen</h2>
+      <h2 className="settings-title">Beheer Reservaties</h2>
       <div className="settings-container">
         <form className="settings-form" onSubmit={handleSave} noValidate>
           <div className="form-group">
-            <label>Zitplaatsen</label>
+            <label>Aantal Zitplaatsen</label>
             <div className="input-container">
               <input
                 type="number"
@@ -35,7 +35,7 @@ const Settings = () => {
           </div>
 
           <div className="form-group">
-            <label>Hoeveel uur op voorhand</label>
+            <label>Min. Uren op Voorhand te Reserveren</label>
             <div className="input-container">
               <input
                 type="number"
@@ -48,7 +48,7 @@ const Settings = () => {
           </div>
 
           <div className="form-group">
-            <label>Hoeveel dagen in de toekomst</label>
+            <label>Max. Aantal Dagen in de Toekomst te Reserveren</label>
             <div className="input-container">
               <input
                 type="number"
