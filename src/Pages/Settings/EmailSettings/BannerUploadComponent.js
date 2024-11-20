@@ -6,28 +6,26 @@ import { FaImage } from 'react-icons/fa';
 
 const BannerUploadComponent = () => {
   const [bannerUrl, setBannerUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const restaurantId = localStorage.getItem('username');
-  const bannerImageUrl =
-    `https://mateza-cloud-storage.ams3.digitaloceanspaces.com/email/banner/${restaurantId}`;
+  const bannerImageUrl = `https://mateza-cloud-storage.ams3.digitaloceanspaces.com/email/banner/${restaurantId}`;
   const [isDragging, setIsDragging] = useState(false);
   const api = useApi();
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    // Check if the image exists
-    fetch(bannerImageUrl, { method: 'HEAD' })
-      .then((res) => {
-        if (res.ok) {
-          setBannerUrl(bannerImageUrl);
-        } else {
-          setBannerUrl('');
-        }
-      })
-      .catch((err) => {
-        console.error('Error fetching banner image:', err);
-        setBannerUrl('');
-      });
-  }, []);
+    // Attempt to load the image
+    const img = new Image();
+    img.src = bannerImageUrl;
+    img.onload = () => {
+      setBannerUrl(bannerImageUrl);
+      setIsLoading(false);
+    };
+    img.onerror = () => {
+      setBannerUrl('');
+      setIsLoading(false);
+    };
+  }, [bannerImageUrl]);
 
   const handleFileUpload = async (file) => {
     const formData = new FormData();
@@ -90,15 +88,20 @@ const BannerUploadComponent = () => {
             position: relative;
             width: 100%;
             max-width: 800px;
-            margin: 0 auto;
-            margin-bottom: 20px;
+            margin: 0 auto 20px auto;
+            height: 150px; /* Set fixed height */
+            border: 1px dashed gray;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            cursor: pointer;
           }
 
           .banner-image {
             width: 100%;
-            height: auto;
+            height: 150px; /* Fixed height */
+            object-fit: cover; /* Maintain aspect ratio, cover the container */
             display: block;
-            border-radius: 8px;
           }
 
           .empty-banner {
@@ -106,11 +109,9 @@ const BannerUploadComponent = () => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 1px dashed gray;
-            border-radius: 8px;
-            padding: 40px;
-            cursor: pointer;
-            background-color: #f9f9f9;
+            height: 100%;
+            transition: background-color 0.3s;
+            color: white; /* Ensure text is white when no image is present */
           }
 
           .empty-banner.dragging {
@@ -120,24 +121,57 @@ const BannerUploadComponent = () => {
           .empty-banner p {
             margin-top: 8px;
             font-weight: bold;
+            color: white;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
           }
 
           .empty-banner input {
             display: none;
           }
+
+          /* Overlay Styles */
+          .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+
+          .banner-upload-container:hover .overlay {
+            opacity: 1;
+          }
+
+          .overlay .message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .overlay .message p {
+            margin-top: 8px;
+            font-weight: bold;
+            color: white !important; /* Explicitly set color to white */
+          }
+
+          /* Ensure the icon inside the overlay is white */
+          .overlay svg {
+            color: white !important;
+          }
         `}
       </style>
 
-      {bannerUrl ? (
-        <img src={bannerUrl} alt="Banner" className="banner-image" />
-      ) : (
-        <div
-          className={`empty-banner ${isDragging ? 'dragging' : ''}`}
-          onClick={handleClick}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
+      {isLoading ? (
+        <div className="empty-banner">
           <FaImage size={48} />
           <p>Sleep uw Banner Hier...</p>
           <input
@@ -145,6 +179,36 @@ const BannerUploadComponent = () => {
             accept="image/*"
             onChange={handleFileSelect}
             ref={fileInputRef}
+          />
+        </div>
+      ) : (
+        <div
+          onClick={handleClick}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {bannerUrl ? (
+            <img src={bannerUrl} alt="Banner" className="banner-image" />
+          ) : (
+            <div className={`empty-banner ${isDragging ? 'dragging' : ''}`}>
+              <FaImage size={48} />
+              <p>Sleep uw Banner Hier...</p>
+            </div>
+          )}
+          {/* Overlay for editing */}
+          <div className="overlay">
+            <FaImage size={48} />
+            <div className="message">
+              <p>Verander uw banner door te klikken of te slepen</p>
+            </div>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            ref={fileInputRef}
+            style={{ display: 'none' }}
           />
         </div>
       )}
