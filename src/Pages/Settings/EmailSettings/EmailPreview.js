@@ -134,10 +134,8 @@ const EmailPreview = ({ settings, handleChange }) => {
 
   return (
     <div className="email-preview-container">
-      {/* Inline styles to isolate from the rest of the code */}
       <style>
         {`
-          /* CSS Reset to neutralize external styles */
           .email-preview-container, .email-preview-container * {
             margin: 0;
             padding: 0;
@@ -151,7 +149,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             background: none;
           }
 
-          /* Container Styles */
           .email-preview-container-small {
             max-width: 800px;
             width: 100%;
@@ -164,7 +161,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             overflow: hidden;
           }
 
-          /* Sender Info Styles */
           .email-preview-container .sender-info {
             display: flex;
             flex-direction: column;
@@ -196,7 +192,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             text-align: right;
           }
 
-          /* Email Body Styles */
           .email-preview-container .email-body {
             color: #333333;
           }

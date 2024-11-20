@@ -34,7 +34,7 @@ const BannerUploadComponent = () => {
     const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       triggerNotification(
-        'Ongeldig bestandstype. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.',
+        'Ongeldig bestandstype.',
         'error'
       );
       return;
@@ -44,7 +44,7 @@ const BannerUploadComponent = () => {
     const maxSize = 5 * 1024 * 1024; // 5 MB
     if (file.size > maxSize) {
       triggerNotification(
-        'Bestand is te groot. Maximaal toegestane grootte is 5 MB.',
+        'Bestand is te groot.',
         'error'
       );
       return;
@@ -158,7 +158,6 @@ const BannerUploadComponent = () => {
             display: none;
           }
 
-          /* Overlay Styles */
           .banner-upload-container .overlay {
             position: absolute;
             top: 0;
@@ -192,12 +191,10 @@ const BannerUploadComponent = () => {
             color: white !important; /* Explicitly set color to white */
           }
 
-          /* Ensure the icon inside the overlay is white */
           .banner-upload-container .overlay svg {
             color: white !important;
           }
 
-          /* Instruction Text */
           .banner-upload-container .upload-instructions {
             text-align: center;
             margin-bottom: 10px;
@@ -211,7 +208,7 @@ const BannerUploadComponent = () => {
 
       {/* Instruction Text */}
       <p className="upload-instructions">
-        Upload uw bestand in dit vak. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.
+        Upload uw bestand in dit vak. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan. (max. 5mb)
       </p>
 
       {isLoading ? (

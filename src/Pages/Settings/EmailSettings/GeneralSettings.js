@@ -19,14 +19,12 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
     settings.startGreeting
   );
 
-  // Check if the current endGreeting is among the default options
   const isEndGreetingInOptions = endGreetingOptions.includes(
     settings.endGreeting
   );
 
   return (
     <form className="settings-form" onSubmit={handleSave} noValidate>
-      {/* Naam Verstuurder */}
       <div className="form-group">
         <label>Naam</label>
         <div className="input-container">
@@ -41,7 +39,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Antwoorden Doorsturen naar Email */}
       <div className="form-group">
         <label>Reply Antwoorden Naar</label>
         <div className="input-container">
@@ -56,7 +53,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Startgroet */}
       <div className="form-group">
         <label>Startgroet</label>
         <div className="input-container">
@@ -80,7 +76,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Email Inhoud */}
       <div className="form-group">
         <label>Email Inhoud</label>
         <div className="input-container">
@@ -94,7 +89,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Eindgroet */}
       <div className="form-group">
         <label>Eindgroet</label>
         <div className="input-container">
@@ -118,7 +112,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Reservatieoverzicht Tabel Weergave */}
       <div className="form-group">
         <label>Reservatieoverzicht Tabel Weergave</label>
         <div className="input-container">
@@ -132,8 +125,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
           </select>
         </div>
       </div>
-
-	        {/* Banner Weergave */}
 			<div className="form-group">
         <label>Banner Weergave</label>
         <div className="input-container">
@@ -155,7 +146,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Reservatie Bewerken */}
       <div className="form-group">
         <label>Reservatie Bewerken</label>
         <div className="input-container">
