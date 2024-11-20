@@ -1,6 +1,7 @@
 // src/components/EmailSettings/GeneralSettings.jsx
 
 import React from 'react';
+import EmailPreview from './EmailPreview';
 
 const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
   return (
@@ -124,6 +125,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
           </select>
         </div>
       </div>
+	  <EmailPreview settings={settings}/>
 
       {/* Opslaan Button */}
       <button type="submit" className="settings-button" disabled={!isDirty}>
