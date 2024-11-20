@@ -292,7 +292,7 @@ const EmailPreview = ({ settings, handleChange }) => {
       <div className="email-preview-container-small">
         <div className="email-body">
 
-		<BannerUploadComponent />
+		{settings.showBanner && <BannerUploadComponent />}
           {/* Start Greeting */}
           <h2>
             <EditableText

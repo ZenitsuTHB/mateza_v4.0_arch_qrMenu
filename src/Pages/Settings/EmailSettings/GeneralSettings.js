@@ -1,14 +1,10 @@
+// GeneralSettings.jsx
+
 import React from 'react';
 
 const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
   // Default options for Start Greeting
-  const startGreetingOptions = [
-    'Dag',
-    'Hallo',
-    'Hey',
-    'Beste',
-    'Geachte',
-  ];
+  const startGreetingOptions = ['Dag', 'Hallo', 'Hey', 'Beste', 'Geachte'];
 
   // Default options for End Greeting
   const endGreetingOptions = [
@@ -132,7 +128,29 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
             onChange={handleChange}
           >
             <option value="Toon tabel">Toon tabel</option>
-            <option value="Zonder tabel">Zonder tabel</option>
+            <option value="Zonder tabel">Verberg tabel</option>
+          </select>
+        </div>
+      </div>
+
+	        {/* Banner Weergave */}
+			<div className="form-group">
+        <label>Banner Weergave</label>
+        <div className="input-container">
+          <select
+            name="showBanner"
+            value={settings.showBanner ? 'Toon Banner' : 'Verberg Banner'}
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: 'showBanner',
+                  value: e.target.value === 'Toon Banner',
+                },
+              })
+            }
+          >
+            <option value="Toon Banner">Toon Banner</option>
+            <option value="Verberg Banner">Verberg Banner</option>
           </select>
         </div>
       </div>
@@ -155,6 +173,8 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
           </select>
         </div>
       </div>
+
+
 
       {/* Opslaan Button */}
       <button type="submit" className="settings-button" disabled={!isDirty}>
