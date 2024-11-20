@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useApi from '../../../Hooks/useApi.js';
 import { FaImage } from 'react-icons/fa';
+import useNotification from '../../../Components/Notification/index.js';
 
 const BannerUploadComponent = () => {
   const [bannerUrl, setBannerUrl] = useState('');
@@ -12,6 +13,7 @@ const BannerUploadComponent = () => {
   const [isDragging, setIsDragging] = useState(false);
   const api = useApi();
   const fileInputRef = useRef(null);
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   useEffect(() => {
     // Attempt to load the image
@@ -28,6 +30,26 @@ const BannerUploadComponent = () => {
   }, [bannerImageUrl]);
 
   const handleFileUpload = async (file) => {
+    // Validate file type
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      triggerNotification(
+        'Ongeldig bestandstype. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.',
+        'error'
+      );
+      return;
+    }
+
+    // Validate file size (max 5 MB)
+    const maxSize = 5 * 1024 * 1024; // 5 MB
+    if (file.size > maxSize) {
+      triggerNotification(
+        'Bestand is te groot. Maximaal toegestane grootte is 5 MB.',
+        'error'
+      );
+      return;
+    }
+
     const formData = new FormData();
     formData.append('image', file);
 
@@ -39,13 +61,20 @@ const BannerUploadComponent = () => {
 
       // After successful upload, update the bannerUrl to trigger re-render
       setBannerUrl(bannerImageUrl + '?' + new Date().getTime()); // Add timestamp to prevent caching
+      triggerNotification('Afbeelding succesvol geüpload.', 'success');
     } catch (error) {
       console.error('Error uploading image:', error);
 
       if (error.response && error.response.data && error.response.data.error) {
-        alert(`Failed to upload image: ${error.response.data.error}`);
+        triggerNotification(
+          `Fout bij uploaden: ${error.response.data.error}`,
+          'error'
+        );
       } else {
-        alert('Failed to upload image. Please try again.');
+        triggerNotification(
+          'Fout bij uploaden. Probeer het alstublieft opnieuw.',
+          'error'
+        );
       }
     }
   };
@@ -97,14 +126,14 @@ const BannerUploadComponent = () => {
             cursor: pointer;
           }
 
-          .banner-image {
+          .banner-upload-container .banner-image {
             width: 100%;
             height: 150px; /* Fixed height */
             object-fit: cover; /* Maintain aspect ratio, cover the container */
             display: block;
           }
 
-          .empty-banner {
+          .banner-upload-container .empty-banner {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -114,23 +143,23 @@ const BannerUploadComponent = () => {
             color: white; /* Ensure text is white when no image is present */
           }
 
-          .empty-banner.dragging {
+          .banner-upload-container .empty-banner.dragging {
             background-color: #e9e9e9;
           }
 
-          .empty-banner p {
+          .banner-upload-container .empty-banner p {
             margin-top: 8px;
             font-weight: bold;
             color: white;
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
           }
 
-          .empty-banner input {
+          .banner-upload-container .empty-banner input {
             display: none;
           }
 
           /* Overlay Styles */
-          .overlay {
+          .banner-upload-container .overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -151,29 +180,44 @@ const BannerUploadComponent = () => {
             opacity: 1;
           }
 
-          .overlay .message {
+          banner-upload-container .overlay .message {
             display: flex;
             flex-direction: column;
             align-items: center;
           }
 
-          .overlay .message p {
+          banner-upload-container .overlay .message p {
             margin-top: 8px;
             font-weight: bold;
             color: white !important; /* Explicitly set color to white */
           }
 
           /* Ensure the icon inside the overlay is white */
-          .overlay svg {
+          banner-upload-container .overlay svg {
             color: white !important;
+          }
+
+          /* Instruction Text */
+          banner-upload-container .upload-instructions {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
           }
         `}
       </style>
 
+      {/* Notification Component */}
+      <NotificationComponent />
+
+      {/* Instruction Text */}
+      <p className="upload-instructions">
+        Upload uw bestand hier. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.
+      </p>
+
       {isLoading ? (
         <div className="empty-banner">
           <FaImage size={48} />
-          <p>Sleep uw Banner Hier...</p>
+          <p>Sleep uw banner hier...</p>
           <input
             type="file"
             accept="image/*"
@@ -193,7 +237,7 @@ const BannerUploadComponent = () => {
           ) : (
             <div className={`empty-banner ${isDragging ? 'dragging' : ''}`}>
               <FaImage size={48} />
-              <p>Sleep uw Banner Hier...</p>
+              <p>Sleep uw banner hier...</p>
             </div>
           )}
           {/* Overlay for editing */}
