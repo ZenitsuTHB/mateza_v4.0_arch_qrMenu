@@ -34,7 +34,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Email Inhoud */}
       <div className="form-group">
         <label>Email Inhoud</label>
         <label className="label-small">
@@ -52,7 +51,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
       </div>
 
 
-      {/* Toon Tabel */}
       <div className="form-group">
         <label>Reservatieoverzicht Tabel Weergave</label>
         <div className="input-container">
@@ -67,7 +65,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      {/* Reservatie Bewerken */}
       <div className="form-group">
         <label>Reservatie Bewerken</label>
         <div className="input-container">
