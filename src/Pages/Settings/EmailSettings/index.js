@@ -63,10 +63,6 @@ const EmailSettings = () => {
     [settings, initialSettings]
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="email-settings-page">
       <NotificationComponent />
