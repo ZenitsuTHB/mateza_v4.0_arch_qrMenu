@@ -57,6 +57,7 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 20px;
+	align-items: start;
   }
   
   .settings-container,
@@ -64,14 +65,6 @@
 	background-color: #fff;
 	border-radius: 10px;
 	padding: 30px;
-  }
-  
-  .settings-container {
-	grid-column: 2 / 3;
-  }
-  
-  .preview-container {
-	grid-column: 1 / 2;
   }
   
   .settings-form {
@@ -137,11 +130,6 @@
   @media (max-width: 768px) {
 	.email-settings-grid {
 	  grid-template-columns: 1fr;
-	}
-  
-	.settings-container,
-	.preview-container {
-	  grid-column: 1 / -1;
 	}
   
 	.preview-container {

@@ -46,6 +46,7 @@ const EmailPreview = ({ settings }) => {
           /* Container Styles */
           .email-preview-container {
             max-width: 800px;
+            width: 100%;
             margin: 0 auto;
             background: #ffffff;
             border: 1px solid #dddddd;
@@ -61,15 +62,18 @@ const EmailPreview = ({ settings }) => {
             flex-direction: column;
             align-items: flex-end;
             margin-bottom: 20px;
+            width: 100%;
           }
 
           .sender-info .info-box {
             border: 1px solid #cccccc;
             border-radius: 5px;
-            padding: 5px 10px;
+            padding: 10px 15px;
             color: #666666;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             text-align: right;
+            width: 100%;
+            background-color: #f5f5f5;
           }
 
           /* Email Body Styles */

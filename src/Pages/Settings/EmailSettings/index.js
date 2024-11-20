@@ -126,6 +126,11 @@ const EmailSettingsTabs = () => {
         </div>
 
         <div className="email-settings-grid">
+          {/* Email Preview */}
+          <div className="preview-container">
+            <EmailPreview settings={settings} />
+          </div>
+
           {/* Settings Form */}
           <div className="settings-container">
             <div className="tab-content">
@@ -146,11 +151,6 @@ const EmailSettingsTabs = () => {
                 />
               )}
             </div>
-          </div>
-
-          {/* Email Preview */}
-          <div className="preview-container">
-            <EmailPreview settings={settings} />
           </div>
         </div>
       </div>
