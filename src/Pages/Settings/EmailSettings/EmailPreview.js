@@ -165,7 +165,7 @@ const EmailPreview = ({ settings, handleChange }) => {
           }
 
           /* Sender Info Styles */
-          .sender-info {
+          .email-preview-container .sender-info {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -173,7 +173,7 @@ const EmailPreview = ({ settings, handleChange }) => {
             width: 100%;
           }
 
-          .sender-info .info-box {
+          .email-preview-container .sender-info .info-box {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -186,12 +186,12 @@ const EmailPreview = ({ settings, handleChange }) => {
             background-color: #f5f5f5;
           }
 
-          .sender-info .info-box .label {
+          .email-preview-container .sender-info .info-box .label {
             font-weight: bold;
             color: #333333;
           }
 
-          .sender-info .info-box .value {
+          .email-preview-container .sender-info .info-box .value {
             font-weight: normal;
             text-align: right;
           }
@@ -213,7 +213,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             margin-bottom: 16px;
           }
 
-          /* Reservation Table Styles */
           .email-preview-container .reservation-table {
             width: 100%;
             border-collapse: collapse;
@@ -233,7 +232,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             background-color: #f9f9f9;
           }
 
-          /* Email Footer Styles */
           .email-preview-container .email-footer {
             text-align: center;
             font-size: 12px;
@@ -254,7 +252,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             vertical-align: middle;
           }
 
-          /* Editable Input Styles */
           .email-preview-container input,
           .email-preview-container textarea {
             border: none;

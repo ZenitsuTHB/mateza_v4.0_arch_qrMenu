@@ -180,25 +180,25 @@ const BannerUploadComponent = () => {
             opacity: 1;
           }
 
-          banner-upload-container .overlay .message {
+          .banner-upload-container .overlay .message {
             display: flex;
             flex-direction: column;
             align-items: center;
           }
 
-          banner-upload-container .overlay .message p {
+          .banner-upload-container .overlay .message p {
             margin-top: 8px;
             font-weight: bold;
             color: white !important; /* Explicitly set color to white */
           }
 
           /* Ensure the icon inside the overlay is white */
-          banner-upload-container .overlay svg {
+          .banner-upload-container .overlay svg {
             color: white !important;
           }
 
           /* Instruction Text */
-          banner-upload-container .upload-instructions {
+          .banner-upload-container .upload-instructions {
             text-align: center;
             margin-bottom: 10px;
             font-weight: bold;
@@ -211,7 +211,7 @@ const BannerUploadComponent = () => {
 
       {/* Instruction Text */}
       <p className="upload-instructions">
-        Upload uw bestand hier. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.
+        Upload uw bestand in dit vak. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan.
       </p>
 
       {isLoading ? (
