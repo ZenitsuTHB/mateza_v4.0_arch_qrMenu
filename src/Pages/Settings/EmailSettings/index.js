@@ -74,7 +74,7 @@ const EmailSettingsTabs = () => {
   );
 
   const tabs = [
-    { id: 'algemeen', label: 'Algemeen', title: 'Email' },
+    { id: 'algemeen', label: 'Bevestigingsmail', title: 'Email' },
     { id: 'meldingen', label: 'Meldingen', title: 'Email' },
   ];
 
