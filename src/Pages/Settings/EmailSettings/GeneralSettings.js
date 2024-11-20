@@ -165,8 +165,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
       </div>
 
 
-
-      {/* Opslaan Button */}
       <button type="submit" className="settings-button" disabled={!isDirty}>
         Opslaan
       </button>

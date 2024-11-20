@@ -136,19 +136,6 @@ const EmailPreview = ({ settings, handleChange }) => {
     <div className="email-preview-container">
       <style>
         {`
-          .email-preview-container, .email-preview-container * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif !important;
-            color: inherit !important;
-            text-align: left;
-            text-decoration: none;
-            list-style: none;
-            border: none;
-            background: none;
-          }
-
           .email-preview-container-small {
             max-width: 800px;
             width: 100%;
@@ -261,7 +248,6 @@ const EmailPreview = ({ settings, handleChange }) => {
         `}
       </style>
 
-      {/* Sender Info */}
       <div className="sender-info">
         <div className="info-box">
           <span className="label">Verzender:</span>
@@ -285,7 +271,6 @@ const EmailPreview = ({ settings, handleChange }) => {
         <div className="email-body">
 
 		{settings.showBanner && <BannerUploadComponent />}
-          {/* Start Greeting */}
           <h2>
             <EditableText
               value={settings.startGreeting || 'Beste'}
@@ -304,7 +289,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             <strong>{sampleData.time}</strong>.
           </p>
 
-          {/* Email Content */}
           <p>
             <EditableText
               value={
@@ -320,7 +304,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             />
           </p>
 
-          {/* Reservation Edit Link */}
           {settings.reservatieBewerken === 'Reservatie Bewerken Toestaan' && (
             <p>
               U kunt uw reservatie bewerken via de volgende link:{' '}
@@ -332,7 +315,6 @@ const EmailPreview = ({ settings, handleChange }) => {
             </p>
           )}
 
-          {/* End Greeting */}
           <p>
             <EditableText
               value={settings.endGreeting || 'Met vriendelijke groeten,'}
@@ -357,7 +339,6 @@ const EmailPreview = ({ settings, handleChange }) => {
           </p>
         </div>
 
-        {/* Reservation Table */}
         {settings.toonTabel === 'Toon tabel' && (
           <>
             <p>
@@ -396,7 +377,6 @@ const EmailPreview = ({ settings, handleChange }) => {
           </>
         )}
 
-        {/* Email Footer */}
         <div className="email-footer">
           <p>
             <a href="https://mateza.be">

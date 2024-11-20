@@ -34,17 +34,17 @@ const BannerUploadComponent = () => {
     const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       triggerNotification(
-        'Ongeldig bestandstype.',
+        'Ongeldig bestandstype',
         'error'
       );
       return;
     }
 
-    // Validate file size (max 5 MB)
-    const maxSize = 5 * 1024 * 1024; // 5 MB
+    // Validate file size (max 2 MB)
+    const maxSize = 2 * 1024 * 1024; // 5 MB
     if (file.size > maxSize) {
       triggerNotification(
-        'Bestand is te groot.',
+        'Bestand is te groot',
         'error'
       );
       return;
@@ -61,7 +61,7 @@ const BannerUploadComponent = () => {
 
       // After successful upload, update the bannerUrl to trigger re-render
       setBannerUrl(bannerImageUrl + '?' + new Date().getTime()); // Add timestamp to prevent caching
-      triggerNotification('Afbeelding succesvol geüpload.', 'success');
+      triggerNotification('Afbeelding geüpload', 'success');
     } catch (error) {
       console.error('Error uploading image:', error);
 
@@ -72,7 +72,7 @@ const BannerUploadComponent = () => {
         );
       } else {
         triggerNotification(
-          'Fout bij uploaden. Probeer het alstublieft opnieuw.',
+          'Fout bij uploaden',
           'error'
         );
       }
@@ -208,7 +208,7 @@ const BannerUploadComponent = () => {
 
       {/* Instruction Text */}
       <p className="upload-instructions">
-        Upload uw bestand in dit vak. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan. (max. 5mb)
+        Upload uw bestand in dit vak. Alleen .png, .jpg en .webp afbeeldingen zijn toegestaan. (max. 2mb)
       </p>
 
       {isLoading ? (
