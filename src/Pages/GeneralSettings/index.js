@@ -61,7 +61,7 @@ const Settings = () => {
           </div>
 
           <div className="form-group">
-            <label>Max gasten online boeking</label>
+            <label>Max. Aantal gasten online boeking</label>
             <div className="input-container">
               <input
                 type="number"
@@ -74,7 +74,7 @@ const Settings = () => {
           </div>
 
           <div className="form-group">
-            <label>Duur reservatie (min)</label>
+            <label>Duur Reservatie (min)</label>
             <div className="input-container">
               <input
                 type="number"
