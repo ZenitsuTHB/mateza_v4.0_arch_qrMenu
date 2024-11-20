@@ -1,5 +1,3 @@
-// src/components/EmailSettings/EmailSettingsTabs.jsx
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import './css/emailSettings.css';
@@ -130,7 +128,7 @@ const EmailSettingsTabs = () => {
           <div className="email-settings-grid">
             {/* Email Preview */}
             <div className="preview-container">
-              <EmailPreview settings={settings} />
+              <EmailPreview settings={settings} handleChange={handleChange} />
             </div>
 
             {/* Settings Form */}

@@ -1,8 +1,6 @@
-// src/components/EmailSettings/EmailPreview.jsx
+import React, { useState, useEffect, useRef } from 'react';
 
-import React from 'react';
-
-const EmailPreview = ({ settings }) => {
+const EmailPreview = ({ settings, handleChange }) => {
   // Sample data for placeholders
   const sampleData = {
     firstName: 'Jan',
@@ -22,6 +20,115 @@ const EmailPreview = ({ settings }) => {
       month: 'long',
       year: 'numeric',
     });
+  };
+
+  // EditableText component
+  const EditableText = ({
+    value,
+    name,
+    handleChange,
+    element: Element = 'span',
+    className = '',
+    style = {},
+    inputType = 'input', // 'input' or 'textarea'
+  }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [localValue, setLocalValue] = useState(value);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+      setLocalValue(value);
+    }, [value]);
+
+    useEffect(() => {
+      if (isEditing && inputRef.current) {
+        inputRef.current.focus();
+        if (inputType !== 'textarea') {
+          inputRef.current.setSelectionRange(
+            inputRef.current.value.length,
+            inputRef.current.value.length
+          );
+        }
+      }
+    }, [isEditing]);
+
+    const handleBlur = () => {
+      setIsEditing(false);
+      handleChange({
+        target: { name, value: localValue },
+      });
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' && inputType !== 'textarea') {
+        handleBlur();
+      }
+    };
+
+    const handleClick = () => {
+      setIsEditing(true);
+    };
+
+    const grayBoxStyle = {
+      border: '1px dashed gray',
+      borderRadius: '8px',
+      padding: '2px',
+      display: 'inline-block',
+      cursor: 'text',
+    };
+
+    const inputStyle = {
+      ...style,
+      border: 'none',
+      outline: 'none',
+      background: 'none',
+      padding: '0',
+      margin: '0',
+      width: 'auto',
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      color: 'inherit',
+    };
+
+    return (
+      <span style={grayBoxStyle}>
+        {isEditing ? (
+          inputType === 'textarea' ? (
+            <textarea
+              ref={inputRef}
+              name={name}
+              value={localValue}
+              onChange={(e) => setLocalValue(e.target.value)}
+              onBlur={handleBlur}
+              className={className}
+              style={inputStyle}
+              rows={1}
+            />
+          ) : (
+            <input
+              ref={inputRef}
+              type="text"
+              name={name}
+              value={localValue}
+              onChange={(e) => setLocalValue(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              className={className}
+              style={inputStyle}
+              size={Math.max(localValue.length + 1, 1)}
+            />
+          )
+        ) : (
+          <Element
+            className={className}
+            style={{ ...style, display: 'inline' }}
+            onClick={handleClick}
+          >
+            {localValue}
+          </Element>
+        )}
+      </span>
+    );
   };
 
   return (
@@ -60,7 +167,7 @@ const EmailPreview = ({ settings }) => {
           .sender-info {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Align items to the start (left) */
+            align-items: flex-start;
             margin-bottom: 20px;
             width: 100%;
           }
@@ -142,8 +249,21 @@ const EmailPreview = ({ settings }) => {
 
           .email-preview-container .email-footer img {
             display: block;
-            margin: 0 auto; /* Center the logo */
+            margin: 0 auto;
             vertical-align: middle;
+          }
+
+          /* Editable Input Styles */
+          .email-preview-container input,
+          .email-preview-container textarea {
+            border: none;
+            outline: none;
+            background: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            width: auto;
+            resize: none;
           }
         `}
       </style>
@@ -152,55 +272,95 @@ const EmailPreview = ({ settings }) => {
       <div className="sender-info">
         <div className="info-box">
           <span className="label">Verzender:</span>
-          <span className="value">{settings.groetNaam || 'Het Team'}</span>
+          <span className="value">
+            {settings.groetNaam || 'Het Team'}
+          </span>
         </div>
-		<div className="info-box">
+        <div className="info-box">
           <span className="label">Email:</span>
           <span className="value">bevestiging@reservaties.net</span>
         </div>
         <div className="info-box">
           <span className="label">Antwoord naar:</span>
-          <span className="value">{settings.antwoordEmail || 'noreply@example.com'}</span>
+          <span className="value">
+            {settings.antwoordEmail || 'noreply@example.com'}
+          </span>
         </div>
       </div>
 
-<div className='email-preview-container-small'>
-      <div className="email-body">
-        {/* Start Greeting */}
-		<h2>
-		{settings.startGreeting || 'Beste'} {sampleData.firstName},
-		</h2>
+      <div className="email-preview-container-small">
+        <div className="email-body">
+          {/* Start Greeting */}
+          <h2>
+            <EditableText
+              value={settings.startGreeting || 'Beste'}
+              name="startGreeting"
+              handleChange={handleChange}
+              element="span"
+              className=""
+              style={{ color: '#FB5B86', fontSize: '24px' }}
+            />{' '}
+            {sampleData.firstName},
+          </h2>
 
-        <p>
-          Uw reservatie is bevestigd voor{' '}
-          <strong>{formatDate(sampleData.date)}</strong> om{' '}
-          <strong>{sampleData.time}</strong>.
-        </p>
-
-        {/* Email Content */}
-        <p>
-          {settings.emailInhoud ||
-            'Wij kijken ernaar uit om u te verwelkomen en hopen dat u een fijne tijd zult hebben.'}
-        </p>
-
-        {/* Reservation Edit Link */}
-        {settings.reservatieBewerken === 'Reservatie Bewerken Toestaan' && (
           <p>
-            U kunt uw reservatie bewerken via de volgende link:{' '}
-            <a
-              href={`https://edit.reservaties.net?reservationId=${sampleData.reservationId}`}
-            >
-              Reservatie Bewerken
-            </a>
+            Uw reservatie is bevestigd voor{' '}
+            <strong>{formatDate(sampleData.date)}</strong> om{' '}
+            <strong>{sampleData.time}</strong>.
           </p>
-        )}
 
-		        {/* End Greeting */}
-        <p>{settings.endGreeting || 'Met vriendelijke groeten,'}</p>
-        <p>
-          <strong>{settings.groetNaam || 'Het Team'}</strong>
-        </p>
-      </div>
+          {/* Email Content */}
+          <p>
+            <EditableText
+              value={
+                settings.emailInhoud ||
+                'Wij kijken ernaar uit om u te verwelkomen en hopen dat u een fijne tijd zult hebben.'
+              }
+              name="emailInhoud"
+              handleChange={handleChange}
+              element="span"
+              inputType="textarea"
+              className=""
+              style={{ fontSize: '16px', lineHeight: '1.5' }}
+            />
+          </p>
+
+          {/* Reservation Edit Link */}
+          {settings.reservatieBewerken === 'Reservatie Bewerken Toestaan' && (
+            <p>
+              U kunt uw reservatie bewerken via de volgende link:{' '}
+              <a
+                href={`https://edit.reservaties.net?reservationId=${sampleData.reservationId}`}
+              >
+                Reservatie Bewerken
+              </a>
+            </p>
+          )}
+
+          {/* End Greeting */}
+          <p>
+            <EditableText
+              value={settings.endGreeting || 'Met vriendelijke groeten,'}
+              name="endGreeting"
+              handleChange={handleChange}
+              element="span"
+              className=""
+              style={{}}
+            />
+          </p>
+          <p>
+            <strong>
+              <EditableText
+                value={settings.groetNaam || 'Het Team'}
+                name="groetNaam"
+                handleChange={handleChange}
+                element="span"
+                className=""
+                style={{}}
+              />
+            </strong>
+          </p>
+        </div>
 
         {/* Reservation Table */}
         {settings.toonTabel === 'Toon tabel' && (
@@ -241,21 +401,19 @@ const EmailPreview = ({ settings }) => {
           </>
         )}
 
-
-
-      {/* Email Footer */}
-      <div className="email-footer">
-        <p>
-          <a href="https://mateza.be">
-            <img
-              src="https://static.reservaties.net/images/logo/logo.png"
-              alt="Mateza Logo"
-              style={{ width: '35px', height: '35px' }}
-            />
-          </a>
-        </p>
+        {/* Email Footer */}
+        <div className="email-footer">
+          <p>
+            <a href="https://mateza.be">
+              <img
+                src="https://static.reservaties.net/images/logo/logo.png"
+                alt="Mateza Logo"
+                style={{ width: '35px', height: '35px' }}
+              />
+            </a>
+          </p>
+        </div>
       </div>
-	  </div>
     </div>
   );
 };
