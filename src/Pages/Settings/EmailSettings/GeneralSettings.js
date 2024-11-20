@@ -1,6 +1,33 @@
 import React from 'react';
 
 const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
+  // Default options for Start Greeting
+  const startGreetingOptions = [
+    'Dag',
+    'Hallo',
+    'Hey',
+    'Beste',
+    'Geachte',
+  ];
+
+  // Default options for End Greeting
+  const endGreetingOptions = [
+    'Met vriendelijke groeten,',
+    'Hartelijk bedankt,',
+    'Tot snel!',
+    'Warme groeten,',
+  ];
+
+  // Check if the current startGreeting is among the default options
+  const isStartGreetingInOptions = startGreetingOptions.includes(
+    settings.startGreeting
+  );
+
+  // Check if the current endGreeting is among the default options
+  const isEndGreetingInOptions = endGreetingOptions.includes(
+    settings.endGreeting
+  );
+
   return (
     <form className="settings-form" onSubmit={handleSave} noValidate>
       {/* Naam Verstuurder */}
@@ -43,11 +70,16 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
             onChange={handleChange}
             required
           >
-            <option value="Dag">Dag</option>
-            <option value="Hallo">Hallo</option>
-            <option value="Hey">Hey</option>
-            <option value="Beste">Beste</option>
-            <option value="Geachte">Geachte</option>
+            {startGreetingOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+            {!isStartGreetingInOptions && (
+              <option value={settings.startGreeting}>
+                {settings.startGreeting}
+              </option>
+            )}
           </select>
         </div>
       </div>
@@ -80,12 +112,16 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
             onChange={handleChange}
             required
           >
-            <option value="Met vriendelijke groeten,">
-              Met vriendelijke groeten,
-            </option>
-            <option value="Hartelijk bedankt,">Hartelijk bedankt,</option>
-            <option value="Tot snel!">Tot snel!</option>
-            <option value="Warme groeten,">Warme groeten,</option>
+            {endGreetingOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+            {!isEndGreetingInOptions && (
+              <option value={settings.endGreeting}>
+                {settings.endGreeting}
+              </option>
+            )}
           </select>
         </div>
       </div>
