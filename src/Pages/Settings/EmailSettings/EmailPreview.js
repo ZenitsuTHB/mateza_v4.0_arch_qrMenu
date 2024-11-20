@@ -1,3 +1,5 @@
+// src/components/EmailSettings/EmailPreview.jsx
+
 import React from 'react';
 
 const EmailPreview = ({ settings }) => {
@@ -51,6 +53,30 @@ const EmailPreview = ({ settings }) => {
             padding: 20px;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+          }
+
+          /* Email Header Styles */
+          .email-preview-container .email-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-bottom: 20px;
+          }
+
+          .email-preview-container .email-header .email-header-item {
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #777777;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .email-preview-container .email-header .email-header-item span:last-child {
+            font-weight: bold;
+            color: #333333;
           }
 
           /* Email Body Styles */
@@ -111,6 +137,18 @@ const EmailPreview = ({ settings }) => {
           }
         `}
       </style>
+
+      {/* Email Header */}
+      <div className="email-header">
+        <div className="email-header-item">
+          <span>Naam Verstuurder:</span>
+          <span>{settings.groetNaam || 'Het Team'}</span>
+        </div>
+        <div className="email-header-item">
+          <span>Antwoordadres:</span>
+          <span>{settings.antwoordEmail || 'noreply@example.com'}</span>
+        </div>
+      </div>
 
       <div className="email-body">
         {/* Start Greeting */}
