@@ -28,6 +28,7 @@ const Login = () => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('loginSuccessful', true);
+        localStorage.setItem('username', username);
 
         // Set the JWT as a cookie based on the environment
         const cookieDomain = window.isProduction ? '.reservaties.net' : 'localhost';

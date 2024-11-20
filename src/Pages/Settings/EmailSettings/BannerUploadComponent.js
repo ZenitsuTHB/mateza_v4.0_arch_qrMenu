@@ -6,8 +6,9 @@ import { FaImage } from 'react-icons/fa';
 
 const BannerUploadComponent = () => {
   const [bannerUrl, setBannerUrl] = useState('');
+  const restaurantId = localStorage.getItem('username');
   const bannerImageUrl =
-    'https://mateza-cloud-storage.ams3.digitaloceanspaces.com/banner/thibault';
+    `https://mateza-cloud-storage.ams3.digitaloceanspaces.com/email/banner/${restaurantId}`;
   const [isDragging, setIsDragging] = useState(false);
   const api = useApi();
   const fileInputRef = useRef(null);
