@@ -1,23 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './css/generalSettings.css';
 import { withHeader } from '../../../Components/Structural/Header';
+import useApi from '../../../Hooks/useApi';
+import useNotification from '../../../Components/Notification';
 
 const Settings = () => {
-  // State variables for the initial settings
-  const [zitplaatsen, setZitplaatsen] = useState(0);
-  const [uurOpVoorhand, setUurOpVoorhand] = useState(0);
-  const [dagenInToekomst, setDagenInToekomst] = useState(0);
-  const [maxGasten, setMaxGasten] = useState(0);
-  const [duurReservatie, setDuurReservatie] = useState(0);
+  const api = useApi();
+  const { triggerNotification, NotificationComponent } = useNotification();
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    // Implement save functionality here
-    alert('Instellingen opgeslagen!');
+  const defaultSettings = {
+    zitplaatsen: 0,
+    uurOpVoorhand: 0,
+    dagenInToekomst: 0,
+    maxGasten: 0,
+    duurReservatie: 0,
   };
+
+  const [settings, setSettings] = useState(defaultSettings);
+  const [initialSettings, setInitialSettings] = useState(defaultSettings);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
+        const data = response || {};
+        const mergedData = { ...defaultSettings, ...data };
+        setSettings(mergedData);
+        setInitialSettings(mergedData);
+      } catch (err) {
+        console.error('Error fetching general settings:', err);
+        triggerNotification('Fout bij het ophalen van instellingen.', 'error');
+        setSettings(defaultSettings);
+        setInitialSettings(defaultSettings);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, [api]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSettings((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      await api.put(window.baseDomain + 'api/general-settings', settings);
+      triggerNotification('Instellingen opgeslagen!', 'success');
+      setInitialSettings(settings);
+    } catch (err) {
+      console.error('Error saving general settings:', err);
+      triggerNotification('Fout bij het opslaan van instellingen.', 'error');
+    }
+  };
+
+  const isDirty = useMemo(
+    () => JSON.stringify(settings) !== JSON.stringify(initialSettings),
+    [settings, initialSettings]
+  );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="general-settings-page">
+      <NotificationComponent />
       <h2 className="settings-title">Beheer Reservaties</h2>
       <div className="settings-container">
         <form className="settings-form" onSubmit={handleSave} noValidate>
@@ -28,8 +83,8 @@ const Settings = () => {
                 type="number"
                 name="zitplaatsen"
                 placeholder="Zitplaatsen"
-                value={zitplaatsen}
-                onChange={(e) => setZitplaatsen(e.target.value)}
+                value={settings.zitplaatsen}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -41,8 +96,8 @@ const Settings = () => {
                 type="number"
                 name="uurOpVoorhand"
                 placeholder="Hoeveel uur op voorhand"
-                value={uurOpVoorhand}
-                onChange={(e) => setUurOpVoorhand(e.target.value)}
+                value={settings.uurOpVoorhand}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -54,8 +109,8 @@ const Settings = () => {
                 type="number"
                 name="dagenInToekomst"
                 placeholder="Hoeveel dagen in de toekomst"
-                value={dagenInToekomst}
-                onChange={(e) => setDagenInToekomst(e.target.value)}
+                value={settings.dagenInToekomst}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -67,8 +122,8 @@ const Settings = () => {
                 type="number"
                 name="maxGasten"
                 placeholder="Max gasten online boeking"
-                value={maxGasten}
-                onChange={(e) => setMaxGasten(e.target.value)}
+                value={settings.maxGasten}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -80,13 +135,13 @@ const Settings = () => {
                 type="number"
                 name="duurReservatie"
                 placeholder="Duur reservatie"
-                value={duurReservatie}
-                onChange={(e) => setDuurReservatie(e.target.value)}
+                value={settings.duurReservatie}
+                onChange={handleChange}
               />
             </div>
           </div>
 
-          <button type="submit" className="settings-button">
+          <button type="submit" className="settings-button" disabled={!isDirty}>
             Opslaan
           </button>
         </form>
