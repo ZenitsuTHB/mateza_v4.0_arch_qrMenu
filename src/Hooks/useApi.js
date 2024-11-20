@@ -79,7 +79,14 @@ const useApi = () => {
             Authorization: `Bearer ${getJwtToken()}`,
           },
         });
-        log('Received response for GET:', endpoint, 'Status:', response.status, 'Data:', response.data);
+        log(
+          'Received response for GET:',
+          endpoint,
+          'Status:',
+          response.status,
+          'Data:',
+          response.data
+        );
 
         if (!noCache) {
           localStorage.setItem(
@@ -97,11 +104,9 @@ const useApi = () => {
         console.error('Error fetching data:', error);
 
         if (error.response && error.response.status === 403) {
-          // Clear user session data
           localStorage.removeItem('accessToken');
           localStorage.setItem('loginSuccessful', 'false');
           log('403 Forbidden: Redirecting to login.');
-          // Redirect to login page
           window.location.href = '/login';
         }
 
@@ -127,9 +132,36 @@ const useApi = () => {
 
       try {
         const storedNumber = updateStoredNumber();
-        const modifiedData = { ...data, storedNumber };
+        let modifiedData;
 
-        log(`${method} request to:`, endpoint, 'Data:', modifiedData, 'Config:', config);
+        if (data instanceof FormData) {
+          modifiedData = data;
+          // **Removed:** Do not append storedNumber to FormData
+          // If your server expects storedNumber, handle it differently
+        } else {
+          modifiedData = { ...data, storedNumber };
+        }
+
+        log(
+          `${method} request to:`,
+          endpoint,
+          'Data:',
+          modifiedData,
+          'Config:',
+          config
+        );
+
+        // Determine the Content-Type
+        let contentType = config.headers?.['Content-Type'];
+        if (!contentType) {
+          if (modifiedData instanceof FormData) {
+            // Let Axios set the Content-Type for FormData
+            contentType = undefined;
+          } else {
+            // Default to 'application/json' for other data types
+            contentType = 'application/json';
+          }
+        }
 
         const response = await axios({
           method,
@@ -138,11 +170,19 @@ const useApi = () => {
           ...config,
           headers: {
             ...config.headers,
+            ...(contentType && { 'Content-Type': contentType }),
             Authorization: `Bearer ${getJwtToken()}`,
           },
         });
 
-        log(`Received response for ${method}:`, endpoint, 'Status:', response.status, 'Data:', response.data);
+        log(
+          `Received response for ${method}:`,
+          endpoint,
+          'Status:',
+          response.status,
+          'Data:',
+          response.data
+        );
 
         const cacheKey = generateCacheKey(endpoint);
         localStorage.removeItem(cacheKey);
@@ -154,11 +194,9 @@ const useApi = () => {
         console.error(`Error with ${method} request:`, error);
 
         if (error.response && error.response.status === 403) {
-          // Clear user session data
           localStorage.removeItem('accessToken');
           localStorage.setItem('loginSuccessful', 'false');
           log(`${method} 403 Forbidden: Redirecting to login.`);
-          // Redirect to login page
           window.location.href = '/login';
         }
 

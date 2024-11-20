@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import BannerUploadComponent from './BannerUploadComponent';
 
 const EmailPreview = ({ settings, handleChange }) => {
   // Sample data for placeholders
@@ -290,6 +291,8 @@ const EmailPreview = ({ settings, handleChange }) => {
 
       <div className="email-preview-container-small">
         <div className="email-body">
+
+		<BannerUploadComponent />
           {/* Start Greeting */}
           <h2>
             <EditableText

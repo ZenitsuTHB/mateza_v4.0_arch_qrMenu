@@ -124,13 +124,7 @@
 	background-color: #0056b3;
   }
   
-  .label-small {
-	font-size: 0.9em;
-	color: #777;
-	margin-top: -5px;
-	margin-bottom: 10px;
-  }
-  
+
   /* Updated Styles for Meldingen Tab */
   .meldingen-container {
 	display: flex;

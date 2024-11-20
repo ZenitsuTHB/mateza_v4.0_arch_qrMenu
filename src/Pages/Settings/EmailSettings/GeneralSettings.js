@@ -87,10 +87,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
       {/* Email Inhoud */}
       <div className="form-group">
         <label>Email Inhoud</label>
-        <br></br>
-        <label className="label-small">
-          Vanwege de GDPR zijn promoties verboden in dit soort mails*
-        </label>
         <div className="input-container">
           <textarea
             name="emailInhoud"
