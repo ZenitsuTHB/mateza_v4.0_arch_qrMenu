@@ -7,7 +7,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
     <form className="settings-form" onSubmit={handleSave} noValidate>
       {/* Naam Verstuurder */}
       <div className="form-group">
-        <label>Naam Verstuurder</label>
+        <label>Naam</label>
         <div className="input-container">
           <input
             type="text"
@@ -22,7 +22,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
 
       {/* Antwoorden Doorsturen naar Email */}
       <div className="form-group">
-        <label>Antwoorden Doorsturen naar Email</label>
+        <label>Reply Antwoorden Naar</label>
         <div className="input-container">
           <input
             type="email"
@@ -57,6 +57,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
       {/* Email Inhoud */}
       <div className="form-group">
         <label>Email Inhoud</label>
+		<br></br>
         <label className="label-small">
           Vanwege de GDPR zijn promoties verboden in dit soort mails*
         </label>

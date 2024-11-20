@@ -44,7 +44,7 @@ const EmailPreview = ({ settings }) => {
           }
 
           /* Container Styles */
-          .email-preview-container {
+          .email-preview-container-small {
             max-width: 800px;
             width: 100%;
             margin: 0 auto;
@@ -60,20 +60,32 @@ const EmailPreview = ({ settings }) => {
           .sender-info {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-start; /* Align items to the start (left) */
             margin-bottom: 20px;
             width: 100%;
           }
 
           .sender-info .info-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border: 1px solid #cccccc;
             border-radius: 5px;
             padding: 10px 15px;
             color: #666666;
             margin-bottom: 10px;
-            text-align: right;
             width: 100%;
             background-color: #f5f5f5;
+          }
+
+          .sender-info .info-box .label {
+            font-weight: bold;
+            color: #333333;
+          }
+
+          .sender-info .info-box .value {
+            font-weight: normal;
+            text-align: right;
           }
 
           /* Email Body Styles */
@@ -129,7 +141,8 @@ const EmailPreview = ({ settings }) => {
           }
 
           .email-preview-container .email-footer img {
-            display: inline-block;
+            display: block;
+            margin: 0 auto; /* Center the logo */
             vertical-align: middle;
           }
         `}
@@ -138,18 +151,25 @@ const EmailPreview = ({ settings }) => {
       {/* Sender Info */}
       <div className="sender-info">
         <div className="info-box">
-          Verzender: {settings.groetNaam || 'Het Team'}
+          <span className="label">Verzender:</span>
+          <span className="value">{settings.groetNaam || 'Het Team'}</span>
+        </div>
+		<div className="info-box">
+          <span className="label">Email:</span>
+          <span className="value">bevestiging@reservaties.net</span>
         </div>
         <div className="info-box">
-          Antwoord naar: {settings.antwoordEmail || 'noreply@example.com'}
+          <span className="label">Antwoord naar:</span>
+          <span className="value">{settings.antwoordEmail || 'noreply@example.com'}</span>
         </div>
       </div>
 
+<div className='email-preview-container-small'>
       <div className="email-body">
         {/* Start Greeting */}
-        <h2>
-          {settings.startGreeting || 'Beste'} {sampleData.firstName},
-        </h2>
+		<h2>
+		{settings.startGreeting || 'Beste'} {sampleData.firstName},
+		</h2>
 
         <p>
           Uw reservatie is bevestigd voor{' '}
@@ -174,6 +194,13 @@ const EmailPreview = ({ settings }) => {
             </a>
           </p>
         )}
+
+		        {/* End Greeting */}
+        <p>{settings.endGreeting || 'Met vriendelijke groeten,'}</p>
+        <p>
+          <strong>{settings.groetNaam || 'Het Team'}</strong>
+        </p>
+      </div>
 
         {/* Reservation Table */}
         {settings.toonTabel === 'Toon tabel' && (
@@ -214,22 +241,10 @@ const EmailPreview = ({ settings }) => {
           </>
         )}
 
-        {/* End Greeting */}
-        <p>{settings.endGreeting || 'Met vriendelijke groeten,'}</p>
-        <p>
-          <strong>{settings.groetNaam || 'Het Team'}</strong>
-        </p>
-      </div>
+
 
       {/* Email Footer */}
       <div className="email-footer">
-        <p>
-          Uw restaurant zorgt voor het{' '}
-          <span style={{ color: '#FB5B86' }}>eten</span>, Mateza voor de{' '}
-          <span style={{ color: '#FB5B86' }}>IT</span>.
-        </p>
-        <p>20% van onze winst gaat naar Alzheimer onderzoek. Bedankt! 😊</p>
-        <p>Mateza. Belgische IT voor Belgische restaurants. ❤️</p>
         <p>
           <a href="https://mateza.be">
             <img
@@ -240,6 +255,7 @@ const EmailPreview = ({ settings }) => {
           </a>
         </p>
       </div>
+	  </div>
     </div>
   );
 };
