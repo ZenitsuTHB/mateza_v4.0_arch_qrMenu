@@ -91,6 +91,8 @@ const Settings = () => {
                 placeholder="Zitplaatsen"
                 value={settings.zitplaatsen}
                 onChange={handleChange}
+                min="0"
+                max="10000"
               />
             </div>
           </div>
@@ -113,6 +115,8 @@ const Settings = () => {
                 placeholder="Hoeveel uur op voorhand"
                 value={settings.uurOpVoorhand}
                 onChange={handleChange}
+                min="0"
+                max="400"
               />
             </div>
           </div>
@@ -135,6 +139,8 @@ const Settings = () => {
                 placeholder="Hoeveel dagen in de toekomst"
                 value={settings.dagenInToekomst}
                 onChange={handleChange}
+                min="0"
+                max="400"
               />
             </div>
           </div>
@@ -157,6 +163,9 @@ const Settings = () => {
                 placeholder="Max gasten online boeking"
                 value={settings.maxGasten}
                 onChange={handleChange}
+                min="0"
+                max="1000"
+                step="1"
               />
             </div>
           </div>
@@ -179,6 +188,9 @@ const Settings = () => {
                 placeholder="Duur reservatie"
                 value={settings.duurReservatie}
                 onChange={handleChange}
+                min="5"
+                max="10000"
+                step="1"
               />
             </div>
           </div>
