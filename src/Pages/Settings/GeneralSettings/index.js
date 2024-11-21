@@ -14,7 +14,7 @@ const Settings = () => {
     uurOpVoorhand: 0,
     dagenInToekomst: 0,
     maxGasten: 0,
-    duurReservatie: 0,
+    intervalReservatie: 0,
     showNoticeForMaxGuests: 'Nee', // New field
     noticePhoneNumber: '',         // New field
   };
@@ -29,12 +29,12 @@ const Settings = () => {
         const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
         const data = response || {};
 
-        // Ensure duurReservatie is a number
+        // Ensure intervalReservatie is a number
         const mergedData = { 
           ...defaultSettings, 
           ...data,
           dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
-          duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie,
+          intervalReservatie: data.intervalReservatie !== undefined ? Number(data.intervalReservatie) : defaultSettings.intervalReservatie,
         };
 
         setSettings(mergedData);
@@ -56,7 +56,7 @@ const Settings = () => {
     const { name, value } = e.target;
     let parsedValue = value;
 
-    if (name === 'duurReservatie' || 'dagenInToekomst') {
+    if (name === 'intervalReservatie' || 'dagenInToekomst') {
       parsedValue = value === '' ? '' : Number(value);
       if (isNaN(parsedValue)) {
         parsedValue = 0; // Default or handle as needed
@@ -168,20 +168,20 @@ const Settings = () => {
           {/* Duur Reservatie (min) */}
           <div className="form-group">
             <div className="label-with-tooltip">
-              <label>Duur Reservatie (min)</label>
+              <label>Interval Reservatie (min)</label>
               <div className="button-with-tooltip">
                 <FaInfoCircle />
                 <div className="tooltip">
-                  De standaard duur van een reservering in minuten.
+                  Het interval tussen reservaties.
                 </div>
               </div>
             </div>
             <div className="input-container">
               <input
                 type="number"
-                name="duurReservatie"
+                name="intervalReservatie"
                 placeholder="Duur reservatie"
-                value={settings.duurReservatie}
+                value={settings.intervalReservatie}
                 onChange={handleChange}
                 min="5"
                 max="10000"

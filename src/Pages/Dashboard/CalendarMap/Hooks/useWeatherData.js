@@ -4,13 +4,22 @@ import useApi from '../../../../Hooks/useApi';
 // Global cache for session-based storage
 const weatherDataCache = {}; // dateString => temperature
 
+const formatDateForFilter = (date) => {
+  if (!date) return '';
+  const year = date.getFullYear();
+  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
+  const day = (`0${date.getDate()}`).slice(-2);
+  return `${year}-${month}-${day}`;
+  };
+
+
 const useWeatherData = (startDate, endDate, fetchWeather) => {
   const [weatherDataByDate, setWeatherDataByDate] = useState({});
   const api = useApi();
 
   // Convert dates to strings outside useEffect to use in dependencies
-  const startDateString = startDate.toISOString().split('T')[0];
-  const endDateString = endDate.toISOString().split('T')[0];
+  const startDateString = formatDateForFilter(startDate);
+  const endDateString = formatDateForFilter(endDate);
 
   useEffect(() => {
     if (!fetchWeather) {

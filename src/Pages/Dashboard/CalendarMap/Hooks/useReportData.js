@@ -5,6 +5,7 @@ import {
   calculateMedian,
   calculateAverage,
 } from '../Utils/reportUtils';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 /**
  * Custom hook to generate report data and calculate statistics.
@@ -15,6 +16,8 @@ import {
  * @param {Boolean} autoGenerate - Flag to auto-generate report.
  * @returns {Object} - Contains report data, statistics, and loading state.
  */
+
+
 const useReportData = (dates, reservationsByDate, selectedShift, autoGenerate) => {
   const [reportGenerated, setReportGenerated] = useState(autoGenerate);
   const [loading, setLoading] = useState(false);
@@ -43,7 +46,7 @@ const useReportData = (dates, reservationsByDate, selectedShift, autoGenerate) =
     let totalGuestsTemp = 0; // Total guests over the period
 
     dates.forEach(({ date }) => {
-      const dateString = date.toISOString().split('T')[0];
+      const dateString = formatDateForFilter(dateString);
       const reservations = reservationsByDate[dateString] || [];
       let dayTotal = 0;
       let shiftTotals = [0, 0, 0];

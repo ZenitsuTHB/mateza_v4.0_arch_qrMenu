@@ -5,6 +5,7 @@ import './css/weekReport.css';
 import { motion } from 'framer-motion';
 import useReportData from './Hooks/useReportData';
 import { getDutchDayName, statLabels } from './Utils/reportUtils';
+import { formatDateForFilter } from '../../../Utils/dateUtils';
 
 // Define the available shifts
 const shifts = [
@@ -30,7 +31,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
   // Calculate total guests by shift
   const totalGuestsByShift = [0, 0, 0]; // [Morning, Afternoon, Evening]
   dates.forEach(({ date }) => {
-    const dateString = date.toISOString().split('T')[0];
+    const dateString = formatDateForFilter(date)
     const reservations = reservationsByDate[dateString] || [];
 
     reservations.forEach((reservation) => {
@@ -110,7 +111,7 @@ const WeekReport = ({ dates, reservationsByDate, selectedShift, autoGenerate = f
             </thead>
             <tbody>
               {dates.map(({ date }, index) => {
-                const dateString = date.toISOString().split('T')[0];
+                const dateString = formatDateForFilter(date);
                 const reservations = reservationsByDate[dateString] || [];
                 let dayTotal = 0;
                 let shiftTotals = [0, 0, 0];

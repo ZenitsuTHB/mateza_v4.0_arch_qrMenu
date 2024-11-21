@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getMonday } from '../Utils/dateUtils';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 const timeSlotNames = ['Ochtend', 'Middag', 'Avond'];
 const timeSlotColors = ['#182825', '#016FB9', '#22AED1'];
@@ -49,7 +50,7 @@ const useChartData = ({
       const data = []; // Corrected: use 'data' array to store temperature values
 
       dateArray.forEach((date) => {
-        const dateString = date.toISOString().split('T')[0];
+        const dateString = formatDateForFilter(date);
         labels.push(
           weekOrMonthView === 'month'
             ? date.getDate()
@@ -76,7 +77,7 @@ const useChartData = ({
       const dataByTimeSlot = [[], [], []];
 
       dateArray.forEach((date) => {
-        const dateString = date.toISOString().split('T')[0];
+        const dateString = formatDateForFilter(date);
         labels.push(
           weekOrMonthView === 'month'
             ? date.getDate()
@@ -106,7 +107,7 @@ const useChartData = ({
       const data = [];
 
       dateArray.forEach((date) => {
-        const dateString = date.toISOString().split('T')[0];
+        const dateString = formatDateForFilter(date);
         labels.push(
           weekOrMonthView === 'month'
             ? date.getDate()
