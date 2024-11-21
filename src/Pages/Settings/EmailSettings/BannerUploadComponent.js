@@ -41,7 +41,7 @@ const BannerUploadComponent = () => {
     }
 
     // Validate file size (max 2 MB)
-    const maxSize = 2 * 1024 * 1024; // 5 MB
+    const maxSize = 2 * 1024 * 1024; // 2 MB
     if (file.size > maxSize) {
       triggerNotification(
         'Bestand is te groot',
