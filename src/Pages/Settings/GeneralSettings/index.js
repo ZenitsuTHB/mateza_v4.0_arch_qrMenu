@@ -15,6 +15,8 @@ const Settings = () => {
     dagenInToekomst: 0,
     maxGasten: 0,
     duurReservatie: 0,
+    showNoticeForMaxGuests: 'Nee', // New field
+    noticePhoneNumber: '',         // New field
   };
 
   const [settings, setSettings] = useState(defaultSettings);
@@ -194,6 +196,52 @@ const Settings = () => {
               />
             </div>
           </div>
+
+          {/* Show Notice for Exceeding Max Guests */}
+          <div className="form-group">
+            <div className="label-with-tooltip">
+              <label>Vraag om te Bellen bij Meer Gasten</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Wanneer iemand een groter aantal gasten kiest dan bepaald in het bovenstaande veld kan u vragen om te bellen.
+                </div>
+              </div>
+            </div>
+            <div className="input-container">
+              <select
+                name="showNoticeForMaxGuests"
+                value={settings.showNoticeForMaxGuests}
+                onChange={handleChange}
+              >
+                <option value="Ja">Ja</option>
+                <option value="Nee">Nee</option>
+              </select>
+            </div>
+          </div>
+
+          {settings.showNoticeForMaxGuests === 'Ja' && (
+            <div className="form-group">
+              <div className="label-with-tooltip">
+                <label>Telefoonnummer</label>
+                <div className="button-with-tooltip">
+                  <FaInfoCircle />
+                  <div className="tooltip">
+                    Het telefoonnummer dat wordt getoond in de melding die vraagt om te bellen voor uitgebreidere reservaties.
+                  </div>
+                </div>
+              </div>
+              <div className="input-container">
+                <input
+                  type="text"
+                  name="noticePhoneNumber"
+                  placeholder="Telefoonnummer"
+                  value={settings.noticePhoneNumber}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          )}
 
           <button type="submit" className="settings-button" disabled={!isDirty}>
             Opslaan
