@@ -148,29 +148,6 @@ const Settings = () => {
           </div>
 
           {/* Max. Aantal gasten online boeking */}
-          <div className="form-group">
-            <div className="label-with-tooltip">
-              <label>Max. Aantal gasten online boeking</label>
-              <div className="button-with-tooltip">
-                <FaInfoCircle />
-                <div className="tooltip">
-                  Het maximale aantal gasten per online reservering.
-                </div>
-              </div>
-            </div>
-            <div className="input-container">
-              <input
-                type="number"
-                name="maxGasten"
-                placeholder="Max gasten online boeking"
-                value={settings.maxGasten}
-                onChange={handleChange}
-                min="0"
-                max="1000"
-                step="1"
-              />
-            </div>
-          </div>
 
           {/* Duur Reservatie (min) */}
           <div className="form-group">
@@ -197,8 +174,32 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Show Notice for Exceeding Max Guests */}
           <div className="form-group">
+            <div className="label-with-tooltip">
+              <label>Max. Aantal Gasten per Online Boeking</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het maximale aantal gasten per online reservering.
+                </div>
+              </div>
+            </div>
+            <div className="input-container">
+              <input
+                type="number"
+                name="maxGasten"
+                placeholder="Max gasten online boeking"
+                value={settings.maxGasten}
+                onChange={handleChange}
+                min="0"
+                max="1000"
+                step="1"
+              />
+            </div>
+          </div>
+
+           {/* Show Notice for Exceeding Max Guests */}
+           <div className="form-group">
             <div className="label-with-tooltip">
               <label>Vraag om te Bellen bij Meer Gasten</label>
               <div className="button-with-tooltip">
@@ -242,6 +243,8 @@ const Settings = () => {
               </div>
             </div>
           )}
+
+         
 
           <button type="submit" className="settings-button" disabled={!isDirty}>
             Opslaan
