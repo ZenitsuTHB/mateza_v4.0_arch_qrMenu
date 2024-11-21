@@ -28,7 +28,14 @@ const Settings = () => {
       try {
         const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
         const data = response || {};
-        const mergedData = { ...defaultSettings, ...data };
+
+        // Ensure duurReservatie is a number
+        const mergedData = { 
+          ...defaultSettings, 
+          ...data,
+          duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie,
+        };
+
         setSettings(mergedData);
         setInitialSettings(mergedData);
       } catch (err) {
@@ -46,9 +53,18 @@ const Settings = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let parsedValue = value;
+
+    if (name === 'duurReservatie') {
+      parsedValue = value === '' ? '' : Number(value);
+      if (isNaN(parsedValue)) {
+        parsedValue = 0; // Default or handle as needed
+      }
+    }
+
     setSettings((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: parsedValue,
     }));
   };
 
@@ -147,8 +163,6 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Max. Aantal gasten online boeking */}
-
           {/* Duur Reservatie (min) */}
           <div className="form-group">
             <div className="label-with-tooltip">
@@ -174,6 +188,7 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Max. Aantal Gasten per Online Boeking */}
           <div className="form-group">
             <div className="label-with-tooltip">
               <label>Max. Aantal Gasten per Online Boeking</label>
@@ -198,8 +213,8 @@ const Settings = () => {
             </div>
           </div>
 
-           {/* Show Notice for Exceeding Max Guests */}
-           <div className="form-group">
+          {/* Show Notice for Exceeding Max Guests */}
+          <div className="form-group">
             <div className="label-with-tooltip">
               <label>Vraag om te Bellen bij Meer Gasten</label>
               <div className="button-with-tooltip">
@@ -243,8 +258,6 @@ const Settings = () => {
               </div>
             </div>
           )}
-
-         
 
           <button type="submit" className="settings-button" disabled={!isDirty}>
             Opslaan
