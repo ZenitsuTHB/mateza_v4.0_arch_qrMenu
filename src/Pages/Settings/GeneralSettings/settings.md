@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **General Reservation Settings** component is a React component that allows administrators to configure key reservation parameters for a restaurant. These settings include seat capacity, booking time constraints, maximum guests per reservation, and default reservation duration. This component interacts with an API to fetch and save settings, and it reflects changes in the user interface.
+The **General Reservation Settings** component is a React component that allows administrators to configure key reservation parameters for a restaurant. These settings include seat capacity, booking time constraints, maximum guests per reservation, default reservation duration, and notification preferences when exceeding guest limits. This component interacts with an API to fetch and save settings, and it reflects changes in the user interface.
 
 ---
 
@@ -122,6 +122,42 @@ The **General Reservation Settings** component is a React component that allows 
 }
 ```
 
+### 6. **Show Notice for Exceeding Maximum Guests (`showNoticeForMaxGuests`)**
+
+- **Description**: Determines whether a notice should be displayed to customers when they select a number of guests exceeding the maximum allowed for online bookings.
+- **Data Type**: String (`"Ja"` or `"Nee"`)
+- **Input Constraints**:
+  - Options: `"Ja"`, `"Nee"`
+- **Storage Location**:
+  - Stored under `general-settings.showNoticeForMaxGuests`.
+
+**Example**:
+
+```json
+"general-settings": {
+  "showNoticeForMaxGuests": "Nee",
+  // other settings...
+}
+```
+
+### 7. **Notice Phone Number (`noticePhoneNumber`)**
+
+- **Description**: The telephone number displayed in the notice when customers select more guests than allowed online.
+- **Data Type**: String
+- **Input Constraints**:
+  - Must be a valid telephone number format.
+- **Storage Location**:
+  - Stored under `general-settings.noticePhoneNumber`.
+
+**Example**:
+
+```json
+"general-settings": {
+  "noticePhoneNumber": "012-3456789",
+  // other settings...
+}
+```
+
 ---
 
 ## Data Structure and Storage
@@ -155,6 +191,8 @@ The general reservation settings are stored under the `general-settings` key in 
     "dagenInToekomst": "6",
     "maxGasten": "2",
     "duurReservatie": { "$numberInt": "0" },
+    "showNoticeForMaxGuests": "Nee",
+    "noticePhoneNumber": "",
     "storedNumber": { "$numberInt": "96" }
   },
   // other settings...
@@ -183,6 +221,8 @@ The general reservation settings are stored under the `general-settings` key in 
 Each setting is represented by an input field in the form, allowing the administrator to update its value.
 
 - **Number Inputs**: All inputs are of type `number`, ensuring that only numerical values can be entered.
+- **Text Inputs**: For fields like `noticePhoneNumber`, a text input is used to capture the telephone number.
+- **Select Boxes**: The `showNoticeForMaxGuests` field is represented by a dropdown selection box with options `"Ja"` and `"Nee"`.
 - **Placeholders**: Each input includes a placeholder that hints at the expected input.
 
 ### Labels and Tooltips
@@ -204,7 +244,7 @@ Each setting is represented by an input field in the form, allowing the administ
 - **`settings`**: Holds the current values of the settings being edited.
 - **`initialSettings`**: Stores the original settings fetched from the API for comparison.
 - **`loading`**: Indicates whether the settings are currently being fetched.
-  
+
 ### useEffect Hooks
 
 - **Fetching Settings**: Fetches settings from the API when the component mounts.
@@ -216,6 +256,7 @@ Each setting is represented by an input field in the form, allowing the administ
 
 - **Minimum and Maximum Values**: Each input field has `min` and `max` attributes to prevent invalid entries.
 - **Step Value**: The `step` attribute is set to `1` for integer inputs to avoid decimal values.
+- **Telephone Number Validation**: While not explicitly handled in the code, it's recommended to ensure that `noticePhoneNumber` follows a valid telephone number format.
 
 ---
 
@@ -301,11 +342,19 @@ Each setting is represented by an input field in the form, allowing the administ
    - Sets a default time slot for each reservation.
    - Important for table turnover and scheduling.
 
+6. **`showNoticeForMaxGuests` (Show Notice for Exceeding Maximum Guests)**
+   - **Impact**: When set to `"Ja"`, customers selecting more guests than the allowed maximum for online bookings will receive a notice prompting them to call the restaurant.
+   - **User Experience**: Enhances communication by informing customers of the need to call for larger reservations, ensuring better management of large groups.
+
+7. **`noticePhoneNumber` (Notice Phone Number)**
+   - **Impact**: Provides the specific telephone number customers should call when they exceed the maximum number of guests allowed for online bookings.
+   - **User Experience**: Streamlines the reservation process for larger parties by directing them to the appropriate contact method.
+
 ---
 
 ## Conclusion
 
-The General Reservation Settings component plays a crucial role in configuring how reservations are managed in the restaurant. By understanding each property's purpose and how it is stored in the data structure, administrators can effectively control the reservation process, ensuring a smooth experience for both the restaurant staff and customers.
+The General Reservation Settings component plays a crucial role in configuring how reservations are managed in the restaurant. By understanding each property's purpose and how it is stored in the data structure, administrators can effectively control the reservation process, ensuring a smooth experience for both the restaurant staff and customers. The addition of notification settings enhances the system's flexibility, allowing for better handling of reservations that exceed standard guest limits.
 
 ---
 
@@ -344,4 +393,4 @@ const handleChange = (e) => {
 
 # Short Summary
 
-The assistant provided detailed documentation for the General Reservation Settings component, explaining each property, its purpose, data type, input constraints, and where it is stored in the overall data structure. The documentation includes examples from the provided JSON data, describes how the settings interact with the API, and outlines the user interface elements. This helps in understanding how each setting affects the reservation system and where it is located in the data hierarchy.
+The assistant updated the documentation for the General Reservation Settings component by adding two new fields: `showNoticeForMaxGuests` and `noticePhoneNumber`. These fields allow administrators to enable a notice when customers select more guests than allowed online and specify the phone number for reservations exceeding the limit. The documentation now includes detailed descriptions of these new fields, their data types, input constraints, storage locations, and their impact on the reservation system. Additionally, the summary and user interface elements sections have been updated to reflect these changes, ensuring a comprehensive understanding of how each setting affects the reservation process.
