@@ -112,19 +112,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
         </div>
       </div>
 
-      <div className="form-group">
-        <label>Reservatieoverzicht Tabel Weergave</label>
-        <div className="input-container">
-          <select
-            name="toonTabel"
-            value={settings.toonTabel}
-            onChange={handleChange}
-          >
-            <option value="Toon tabel">Toon tabel</option>
-            <option value="Zonder tabel">Verberg tabel</option>
-          </select>
-        </div>
-      </div>
+
 			<div className="form-group">
         <label>Banner Weergave</label>
         <div className="input-container">
@@ -142,24 +130,6 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
           >
             <option value="Toon Banner">Toon Banner</option>
             <option value="Verberg Banner">Verberg Banner</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="form-group">
-        <label>Reservatie Bewerken</label>
-        <div className="input-container">
-          <select
-            name="reservatieBewerken"
-            value={settings.reservatieBewerken}
-            onChange={handleChange}
-          >
-            <option value="Reservatie Bewerken Toestaan">
-              Reservatie Bewerken Toestaan
-            </option>
-            <option value="Niet Toestaan om Reservatie te Bewerken">
-              Niet Toestaan om Reservatie te Bewerken
-            </option>
           </select>
         </div>
       </div>

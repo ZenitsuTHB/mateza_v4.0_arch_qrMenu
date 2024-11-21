@@ -18,8 +18,6 @@ const EmailSettingsTabs = () => {
     antwoordEmail: '',
     groetNaam: '',
     emailInhoud: '',
-    toonTabel: 'Toon tabel',
-    reservatieBewerken: 'Reservatie Bewerken Toestaan',
     startGreeting: 'Beste',
     endGreeting: 'Met vriendelijke groeten,',
   };
