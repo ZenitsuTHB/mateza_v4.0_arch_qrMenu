@@ -33,6 +33,7 @@ const Settings = () => {
         const mergedData = { 
           ...defaultSettings, 
           ...data,
+          dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
           duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie,
         };
 
@@ -55,12 +56,13 @@ const Settings = () => {
     const { name, value } = e.target;
     let parsedValue = value;
 
-    if (name === 'duurReservatie') {
+    if (name === 'duurReservatie' || 'dagenInToekomst') {
       parsedValue = value === '' ? '' : Number(value);
       if (isNaN(parsedValue)) {
         parsedValue = 0; // Default or handle as needed
       }
     }
+
 
     setSettings((prev) => ({
       ...prev,
