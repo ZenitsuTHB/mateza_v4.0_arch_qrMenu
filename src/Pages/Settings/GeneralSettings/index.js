@@ -3,6 +3,7 @@ import './css/generalSettings.css';
 import { withHeader } from '../../../Components/Structural/Header';
 import useApi from '../../../Hooks/useApi';
 import useNotification from '../../../Components/Notification';
+import { FaInfoCircle } from 'react-icons/fa'; // Import the info icon
 
 const Settings = () => {
   const api = useApi();
@@ -72,8 +73,17 @@ const Settings = () => {
       <h2 className="settings-title">Beheer Reservaties</h2>
       <div className="settings-container">
         <form className="settings-form" onSubmit={handleSave} noValidate>
+          {/* Aantal Zitplaatsen */}
           <div className="form-group">
-            <label>Aantal Zitplaatsen</label>
+            <div className="label-with-tooltip">
+              <label>Aantal Zitplaatsen</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het maximum aantal gasten die kunnen boeken in uw restaurant indien geen uitzondering van toepassing is.
+                </div>
+              </div>
+            </div>
             <div className="input-container">
               <input
                 type="number"
@@ -85,8 +95,17 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Min. Uren op Voorhand te Reserveren */}
           <div className="form-group">
-            <label>Min. Uren op Voorhand te Reserveren</label>
+            <div className="label-with-tooltip">
+              <label>Min. Uren op Voorhand te Reserveren</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het minimum aantal uren dat klanten vooraf moeten reserveren.
+                </div>
+              </div>
+            </div>
             <div className="input-container">
               <input
                 type="number"
@@ -98,8 +117,17 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Max. Aantal Dagen in de Toekomst te Reserveren */}
           <div className="form-group">
-            <label>Max. Aantal Dagen in de Toekomst te Reserveren</label>
+            <div className="label-with-tooltip">
+              <label>Max. Aantal Dagen in de Toekomst te Reserveren</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het maximale aantal dagen in de toekomst tot wanneer klanten kunnen reserveren.
+                </div>
+              </div>
+            </div>
             <div className="input-container">
               <input
                 type="number"
@@ -111,8 +139,17 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Max. Aantal gasten online boeking */}
           <div className="form-group">
-            <label>Max. Aantal gasten online boeking</label>
+            <div className="label-with-tooltip">
+              <label>Max. Aantal gasten online boeking</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het maximale aantal gasten per online reservering.
+                </div>
+              </div>
+            </div>
             <div className="input-container">
               <input
                 type="number"
@@ -124,8 +161,17 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Duur Reservatie (min) */}
           <div className="form-group">
-            <label>Duur Reservatie (min)</label>
+            <div className="label-with-tooltip">
+              <label>Duur Reservatie (min)</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  De standaard duur van een reservering in minuten.
+                </div>
+              </div>
+            </div>
             <div className="input-container">
               <input
                 type="number"
