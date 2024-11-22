@@ -10,17 +10,24 @@ import {
   FaUser,
   FaTable,
   FaMailBulk,
+  FaGift,
+  FaPencilAlt,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
 import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/Dashboard/DayList/index.js';
+import GiftCard from '../Pages/Giftcard/GiftCard'
+import GiftcardEditor from '../Pages/Giftcard/GiftcardEditor'
+import TablePlan from '../Pages/TablePlan'
+
 
 import {
   overviewSecondaryTopBar,
   calendarSecondaryTopBar,
   accountSecondaryTopBar,
-  settingsSecondaryTopBar
+  settingsSecondaryTopBar,
+  giftCardSecondaryTopBar
 } from './secondaryTabConfig.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
@@ -132,11 +139,6 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
-];
-
-
-/*
-
   {
     path: '/table-plan',
     element: <TablePlan title="Tafelplan" />,
@@ -168,7 +170,9 @@ const routesConfig = [
     secondaryTopBar: giftCardSecondaryTopBar,
   }
 
-*/
+];
+
+
 
 
 export default routesConfig;
