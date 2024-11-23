@@ -15,9 +15,10 @@ const Settings = () => {
     dagenInToekomst: 0,
     maxGasten: 0,
     intervalReservatie: 0,
+    duurReservatie: 60, // New field: Standard duration of a reservation in minutes
     showNoticeForMaxGuests: 'Nee', // New field
     noticePhoneNumber: '',         // New field
-  };
+  };  
 
   const [settings, setSettings] = useState(defaultSettings);
   const [initialSettings, setInitialSettings] = useState(defaultSettings);
@@ -35,6 +36,7 @@ const Settings = () => {
           ...data,
           dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
           intervalReservatie: data.intervalReservatie !== undefined ? Number(data.intervalReservatie) : defaultSettings.intervalReservatie,
+          duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie, // Parsing duurReservatie
         };
 
         setSettings(mergedData);
@@ -56,7 +58,7 @@ const Settings = () => {
     const { name, value } = e.target;
     let parsedValue = value;
 
-    if (name === 'intervalReservatie' || 'dagenInToekomst') {
+    if (name === 'intervalReservatie' || 'dagenInToekomst' || name === 'duurReservatie') {
       parsedValue = value === '' ? '' : Number(value);
       if (isNaN(parsedValue)) {
         parsedValue = 0; // Default or handle as needed
@@ -185,6 +187,31 @@ const Settings = () => {
                 onChange={handleChange}
                 min="5"
                 max="10000"
+                step="1"
+              />
+            </div>
+          </div>
+
+          {/* Duur Reservatie (min) */}
+          <div className="form-group">
+            <div className="label-with-tooltip">
+              <label>Duur Reservatie (min)</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  De standaardduur van een reservatie in minuten.
+                </div>
+              </div>
+            </div>
+            <div className="input-container">
+              <input
+                type="number"
+                name="duurReservatie"
+                placeholder="Duur reservatie"
+                value={settings.duurReservatie}
+                onChange={handleChange}
+                min="5"
+                max="720"
                 step="1"
               />
             </div>
