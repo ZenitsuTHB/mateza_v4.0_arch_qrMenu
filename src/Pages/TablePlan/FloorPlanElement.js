@@ -1,3 +1,4 @@
+// FloorPlanElement.js
 import React, { useState, useEffect } from 'react';
 import Table from './Table.js';
 import Walls from './Walls.js';
@@ -5,6 +6,9 @@ import Walls from './Walls.js';
 const FloorPlanElement = ({
   element,
   moveElement,
+  rotateElement,
+  duplicateElement,
+  deleteElement,
   floorPlanSize,
   tableNumber, // **Add tableNumber to the props**
 }) => {
@@ -100,6 +104,7 @@ const FloorPlanElement = ({
     cursor: 'move',
     transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
     zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
+    transform: `rotate(${element.rotation || 0}deg)`, // Apply rotation
   };
 
   return (
@@ -110,7 +115,13 @@ const FloorPlanElement = ({
     >
       {element.type === 'table' ? (
         // **Pass tableNumber to the Table component**
-        <Table numberOfGuests={element.capacity} tableNumber={tableNumber} />
+        <Table
+          numberOfGuests={element.capacity}
+          tableNumber={tableNumber}
+          rotate={() => rotateElement(element.id)}
+          duplicate={() => duplicateElement(element.id)}
+          deleteTable={() => deleteElement(element.id)}
+        />
       ) : element.type === 'wall' ? (
         <Walls length={element.width / 20 + 1} />
       ) : null}

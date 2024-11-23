@@ -23,10 +23,8 @@
   height: 100%;
 }
 
-
 .table-plan-component .alignment-line {
-	position: absolute;
-	background-color: red;
-	z-index: 100;
-  }
-  
+  position: absolute;
+  background-color: red;
+  z-index: 100;
+}

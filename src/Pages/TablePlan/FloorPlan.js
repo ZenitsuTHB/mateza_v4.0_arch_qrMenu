@@ -1,3 +1,4 @@
+// FloorPlan.js
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
@@ -52,6 +53,49 @@ const FloorPlan = () => {
     );
   }, []);
 
+  const rotateElement = useCallback((id) => {
+    setElements((prevElements) =>
+      prevElements.map((el) =>
+        el.id === id
+          ? {
+              ...el,
+              rotation: (el.rotation || 0) + 90, // Rotate by 90 degrees
+            }
+          : el
+      )
+    );
+  }, []);
+
+  const duplicateElement = useCallback((id) => {
+    setElements((prevElements) => {
+      const elementToDuplicate = prevElements.find((el) => el.id === id);
+      if (!elementToDuplicate) return prevElements;
+      const newId = Date.now();
+      const newElement = {
+        ...elementToDuplicate,
+        id: newId,
+        x: Math.min(elementToDuplicate.x + 20, floorPlanSize.width - elementToDuplicate.width),
+        y: Math.min(elementToDuplicate.y + 20, floorPlanSize.height - elementToDuplicate.height),
+        name:
+          elementToDuplicate.type === 'table'
+            ? `T${nextTableNumber}`
+            : `${elementToDuplicate.subtype.charAt(0).toUpperCase() + elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
+        rotation: elementToDuplicate.rotation || 0,
+      };
+
+      if (elementToDuplicate.type === 'table') {
+        newElement.tableNumber = nextTableNumber;
+        setNextTableNumber((prev) => prev + 1);
+      }
+
+      return [...prevElements, newElement];
+    });
+  }, [floorPlanSize.width, floorPlanSize.height, nextTableNumber]);
+
+  const deleteElement = useCallback((id) => {
+    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
+  }, []);
+
   const snapToGrid = (x, y, gridSize = 50) => {
     const snappedX = Math.round(x / gridSize) * gridSize;
     const snappedY = Math.round(y / gridSize) * gridSize;
@@ -93,11 +137,12 @@ const FloorPlan = () => {
           capacity: item.capacity,
           name:
             item.elementType === 'table'
-              ? `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Table ${id}`
+              ? `T${nextTableNumber}`
               : `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Decoration ${id}`,
           minCapacity: item.minCapacity || 1,
           maxCapacity: item.maxCapacity || 10,
           priority: 'Medium',
+          rotation: 0, // Initialize rotation
         };
 
         // **Assign a tableNumber if the element is a table**
@@ -110,8 +155,6 @@ const FloorPlan = () => {
       }
     },
   });
-
-  // ... rest of the component
 
   return (
     <ResizableBox
@@ -142,6 +185,9 @@ const FloorPlan = () => {
             key={el.id}
             element={el}
             moveElement={moveElement}
+            rotateElement={rotateElement}
+            duplicateElement={duplicateElement}
+            deleteElement={deleteElement}
             floorPlanSize={floorPlanSize}
             // **Pass the tableNumber to FloorPlanElement**
             tableNumber={el.tableNumber}

@@ -1,7 +1,17 @@
-import React from 'react';
+// Table.js
+import React, { useState } from 'react';
 import './css/table.css';
+import { FaSyncAlt, FaEdit, FaClone, FaTrash } from 'react-icons/fa';
 
-const Table = ({ numberOfGuests, tableNumber }) => { // **Accept tableNumber prop**
+const Table = ({
+  numberOfGuests,
+  tableNumber,
+  rotate,
+  duplicate,
+  deleteTable,
+  showActions = true, // **Default to true**
+}) => { 
+  const [isHovered, setIsHovered] = useState(false);
   const isSquare = numberOfGuests === 4;
 
   const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
@@ -21,7 +31,26 @@ const Table = ({ numberOfGuests, tableNumber }) => { // **Accept tableNumber pro
     <div
       className="table-plan-component table-container"
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Action Buttons */}
+      {showActions && isHovered && (
+        <div className="table-plan-component action-buttons">
+          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
+            <FaSyncAlt color="#555555" />
+          </button>
+          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
+            <FaEdit color="#555555" />
+          </button>
+          <button className="table-plan-component action-button duplicate-button" onClick={duplicate}>
+            <FaClone color="#555555" />
+          </button>
+          <button className="table-plan-component action-button delete-button" onClick={deleteTable}>
+            <FaTrash color="red" />
+          </button>
+        </div>
+      )}
       <div
         className="table-plan-component chairs top-chairs"
         style={{

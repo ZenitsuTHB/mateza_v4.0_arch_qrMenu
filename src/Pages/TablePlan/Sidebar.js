@@ -1,3 +1,4 @@
+// Sidebar.js
 import React, { useState, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { motion } from 'framer-motion';
@@ -22,7 +23,8 @@ const TableItem = ({ table }) => {
 
   return (
     <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Table numberOfGuests={table.numberOfGuests} />
+      {/* Pass showActions={false} to hide action buttons in Sidebar */}
+      <Table numberOfGuests={table.numberOfGuests} showActions={false} />
       <div className="table-plan-component item-info">
         <p>Tafel {table.id}</p>
         <p>Gasten: {table.numberOfGuests}</p>

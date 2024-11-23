@@ -1,3 +1,4 @@
+// Walls.js
 import React from 'react';
 import './css/walls.css';
 
