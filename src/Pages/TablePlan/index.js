@@ -14,20 +14,8 @@ const TablePlan = () => {
     { id: 4, numberOfGuests: 4 },
     { id: 5, numberOfGuests: 5 },
     { id: 6, numberOfGuests: 6 },
-    { id: 1, numberOfGuests: 7 },
-    { id: 2, numberOfGuests: 8 },
-    { id: 3, numberOfGuests: 9 },
-    { id: 4, numberOfGuests: 10 },
-    { id: 5, numberOfGuests: 11 },
-    { id: 6, numberOfGuests: 12 },
-    { id: 1, numberOfGuests: 13 },
-    { id: 2, numberOfGuests: 14 },
-    { id: 3, numberOfGuests: 15 },
-    { id: 4, numberOfGuests: 16 },
-    { id: 5, numberOfGuests: 17 },
-    { id: 6, numberOfGuests: 18 },
-    { id: 5, numberOfGuests: 19 },
-    { id: 6, numberOfGuests: 20 },
+    { id: 7, numberOfGuests: 7 },
+    { id: 8, numberOfGuests: 8 },
   ];
 
   const walls = [
