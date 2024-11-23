@@ -22,7 +22,7 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
 
   return (
     <div
-      className={`table-display-component table-container ${isOccupied ? 'occupied' : ''}`}
+      className={`table-container ${isOccupied ? 'occupied' : ''} ${isActive ? 'active' : ''}`}
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
     >
       {/* Tooltip */}
