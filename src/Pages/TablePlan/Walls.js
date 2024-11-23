@@ -8,10 +8,10 @@ const Walls = ({ length }) => {
 
   return (
     <div
-      className="table-plan-component walls-container"
+      className="walls-container"
       style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
     >
-      <div className="table-plan-component wall"></div>
+      <div className="wall"></div>
     </div>
   );
 };

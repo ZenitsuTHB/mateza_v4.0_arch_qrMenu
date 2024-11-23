@@ -7,7 +7,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import './css/app.css';
 
-const TablePlan = () => {
+const TableEditor = () => {
   const tables = [
     { id: 1, numberOfGuests: 1 },
     { id: 2, numberOfGuests: 2 },
@@ -39,4 +39,4 @@ const TablePlan = () => {
   );
 };
 
-export default withHeader(TablePlan);
+export default withHeader(TableEditor);

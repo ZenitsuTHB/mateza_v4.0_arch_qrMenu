@@ -49,7 +49,7 @@ const FloorPlan = ({ tables, reservations, assignReservation, removeReservation,
       height={600}
       minConstraints={[400, 300]}
       maxConstraints={[1600, 1200]}
-      className="table-plan-component resizable-floor-plan"
+      className="resizable-floor-plan"
       onResizeStop={(e, data) => {
         // Directly set the new size without snapping
         setFloorPlanSize({ width: data.size.width, height: data.size.height });
@@ -58,7 +58,7 @@ const FloorPlan = ({ tables, reservations, assignReservation, removeReservation,
     >
       <div
         id="floor-plan-container"
-        className="table-plan-component floor-plan"
+        className="floor-plan"
         ref={(node) => {
           drop(node);
           floorPlanRef.current = node;

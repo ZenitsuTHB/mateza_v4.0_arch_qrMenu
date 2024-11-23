@@ -12,6 +12,7 @@ import {
   FaMailBulk,
   FaGift,
   FaPencilAlt,
+  FaChair,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -27,7 +28,8 @@ import {
   calendarSecondaryTopBar,
   accountSecondaryTopBar,
   settingsSecondaryTopBar,
-  giftCardSecondaryTopBar
+  giftCardSecondaryTopBar,
+  tableSecondaryTopBar
 } from './secondaryTabConfig.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
@@ -35,6 +37,7 @@ import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
 import Settings from '../Pages/Settings/GeneralSettings/index.js';
 import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
+import TableEditor from '../Pages/TableEditor/index.js';
 
 
 const routesConfig = [
@@ -140,13 +143,24 @@ const routesConfig = [
     secondaryTopBar: accountSecondaryTopBar,
   },
   {
-    path: '/table-plan',
+    path: '/table',
     element: <TablePlan title="Tafelplan" />,
     label: 'Tafelplan',
-    icon: FaTable,
+    icon: FaChair,
     isMenu: true,
     isMobile: true,
     isTab: true,
+    secondaryTopBar: tableSecondaryTopBar,
+  },
+  {
+    path: 'table/table-editor',
+    element: <TableEditor title="Tafels Bewerken" />,
+    label: 'Tafels Bewerken',
+    icon: FaTable,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: tableSecondaryTopBar,
   },
 
   {

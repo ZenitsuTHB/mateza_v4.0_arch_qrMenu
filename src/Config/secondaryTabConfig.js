@@ -11,6 +11,17 @@ export const overviewSecondaryTopBar = [
 	}
   ];
 
+  export const tableSecondaryTopBar = [
+	{
+	  label: 'Tafelplan',
+	  path: '/table',
+	},
+	{
+	  label: 'Tafels Bewerken',
+	  path: '/table/table-editor',
+	}
+  ];
+
   export const settingsSecondaryTopBar = [
 	{
 	  label: 'Reservaties',
