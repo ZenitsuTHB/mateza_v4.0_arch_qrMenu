@@ -9,7 +9,7 @@
 }
 
 .table-plan-component .table {
-  background-color: #f5f5dc;
+  background-color: #f5f5dc; /* Light color when not occupied */
   border: 2px solid #d2b48c;
   border-radius: 8px;
   position: absolute;
@@ -17,6 +17,16 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
+  overflow: hidden;
+  padding: 5px;
+  box-sizing: border-box;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.table-plan-component .table-occupied {
+  background-color: #4caf50; /* Green when occupied */
+  border: #206622;
+  color: #ffffff; /* White text */
 }
 
 .table-plan-component .chairs {
@@ -42,59 +52,27 @@
 .table-plan-component .chair {
   width: 20px;
   height: 20px;
-  background-color: #f5f5dc;
+  background-color: #f5f5dc; /* Light color when not occupied */
   border: 2px solid #d2b48c;
   border-radius: 50%;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* **Add these styles for the table number** */
-.table-plan-component .table-number {
-  position: absolute;
-  bottom: 5px;
-  right: 5px; /* Changed from left to right */
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: #333;
-  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
-  transition: transform 0.2s;
+.table-plan-component .occupied .chair {
+  background-color: #4caf50; /* Green when occupied */
+  border-color: #388e3c;
 }
 
-/* **Styles for action buttons** */
-.table-plan-component .action-buttons { 
-  position: absolute;
-  top: -20px; /* Position above the table */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  opacity: 0; /* Hidden by default */
-  pointer-events: none; /* Prevent buttons from blocking table interactions */
-}
-
-.table-plan-component .table-container:hover .action-buttons {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.table-plan-component .action-buttons .action-button {
-  width: 35px; /* Slightly larger */
-  height: 35px;
-  background-color: #ffffff;
+.table-plan-component .reservation {
+  background-color: transparent; /* Remove background to show table's color */
   border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  opacity: 1; /* Ensure buttons are fully opaque */
-  transform: scale(1); /* No scaling */
-  /* Removed animation properties */
+  color: #ffffff; /* White text */
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  cursor: grab;
 }
 
-
-.table-plan-component .action-buttons .action-button:hover {
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+.table-plan-component .reservation:hover {
+  text-decoration: underline;
 }

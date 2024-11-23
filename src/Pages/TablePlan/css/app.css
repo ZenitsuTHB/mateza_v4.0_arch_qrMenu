@@ -7,6 +7,7 @@
   width: 100vw;
   box-sizing: border-box;
   padding: 20px;
+  padding-right: 370px; /* Adjusted to accommodate the fixed sidebar width (350px + 20px padding) */
 }
 
 .table-plan-component .floor-plan {
@@ -16,4 +17,26 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjustments to ensure the sidebar does not overlap */
+@media (max-width: 1200px) {
+  .table-plan-component .app-container {
+    padding-right: 370px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-plan-component .app-container {
+    flex-direction: column;
+    padding-right: 20px;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+    right: 0;
+  }
 }

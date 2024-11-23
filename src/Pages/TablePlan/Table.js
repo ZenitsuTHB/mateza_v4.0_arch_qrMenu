@@ -1,23 +1,16 @@
 // Table.js
-import React, { useState } from 'react';
+import React from 'react';
+import { useDrag } from 'react-dnd';
 import './css/table.css';
-import { FaSyncAlt, FaEdit, FaClone, FaTrash } from 'react-icons/fa';
 
-const Table = ({
-  numberOfGuests,
-  tableNumber,
-  rotate,
-  duplicate,
-  deleteTable,
-  showActions = true, // **Default to true**
-}) => { 
-  const [isHovered, setIsHovered] = useState(false);
-  const isSquare = numberOfGuests === 4;
+const Table = ({ capacity, reservations, tableId, removeReservation }) => {
+  const isOccupied = reservations.length > 0;
 
-  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
+  // Calculate table width based on capacity
+  const tableWidth = 70 + (capacity > 4 ? (capacity - 4) * 10 : 0);
   const tableHeight = 70;
 
-  const chairsPerSide = Math.ceil(numberOfGuests / 2);
+  const chairsPerSide = Math.ceil(capacity / 2);
 
   const topChairs = [];
   const bottomChairs = [];
@@ -27,61 +20,76 @@ const Table = ({
     bottomChairs.push(i);
   }
 
+  // Prepare tooltip content
+  const tooltipContent = reservations
+    .map((res) => `${res.firstName} ${res.lastName} (${res.numberOfGuests}p) - ${res.time}`)
+    .join('\n');
+
   return (
     <div
-      className="table-plan-component table-container"
+      className={`table-plan-component table-container ${isOccupied ? 'occupied' : ''}`}
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      title={isOccupied ? tooltipContent : 'Geen reserveringen'}
     >
-      {/* Action Buttons */}
-      {showActions && isHovered && (
-        <div className="table-plan-component action-buttons">
-          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
-            <FaSyncAlt color="#555555" />
-          </button>
-          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
-            <FaEdit color="#555555" />
-          </button>
-          <button className="table-plan-component action-button duplicate-button" onClick={duplicate}>
-            <FaClone color="#555555" />
-          </button>
-          <button className="table-plan-component action-button delete-button" onClick={deleteTable}>
-            <FaTrash color="red" />
-          </button>
-        </div>
-      )}
       <div
         className="table-plan-component chairs top-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
-        {topChairs.slice(0, Math.floor(numberOfGuests / 2)).map((chair, index) => (
+        {topChairs.map((chair, index) => (
           <div key={`top-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
       <div
-        className="table-plan-component table"
+        className={`table-plan-component table ${isOccupied ? 'table-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
           height: `${tableHeight}px`,
         }}
-      ></div>
+      >
+        {/* Display Reservations Assigned to This Table */}
+        {reservations.map((res) => (
+          <Reservation
+            key={res.id}
+            reservation={res}
+            tableId={tableId}
+            removeReservation={removeReservation}
+          />
+        ))}
+      </div>
       <div
         className="table-plan-component chairs bottom-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
-        {bottomChairs.slice(0, Math.ceil(numberOfGuests / 2)).map((chair, index) => (
+        {bottomChairs.map((chair, index) => (
           <div key={`bottom-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
-      {/* **Render the table number if it exists** */}
-      {tableNumber && (
-        <div className="table-plan-component table-number">T{tableNumber}</div>
-      )}
+    </div>
+  );
+};
+
+// Reservation Component
+const Reservation = ({ reservation, tableId, removeReservation }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'GUEST',
+    item: { id: reservation.id, ...reservation },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [reservation]);
+
+  return (
+    <div
+      className="reservation"
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
+      title={`${reservation.firstName} ${reservation.lastName} (${reservation.numberOfGuests}p) - ${reservation.time}`}
+    >
+      {reservation.firstName} {reservation.lastName} ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
 };
