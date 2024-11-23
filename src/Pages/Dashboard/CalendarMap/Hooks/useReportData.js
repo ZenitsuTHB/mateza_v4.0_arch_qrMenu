@@ -46,7 +46,7 @@ const useReportData = (dates, reservationsByDate, selectedShift, autoGenerate) =
     let totalGuestsTemp = 0; // Total guests over the period
 
     dates.forEach(({ date }) => {
-      const dateString = formatDateForFilter(dateString);
+      const dateString = formatDateForFilter(date);
       const reservations = reservationsByDate[dateString] || [];
       let dayTotal = 0;
       let shiftTotals = [0, 0, 0];

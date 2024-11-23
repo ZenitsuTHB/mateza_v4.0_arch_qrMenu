@@ -10,15 +10,7 @@ import {
   getDutchDayName, // Ensure this is imported from reportUtils.js
   statLabels,
 } from './Utils/reportUtils';
-
-const formatDateForFilter = (date) => {
-  if (!date) return '';
-  const year = date.getFullYear();
-  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
-  const day = (`0${date.getDate()}`).slice(-2);
-  return `${year}-${month}-${day}`;
-  };
-
+import { formatDateForFilter } from '../../../Utils/dateUtils';
 
 // CollapsibleBlock Component remains unchanged
 const CollapsibleBlock = ({ weekNumber, dates, reservationsByDate, selectedShift }) => {
