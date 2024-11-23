@@ -36,53 +36,50 @@ const TablePlan = () => {
   ]);
 
   // Function to assign a reservation to a table, with swapping if necessary
-  const assignReservation = (reservationId, targetTableId) => {
-    setReservations((prevReservations) => {
-      const targetTable = tables.find((t) => t.id === targetTableId);
-      if (!targetTable) return prevReservations;
+// Function to assign a reservation to a table, with swapping if necessary
+const assignReservation = (reservationId, targetTableId) => {
+  setReservations((prevReservations) => {
+    const targetTable = tables.find((t) => t.id === targetTableId);
+    if (!targetTable) return prevReservations;
 
-      const targetReservations = prevReservations.filter((res) => res.tableId === targetTableId);
-      const totalGuests = targetReservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
+    const targetReservations = prevReservations.filter((res) => res.tableId === targetTableId);
+    const totalGuests = targetReservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
 
-      const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
-      if (!reservationToAssign) return prevReservations;
+    const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
+    if (!reservationToAssign) return prevReservations;
 
-      // Check if adding the reservation exceeds capacity
-      if (totalGuests + reservationToAssign.numberOfGuests <= targetTable.capacity) {
-        // Assign directly
-        return prevReservations.map((res) =>
-          res.id === reservationId ? { ...res, tableId: targetTableId } : res
-        );
-      } else {
-        // Find a reservation to swap
-        const availableSpace = targetTable.capacity - totalGuests;
-        // Find a reservation that can fit in the reservationToAssign's table
-        const possibleSwap = prevReservations.find(
-          (res) =>
-            res.tableId !== targetTableId &&
-            res.numberOfGuests <= reservationToAssign.numberOfGuests &&
-            res.tableId === reservationToAssign.tableId // Optional: same current table
-        );
+    // Check if adding the reservation exceeds capacity
+    if (totalGuests + reservationToAssign.numberOfGuests <= targetTable.capacity) {
+      // Assign directly
+      return prevReservations.map((res) =>
+        res.id === reservationId ? { ...res, tableId: targetTableId } : res
+      );
+    } else {
+      // Find a reservation to swap
+      const possibleSwap = targetReservations.find(
+        (res) => res.numberOfGuests === reservationToAssign.numberOfGuests
+      );
 
-        if (possibleSwap) {
-          // Perform swap
-          return prevReservations.map((res) => {
-            if (res.id === reservationId) {
-              return { ...res, tableId: targetTableId };
-            }
-            if (res.id === possibleSwap.id) {
-              return { ...res, tableId: reservationToAssign.tableId };
-            }
-            return res;
-          });
-        }
-
-        // If no suitable swap found, do not assign
-        alert('Cannot assign reservation to this table. Not enough space and no suitable swap found.');
-        return prevReservations;
+      if (possibleSwap) {
+        // Perform swap
+        return prevReservations.map((res) => {
+          if (res.id === reservationId) {
+            return { ...res, tableId: targetTableId };
+          }
+          if (res.id === possibleSwap.id) {
+            return { ...res, tableId: prevReservations.find((r) => r.id === reservationId).tableId };
+          }
+          return res;
+        });
       }
-    });
-  };
+
+      // If no suitable swap found, do not assign
+      alert('Cannot assign reservation to this table. Not enough space and no suitable swap found.');
+      return prevReservations;
+    }
+  });
+};
+
 
   // Function to remove a reservation from a table
   const removeReservation = (reservationId) => {

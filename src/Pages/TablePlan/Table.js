@@ -3,7 +3,7 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import './css/table.css';
 
-const Table = ({ capacity, reservations, tableId, removeReservation }) => {
+const Table = ({ capacity, reservations, tableId, removeReservation, isActive }) => {
   const isOccupied = reservations.length > 0;
 
   // Calculate table width based on capacity
@@ -29,10 +29,20 @@ const Table = ({ capacity, reservations, tableId, removeReservation }) => {
     <div
       className={`table-plan-component table-container ${isOccupied ? 'occupied' : ''}`}
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
-      title={isOccupied ? tooltipContent : 'Geen reserveringen'}
     >
+      {/* Tooltip */}
+      {isOccupied && (
+        <div className="tooltip">
+          {reservations.map((res) => (
+            <div key={res.id}>
+              {res.firstName} {res.lastName} ({res.numberOfGuests}p) - {res.time}
+            </div>
+          ))}
+        </div>
+      )}
+
       <div
-        className="table-plan-component chairs top-chairs"
+        className={`table-plan-component chairs top-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
         }}
@@ -57,9 +67,11 @@ const Table = ({ capacity, reservations, tableId, removeReservation }) => {
             removeReservation={removeReservation}
           />
         ))}
+        {/* Table Number */}
+        <div className="table-number">T{tableId}</div>
       </div>
       <div
-        className="table-plan-component chairs bottom-chairs"
+        className={`table-plan-component chairs bottom-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
         }}
@@ -87,9 +99,8 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       className="reservation"
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
-      title={`${reservation.firstName} ${reservation.lastName} (${reservation.numberOfGuests}p) - ${reservation.time}`}
     >
-      {reservation.firstName} {reservation.lastName} ({reservation.numberOfGuests}p) - {reservation.time}
+      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
 };

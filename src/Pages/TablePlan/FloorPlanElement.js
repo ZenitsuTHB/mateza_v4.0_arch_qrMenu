@@ -28,8 +28,6 @@ const FloorPlanElement = ({
 
   const isActive = isOver && canDrop;
 
-  const backgroundColor = isActive ? '#e6ffe6' : '#ffffff';
-
   return (
     <div
       ref={drop}
@@ -37,9 +35,6 @@ const FloorPlanElement = ({
         position: 'absolute',
         left: `${table.x}px`,
         top: `${table.y}px`,
-        backgroundColor,
-        borderRadius: '8px',
-        padding: '5px',
       }}
     >
       <Table
@@ -47,6 +42,7 @@ const FloorPlanElement = ({
         reservations={reservations}
         tableId={table.id}
         removeReservation={removeReservation}
+        isActive={isActive}
       />
     </div>
   );

@@ -9,7 +9,7 @@
 }
 
 .table-plan-component .table {
-  background-color: #f5f5dc; /* Light color when not occupied */
+  background-color: rgba(245, 245, 220, 0.8); /* Light color with opacity */
   border: 2px solid #d2b48c;
   border-radius: 8px;
   position: absolute;
@@ -20,13 +20,13 @@
   overflow: hidden;
   padding: 5px;
   box-sizing: border-box;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .table-plan-component .table-occupied {
-  background-color: #4caf50; /* Green when occupied */
-  border: #206622;
+  background-color: rgba(76, 175, 80, 0.8); /* Green with opacity */
   color: #ffffff; /* White text */
+  border-color: #388e3c; /* Darker green border */
 }
 
 .table-plan-component .chairs {
@@ -52,14 +52,14 @@
 .table-plan-component .chair {
   width: 20px;
   height: 20px;
-  background-color: #f5f5dc; /* Light color when not occupied */
+  background-color: rgba(245, 245, 220, 0.8); /* Light color with opacity */
   border: 2px solid #d2b48c;
   border-radius: 50%;
   transition: background-color 0.3s, border-color 0.3s;
 }
 
 .table-plan-component .occupied .chair {
-  background-color: #4caf50; /* Green when occupied */
+  background-color: rgba(76, 175, 80, 0.8); /* Green with opacity */
   border-color: #388e3c;
 }
 
@@ -75,4 +75,45 @@
 
 .table-plan-component .reservation:hover {
   text-decoration: underline;
+}
+
+.table-plan-component .reservation-name {
+  font-weight: bold;
+}
+  
+/* Tooltip Styles */
+.tooltip {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: pre-line;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+.table-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+.table-plan-component .table-number {
+  position: absolute;
+  bottom: 5px;
+  right: 5px; /* Changed from left to right */
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #333;
+  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
+  transition: transform 0.2s;
 }

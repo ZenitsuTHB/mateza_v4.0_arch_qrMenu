@@ -1,5 +1,5 @@
 // FloorPlan.js
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
@@ -8,7 +8,7 @@ import FloorPlanElement from './FloorPlanElement.js';
 
 const FloorPlan = ({ tables, reservations, assignReservation, removeReservation }) => {
   const floorPlanRef = useRef(null);
-  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+  const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
