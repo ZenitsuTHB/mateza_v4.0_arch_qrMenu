@@ -106,7 +106,7 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
     >
-      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.capacity}p) - {reservation.time}
+      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
 };
