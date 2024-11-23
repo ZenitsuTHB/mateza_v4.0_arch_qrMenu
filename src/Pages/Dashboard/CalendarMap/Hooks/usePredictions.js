@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { median, mean } from '../Utils/predictionUtils';
-import { formatDate, getStartAndEndOfMonth, generateDatesArray } from '../Utils/dateUtils';
-import reservations, { maxCapacity } from '../reservationData';
+import { getStartAndEndOfMonth, generateDatesArray } from '../Utils/dateUtils';
+import { maxCapacity } from '../reservationData';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 const usePredictions = (
   currentDate,
@@ -49,7 +50,7 @@ const usePredictions = (
 
     // Build historical data for all dates
     datesArray.forEach((date) => {
-      const dateStr = formatDate(date);
+      const dateStr = formatDateForFilter(date);
       const reservationsForDate = getReservationsForDate(dateStr);
       const totalGuests = reservationsForDate.reduce((sum, res) => sum + res.aantalGasten, 0);
       historicalData.push({ date, totalGuests });
@@ -67,7 +68,7 @@ const usePredictions = (
 
     for (let i = startIndex; i < datesArray.length; i++) {
       const currentDate = datesArray[i];
-      const currentDateStr = formatDate(currentDate);
+      const currentDateStr = formatDateForFilter(currentDate);
       const currentReservations = getReservationsForDate(currentDateStr);
       const currentTotalGuests = currentReservations.reduce((sum, res) => sum + res.aantalGasten, 0);
 

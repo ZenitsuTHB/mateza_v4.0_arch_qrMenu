@@ -1,17 +1,9 @@
 import { useState, useEffect } from 'react';
 import useApi from '../../../../Hooks/useApi';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 // Global cache for session-based storage
 const weatherDataCache = {}; // dateString => temperature
-
-const formatDateForFilter = (date) => {
-  if (!date) return '';
-  const year = date.getFullYear();
-  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
-  const day = (`0${date.getDate()}`).slice(-2);
-  return `${year}-${month}-${day}`;
-  };
-
 
 const useWeatherData = (startDate, endDate, fetchWeather) => {
   const [weatherDataByDate, setWeatherDataByDate] = useState({});

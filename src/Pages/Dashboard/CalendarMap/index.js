@@ -9,21 +9,14 @@ import './css/calendarComponent.css';
 import { withHeader } from '../../../Components/Structural/Header';
 import useReservations from './Hooks/useReservations';
 import usePredictions from './Hooks/usePredictions';
-import WeekReport from './WeekReport';
-import MonthReport from './MonthReport';
+import WeekReport from './Reports/WeekReport';
+import MonthReport from './Reports/MonthReport';
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard';
 import BezettingspercentageForm from './BezettingspercentageForm';
 import useDates from './Hooks/useDates';
 import useWeatherData from './Hooks/useWeatherData';
 import { getMonday } from './Utils/dateUtils';
-
-const formatDateForFilter = (date) => {
-  if (!date) return '';
-  const year = date.getFullYear();
-  const month = (`0${date.getMonth() + 1}`).slice(-2); // Months are zero-based
-  const day = (`0${date.getDate()}`).slice(-2);
-  return `${year}-${month}-${day}`;
-};
+import { formatDateForFilter } from '../../../Utils/dateUtils';
 
 
 const CalendarComponent = () => {

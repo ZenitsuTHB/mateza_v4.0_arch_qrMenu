@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
-import useReportData from './Hooks/useReportData';
+import useReportData from '../Hooks/useReportData';
 import {
   groupDatesIntoWeeks,
   getDutchDateString,
   getDutchDayName, // Ensure this is imported from reportUtils.js
   statLabels,
-} from './Utils/reportUtils';
-import { formatDateForFilter } from '../../../Utils/dateUtils';
+} from '../Utils/reportUtils';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 // CollapsibleBlock Component remains unchanged
 const CollapsibleBlock = ({ weekNumber, dates, reservationsByDate, selectedShift }) => {

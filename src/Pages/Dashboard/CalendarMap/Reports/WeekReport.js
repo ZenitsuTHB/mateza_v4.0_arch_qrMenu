@@ -3,9 +3,9 @@
 import React from 'react';
 import './css/weekReport.css';
 import { motion } from 'framer-motion';
-import useReportData from './Hooks/useReportData';
-import { getDutchDayName, statLabels } from './Utils/reportUtils';
-import { formatDateForFilter } from '../../../Utils/dateUtils';
+import useReportData from '../Hooks/useReportData';
+import { getDutchDayName, statLabels } from '../Utils/reportUtils';
+import { formatDateForFilter } from '../../../../Utils/dateUtils';
 
 // Define the available shifts
 const shifts = [
