@@ -1,10 +1,11 @@
-// src/components/ReservationForm/Calendar.js
+// src/Pages/NewReservation/Calendar.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/nl';
 import { isWeekInPast, isSameDay } from './Utils/dateUtils';
 import './css/calendar.css';
+import useApi from '../../../Hooks/useApi';
 
 moment.locale('nl'); // Set moment to Dutch locale
 
@@ -13,10 +14,13 @@ const Calendar = ({
   selectedDate,
   onSelectDate,
   autoExpand,
+  onReservationsFetched, // New prop for callback
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const [startDate, setStartDate] = useState(null);
+  const [reservations, setReservations] = useState(null); // Local state for reservations
   const calendarRef = useRef(null);
+  const api = useApi(); // Initialize useApi hook
 
   const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
 
@@ -49,6 +53,31 @@ const Calendar = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const fetchAndHandleReservations = async () => {
+      if (startDate) {
+        const beginDate = startDate.format('YYYY-MM-DD');
+        const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
+        const restaurantId = 'thibault'; // Replace with dynamic ID if necessary
+        const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
+
+        try {
+          const data = await api.get(endpoint, { noCache: true });
+          setReservations(data); // Update local state with fetched reservations
+          console.log('Fetched reservations:', data);
+
+          if (onReservationsFetched && typeof onReservationsFetched === 'function') {
+            onReservationsFetched(data); // Invoke callback with fetched data
+          }
+        } catch (error) {
+          console.error('Error fetching reservations:', error);
+        }
+      }
+    };
+
+    fetchAndHandleReservations();
+  }, [startDate, api, onReservationsFetched]);
 
   const generateCalendarDays = (startDate) => {
     const days = [];

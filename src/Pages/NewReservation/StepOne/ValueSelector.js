@@ -1,8 +1,8 @@
-// ValueSelectorGuests.jsx
+// src/Pages/NewReservation/ValueSelector.jsx
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion
-import './css/valueSelector.css'; // Use the same CSS as ValueSelector
+import { motion, AnimatePresence } from 'framer-motion';
+import './css/valueSelector.css';
 
 const ValueSelectorGuests = ({ value, onChange }) => {
   const predefinedValues = [1, 2, 3, '4+ Gasten'];

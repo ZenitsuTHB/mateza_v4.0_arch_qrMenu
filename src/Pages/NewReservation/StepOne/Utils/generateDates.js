@@ -1,144 +1,191 @@
-// Calendar/generateDates.js
+// src/Pages/NewReservation/Utils/generateDates.js
 
 import { DateTime } from 'luxon';
-
-const getOrInitializeArray = (dict, key) => {
-    if (!Array.isArray(dict[key])) {
-        dict[key] = [];
-    }
-    return dict[key];
-};
+import { collectExceptions } from './exceptions';
+import { getSchemeSettingsDates } from './dates/schemeDates';
+import { getBlockSettingsDates } from './dates/blockDates';
+import { generateAvailableTimesForDate } from './generateTimes';
 
 const initializeDictionaries = () => {
-    window.dateDictionary = window.dateDictionary || {};
-    window.shiftsPerDate = window.shiftsPerDate || {};
+  window.dateDictionary = window.dateDictionary || {};
+  window.shiftsPerDate = window.shiftsPerDate || {};
 };
 
-const processTimeblock = (block) => {
-    if (!block.date) {
-        return;
+export const generateAvailableDates = (timeblocks = [], reservations = []) => {
+  initializeDictionaries();
+  collectExceptions(timeblocks);
+
+  const dagenInToekomstRaw = window.generalSettings?.dagenInToekomst;
+  let dagenInToekomst = 365;
+
+  if (dagenInToekomstRaw) {
+    if (typeof dagenInToekomstRaw === 'number') {
+      dagenInToekomst = dagenInToekomstRaw;
+    } else if (typeof dagenInToekomstRaw === 'string') {
+      dagenInToekomst = parseInt(dagenInToekomstRaw, 10);
+      if (isNaN(dagenInToekomst)) {
+        dagenInToekomst = 365;
+      }
+    }
+  }
+
+  const today = DateTime.now().setZone('Europe/Brussels').startOf('day');
+  const maxDate = today.plus({ days: dagenInToekomst - 1 }).endOf('day');
+
+  const blockDates = getBlockSettingsDates(timeblocks);
+  const schemeDates = getSchemeSettingsDates(timeblocks, maxDate);
+  const combinedDates = [...blockDates, ...schemeDates];
+
+  const filteredDates = combinedDates.filter((dateStr) => {
+    const date = DateTime.fromISO(dateStr, { zone: 'Europe/Brussels' }).startOf('day');
+    return date >= today && date <= maxDate;
+  });
+
+  let uniqueDates = Array.from(new Set(filteredDates)).sort();
+
+  // Initialize countingDictionary
+  const countingDictionary = {};
+
+  // Retrieve intervalReservatie and validate it
+  const intervalReservatie = window.generalSettings?.intervalReservatie;
+  let intervalMinutes = 30; // Default value
+
+  if (
+    typeof intervalReservatie === 'number' &&
+    Number.isInteger(intervalReservatie) &&
+    intervalReservatie > 0
+  ) {
+    intervalMinutes = intervalReservatie;
+  } else {
+    console.warn(
+      `[generateAvailableDates] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+    );
+  }
+
+  // Retrieve duurReservatie and validate it
+  const duurReservatieRaw = window.generalSettings?.duurReservatie;
+  let duurReservatieMinutes = 120; // Default duration in minutes (2 hours)
+
+  if (
+    typeof duurReservatieRaw === 'number' &&
+    Number.isInteger(duurReservatieRaw) &&
+    duurReservatieRaw > 0
+  ) {
+    duurReservatieMinutes = duurReservatieRaw;
+  } else {
+    console.warn(
+      `[generateAvailableDates] Invalid duurReservatie value "${duurReservatieRaw}". Using default duurReservatieMinutes = 120`
+    );
+  }
+
+  // Function to generate times for a given dateKey
+  const generateAvailableTimesForDateKey = (dateKey) => {
+    const dateDictionary = window.dateDictionary;
+    const shiftsPerDate = window.shiftsPerDate;
+
+    if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+      return [];
     }
 
-    const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+    const shiftData =
+      shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
 
-    if (!window.dateDictionary[dateString]) {
-        window.dateDictionary[dateString] = [];
+    if (shiftData.length > 0) {
+      const shiftButtons = shiftData.map((shift) => ({
+        label: shift.name,
+        value: shift.startTime,
+      }));
+      return shiftButtons.map((button) => button.value);
     }
-    window.dateDictionary[dateString].push({
-        startTime: block.startTime || null,
-        endTime: block.endTime || null
+
+    const times = [];
+    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
+
+    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+        year: selectedDate.getFullYear(),
+        month: selectedDate.getMonth() + 1,
+        day: selectedDate.getDate(),
+      });
+
+      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+        year: selectedDate.getFullYear(),
+        month: selectedDate.getMonth() + 1,
+        day: selectedDate.getDate(),
+      });
+
+      while (startDateTime < endDateTime) {
+        const timeString = startDateTime.toFormat('HH:mm');
+        times.push(timeString);
+        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+      }
     });
 
-    if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
-        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+    const uniqueTimes = [...new Set(times)].sort(
+      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+    );
 
-        block.shifts.forEach(shift => {
-            const exists = shiftsArray.some(existingShift => 
-                existingShift.name === shift.name && existingShift.startTime === shift.startTime
-            );
-            if (!exists) {
-                shiftsArray.push({
-                    name: shift.name || '',
-                    startTime: shift.startTime || '',
-                    endTime: shift.endTime || null
-                });
-            }
-        });
-    }
-};
+    return uniqueTimes;
+  };
 
-const getBlockSettingsDates = (timeblocks) => {
-    initializeDictionaries();
-    const dates = [];
+  // Generate countingDictionary with initial counts
+  uniqueDates.forEach((dateKey) => {
+    const times = generateAvailableTimesForDateKey(dateKey);
+    countingDictionary[dateKey] = {};
 
-    timeblocks.forEach((block) => {
-        processTimeblock(block);
-        if (block.date) {
-            const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
-            dates.push(dateString);
-        }
+    times.forEach((time) => {
+      countingDictionary[dateKey][time] = 0;
     });
+  });
 
-    return dates;
-};
+  // Process reservations to update counts
+  reservations.forEach((reservation) => {
+    const reservationDate = reservation.date; // string in "YYYY-MM-DD" format
+    const reservationTime = reservation.time; // string in "HH:mm"
+    const numberOfGuests = reservation.guests;
 
-const isWithinPeriod = (currentDate, endDate) => {
-    return currentDate <= endDate;
-};
+    if (countingDictionary[reservationDate]) {
+      const resStartDateTime = DateTime.fromISO(
+        `${reservationDate}T${reservationTime}`,
+        { zone: 'Europe/Brussels' }
+      );
 
-const processDaySetting = (dateString, daySetting) => {
-    if (!window.dateDictionary[dateString]) {
-        window.dateDictionary[dateString] = [];
+      // Use duurReservatieMinutes instead of fixed 2 hours
+      const resEndDateTime = resStartDateTime.plus({ minutes: duurReservatieMinutes });
+
+      // For each time period in countingDictionary[reservationDate]
+      Object.keys(countingDictionary[reservationDate]).forEach((timePeriodStart) => {
+        const timePeriodStartDateTime = DateTime.fromISO(
+          `${reservationDate}T${timePeriodStart}`,
+          { zone: 'Europe/Brussels' }
+        );
+        const timePeriodEndDateTime = timePeriodStartDateTime.plus({ minutes: intervalMinutes });
+
+        // Check if reservation interval collides with time period
+        if (resStartDateTime < timePeriodEndDateTime && resEndDateTime > timePeriodStartDateTime) {
+          // There is a collision
+          countingDictionary[reservationDate][timePeriodStart] += numberOfGuests;
+        }
+      });
     }
-    window.dateDictionary[dateString].push({
-        startTime: daySetting.startTime || null,
-        endTime: daySetting.endTime || null,
-    });
+  });
 
-    if (daySetting.shiftsEnabled && Array.isArray(daySetting.shifts) && daySetting.shifts.length > 0) {
-        console.log(`[processDaySetting] Processing shifts for ${dateString}`);
-        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+  // Store countingDictionary in window for access in generateAvailableTimesForDate
+  window.countingDictionary = countingDictionary;
 
-        daySetting.shifts.forEach(shift => {
-            const exists = shiftsArray.some(existingShift => 
-                existingShift.name === shift.name && existingShift.startTime === shift.startTime
-            );
-            if (!exists) {
-                shiftsArray.push({
-                    name: shift.name || '',
-                    startTime: shift.startTime || '',
-                    endTime: shift.endTime || null
-                });
-            }
-        });
+  // Remove dates with no available time buttons
+  const datesToRemove = [];
+  uniqueDates.forEach((dateKey) => {
+    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
+    const availableTimeButtons = generateAvailableTimesForDate(selectedDate);
+
+    if (availableTimeButtons.length === 0) {
+      datesToRemove.push(dateKey);
     }
-};
+  });
 
-const getSchemeSettingsDates = (timeblocks) => {
-    console.log(`[getSchemeSettingsDates] Starting processing of scheme settings dates.`);
-    initializeDictionaries();
-    const dates = [];
-    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  // Filter out the dates to remove
+  uniqueDates = uniqueDates.filter((dateKey) => !datesToRemove.includes(dateKey));
 
-    timeblocks.forEach((block) => {
-        if (!block.schemeSettings) {
-            return;
-        }
-
-        const { schemeSettings } = block;
-        let currentDate = DateTime.now().setZone("Europe/Brussels").startOf('day');
-        let endDate = currentDate.plus({ days: 365 }).startOf('day');
-
-        if (schemeSettings.period && schemeSettings.period.enabled) {
-            const { startDate, endDate: periodEndDate } = schemeSettings.period;
-            if (startDate && periodEndDate) {
-                currentDate = DateTime.fromISO(startDate, { zone: "Europe/Brussels" }).startOf('day');
-                endDate = DateTime.fromISO(periodEndDate, { zone: "Europe/Brussels" }).endOf('day');
-            }
-        }
-
-        while (isWithinPeriod(currentDate, endDate)) {
-            const dayOfWeek = currentDate.weekday % 7;
-            const dayName = dayNames[dayOfWeek];
-            const daySetting = schemeSettings[dayName];
-            if (daySetting && daySetting.enabled) {
-                const dateString = currentDate.toISODate();
-                dates.push(dateString);
-                processDaySetting(dateString, daySetting);
-            }
-
-            currentDate = currentDate.plus({ days: 1 });
-        }
-    });
-    return dates;
-};
-
-export const generateAvailableDates = (timeblocks) => {
-    initializeDictionaries();
-
-    const blockDates = getBlockSettingsDates(timeblocks);
-    const schemeDates = getSchemeSettingsDates(timeblocks);
-    const combinedDates = [...blockDates, ...schemeDates];
-    const uniqueDates = Array.from(new Set(combinedDates)).sort();
-    return uniqueDates;
+  return uniqueDates;
 };

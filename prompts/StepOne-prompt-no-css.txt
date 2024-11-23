@@ -1,0 +1,3394 @@
+This is my code for the admin reservations. I want to preserve the style and now your task is to modify the logic so it works with the new kind of logic.
+
+Here is the Admin Reservation code with the good layout and style, but the wrong logic.
+
+I want to maintain this layout and all the style classes and replace the logic.
+
+-- BEGIN OF ADMIN RESERVATION CODE
+File Contents:
+
+--- Calendar.js ---
+// src/components/ReservationForm/Calendar.js
+
+import React, { useState, useEffect, useRef } from 'react';
+import moment from 'moment-timezone';
+import 'moment/locale/nl';
+import { isWeekInPast, isSameDay } from './Utils/dateUtils';
+import './css/calendar.css';
+
+moment.locale('nl'); // Set moment to Dutch locale
+
+const Calendar = ({
+  availableDates,
+  selectedDate,
+  onSelectDate,
+  autoExpand,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(autoExpand || false);
+  const [startDate, setStartDate] = useState(null);
+  const calendarRef = useRef(null);
+
+  const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
+
+  useEffect(() => {
+    if (autoExpand) {
+      setIsExpanded(true);
+    }
+  }, [autoExpand]);
+
+  useEffect(() => {
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    let firstWeekStart = today.clone().startOf('isoWeek');
+    while (isWeekInPast(firstWeekStart)) {
+      firstWeekStart.add(1, 'week');
+    }
+    setStartDate(firstWeekStart);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const generateCalendarDays = (startDate) => {
+    const days = [];
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const twoWeeksFromStart = startDate.clone().add(13, 'days');
+
+    let date = startDate.clone();
+    while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
+      const formattedDate = date.format('YYYY-MM-DD');
+      const isAvailable = availableDates.includes(formattedDate);
+
+      days.push({
+        date: date.clone(),
+        isPast: date.isBefore(today, 'day'),
+        isFuture: date.isAfter(maxDate, 'day'),
+        isAvailable: isAvailable,
+      });
+
+      date.add(1, 'day');
+    }
+
+    return days;
+  };
+
+  const handleDateClick = (day) => {
+    if (day.isAvailable && !day.isPast && !day.isFuture) {
+      const formattedDate = day.date.format('YYYY-MM-DD');
+      onSelectDate(formattedDate); // Notify parent
+      setIsExpanded(false);
+    } else {
+      console.log('Date is not available for selection.');
+    }
+  };
+
+  const handlePrevWeek = () => {
+    const newStartDate = startDate.clone().subtract(1, 'week');
+    if (isWeekInPast(newStartDate)) {
+      console.log('Cannot go to previous week. It is in the past.');
+      return;
+    }
+    setStartDate(newStartDate);
+  };
+
+  const handleNextWeek = () => {
+    const newStartDate = startDate.clone().add(1, 'week');
+    setStartDate(newStartDate);
+  };
+
+  const formatDisplayDate = () => {
+    if (!selectedDate) {
+      return 'Selecteer een datum'; // "Select a date" in Dutch
+    }
+
+    const selectedMoment = moment(selectedDate, 'YYYY-MM-DD')
+      .tz('Europe/Amsterdam')
+      .startOf('day');
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const tomorrow = moment().tz('Europe/Amsterdam').add(1, 'day').startOf('day');
+
+    if (selectedMoment.isSame(today, 'day')) {
+      return 'Vandaag'; // "Today" in Dutch
+    } else if (selectedMoment.isSame(tomorrow, 'day')) {
+      return 'Morgen'; // "Tomorrow" in Dutch
+    } else {
+      // Format: e.g., "Maandag 1 Januari 2023"
+      return selectedMoment.format('dddd D MMMM YYYY');
+    }
+  };
+
+  const days = startDate ? generateCalendarDays(startDate) : [];
+
+  return (
+    <div className="calendar-container" ref={calendarRef}>
+      <div
+        className="calendar-display"
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+        }}
+      >
+        <span>{formatDisplayDate()}</span>
+        <span className="arrow">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            style={{
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+            }}
+          >
+            <path
+              d="M7 10l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+          </svg>
+        </span>
+      </div>
+      {isExpanded && startDate && (
+        <div className="calendar">
+          <div className="calendar-header">
+            <button type="button" onClick={handlePrevWeek}>
+              &lt;
+            </button>
+            <span>
+              {startDate.format('DD MMM')} -{' '}
+              {startDate.clone().add(13, 'days').format('DD MMM YYYY')}
+            </span>
+            <button type="button" onClick={handleNextWeek}>
+              &gt;
+            </button>
+          </div>
+          <div className="calendar-weeks-wrapper">
+            <table className="calendar-table">
+              <thead>
+                <tr>
+                  {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
+                    <th key={day}>{day}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 2 }).map((_, weekIndex) => (
+                  <tr key={weekIndex}>
+                    {days
+                      .slice(weekIndex * 7, weekIndex * 7 + 7)
+                      .map((dayObj, index) => {
+                        const isSelected =
+                          selectedDate &&
+                          isSameDay(
+                            dayObj.date,
+                            moment(selectedDate, 'YYYY-MM-DD').tz('Europe/Amsterdam')
+                          );
+                        const classNames = [];
+                        if (dayObj.isPast) {
+                          classNames.push('gray-out');
+                        } else if (dayObj.isAvailable) {
+                          classNames.push('available');
+                        } else {
+                          classNames.push('unavailable');
+                        }
+                        if (isSelected) {
+                          classNames.push('selected');
+                        }
+
+                        return (
+                          <td
+                            key={index}
+                            className={classNames.join(' ')}
+                            onClick={() => handleDateClick(dayObj)}
+                            style={{
+                              '--animation-order': index + weekIndex * 7,
+                            }}
+                          >
+                            <div className="day-square">
+                              {dayObj.date.date()}
+                            </div>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Calendar;
+
+
+--- DateSelector.js ---
+// src/components/ReservationForm/DateSelector.jsx
+
+import React, { useEffect, useState } from 'react';
+import Calendar from './Calendar';
+import { generateAvailableDates } from './Utils/generateDates';
+import moment from 'moment';
+
+const DateSelector = ({
+  formData,
+  handleChange,
+  resetFormDataFields,
+  timeblocks,
+}) => {
+  const [availableDates, setAvailableDates] = useState([]);
+
+  useEffect(() => {
+    if (Array.isArray(timeblocks)) {
+      const dates = generateAvailableDates(timeblocks);
+      setAvailableDates(dates);
+    } else {
+      console.error("timeblocks is undefined or not an array:", timeblocks);
+      setAvailableDates([]);
+    }
+  }, [timeblocks]);
+
+  const handleDateSelect = (date) => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    console.log('Selected date:', formattedDate);
+    handleChange({
+      target: { name: 'date', value: formattedDate },
+    });
+    resetFormDataFields(['time']);
+  };
+
+  return (
+    <div className="form-group date-selector-container">
+      <label htmlFor="date" className="default-text-color">
+        Datum<span className="required">*</span>
+      </label>
+      <Calendar
+        availableDates={availableDates}
+        selectedDate={formData.date || null}
+        onSelectDate={handleDateSelect}
+        autoExpand={false}
+      />
+    </div>
+  );
+};
+
+export default DateSelector;
+
+
+--- Hooks/useFetchRestaurantData.js ---
+// src/Hooks/useFetchRestaurantData.js
+
+import { useState, useEffect } from 'react';
+import useApi from '../../../../Hooks/useApi';
+
+const useFetchRestaurantData = () => {
+  const [restaurantData, setRestaurantData] = useState(null);
+  const api = useApi();
+
+
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const endpoint = `${window.baseDomain}api/auth-restaurant/`;
+        const response = await api.get(endpoint);
+
+
+        if (response) {
+          setRestaurantData(response);
+        }
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+        const errorCode = error.response?.status || 'unknown';
+      }
+    };
+
+    fetchRestaurantData();
+  }, [api]);
+
+  return restaurantData;
+};
+
+export default useFetchRestaurantData;
+
+
+--- TimeSelector.js ---
+// src/components/ReservationForm/TimeSelector.jsx
+
+import React, { useState, useEffect, useRef } from 'react';
+import { generateAvailableTimesForDate } from './Utils/generateTimes';
+import './css/timeSelector.css'
+
+const TimeSelector = ({
+  formData,
+  handleChange,
+  field,
+  selectedDate,
+  expanded,
+  setCurrentExpandedField,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(expanded || false);
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const timeSelectorRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const times = generateAvailableTimesForDate(selectedDate);
+      setAvailableTimes(times);
+    } else {
+      setAvailableTimes([]);
+    }
+  }, [selectedDate]);
+
+  const handleTimeSelect = (timeValue) => {
+    handleChange({
+      target: { name: field.id, value: timeValue },
+    });
+    setIsExpanded(false);
+    if (setCurrentExpandedField) {
+      setCurrentExpandedField(null);
+    }
+  };
+
+  const formatDisplayTime = () => {
+    if (formData[field.id]) {
+      const selected = availableTimes.find((time) => time.value === formData[field.id]);
+      return selected ? selected.label : 'Selecteer een tijd';
+    }
+    return 'Selecteer een tijd';
+  };
+
+  if (!field) {
+    return null;
+  }
+
+  return (
+    <div className="form-group time-selector-container" ref={timeSelectorRef}>
+      <label className="default-text-color" htmlFor={field.id}>
+        {field.label}
+        <span className="required">*</span>
+      </label>
+
+      {!selectedDate ? (
+        <p className="info-text">Selecteer eerst een datum.</p>
+      ) : (
+        <>
+          <div
+            className="time-display"
+            onClick={() => {
+              setIsExpanded(!isExpanded);
+              if (!isExpanded && setCurrentExpandedField) {
+                setCurrentExpandedField('time');
+              }
+            }}
+          >
+            <span>{formatDisplayTime()}</span>
+            <span className="arrow">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                style={{
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                <path
+                  d="M7 10l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </span>
+          </div>
+          {isExpanded && (
+            <div className="time-selector">
+              {availableTimes.length === 0 ? (
+                <div className="no-times">Geen beschikbare tijden.</div>
+              ) : (
+                <div className="time-options">
+                  {availableTimes.map((time) => (
+                    <div
+                      key={time.value}
+                      className={`time-option ${
+                        formData[field.id] === time.value ? 'selected' : ''
+                      }`}
+                      onClick={() => handleTimeSelect(time.value)}
+                    >
+                      {time.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+export default TimeSelector;
+
+
+--- Utils/dateUtils.js ---
+// src/components/ReservationForm/Utils/dateUtils.js
+
+import moment from 'moment-timezone';
+
+export const isWeekInPast = (weekStartDate) => {
+  const today = moment().tz('Europe/Brussels').startOf('day');
+  const weekEndDate = weekStartDate.clone().add(6, 'days').endOf('day');
+  return weekEndDate.isBefore(today);
+};
+
+export const isSameDay = (date1, date2) => date1.isSame(date2, 'day');
+
+
+--- Utils/generateDates.js ---
+// Calendar/generateDates.js
+
+import { DateTime } from 'luxon';
+
+const getOrInitializeArray = (dict, key) => {
+    if (!Array.isArray(dict[key])) {
+        dict[key] = [];
+    }
+    return dict[key];
+};
+
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+
+const processTimeblock = (block) => {
+    if (!block.date) {
+        return;
+    }
+
+    const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+
+    if (!window.dateDictionary[dateString]) {
+        window.dateDictionary[dateString] = [];
+    }
+    window.dateDictionary[dateString].push({
+        startTime: block.startTime || null,
+        endTime: block.endTime || null
+    });
+
+    if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        block.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift => 
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+const getBlockSettingsDates = (timeblocks) => {
+    initializeDictionaries();
+    const dates = [];
+
+    timeblocks.forEach((block) => {
+        processTimeblock(block);
+        if (block.date) {
+            const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+            dates.push(dateString);
+        }
+    });
+
+    return dates;
+};
+
+const isWithinPeriod = (currentDate, endDate) => {
+    return currentDate <= endDate;
+};
+
+const processDaySetting = (dateString, daySetting) => {
+    if (!window.dateDictionary[dateString]) {
+        window.dateDictionary[dateString] = [];
+    }
+    window.dateDictionary[dateString].push({
+        startTime: daySetting.startTime || null,
+        endTime: daySetting.endTime || null,
+    });
+
+    if (daySetting.shiftsEnabled && Array.isArray(daySetting.shifts) && daySetting.shifts.length > 0) {
+        console.log(`[processDaySetting] Processing shifts for ${dateString}`);
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        daySetting.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift => 
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+const getSchemeSettingsDates = (timeblocks) => {
+    console.log(`[getSchemeSettingsDates] Starting processing of scheme settings dates.`);
+    initializeDictionaries();
+    const dates = [];
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    timeblocks.forEach((block) => {
+        if (!block.schemeSettings) {
+            return;
+        }
+
+        const { schemeSettings } = block;
+        let currentDate = DateTime.now().setZone("Europe/Brussels").startOf('day');
+        let endDate = currentDate.plus({ days: 365 }).startOf('day');
+
+        if (schemeSettings.period && schemeSettings.period.enabled) {
+            const { startDate, endDate: periodEndDate } = schemeSettings.period;
+            if (startDate && periodEndDate) {
+                currentDate = DateTime.fromISO(startDate, { zone: "Europe/Brussels" }).startOf('day');
+                endDate = DateTime.fromISO(periodEndDate, { zone: "Europe/Brussels" }).endOf('day');
+            }
+        }
+
+        while (isWithinPeriod(currentDate, endDate)) {
+            const dayOfWeek = currentDate.weekday % 7;
+            const dayName = dayNames[dayOfWeek];
+            const daySetting = schemeSettings[dayName];
+            if (daySetting && daySetting.enabled) {
+                const dateString = currentDate.toISODate();
+                dates.push(dateString);
+                processDaySetting(dateString, daySetting);
+            }
+
+            currentDate = currentDate.plus({ days: 1 });
+        }
+    });
+    return dates;
+};
+
+export const generateAvailableDates = (timeblocks) => {
+    initializeDictionaries();
+
+    const blockDates = getBlockSettingsDates(timeblocks);
+    const schemeDates = getSchemeSettingsDates(timeblocks);
+    const combinedDates = [...blockDates, ...schemeDates];
+    const uniqueDates = Array.from(new Set(combinedDates)).sort();
+    return uniqueDates;
+};
+
+
+--- Utils/generateTimes.js ---
+import moment from 'moment-timezone';
+
+export const generateAvailableTimesForDate = (selectedDate) => {
+  if (!selectedDate) {
+    return [];
+  }
+
+  const selectedDateStr = moment(selectedDate).format('YYYY-MM-DD');
+  const timeEntries = window.dateDictionary[selectedDateStr];
+
+  if (!timeEntries || timeEntries.length === 0) {
+    return [];
+  }
+
+  const timesSet = new Set();
+  const intervalMinutes = 30; // Adjust as needed
+
+  timeEntries.forEach((entry) => {
+    const startTime = moment(entry.startTime, 'HH:mm');
+    const endTime = moment(entry.endTime, 'HH:mm');
+
+    let currentTime = startTime.clone();
+    while (currentTime.isBefore(endTime)) {
+      const timeStr = currentTime.format('HH:mm');
+      timesSet.add(timeStr);
+      currentTime.add(intervalMinutes, 'minutes');
+    }
+  });
+
+  const times = Array.from(timesSet)
+    .sort((a, b) => moment(a, 'HH:mm') - moment(b, 'HH:mm'))
+    .map((timeStr) => ({
+      label: timeStr,
+      value: timeStr,
+    }));
+
+  return times;
+};
+
+
+--- ValueSelector.js ---
+// ValueSelectorGuests.jsx
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion
+import './css/valueSelector.css'; // Use the same CSS as ValueSelector
+
+const ValueSelectorGuests = ({ value, onChange }) => {
+  const predefinedValues = [1, 2, 3, '4+ Gasten'];
+  const [selectedValue, setSelectedValue] = useState(value || '');
+  const [showSlider, setShowSlider] = useState(false);
+
+  const handlePredefinedValueClick = (val) => {
+    if (val === '4+ Gasten') {
+      setShowSlider(true);
+      setSelectedValue(4);
+      onChange({ target: { name: 'numberOfGuests', value: 4 } });
+    } else {
+      setShowSlider(false);
+      setSelectedValue(val);
+      onChange({ target: { name: 'numberOfGuests', value: val } });
+    }
+  };
+
+  const handleSliderChange = (e) => {
+    const val = e.target.value;
+    setSelectedValue(val);
+    onChange({ target: { name: 'numberOfGuests', value: val } });
+  };
+
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setSelectedValue(val);
+    onChange({ target: { name: 'numberOfGuests', value: val } });
+  };
+
+  return (
+    <div className="value-selector">
+      <div className="predefined-values">
+        {predefinedValues.map((val) => (
+          <button
+            key={val}
+            type="button"
+            className={`predefined-value-button ${
+              selectedValue == val || (val === '4+ Gasten' && showSlider) ? 'active' : ''
+            }`}
+            onClick={() => handlePredefinedValueClick(val)}
+          >
+            {val === '4+ Gasten' ? '4+ Gasten' : `${val} ${val === 1 ? 'Gast' : 'Gasten'}`}
+          </button>
+        ))}
+      </div>
+      <AnimatePresence>
+        {showSlider && (
+          <motion.div
+            className="slider-container"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <input
+              type="range"
+              min="4"
+              max="15"
+              step="1"
+              value={selectedValue}
+              onChange={handleSliderChange}
+              className="slider"
+            />
+            <input
+              type="number"
+              name="numberOfGuests"
+              value={selectedValue}
+              onChange={handleInputChange}
+              className="value-input"
+              min="4"
+              max="100"
+              step="1"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default ValueSelectorGuests;
+
+
+--- index.js ---
+// src/components/ReservationForm/ReservationStepOne.jsx
+
+import React, { useState, useEffect } from 'react';
+import useApi from '../../../Hooks/useApi';
+import ValueSelectorGuests from './ValueSelector';
+import DateSelector from './DateSelector';
+import TimeSelector from './TimeSelector';
+
+const ReservationStepOne = ({
+  formData,
+  errors,
+  handleChange,
+  handleStepOneSubmit,
+  setFormData,
+}) => {
+  const api = useApi();
+
+  // State for timeblocks
+  const [timeblocks, setTimeblocks] = useState([]);
+  const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
+  const [timeblocksError, setTimeblocksError] = useState(null);
+
+  // Fetch timeblocks on component mount
+  useEffect(() => {
+    const fetchTimeblocks = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
+        setTimeblocks(data.timeblocks || []);
+      } catch (err) {
+        setTimeblocksError(err);
+        console.error('Error fetching timeblocks:', err);
+      } finally {
+        setLoadingTimeblocks(false);
+      }
+    };
+
+    fetchTimeblocks();
+  }, [api]);
+
+  const resetFormDataFields = (fieldsToReset) => {
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData };
+      fieldsToReset.forEach((field) => {
+        newFormData[field] = '';
+      });
+      return newFormData;
+    });
+  };
+
+  if (loadingTimeblocks) {
+    return <div>Loading timeblocks...</div>;
+  }
+
+  if (timeblocksError) {
+    return <div>Error loading timeblocks: {timeblocksError.message}</div>;
+  }
+
+  return (
+    
+    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
+      <ValueSelectorGuests
+        value={formData.numberOfGuests}
+        onChange={handleChange}
+        error={errors.numberOfGuests}
+      />
+
+      {formData.numberOfGuests && (
+        <DateSelector
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          timeblocks={timeblocks} 
+        />
+      )}
+
+      {formData.date && (
+        <TimeSelector
+          formData={formData}
+          handleChange={handleChange}
+          field={{ id: 'time', label: 'Tijd' }}
+          selectedDate={formData.date}
+        />
+      )}
+
+      <button type="submit" className="account-manage__button">
+        Verder
+      </button>
+    </form>
+  );
+};
+
+export default ReservationStepOne;
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/NewReservation/StepOne":
+
+├── Calendar.js
+├── DateSelector.js
+├── Hooks
+│   └── useFetchRestaurantData.js
+├── TimeSelector.js
+├── Utils
+│   ├── dateUtils.js
+│   ├── generateDates.js
+│   └── generateTimes.js
+├── ValueSelector.js
+├── css
+│   ├── calendar.css
+│   ├── timeSelector.css
+│   └── valueSelector.css
+└── index.js
+
+
+List of Files:
+Calendar.js
+DateSelector.js
+Hooks/useFetchRestaurantData.js
+TimeSelector.js
+Utils/dateUtils.js
+Utils/generateDates.js
+Utils/generateTimes.js
+ValueSelector.js
+index.js
+
+The following two files are parent files that are connected:
+
+import React, { useState } from 'react';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import useApi from '../../Hooks/useApi';
+import ReservationStepOne from './StepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
+import ReservationSummary from './ReservationSummary';
+import { withHeader } from '../../Components/Structural/Header';
+import './css/newReservationAdmin.css';
+
+const NewReservationAdmin = () => {
+  const api = useApi();
+
+  const [formData, setFormData] = useState({
+    guests: '',
+    date: '',
+    time: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    extraInfo: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationSubmitted, setReservationSubmitted] = useState(false); // New state variable
+
+  const validateStepOne = () => {
+    const errors = {};
+    if (!formData.guests) {
+      errors.guests = 'Aantal gasten is verplicht';
+    }
+    if (!formData.date) {
+      errors.date = 'Datum is verplicht';
+    }
+    if (!formData.time) {
+      errors.time = 'Tijd is verplicht';
+    }
+    return errors;
+  };
+
+  const validateStepTwo = () => {
+    const errors = {};
+
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'E-mail is ongeldig';
+    }
+
+    return errors;
+  };
+
+  const handleStepOneSubmit = (e) => {
+    e.preventDefault();
+    const stepOneErrors = validateStepOne();
+    if (Object.keys(stepOneErrors).length > 0) {
+      setErrors(stepOneErrors);
+    } else {
+      setErrors({});
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    const stepTwoErrors = validateStepTwo();
+    if (Object.keys(stepTwoErrors).length > 0) {
+      setErrors(stepTwoErrors);
+    } else {
+      setErrors({});
+      setIsSubmitting(true);
+      const submissionData = {
+        guests: formData.guests,
+        date: formData.date,
+        time: formData.time,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        extraInfo: formData.extraInfo,
+      };
+
+      try {
+        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
+        setIsModalOpen(false);
+        setReservationSubmitted(true);
+      } catch (error) {
+        // Handle error appropriately
+        console.error('Error submitting reservation:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  return (
+    <div className="new-reservation-page">
+      <h2 className="account-manage-title">Admin Reservaties</h2>
+      <div className="account-manage-container">
+        {reservationSubmitted ? (
+          <ReservationSummary
+            formData={formData}
+            onNewReservation={() => {
+              setFormData({
+                guests: '',
+                date: '',
+                time: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                extraInfo: '',
+              });
+              setReservationSubmitted(false);
+            }}
+          />
+        ) : (
+          <>
+            <ReservationStepOne
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleStepOneSubmit={handleStepOneSubmit}
+              setFormData={setFormData}
+            />
+
+            {isModalOpen && (
+              <ModalWithoutTabs
+                content={
+                  <ReservationStepTwoModal
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleFinalSubmit={handleFinalSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                }
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default withHeader(NewReservationAdmin);
+
+-- END OF ADMIN RESERVATION CODE
+
+I want to look at the logic of the Good Logic Client Reservation Code and use it within the Admin Reservation Code layout.
+
+So that we use the layout of the admin reservation code, but the logic of the Good Logic Client Reservation Code.
+
+We are focused on the internal logic, so this means that many logical files and functions like generateAvailableDates, collectExceptions, processDaySetting and generateAvailableTimesForDate can all remain the same as the Client Reservation Code.
+
+It is crucial the exactly keep the layout of the Admin Reservation Code.
+
+--- BEGIN OF CLIENT RESERVATION CODE ---
+File Contents:
+
+--- Fields/DateSelector/Calendar.js ---
+// src/components/Calendar.js
+
+import React, { useState, useEffect, useRef } from 'react';
+import moment from 'moment-timezone';
+import 'moment/locale/nl';
+import { isWeekInPast, isSameDay } from './Utils/dateUtils';
+import './css/calendar.css';
+import useApi from '../../../../../Hooks/useApi'; // Ensure the path is correct
+
+moment.locale('nl');
+
+const Calendar = ({
+  availableDates,
+  selectedDate,
+  onSelectDate,
+  autoExpand,
+  onReservationsFetched, // New prop for callback
+}) => {
+  const [isExpanded, setIsExpanded] = useState(autoExpand || false);
+  const [startDate, setStartDate] = useState(null);
+  const [reservations, setReservations] = useState(null); // Local state for reservations
+  const calendarRef = useRef(null);
+  const api = useApi(); // Initialize useApi hook
+
+  const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
+
+  useEffect(() => {
+    if (autoExpand) {
+      setIsExpanded(true);
+    }
+  }, [autoExpand]);
+
+  useEffect(() => {
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    let firstWeekStart = today.clone().startOf('isoWeek');
+    while (isWeekInPast(firstWeekStart)) {
+      firstWeekStart.add(1, 'week');
+    }
+    setStartDate(firstWeekStart);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchAndHandleReservations = async () => {
+      if (startDate) {
+        const beginDate = startDate.format('YYYY-MM-DD');
+        const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
+        const restaurantId = 'thibault'; // Replace with dynamic ID if necessary
+        const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
+
+        try {
+          const data = await api.get(endpoint);
+          setReservations(data); // Update local state with fetched reservations
+          // window.reservations = data; // Optional: Retain if needed globally
+          console.log('Fetched reservations:', data);
+
+          if (onReservationsFetched && typeof onReservationsFetched === 'function') {
+            onReservationsFetched(data); // Invoke callback with fetched data
+          }
+        } catch (error) {
+          console.error('Error fetching reservations:', error);
+          // Optionally, handle the error state here
+        }
+      }
+    };
+
+    fetchAndHandleReservations();
+  }, [startDate, api, onReservationsFetched]);
+
+  const generateCalendarDays = (startDate) => {
+    const days = [];
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const twoWeeksFromStart = startDate.clone().add(13, 'days');
+
+    let date = startDate.clone();
+    while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
+      const formattedDate = date.format('YYYY-MM-DD');
+      const isAvailable = availableDates.includes(formattedDate);
+
+      days.push({
+        date: date.clone(),
+        isPast: date.isBefore(today, 'day'),
+        isFuture: date.isAfter(maxDate, 'day'),
+        isAvailable: isAvailable,
+      });
+
+      date.add(1, 'day');
+    }
+
+    return days;
+  };
+
+  const handleDateClick = (day) => {
+    if (day.isAvailable && !day.isPast && !day.isFuture) {
+      onSelectDate(day.date.toDate());
+      setIsExpanded(false);
+    } else {
+      console.log('Date is not available for selection.');
+    }
+  };
+
+  const handlePrevWeek = () => {
+    const newStartDate = startDate.clone().subtract(1, 'week');
+    if (isWeekInPast(newStartDate)) {
+      console.log('Cannot go to previous week. It is in the past.');
+      return;
+    }
+    setStartDate(newStartDate);
+  };
+
+  const handleNextWeek = () => {
+    const newStartDate = startDate.clone().add(1, 'week');
+    setStartDate(newStartDate);
+  };
+
+  const formatDisplayDate = () => {
+    if (!selectedDate) {
+      return 'Selecteer een datum';
+    }
+
+    const selectedMoment = moment(selectedDate)
+      .tz('Europe/Amsterdam')
+      .startOf('day');
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    const tomorrow = moment()
+      .tz('Europe/Amsterdam')
+      .add(1, 'day')
+      .startOf('day');
+
+    if (selectedMoment.isSame(today, 'day')) {
+      return 'Vandaag';
+    } else if (selectedMoment.isSame(tomorrow, 'day')) {
+      return 'Morgen';
+    } else {
+      return selectedMoment.format('DD MMMM YYYY');
+    }
+  };
+
+  const days = startDate ? generateCalendarDays(startDate) : [];
+
+  return (
+    <div className="calendar-container" ref={calendarRef}>
+      <div
+        className="calendar-display"
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+        }}
+      >
+        <span>{formatDisplayDate()}</span>
+        <span className="arrow">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            style={{
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+            }}
+          >
+            <path
+              d="M7 10l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+          </svg>
+        </span>
+      </div>
+      {isExpanded && startDate && (
+        <div className="calendar">
+          <div className="calendar-header">
+            <button type="button" onClick={handlePrevWeek}>
+              &lt;
+            </button>
+            <span>
+              {startDate.format('DD MMM')} -{' '}
+              {startDate.clone().add(13, 'days').format('DD MMM YYYY')}
+            </span>
+            <button type="button" onClick={handleNextWeek}>
+              &gt;
+            </button>
+          </div>
+          <div className="calendar-weeks-wrapper">
+            <table className="calendar-table">
+              <thead>
+                <tr>
+                  {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
+                    <th key={day}>{day}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 2 }).map((_, weekIndex) => (
+                  <tr key={weekIndex}>
+                    {days
+                      .slice(weekIndex * 7, weekIndex * 7 + 7)
+                      .map((dayObj, index) => {
+                        const isSelected =
+                          selectedDate &&
+                          isSameDay(
+                            dayObj.date,
+                            moment(selectedDate).tz('Europe/Amsterdam')
+                          );
+                        const classNames = [];
+                        if (dayObj.isPast) {
+                          classNames.push('gray-out');
+                        } else if (dayObj.isAvailable) {
+                          classNames.push('available');
+                        } else {
+                          classNames.push('unavailable');
+                        }
+                        if (isSelected) {
+                          classNames.push('selected');
+                        }
+
+                        return (
+                          <td
+                            key={index}
+                            className={classNames.join(' ')}
+                            onClick={() => handleDateClick(dayObj)}
+                            style={{
+                              '--animation-order': index + weekIndex * 7,
+                            }}
+                          >
+                            <div className="day-square">
+                              {dayObj.date.date()}
+                            </div>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Calendar;
+
+--- Fields/DateSelector/Utils/IO/generateDates.txt ---
+
+INPUT OUTPUT DESCRIPTION
+
+generateAvailableDates
+export const generateAvailableDates = (timeblocks = [], reservations = []) =>
+
+INPUT
+timeblocks, reservations
+input example:
+
+- timeblocks:
+[
+    {
+        "id": "671e6d5f7272b4a71f47e12b",
+        "_id": "671e6d5f7272b4a71f47e12b",
+        "date": "2024-11-27",
+        "title": "Tijdsblok (27 oktober)",
+        "startTime": "15:25",
+        "endTime": "23:25",
+        "kleurInstelling": "#2c909b",
+        "zitplaatsen": 7,
+        "schemeSettings": {
+            "Monday": {
+                "enabled": true,
+                "startTime": "18:00",
+                "endTime": "21:00",
+                "startDate": "",
+                "endDate": "",
+                "shiftsEnabled": true,
+                "shifts": [
+                    {
+                        "name": "Jan",
+                        "startTime": "20:00"
+                    }
+                ]
+            },
+            "Tuesday": {
+                "enabled": true,
+                "startTime": "18:00",
+                "endTime": "21:00",
+                "startDate": "",
+                "endDate": "",
+                "shiftsEnabled": true,
+                "shifts": [
+                    {
+                        "name": "Shift 2",
+                        "startTime": "20:00"
+                    }
+                ]
+            },
+            "Thursday": {
+                "enabled": true,
+                "startTime": "17:25",
+                "endTime": "23:25",
+                "startDate": "",
+                "endDate": "",
+                "shiftsEnabled": false,
+                "shifts": []
+            },
+            "Wednesday": {
+                "enabled": true,
+                "startTime": "15:25",
+                "endTime": "23:25",
+                "startDate": "",
+                "endDate": ""
+            }
+        },
+        "exceptionalDays": {
+            "sluitingsperiode": [
+                {
+                    "enabled": false,
+                    "startDate": "2024-11-22",
+                    "endDate": "2024-11-27"
+                },
+                {
+                    "enabled": false,
+                    "startDate": "2024-11-22",
+                    "endDate": "2024-11-24"
+                },
+                {
+                    "enabled": false,
+                    "startDate": "",
+                    "endDate": ""
+                },
+                {
+                    "enabled": false,
+                    "startDate": "",
+                    "endDate": ""
+                },
+                {
+                    "enabled": false,
+                    "startDate": "",
+                    "endDate": ""
+                },
+                {
+                    "enabled": false,
+                    "startDate": "",
+                    "endDate": ""
+                }
+            ],
+            "sluitingsdag": [
+                {
+                    "enabled": false,
+                    "date": "2024-11-25"
+                }
+            ],
+            "uitzonderlijkeOpeningsuren": [
+                {
+                    "enabled": false,
+                    "date": "2024-11-28",
+                    "startTime": "08:15",
+                    "endTime": "16:15"
+                }
+            ]
+        },
+        "storedNumber": 10
+    }
+]
+
+
+- reservations:
+[
+    {
+        "guests": 3,
+        "time": "19:25",
+        "date": "2024-11-21"
+    },
+    {
+        "guests": 5,
+        "time": "21:25",
+        "date": "2024-11-22"
+    },
+]
+
+OUTPUT
+uniqueDates
+
+output example:
+
+- uniqueDates
+
+[
+    "2024-11-25",
+    "2024-11-26",
+    "2024-11-27",
+    "2024-11-28",
+    "2024-12-02",
+    "2024-12-03",
+    "2024-12-04",
+]
+
+END OF INPUT OUTPUT DESCRIPTION
+
+
+--- Fields/DateSelector/Utils/dateUtils.js ---
+// Utils/dateUtils.js
+
+import moment from 'moment-timezone';
+
+export const isWeekInPast = (weekStartDate) => {
+  const today = moment().tz('Europe/Brussels').startOf('day');
+  const weekEndDate = weekStartDate.clone().add(6, 'days').endOf('day');
+  return weekEndDate.isBefore(today);
+};
+
+export const isSameDay = (date1, date2) => date1.isSame(date2, 'day');
+
+
+--- Fields/DateSelector/Utils/dates/blockDates.js ---
+// dates/blockDates.js
+
+import { DateTime } from 'luxon';
+
+const getOrInitializeArray = (dict, key) => {
+    if (!Array.isArray(dict[key])) {
+        dict[key] = [];
+    }
+    return dict[key];
+};
+
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+
+const processTimeblock = (block) => {
+    if (!block.date) {
+        return;
+    }
+
+    const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+
+    // Check if date is in closedDates
+    if (window.closedDates.has(dateString)) {
+        return;
+    }
+
+    // Check for exceptional openings
+    if (window.exceptionalOpenings[dateString]) {
+        const exceptionalOpening = window.exceptionalOpenings[dateString];
+        window.dateDictionary[dateString] = [{
+            startTime: exceptionalOpening.startTime,
+            endTime: exceptionalOpening.endTime
+        }];
+    } else {
+        // Use the block's times
+        if (!window.dateDictionary[dateString]) {
+            window.dateDictionary[dateString] = [];
+        }
+        window.dateDictionary[dateString].push({
+            startTime: block.startTime || null,
+            endTime: block.endTime || null
+        });
+    }
+
+    // Process shifts
+    if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        block.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift =>
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+export const getBlockSettingsDates = (timeblocks) => {
+    initializeDictionaries();
+    const dates = [];
+
+    timeblocks.forEach((block) => {
+        processTimeblock(block);
+        // Do not add date if not in dateDictionary (i.e., date was skipped)
+        if (block.date) {
+            const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+            if (window.dateDictionary[dateString]) {
+                dates.push(dateString);
+            }
+        }
+    });
+
+    return dates;
+};
+
+--- Fields/DateSelector/Utils/dates/schemeDates.js ---
+// dates/schemeDates.js
+
+import { DateTime } from 'luxon';
+
+const getOrInitializeArray = (dict, key) => {
+    if (!Array.isArray(dict[key])) {
+        dict[key] = [];
+    }
+    return dict[key];
+};
+
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+
+const isWithinPeriod = (currentDate, endDate) => {
+    return currentDate <= endDate;
+};
+
+const processDaySetting = (dateString, daySetting) => {
+    // Check if date is in closedDates
+    if (window.closedDates.has(dateString)) {
+        return;
+    }
+
+    // Check for exceptional openings
+    if (window.exceptionalOpenings[dateString]) {
+        const exceptionalOpening = window.exceptionalOpenings[dateString];
+        window.dateDictionary[dateString] = [{
+            startTime: exceptionalOpening.startTime,
+            endTime: exceptionalOpening.endTime
+        }];
+    } else {
+        // Use the daySetting's times
+        if (!window.dateDictionary[dateString]) {
+            window.dateDictionary[dateString] = [];
+        }
+        window.dateDictionary[dateString].push({
+            startTime: daySetting.startTime || null,
+            endTime: daySetting.endTime || null,
+        });
+    }
+
+    // Process shifts
+    if (daySetting.shiftsEnabled && Array.isArray(daySetting.shifts) && daySetting.shifts.length > 0) {
+        const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+
+        daySetting.shifts.forEach(shift => {
+            const exists = shiftsArray.some(existingShift =>
+                existingShift.name === shift.name && existingShift.startTime === shift.startTime
+            );
+            if (!exists) {
+                shiftsArray.push({
+                    name: shift.name || '',
+                    startTime: shift.startTime || '',
+                    endTime: shift.endTime || null
+                });
+            }
+        });
+    }
+};
+
+export const getSchemeSettingsDates = (timeblocks, maxDate) => {
+    initializeDictionaries();
+    const dates = [];
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    timeblocks.forEach((block) => {
+        if (!block.schemeSettings) {
+            return;
+        }
+
+        const { schemeSettings } = block;
+        let currentDate = DateTime.now().setZone("Europe/Brussels").startOf('day');
+
+        // Adjust endDate based on dagenInToekomst
+        let endDate = maxDate;
+
+        if (schemeSettings.period && schemeSettings.period.enabled) {
+            const { startDate, endDate: periodEndDate } = schemeSettings.period;
+            if (startDate && periodEndDate) {
+                currentDate = DateTime.fromISO(startDate, { zone: "Europe/Brussels" }).startOf('day');
+                const schemeEndDate = DateTime.fromISO(periodEndDate, { zone: "Europe/Brussels" }).endOf('day');
+                // Use the minimum of schemeEndDate and maxDate
+                endDate = schemeEndDate < maxDate ? schemeEndDate : maxDate;
+            }
+        }
+
+        while (isWithinPeriod(currentDate, endDate)) {
+            const dayOfWeek = currentDate.weekday % 7;
+            const dayName = dayNames[dayOfWeek];
+            const daySetting = schemeSettings[dayName];
+            const dateString = currentDate.toISODate();
+            if (daySetting && daySetting.enabled) {
+                processDaySetting(dateString, daySetting);
+                if (window.dateDictionary[dateString]) {
+                    dates.push(dateString);
+                }
+            }
+            currentDate = currentDate.plus({ days: 1 });
+        }
+    });
+    return dates;
+};
+
+--- Fields/DateSelector/Utils/exceptions.js ---
+import { DateTime } from 'luxon';
+
+export const collectExceptions = (timeblocks) => {
+    window.closedDates = new Set();
+    window.exceptionalOpenings = {};
+
+    timeblocks.forEach((block) => {
+        if (!block.exceptionalDays) {
+            return;
+        }
+
+        const { exceptionalDays } = block;
+
+        // Process sluitingsperiode (closing periods)
+        if (Array.isArray(exceptionalDays.sluitingsperiode)) {
+            exceptionalDays.sluitingsperiode.forEach((period) => {
+                if (period.enabled) {
+                    const { startDate, endDate } = period;
+                    if (startDate && endDate) {
+                        let currentDate = DateTime.fromISO(startDate, { zone: "Europe/Brussels" }).startOf('day');
+                        const endDateObj = DateTime.fromISO(endDate, { zone: "Europe/Brussels" }).startOf('day');
+                        while (currentDate <= endDateObj) {
+                            const dateString = currentDate.toISODate();
+                            window.closedDates.add(dateString);
+                            console.log(`[collectExceptions] Adding ${dateString} to closedDates due to sluitingsperiode.`);
+                            currentDate = currentDate.plus({ days: 1 });
+                        }
+                    }
+                }
+            });
+        }
+
+        // Process sluitingsdag (closing days)
+        if (Array.isArray(exceptionalDays.sluitingsdag)) {
+            exceptionalDays.sluitingsdag.forEach((day) => {
+                if (day.enabled) {
+                    const { date } = day;
+                    if (date) {
+                        window.closedDates.add(date);
+                        console.log(`[collectExceptions] Adding ${date} to closedDates due to sluitingsdag.`);
+                    }
+                }
+            });
+        }
+
+        // Process uitzonderlijkeOpeningsuren (exceptional opening hours)
+        if (Array.isArray(exceptionalDays.uitzonderlijkeOpeningsuren)) {
+            exceptionalDays.uitzonderlijkeOpeningsuren.forEach((opening) => {
+                if (opening.enabled) {
+                    const { date, startTime, endTime } = opening;
+                    if (date && startTime && endTime) {
+                        window.exceptionalOpenings[date] = {
+                            startTime,
+                            endTime,
+                        };
+                        console.log(`[collectExceptions] Adding exceptional opening for ${date}: ${startTime} - ${endTime}`);
+                    }
+                }
+            });
+        }
+    });
+};
+
+--- Fields/DateSelector/Utils/generateDates.js ---
+// Calendar/generateDates.js
+
+import { DateTime } from 'luxon';
+import { collectExceptions } from './exceptions';
+import { getSchemeSettingsDates } from './dates/schemeDates';
+import { getBlockSettingsDates } from './dates/blockDates';
+import { generateAvailableTimesForDate } from '../../TimeSelector/Utils/generateTimes'; // Ensure correct import path
+
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+
+export const generateAvailableDates = (timeblocks = [], reservations = []) => {
+    initializeDictionaries();
+    collectExceptions(timeblocks);
+
+    const dagenInToekomstRaw = window.generalSettings?.dagenInToekomst;
+    let dagenInToekomst = 365;
+
+    if (dagenInToekomstRaw) {
+        if (typeof dagenInToekomstRaw === 'number') {
+            dagenInToekomst = dagenInToekomstRaw;
+        } else if (typeof dagenInToekomstRaw === 'string') {
+            dagenInToekomst = parseInt(dagenInToekomstRaw, 10);
+            if (isNaN(dagenInToekomst)) {
+                dagenInToekomst = 365;
+            }
+        }
+    }
+
+    const today = DateTime.now().setZone("Europe/Brussels").startOf('day');
+    const maxDate = today.plus({ days: dagenInToekomst - 1 }).endOf('day'); // Subtract 1 because we count today as day 1
+
+    const blockDates = getBlockSettingsDates(timeblocks);
+    const schemeDates = getSchemeSettingsDates(timeblocks, maxDate);
+    const combinedDates = [...blockDates, ...schemeDates];
+
+    const filteredDates = combinedDates.filter(dateStr => {
+        const date = DateTime.fromISO(dateStr, { zone: "Europe/Brussels" }).startOf('day');
+        return date >= today && date <= maxDate;
+    });
+
+    let uniqueDates = Array.from(new Set(filteredDates)).sort();
+
+    // Initialize countingDictionary
+    const countingDictionary = {};
+
+    // Retrieve intervalReservatie and validate it
+    const intervalReservatie = window.generalSettings?.intervalReservatie;
+    let intervalMinutes = 30; // Default value
+
+    if (
+        typeof intervalReservatie === 'number' &&
+        Number.isInteger(intervalReservatie) &&
+        intervalReservatie > 0
+    ) {
+        intervalMinutes = intervalReservatie;
+    } else {
+        console.warn(
+            `[generateAvailableDates] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+        );
+    }
+
+    // Retrieve duurReservatie and validate it
+    const duurReservatieRaw = window.generalSettings?.duurReservatie;
+    let duurReservatieMinutes = 120; // Default duration in minutes (2 hours)
+
+    if (
+        typeof duurReservatieRaw === 'number' &&
+        Number.isInteger(duurReservatieRaw) &&
+        duurReservatieRaw > 0
+    ) {
+        duurReservatieMinutes = duurReservatieRaw;
+    } else {
+        console.warn(
+            `[generateAvailableDates] Invalid duurReservatie value "${duurReservatieRaw}". Using default duurReservatieMinutes = 120`
+        );
+    }
+
+    // Function to generate times for a given dateKey
+    const generateAvailableTimesForDateKey = (dateKey) => {
+        const dateDictionary = window.dateDictionary;
+        const shiftsPerDate = window.shiftsPerDate;
+
+        if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+            return [];
+        }
+
+        const shiftData =
+            shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
+
+        if (shiftData.length > 0) {
+            const shiftButtons = shiftData.map((shift) => ({
+                label: shift.name,
+                value: shift.startTime,
+            }));
+            return shiftButtons.map(button => button.value);
+        }
+
+        const times = [];
+        const selectedDate = DateTime.fromISO(dateKey, { zone: "Europe/Brussels" }).toJSDate();
+
+        dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+
+            let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
+
+            const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
+
+            while (startDateTime < endDateTime) {
+                const timeString = startDateTime.toFormat('HH:mm');
+                times.push(timeString);
+                startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+            }
+        });
+
+        const uniqueTimes = [...new Set(times)].sort(
+            (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+        );
+
+        return uniqueTimes;
+    };
+
+    // Generate countingDictionary with initial counts
+    uniqueDates.forEach(dateKey => {
+        const times = generateAvailableTimesForDateKey(dateKey);
+        countingDictionary[dateKey] = {};
+
+        times.forEach(time => {
+            countingDictionary[dateKey][time] = 0;
+        });
+    });
+
+    // Process reservations to update counts
+    reservations.forEach(reservation => {
+        const reservationDate = reservation.date; // string in "YYYY-MM-DD" format
+        const reservationTime = reservation.time; // string in "HH:mm"
+        const numberOfGuests = reservation.guests;
+
+        if (countingDictionary[reservationDate]) {
+            const resStartDateTime = DateTime.fromISO(`${reservationDate}T${reservationTime}`, { zone: "Europe/Brussels" });
+
+            // Use duurReservatieMinutes instead of fixed 2 hours
+            const resEndDateTime = resStartDateTime.plus({ minutes: duurReservatieMinutes });
+
+            // For each time period in countingDictionary[reservationDate]
+            Object.keys(countingDictionary[reservationDate]).forEach(timePeriodStart => {
+                const timePeriodStartDateTime = DateTime.fromISO(`${reservationDate}T${timePeriodStart}`, { zone: "Europe/Brussels" });
+                const timePeriodEndDateTime = timePeriodStartDateTime.plus({ minutes: intervalMinutes });
+
+                // Check if reservation interval collides with time period
+                if (resStartDateTime < timePeriodEndDateTime && resEndDateTime > timePeriodStartDateTime) {
+                    // There is a collision
+                    countingDictionary[reservationDate][timePeriodStart] += numberOfGuests;
+                }
+            });
+        }
+    });
+
+    // Print the countingDictionary
+    console.log('[generateAvailableDates] Counting Dictionary:', countingDictionary);
+
+    // Store countingDictionary in window for access in generateAvailableTimesForDate
+    window.countingDictionary = countingDictionary;
+
+    // Remove dates with no available time buttons
+    const datesToRemove = [];
+    uniqueDates.forEach(dateKey => {
+        const selectedDate = DateTime.fromISO(dateKey, { zone: "Europe/Brussels" }).toJSDate();
+        const availableTimeButtons = generateAvailableTimesForDate(selectedDate);
+
+        if (availableTimeButtons.length === 0) {
+            datesToRemove.push(dateKey);
+        }
+    });
+
+    // Filter out the dates to remove
+    uniqueDates = uniqueDates.filter(dateKey => !datesToRemove.includes(dateKey));
+
+    // Print the final uniqueDates
+    console.log('[generateAvailableDates] Final Unique Dates:', uniqueDates);
+
+    return uniqueDates;
+};
+
+
+--- Fields/DateSelector/index.js ---
+// src/components/DateSelector.js
+
+import React, { useEffect, useState, useCallback } from 'react';
+import Calendar from './Calendar';
+import { generateAvailableDates } from './Utils/generateDates';
+
+const DateSelector = ({
+  formData,
+  handleChange,
+  resetFormDataFields,
+  timeblocks,
+  expanded,
+  setCurrentExpandedField,
+}) => {
+  const [availableDates, setAvailableDates] = useState([]);
+  const [reservations, setReservations] = useState([]); // New state for reservations
+
+  useEffect(() => {
+      const dates = generateAvailableDates(timeblocks, reservations);
+      setAvailableDates(dates);
+  }, [timeblocks, reservations]);
+
+  const formatDateForFilter = (date) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleDateSelect = (date) => {
+    window.selectedDate = formatDateForFilter(date);
+    handleChange({
+      target: { name: 'date', value: date },
+    });
+    resetFormDataFields(['time']);
+    if (setCurrentExpandedField) {
+      setCurrentExpandedField('time');
+    }
+  };
+
+  // Memoize the callback to prevent unnecessary re-renders
+  const handleReservationsFetched = useCallback((data) => {
+    setReservations(data); // Update the reservations state
+  }, []);
+
+  return (
+    <div className="form-group date-selector-container">
+      <label htmlFor="date" className="default-text-color">
+        Datum<span className="required">*</span>
+      </label>
+      <Calendar
+        availableDates={availableDates}
+        selectedDate={formData.date ? formData.date : null}
+        onSelectDate={handleDateSelect}
+        autoExpand={expanded}
+        onReservationsFetched={handleReservationsFetched} // Pass the memoized handler as prop
+      />
+    </div>
+  );
+};
+
+export default DateSelector;
+
+
+--- Fields/GuestSelector/index.js ---
+import React, { useState, useEffect, useRef } from 'react';
+import './css/guestNumberSelector.css';
+
+const GuestNumberSelector = ({
+  formData,
+  handleChange,
+  field,
+  expanded,
+  setCurrentExpandedField,
+  maxGuests,
+  generalSettings, // Added generalSettings prop
+  onExceedMaxGuests, // New prop to notify parent when max is exceeded
+}) => {
+  const [isExpanded, setIsExpanded] = useState(expanded || false);
+  const [customGuestsVisible, setCustomGuestsVisible] = useState(false);
+  const guestSelectorRef = useRef(null);
+
+  // Determine if notice should be shown
+  const showNoticeForMaxGuests = generalSettings?.showNoticeForMaxGuests === 'Ja';
+
+  // Generate preset numbers and determine if '+6' option should be shown
+  let presetNumbers = [];
+  let showPlusSixOption = false;
+
+  if (showNoticeForMaxGuests) {
+    // Always show preset numbers [1,2,3,4,5] and '+6' option
+    presetNumbers = [1, 2, 3, 4, 5];
+    showPlusSixOption = true;
+  } else {
+    // When showNoticeForMaxGuests is 'Nee', limit to maxGuests
+    const limitedPreset = Math.min(maxGuests, 5);
+    presetNumbers = Array.from({ length: limitedPreset }, (_, i) => i + 1);
+    if (maxGuests > 5) {
+      showPlusSixOption = true;
+    }
+  }
+
+  useEffect(() => {
+    // Reset guest number if exceeding maxGuests and showNoticeForMaxGuests is 'Nee'
+    if (!showNoticeForMaxGuests && field) {
+      const numGuests = parseInt(formData[field.id], 10);
+      if (numGuests > maxGuests) {
+        handleChange({
+          target: { name: field.id, value: maxGuests.toString() },
+        });
+        if (onExceedMaxGuests) {
+          onExceedMaxGuests();
+        }
+      }
+    }
+  }, [formData, field, maxGuests, handleChange, showNoticeForMaxGuests, onExceedMaxGuests]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        guestSelectorRef.current &&
+        !guestSelectorRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsExpanded(expanded);
+  }, [expanded]);
+
+  if (!field) {
+    return null;
+  }
+
+  const handleButtonClick = () => {
+    setIsExpanded(!isExpanded);
+    if (!isExpanded && setCurrentExpandedField) {
+      setCurrentExpandedField('guest');
+    }
+  };
+
+  const handleGuestSelect = (number) => {
+    handleChange({
+      target: { name: field.id, value: number },
+    });
+    setIsExpanded(false);
+    setCustomGuestsVisible(false);
+    if (setCurrentExpandedField) {
+      setCurrentExpandedField('date');
+    }
+  };
+
+  const handleCustomButtonClick = () => {
+    setCustomGuestsVisible(true);
+  };
+
+  const handleInputChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+    value = value ? parseInt(value, 10) : '';
+    if (!showNoticeForMaxGuests && value > maxGuests) {
+      value = maxGuests;
+      if (onExceedMaxGuests) {
+        onExceedMaxGuests();
+      }
+    }
+    handleChange({
+      target: { name: field.id, value: value.toString() },
+    });
+  };
+
+  const formatDisplayGuests = () => {
+    return formData[field.id]
+      ? `${formData[field.id]} ${formData[field.id] === '1' ? 'Gast' : 'Gasten'}`
+      : 'Selecteer aantal gasten';
+  };
+
+  const numGuests = parseInt(formData[field.id], 10) || 0;
+
+  return (
+    <div
+      className="form-group guest-number-selector-container"
+      ref={guestSelectorRef}
+    >
+      <label htmlFor={field.id} className="default-text-color">
+        {field.label}
+        {field.required && <span className="required">*</span>}
+      </label>
+      <div className="guest-number-display" onClick={handleButtonClick}>
+        <span>{formatDisplayGuests()}</span>
+        <span className="arrow">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            style={{
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s',
+            }}
+          >
+            <path
+              d="M7 10l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+          </svg>
+        </span>
+      </div>
+      {isExpanded && (
+        <div className="guest-number-selector">
+          <div className="guest-number-options">
+            {presetNumbers.map((number) => (
+              <div
+                key={number}
+                className={`guest-number-option ${
+                  formData[field.id] === number.toString() ? 'selected' : ''
+                }`}
+                onClick={() => handleGuestSelect(number.toString())}
+              >
+                {number}
+              </div>
+            ))}
+            {showPlusSixOption && (
+              <div
+                className={`guest-number-option ${
+                  numGuests > 5 ? 'selected' : ''
+                }`}
+                onClick={handleCustomButtonClick}
+              >
+                6+
+              </div>
+            )}
+          </div>
+          {customGuestsVisible && (
+            <div className="guest-number-custom-input">
+              <input
+                type="number"
+                id={field.id}
+                name={field.id}
+                value={formData[field.id] || ''}
+                onChange={handleInputChange}
+                required={field.required}
+                placeholder="Aantal gasten"
+                min={6}
+                // Set max only if showNoticeForMaxGuests is 'Nee'
+                max={!showNoticeForMaxGuests ? maxGuests : undefined}
+              />
+              <button
+                type="button"
+                className="close-custom-guest-button"
+                onClick={() => setIsExpanded(false)}
+              >
+                Sluiten
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GuestNumberSelector;
+
+
+--- Fields/TimeSelector/Utils/generateTimes.js ---
+// generateTimes.js
+
+import { DateTime } from 'luxon';
+
+const formatDateKey = (date) => {
+    const formattedDate = DateTime.fromJSDate(date).toISODate();
+    return formattedDate;
+};
+
+export const generateAvailableTimesForDate = (selectedDate) => {
+    const dateDictionary = window.dateDictionary;
+    const shiftsPerDate = window.shiftsPerDate;
+    const dateKey = formatDateKey(selectedDate);
+    const now = DateTime.now().setZone("Europe/Brussels");
+
+    // Retrieve intervalReservatie and validate it
+    const intervalReservatie = window.generalSettings?.intervalReservatie;
+    let intervalMinutes = 30; // Default value
+
+    if (
+        typeof intervalReservatie === 'number' &&
+        Number.isInteger(intervalReservatie) &&
+        intervalReservatie > 0
+    ) {
+        intervalMinutes = intervalReservatie;
+    } else {
+        console.warn(
+            `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+        );
+    }
+
+    if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+        return [];
+    }
+
+    const shiftData =
+        shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
+
+    let timeButtons = [];
+
+    if (shiftData.length > 0) {
+        timeButtons = shiftData.map((shift) => ({
+            label: shift.name,
+            value: shift.startTime,
+        }));
+    } else {
+        const times = [];
+
+        dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+
+            let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
+
+            const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
+
+            while (startDateTime < endDateTime) {
+                if (startDateTime > now) {
+                    const timeString = startDateTime.toFormat('HH:mm');
+                    times.push(timeString);
+                }
+                startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+            }
+        });
+
+        const uniqueTimes = [...new Set(times)].sort(
+            (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+        );
+
+        timeButtons = uniqueTimes.map((time) => ({
+            label: time,
+            value: time,
+        }));
+    }
+
+    // Filter timeButtons based on countingDictionary
+    const capacityLimit = 3;
+    const countingDictionary = window.countingDictionary || {};
+
+    if (countingDictionary[dateKey]) {
+        timeButtons = timeButtons.filter(button => {
+            const time = button.value;
+            const guestsCount = countingDictionary[dateKey][time] || 0;
+            return guestsCount < capacityLimit;
+        });
+    }
+
+    return timeButtons;
+};
+
+
+--- Fields/TimeSelector/index.js ---
+import React, { useState, useEffect, useRef } from 'react';
+import './css/timeSelector.css';
+import { generateAvailableTimesForDate } from './Utils/generateTimes';
+
+const TimeSelector = ({
+  formData,
+  handleChange,
+  field,
+  selectedDate,
+  timeblocks,
+  expanded,
+  setCurrentExpandedField,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(expanded || false);
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const timeSelectorRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const times = generateAvailableTimesForDate(selectedDate);
+      setAvailableTimes(times);
+    } else {
+      setAvailableTimes([]);
+    }
+  }, [selectedDate, timeblocks]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        timeSelectorRef.current &&
+        !timeSelectorRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsExpanded(expanded);
+  }, [expanded]);
+
+  const handleTimeSelect = (timeValue) => {
+    handleChange({
+      target: { name: field.id, value: timeValue },
+    });
+    setIsExpanded(false);
+    if (setCurrentExpandedField) {
+      setCurrentExpandedField(null);
+    }
+  };
+
+  const formatDisplayTime = () => {
+    if (formData[field.id]) {
+      const selected = availableTimes.find(time => time.value === formData[field.id]);
+      return selected ? selected.label : 'Selecteer een tijd';
+    }
+    return 'Selecteer een tijd';
+  };
+
+  if (!field) {
+    return null;
+  }
+
+  return (
+    <div className="form-group time-selector-container" ref={timeSelectorRef}>
+      <label className="default-text-color" htmlFor={field.id}>
+        {field.label}
+        {field.required && <span className="required">*</span>}
+      </label>
+
+      {!selectedDate ? (
+        <p className="info-text">Selecteer eerst een datum.</p>
+      ) : (
+        <>
+          <div
+            className="time-display"
+            onClick={() => {
+              setIsExpanded(!isExpanded);
+              if (!isExpanded && setCurrentExpandedField) {
+                setCurrentExpandedField('time');
+              }
+            }}
+          >
+            <span>{formatDisplayTime()}</span>
+            <span className="arrow">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                style={{
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                <path
+                  d="M7 10l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </span>
+          </div>
+          {isExpanded && (
+            <div className="time-selector">
+              {availableTimes.length === 0 ? (
+                <div className="no-times">Geen beschikbare tijden.</div>
+              ) : (
+                <div className="time-options">
+                  {availableTimes.map((time) => (
+                    <div
+                      key={time.value}
+                      className={`time-option ${
+                        formData[field.id] === time.value ? 'selected' : ''
+                      }`}
+                      onClick={() => handleTimeSelect(time.value)}
+                    >
+                      {time.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+export default TimeSelector;
+
+
+--- Notifications/index.js ---
+import React from 'react';
+import { FaExclamationTriangle } from 'react-icons/fa';
+import './css/maxGuestsMessage.css';
+
+const MaxGuestMessage = ({ maxGuests, noticePhoneNumber, type }) => {
+  let message = '';
+
+  if (type === 'call') {
+    message = `Het aantal gasten is hoger dan het maximum van ${maxGuests} voor online reservaties. Neem alstublieft telefonisch contact met ons op${noticePhoneNumber ? ` via ${noticePhoneNumber}` : ''} om uw reservatie te maken.`;
+  } else if (type === 'limit') {
+    message = `U kunt maximaal ${maxGuests} gasten online reserveren.`;
+  }
+
+  return (
+    <div className="max-guest-message">
+      <FaExclamationTriangle className="warning-icon" />
+      <p>{message}</p>
+    </div>
+  );
+};
+
+export default MaxGuestMessage;
+
+
+--- Title/index.js ---
+// src/components/NewReservation/Title.jsx
+
+import React from 'react';
+
+const Title = ({ title, subtitle }) => {
+  return (
+    <>
+      <h2 className='title default-text-color'>{title}</h2>
+      <h3 className="subtitle default-text-color">{subtitle}</h3>
+    </>
+  );
+};
+
+export default Title;
+
+
+--- algorithm.md ---
+# Documentation: `generateAvailableDates.js`
+
+## Overview
+
+The `generateAvailableDates.js` script is responsible for generating a list of available dates for reservations, taking into account both regular scheduling and exceptions such as closing periods, specific closed days, and exceptional opening hours.
+
+This script processes the `timeblocks` data, which includes regular schedule settings (`schemeSettings`) and exception rules (`exceptionalDays`), and produces a list of dates when the restaurant is available for reservations.
+
+---
+
+## Key Concepts
+
+- **Timeblocks**: The primary data structure containing schedule and exception information.
+- **Exceptions**: Special rules that modify the regular schedule, including closing periods, closed days, and exceptional opening hours.
+- **Date Dictionaries**:
+  - `window.dateDictionary`: Stores available time ranges for each date.
+  - `window.shiftsPerDate`: Stores available shifts for each date.
+  - `window.closedDates`: A set of dates when the restaurant is closed.
+  - `window.exceptionalOpenings`: An object mapping dates to their exceptional opening times.
+
+---
+
+## Functions and Workflow
+
+### 1. Initialization Functions
+
+#### `initializeDictionaries()`
+
+```javascript
+const initializeDictionaries = () => {
+    window.dateDictionary = window.dateDictionary || {};
+    window.shiftsPerDate = window.shiftsPerDate || {};
+};
+```
+
+- Initializes or resets the global dictionaries used to store date and shift information.
+
+#### `collectExceptions(timeblocks)`
+
+```javascript
+const collectExceptions = (timeblocks) => {
+    window.closedDates = new Set();
+    window.exceptionalOpenings = {};
+
+    timeblocks.forEach((block) => {
+        if (!block.exceptionalDays) {
+            return;
+        }
+
+        const { exceptionalDays } = block;
+
+        // Process sluitingsperiode (closing periods)
+        // Process sluitingsdag (closing days)
+        // Process uitzonderlijkeOpeningsuren (exceptional opening hours)
+    });
+};
+```
+
+- Processes the `exceptionalDays` from each `timeblock`.
+- Populates `window.closedDates` with dates when the restaurant is closed.
+- Populates `window.exceptionalOpenings` with dates and times when the restaurant has exceptional opening hours.
+
+---
+
+### 2. Processing Functions
+
+#### `processTimeblock(block)`
+
+```javascript
+const processTimeblock = (block) => {
+    if (!block.date) {
+        return;
+    }
+
+    const dateString = DateTime.fromISO(block.date, { zone: "Europe/Brussels" }).toISODate();
+
+    // Check if date is in closedDates
+    // Check for exceptional openings
+    // Process shifts
+};
+```
+
+- Processes individual `timeblock` entries with specific dates.
+- Skips dates that are in `window.closedDates`.
+- Uses exceptional opening times if available.
+- Updates `window.dateDictionary` and `window.shiftsPerDate` accordingly.
+
+#### `processDaySetting(dateString, daySetting)`
+
+```javascript
+const processDaySetting = (dateString, daySetting) => {
+    // Check if date is in closedDates
+    // Check for exceptional openings
+    // Process shifts
+};
+```
+
+- Processes schedule settings for recurring days within `schemeSettings`.
+- Skips dates in `window.closedDates`.
+- Uses exceptional opening times if available.
+- Updates `window.dateDictionary` and `window.shiftsPerDate`.
+
+---
+
+### 3. Date Generation Functions
+
+#### `getBlockSettingsDates(timeblocks)`
+
+```javascript
+const getBlockSettingsDates = (timeblocks) => {
+    initializeDictionaries();
+    const dates = [];
+
+    timeblocks.forEach((block) => {
+        processTimeblock(block);
+        // Add date to dates array if applicable
+    });
+
+    return dates;
+};
+```
+
+- Processes `timeblocks` that have specific dates (block settings).
+- Returns an array of dates available based on block settings.
+
+#### `getSchemeSettingsDates(timeblocks)`
+
+```javascript
+const getSchemeSettingsDates = (timeblocks) => {
+    initializeDictionaries();
+    const dates = [];
+
+    timeblocks.forEach((block) => {
+        // Process schemeSettings
+        // Loop over dates in the schedule period
+        // Use processDaySetting for each date
+    });
+
+    return dates;
+};
+```
+
+- Processes `timeblocks` with recurring schedules (`schemeSettings`).
+- Generates dates for each enabled day in the schedule period.
+- Returns an array of dates available based on scheme settings.
+
+---
+
+### 4. Main Function
+
+#### `generateAvailableDates(timeblocks)`
+
+```javascript
+export const generateAvailableDates = (timeblocks) => {
+    initializeDictionaries();
+    collectExceptions(timeblocks);
+
+    const blockDates = getBlockSettingsDates(timeblocks);
+    const schemeDates = getSchemeSettingsDates(timeblocks);
+    const combinedDates = [...blockDates, ...schemeDates];
+    const uniqueDates = Array.from(new Set(combinedDates)).sort();
+
+    return uniqueDates;
+};
+```
+
+- Initializes dictionaries and collects exceptions.
+- Generates dates from both block settings and scheme settings.
+- Combines and deduplicates the dates.
+- Returns a sorted array of unique available dates.
+
+---
+
+## Exception Handling
+
+### Closing Periods (`sluitingsperiode`)
+
+- Represented as date ranges when the restaurant is closed.
+- Dates within these ranges are added to `window.closedDates`.
+
+### Closed Days (`sluitingsdag`)
+
+- Specific dates when the restaurant is closed.
+- Added directly to `window.closedDates`.
+
+### Exceptional Opening Hours (`uitzonderlijkeOpeningsuren`)
+
+- Specific dates with special opening times.
+- Stored in `window.exceptionalOpenings` with their respective times.
+
+### Logic Flow
+
+- **Priority Order**:
+  1. If a date is in `window.closedDates`, it is skipped entirely.
+  2. If a date has exceptional openings in `window.exceptionalOpenings`, those times are used.
+  3. Otherwise, regular schedule times are used.
+
+---
+
+## Detailed Workflow
+
+1. **Initialization**:
+   - Call `initializeDictionaries()` to set up the global variables.
+   - Call `collectExceptions(timeblocks)` to process and store exceptions.
+
+2. **Processing Block Settings**:
+   - Iterate over each `timeblock`.
+   - For blocks with a specific `date`, call `processTimeblock(block)`.
+     - Skip if the date is closed.
+     - Use exceptional opening times if available.
+     - Update `window.dateDictionary` and `window.shiftsPerDate`.
+
+3. **Processing Scheme Settings**:
+   - Iterate over each `timeblock`.
+   - For blocks with `schemeSettings`, loop over the schedule period.
+     - For each date, call `processDaySetting(dateString, daySetting)`.
+       - Skip if the date is closed.
+       - Use exceptional opening times if available.
+       - Update `window.dateDictionary` and `window.shiftsPerDate`.
+
+4. **Generating Available Dates**:
+   - Combine dates from block settings and scheme settings.
+   - Remove duplicates and sort the dates.
+   - Return the final list of available dates.
+
+---
+
+## Logging Statements
+
+- **Debugging Information**:
+  - The script includes `console.log` statements to trace the computation.
+  - Logs when dates are added to `closedDates` and `exceptionalOpenings`.
+  - Logs when dates are skipped or processed in `processTimeblock` and `processDaySetting`.
+  - Logs the final list of available dates in `generateAvailableDates`.
+
+---
+
+## Example Usage
+
+```javascript
+import { generateAvailableDates } from './generateAvailableDates';
+
+const timeblocks = [/* Array of timeblock objects */];
+
+const availableDates = generateAvailableDates(timeblocks);
+
+console.log('Available Dates:', availableDates);
+```
+
+---
+
+## Important Variables
+
+- **`timeblocks`**: Array of timeblock objects containing schedule and exception data.
+- **`window.dateDictionary`**: Stores available time ranges for each date.
+- **`window.shiftsPerDate`**: Stores shift information for each date.
+- **`window.closedDates`**: Set of dates when the restaurant is closed.
+- **`window.exceptionalOpenings`**: Object mapping dates to exceptional opening times.
+
+---
+
+## Dependencies
+
+- **Luxon Library**: Used for date and time manipulation.
+  - Import: `import { DateTime } from 'luxon';`
+
+---
+
+## Notes
+
+- **Global Variables**: The use of `window` variables allows data sharing across functions but is generally discouraged in modular code. Consider refactoring to use context or state management if integrating into a larger application.
+- **Date Formats**: Dates are handled in ISO format (`YYYY-MM-DD`) to maintain consistency.
+- **Time Zones**: All date and time manipulations are set to `"Europe/Brussels"` timezone.
+
+---
+
+# Documentation: `generateAvailableTimesForDate.js`
+
+## Overview
+
+The `generateAvailableTimesForDate.js` script is designed to generate a list of available times or shifts for a selected date. It takes into account both regular schedule times and any exceptions specified for that date, such as exceptional opening hours or shifts.
+
+---
+
+## Key Concepts
+
+- **Selected Date**: The date for which available times are being generated, stored in `window.unformattedDate`.
+- **Date Dictionaries**:
+  - `window.dateDictionary`: Contains available time ranges for each date.
+  - `window.shiftsPerDate`: Contains shift information for each date.
+- **Interval Minutes**: The time interval between available times, set to 30 minutes by default.
+
+---
+
+## Function and Workflow
+
+### `generateAvailableTimesForDate()`
+
+```javascript
+export const generateAvailableTimesForDate = () => {
+    const selectedDate = window.unformattedDate;
+    const dateDictionary = window.dateDictionary;
+    const shiftsPerDate = window.shiftsPerDate;
+    const dateKey = formatDateKey(selectedDate);
+    const intervalMinutes = 30;
+
+    // Check if date has available times
+    // Check for shift data
+    // Generate times based on time ranges
+    // Return list of available times or shifts
+};
+```
+
+- Generates available times or shifts for the selected date.
+- Checks if there are any times available for the date in `window.dateDictionary`.
+- Prioritizes shifts if they are available for the date.
+- Generates times based on available time ranges if no shifts are present.
+- Returns an array of time options for the user.
+
+---
+
+## Helper Function
+
+### `formatDateKey(date)`
+
+```javascript
+const formatDateKey = (date) => {
+    const formattedDate = DateTime.fromJSDate(date).toISODate();
+    return formattedDate;
+};
+```
+
+- Converts a JavaScript `Date` object to an ISO date string (`YYYY-MM-DD`).
+- Ensures consistency in date keys used in dictionaries.
+
+---
+
+## Detailed Workflow
+
+1. **Retrieve Selected Date**:
+   - `const selectedDate = window.unformattedDate;`
+   - The date selected by the user is retrieved from the global `window` object.
+
+2. **Prepare Variables**:
+   - `dateKey`: Formatted date string used as a key in dictionaries.
+   - `intervalMinutes`: Time interval between available times.
+
+3. **Check for Available Times**:
+   - If there are no entries for the `dateKey` in `window.dateDictionary`, return an empty array.
+
+4. **Check for Shift Data**:
+   - If shifts are available for the date in `window.shiftsPerDate`, generate time options based on shifts.
+   - Each shift is converted to an object with `label` and `value`.
+
+5. **Generate Times from Time Ranges**:
+   - Iterate over each time range in `window.dateDictionary[dateKey]`.
+   - Use `moment` to handle time calculations.
+   - Increment time by `intervalMinutes` until the end time is reached.
+   - Collect unique times and sort them.
+
+6. **Prepare Time Options**:
+   - Convert the list of times into an array of objects with `label` and `value`.
+   - Return the array of available times.
+
+---
+
+## Example Time Generation
+
+```javascript
+dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+    let currentTime = moment(startTime, 'HH:mm');
+    const endMoment = moment(endTime, 'HH:mm');
+
+    while (currentTime.isBefore(endMoment)) {
+        const timeString = currentTime.format('HH:mm');
+        times.push(timeString);
+        currentTime.add(intervalMinutes, 'minutes');
+    }
+});
+```
+
+- For each time range, the function generates times at 30-minute intervals.
+- Uses `moment` for time arithmetic.
+
+---
+
+## Logging Statements
+
+- **Debugging Information**:
+  - Logs when no times are available for the selected date.
+  - Logs when shift data is used for the date.
+  - Logs each time range being processed.
+  - Logs the final list of available times.
+
+---
+
+## Important Variables
+
+- **`selectedDate`**: The date selected by the user.
+- **`dateDictionary`**: Contains time ranges for each date.
+- **`shiftsPerDate`**: Contains shift information for each date.
+- **`dateKey`**: Formatted date string (`YYYY-MM-DD`).
+- **`intervalMinutes`**: Time interval between available times (default is 30 minutes).
+- **`times`**: Array of generated times.
+
+---
+
+## Dependencies
+
+- **Moment.js Library**: Used for time manipulation.
+  - Import: `import moment from 'moment-timezone';`
+- **Luxon Library**: Used for date formatting.
+  - Import: `import { DateTime } from 'luxon';`
+
+---
+
+## Example Usage
+
+```javascript
+import { generateAvailableTimesForDate } from './generateAvailableTimesForDate';
+
+// Assume window.unformattedDate is set to the selected date
+const availableTimes = generateAvailableTimesForDate();
+
+console.log('Available Times:', availableTimes);
+```
+
+---
+
+## Notes
+
+- **Global Variables**: Relies on `window.unformattedDate`, `window.dateDictionary`, and `window.shiftsPerDate`. Consider passing these as parameters or using context to avoid global dependencies.
+- **Time Zones**: Time manipulations are set to `"Europe/Brussels"` timezone to ensure consistency.
+- **Time Formats**: Times are formatted as `HH:mm` strings.
+
+---
+
+## Handling Shifts and Time Ranges
+
+- **Priority Order**:
+  - If shifts are available for the date, they are used to generate time options.
+  - If no shifts are present, time ranges are used to generate times at specified intervals.
+
+- **Shift Data Structure**:
+  - Each shift should have a `name`, `startTime`, and optionally an `endTime`.
+  - Shifts are converted into time options with `label` (shift name) and `value` (start time).
+
+---
+
+## Error Handling
+
+- The function returns an empty array if:
+  - No times are available for the selected date.
+  - The selected date is not present in `window.dateDictionary`.
+
+---
+
+## Integration with Date Selection
+
+- Ensure that `window.unformattedDate` is set whenever a date is selected.
+- The `generateAvailableTimesForDate` function should be called whenever the selected date changes to update the available times accordingly.
+
+---
+
+# Short Summary
+
+The provided documentation covers two scripts responsible for generating available dates and times for a reservation system, taking into account regular schedules and exceptions like closures and exceptional openings. The `generateAvailableDates.js` script processes `timeblocks` data to create a list of dates when the restaurant is open, while the `generateAvailableTimesForDate.js` script generates available times or shifts for a selected date. Both scripts use global variables to store and access data across functions, and they include logging statements for debugging purposes. Key concepts, functions, workflows, and important variables are explained to provide a comprehensive understanding of how the date and time generation works.
+
+--- index.js ---
+import React, { useState, useEffect } from 'react';
+import Title from './Title';
+import DateSelector from './Fields/DateSelector';
+import TimeSelector from './Fields/TimeSelector';
+import GuestNumberSelector from './Fields/GuestSelector';
+import MaxGuestMessage from './Notifications/index';
+import './css/notifications.css';
+
+const StepOne = ({
+  title,
+  timeblocks,
+  formData,
+  handleChange,
+  resetFormDataFields,
+  setCurrentStep,
+  fields,
+  generalNotification,
+  expandedField,
+  generalSettings, // Added generalSettings prop
+}) => {
+  const [currentExpandedField, setCurrentExpandedField] = useState(expandedField || 'guest');
+
+  useEffect(() => {
+    setCurrentExpandedField(expandedField || 'guest');
+  }, [expandedField]);
+
+  // Use maxGasten from generalSettings, default to 10 if not available
+  const maxGuests = parseInt(generalSettings?.maxGasten, 10) || 10;
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    setCurrentStep(2);
+  };
+
+  const timeField = fields.find((field) => field.id === 'time');
+  const guestNumberField = fields.find((field) => field.id === 'guests');
+
+  const numGuests = parseInt(formData[guestNumberField.id], 10) || 0;
+
+  // Determine if a notice should be shown based on settings and guest number
+  const showNotice =
+    (generalSettings?.showNoticeForMaxGuests === 'Ja' && numGuests > maxGuests) ||
+    (generalSettings?.showNoticeForMaxGuests !== 'Ja' && numGuests > maxGuests);
+
+  // Determine the message type based on settings
+  const noticeType =
+    generalSettings?.showNoticeForMaxGuests === 'Ja' ? 'call' : 'limit';
+
+  // Determine if the time has been selected
+  const isTimeSelected = !!formData[timeField.id];
+
+  return (
+    <form onSubmit={handleNext}>
+      <Title title={title} subtitle="Stap 1/3" />
+
+      {generalNotification && generalNotification.trim() !== '' && (
+        <div className="general-notification">{generalNotification}</div>
+      )}
+
+      <GuestNumberSelector
+        formData={formData}
+        handleChange={handleChange}
+        field={guestNumberField}
+        expanded={currentExpandedField === 'guest'}
+        setCurrentExpandedField={setCurrentExpandedField}
+        maxGuests={maxGuests}
+        generalSettings={generalSettings} // Pass generalSettings
+      />
+
+      {showNotice && (
+        <MaxGuestMessage
+          maxGuests={maxGuests}
+          noticePhoneNumber={
+            generalSettings?.showNoticeForMaxGuests === 'Ja'
+              ? generalSettings.noticePhoneNumber
+              : ''
+          }
+          type={noticeType}
+        />
+      )}
+
+      {/* Hide Date and Time selectors if notice is shown */}
+      {!showNotice && formData[guestNumberField.id] && (
+        <DateSelector
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          expanded={currentExpandedField === 'date'}
+          setCurrentExpandedField={setCurrentExpandedField}
+          timeblocks={timeblocks}
+        />
+      )}
+
+      {!showNotice && formData.date && (
+        <TimeSelector
+          formData={formData}
+          handleChange={handleChange}
+          field={timeField}
+          selectedDate={formData.date}
+          expanded={currentExpandedField === 'time'}
+          setCurrentExpandedField={setCurrentExpandedField}
+          timeblocks={timeblocks}
+        />
+      )}
+
+      {/* Show the "Volgende" button only if time is selected and no notice is shown */}
+      {!showNotice && isTimeSelected && (
+        <button type="submit" className="submit-button">
+          Volgende
+        </button>
+      )}
+    </form>
+  );
+};
+
+export default StepOne;
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Reservation Page/client-booking-page/src/Pages/Steps/StepOne":
+
+├── Fields
+│   ├── DateSelector
+│   │   ├── Calendar.js
+│   │   ├── Utils
+│   │   │   ├── IO
+│   │   │   │   └── generateDates.txt
+│   │   │   ├── dateUtils.js
+│   │   │   ├── dates
+│   │   │   │   ├── blockDates.js
+│   │   │   │   └── schemeDates.js
+│   │   │   ├── exceptions.js
+│   │   │   └── generateDates.js
+│   │   ├── css
+│   │   │   └── calendar.css
+│   │   └── index.js
+│   ├── GuestSelector
+│   │   ├── css
+│   │   │   └── guestNumberSelector.css
+│   │   └── index.js
+│   └── TimeSelector
+│       ├── Utils
+│       │   └── generateTimes.js
+│       ├── css
+│       │   └── timeSelector.css
+│       └── index.js
+├── Notifications
+│   ├── css
+│   │   └── maxGuestsMessage.css
+│   └── index.js
+├── Title
+│   └── index.js
+├── algorithm.md
+├── css
+│   └── notifications.css
+└── index.js
+
+
+List of Files:
+Fields/DateSelector/Calendar.js
+Fields/DateSelector/Utils/IO/generateDates.txt
+Fields/DateSelector/Utils/dateUtils.js
+Fields/DateSelector/Utils/dates/blockDates.js
+Fields/DateSelector/Utils/dates/schemeDates.js
+Fields/DateSelector/Utils/exceptions.js
+Fields/DateSelector/Utils/generateDates.js
+Fields/DateSelector/index.js
+Fields/GuestSelector/index.js
+Fields/TimeSelector/Utils/generateTimes.js
+Fields/TimeSelector/index.js
+Notifications/index.js
+Title/index.js
+algorithm.md
+index.js
+
+Parent components:
+// src/Pages/ReservationForm/index.js
+
+import React, { useState, useEffect } from 'react';
+import StepOne from '../../Steps/StepOne';
+import StepTwo from '../../Steps/StepTwo';
+import SuccessMessage from '../../Steps/StepThree';
+import './css/form.css';
+
+const ReservationForm = ({ title, settings, generalSettings, fields, timeblocks }) => {
+  const initialFormData = {};
+  fields.forEach((field) => {
+    initialFormData[field.id] = '';
+  });
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [expandedField, setExpandedField] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+
+    if (type === 'number' && !/^\d*$/.test(value)) {
+      return;
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    if (formData.date) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        time: '',
+      }));
+    }
+  }, [formData.date]);
+
+  const resetFormDataFields = (fieldsToReset) => {
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData };
+      fieldsToReset.forEach((field) => {
+        newFormData[field] = '';
+      });
+      return newFormData;
+    });
+  };
+
+  const goToStep = (step, field) => {
+    if (step === 1) {
+      if (field === 'guest') {
+        resetFormDataFields(['date', 'time']);
+      } else if (field === 'date') {
+        resetFormDataFields(['time']);
+      }
+    }
+    setCurrentStep(step);
+    setExpandedField(field || null);
+  };
+
+  return (
+    <div className="reservation-form">
+      {currentStep === 1 && (
+        <StepOne
+          title={title}
+          timeblocks={timeblocks}
+          generalNotification={settings?.generalNotification}
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          setCurrentStep={goToStep}
+          fields={fields}
+          expandedField={expandedField}
+          generalSettings={generalSettings} // Pass generalSettings to StepOne
+        />
+      )}
+
+      {currentStep === 2 && (
+        <StepTwo
+          title={title}
+          formData={formData}
+          handleChange={handleChange}
+          setCurrentStep={goToStep}
+          fields={fields}
+        />
+      )}
+
+      {currentStep === 3 && <SuccessMessage />}
+    </div>
+  );
+};
+
+export default ReservationForm;
+// src/components/NewReservation.jsx
+
+import React, { useState, useEffect } from 'react';
+import { fields } from './Config/formConfig.js';
+import './css/newReservation.css';
+import './css/mobile.css';
+import './css/animations.css';
+import './css/style.css';
+import useFonts from '../../Hooks/useFonts.js';
+import transformFonts from '../../Utils/transformFonts.js';
+import computeAlignmentValues from '../../Utils/computeAlignmentValues.js';
+import useApi from '../../Hooks/useApi.js';
+import ReservationModal from './Structure/PopUp.js';
+import ReservationFullScreen from './Structure/FullScreen.js';
+import ReservationForm from './Structure/Form.js';
+import ReservationStyles from './Style/ReservationStyles.js';
+
+const NewReservation = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [restaurantData, setRestaurantData] = useState(null);
+  const api = useApi();
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsClosing(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const endpoint = `${window.baseDomain}api/restaurant/${window.restaurantId}`;
+        const data = await api.get(endpoint);
+        window.restaurantData = data; // Optional: Retain if needed globally
+        setRestaurantData(data);
+        console.log(window.restaurantData);
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [api]);
+
+  useFonts(restaurantData);
+
+  if (!restaurantData) {
+    return <div>Loading...</div>;
+  }
+
+  const { colors, theme, settings, timeblocks } = restaurantData;
+  const generalSettings = restaurantData['general-settings'] || {}; // Extract generalSettings
+  window.generalSettings = generalSettings; // Optional: Retain if needed globally
+
+  const alignment = settings?.alignment || 'fullScreenColor';
+  const { alignmentBottomValue, alignmentTopValue, alignmentMarginValue } = computeAlignmentValues(alignment);
+
+  let { fonts } = restaurantData;
+  fonts = transformFonts(fonts);
+  const { titleFont, subtitleFont, buttonFont, labelFont } = fonts;
+
+  const title = settings?.pageTitle || 'Reserveer een Tafel';
+
+  const backgroundType = colors?.backgroundType || 'solid';
+
+  let formSectionBackgroundStyle = '';
+  if (backgroundType === 'solid') {
+    formSectionBackgroundStyle = `
+      .form-section {
+        background-color: ${colors?.backgroundColor || '#FFFFFF'} !important;
+      }
+    `;
+  } else if (backgroundType === 'gradient') {
+    const startColor = colors?.gradientStartColor || '#FFFFFF';
+    const endColor = colors?.gradientEndColor || '#000000';
+    formSectionBackgroundStyle = `
+      .form-section {
+        background-image: linear-gradient(${startColor}, ${endColor}) !important;
+      }
+    `;
+  } else if (backgroundType === 'animated') {
+    formSectionBackgroundStyle = `
+      .form-section {
+        background-color: ${colors?.backgroundColor || '#FFFFFF'} !important;
+      }
+      .form-section.animated-background {
+        background-size: 800% 800%;
+      }
+    `;
+  }
+
+  const formContent = (
+    <ReservationForm
+      title={title}
+      settings={settings}
+      generalSettings={generalSettings} // Pass generalSettings to ReservationForm
+      fields={fields}
+      timeblocks={timeblocks}
+    />
+  );
+
+  const backgroundBlur = settings?.backgroundBlur || 'sharpPicture';
+
+  const hexToRgba = (hex, opacity) => {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
+  const backgroundColorTransparant = hexToRgba(colors?.backgroundColor || '#FFFFFF', 0.03);
+
+  return (
+    <div
+      className={`new-reservation-page ${window.viewMode === 'popup' ? 'popup-mode' : ''} ${
+        backgroundBlur === 'blurBackground' ? 'blur-background' : ''
+      }`}
+      style={{
+        '--widget-background-color': colors?.widgetBackgroundColor,
+        '--widget-text-color': colors?.widgetTextColor,
+        '--text-color': colors?.textColor,
+        '--background-color': colors?.backgroundColor,
+        '--background-color-transparant': backgroundColorTransparant,
+        '--container-color': colors?.containerColor,
+        '--button-color': colors?.buttonColor,
+        '--button-text-color': colors?.buttonTextColor,
+        '--alignment-bottom': alignmentBottomValue,
+        '--alignment-top': alignmentTopValue,
+        '--alignment-margin': alignmentMarginValue,
+      }}
+    >
+      {window.viewMode === 'full-screen' ? (
+        <ReservationFullScreen theme={theme} formContent={formContent} />
+      ) : (
+        <ReservationModal
+          isModalOpen={isModalOpen}
+          isClosing={isClosing}
+          openModal={openModal}
+          closeModal={closeModal}
+          formContent={formContent}
+        />
+      )}
+
+      {/* Include the ReservationStyles component */}
+      <ReservationStyles
+        fonts={{ labelFont, titleFont, subtitleFont, buttonFont }}
+        formSectionBackgroundStyle={formSectionBackgroundStyle}
+      />
+
+      {window.viewMode === 'full-screen' ? (
+        <div className={`form-section ${backgroundType === 'animated' ? 'animated-background' : ''}`}>
+          {formContent}
+        </div>
+      ) : (
+        <div className=""></div>
+      )}
+    </div>
+  );
+};
+
+export default NewReservation;
+
+
+--- END OF CLIENT RESERVATION CODE ---
+
+So apply the exact same algorithm and logic as for the client reservation code inside the admin reservation code.
+
+Note the that data should be fetched from the auth-reservation endpoint, but the data is the same as the reservation endpoint so it can be treated the same way.
+
+To retrieve the data, useFetchRestaurantData with a call to api/auth-restaurant works fine.
+
+Print the new code in full with the changes. Keep sure to keep styling classes and layout the same as the admin reservation code and use the logic of the client reservation code.

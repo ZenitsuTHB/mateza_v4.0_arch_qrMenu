@@ -1,10 +1,10 @@
-// src/components/ReservationForm/ReservationStepOne.jsx
+// src/Pages/NewReservation/ReservationStepOne.jsx
 
 import React, { useState, useEffect } from 'react';
-import useApi from '../../../Hooks/useApi';
 import ValueSelectorGuests from './ValueSelector';
 import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
+import useApi from '../../../Hooks/useApi';
 
 const ReservationStepOne = ({
   formData,
@@ -20,12 +20,15 @@ const ReservationStepOne = ({
   const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
   const [timeblocksError, setTimeblocksError] = useState(null);
 
-  // Fetch timeblocks on component mount
+  // Fetch timeblocks and general settings on component mount
   useEffect(() => {
     const fetchTimeblocks = async () => {
       try {
-        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`);
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`, { noCache: true });
         setTimeblocks(data.timeblocks || []);
+        window.timeblocks = data.timeblocks || []; // Retain globally if needed
+        const generalSettings = data['general-settings'] || {};
+        window.generalSettings = generalSettings; // Retain globally
       } catch (err) {
         setTimeblocksError(err);
         console.error('Error fetching timeblocks:', err);
@@ -56,7 +59,6 @@ const ReservationStepOne = ({
   }
 
   return (
-    
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests
         value={formData.numberOfGuests}
@@ -69,7 +71,7 @@ const ReservationStepOne = ({
           formData={formData}
           handleChange={handleChange}
           resetFormDataFields={resetFormDataFields}
-          timeblocks={timeblocks} 
+          timeblocks={timeblocks}
         />
       )}
 

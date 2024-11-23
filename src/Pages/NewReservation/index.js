@@ -1,3 +1,5 @@
+// src/Pages/NewReservation/NewReservationAdmin.jsx
+
 import React, { useState } from 'react';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
@@ -11,7 +13,7 @@ const NewReservationAdmin = () => {
   const api = useApi();
 
   const [formData, setFormData] = useState({
-    guests: '',
+    numberOfGuests: '',
     date: '',
     time: '',
     firstName: '',
@@ -25,12 +27,12 @@ const NewReservationAdmin = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [reservationSubmitted, setReservationSubmitted] = useState(false); // New state variable
+  const [reservationSubmitted, setReservationSubmitted] = useState(false);
 
   const validateStepOne = () => {
     const errors = {};
-    if (!formData.guests) {
-      errors.guests = 'Aantal gasten is verplicht';
+    if (!formData.numberOfGuests) {
+      errors.numberOfGuests = 'Aantal gasten is verplicht';
     }
     if (!formData.date) {
       errors.date = 'Datum is verplicht';
@@ -71,7 +73,7 @@ const NewReservationAdmin = () => {
       setErrors({});
       setIsSubmitting(true);
       const submissionData = {
-        guests: formData.guests,
+        numberOfGuests: formData.numberOfGuests,
         date: formData.date,
         time: formData.time,
         firstName: formData.firstName,
@@ -86,7 +88,6 @@ const NewReservationAdmin = () => {
         setIsModalOpen(false);
         setReservationSubmitted(true);
       } catch (error) {
-        // Handle error appropriately
         console.error('Error submitting reservation:', error);
       } finally {
         setIsSubmitting(false);
@@ -109,7 +110,7 @@ const NewReservationAdmin = () => {
             formData={formData}
             onNewReservation={() => {
               setFormData({
-                guests: '',
+                numberOfGuests: '',
                 date: '',
                 time: '',
                 firstName: '',

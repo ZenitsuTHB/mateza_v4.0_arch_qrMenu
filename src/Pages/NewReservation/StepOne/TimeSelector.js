@@ -1,8 +1,8 @@
-// src/components/ReservationForm/TimeSelector.jsx
+// src/Pages/NewReservation/TimeSelector.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
 import { generateAvailableTimesForDate } from './Utils/generateTimes';
-import './css/timeSelector.css'
+import './css/timeSelector.css';
 
 const TimeSelector = ({
   formData,
@@ -18,7 +18,7 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate) {
-      const times = generateAvailableTimesForDate(selectedDate);
+      const times = generateAvailableTimesForDate(new Date(selectedDate));
       setAvailableTimes(times);
     } else {
       setAvailableTimes([]);

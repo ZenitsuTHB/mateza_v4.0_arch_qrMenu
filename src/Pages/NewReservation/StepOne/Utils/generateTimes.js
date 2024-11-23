@@ -1,38 +1,94 @@
-import moment from 'moment-timezone';
+// src/Pages/NewReservation/Utils/generateTimes.js
+
+import { DateTime } from 'luxon';
+
+const formatDateKey = (date) => {
+  const formattedDate = DateTime.fromJSDate(date).toISODate();
+  return formattedDate;
+};
 
 export const generateAvailableTimesForDate = (selectedDate) => {
-  if (!selectedDate) {
+  const dateDictionary = window.dateDictionary;
+  const shiftsPerDate = window.shiftsPerDate;
+  const dateKey = formatDateKey(selectedDate);
+  const now = DateTime.now().setZone('Europe/Brussels');
+
+  // Retrieve intervalReservatie and validate it
+  const intervalReservatie = window.generalSettings?.intervalReservatie;
+  let intervalMinutes = 30; // Default value
+
+  if (
+    typeof intervalReservatie === 'number' &&
+    Number.isInteger(intervalReservatie) &&
+    intervalReservatie > 0
+  ) {
+    intervalMinutes = intervalReservatie;
+  } else {
+    console.warn(
+      `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+    );
+  }
+
+  if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
     return [];
   }
 
-  const selectedDateStr = moment(selectedDate).format('YYYY-MM-DD');
-  const timeEntries = window.dateDictionary[selectedDateStr];
+  const shiftData =
+    shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
 
-  if (!timeEntries || timeEntries.length === 0) {
-    return [];
-  }
+  let timeButtons = [];
 
-  const timesSet = new Set();
-  const intervalMinutes = 30; // Adjust as needed
-
-  timeEntries.forEach((entry) => {
-    const startTime = moment(entry.startTime, 'HH:mm');
-    const endTime = moment(entry.endTime, 'HH:mm');
-
-    let currentTime = startTime.clone();
-    while (currentTime.isBefore(endTime)) {
-      const timeStr = currentTime.format('HH:mm');
-      timesSet.add(timeStr);
-      currentTime.add(intervalMinutes, 'minutes');
-    }
-  });
-
-  const times = Array.from(timesSet)
-    .sort((a, b) => moment(a, 'HH:mm') - moment(b, 'HH:mm'))
-    .map((timeStr) => ({
-      label: timeStr,
-      value: timeStr,
+  if (shiftData.length > 0) {
+    timeButtons = shiftData.map((shift) => ({
+      label: shift.name,
+      value: shift.startTime,
     }));
+  } else {
+    const times = [];
 
-  return times;
+    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+        year: selectedDate.getFullYear(),
+        month: selectedDate.getMonth() + 1,
+        day: selectedDate.getDate(),
+      });
+
+      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+        year: selectedDate.getFullYear(),
+        month: selectedDate.getMonth() + 1,
+        day: selectedDate.getDate(),
+      });
+
+      while (startDateTime < endDateTime) {
+        if (startDateTime > now) {
+          const timeString = startDateTime.toFormat('HH:mm');
+          times.push(timeString);
+        }
+        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+      }
+    });
+
+    const uniqueTimes = [...new Set(times)].sort(
+      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+    );
+
+    timeButtons = uniqueTimes.map((time) => ({
+      label: time,
+      value: time,
+    }));
+  }
+
+  // Filter timeButtons based on countingDictionary
+  const capacityLimit = 3;
+  const countingDictionary = window.countingDictionary || {};
+
+  if (countingDictionary[dateKey]) {
+    timeButtons = timeButtons.filter((button) => {
+      const time = button.value;
+      const guestsCount = countingDictionary[dateKey][time] || 0;
+      return guestsCount < capacityLimit;
+    });
+  }
+
+  return timeButtons;
 };
