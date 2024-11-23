@@ -44,15 +44,6 @@ const TablePlan = () => {
       const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
       if (!reservationToAssign) return prevReservations;
 
-      // Optional: Check if the table has enough capacity
-      const totalGuests = prevReservations
-        .filter((res) => res.tableId === targetTableId)
-        .reduce((sum, res) => sum + res.numberOfGuests, 0);
-
-      if (totalGuests + reservationToAssign.numberOfGuests > targetTable.capacity) {
-        alert('Not enough capacity at this table.');
-        return prevReservations;
-      }
 
       // Assign the reservation to the target table without unassigning others
       return prevReservations.map((res) =>

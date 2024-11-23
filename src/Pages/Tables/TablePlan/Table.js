@@ -47,14 +47,14 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
         </div>
       )}
 
-      <div
-        className={`chairs top-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
+<div
+        className="table-plan-component chairs top-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
-        {topChairs.map((chair, index) => (
-          <div key={`top-${index}`} className="chair"></div>
+        {topChairs.slice(0, Math.floor(capacity / 2)).map((chair, index) => (
+          <div key={`top-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
       <div
@@ -77,13 +77,13 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
         <div className="table-number">T{tableId}</div>
       </div>
       <div
-        className={`chairs bottom-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
+        className="table-plan-component chairs bottom-chairs"
         style={{
           width: `${tableWidth}px`,
         }}
       >
-        {bottomChairs.map((chair, index) => (
-          <div key={`bottom-${index}`} className="chair"></div>
+        {bottomChairs.slice(0, Math.ceil(capacity / 2)).map((chair, index) => (
+          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
     </div>
@@ -106,7 +106,7 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
     >
-      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
+      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.capacity}p) - {reservation.time}
     </div>
   );
 };
