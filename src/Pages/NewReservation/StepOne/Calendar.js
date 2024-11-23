@@ -59,7 +59,7 @@ const Calendar = ({
       if (startDate) {
         const beginDate = startDate.format('YYYY-MM-DD');
         const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
-        const restaurantId = 'thibault'; // Replace with dynamic ID if necessary
+        const restaurantId = localStorage.getItem('username');
         const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
 
         try {
