@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/table.css';
 
-const Table = ({ numberOfGuests }) => {
+const Table = ({ numberOfGuests, tableNumber }) => { // **Accept tableNumber prop**
   const isSquare = numberOfGuests === 4;
 
   const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
@@ -49,6 +49,10 @@ const Table = ({ numberOfGuests }) => {
           <div key={`bottom-${index}`} className="table-plan-component chair"></div>
         ))}
       </div>
+      {/* **Render the table number if it exists** */}
+      {tableNumber && (
+        <div className="table-plan-component table-number">T{tableNumber}</div>
+      )}
     </div>
   );
 };

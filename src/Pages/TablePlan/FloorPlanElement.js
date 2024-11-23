@@ -1,4 +1,3 @@
-// FloorPlanElement.js
 import React, { useState, useEffect } from 'react';
 import Table from './Table.js';
 import Walls from './Walls.js';
@@ -7,7 +6,7 @@ const FloorPlanElement = ({
   element,
   moveElement,
   floorPlanSize,
-  // Removed onDrag and onDragEnd props
+  tableNumber, // **Add tableNumber to the props**
 }) => {
   const [position, setPosition] = useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = useState(false);
@@ -110,7 +109,8 @@ const FloorPlanElement = ({
       style={style}
     >
       {element.type === 'table' ? (
-        <Table numberOfGuests={element.capacity} />
+        // **Pass tableNumber to the Table component**
+        <Table numberOfGuests={element.capacity} tableNumber={tableNumber} />
       ) : element.type === 'wall' ? (
         <Walls length={element.width / 20 + 1} />
       ) : null}

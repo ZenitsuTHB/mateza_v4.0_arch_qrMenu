@@ -1,4 +1,3 @@
-// FloorPlan.js
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
@@ -13,7 +12,8 @@ const FloorPlan = () => {
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
 
-  // Removed alignmentLines state and related logic
+  // **Add this state to track the next table number**
+  const [nextTableNumber, setNextTableNumber] = useState(1);
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -58,15 +58,12 @@ const FloorPlan = () => {
     return [snappedX, snappedY];
   };
 
-  // Removed snapSize function and snapping logic from onResizeStop
-
   const [, drop] = useDrop({
     accept: 'ITEM',
     drop: (item, monitor) => {
       const offset = monitor.getClientOffset();
       const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
 
-      // Position based on top-left corner
       let x = offset.x - floorPlanRect.left;
       let y = offset.y - floorPlanRect.top;
 
@@ -85,7 +82,7 @@ const FloorPlan = () => {
         moveElement(item.id, x, y);
       } else {
         const id = Date.now();
-        addElement({
+        const newElement = {
           id,
           type: item.elementType,
           subtype: item.subtype,
@@ -101,16 +98,20 @@ const FloorPlan = () => {
           minCapacity: item.minCapacity || 1,
           maxCapacity: item.maxCapacity || 10,
           priority: 'Medium',
-        });
+        };
+
+        // **Assign a tableNumber if the element is a table**
+        if (item.elementType === 'table') {
+          newElement.tableNumber = nextTableNumber;
+          setNextTableNumber((prev) => prev + 1);
+        }
+
+        addElement(newElement);
       }
     },
   });
 
-  // Removed handleDragging and alignment logic
-
-  // Removed snappedPosition state
-
-  // Removed clearAlignmentLines function
+  // ... rest of the component
 
   return (
     <ResizableBox
@@ -142,7 +143,8 @@ const FloorPlan = () => {
             element={el}
             moveElement={moveElement}
             floorPlanSize={floorPlanSize}
-            // Removed onDrag and onDragEnd props
+            // **Pass the tableNumber to FloorPlanElement**
+            tableNumber={el.tableNumber}
           />
         ))}
       </div>

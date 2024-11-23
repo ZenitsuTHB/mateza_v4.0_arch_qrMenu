@@ -46,3 +46,18 @@
   border: 2px solid #d2b48c;
   border-radius: 50%;
 }
+
+/* Existing styles... */
+
+/* **Add these styles for the table number** */
+.table-plan-component .table-number {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #333;
+  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
+}
