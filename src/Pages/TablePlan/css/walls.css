@@ -1,13 +1,13 @@
 /* css/walls.css */
 
-.table-plan-component .walls-container {
+.table-display-component .walls-container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px;
 }
 
-.table-plan-component .wall {
+.table-display-component .wall {
   width: 100%;
   height: 100%;
   background-color: #8b4513;

@@ -92,7 +92,7 @@ const assignReservation = (reservationId, targetTableId) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="table-plan-component">
+      <div className="table-display-component">
         <div className="app-container">
           <FloorPlan
             tables={tables}

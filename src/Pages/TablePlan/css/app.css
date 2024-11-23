@@ -1,6 +1,6 @@
 /* css/app.css */
 
-.table-plan-component .app-container {
+.table-display-component .app-container {
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -10,7 +10,7 @@
   padding-right: 370px; /* Adjusted to accommodate the fixed sidebar width (350px + 20px padding) */
 }
 
-.table-plan-component .floor-plan {
+.table-display-component .floor-plan {
   flex: 3;
   margin-right: 20px;
   background-color: #ffffff;
@@ -21,18 +21,18 @@
 
 /* Adjustments to ensure the sidebar does not overlap */
 @media (max-width: 1200px) {
-  .table-plan-component .app-container {
+  .table-display-component .app-container {
     padding-right: 370px;
   }
 }
 
 @media (max-width: 768px) {
-  .table-plan-component .app-container {
+  .table-display-component .app-container {
     flex-direction: column;
     padding-right: 20px;
   }
 
-  .sidebar {
+  .table-display-component .sidebar {
     position: relative;
     width: 100%;
     height: auto;

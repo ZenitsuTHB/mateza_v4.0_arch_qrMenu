@@ -1,6 +1,6 @@
 /* css/table.css */
 
-.table-plan-component .table-container {
+.table-display-component .table-container {
   position: relative;
   display: flex;
   align-items: center;
@@ -8,8 +8,8 @@
   height: 80px;
 }
 
-.table-plan-component .table {
-  background-color: rgba(245, 245, 220, 0.8); /* Light color with opacity */
+.table-display-component .table {
+  background-color: rgba(245, 245, 220, 1); /* Light color with opacity */
   border: 2px solid #d2b48c;
   border-radius: 8px;
   position: absolute;
@@ -23,13 +23,13 @@
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-.table-plan-component .table-occupied {
-  background-color: rgba(76, 175, 80, 0.8); /* Green with opacity */
+.table-display-component .table-occupied {
+  background-color: rgba(76, 175, 80, 1); /* Green with opacity */
   color: #ffffff; /* White text */
   border-color: #388e3c; /* Darker green border */
 }
 
-.table-plan-component .chairs {
+.table-display-component .chairs {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -39,17 +39,17 @@
   z-index: 1;
 }
 
-.table-plan-component .top-chairs {
+.table-display-component .top-chairs {
   top: 0;
   transform: translate(-50%, 150%);
 }
 
-.table-plan-component .bottom-chairs {
+.table-display-component .bottom-chairs {
   bottom: 0;
   transform: translate(-50%, -150%);
 }
 
-.table-plan-component .chair {
+.table-display-component .chair {
   width: 20px;
   height: 20px;
   background-color: rgba(245, 245, 220, 0.8); /* Light color with opacity */
@@ -58,12 +58,12 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-.table-plan-component .occupied .chair {
+.table-display-component .occupied .chair {
   background-color: rgba(76, 175, 80, 0.8); /* Green with opacity */
   border-color: #388e3c;
 }
 
-.table-plan-component .reservation {
+.table-display-component .reservation {
   background-color: transparent; /* Remove background to show table's color */
   border: none;
   color: #ffffff; /* White text */
@@ -73,16 +73,16 @@
   cursor: grab;
 }
 
-.table-plan-component .reservation:hover {
+.table-display-component .reservation:hover {
   text-decoration: underline;
 }
 
-.table-plan-component .reservation-name {
+.table-display-component .reservation-name {
   font-weight: bold;
 }
   
 /* Tooltip Styles */
-.tooltip {
+.table-display-component .tooltip {
   position: absolute;
   top: -10px;
   left: 50%;
@@ -99,13 +99,13 @@
   z-index: 10;
 }
 
-.table-container:hover .tooltip {
+.table-display-component .table-container:hover .tooltip {
   visibility: visible;
   opacity: 1;
 }
 
 
-.table-plan-component .table-number {
+.table-display-component .table-display-component .table-number {
   position: absolute;
   bottom: 5px;
   right: 5px; /* Changed from left to right */

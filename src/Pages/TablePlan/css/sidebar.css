@@ -1,6 +1,6 @@
 /* css/sidebar.css */
 
-.sidebar {
+.table-display-component .sidebar {
   width: 350px;
   position: fixed;
   height: calc(100% - 60px);
@@ -14,11 +14,11 @@
   border-left: 1px solid #ccc;
 }
 
-.search-bar {
+.table-display-component .search-bar {
   margin-bottom: 20px;
 }
 
-.search-bar input {
+.table-display-component .search-bar input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #cccccc;
@@ -26,13 +26,13 @@
   font-size: 14px;
 }
 
-.guests-list {
+.table-display-component .guests-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.guest-block {
+.table-display-component .guest-block {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   padding: 10px 15px;
@@ -42,25 +42,25 @@
   transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.guest-block:hover {
+.table-display-component .guest-block:hover {
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.guest-name {
+.table-display-component .guest-name {
   margin: 0;
   font-weight: bold;
   font-size: 16px;
   color: #333333;
 }
 
-.guest-details {
+.table-display-component .guest-details {
   margin: 5px 0 0 0;
   font-size: 14px;
   color: #555555;
 }
 
-.no-results {
+.table-display-component .no-results {
   text-align: center;
   color: #888888;
   font-size: 16px;
