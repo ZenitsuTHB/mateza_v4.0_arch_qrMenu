@@ -20,7 +20,7 @@ import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/Dashboard/DayList/index.js';
 import GiftCard from '../Pages/Giftcard/GiftCard'
 import GiftcardEditor from '../Pages/Giftcard/GiftcardEditor'
-import TablePlan from '../Pages/TablePlan'
+import TablePlan from '../Pages/Tables/TablePlan/index.js'
 
 
 import {
@@ -37,7 +37,7 @@ import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
 import Settings from '../Pages/Settings/GeneralSettings/index.js';
 import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
-import TableEditor from '../Pages/TableEditor/index.js';
+import TableEditor from '../Pages/Tables/TableEditor/index.js';
 
 
 const routesConfig = [

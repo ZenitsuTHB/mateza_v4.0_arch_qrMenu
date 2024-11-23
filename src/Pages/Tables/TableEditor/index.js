@@ -2,7 +2,7 @@
 import React from 'react';
 import FloorPlan from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
-import { withHeader } from '../../Components/Structural/Header/index.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import './css/app.css';
