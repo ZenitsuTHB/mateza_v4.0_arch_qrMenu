@@ -50,8 +50,8 @@
 }
 
 .table-display-component .chair {
-  width: 20px;
-  height: 20px;
+  width: 20px !important;
+  height: 20px !important;
   background-color: rgba(245, 245, 220, 0.8); /* Light color with opacity */
   border: 2px solid #d2b48c;
   border-radius: 50%;
@@ -105,24 +105,24 @@
   display: block;
 }
 
-.tooltip-content {
+.table-display-component .tooltip-content {
   margin-bottom: 15px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
 
-.tooltip-content:last-child {
+.table-display-component .tooltip-content:last-child {
   margin-bottom: 0;
   border-bottom: none;
   padding-bottom: 0;
 }
 
-.reservation-summary {
+.table-display-component .reservation-summary {
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.reservation-notes input {
+.table-display-component .reservation-notes input {
   width: 100%;
   padding: 5px;
   border: 1px solid #ccc;
@@ -131,29 +131,6 @@
   box-sizing: border-box;
 }
 
-.tooltip-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.tooltip-button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-}
-
-.edit-button {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.delete-button {
-  background-color: #f44336;
-  color: white;
-}
 
 .table-display-component .table-number {
   position: absolute;

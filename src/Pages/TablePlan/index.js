@@ -24,7 +24,7 @@ const TablePlan = () => {
 
   // Dummy Tables Data with positions and capacities
   const [tables, setTables] = useState([
-    { id: 1, capacity: 4, x: 100, y: 100 },
+    { id: 1, capacity: 6, x: 100, y: 100 },
     { id: 2, capacity: 2, x: 300, y: 100 },
     { id: 3, capacity: 6, x: 500, y: 100 },
     { id: 4, capacity: 3, x: 100, y: 300 },

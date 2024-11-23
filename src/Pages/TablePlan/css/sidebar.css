@@ -1,50 +1,68 @@
-/* sidebar.css */
+/* css/sidebar.css */
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
+.table-display-component .sidebar {
+  width: 350px;
+  position: fixed;
+  height: calc(100% - 60px);
+  right: 0;
+  top: 60px;
+  background-color: rgb(220, 220, 220);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+  border-left: 1px solid #ccc;
 }
 
-.search-bar {
+.table-display-component .search-bar {
   margin-bottom: 20px;
 }
 
-.search-bar input {
+.table-display-component .search-bar input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border: 1px solid #cccccc;
   border-radius: 4px;
+  font-size: 14px;
 }
 
-.guests-list {
-  flex: 1;
+.table-display-component .guests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.guest-block {
-  background-color: white;
-  border: 1px solid #ddd;
+.table-display-component .guest-block {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 10px 15px;
   border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
   cursor: grab;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.guest-block:hover {
+.table-display-component .guest-block:hover {
   background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.guest-name {
+.table-display-component .guest-name {
+  margin: 0;
   font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 16px;
+  color: #333333;
 }
 
-.guest-details {
-  font-size: 0.9em;
-  color: #555;
+.table-display-component .guest-details {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #555555;
 }
 
-.no-results {
-  color: #999;
+.table-display-component .no-results {
   text-align: center;
+  color: #888888;
+  font-size: 16px;
+  margin-top: 50px;
 }
