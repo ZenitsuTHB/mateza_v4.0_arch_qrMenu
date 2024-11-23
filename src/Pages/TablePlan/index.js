@@ -8,18 +8,18 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import './css/app.css';
 
 const TablePlan = () => {
-  // Dummy Reservations Data
+  // Dummy Reservations Data with 'notes' field
   const [reservations, setReservations] = useState([
-    { id: 1, firstName: 'Jan', lastName: 'De Vries', numberOfGuests: 4, time: '18:30', tableId: null },
-    { id: 2, firstName: 'Marie', lastName: 'Jansen', numberOfGuests: 2, time: '19:00', tableId: null },
-    { id: 3, firstName: 'Pieter', lastName: 'Bakker', numberOfGuests: 5, time: '20:15', tableId: null },
-    { id: 4, firstName: 'Sophie', lastName: 'Visser', numberOfGuests: 3, time: '18:45', tableId: null },
-    { id: 5, firstName: 'Lars', lastName: 'Smit', numberOfGuests: 6, time: '19:30', tableId: null },
-    { id: 6, firstName: 'Emma', lastName: 'Meijer', numberOfGuests: 2, time: '20:00', tableId: null },
-    { id: 7, firstName: 'Tom', lastName: 'Kuiper', numberOfGuests: 4, time: '18:15', tableId: null },
-    { id: 8, firstName: 'Lisa', lastName: 'de Boer', numberOfGuests: 1, time: '19:45', tableId: null },
-    { id: 9, firstName: 'Kees', lastName: 'Vos', numberOfGuests: 3, time: '20:30', tableId: null },
-    { id: 10, firstName: 'Nina', lastName: 'Dijkstra', numberOfGuests: 5, time: '18:00', tableId: null },
+    { id: 1, firstName: 'Jan', lastName: 'De Vries', numberOfGuests: 4, time: '18:30', tableId: null, notes: '' },
+    { id: 2, firstName: 'Marie', lastName: 'Jansen', numberOfGuests: 2, time: '19:00', tableId: null, notes: '' },
+    { id: 3, firstName: 'Pieter', lastName: 'Bakker', numberOfGuests: 5, time: '20:15', tableId: null, notes: '' },
+    { id: 4, firstName: 'Sophie', lastName: 'Visser', numberOfGuests: 3, time: '18:45', tableId: null, notes: '' },
+    { id: 5, firstName: 'Lars', lastName: 'Smit', numberOfGuests: 6, time: '19:30', tableId: null, notes: '' },
+    { id: 6, firstName: 'Emma', lastName: 'Meijer', numberOfGuests: 2, time: '20:00', tableId: null, notes: '' },
+    { id: 7, firstName: 'Tom', lastName: 'Kuiper', numberOfGuests: 4, time: '18:15', tableId: null, notes: '' },
+    { id: 8, firstName: 'Lisa', lastName: 'de Boer', numberOfGuests: 1, time: '19:45', tableId: null, notes: '' },
+    { id: 9, firstName: 'Kees', lastName: 'Vos', numberOfGuests: 3, time: '20:30', tableId: null, notes: '' },
+    { id: 10, firstName: 'Nina', lastName: 'Dijkstra', numberOfGuests: 5, time: '18:00', tableId: null, notes: '' },
   ]);
 
   // Dummy Tables Data with positions and capacities
@@ -36,56 +36,63 @@ const TablePlan = () => {
   ]);
 
   // Function to assign a reservation to a table, with swapping if necessary
-// Function to assign a reservation to a table, with swapping if necessary
-const assignReservation = (reservationId, targetTableId) => {
-  setReservations((prevReservations) => {
-    const targetTable = tables.find((t) => t.id === targetTableId);
-    if (!targetTable) return prevReservations;
+  const assignReservation = (reservationId, targetTableId) => {
+    setReservations((prevReservations) => {
+      const targetTable = tables.find((t) => t.id === targetTableId);
+      if (!targetTable) return prevReservations;
 
-    const targetReservations = prevReservations.filter((res) => res.tableId === targetTableId);
-    const totalGuests = targetReservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
+      const targetReservations = prevReservations.filter((res) => res.tableId === targetTableId);
+      const totalGuests = targetReservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
 
-    const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
-    if (!reservationToAssign) return prevReservations;
+      const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
+      if (!reservationToAssign) return prevReservations;
 
-    // Check if adding the reservation exceeds capacity
-    if (totalGuests + reservationToAssign.numberOfGuests <= targetTable.capacity) {
-      // Assign directly
-      return prevReservations.map((res) =>
-        res.id === reservationId ? { ...res, tableId: targetTableId } : res
-      );
-    } else {
-      // Find a reservation to swap
-      const possibleSwap = targetReservations.find(
-        (res) => res.numberOfGuests === reservationToAssign.numberOfGuests
-      );
+      // Check if adding the reservation exceeds capacity
+      if (totalGuests + reservationToAssign.numberOfGuests <= targetTable.capacity) {
+        // Assign directly
+        return prevReservations.map((res) =>
+          res.id === reservationId ? { ...res, tableId: targetTableId } : res
+        );
+      } else {
+        // Find a reservation to swap that fits the incoming reservation
+        const possibleSwap = targetReservations.find(
+          (res) => reservationToAssign.numberOfGuests === res.numberOfGuests
+        );
 
-      if (possibleSwap) {
-        // Perform swap
-        return prevReservations.map((res) => {
-          if (res.id === reservationId) {
-            return { ...res, tableId: targetTableId };
-          }
-          if (res.id === possibleSwap.id) {
-            return { ...res, tableId: prevReservations.find((r) => r.id === reservationId).tableId };
-          }
-          return res;
-        });
+        if (possibleSwap) {
+          // Perform swap
+          return prevReservations.map((res) => {
+            if (res.id === reservationId) {
+              return { ...res, tableId: targetTableId };
+            }
+            if (res.id === possibleSwap.id) {
+              return { ...res, tableId: reservationToAssign.tableId };
+            }
+            return res;
+          });
+        }
+
+        // If no suitable swap found, do not assign
+        alert('Cannot assign reservation to this table. Not enough space and no suitable swap found.');
+        return prevReservations;
       }
-
-      // If no suitable swap found, do not assign
-      alert('Cannot assign reservation to this table. Not enough space and no suitable swap found.');
-      return prevReservations;
-    }
-  });
-};
-
+    });
+  };
 
   // Function to remove a reservation from a table
   const removeReservation = (reservationId) => {
     setReservations((prevReservations) =>
       prevReservations.map((res) =>
         res.id === reservationId ? { ...res, tableId: null } : res
+      )
+    );
+  };
+
+  // Function to update notes for a reservation
+  const updateNotes = (reservationId, newNotes) => {
+    setReservations((prevReservations) =>
+      prevReservations.map((res) =>
+        res.id === reservationId ? { ...res, notes: newNotes } : res
       )
     );
   };
@@ -99,6 +106,7 @@ const assignReservation = (reservationId, targetTableId) => {
             reservations={reservations}
             assignReservation={assignReservation}
             removeReservation={removeReservation}
+            updateNotes={updateNotes}
           />
           <Sidebar reservations={reservations} />
         </div>

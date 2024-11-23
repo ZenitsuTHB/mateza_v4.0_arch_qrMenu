@@ -8,6 +8,7 @@ const FloorPlanElement = ({
   reservations,
   assignReservation,
   removeReservation,
+  updateNotes,
   floorPlanSize,
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -35,6 +36,8 @@ const FloorPlanElement = ({
         position: 'absolute',
         left: `${table.x}px`,
         top: `${table.y}px`,
+        border: isActive ? '2px dashed #4CAF50' : 'none', // Visual feedback
+        transition: 'border 0.2s ease',
       }}
     >
       <Table
@@ -42,6 +45,7 @@ const FloorPlanElement = ({
         reservations={reservations}
         tableId={table.id}
         removeReservation={removeReservation}
+        updateNotes={updateNotes}
         isActive={isActive}
       />
     </div>

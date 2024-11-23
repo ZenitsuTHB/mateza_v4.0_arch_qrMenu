@@ -1,42 +1,20 @@
-/* css/app.css */
+/* app.css */
 
-.table-display-component .app-container {
+.app-container {
   display: flex;
   flex-direction: row;
   height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
+}
+
+.table-display-component {
+  flex: 1;
+  position: relative;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #f5f5f5;
+  border-left: 1px solid #ddd;
   padding: 20px;
-  padding-right: 370px; /* Adjusted to accommodate the fixed sidebar width (350px + 20px padding) */
-}
-
-.table-display-component .floor-plan {
-  flex: 3;
-  margin-right: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Adjustments to ensure the sidebar does not overlap */
-@media (max-width: 1200px) {
-  .table-display-component .app-container {
-    padding-right: 370px;
-  }
-}
-
-@media (max-width: 768px) {
-  .table-display-component .app-container {
-    flex-direction: column;
-    padding-right: 20px;
-  }
-
-  .table-display-component .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    top: 0;
-    right: 0;
-  }
+  overflow-y: auto;
 }

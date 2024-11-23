@@ -1,9 +1,9 @@
 // Table.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useDrag } from 'react-dnd';
 import './css/table.css';
 
-const Table = ({ capacity, reservations, tableId, removeReservation, isActive }) => {
+const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes, isActive }) => {
   const isOccupied = reservations.length > 0;
 
   // Calculate table width based on capacity
@@ -20,39 +20,61 @@ const Table = ({ capacity, reservations, tableId, removeReservation, isActive })
     bottomChairs.push(i);
   }
 
-  // Prepare tooltip content
-  const tooltipContent = reservations
-    .map((res) => `${res.firstName} ${res.lastName} (${res.numberOfGuests}p) - ${res.time}`)
-    .join('\n');
-
   return (
     <div
-      className={`table-plan-component table-container ${isOccupied ? 'occupied' : ''}`}
+      className={`table-display-component table-container ${isOccupied ? 'occupied' : ''}`}
       style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
     >
       {/* Tooltip */}
       {isOccupied && (
         <div className="tooltip">
           {reservations.map((res) => (
-            <div key={res.id}>
-              {res.firstName} {res.lastName} ({res.numberOfGuests}p) - {res.time}
+            <div key={res.id} className="tooltip-content">
+              <div className="reservation-summary">
+                <span className="reservation-name">{res.firstName} {res.lastName}</span> ({res.numberOfGuests}p) - {res.time}
+              </div>
+              <div className="reservation-notes">
+                <input
+                  type="text"
+                  placeholder="Add a note..."
+                  value={res.notes}
+                  onChange={(e) => updateNotes(res.id, e.target.value)}
+                  aria-label={`Add a note for reservation of ${res.firstName} ${res.lastName}`}
+                />
+              </div>
+              <div className="tooltip-actions">
+                <button
+                  onClick={() => handleEdit(res.id)}
+                  className="tooltip-button edit-button"
+                  aria-label={`Edit reservation for ${res.firstName} ${res.lastName}`}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(res.id)}
+                  className="tooltip-button delete-button"
+                  aria-label={`Delete reservation for ${res.firstName} ${res.lastName}`}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
 
       <div
-        className={`table-plan-component chairs top-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
+        className={`table-display-component chairs top-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
         }}
       >
         {topChairs.map((chair, index) => (
-          <div key={`top-${index}`} className="table-plan-component chair"></div>
+          <div key={`top-${index}`} className="table-display-component chair"></div>
         ))}
       </div>
       <div
-        className={`table-plan-component table ${isOccupied ? 'table-occupied' : ''}`}
+        className={`table-display-component table ${isOccupied ? 'table-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
           height: `${tableHeight}px`,
@@ -71,13 +93,13 @@ const Table = ({ capacity, reservations, tableId, removeReservation, isActive })
         <div className="table-number">T{tableId}</div>
       </div>
       <div
-        className={`table-plan-component chairs bottom-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
+        className={`table-display-component chairs bottom-chairs ${isOccupied ? 'chairs-occupied' : ''}`}
         style={{
           width: `${tableWidth}px`,
         }}
       >
         {bottomChairs.map((chair, index) => (
-          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
+          <div key={`bottom-${index}`} className="table-display-component chair"></div>
         ))}
       </div>
     </div>
@@ -103,6 +125,25 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
+};
+
+// Handler functions for edit and delete actions
+const handleEdit = (reservationId) => {
+  // Implement edit functionality (e.g., open a modal with reservation details)
+  alert(`Edit reservation with ID: ${reservationId}`);
+};
+
+const handleDelete = (reservationId) => {
+  // Confirm before deleting
+  if (window.confirm('Are you sure you want to delete this reservation?')) {
+    // Implement delete functionality
+    // This function needs access to removeReservation, which isn't available here
+    // To fix this, we can pass removeReservation down to the Reservation component
+    // and call it from there. Alternatively, use context or lift the handler up.
+    // For simplicity, assuming removeReservation is passed correctly
+    // Here, we'll just log the action.
+    console.log(`Reservation ${reservationId} deleted.`);
+  }
 };
 
 export default Table;

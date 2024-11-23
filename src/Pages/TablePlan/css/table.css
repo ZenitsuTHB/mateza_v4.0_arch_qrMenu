@@ -1,4 +1,4 @@
-/* css/table.css */
+/* table.css */
 
 .table-display-component .table-container {
   position: relative;
@@ -80,32 +80,82 @@
 .table-display-component .reservation-name {
   font-weight: bold;
 }
-  
+
 /* Tooltip Styles */
 .table-display-component .tooltip {
+  display: none; /* Hidden by default */
   position: absolute;
   top: -10px;
   left: 50%;
   transform: translate(-50%, -100%);
-  background-color: rgba(0, 0, 0, 0.75);
-  color: #ffffff;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: pre-line;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #333333;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 10;
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+  transition: opacity 0.3s;
 }
 
 .table-display-component .table-container:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
+  display: block;
 }
 
+.tooltip-content {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
 
-.table-display-component .table-display-component .table-number {
+.tooltip-content:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.reservation-summary {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.reservation-notes input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.tooltip-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.tooltip-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.table-display-component .table-number {
   position: absolute;
   bottom: 5px;
   right: 5px; /* Changed from left to right */

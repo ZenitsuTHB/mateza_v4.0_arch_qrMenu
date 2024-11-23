@@ -6,7 +6,7 @@ import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
 
-const FloorPlan = ({ tables, reservations, assignReservation, removeReservation }) => {
+const FloorPlan = ({ tables, reservations, assignReservation, removeReservation, updateNotes }) => {
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
 
@@ -72,6 +72,7 @@ const FloorPlan = ({ tables, reservations, assignReservation, removeReservation 
             reservations={reservations.filter((res) => res.tableId === table.id)}
             assignReservation={assignReservation}
             removeReservation={removeReservation}
+            updateNotes={updateNotes}
             floorPlanSize={floorPlanSize}
           />
         ))}
