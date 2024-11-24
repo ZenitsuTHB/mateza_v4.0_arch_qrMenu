@@ -128,4 +128,100 @@
 	color: #000000;
   }
 
+
+.top-bar-component .icon-button-container {
+	position: relative;
+  }
+  
+  .top-bar-component .logout-menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	background-color: #ffffff;
+	border-radius: 4px;
+	padding: 10px;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: var(--z-index-nav-top);
+  }
+  
+  .top-bar-component .logout-menu-item {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+  }
+  
+  .top-bar-component .logout-menu-item .logout-icon {
+	color: red;
+	margin-right: 8px;
+  }
+  
+  .top-bar-component .logout-menu-item span {
+	color: #000;
+  }
+  
+
+  /* accountMenu.css */
+
+.account-button-wrapper {
+	position: relative;
+  }
+  
+  .account-menu {
+	position: absolute;
+	top: 60px; /* Adjust based on top bar height */
+	right: 0;
+	background-color: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 10px 15px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	width: 150px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .account-menu:hover {
+	background-color: #f9f9f9;
+  }
+  
+  .logout-button {
+	display: flex;
+	align-items: center;
+	background: none;
+	border: none;
+	width: 100%;
+	cursor: pointer;
+	padding: 5px 0;
+  }
+  
+  .logout-button:focus {
+	outline: none;
+  }
+  
+  .logout-icon {
+	color: red;
+	margin-right: 10px;
+	font-size: 18px;
+  }
+  
+  .logout-text {
+	color: #000000;
+	font-size: 16px;
+  }
+  
+  /* Adjust positioning for mobile if needed */
+  @media (max-width: 768px) {
+	.account-menu {
+	  top: 50px; /* Adjust based on mobile top bar height */
+	  right: 10px;
+	  width: 120px;
+	}
+  
+	.logout-text {
+	  font-size: 14px;
+	}
+  }
   

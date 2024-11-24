@@ -12,11 +12,11 @@ const topBarConfig = [
     icon: FaPencilAlt,
     path: '/account',
   },
-
   {
     label: 'Account',
     icon: FaUser,
     path: '/account',
+    hasDropdown: true,
   },
 ];
 

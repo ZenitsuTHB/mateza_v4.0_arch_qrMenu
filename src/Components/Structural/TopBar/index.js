@@ -1,3 +1,5 @@
+// TopBar.jsx
+
 import React, { useState, useRef, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import topBarConfig from '../../../Config/topbarConfig.js';
@@ -8,9 +10,11 @@ import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
+import { FaSignOutAlt } from 'react-icons/fa'; // Import the shutdown icon
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false); // State for Account Menu
   const menuTimeoutRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +33,23 @@ const TopBar = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  // Handlers for Account Menu
+  const handleAccountMouseEnter = () => {
+    clearTimeout(menuTimeoutRef.current);
+    setIsAccountMenuOpen(true);
+  };
+
+  const handleAccountMouseLeave = () => {
+    menuTimeoutRef.current = setTimeout(() => {
+      setIsAccountMenuOpen(false);
+    }, 300);
+  };
+
+  const handleLogout = () => {
+    localStorage.setItem('loginSuccessful', false);
+    window.location.reload();
   };
 
   return (
@@ -71,6 +92,33 @@ const TopBar = () => {
         <div className="top-bar-right">
           {topBarConfig.map((button) => {
             const IconComponent = button.icon;
+            if (button.hasDropdown === true) {
+              return (
+                <div
+                  key={button.label}
+                  className="account-button-wrapper"
+                  onMouseEnter={handleAccountMouseEnter}
+                  onMouseLeave={handleAccountMouseLeave}
+                >
+                  <button
+                    className="icon-button"
+                    aria-label={button.label}
+                    onClick={() => navigate(button.path)}
+                  >
+                    <IconComponent />
+                  </button>
+                  {isAccountMenuOpen && (
+                    <div className="account-menu">
+                      <button className="logout-button" onClick={handleLogout}>
+                        <FaSignOutAlt className="logout-icon" />
+                        <span className="logout-text">Uitloggen</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            else {
             return (
               <button
                 key={button.label}
@@ -81,7 +129,9 @@ const TopBar = () => {
                 <IconComponent />
               </button>
             );
+          }
           })}
+          
         </div>
       </div>
     </div>
