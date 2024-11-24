@@ -223,5 +223,54 @@
 	.top-bar-component .logout-text {
 	  font-size: 14px;
 	}
+  }/* topBar.css */
+
+/* General Styles for the Dropdown Menu */
+.top-bar-component .dropdown-button-wrapper {
+	position: relative;
   }
   
+  .top-bar-component .dropdown-menu {
+	position: absolute;
+	top: 60px; /* Adjust based on top bar height */
+	right: 0;
+	background-color: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 10px 15px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	width: 150px;
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .top-bar-component .dropdown-button {
+	display: flex;
+	align-items: center;
+	background: none;
+	border: none;
+	width: 100%;
+	cursor: pointer;
+	padding: 5px 0;
+  }
+  
+  .top-bar-component .dropdown-button:focus {
+	outline: none;
+  }
+  
+  .top-bar-component .dropdown-icon {
+	color: black;
+	margin-right: 10px;
+	font-size: 16px;
+  }
+  
+  .top-bar-component .dropdown-text {
+	color: #000000;
+	font-size: 16px;
+  }
+  
+  /* Specific Styles for Logout Icon */
+  .top-bar-component .dropdown-icon.logout {
+	color: red;
+  }
