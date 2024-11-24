@@ -11,6 +11,7 @@ import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
 import { FaSignOutAlt } from 'react-icons/fa'; // Import the shutdown icon
+import { motion, AnimatePresence } from 'framer-motion'; // Import framer-motion components
 
 const TopBar = () => {
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
@@ -50,6 +51,13 @@ const TopBar = () => {
   const handleLogout = () => {
     localStorage.setItem('loginSuccessful', false);
     window.location.reload();
+  };
+
+  // Define animation variants for the account menu
+  const accountMenuVariants = {
+    hidden: { opacity: 0, y: '-10px' },
+    visible: { opacity: 1, y: '0' },
+    exit: { opacity: 0, y: '-10px' },
   };
 
   return (
@@ -107,31 +115,38 @@ const TopBar = () => {
                   >
                     <IconComponent />
                   </button>
-                  {isAccountMenuOpen && (
-                    <div className="account-menu">
-                      <button className="logout-button" onClick={handleLogout}>
-                        <FaSignOutAlt className="logout-icon" />
-                        <span className="logout-text">Uitloggen</span>
-                      </button>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {isAccountMenuOpen && (
+                      <motion.div
+                        className="account-menu"
+                        variants={accountMenuVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        transition={{ duration: 0.3 }}
+                      >
+                        <button className="logout-button" onClick={handleLogout}>
+                          <FaSignOutAlt className="logout-icon" />
+                          <span className="logout-text">Uitloggen</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
+            } else {
+              return (
+                <button
+                  key={button.label}
+                  className="icon-button"
+                  aria-label={button.label}
+                  onClick={() => navigate(button.path)}
+                >
+                  <IconComponent />
+                </button>
+              );
             }
-            else {
-            return (
-              <button
-                key={button.label}
-                className="icon-button"
-                aria-label={button.label}
-                onClick={() => navigate(button.path)}
-              >
-                <IconComponent />
-              </button>
-            );
-          }
           })}
-          
         </div>
       </div>
     </div>

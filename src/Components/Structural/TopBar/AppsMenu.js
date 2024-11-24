@@ -1,6 +1,6 @@
 // AppsMenu.js
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './css/appsMenu.css';
 import AppsSearchBar from './AppsSearchBar';
 import icon1 from '../../../Assets/logos/1.webp';
@@ -9,7 +9,6 @@ import icon3 from '../../../Assets/logos/3.webp';
 import icon4 from '../../../Assets/logos/4.webp';
 import icon5 from '../../../Assets/logos/5.webp';
 import icon6 from '../../../Assets/logos/6.webp';
-
 
 const apps = [
   { name: 'Gasten', link: '', icon: icon1 },
@@ -51,48 +50,106 @@ const AppsMenu = ({ onMouseEnter, onMouseLeave }) => {
     };
   }, [onMouseLeave]);
 
-  return (
-    <motion.div
-      ref={menuRef}
-      className="apps-menu"
-      initial={{ opacity: 0, y: '-20px' }}
-      animate={{ opacity: 1, y: '0' }}
-      exit={{ opacity: 0, y: '-20px' }}
-      transition={{ duration: 0.3 }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >		
-      <AppsSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      
-      <div className="apps-flex-container">
-        {filteredApps.map((app, index) => {
-          const isEnabled = enabledApps.includes(app.name);
+  // Define animation variants for the container
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      y: '-20px',
+    },
+    visible: {
+      opacity: 1,
+      y: '0',
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.1,
+        duration: 0.3,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: '-20px',
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
 
-          return (
-            <a
-              key={index}
-              href={isEnabled ? app.link : '#'}
-              className={`app-item ${isEnabled ? '' : 'disabled'}`}
-              target={isEnabled ? '_blank' : ''}
-              rel={isEnabled ? 'noopener noreferrer' : ''}
-              onClick={(e) => !isEnabled && e.preventDefault()}
-              aria-label={isEnabled ? `Open ${app.name}` : `${app.name} is disabled`}
-            >
-              <motion.img
-                src={app.icon}
-                alt={app.name}
-                className="app-icon"
-                style={{
-                  filter: isEnabled ? 'none' : 'blur(2px)',
-                  opacity: isEnabled ? 1 : 0.5,
-                }}
-              />
-              <span className="app-name">{highlightMatch(app.name)}</span>
-            </a>
-          );
-        })}
-      </div>
-    </motion.div>
+  // Define animation variants for each app item
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      y: '-10px',
+    },
+    visible: {
+      opacity: 1,
+      y: '0',
+      transition: {
+        duration: 0.2,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: '-10px',
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        ref={menuRef}
+        className="apps-menu"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <AppsSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+        <motion.div
+          className="apps-flex-container"
+          variants={containerVariants}
+        >
+          {filteredApps.map((app, index) => {
+            const isEnabled = enabledApps.includes(app.name);
+
+            return (
+              <motion.a
+                key={app.name} // Use app.name as key for better performance
+                href={isEnabled ? app.link : '#'}
+                className={`app-item ${isEnabled ? '' : 'disabled'}`}
+                target={isEnabled ? '_blank' : ''}
+                rel={isEnabled ? 'noopener noreferrer' : ''}
+                onClick={(e) => !isEnabled && e.preventDefault()}
+                aria-label={isEnabled ? `Open ${app.name}` : `${app.name} is disabled`}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <motion.img
+                  src={app.icon}
+                  alt={app.name}
+                  className="app-icon"
+                  style={{
+                    filter: isEnabled ? 'none' : 'blur(2px)',
+                    opacity: isEnabled ? 1 : 0.5,
+                  }}
+                  // Optional: Add hover animation for icons
+                  whileHover={{ scale: isEnabled ? 1.1 : 1 }}
+                  transition={{ duration: 0.2 }}
+                />
+                <span className="app-name">{highlightMatch(app.name)}</span>
+              </motion.a>
+            );
+          })}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
