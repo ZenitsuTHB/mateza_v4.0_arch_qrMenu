@@ -20,6 +20,8 @@
     overflow-y: auto; /* Use 'auto' instead of 'scroll' */
 }
 
+
+
   .sidebar-component .sidebar-item__active-bg {
 	position: absolute;
 	inset: 0;
@@ -163,4 +165,5 @@
   .sidebar-pin:hover {
 	color: #000;
   }
+  
   

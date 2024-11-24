@@ -4,27 +4,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SidebarItem from './SidebarItem';
 import { useNavigate } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
-import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa'; // Import chevron and pin icons
+import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa';
 import './css/style.css';
 import './css/mobile.css';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
-  const [isExpanded, setIsExpanded] = useState(false); // State for sidebar expansion
-  const [isPinned, setIsPinned] = useState(false); // State for sidebar pin
-  const [collapseTimeout, setCollapseTimeout] = useState(null); // For auto-collapse
+  const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900); // Initialize based on window width
+  const [isPinned, setIsPinned] = useState(false);
+  const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
-  const isMobile = window.innerWidth < 900;
 
   // Function to handle item clicks
   const handleItemClick = (path) => {
     setActiveTab(path);
     navigate(path);
-    // Collapse the sidebar if it's expanded and not pinned
     if (isExpanded && !isPinned) {
       setIsExpanded(false);
     }
-    // Clear any existing collapse timeout
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
       setCollapseTimeout(null);
@@ -33,12 +30,10 @@ const Sidebar = () => {
 
   const toggleSidebar = () => {
     setIsExpanded((prev) => !prev);
-    // Clear any existing collapse timeout when manually toggling
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
       setCollapseTimeout(null);
     }
-    // Reset pin state when collapsing
     if (isExpanded && isPinned) {
       setIsPinned(false);
     }
@@ -59,7 +54,7 @@ const Sidebar = () => {
     if (isExpanded && !isPinned) {
       const timeout = setTimeout(() => {
         setIsExpanded(false);
-      }, 5000); // Collapse after 5 seconds
+      }, 5000);
       setCollapseTimeout(timeout);
     }
   };
@@ -84,14 +79,40 @@ const Sidebar = () => {
       }
     });
 
-    // Optional cleanup to remove inline styles when the component unmounts
     return () => {
       elements.forEach((el) => {
-        el.style.paddingLeft = ''; // Resets to original CSS
+        el.style.paddingLeft = '';
       });
     };
-  }, [isExpanded, isPinned, activeTab])
-  
+  }, [isExpanded, isPinned, activeTab]);
+
+  // **New useEffect for handling window resize**
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 900 && isExpanded) {
+        setIsExpanded(false);
+        if (collapseTimeout) {
+          clearTimeout(collapseTimeout);
+          setCollapseTimeout(null);
+        }
+      } else if (window.innerWidth >= 900 && !isPinned) {
+        // Optionally, you can decide to expand the sidebar when resizing above 900px
+        // setIsExpanded(true);
+        // Uncomment the above line if you want this behavior
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isExpanded, isPinned, collapseTimeout]);
 
   return (
     <motion.div
@@ -101,14 +122,14 @@ const Sidebar = () => {
       onMouseLeave={handleMouseLeave}
     >
       {routesConfig
-        .filter((route) => route.isMenu && (isMobile ? route.isMobile : true))
+        .filter((route) => route.isMenu)
         .map((route) => (
           <SidebarItem
             key={route.path}
             item={{ id: route.path, title: route.label, icon: route.icon }}
             activeTab={activeTab}
             handleItemClick={handleItemClick}
-            isExpanded={isExpanded && !isMobile}
+            isExpanded={isExpanded}
             isPinned={isPinned}
             secondaryTopBar={route.secondaryTopBar}
           />
