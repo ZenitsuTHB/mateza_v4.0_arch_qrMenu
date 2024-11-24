@@ -15,9 +15,10 @@
   }
   
   .sidebar-component.expanded {
-	width: 200px;
-	overflow: hidden;
-  }
+    width: 200px;
+    max-height: calc(100vh - 100px); /* Adjust the offset as needed */
+    overflow-y: auto; /* Use 'auto' instead of 'scroll' */
+}
 
   .sidebar-component .sidebar-item__active-bg {
 	position: absolute;
