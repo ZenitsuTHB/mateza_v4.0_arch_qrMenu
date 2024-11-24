@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarItem from './SidebarItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
 import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa';
 import './css/style.css';
@@ -14,6 +14,7 @@ const Sidebar = () => {
   const [isPinned, setIsPinned] = useState(false);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation(); // Import useLocation
 
   // Function to handle item clicks
   const handleItemClick = (path) => {
@@ -70,21 +71,28 @@ const Sidebar = () => {
 
   // Adjust padding of .withHeader elements based on sidebar expansion
   useEffect(() => {
-    const elements = document.querySelectorAll('.withHeader');
-    elements.forEach((el) => {
-      if (isPinned) {
-        el.style.paddingLeft = '200px';
-      } else {
-        el.style.paddingLeft = isExpanded ? '200px' : '60px';
-      }
-    });
+    const adjustPadding = () => {
+      const elements = document.querySelectorAll('.withHeader');
+      elements.forEach((el) => {
+        if (isPinned) {
+          el.style.paddingLeft = '200px';
+        } else {
+          el.style.paddingLeft = isExpanded ? '200px' : '60px';
+        }
+      });
+    };
+
+    // Use a timeout to ensure elements are present in the DOM
+    const timeoutId = setTimeout(adjustPadding, 0);
 
     return () => {
+      clearTimeout(timeoutId);
+      const elements = document.querySelectorAll('.withHeader');
       elements.forEach((el) => {
         el.style.paddingLeft = '';
       });
     };
-  }, [isExpanded, isPinned, activeTab]);
+  }, [isExpanded, isPinned, activeTab, location.pathname]); // Add location.pathname as dependency
 
   return (
     <motion.div
