@@ -8,9 +8,9 @@ const topBarConfig = [
   },
 
   {
-    label: 'Account',
+    label: 'Edit',
     icon: FaPencilAlt,
-    path: '/account',
+    path: '/edit',
   },
   {
     label: 'Account',

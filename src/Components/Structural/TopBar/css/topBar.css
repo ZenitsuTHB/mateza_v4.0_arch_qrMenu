@@ -162,11 +162,11 @@
 
   /* accountMenu.css */
 
-.account-button-wrapper {
+  .top-bar-component .account-button-wrapper {
 	position: relative;
   }
   
-  .account-menu {
+  .top-bar-component .account-menu {
 	position: absolute;
 	top: 60px; /* Adjust based on top bar height */
 	right: 0;
@@ -183,11 +183,11 @@
 	transition: background-color 0.3s ease;
   }
   
-  .account-menu:hover {
+  .top-bar-component .account-menu:hover {
 	background-color: #f9f9f9;
   }
   
-  .logout-button {
+  .top-bar-component .logout-button {
 	display: flex;
 	align-items: center;
 	background: none;
@@ -197,30 +197,30 @@
 	padding: 5px 0;
   }
   
-  .logout-button:focus {
+  .top-bar-component .logout-button:focus {
 	outline: none;
   }
   
-  .logout-icon {
+  .top-bar-component .logout-icon {
 	color: red;
 	margin-right: 10px;
 	font-size: 18px;
   }
   
-  .logout-text {
+  .top-bar-component .logout-text {
 	color: #000000;
 	font-size: 16px;
   }
   
   /* Adjust positioning for mobile if needed */
   @media (max-width: 768px) {
-	.account-menu {
+	.top-bar-component .account-menu {
 	  top: 50px; /* Adjust based on mobile top bar height */
 	  right: 10px;
 	  width: 120px;
 	}
   
-	.logout-text {
+	.top-bar-component .logout-text {
 	  font-size: 14px;
 	}
   }
