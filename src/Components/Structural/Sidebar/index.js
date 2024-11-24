@@ -94,6 +94,22 @@ const Sidebar = () => {
     };
   }, [isExpanded, isPinned, activeTab, location.pathname]); // Add location.pathname as dependency
 
+  // Polling: Check window.innerWidth every 100ms
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const shouldExpand = window.innerWidth >= 900;
+      setIsExpanded((prevIsExpanded) => {
+        if (shouldExpand !== prevIsExpanded && !isPinned) {
+          return shouldExpand;
+        }
+        return prevIsExpanded;
+      });
+    }, 100); // 100 milliseconds
+
+    // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
+  }, [isPinned]);
+
   return (
     <motion.div
       className={`sidebar-component ${isExpanded ? 'expanded' : ''}`}
