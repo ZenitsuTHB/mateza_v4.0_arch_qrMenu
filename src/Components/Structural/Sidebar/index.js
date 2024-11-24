@@ -97,13 +97,10 @@ const Sidebar = () => {
   // Polling: Check window.innerWidth every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const shouldExpand = window.innerWidth >= 900;
-      setIsExpanded((prevIsExpanded) => {
-        if (shouldExpand !== prevIsExpanded && !isPinned) {
-          return shouldExpand;
-        }
-        return prevIsExpanded;
-      });
+      const mobile = window.innerWidth < 900;
+      if (mobile) {
+        setIsExpanded(false);
+      }
     }, 100); // 100 milliseconds
 
     // Clean up the interval on unmount
