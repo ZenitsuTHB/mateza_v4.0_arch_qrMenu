@@ -10,7 +10,7 @@ import './css/mobile.css';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
-  const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900); // Initialize based on window width
+  const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900);
   const [isPinned, setIsPinned] = useState(false);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
@@ -85,34 +85,6 @@ const Sidebar = () => {
       });
     };
   }, [isExpanded, isPinned, activeTab]);
-
-  // **New useEffect for handling window resize**
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 900 && isExpanded) {
-        setIsExpanded(false);
-        if (collapseTimeout) {
-          clearTimeout(collapseTimeout);
-          setCollapseTimeout(null);
-        }
-      } else if (window.innerWidth >= 900 && !isPinned) {
-        // Optionally, you can decide to expand the sidebar when resizing above 900px
-        // setIsExpanded(true);
-        // Uncomment the above line if you want this behavior
-      }
-    };
-
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener on unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [isExpanded, isPinned, collapseTimeout]);
 
   return (
     <motion.div
