@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import './css/tableList.css';
 import useApi from '../../../Hooks/useApi';
 import useNotification from '../../../Components/Notification';
-import { FaEllipsisV } from 'react-icons/fa';
+import TableRow from './TableRow';
+import TableGroupRow from './TableGroupRow';
 
 const TablesList = () => {
   const api = useApi();
-  const { triggerNotification, NotificationComponent } = useNotification(); // Initialize notification hook
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   const [tables, setTables] = useState([]);
   const [lines, setLines] = useState([]);
@@ -187,112 +188,29 @@ const TablesList = () => {
         <thead>
           <tr>
             <th>Tafelnummer</th>
-            <th>Naam</th>
-            <th className="hide-on-mobile">Min. Capaciteit</th>
-            <th className="hide-on-mobile">Max. Capaciteit</th>
+            <th className="hide-on-mobile">Naam</th>
+            <th >Min. Capaciteit</th>
+            <th >Max. Capaciteit</th>
             <th className="hide-on-mobile">Vorm</th>
             <th className="hide-on-mobile">Prioriteit</th>
-            <th>Acties</th>
-            <th></th> {/* Empty header for ellipsis column */}
+            <th className="actions-column">Acties</th>
+            <th className="hide-on-mobile ellipsis-column"></th>
           </tr>
         </thead>
         <tbody>
           {tables.map((table) => (
-            <tr key={table.id}>
-              <td>
-                <input
-                  type="text"
-                  value={table.tableNumber || ''}
-                  onChange={(e) =>
-                    handleTableInputChange(table.id, 'tableNumber', e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={table.name || ''}
-                  onChange={(e) => handleTableInputChange(table.id, 'name', e.target.value)}
-                />
-              </td>
-              <td className="hide-on-mobile">
-                <input
-                  type="number"
-                  value={table.minCapacity || ''}
-                  onChange={(e) =>
-                    handleTableInputChange(table.id, 'minCapacity', parseInt(e.target.value, 10))
-                  }
-                />
-              </td>
-              <td className="hide-on-mobile">
-                <input
-                  type="number"
-                  value={table.maxCapacity || ''}
-                  onChange={(e) =>
-                    handleTableInputChange(table.id, 'maxCapacity', parseInt(e.target.value, 10))
-                  }
-                />
-              </td>
-              <td className="hide-on-mobile">
-                <select
-                  value={table.shape || ''}
-                  onChange={(e) => handleTableInputChange(table.id, 'shape', e.target.value)}
-                >
-                  <option value="">Selecteer Vorm</option>
-                  <option value="rond">Rond</option>
-                  <option value="vierkant">Vierkant</option>
-                  <option value="metStoelen">Met Stoelen</option>
-                </select>
-              </td>
-              <td className="hide-on-mobile">
-                <select
-                  value={table.priority || ''}
-                  onChange={(e) =>
-                    handleTableInputChange(table.id, 'priority', e.target.value)
-                  }
-                >
-                  <option value="">Selecteer Prioriteit</option>
-                  <option value="metVoorangInvullen">Met Voorrang Invullen</option>
-                  <option value="snellerInvullen">Sneller Invullen</option>
-                  <option value="tragerInvullen">Trager Invullen</option>
-                  <option value="alsLaatsteIndelen">Als Laatste Indelen</option>
-                </select>
-              </td>
-              <td className="actions-column">
-                <button
-                  className="standard-button blue"
-                  onClick={() => handleSaveTable(table)}
-                >
-                  Opslaan
-                </button>
-              </td>
-              <td>
-                <div className="ellipsis-container">
-                  <FaEllipsisV
-                    className="ellipsis-icon"
-                    onClick={() => toggleTooltipTable(table.id)}
-                  />
-                  {openTooltipTableId === table.id && (
-                    <div className="tooltip-container">
-                      <div
-                        className="tooltip-item delete-item"
-                        onClick={() => handleDeleteTable(table)}
-                      >
-                        Verwijderen
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </td>
-            </tr>
+            <TableRow
+              key={table.id}
+              table={table}
+              openTooltipTableId={openTooltipTableId}
+              toggleTooltipTable={toggleTooltipTable}
+              handleTableInputChange={handleTableInputChange}
+              handleSaveTable={handleSaveTable}
+              handleDeleteTable={handleDeleteTable}
+            />
           ))}
         </tbody>
       </table>
-      {/* Save button below the tables */}
-      {/* Uncomment if you want a separate save button for all tables */}
-      {/* <button className="standard-button blue" onClick={handleSaveAllTables}>
-        Opslaan
-      </button> */}
 
       <h2 className="tables-list-title">Tafelgroepen</h2>
       <table className="table-groups-list">
@@ -300,78 +218,25 @@ const TablesList = () => {
           <tr>
             <th>Van Tafel</th>
             <th>Naar Tafel</th>
-            <th>Acties</th>
-            <th></th> {/* Empty header for ellipsis column */}
+            <th className="actions-column">Acties</th>
+            <th className="ellipsis-column"></th>
           </tr>
         </thead>
         <tbody>
           {lines.map((line) => (
-            <tr key={line.id}>
-              <td>
-                <select
-                  value={line.from || ''}
-                  onChange={(e) =>
-                    handleLineInputChange(line.id, 'from', e.target.value)
-                  }
-                >
-                  <option value="">Selecteer Tafel</option>
-                  {tableOptions.map((table) => (
-                    <option key={table.value} value={table.value}>
-                      {table.label}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select
-                  value={line.to || ''}
-                  onChange={(e) =>
-                    handleLineInputChange(line.id, 'to', e.target.value)
-                  }
-                >
-                  <option value="">Selecteer Tafel</option>
-                  {tableOptions.map((table) => (
-                    <option key={table.value} value={table.value}>
-                      {table.label}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td className="actions-column">
-                <button
-                  className="standard-button blue"
-                  onClick={() => handleSaveLine(line)}
-                >
-                  Opslaan
-                </button>
-              </td>
-              <td>
-                <div className="ellipsis-container">
-                  <FaEllipsisV
-                    className="ellipsis-icon"
-                    onClick={() => toggleTooltipLine(line.id)}
-                  />
-                  {openTooltipLineId === line.id && (
-                    <div className="tooltip-container">
-                      <div
-                        className="tooltip-item delete-item"
-                        onClick={() => handleDeleteLine(line)}
-                      >
-                        Verwijderen
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </td>
-            </tr>
+            <TableGroupRow
+              key={line.id}
+              line={line}
+              tableOptions={tableOptions}
+              openTooltipLineId={openTooltipLineId}
+              toggleTooltipLine={toggleTooltipLine}
+              handleLineInputChange={handleLineInputChange}
+              handleSaveLine={handleSaveLine}
+              handleDeleteLine={handleDeleteLine}
+            />
           ))}
         </tbody>
       </table>
-      {/* Save button below the tafelgroepen */}
-      {/* Uncomment if you want a separate save button for all tafelgroepen */}
-      {/* <button className="standard-button blue" onClick={handleSaveAllLines}>
-        Opslaan
-      </button> */}
 
       {/* Include the NotificationComponent to display notifications */}
       <NotificationComponent />
