@@ -172,6 +172,84 @@ const FloorPlanElement = ({
 export default FloorPlanElement;
 
 
+--- Hooks/useReservations.js ---
+// src/Components/Calendar/Hooks/useReservations.js
+
+import { useState, useEffect } from 'react';
+import useApi from '../../../../Hooks/useApi';
+
+/**
+ * Custom hook to fetch and manage reservations data.
+ *
+ * @returns {Array} An array of reservation objects.
+ */
+const useReservations = () => {
+  const [reservations, setReservations] = useState([]);
+  const api = useApi();
+
+  useEffect(() => {
+    /**
+     * Fetches reservations from the backend API and processes them.
+     */
+    const fetchReservations = async () => {
+      try {
+        // Fetch raw data from the backend API
+        const data = await api.get(`${window.baseDomain}api/auth-reservations`, { noCache: true });
+
+        console.log('Raw data from backend:', data);
+
+        // Check if data is an array
+        if (!Array.isArray(data)) {
+          console.error('Unexpected data format: Expected an array of reservations.');
+          setReservations([]);
+          return;
+        }
+
+        // Process and map each reservation to the frontend format
+        const mappedReservations = data.map((reservation) => {
+          // Extract the reservation ID
+          const id = reservation._id?.$oid || reservation._id || `unknown-${Math.random()}`;
+
+          // Parse the number of guests
+          const guests = parseInt(reservation.guests?.$numberInt || reservation.guests, 10);
+          const numberOfGuests = isNaN(guests) ? 1 : guests; // Default to 1 if parsing fails
+
+          // Extract and trim extra information
+          const notes = reservation.extraInfo?.trim() || '';
+
+          // Return the mapped reservation object
+          return {
+            id,
+            date: reservation.date, // Ensure this is in 'YYYY-MM-DD' format or adjust as needed
+            time: reservation.time, // Ensure this is in 'HH:MM' format or adjust as needed
+            firstName: reservation.firstName || 'Unknown',
+            lastName: reservation.lastName || 'Guest',
+            numberOfGuests,
+            tableId: null, // Initialize as null; will be updated when assigned
+            notes,
+            email: reservation.email || '',
+            phone: reservation.phone || '',
+            reservationType: reservation.reservationType || 'common',
+            // Add other fields if necessary
+          };
+        });
+
+        setReservations(mappedReservations);
+      } catch (error) {
+        console.error('Error fetching reservations:', error);
+        setReservations([]); // Fallback to an empty array on error
+      }
+    };
+
+    fetchReservations();
+  }, [api]);
+
+  return reservations;
+};
+
+export default useReservations;
+
+
 --- Sidebar.js ---
 // Sidebar.js
 import React, { useState, useMemo } from 'react';
@@ -196,13 +274,16 @@ const Sidebar = ({ reservations }) => {
 
   // Guest Block Component
   const GuestBlock = ({ guest }) => {
-    const [{ isDragging }, drag] = useDrag(() => ({
-      type: 'GUEST',
-      item: { id: guest.id, ...guest },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
+    const [{ isDragging }, drag] = useDrag(
+      () => ({
+        type: 'GUEST',
+        item: { id: guest.id, ...guest },
+        collect: (monitor) => ({
+          isDragging: !!monitor.isDragging(),
+        }),
       }),
-    }), [guest]);
+      [guest]
+    );
 
     return (
       <div
@@ -210,8 +291,12 @@ const Sidebar = ({ reservations }) => {
         ref={drag}
         style={{ opacity: isDragging ? 0.5 : 1 }}
       >
-        <p className="guest-name">{guest.firstName} {guest.lastName}</p>
-        <p className="guest-details">{guest.numberOfGuests}p • {guest.time}</p>
+        <p className="guest-name">
+          {guest.firstName} {guest.lastName}
+        </p>
+        <p className="guest-details">
+          {guest.numberOfGuests}p • {guest.time}
+        </p>
       </div>
     );
   };
@@ -401,28 +486,25 @@ export default Walls;
 
 --- index.js ---
 // index.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FloorPlanGeneral from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import useReservations from './Hooks/useReservations.js';
 import './css/app.css';
 
 const TablePlan = () => {
-  // Dummy Reservations Data with 'notes' field
-  const [reservations, setReservations] = useState([
-    {
-      id: 1,
-      firstName: 'Jan',
-      lastName: 'De Vries',
-      numberOfGuests: 4,
-      time: '18:30',
-      tableId: null,
-      notes: '',
-    },
-    // ... other reservations
-  ]);
+  const fetchedReservations = useReservations();
+
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    if (fetchedReservations.length > 0 && reservations.length === 0) {
+      setReservations(fetchedReservations);
+    }
+  }, [fetchedReservations, reservations]);
 
   // Function to assign a reservation to a table
   const assignReservation = (reservationId, targetTableId) => {
@@ -476,6 +558,8 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 
 ├── FloorPlan.js
 ├── FloorPlanElement.js
+├── Hooks
+│   └── useReservations.js
 ├── Sidebar.js
 ├── Table.js
 ├── Walls.js
@@ -491,6 +575,7 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
 List of Files:
 FloorPlan.js
 FloorPlanElement.js
+Hooks/useReservations.js
 Sidebar.js
 Table.js
 Walls.js

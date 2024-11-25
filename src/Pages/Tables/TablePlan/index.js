@@ -1,4 +1,3 @@
-// index.js
 import React, { useState, useEffect } from 'react';
 import FloorPlanGeneral from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
@@ -7,11 +6,13 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import useReservations from './Hooks/useReservations.js';
 import './css/app.css';
+import TableSlots from './TableSlots.js';
 
 const TablePlan = () => {
   const fetchedReservations = useReservations();
 
   const [reservations, setReservations] = useState([]);
+  const [floorPlanWidth, setFloorPlanWidth] = useState(800);
 
   useEffect(() => {
     if (fetchedReservations.length > 0 && reservations.length === 0) {
@@ -19,7 +20,6 @@ const TablePlan = () => {
     }
   }, [fetchedReservations, reservations]);
 
-  // Function to assign a reservation to a table
   const assignReservation = (reservationId, targetTableId) => {
     setReservations((prevReservations) =>
       prevReservations.map((res) =>
@@ -28,7 +28,6 @@ const TablePlan = () => {
     );
   };
 
-  // Function to remove a reservation from a table
   const removeReservation = (reservationId) => {
     setReservations((prevReservations) =>
       prevReservations.map((res) =>
@@ -37,7 +36,6 @@ const TablePlan = () => {
     );
   };
 
-  // Function to update notes for a reservation
   const updateNotes = (reservationId, newNotes) => {
     setReservations((prevReservations) =>
       prevReservations.map((res) =>
@@ -49,6 +47,12 @@ const TablePlan = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="table-display-component">
+        <TableSlots
+          selectedSlot={null}
+          onSelectSlot={null}
+          currentDate={new Date()}
+          floorPlanWidth={floorPlanWidth} // Pass floor plan width
+        />
         <div className="app-container">
           <FloorPlanGeneral
             reservations={reservations}
