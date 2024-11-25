@@ -10,7 +10,7 @@ import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
-import { FaSignOutAlt } from 'react-icons/fa'; // Import the logout icon
+import { FaSignOutAlt, FaExternalLinkAlt } from 'react-icons/fa'; // Import additional icons
 import { motion, AnimatePresence } from 'framer-motion';
 
 const TopBar = () => {
@@ -62,6 +62,18 @@ const TopBar = () => {
     exit: { opacity: 0, y: '-10px' },
   };
 
+  // New handler for button clicks (both top-level and dropdown items)
+  const handleButtonClick = (item) => {
+    if (item.action === 'logout') {
+      handleLogout();
+    } else if (item.isExternal && item.path) {
+      window.open(item.path, '_blank', 'noopener,noreferrer');
+      // Alternatively, use window.location.href = item.path; to navigate in the same tab
+    } else if (item.path) {
+      navigate(item.path);
+    }
+  };
+
   return (
     <div className="top-bar-component">
       <div className="top-bar">
@@ -105,6 +117,8 @@ const TopBar = () => {
         <div className="top-bar-right">
           {topBarConfig.map((button) => {
             const IconComponent = button.icon;
+            const isExternal = button.isExternal || false;
+
             if (button.hasDropdown) {
               return (
                 <div
@@ -116,10 +130,11 @@ const TopBar = () => {
                   <button
                     className="icon-button"
                     aria-label={button.label}
-                    onClick={() => navigate(button.path)}
+                    onClick={() => handleButtonClick(button)}
                     style={{ color: button.iconColor || 'var(--color-accent)' }}
                   >
                     <IconComponent />
+                    {/* If the button is external, show an external link icon */}
                   </button>
                   <AnimatePresence>
                     {openDropdown === button.label && (
@@ -135,13 +150,7 @@ const TopBar = () => {
                           <button
                             key={index}
                             className="dropdown-button"
-                            onClick={() => {
-                              if (item.action === 'logout') {
-                                handleLogout();
-                              } else if (item.path) {
-                                navigate(item.path);
-                              }
-                            }}
+                            onClick={() => handleButtonClick(item)}
                           >
                             <item.icon
                               className={`dropdown-icon ${item.isLogout ? 'logout' : ''}`}
@@ -156,14 +165,17 @@ const TopBar = () => {
                 </div>
               );
             } else {
+              // For buttons without dropdown
               return (
                 <button
                   key={button.label}
                   className="icon-button"
                   aria-label={button.label}
-                  onClick={() => navigate(button.path)}
+                  onClick={() => handleButtonClick(button)}
+                  style={{ color: button.iconColor || 'var(--color-accent)' }}
                 >
                   <IconComponent />
+                  {/* If the button is external, show an external link icon */}
                 </button>
               );
             }

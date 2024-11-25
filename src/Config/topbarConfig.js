@@ -14,20 +14,23 @@ const topBarConfig = [
         label: 'Reserveren',
         icon: FaPlus,
         path: '/new-reservation',
+        isExternal: false, // Optional, defaults to false
       },
     ],
   },
   {
     label: 'Edit',
     icon: FaPencilAlt,
-    path: '/edit',
+    path: 'https://preview.reservaties.net/',
+    isExternal: true, // Indicates external URL
     hasDropdown: true,
     iconColor: 'black',
     dropdownItems: [
       {
         label: 'Bewerken',
         icon: FaPencilAlt,
-        path: '/edit-reservation',
+        path: 'https://preview.reservaties.net/',
+        isExternal: true, // Indicates external URL
       },
     ],
   },
