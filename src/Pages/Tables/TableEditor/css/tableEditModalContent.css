@@ -127,3 +127,6 @@
 	color: #000;
   }
   
+  .table-edit-modal-content .settings-form {
+	width: 100%;
+  }
