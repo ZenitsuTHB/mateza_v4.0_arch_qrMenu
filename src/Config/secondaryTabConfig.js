@@ -13,11 +13,11 @@ export const overviewSecondaryTopBar = [
 
   export const tableSecondaryTopBar = [
 	{
-	  label: 'Tafelplan',
+	  label: 'Bekijken',
 	  path: '/table',
 	},
 	{
-	  label: 'Tafels Bewerken',
+	  label: 'Bewerken',
 	  path: '/table/table-editor',
 	}
   ];
