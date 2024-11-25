@@ -216,8 +216,8 @@ const TablesList = () => {
       <table className="table-groups-list">
         <thead>
           <tr>
-            <th>Van Tafel</th>
-            <th>Naar Tafel</th>
+            <th>Tafel 1</th>
+            <th>Tafel 2</th>
             <th className="actions-column">Acties</th>
             <th className="ellipsis-column"></th>
           </tr>
