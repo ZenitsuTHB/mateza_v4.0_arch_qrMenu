@@ -28,6 +28,7 @@
   
   .table-edit-modal-content .input-container {
 	position: relative;
+	width: 100%;
   }
   
   .table-edit-modal-content .input-container input,
@@ -46,7 +47,7 @@
 	outline: none;
   }
   
-  .table-edit-modal-content .save-button {
+  .table-edit-modal-content .settings-button {
 	padding: 12px;
 	background-color: #007bff;
 	color: #fff;
@@ -60,10 +61,9 @@
 	gap: 10px;
 	transition: background-color 0.3s ease;
 	width: 100%;
-	margin-top: 20px;
   }
   
-  .table-edit-modal-content .save-button:hover {
+  .table-edit-modal-content .settings-button:hover {
 	background-color: #0056b3;
   }
   
@@ -127,6 +127,3 @@
 	color: #000;
   }
   
-  .table-edit-modal-content .settings-form {
-	width: 100%;
-  }

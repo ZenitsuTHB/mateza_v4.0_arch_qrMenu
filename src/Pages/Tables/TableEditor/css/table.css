@@ -47,7 +47,7 @@
   border-radius: 50%;
 }
 
-/* **Add these styles for the table number** */
+/* **Styles for the table number** */
 .table-plan-component .table-number {
   position: absolute;
   bottom: 5px;
@@ -93,7 +93,6 @@
   transform: scale(1); /* No scaling */
   /* Removed animation properties */
 }
-
 
 .table-plan-component .action-buttons .action-button:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);

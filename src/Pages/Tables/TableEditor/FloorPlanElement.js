@@ -1,5 +1,5 @@
 // FloorPlanElement.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Table from './Table.js';
 import Walls from './Walls.js';
 
@@ -13,15 +13,13 @@ const FloorPlanElement = ({
   tableNumber,
   openModal,
 }) => {
-  const [position, setPosition] = useState({ x: element.x, y: element.y });
-  const [isDragging, setIsDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = React.useState({ x: element.x, y: element.y });
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
 
-  const snapToGrid = (x, y, gridSize = 50) => {
-    const snappedX = Math.round(x / gridSize) * gridSize;
-    const snappedY = Math.round(y / gridSize) * gridSize;
-    return [snappedX, snappedY];
-  };
+  React.useEffect(() => {
+    setPosition({ x: element.x, y: element.y });
+  }, [element.x, element.y]);
 
   const handleMouseDown = (e) => {
     e.preventDefault(); // Prevent text selection
@@ -32,7 +30,7 @@ const FloorPlanElement = ({
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleMouseMove = (e) => {
       if (isDragging) {
         let newX = e.clientX - offset.x;
@@ -57,8 +55,9 @@ const FloorPlanElement = ({
 
         // Apply snapping on mouse release for non-wall elements
         if (element.type !== 'wall') {
-          const [snappedX, snappedY] = snapToGrid(position.x, position.y);
-          const finalX = Math.max(0, Math.min(snappedX, floorPlanSize.width - element.width));
+          const snapped = Math.round(position.x / 50) * 50; // Assuming grid size 50
+          const snappedY = Math.round(position.y / 50) * 50;
+          const finalX = Math.max(0, Math.min(snapped, floorPlanSize.width - element.width));
           const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
 
           setPosition({ x: finalX, y: finalY });
@@ -67,8 +66,6 @@ const FloorPlanElement = ({
           // For walls, no snapping
           moveElement(element.id, position.x, position.y);
         }
-
-        // Removed onDragEnd call
       }
     };
 
@@ -82,7 +79,8 @@ const FloorPlanElement = ({
   }, [
     isDragging,
     offset,
-    position,
+    position.x,
+    position.y,
     moveElement,
     element.id,
     floorPlanSize,
@@ -90,10 +88,6 @@ const FloorPlanElement = ({
     element.height,
     element.type,
   ]);
-
-  useEffect(() => {
-    setPosition({ x: element.x, y: element.y });
-  }, [element.x, element.y]);
 
   const style = {
     position: 'absolute',
@@ -105,7 +99,6 @@ const FloorPlanElement = ({
     cursor: 'move',
     transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
     zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
-    transform: `rotate(${element.rotation || 0}deg)`, // Apply rotation
   };
 
   return (
@@ -114,18 +107,32 @@ const FloorPlanElement = ({
       onMouseDown={handleMouseDown}
       style={style}
     >
-      {element.type === 'table' ? (
-        <Table
-          numberOfGuests={element.capacity}
-          tableNumber={tableNumber}
-          rotate={() => rotateElement(element.id)}
-          duplicate={() => duplicateElement(element.id)}
-          deleteTable={() => deleteElement(element.id)}
-          editTable={() => openModal(element)}
-        />
-      ) : element.type === 'wall' ? (
-        <Walls length={element.width / 20 + 1} />
-      ) : null}
+      {/* Rotated Content */}
+      <div
+        style={{
+          transform: `rotate(${element.rotation || 0}deg)`,
+          transformOrigin: 'center center',
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}
+      >
+        {element.type === 'table' ? (
+          <Table
+            numberOfGuests={element.capacity}
+            tableNumber={tableNumber}
+            rotate={() => rotateElement(element.id)}
+            duplicate={() => duplicateElement(element.id)}
+            deleteTable={() => deleteElement(element.id)}
+            editTable={() => openModal(element)}
+            showActions={true}
+            rotation={element.rotation || 0} // Pass rotation to Table
+          />
+        ) : element.type === 'wall' ? (
+          <Walls length={element.width / 20 + 1} />
+        ) : null}
+      </div>
+      {/* Action Buttons are handled within Table component */}
     </div>
   );
 };
