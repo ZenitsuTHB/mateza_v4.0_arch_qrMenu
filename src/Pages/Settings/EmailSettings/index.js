@@ -121,7 +121,11 @@ const EmailSettingsTabs = () => {
               </motion.button>
             ))}
           </div>
-        </div>*/}
+        </div>
+        
+        TODO ENABLE THIS AGAIN AND WORK ON CONNECTING THE EMAIL NOTIFICATION SETTINGS
+        */}
+
         
 
         {/* Conditional Rendering Based on Active Tab */}
