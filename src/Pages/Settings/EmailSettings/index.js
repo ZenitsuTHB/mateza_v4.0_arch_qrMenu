@@ -78,7 +78,7 @@ const EmailSettingsTabs = () => {
 
   const tabs = [
     { id: 'algemeen', label: 'Bevestigingsmail', title: 'Email' },
-    { id: 'meldingen', label: 'Meldingen', title: 'Email' },
+    {/*{ id: 'meldingen', label: 'Meldingen', title: 'Email' },*/}
   ];
 
   const handleTabClick = (tabId) => {
@@ -88,11 +88,13 @@ const EmailSettingsTabs = () => {
   return (
     <div className="email-settings-page">
       <NotificationComponent />
-      <h2 className="settings-title">
+      {/*<h2 className="settings-title">
         {tabs.find((tab) => tab.id === activeTab).title}
-      </h2>
+      </h2>*/}
 
+        
       <div className="settings-tabs">
+        {/*
         <div className="tab-menu">
           <div className="buttons-container">
             {tabs.map((tab) => (
@@ -119,7 +121,8 @@ const EmailSettingsTabs = () => {
               </motion.button>
             ))}
           </div>
-        </div>
+        </div>*/}
+        
 
         {/* Conditional Rendering Based on Active Tab */}
         {activeTab === 'algemeen' && (

@@ -97,6 +97,7 @@ const ModalContent = ({
             />
           </label>
         </div>
+        {/*
         <label className="modal-label">
           Max Capaciteit Gasten:
           <input
@@ -117,7 +118,7 @@ const ModalContent = ({
             onChange={handleChange}
             required
           />
-        </label>
+        </label>*/}
         
         {showMessage && (
           <div className="weekly-schedule-container">
