@@ -202,7 +202,7 @@ const AddGiftCardSection = () => {
           </p>
         )}
 
-        <button type="submit" className="add-gift-card-section__button">
+        <button type="submit" className="button-style-3">
           Aanmaken
         </button>
       </form>

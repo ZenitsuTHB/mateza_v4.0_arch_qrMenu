@@ -83,16 +83,6 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: calendarSecondaryTopBar,
   },
-  {
-    path: '/settings',
-    element: <Settings title="Administratie" />,
-    label: 'Administratie',
-    icon: FaCog,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: settingsSecondaryTopBar,
-  },
 
   {
     path: '/settings/email',
@@ -192,7 +182,17 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: giftCardSecondaryTopBar,
-  }
+  },
+  {
+    path: '/settings',
+    element: <Settings title="Administratie" />,
+    label: 'Administratie',
+    icon: FaCog,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: settingsSecondaryTopBar,
+  },
 
 ];
 

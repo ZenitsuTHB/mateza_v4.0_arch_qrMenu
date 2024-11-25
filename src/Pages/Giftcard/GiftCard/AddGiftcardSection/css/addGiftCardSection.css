@@ -92,26 +92,7 @@
 	align-items: center;
 	gap: 5px;
   }
-  
-  .gift-card-page .add-gift-card-section__button {
-	padding: 12px;
-	background-color: var(--color-blue);
-	color: var(--color-white);
-	border: none;
-	border-radius: var(--border-radius);
-	cursor: pointer;
-	font-size: 1.1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	transition: background-color 0.3s ease;
-  }
-  
-  .gift-card-page .add-gift-card-section__button:hover {
-	background-color: #0056b3;
-  }
-  
+
   @media (max-width: 768px) {
 	.gift-card-page .name-fields {
 	  flex-direction: column;
@@ -119,11 +100,6 @@
   
 	.gift-card-page .add-gift-card-section__form {
 	  gap: 10px;
-	}
-  
-	.gift-card-page .add-gift-card-section__button {
-	  font-size: 1rem;
-	  padding: 10px;
 	}
   }
   
