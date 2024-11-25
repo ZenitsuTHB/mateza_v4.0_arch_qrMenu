@@ -13,6 +13,7 @@ import ShiftSelector from './Buttons/ShiftSelector.js'; // Updated import
 import { shifts } from './Utils/constants.js';
 import './css/dayCalendar.css';
 import './css/mobile.css';
+import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
 
 const DayCalendar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,6 +88,22 @@ const DayCalendar = () => {
       localStorage.removeItem('hiddenBefore');
     }
   };
+
+  // Check query parameters
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const action = params.get('action');
+
+    if (action === 'create-timeblock') {
+      openModal();
+      // Remove the query parameter from the URL
+      params.delete('action');
+      navigate({ search: params.toString() }, { replace: true });
+    }
+  }, [location.search, navigate]);
 
   return (
     <div className="day-calendar-page">

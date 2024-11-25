@@ -6,6 +6,7 @@ import SchemeItem from './Modal/Scheme/SchemeItem';
 import useTimeBlocks from './Hooks/fetchTimeblocks';
 import useNotification from '../../Components/Notification/index';
 import { withHeader } from '../../Components/Structural/Header';
+import './css/schemeStandalone.css'; // Import the CSS file
 
 const SchemeStandalone = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
@@ -167,44 +168,51 @@ const SchemeStandalone = () => {
   };
 
   if (!schemeSettings) {
-    return <div>Geen schema gevonden.</div>;
+    return (
+      <div className="scheme-page">
+        <div className="no-timeblock-message">
+          <a href="/#/scheme/calendar?action=create-timeblock">
+            Klik Hier Om Uw Eerste Tijdsblok Aan Te Maken
+          </a>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className='scheme-page'>
-    <div className='day-calendar-page'>
-
-      <div className='scheme-container'>
-      <NotificationComponent />
-      <h2 className="secondary-title">Openingsuren</h2>
-      <div className="scheme-list">
-        {items.map((item) => (
-          <SchemeItem
-            key={item.id}
-            item={item}
-            schemeSettings={schemeSettings}
-            handleToggle={handleToggle}
-            handleInputChange={handleInputChange}
-            errors={errors}
-            isSaveAttempted={isSaveAttempted}
-            handleShiftsToggle={handleShiftsToggle}
-            handleShiftInputChange={handleShiftInputChange}
-            addShift={addShift}
-            removeShift={removeShift}
-          />
-        ))}
+      <div className='day-calendar-page'>
+        <div className='scheme-container'>
+          <NotificationComponent />
+          <h2 className="secondary-title">Openingsuren</h2>
+          <div className="scheme-list">
+            {items.map((item) => (
+              <SchemeItem
+                key={item.id}
+                item={item}
+                schemeSettings={schemeSettings}
+                handleToggle={handleToggle}
+                handleInputChange={handleInputChange}
+                errors={errors}
+                isSaveAttempted={isSaveAttempted}
+                handleShiftsToggle={handleShiftsToggle}
+                handleShiftInputChange={handleShiftInputChange}
+                addShift={addShift}
+                removeShift={removeShift}
+              />
+            ))}
+          </div>
+          <div className="modal-buttons">
+            <button
+              type="button"
+              className="standard-button blue"
+              onClick={handleSaveScheme}
+            >
+              Opslaan
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="modal-buttons">
-        <button
-          type="button"
-          className="standard-button blue"
-          onClick={handleSaveScheme}
-        >
-          Opslaan
-        </button>
-      </div>
-      </div>
-    </div>
     </div>
   );
 };
