@@ -49,6 +49,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "deploy": "node deploy.js",
+    "build-and-deploy": "npm run build && npm run deploy",
     "generate-prompt": "node generatePrompt.mjs",
     "new-prompt": "node generatePrompt.mjs c",
     "process-result": "node processResult.mjs",
