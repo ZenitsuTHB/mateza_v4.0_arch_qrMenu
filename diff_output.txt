@@ -1,0 +1,4052 @@
+diff --git a/prompts/StepOne-prompt-no-css.txt b/prompts/StepOne-prompt-no-css.txt
+deleted file mode 100644
+index 4cc841d..0000000
+--- a/prompts/StepOne-prompt-no-css.txt
++++ /dev/null
+@@ -1,1275 +0,0 @@
+-File Contents:
+-
+---- Calendar.js ---
+-// src/Pages/NewReservation/Calendar.jsx
+-
+-import React, { useState, useEffect, useRef } from 'react';
+-import moment from 'moment-timezone';
+-import 'moment/locale/nl';
+-import { isWeekInPast, isSameDay } from './Utils/dateUtils';
+-import './css/calendar.css';
+-import useApi from '../../../Hooks/useApi';
+-
+-moment.locale('nl'); // Set moment to Dutch locale
+-
+-const Calendar = ({
+-  availableDates,
+-  selectedDate,
+-  onSelectDate,
+-  autoExpand,
+-  onReservationsFetched, // New prop for callback
+-}) => {
+-  const [isExpanded, setIsExpanded] = useState(autoExpand || false);
+-  const [startDate, setStartDate] = useState(null);
+-  const [reservations, setReservations] = useState(null); // Local state for reservations
+-  const calendarRef = useRef(null);
+-  const api = useApi(); // Initialize useApi hook
+-
+-  const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
+-
+-  useEffect(() => {
+-    if (autoExpand) {
+-      setIsExpanded(true);
+-    }
+-  }, [autoExpand]);
+-
+-  useEffect(() => {
+-    const today = moment().tz('Europe/Amsterdam').startOf('day');
+-    let firstWeekStart = today.clone().startOf('isoWeek');
+-    while (isWeekInPast(firstWeekStart)) {
+-      firstWeekStart.add(1, 'week');
+-    }
+-    setStartDate(firstWeekStart);
+-  }, []);
+-
+-  useEffect(() => {
+-    const handleClickOutside = (event) => {
+-      if (
+-        calendarRef.current &&
+-        !calendarRef.current.contains(event.target)
+-      ) {
+-        setIsExpanded(false);
+-      }
+-    };
+-    document.addEventListener('mousedown', handleClickOutside);
+-    return () => {
+-      document.removeEventListener('mousedown', handleClickOutside);
+-    };
+-  }, []);
+-
+-  useEffect(() => {
+-    const fetchAndHandleReservations = async () => {
+-      if (startDate) {
+-        const beginDate = startDate.format('YYYY-MM-DD');
+-        const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
+-        const restaurantId = localStorage.getItem('username');
+-        const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
+-
+-        try {
+-          const data = await api.get(endpoint, { noCache: true });
+-          setReservations(data); // Update local state with fetched reservations
+-          console.log('Fetched reservations:', data);
+-
+-          if (onReservationsFetched && typeof onReservationsFetched === 'function') {
+-            onReservationsFetched(data); // Invoke callback with fetched data
+-          }
+-        } catch (error) {
+-          console.error('Error fetching reservations:', error);
+-        }
+-      }
+-    };
+-
+-    fetchAndHandleReservations();
+-  }, [startDate, api, onReservationsFetched]);
+-
+-  const generateCalendarDays = (startDate) => {
+-    const days = [];
+-    const today = moment().tz('Europe/Amsterdam').startOf('day');
+-    const twoWeeksFromStart = startDate.clone().add(13, 'days');
+-
+-    let date = startDate.clone();
+-    while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
+-      const formattedDate = date.format('YYYY-MM-DD');
+-      const isAvailable = availableDates.includes(formattedDate);
+-
+-      days.push({
+-        date: date.clone(),
+-        isPast: date.isBefore(today, 'day'),
+-        isFuture: date.isAfter(maxDate, 'day'),
+-        isAvailable: isAvailable,
+-      });
+-
+-      date.add(1, 'day');
+-    }
+-
+-    return days;
+-  };
+-
+-  const handleDateClick = (day) => {
+-    if (day.isAvailable && !day.isPast && !day.isFuture) {
+-      const formattedDate = day.date.format('YYYY-MM-DD');
+-      onSelectDate(formattedDate); // Notify parent
+-      setIsExpanded(false);
+-    } else {
+-      console.log('Date is not available for selection.');
+-    }
+-  };
+-
+-  const handlePrevWeek = () => {
+-    const newStartDate = startDate.clone().subtract(1, 'week');
+-    if (isWeekInPast(newStartDate)) {
+-      console.log('Cannot go to previous week. It is in the past.');
+-      return;
+-    }
+-    setStartDate(newStartDate);
+-  };
+-
+-  const handleNextWeek = () => {
+-    const newStartDate = startDate.clone().add(1, 'week');
+-    setStartDate(newStartDate);
+-  };
+-
+-  const formatDisplayDate = () => {
+-    if (!selectedDate) {
+-      return 'Selecteer een datum'; // "Select a date" in Dutch
+-    }
+-
+-    const selectedMoment = moment(selectedDate, 'YYYY-MM-DD')
+-      .tz('Europe/Amsterdam')
+-      .startOf('day');
+-    const today = moment().tz('Europe/Amsterdam').startOf('day');
+-    const tomorrow = moment().tz('Europe/Amsterdam').add(1, 'day').startOf('day');
+-
+-    if (selectedMoment.isSame(today, 'day')) {
+-      return 'Vandaag'; // "Today" in Dutch
+-    } else if (selectedMoment.isSame(tomorrow, 'day')) {
+-      return 'Morgen'; // "Tomorrow" in Dutch
+-    } else {
+-      // Format: e.g., "Maandag 1 Januari 2023"
+-      return selectedMoment.format('dddd D MMMM YYYY');
+-    }
+-  };
+-
+-  const days = startDate ? generateCalendarDays(startDate) : [];
+-
+-  return (
+-    <div className="calendar-container" ref={calendarRef}>
+-      <div
+-        className="calendar-display"
+-        onClick={() => {
+-          setIsExpanded(!isExpanded);
+-        }}
+-      >
+-        <span>{formatDisplayDate()}</span>
+-        <span className="arrow">
+-          <svg
+-            width="12"
+-            height="12"
+-            viewBox="0 0 24 24"
+-            style={{
+-              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+-              transition: 'transform 0.2s',
+-            }}
+-          >
+-            <path
+-              d="M7 10l5 5 5-5"
+-              fill="none"
+-              stroke="currentColor"
+-              strokeWidth="2"
+-            />
+-          </svg>
+-        </span>
+-      </div>
+-      {isExpanded && startDate && (
+-        <div className="calendar">
+-          <div className="calendar-header">
+-            <button type="button" onClick={handlePrevWeek}>
+-              &lt;
+-            </button>
+-            <span>
+-              {startDate.format('DD MMM')} -{' '}
+-              {startDate.clone().add(13, 'days').format('DD MMM YYYY')}
+-            </span>
+-            <button type="button" onClick={handleNextWeek}>
+-              &gt;
+-            </button>
+-          </div>
+-          <div className="calendar-weeks-wrapper">
+-            <table className="calendar-table">
+-              <thead>
+-                <tr>
+-                  {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
+-                    <th key={day}>{day}</th>
+-                  ))}
+-                </tr>
+-              </thead>
+-              <tbody>
+-                {Array.from({ length: 2 }).map((_, weekIndex) => (
+-                  <tr key={weekIndex}>
+-                    {days
+-                      .slice(weekIndex * 7, weekIndex * 7 + 7)
+-                      .map((dayObj, index) => {
+-                        const isSelected =
+-                          selectedDate &&
+-                          isSameDay(
+-                            dayObj.date,
+-                            moment(selectedDate, 'YYYY-MM-DD').tz('Europe/Amsterdam')
+-                          );
+-                        const classNames = [];
+-                        if (dayObj.isPast) {
+-                          classNames.push('gray-out');
+-                        } else if (dayObj.isAvailable) {
+-                          classNames.push('available');
+-                        } else {
+-                          classNames.push('unavailable');
+-                        }
+-                        if (isSelected) {
+-                          classNames.push('selected');
+-                        }
+-
+-                        return (
+-                          <td
+-                            key={index}
+-                            className={classNames.join(' ')}
+-                            onClick={() => handleDateClick(dayObj)}
+-                            style={{
+-                              '--animation-order': index + weekIndex * 7,
+-                            }}
+-                          >
+-                            <div className="day-square">
+-                              {dayObj.date.date()}
+-                            </div>
+-                          </td>
+-                        );
+-                      })}
+-                  </tr>
+-                ))}
+-              </tbody>
+-            </table>
+-          </div>
+-        </div>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default Calendar;
+-
+-
+---- DateSelector.js ---
+-// src/Pages/NewReservation/DateSelector.jsx
+-
+-import React, { useEffect, useState, useCallback } from 'react';
+-import Calendar from './Calendar';
+-import { generateAvailableDates } from './Utils/generateDates';
+-import moment from 'moment';
+-
+-const DateSelector = ({
+-  formData,
+-  handleChange,
+-  resetFormDataFields,
+-  timeblocks,
+-}) => {
+-  const [availableDates, setAvailableDates] = useState([]);
+-  const [reservations, setReservations] = useState([]); // New state for reservations
+-
+-  useEffect(() => {
+-    if (Array.isArray(timeblocks)) {
+-      const dates = generateAvailableDates(timeblocks, reservations);
+-      setAvailableDates(dates);
+-    } else {
+-      console.error('timeblocks is undefined or not an array:', timeblocks);
+-      setAvailableDates([]);
+-    }
+-  }, [timeblocks, reservations]);
+-
+-  const handleDateSelect = (date) => {
+-    const formattedDate = moment(date).format('YYYY-MM-DD');
+-    console.log('Selected date:', formattedDate);
+-    handleChange({
+-      target: { name: 'date', value: formattedDate },
+-    });
+-    resetFormDataFields(['time']);
+-  };
+-
+-  // Memoize the callback to prevent unnecessary re-renders
+-  const handleReservationsFetched = useCallback((data) => {
+-    setReservations(data); // Update the reservations state
+-  }, []);
+-
+-  return (
+-    <div className="form-group date-selector-container">
+-      <label htmlFor="date" className="default-text-color">
+-        Datum<span className="required">*</span>
+-      </label>
+-      <Calendar
+-        availableDates={availableDates}
+-        selectedDate={formData.date || null}
+-        onSelectDate={handleDateSelect}
+-        autoExpand={false}
+-        onReservationsFetched={handleReservationsFetched} // Pass the handler as prop
+-      />
+-    </div>
+-  );
+-};
+-
+-export default DateSelector;
+-
+-
+---- Hooks/useFetchRestaurantData.js ---
+-// src/Hooks/useFetchRestaurantData.js
+-
+-import { useState, useEffect } from 'react';
+-import useApi from '../../../../Hooks/useApi';
+-
+-const useFetchRestaurantData = () => {
+-  const [restaurantData, setRestaurantData] = useState(null);
+-  const api = useApi();
+-
+-
+-  useEffect(() => {
+-    const fetchRestaurantData = async () => {
+-      try {
+-        const endpoint = `${window.baseDomain}api/auth-restaurant/`;
+-        const response = await api.get(endpoint);
+-
+-
+-        if (response) {
+-          setRestaurantData(response);
+-        }
+-      } catch (error) {
+-        console.error('Error fetching restaurant data:', error);
+-        const errorCode = error.response?.status || 'unknown';
+-      }
+-    };
+-
+-    fetchRestaurantData();
+-  }, [api]);
+-
+-  return restaurantData;
+-};
+-
+-export default useFetchRestaurantData;
+-
+-
+---- TimeSelector.js ---
+-// src/Pages/NewReservation/TimeSelector.jsx
+-
+-import React, { useState, useEffect, useRef } from 'react';
+-import { generateAvailableTimesForDate } from './Utils/generateTimes';
+-import './css/timeSelector.css';
+-
+-const TimeSelector = ({
+-  formData,
+-  handleChange,
+-  field,
+-  selectedDate,
+-  expanded,
+-  setCurrentExpandedField,
+-}) => {
+-  const [isExpanded, setIsExpanded] = useState(expanded || false);
+-  const [availableTimes, setAvailableTimes] = useState([]);
+-  const timeSelectorRef = useRef(null);
+-
+-  useEffect(() => {
+-    if (selectedDate) {
+-      const times = generateAvailableTimesForDate(new Date(selectedDate));
+-      setAvailableTimes(times);
+-    } else {
+-      setAvailableTimes([]);
+-    }
+-  }, [selectedDate]);
+-
+-  const handleTimeSelect = (timeValue) => {
+-    handleChange({
+-      target: { name: field.id, value: timeValue },
+-    });
+-    setIsExpanded(false);
+-    if (setCurrentExpandedField) {
+-      setCurrentExpandedField(null);
+-    }
+-  };
+-
+-  const formatDisplayTime = () => {
+-    if (formData[field.id]) {
+-      const selected = availableTimes.find((time) => time.value === formData[field.id]);
+-      return selected ? selected.label : 'Selecteer een tijd';
+-    }
+-    return 'Selecteer een tijd';
+-  };
+-
+-  if (!field) {
+-    return null;
+-  }
+-
+-  return (
+-    <div className="form-group time-selector-container" ref={timeSelectorRef}>
+-      <label className="default-text-color" htmlFor={field.id}>
+-        {field.label}
+-        <span className="required">*</span>
+-      </label>
+-
+-      {!selectedDate ? (
+-        <p className="info-text">Selecteer eerst een datum.</p>
+-      ) : (
+-        <>
+-          <div
+-            className="time-display"
+-            onClick={() => {
+-              setIsExpanded(!isExpanded);
+-              if (!isExpanded && setCurrentExpandedField) {
+-                setCurrentExpandedField('time');
+-              }
+-            }}
+-          >
+-            <span>{formatDisplayTime()}</span>
+-            <span className="arrow">
+-              <svg
+-                width="12"
+-                height="12"
+-                viewBox="0 0 24 24"
+-                style={{
+-                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+-                  transition: 'transform 0.2s',
+-                }}
+-              >
+-                <path
+-                  d="M7 10l5 5 5-5"
+-                  fill="none"
+-                  stroke="currentColor"
+-                  strokeWidth="2"
+-                />
+-              </svg>
+-            </span>
+-          </div>
+-          {isExpanded && (
+-            <div className="time-selector">
+-              {availableTimes.length === 0 ? (
+-                <div className="no-times">Geen beschikbare tijden.</div>
+-              ) : (
+-                <div className="time-options">
+-                  {availableTimes.map((time) => (
+-                    <div
+-                      key={time.value}
+-                      className={`time-option ${
+-                        formData[field.id] === time.value ? 'selected' : ''
+-                      }`}
+-                      onClick={() => handleTimeSelect(time.value)}
+-                    >
+-                      {time.label}
+-                    </div>
+-                  ))}
+-                </div>
+-              )}
+-            </div>
+-          )}
+-        </>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default TimeSelector;
+-
+-
+---- Utils/dateUtils.js ---
+-// src/Pages/NewReservation/Utils/dateUtils.js
+-
+-import moment from 'moment-timezone';
+-
+-export const isWeekInPast = (weekStartDate) => {
+-  const today = moment().tz('Europe/Brussels').startOf('day');
+-  const weekEndDate = weekStartDate.clone().add(6, 'days').endOf('day');
+-  return weekEndDate.isBefore(today);
+-};
+-
+-export const isSameDay = (date1, date2) => date1.isSame(date2, 'day');
+-
+-
+---- Utils/dates/blockDates.js ---
+-// src/Pages/NewReservation/Utils/dates/blockDates.js
+-
+-import { DateTime } from 'luxon';
+-
+-const getOrInitializeArray = (dict, key) => {
+-  if (!Array.isArray(dict[key])) {
+-    dict[key] = [];
+-  }
+-  return dict[key];
+-};
+-
+-const initializeDictionaries = () => {
+-  window.dateDictionary = window.dateDictionary || {};
+-  window.shiftsPerDate = window.shiftsPerDate || {};
+-};
+-
+-const processTimeblock = (block) => {
+-  if (!block.date) {
+-    return;
+-  }
+-
+-  const dateString = DateTime.fromISO(block.date, { zone: 'Europe/Brussels' }).toISODate();
+-
+-  // Check if date is in closedDates
+-  if (window.closedDates.has(dateString)) {
+-    return;
+-  }
+-
+-  // Check for exceptional openings
+-  if (window.exceptionalOpenings[dateString]) {
+-    const exceptionalOpening = window.exceptionalOpenings[dateString];
+-    window.dateDictionary[dateString] = [
+-      {
+-        startTime: exceptionalOpening.startTime,
+-        endTime: exceptionalOpening.endTime,
+-      },
+-    ];
+-  } else {
+-    // Use the block's times
+-    if (!window.dateDictionary[dateString]) {
+-      window.dateDictionary[dateString] = [];
+-    }
+-    window.dateDictionary[dateString].push({
+-      startTime: block.startTime || null,
+-      endTime: block.endTime || null,
+-    });
+-  }
+-
+-  // Process shifts
+-  if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
+-    const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+-
+-    block.shifts.forEach((shift) => {
+-      const exists = shiftsArray.some(
+-        (existingShift) =>
+-          existingShift.name === shift.name && existingShift.startTime === shift.startTime
+-      );
+-      if (!exists) {
+-        shiftsArray.push({
+-          name: shift.name || '',
+-          startTime: shift.startTime || '',
+-          endTime: shift.endTime || null,
+-        });
+-      }
+-    });
+-  }
+-};
+-
+-export const getBlockSettingsDates = (timeblocks) => {
+-  initializeDictionaries();
+-  const dates = [];
+-
+-  timeblocks.forEach((block) => {
+-    processTimeblock(block);
+-    // Do not add date if not in dateDictionary (i.e., date was skipped)
+-    if (block.date) {
+-      const dateString = DateTime.fromISO(block.date, { zone: 'Europe/Brussels' }).toISODate();
+-      if (window.dateDictionary[dateString]) {
+-        dates.push(dateString);
+-      }
+-    }
+-  });
+-
+-  return dates;
+-};
+-
+-
+---- Utils/dates/schemeDates.js ---
+-// src/Pages/NewReservation/Utils/dates/schemeDates.js
+-
+-import { DateTime } from 'luxon';
+-
+-const getOrInitializeArray = (dict, key) => {
+-  if (!Array.isArray(dict[key])) {
+-    dict[key] = [];
+-  }
+-  return dict[key];
+-};
+-
+-const initializeDictionaries = () => {
+-  window.dateDictionary = window.dateDictionary || {};
+-  window.shiftsPerDate = window.shiftsPerDate || {};
+-};
+-
+-const isWithinPeriod = (currentDate, endDate) => {
+-  return currentDate <= endDate;
+-};
+-
+-const processDaySetting = (dateString, daySetting) => {
+-  // Check if date is in closedDates
+-  if (window.closedDates.has(dateString)) {
+-    return;
+-  }
+-
+-  // Check for exceptional openings
+-  if (window.exceptionalOpenings[dateString]) {
+-    const exceptionalOpening = window.exceptionalOpenings[dateString];
+-    window.dateDictionary[dateString] = [
+-      {
+-        startTime: exceptionalOpening.startTime,
+-        endTime: exceptionalOpening.endTime,
+-      },
+-    ];
+-  } else {
+-    // Use the daySetting's times
+-    if (!window.dateDictionary[dateString]) {
+-      window.dateDictionary[dateString] = [];
+-    }
+-    window.dateDictionary[dateString].push({
+-      startTime: daySetting.startTime || null,
+-      endTime: daySetting.endTime || null,
+-    });
+-  }
+-
+-  // Process shifts
+-  if (
+-    daySetting.shiftsEnabled &&
+-    Array.isArray(daySetting.shifts) &&
+-    daySetting.shifts.length > 0
+-  ) {
+-    const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
+-
+-    daySetting.shifts.forEach((shift) => {
+-      const exists = shiftsArray.some(
+-        (existingShift) =>
+-          existingShift.name === shift.name && existingShift.startTime === shift.startTime
+-      );
+-      if (!exists) {
+-        shiftsArray.push({
+-          name: shift.name || '',
+-          startTime: shift.startTime || '',
+-          endTime: shift.endTime || null,
+-        });
+-      }
+-    });
+-  }
+-};
+-
+-export const getSchemeSettingsDates = (timeblocks, maxDate) => {
+-  initializeDictionaries();
+-  const dates = [];
+-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+-
+-  timeblocks.forEach((block) => {
+-    if (!block.schemeSettings) {
+-      return;
+-    }
+-
+-    const { schemeSettings } = block;
+-    let currentDate = DateTime.now().setZone('Europe/Brussels').startOf('day');
+-
+-    // Adjust endDate based on dagenInToekomst
+-    let endDate = maxDate;
+-
+-    if (schemeSettings.period && schemeSettings.period.enabled) {
+-      const { startDate, endDate: periodEndDate } = schemeSettings.period;
+-      if (startDate && periodEndDate) {
+-        currentDate = DateTime.fromISO(startDate, { zone: 'Europe/Brussels' }).startOf('day');
+-        const schemeEndDate = DateTime.fromISO(periodEndDate, { zone: 'Europe/Brussels' }).endOf('day');
+-        // Use the minimum of schemeEndDate and maxDate
+-        endDate = schemeEndDate < maxDate ? schemeEndDate : maxDate;
+-      }
+-    }
+-
+-    while (isWithinPeriod(currentDate, endDate)) {
+-      const dayOfWeek = currentDate.weekday % 7;
+-      const dayName = dayNames[dayOfWeek];
+-      const daySetting = schemeSettings[dayName];
+-      const dateString = currentDate.toISODate();
+-      if (daySetting && daySetting.enabled) {
+-        processDaySetting(dateString, daySetting);
+-        if (window.dateDictionary[dateString]) {
+-          dates.push(dateString);
+-        }
+-      }
+-      currentDate = currentDate.plus({ days: 1 });
+-    }
+-  });
+-  return dates;
+-};
+-
+-
+---- Utils/exceptions.js ---
+-// src/Pages/NewReservation/Utils/exceptions.js
+-
+-import { DateTime } from 'luxon';
+-
+-export const collectExceptions = (timeblocks) => {
+-  window.closedDates = new Set();
+-  window.exceptionalOpenings = {};
+-
+-  timeblocks.forEach((block) => {
+-    if (!block.exceptionalDays) {
+-      return;
+-    }
+-
+-    const { exceptionalDays } = block;
+-
+-    // Process sluitingsperiode (closing periods)
+-    if (Array.isArray(exceptionalDays.sluitingsperiode)) {
+-      exceptionalDays.sluitingsperiode.forEach((period) => {
+-        if (period.enabled) {
+-          const { startDate, endDate } = period;
+-          if (startDate && endDate) {
+-            let currentDate = DateTime.fromISO(startDate, { zone: 'Europe/Brussels' }).startOf('day');
+-            const endDateObj = DateTime.fromISO(endDate, { zone: 'Europe/Brussels' }).startOf('day');
+-            while (currentDate <= endDateObj) {
+-              const dateString = currentDate.toISODate();
+-              window.closedDates.add(dateString);
+-              currentDate = currentDate.plus({ days: 1 });
+-            }
+-          }
+-        }
+-      });
+-    }
+-
+-    // Process sluitingsdag (closing days)
+-    if (Array.isArray(exceptionalDays.sluitingsdag)) {
+-      exceptionalDays.sluitingsdag.forEach((day) => {
+-        if (day.enabled) {
+-          const { date } = day;
+-          if (date) {
+-            window.closedDates.add(date);
+-          }
+-        }
+-      });
+-    }
+-
+-    // Process uitzonderlijkeOpeningsuren (exceptional opening hours)
+-    if (Array.isArray(exceptionalDays.uitzonderlijkeOpeningsuren)) {
+-      exceptionalDays.uitzonderlijkeOpeningsuren.forEach((opening) => {
+-        if (opening.enabled) {
+-          const { date, startTime, endTime } = opening;
+-          if (date && startTime && endTime) {
+-            window.exceptionalOpenings[date] = {
+-              startTime,
+-              endTime,
+-            };
+-          }
+-        }
+-      });
+-    }
+-  });
+-};
+-
+-
+---- Utils/generateDates.js ---
+-// src/Pages/NewReservation/Utils/generateDates.js
+-
+-import { DateTime } from 'luxon';
+-import { collectExceptions } from './exceptions';
+-import { getSchemeSettingsDates } from './dates/schemeDates';
+-import { getBlockSettingsDates } from './dates/blockDates';
+-import { generateAvailableTimesForDate } from './generateTimes';
+-
+-const initializeDictionaries = () => {
+-  window.dateDictionary = window.dateDictionary || {};
+-  window.shiftsPerDate = window.shiftsPerDate || {};
+-};
+-
+-export const generateAvailableDates = (timeblocks = [], reservations = []) => {
+-  initializeDictionaries();
+-  collectExceptions(timeblocks);
+-
+-  const dagenInToekomstRaw = window.generalSettings?.dagenInToekomst;
+-  let dagenInToekomst = 365;
+-
+-  if (dagenInToekomstRaw) {
+-    if (typeof dagenInToekomstRaw === 'number') {
+-      dagenInToekomst = dagenInToekomstRaw;
+-    } else if (typeof dagenInToekomstRaw === 'string') {
+-      dagenInToekomst = parseInt(dagenInToekomstRaw, 10);
+-      if (isNaN(dagenInToekomst)) {
+-        dagenInToekomst = 365;
+-      }
+-    }
+-  }
+-
+-  const today = DateTime.now().setZone('Europe/Brussels').startOf('day');
+-  const maxDate = today.plus({ days: dagenInToekomst - 1 }).endOf('day');
+-
+-  const blockDates = getBlockSettingsDates(timeblocks);
+-  const schemeDates = getSchemeSettingsDates(timeblocks, maxDate);
+-  const combinedDates = [...blockDates, ...schemeDates];
+-
+-  const filteredDates = combinedDates.filter((dateStr) => {
+-    const date = DateTime.fromISO(dateStr, { zone: 'Europe/Brussels' }).startOf('day');
+-    return date >= today && date <= maxDate;
+-  });
+-
+-  let uniqueDates = Array.from(new Set(filteredDates)).sort();
+-
+-  // Initialize countingDictionary
+-  const countingDictionary = {};
+-
+-  // Retrieve intervalReservatie and validate it
+-  const intervalReservatie = window.generalSettings?.intervalReservatie;
+-  let intervalMinutes = 30; // Default value
+-
+-  if (
+-    typeof intervalReservatie === 'number' &&
+-    Number.isInteger(intervalReservatie) &&
+-    intervalReservatie > 0
+-  ) {
+-    intervalMinutes = intervalReservatie;
+-  } else {
+-    console.warn(
+-      `[generateAvailableDates] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+-    );
+-  }
+-
+-  // Retrieve duurReservatie and validate it
+-  const duurReservatieRaw = window.generalSettings?.duurReservatie;
+-  let duurReservatieMinutes = 120; // Default duration in minutes (2 hours)
+-
+-  if (
+-    typeof duurReservatieRaw === 'number' &&
+-    Number.isInteger(duurReservatieRaw) &&
+-    duurReservatieRaw > 0
+-  ) {
+-    duurReservatieMinutes = duurReservatieRaw;
+-  } else {
+-    console.warn(
+-      `[generateAvailableDates] Invalid duurReservatie value "${duurReservatieRaw}". Using default duurReservatieMinutes = 120`
+-    );
+-  }
+-
+-  // Function to generate times for a given dateKey
+-  const generateAvailableTimesForDateKey = (dateKey) => {
+-    const dateDictionary = window.dateDictionary;
+-    const shiftsPerDate = window.shiftsPerDate;
+-
+-    if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+-      return [];
+-    }
+-
+-    const shiftData =
+-      shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
+-
+-    if (shiftData.length > 0) {
+-      const shiftButtons = shiftData.map((shift) => ({
+-        label: shift.name,
+-        value: shift.startTime,
+-      }));
+-      return shiftButtons.map((button) => button.value);
+-    }
+-
+-    const times = [];
+-    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
+-
+-    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+-      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+-        year: selectedDate.getFullYear(),
+-        month: selectedDate.getMonth() + 1,
+-        day: selectedDate.getDate(),
+-      });
+-
+-      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+-        year: selectedDate.getFullYear(),
+-        month: selectedDate.getMonth() + 1,
+-        day: selectedDate.getDate(),
+-      });
+-
+-      while (startDateTime < endDateTime) {
+-        const timeString = startDateTime.toFormat('HH:mm');
+-        times.push(timeString);
+-        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+-      }
+-    });
+-
+-    const uniqueTimes = [...new Set(times)].sort(
+-      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+-    );
+-
+-    return uniqueTimes;
+-  };
+-
+-  // Generate countingDictionary with initial counts
+-  uniqueDates.forEach((dateKey) => {
+-    const times = generateAvailableTimesForDateKey(dateKey);
+-    countingDictionary[dateKey] = {};
+-
+-    times.forEach((time) => {
+-      countingDictionary[dateKey][time] = 0;
+-    });
+-  });
+-
+-  // Process reservations to update counts
+-  reservations.forEach((reservation) => {
+-    const reservationDate = reservation.date; // string in "YYYY-MM-DD" format
+-    const reservationTime = reservation.time; // string in "HH:mm"
+-    const numberOfGuests = reservation.guests;
+-
+-    if (countingDictionary[reservationDate]) {
+-      const resStartDateTime = DateTime.fromISO(
+-        `${reservationDate}T${reservationTime}`,
+-        { zone: 'Europe/Brussels' }
+-      );
+-
+-      // Use duurReservatieMinutes instead of fixed 2 hours
+-      const resEndDateTime = resStartDateTime.plus({ minutes: duurReservatieMinutes });
+-
+-      // For each time period in countingDictionary[reservationDate]
+-      Object.keys(countingDictionary[reservationDate]).forEach((timePeriodStart) => {
+-        const timePeriodStartDateTime = DateTime.fromISO(
+-          `${reservationDate}T${timePeriodStart}`,
+-          { zone: 'Europe/Brussels' }
+-        );
+-        const timePeriodEndDateTime = timePeriodStartDateTime.plus({ minutes: intervalMinutes });
+-
+-        // Check if reservation interval collides with time period
+-        if (resStartDateTime < timePeriodEndDateTime && resEndDateTime > timePeriodStartDateTime) {
+-          // There is a collision
+-          countingDictionary[reservationDate][timePeriodStart] += numberOfGuests;
+-        }
+-      });
+-    }
+-  });
+-
+-  // Store countingDictionary in window for access in generateAvailableTimesForDate
+-  window.countingDictionary = countingDictionary;
+-
+-  // Remove dates with no available time buttons
+-  const datesToRemove = [];
+-  uniqueDates.forEach((dateKey) => {
+-    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
+-    const availableTimeButtons = generateAvailableTimesForDate(selectedDate);
+-
+-    if (availableTimeButtons.length === 0) {
+-      datesToRemove.push(dateKey);
+-    }
+-  });
+-
+-  // Filter out the dates to remove
+-  uniqueDates = uniqueDates.filter((dateKey) => !datesToRemove.includes(dateKey));
+-
+-  return uniqueDates;
+-};
+-
+-
+---- Utils/generateTimes.js ---
+-// src/Pages/NewReservation/Utils/generateTimes.js
+-
+-import { DateTime } from 'luxon';
+-
+-const formatDateKey = (date) => {
+-  const formattedDate = DateTime.fromJSDate(date).toISODate();
+-  return formattedDate;
+-};
+-
+-export const generateAvailableTimesForDate = (selectedDate) => {
+-  const dateDictionary = window.dateDictionary;
+-  const shiftsPerDate = window.shiftsPerDate;
+-  const dateKey = formatDateKey(selectedDate);
+-  const now = DateTime.now().setZone('Europe/Brussels');
+-
+-  // Retrieve intervalReservatie and validate it
+-  const intervalReservatie = window.generalSettings?.intervalReservatie;
+-  let intervalMinutes = 30; // Default value
+-
+-  if (
+-    typeof intervalReservatie === 'number' &&
+-    Number.isInteger(intervalReservatie) &&
+-    intervalReservatie > 0
+-  ) {
+-    intervalMinutes = intervalReservatie;
+-  } else {
+-    console.warn(
+-      `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+-    );
+-  }
+-
+-  if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+-    return [];
+-  }
+-
+-  const shiftData =
+-    shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
+-
+-  let timeButtons = [];
+-
+-  if (shiftData.length > 0) {
+-    timeButtons = shiftData.map((shift) => ({
+-      label: shift.name,
+-      value: shift.startTime,
+-    }));
+-  } else {
+-    const times = [];
+-
+-    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
+-      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+-        year: selectedDate.getFullYear(),
+-        month: selectedDate.getMonth() + 1,
+-        day: selectedDate.getDate(),
+-      });
+-
+-      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
+-        year: selectedDate.getFullYear(),
+-        month: selectedDate.getMonth() + 1,
+-        day: selectedDate.getDate(),
+-      });
+-
+-      while (startDateTime < endDateTime) {
+-        if (startDateTime > now) {
+-          const timeString = startDateTime.toFormat('HH:mm');
+-          times.push(timeString);
+-        }
+-        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+-      }
+-    });
+-
+-    const uniqueTimes = [...new Set(times)].sort(
+-      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+-    );
+-
+-    timeButtons = uniqueTimes.map((time) => ({
+-      label: time,
+-      value: time,
+-    }));
+-  }
+-
+-  // Filter timeButtons based on countingDictionary
+-  const capacityLimit = 3;
+-  const countingDictionary = window.countingDictionary || {};
+-
+-  if (countingDictionary[dateKey]) {
+-    timeButtons = timeButtons.filter((button) => {
+-      const time = button.value;
+-      const guestsCount = countingDictionary[dateKey][time] || 0;
+-      return guestsCount < capacityLimit;
+-    });
+-  }
+-
+-  return timeButtons;
+-};
+-
+-
+---- ValueSelector.js ---
+-// src/Pages/NewReservation/ValueSelector.jsx
+-
+-import React, { useState } from 'react';
+-import { motion, AnimatePresence } from 'framer-motion';
+-import './css/valueSelector.css';
+-
+-const ValueSelectorGuests = ({ value, onChange }) => {
+-  const predefinedValues = [1, 2, 3, '4+ Gasten'];
+-  const [selectedValue, setSelectedValue] = useState(value || '');
+-  const [showSlider, setShowSlider] = useState(false);
+-
+-  const handlePredefinedValueClick = (val) => {
+-    if (val === '4+ Gasten') {
+-      setShowSlider(true);
+-      setSelectedValue(4);
+-      onChange({ target: { name: 'numberOfGuests', value: 4 } });
+-    } else {
+-      setShowSlider(false);
+-      setSelectedValue(val);
+-      onChange({ target: { name: 'numberOfGuests', value: val } });
+-    }
+-  };
+-
+-  const handleSliderChange = (e) => {
+-    const val = e.target.value;
+-    setSelectedValue(val);
+-    onChange({ target: { name: 'numberOfGuests', value: val } });
+-  };
+-
+-  const handleInputChange = (e) => {
+-    const val = e.target.value;
+-    setSelectedValue(val);
+-    onChange({ target: { name: 'numberOfGuests', value: val } });
+-  };
+-
+-  return (
+-    <div className="value-selector">
+-      <div className="predefined-values">
+-        {predefinedValues.map((val) => (
+-          <button
+-            key={val}
+-            type="button"
+-            className={`predefined-value-button ${
+-              selectedValue == val || (val === '4+ Gasten' && showSlider) ? 'active' : ''
+-            }`}
+-            onClick={() => handlePredefinedValueClick(val)}
+-          >
+-            {val === '4+ Gasten' ? '4+ Gasten' : `${val} ${val === 1 ? 'Gast' : 'Gasten'}`}
+-          </button>
+-        ))}
+-      </div>
+-      <AnimatePresence>
+-        {showSlider && (
+-          <motion.div
+-            className="slider-container"
+-            initial={{ opacity: 0, height: 0 }}
+-            animate={{ opacity: 1, height: 'auto' }}
+-            exit={{ opacity: 0, height: 0 }}
+-          >
+-            <input
+-              type="range"
+-              min="4"
+-              max="15"
+-              step="1"
+-              value={selectedValue}
+-              onChange={handleSliderChange}
+-              className="slider"
+-            />
+-            <input
+-              type="number"
+-              name="numberOfGuests"
+-              value={selectedValue}
+-              onChange={handleInputChange}
+-              className="value-input"
+-              min="4"
+-              max="100"
+-              step="1"
+-            />
+-          </motion.div>
+-        )}
+-      </AnimatePresence>
+-    </div>
+-  );
+-};
+-
+-export default ValueSelectorGuests;
+-
+-
+---- index.js ---
+-// src/Pages/NewReservation/ReservationStepOne.jsx
+-
+-import React, { useState, useEffect } from 'react';
+-import ValueSelectorGuests from './ValueSelector';
+-import DateSelector from './DateSelector';
+-import TimeSelector from './TimeSelector';
+-import useApi from '../../../Hooks/useApi';
+-
+-const ReservationStepOne = ({
+-  formData,
+-  errors,
+-  handleChange,
+-  handleStepOneSubmit,
+-  setFormData,
+-}) => {
+-  const api = useApi();
+-
+-  // State for timeblocks
+-  const [timeblocks, setTimeblocks] = useState([]);
+-  const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
+-  const [timeblocksError, setTimeblocksError] = useState(null);
+-
+-  // Fetch timeblocks and general settings on component mount
+-  useEffect(() => {
+-    const fetchTimeblocks = async () => {
+-      try {
+-        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`, { noCache: true });
+-        setTimeblocks(data.timeblocks || []);
+-        window.timeblocks = data.timeblocks || []; // Retain globally if needed
+-        const generalSettings = data['general-settings'] || {};
+-        window.generalSettings = generalSettings; // Retain globally
+-      } catch (err) {
+-        setTimeblocksError(err);
+-        console.error('Error fetching timeblocks:', err);
+-      } finally {
+-        setLoadingTimeblocks(false);
+-      }
+-    };
+-
+-    fetchTimeblocks();
+-  }, [api]);
+-
+-  const resetFormDataFields = (fieldsToReset) => {
+-    setFormData((prevFormData) => {
+-      const newFormData = { ...prevFormData };
+-      fieldsToReset.forEach((field) => {
+-        newFormData[field] = '';
+-      });
+-      return newFormData;
+-    });
+-  };
+-
+-  if (loadingTimeblocks) {
+-    return <div>Loading timeblocks...</div>;
+-  }
+-
+-  if (timeblocksError) {
+-    return <div>Error loading timeblocks: {timeblocksError.message}</div>;
+-  }
+-
+-  return (
+-    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
+-      <ValueSelectorGuests
+-        value={formData.numberOfGuests}
+-        onChange={handleChange}
+-        error={errors.numberOfGuests}
+-      />
+-
+-      {formData.numberOfGuests && (
+-        <DateSelector
+-          formData={formData}
+-          handleChange={handleChange}
+-          resetFormDataFields={resetFormDataFields}
+-          timeblocks={timeblocks}
+-        />
+-      )}
+-
+-      {formData.date && (
+-        <TimeSelector
+-          formData={formData}
+-          handleChange={handleChange}
+-          field={{ id: 'time', label: 'Tijd' }}
+-          selectedDate={formData.date}
+-        />
+-      )}
+-
+-      <button type="submit" className="account-manage__button">
+-        Verder
+-      </button>
+-    </form>
+-  );
+-};
+-
+-export default ReservationStepOne;
+-
+-
+-
+-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/NewReservation/StepOne":
+-
+-├── Calendar.js
+-├── DateSelector.js
+-├── Hooks
+-│   └── useFetchRestaurantData.js
+-├── TimeSelector.js
+-├── Utils
+-│   ├── dateUtils.js
+-│   ├── dates
+-│   │   ├── blockDates.js
+-│   │   └── schemeDates.js
+-│   ├── exceptions.js
+-│   ├── generateDates.js
+-│   └── generateTimes.js
+-├── ValueSelector.js
+-├── css
+-│   ├── calendar.css
+-│   ├── timeSelector.css
+-│   └── valueSelector.css
+-└── index.js
+-
+-
+-List of Files:
+-Calendar.js
+-DateSelector.js
+-Hooks/useFetchRestaurantData.js
+-TimeSelector.js
+-Utils/dateUtils.js
+-Utils/dates/blockDates.js
+-Utils/dates/schemeDates.js
+-Utils/exceptions.js
+-Utils/generateDates.js
+-Utils/generateTimes.js
+-ValueSelector.js
+-index.js
+-
+-**Instruction:**
+-1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+-2. Prefix all CSS classes with the `.component-name-component` class. Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
+-
+-**Note:** CSS files have been excluded from this prompt.
+\ No newline at end of file
+diff --git a/prompts/TableEditor-prompt-no-css.txt b/prompts/TableEditor-prompt-no-css.txt
+deleted file mode 100644
+index fa85188..0000000
+--- a/prompts/TableEditor-prompt-no-css.txt
++++ /dev/null
+@@ -1,935 +0,0 @@
+-File Contents:
+-
+---- FloorPlan.js ---
+-// FloorPlan.js
+-import React, { useState, useCallback, useRef, useEffect } from 'react';
+-import { useDrop } from 'react-dnd';
+-import './css/floorPlan.css';
+-import { ResizableBox } from 'react-resizable';
+-import 'react-resizable/css/styles.css';
+-import FloorPlanElement from './FloorPlanElement.js';
+-import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
+-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
+-import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
+-
+-const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
+-
+-const FloorPlan = () => {
+-  const [elements, setElements] = useState([]);
+-  const floorPlanRef = useRef(null);
+-  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+-  const [nextTableNumber, setNextTableNumber] = useState(1);
+-
+-  const api = useApi(); // Initialize useApi hook
+-
+-  // State for modal
+-  const [selectedElement, setSelectedElement] = useState(null);
+-  const [showModal, setShowModal] = useState(false);
+-
+-  // Update floor plan size on mount and when resized
+-  useEffect(() => {
+-    const updateSize = () => {
+-      if (floorPlanRef.current) {
+-        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+-        setFloorPlanSize({ width, height });
+-      }
+-    };
+-
+-    // Initial size
+-    updateSize();
+-
+-    // Update size on window resize
+-    window.addEventListener('resize', updateSize);
+-
+-    // Cleanup
+-    return () => window.removeEventListener('resize', updateSize);
+-  }, []);
+-
+-  // Load tables from API on mount
+-  useEffect(() => {
+-    const fetchTables = async () => {
+-      try {
+-        const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
+-        // Ensure that data is an array
+-        if (Array.isArray(data)) {
+-          setElements(data);
+-        } else if (data && Array.isArray(data.tables)) { // If API returns { tables: [...] }
+-          setElements(data.tables);
+-        } else {
+-          setElements([]); // Fallback to empty array
+-        }
+-      } catch (error) {
+-        console.error('Error fetching tables:', error);
+-        setElements([]); // Fallback to empty array on error
+-      }
+-    };
+-
+-    fetchTables();
+-  }, [api]);
+-
+-  const addElement = (element) => {
+-    setElements((prevElements) => [...prevElements, element]);
+-  };
+-
+-  const updateElement = (updatedElement) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) => (el.id === updatedElement.id ? updatedElement : el))
+-    );
+-  };
+-
+-  const moveElement = useCallback((id, x, y) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) =>
+-        el.id === id
+-          ? {
+-              ...el,
+-              x,
+-              y,
+-            }
+-          : el
+-      )
+-    );
+-  }, []);
+-
+-  const rotateElement = useCallback((id) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) =>
+-        el.id === id
+-          ? {
+-              ...el,
+-              rotation: (el.rotation || 0) + 90, // Rotate by 90 degrees
+-            }
+-          : el
+-      )
+-    );
+-  }, []);
+-
+-  const duplicateElement = useCallback(
+-    (id) => {
+-      setElements((prevElements) => {
+-        const elementToDuplicate = prevElements.find((el) => el.id === id);
+-        if (!elementToDuplicate) return prevElements;
+-        const newId = Date.now();
+-        const newElement = {
+-          ...elementToDuplicate,
+-          id: newId,
+-          x: Math.min(
+-            elementToDuplicate.x + 20,
+-            floorPlanSize.width - elementToDuplicate.width
+-          ),
+-          y: Math.min(
+-            elementToDuplicate.y + 20,
+-            floorPlanSize.height - elementToDuplicate.height
+-          ),
+-          name:
+-            elementToDuplicate.type === 'table'
+-              ? `T${nextTableNumber}`
+-              : `${elementToDuplicate.subtype.charAt(0).toUpperCase() +
+-                  elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
+-          rotation: elementToDuplicate.rotation || 0,
+-        };
+-
+-        if (elementToDuplicate.type === 'table') {
+-          newElement.tableNumber = nextTableNumber;
+-          setNextTableNumber((prev) => prev + 1);
+-        }
+-
+-        // **Removed modal opening on duplication**
+-        // setSelectedElement(newElement);
+-        // setShowModal(true);
+-
+-        return [...prevElements, newElement];
+-      });
+-    },
+-    [floorPlanSize.width, floorPlanSize.height, nextTableNumber]
+-  );
+-
+-  const deleteElement = useCallback((id) => {
+-    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
+-  }, []);
+-
+-  const snapToGrid = (x, y, gridSize = 50) => {
+-    const snappedX = Math.round(x / gridSize) * gridSize;
+-    const snappedY = Math.round(y / gridSize) * gridSize;
+-    return [snappedX, snappedY];
+-  };
+-
+-  const [, drop] = useDrop({
+-    accept: 'ITEM',
+-    drop: (item, monitor) => {
+-      const offset = monitor.getClientOffset();
+-      const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+-
+-      let x = offset.x - floorPlanRect.left;
+-      let y = offset.y - floorPlanRect.top;
+-
+-      // Apply snapping only if the element is not a wall
+-      if (item.elementType !== 'wall') {
+-        const [snappedX, snappedY] = snapToGrid(x, y);
+-        x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+-        y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
+-      } else {
+-        // For walls, ensure they stay within boundaries without snapping
+-        x = Math.max(0, Math.min(x, floorPlanSize.width - item.width));
+-        y = Math.max(0, Math.min(y, floorPlanSize.height - item.height));
+-      }
+-
+-      if (item.id) {
+-        moveElement(item.id, x, y);
+-      } else {
+-        const id = Date.now();
+-        const newElement = {
+-          id,
+-          type: item.elementType,
+-          subtype: item.subtype,
+-          x,
+-          y,
+-          width: item.width,
+-          height: item.height,
+-          capacity: item.capacity,
+-          name:
+-            item.elementType === 'table'
+-              ? `T${nextTableNumber}`
+-              : `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Decoration ${id}`,
+-          minCapacity: item.minCapacity || 1,
+-          maxCapacity: item.maxCapacity || 10,
+-          priority: 'Medium',
+-          rotation: 0, // Initialize rotation
+-        };
+-
+-        // Assign a tableNumber if the element is a table
+-        if (item.elementType === 'table') {
+-          newElement.tableNumber = nextTableNumber;
+-          setNextTableNumber((prev) => prev + 1);
+-        }
+-
+-        addElement(newElement);
+-
+-        // **Open modal to edit table details only if needed**
+-        setSelectedElement(newElement);
+-        setShowModal(true);
+-      }
+-    },
+-  });
+-
+-  const handleModalClose = () => {
+-    setShowModal(false);
+-    setSelectedElement(null);
+-  };
+-
+-  const handleModalSave = (updatedElement) => {
+-    // Update the element in state
+-    updateElement(updatedElement);
+-    setShowModal(false);
+-    setSelectedElement(null);
+-
+-    // Save the element to API
+-    const saveElement = async () => {
+-      try {
+-        if (updatedElement._id) {
+-          // Existing table: use PUT request
+-          await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
+-        } else {
+-          // New table: use POST request
+-          await api.post(`${window.baseDomain}api/tables`, updatedElement);
+-        }
+-      } catch (error) {
+-        console.error('Error saving table:', error);
+-      }
+-    };
+-
+-    saveElement();
+-  };
+-
+-  return (
+-    <>
+-      <ResizableBox
+-        width={800}
+-        height={600}
+-        minConstraints={[400, 300]}
+-        maxConstraints={[1600, 1200]}
+-        className="table-plan-component resizable-floor-plan"
+-        onResizeStop={(e, data) => {
+-          // Directly set the new size without snapping
+-          setFloorPlanSize({ width: data.size.width, height: data.size.height });
+-        }}
+-        resizeHandles={['se']} // Optional: specify resize handles if needed
+-      >
+-        <div
+-          id="floor-plan-container"
+-          className="table-plan-component floor-plan"
+-          ref={(node) => {
+-            drop(node);
+-            floorPlanRef.current = node;
+-          }}
+-          style={{ position: 'relative', width: '100%', height: '100%' }}
+-        >
+-          {Array.isArray(elements) && elements.map((el) => (
+-            <FloorPlanElement
+-              key={el.id}
+-              element={el}
+-              moveElement={moveElement}
+-              rotateElement={rotateElement}
+-              duplicateElement={duplicateElement}
+-              deleteElement={deleteElement}
+-              floorPlanSize={floorPlanSize}
+-              tableNumber={el.tableNumber}
+-              openModal={(element) => {
+-                setSelectedElement(element);
+-                setShowModal(true);
+-              }}
+-            />
+-          ))}
+-        </div>
+-      </ResizableBox>
+-      {showModal && selectedElement && (
+-        <ModalWithoutTabs
+-          onClose={handleModalClose}
+-          content={
+-            <TableEditModalContent
+-              element={selectedElement}
+-              onSave={handleModalSave}
+-              onClose={handleModalClose}
+-            />
+-          }
+-        />
+-      )}
+-    </>
+-  );
+-};
+-
+-export default FloorPlan;
+-
+-
+---- FloorPlanElement.js ---
+-// FloorPlanElement.js
+-import React from 'react';
+-import Table from './Table.js';
+-import Walls from './Walls.js';
+-
+-const FloorPlanElement = ({
+-  element,
+-  moveElement,
+-  rotateElement,
+-  duplicateElement,
+-  deleteElement,
+-  floorPlanSize,
+-  tableNumber,
+-  openModal,
+-}) => {
+-  const [position, setPosition] = React.useState({ x: element.x, y: element.y });
+-  const [isDragging, setIsDragging] = React.useState(false);
+-  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+-
+-  React.useEffect(() => {
+-    setPosition({ x: element.x, y: element.y });
+-  }, [element.x, element.y]);
+-
+-  const handleMouseDown = (e) => {
+-    e.preventDefault(); // Prevent text selection
+-    setIsDragging(true);
+-    setOffset({
+-      x: e.clientX - position.x,
+-      y: e.clientY - position.y,
+-    });
+-  };
+-
+-  React.useEffect(() => {
+-    const handleMouseMove = (e) => {
+-      if (isDragging) {
+-        let newX = e.clientX - offset.x;
+-        let newY = e.clientY - offset.y;
+-
+-        // Constrain within floor plan boundaries
+-        newX = Math.max(0, Math.min(newX, floorPlanSize.width - element.width));
+-        newY = Math.max(0, Math.min(newY, floorPlanSize.height - element.height));
+-
+-        setPosition({
+-          x: newX,
+-          y: newY,
+-        });
+-
+-        // No alignment or snapping during dragging
+-      }
+-    };
+-
+-    const handleMouseUp = () => {
+-      if (isDragging) {
+-        setIsDragging(false);
+-
+-        // Apply snapping on mouse release for non-wall elements
+-        if (element.type !== 'wall') {
+-          const snapped = Math.round(position.x / 50) * 50; // Assuming grid size 50
+-          const snappedY = Math.round(position.y / 50) * 50;
+-          const finalX = Math.max(0, Math.min(snapped, floorPlanSize.width - element.width));
+-          const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
+-
+-          setPosition({ x: finalX, y: finalY });
+-          moveElement(element.id, finalX, finalY);
+-        } else {
+-          // For walls, no snapping
+-          moveElement(element.id, position.x, position.y);
+-        }
+-      }
+-    };
+-
+-    document.addEventListener('mousemove', handleMouseMove);
+-    document.addEventListener('mouseup', handleMouseUp);
+-
+-    return () => {
+-      document.removeEventListener('mousemove', handleMouseMove);
+-      document.removeEventListener('mouseup', handleMouseUp);
+-    };
+-  }, [
+-    isDragging,
+-    offset,
+-    position.x,
+-    position.y,
+-    moveElement,
+-    element.id,
+-    floorPlanSize,
+-    element.width,
+-    element.height,
+-    element.type,
+-  ]);
+-
+-  const style = {
+-    position: 'absolute',
+-    left: `${position.x}px`,
+-    top: `${position.y}px`,
+-    width: `${element.width}px`,
+-    height: `${element.height}px`,
+-    opacity: isDragging ? 0.5 : 1,
+-    cursor: 'move',
+-    transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
+-    zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
+-  };
+-
+-  return (
+-    <div
+-      className="table-plan-component floor-plan-element"
+-      onMouseDown={handleMouseDown}
+-      style={style}
+-    >
+-      {/* Rotated Content */}
+-      <div
+-        style={{
+-          transform: `rotate(${element.rotation || 0}deg)`,
+-          transformOrigin: 'center center',
+-          width: '100%',
+-          height: '100%',
+-          position: 'relative',
+-        }}
+-      >
+-        {element.type === 'table' ? (
+-          <Table
+-            numberOfGuests={element.capacity}
+-            tableNumber={tableNumber}
+-            rotate={() => rotateElement(element.id)}
+-            duplicate={() => duplicateElement(element.id)}
+-            deleteTable={() => deleteElement(element.id)}
+-            editTable={() => openModal(element)}
+-            showActions={true}
+-            rotation={element.rotation || 0} // Pass rotation to Table
+-          />
+-        ) : element.type === 'wall' ? (
+-          <Walls length={element.width / 20 + 1} />
+-        ) : null}
+-      </div>
+-      {/* Action Buttons are handled within Table component */}
+-    </div>
+-  );
+-};
+-
+-export default FloorPlanElement;
+-
+-
+---- Sidebar.js ---
+-// Sidebar.js
+-import React, { useState, useRef } from 'react';
+-import { useDrag } from 'react-dnd';
+-import { motion } from 'framer-motion';
+-import Table from './Table.js';
+-import Walls from './Walls.js';
+-import './css/sidebar.css';
+-
+-const TableItem = ({ table }) => {
+-  const [{ isDragging }, drag] = useDrag(() => ({
+-    type: 'ITEM',
+-    item: {
+-      elementType: 'table',
+-      subtype: 'round',
+-      width: 70,
+-      height: 70,
+-      capacity: table.numberOfGuests,
+-    },
+-    collect: (monitor) => ({
+-      isDragging: !!monitor.isDragging(),
+-    }),
+-  }), [table]);
+-
+-  return (
+-    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+-      {/* Pass showActions={false} to hide action buttons in Sidebar */}
+-      <Table numberOfGuests={table.numberOfGuests} showActions={false} />
+-      <div className="table-plan-component item-info">
+-        <p>Tafel {table.id}</p>
+-        <p>Gasten: {table.numberOfGuests}</p>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-const WallItem = ({ wall }) => {
+-  const [{ isDragging }, drag] = useDrag(() => ({
+-    type: 'ITEM',
+-    item: {
+-      elementType: 'wall',
+-      subtype: 'wall',
+-      width: wall.length * 20,
+-      height: 20,
+-    },
+-    collect: (monitor) => ({
+-      isDragging: !!monitor.isDragging(),
+-    }),
+-  }), [wall]);
+-
+-  return (
+-    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+-      <Walls length={wall.length} />
+-      <div className="table-plan-component item-info">
+-        <p>Muur {wall.id}</p>
+-        <p>Lengte: {wall.length} eenheden</p>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-const Sidebar = ({ tables, walls }) => {
+-  const [activeTab, setActiveTab] = useState('tables');
+-  const [searchTerm, setSearchTerm] = useState('');
+-  const [pendingTab, setPendingTab] = useState(null);
+-
+-  const tablesRef = useRef();
+-  const wallsRef = useRef();
+-
+-  const isIframe = typeof window !== 'undefined' && window.isIframe;
+-
+-  const tabs = [
+-    { id: 'tables', label: 'Tafels', title: "Beheer Tafels" },
+-    { id: 'walls', label: 'Muren', title: "Beheer Muren" },
+-  ];
+-
+-  const filteredTables = tables.filter(
+-    (table) =>
+-      table.id.toString().includes(searchTerm) ||
+-      table.numberOfGuests.toString().includes(searchTerm)
+-  );
+-
+-  const filteredWalls = walls.filter(
+-    (wall) =>
+-      wall.id.toString().includes(searchTerm) ||
+-      wall.length.toString().includes(searchTerm)
+-  );
+-
+-  const handleTabClick = async (tabId, tabTitle) => {
+-    let currentRef;
+-    if (activeTab === 'tables') {
+-      currentRef = tablesRef;
+-    } else if (activeTab === 'walls') {
+-      currentRef = wallsRef;
+-    }
+-
+-    if (currentRef && currentRef.current && currentRef.current.isDirty) {
+-      if (isIframe) {
+-        try {
+-          await currentRef.current.handleSave();
+-          setActiveTab(tabId);
+-        } catch (error) {
+-          console.error('Error saving before tab switch:', error);
+-        }
+-      } else {
+-        setPendingTab({ id: tabId, title: tabTitle });
+-      }
+-    } else {
+-      setActiveTab(tabId);
+-    }
+-  };
+-
+-  return (
+-    <div className="table-plan-component sidebar">
+-      <div className="table-plan-component tabs">
+-        <div className="table-plan-component buttons-container">
+-          {tabs.map((tab) => (
+-            <motion.button
+-              key={tab.id}
+-              type="button"
+-              className={`table-plan-component tab-button ${activeTab === tab.id ? 'active' : ''}`}
+-              onClick={() => handleTabClick(tab.id, tab.title)}
+-              whileHover={{ scale: 1.05 }}
+-              whileTap={{ scale: 0.95 }}
+-            >
+-              <span className="table-plan-component tab-label">{tab.label}</span>
+-              {activeTab === tab.id && (
+-                <motion.div
+-                  layoutId="underline-sidebar-tabs"
+-                  className="table-plan-component tab-underline"
+-                  initial={false}
+-                  animate={{ opacity: 1 }}
+-                  transition={{ duration: 0.3 }}
+-                />
+-              )}
+-            </motion.button>
+-          ))}
+-        </div>
+-      </div>
+-      <div className="table-plan-component search-bar">
+-        <input
+-          type="text"
+-          placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
+-          value={searchTerm}
+-          onChange={(e) => setSearchTerm(e.target.value)}
+-          aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
+-        />
+-      </div>
+-      <div className="table-plan-component items-list">
+-        {activeTab === 'tables' && filteredTables.length > 0 ? (
+-          <div className="table-plan-component grid-container">
+-            {filteredTables.map((table) => (
+-              <TableItem key={table.id} table={table} />
+-            ))}
+-          </div>
+-        ) : activeTab === 'walls' && filteredWalls.length > 0 ? (
+-          <div className="table-plan-component grid-container">
+-            {filteredWalls.map((wall) => (
+-              <WallItem key={wall.id} wall={wall} />
+-            ))}
+-          </div>
+-        ) : (
+-          <p className="table-plan-component no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
+-        )}
+-      </div>
+-    </div>
+-  );
+-};
+-
+-export default Sidebar;
+-
+-
+---- Table.js ---
+-// Table.js
+-import React, { useState } from 'react';
+-import './css/table.css';
+-import { FaSyncAlt, FaEdit, FaClone, FaTrash } from 'react-icons/fa';
+-
+-const Table = ({
+-  numberOfGuests,
+-  tableNumber,
+-  rotate,
+-  duplicate,
+-  deleteTable,
+-  editTable, // **Added editTable prop**
+-  showActions = true, // **Default to true**
+-}) => { 
+-  const [isHovered, setIsHovered] = useState(false);
+-  const isSquare = numberOfGuests === 4;
+-
+-  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
+-  const tableHeight = 70;
+-
+-  const chairsPerSide = Math.ceil(numberOfGuests / 2);
+-
+-  const topChairs = [];
+-  const bottomChairs = [];
+-
+-  for (let i = 0; i < chairsPerSide; i++) {
+-    topChairs.push(i);
+-    bottomChairs.push(i);
+-  }
+-
+-  return (
+-    <div
+-      className="table-plan-component table-container"
+-      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
+-      onMouseEnter={() => setIsHovered(true)}
+-      onMouseLeave={() => setIsHovered(false)}
+-    >
+-      {/* Action Buttons */}
+-      {showActions && isHovered && (
+-        <div className="table-plan-component action-buttons">
+-          <button
+-            className="table-plan-component action-button rotate-button"
+-            onClick={rotate}
+-            aria-label="Rotate Table"
+-          >
+-            <FaSyncAlt color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button duplicate-button"
+-            onClick={editTable}
+-            aria-label="Edit Table"
+-          >
+-            <FaEdit color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button duplicate-button"
+-            onClick={duplicate}
+-            aria-label="Duplicate Table"
+-          >
+-            <FaClone color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button delete-button"
+-            onClick={deleteTable}
+-            aria-label="Delete Table"
+-          >
+-            <FaTrash color="red" />
+-          </button>
+-        </div>
+-      )}
+-      <div
+-        className="table-plan-component chairs top-chairs"
+-        style={{
+-          width: `${tableWidth}px`,
+-        }}
+-      >
+-        {topChairs.slice(0, Math.floor(numberOfGuests / 2)).map((chair, index) => (
+-          <div key={`top-${index}`} className="table-plan-component chair"></div>
+-        ))}
+-      </div>
+-      <div
+-        className="table-plan-component table"
+-        style={{
+-          width: `${tableWidth}px`,
+-          height: `${tableHeight}px`,
+-        }}
+-      ></div>
+-      <div
+-        className="table-plan-component chairs bottom-chairs"
+-        style={{
+-          width: `${tableWidth}px`,
+-        }}
+-      >
+-        {bottomChairs.slice(0, Math.ceil(numberOfGuests / 2)).map((chair, index) => (
+-          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
+-        ))}
+-      </div>
+-      {/* **Render the table number if it exists** */}
+-      {tableNumber && (
+-        <div className="table-plan-component table-number">T{tableNumber}</div>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default Table;
+-
+-
+---- TableEditModalContent.js ---
+-// TableEditModalContent.js
+-import React, { useState } from 'react';
+-import './css/tableEditModalContent.css';
+-
+-const TableEditModalContent = ({ element, onSave, onClose }) => {
+-  const [tableNumber, setTableNumber] = useState(element.tableNumber || '');
+-  const [name, setName] = useState(element.name || '');
+-  const [shape, setShape] = useState(element.shape || 'rond');
+-  const [minCapacity, setMinCapacity] = useState(element.minCapacity || 1);
+-  const [maxCapacity, setMaxCapacity] = useState(element.maxCapacity || 10);
+-  const [priority, setPriority] = useState(element.priority || 'Medium');
+-
+-  const handleSave = () => {
+-    const updatedElement = {
+-      ...element,
+-      tableNumber,
+-      name,
+-      shape,
+-      minCapacity,
+-      maxCapacity,
+-      priority,
+-    };
+-    onSave(updatedElement);
+-  };
+-
+-  return (
+-    <div className="table-edit-modal-content">
+-      <h2>Bewerk Tafel</h2>
+-      <div className="settings-form">
+-        <div className="form-group">
+-          <label>Tafelnummer</label>
+-          <div className="input-container">
+-            <input
+-              type="text"
+-              value={tableNumber}
+-              onChange={(e) => setTableNumber(e.target.value)}
+-              placeholder="Voer het tafelnummer in"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Naam</label>
+-          <div className="input-container">
+-            <input
+-              type="text"
+-              value={name}
+-              onChange={(e) => setName(e.target.value)}
+-              placeholder="Voer de naam in"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Vorm</label>
+-          <div className="input-container">
+-            <select value={shape} onChange={(e) => setShape(e.target.value)}>
+-              <option value="rond">Rond</option>
+-              <option value="vierkant">Vierkant</option>
+-              <option value="metStoelen">Met Stoelen</option>
+-            </select>
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Min capaciteit</label>
+-          <div className="input-container">
+-            <input
+-              type="number"
+-              value={minCapacity}
+-              onChange={(e) => setMinCapacity(parseInt(e.target.value, 10))}
+-              min="1"
+-              placeholder="Minimum aantal gasten"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Max capaciteit</label>
+-          <div className="input-container">
+-            <input
+-              type="number"
+-              value={maxCapacity}
+-              onChange={(e) => setMaxCapacity(parseInt(e.target.value, 10))}
+-              min={minCapacity}
+-              placeholder="Maximum aantal gasten"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Prioriteit</label>
+-          <div className="input-container">
+-            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+-              <option value="metVoorangInvullen">Met Voorang Invullen</option>
+-              <option value="snellerInvullen">Sneller Invullen</option>
+-              <option value="tragerInvullen">Trager Invullen</option>
+-              <option value="alsLaatsteIndelen">Als Laatste Indelen</option>
+-            </select>
+-          </div>
+-        </div>
+-        <button className="settings-button save-button" onClick={handleSave}>
+-          Opslaan
+-        </button>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-export default TableEditModalContent;
+-
+-
+---- Walls.js ---
+-// Walls.js
+-import React from 'react';
+-import './css/walls.css';
+-
+-const Walls = ({ length }) => {
+-  const wallWidth = (length - 1) * 20;
+-  const wallHeight = 20;
+-
+-  return (
+-    <div
+-      className="table-plan-component walls-container"
+-      style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
+-    >
+-      <div className="table-plan-component wall"></div>
+-    </div>
+-  );
+-};
+-
+-export default Walls;
+-
+-
+---- index.js ---
+-// index.js
+-import React from 'react';
+-import FloorPlan from './FloorPlan.js';
+-import Sidebar from './Sidebar.js';
+-import { withHeader } from '../../../Components/Structural/Header/index.js';
+-import { DndProvider } from 'react-dnd';
+-import { HTML5Backend } from 'react-dnd-html5-backend';
+-import './css/app.css';
+-
+-const TableEditor = () => {
+-  const tables = [
+-    { id: 1, numberOfGuests: 1 },
+-    { id: 2, numberOfGuests: 2 },
+-    { id: 3, numberOfGuests: 3 },
+-    { id: 4, numberOfGuests: 4 },
+-    { id: 5, numberOfGuests: 5 },
+-    { id: 6, numberOfGuests: 6 },
+-    { id: 7, numberOfGuests: 7 },
+-    { id: 8, numberOfGuests: 8 },
+-  ];
+-
+-  const walls = [
+-    { id: 1, length: 3 },
+-    { id: 2, length: 5 },
+-    { id: 3, length: 2 },
+-    { id: 4, length: 4 },
+-    { id: 5, length: 6 },
+-  ];
+-
+-  return (
+-    <DndProvider backend={HTML5Backend}>
+-      <div className="table-plan-component">
+-        <div className="app-container">
+-          <FloorPlan />
+-          <Sidebar tables={tables} walls={walls} />
+-        </div>
+-      </div>
+-    </DndProvider>
+-  );
+-};
+-
+-export default withHeader(TableEditor);
+-
+-
+-
+-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TableEditor":
+-
+-├── FloorPlan.js
+-├── FloorPlanElement.js
+-├── Sidebar.js
+-├── Table.js
+-├── TableEditModalContent.js
+-├── Walls.js
+-├── css
+-│   ├── app.css
+-│   ├── floorPlan.css
+-│   ├── sidebar.css
+-│   ├── table.css
+-│   ├── tableEditModalContent.css
+-│   └── walls.css
+-└── index.js
+-
+-
+-List of Files:
+-FloorPlan.js
+-FloorPlanElement.js
+-Sidebar.js
+-Table.js
+-TableEditModalContent.js
+-Walls.js
+-index.js
+-
+-**Instruction:**
+-1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+-2. Prefix all CSS classes with the `.component-name-component` class. Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
+-
+-**Note:** CSS files have been excluded from this prompt.
+\ No newline at end of file
+diff --git a/prompts/TableEditor-prompt-with-css.txt b/prompts/TableEditor-prompt-with-css.txt
+deleted file mode 100644
+index 25a0e36..0000000
+--- a/prompts/TableEditor-prompt-with-css.txt
++++ /dev/null
+@@ -1,1416 +0,0 @@
+-File Contents:
+-
+---- FloorPlan.js ---
+-// FloorPlan.js
+-import React, { useState, useCallback, useRef, useEffect } from 'react';
+-import { useDrop } from 'react-dnd';
+-import './css/floorPlan.css';
+-import { ResizableBox } from 'react-resizable';
+-import 'react-resizable/css/styles.css';
+-import FloorPlanElement from './FloorPlanElement.js';
+-import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
+-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
+-import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
+-
+-const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
+-
+-const FloorPlan = () => {
+-  const [elements, setElements] = useState([]);
+-  const floorPlanRef = useRef(null);
+-  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+-  const [nextTableNumber, setNextTableNumber] = useState(1);
+-
+-  const api = useApi(); // Initialize useApi hook
+-
+-  // State for modal
+-  const [selectedElement, setSelectedElement] = useState(null);
+-  const [showModal, setShowModal] = useState(false);
+-
+-  // Update floor plan size on mount and when resized
+-  useEffect(() => {
+-    const updateSize = () => {
+-      if (floorPlanRef.current) {
+-        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+-        setFloorPlanSize({ width, height });
+-      }
+-    };
+-
+-    // Initial size
+-    updateSize();
+-
+-    // Update size on window resize
+-    window.addEventListener('resize', updateSize);
+-
+-    // Cleanup
+-    return () => window.removeEventListener('resize', updateSize);
+-  }, []);
+-
+-  // Load tables from API on mount
+-  useEffect(() => {
+-    const fetchTables = async () => {
+-      try {
+-        const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
+-        // Ensure that data is an array
+-        if (Array.isArray(data)) {
+-          setElements(data);
+-        } else if (data && Array.isArray(data.tables)) { // If API returns { tables: [...] }
+-          setElements(data.tables);
+-        } else {
+-          setElements([]); // Fallback to empty array
+-        }
+-      } catch (error) {
+-        console.error('Error fetching tables:', error);
+-        setElements([]); // Fallback to empty array on error
+-      }
+-    };
+-
+-    fetchTables();
+-  }, [api]);
+-
+-  const addElement = (element) => {
+-    setElements((prevElements) => [...prevElements, element]);
+-  };
+-
+-  const updateElement = (updatedElement) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) => (el.id === updatedElement.id ? updatedElement : el))
+-    );
+-  };
+-
+-  const moveElement = useCallback((id, x, y) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) =>
+-        el.id === id
+-          ? {
+-              ...el,
+-              x,
+-              y,
+-            }
+-          : el
+-      )
+-    );
+-  }, []);
+-
+-  const rotateElement = useCallback((id) => {
+-    setElements((prevElements) =>
+-      prevElements.map((el) =>
+-        el.id === id
+-          ? {
+-              ...el,
+-              rotation: (el.rotation || 0) + 90, // Rotate by 90 degrees
+-            }
+-          : el
+-      )
+-    );
+-  }, []);
+-
+-  const duplicateElement = useCallback(
+-    (id) => {
+-      setElements((prevElements) => {
+-        const elementToDuplicate = prevElements.find((el) => el.id === id);
+-        if (!elementToDuplicate) return prevElements;
+-        const newId = Date.now();
+-        const newElement = {
+-          ...elementToDuplicate,
+-          id: newId,
+-          x: Math.min(
+-            elementToDuplicate.x + 20,
+-            floorPlanSize.width - elementToDuplicate.width
+-          ),
+-          y: Math.min(
+-            elementToDuplicate.y + 20,
+-            floorPlanSize.height - elementToDuplicate.height
+-          ),
+-          name:
+-            elementToDuplicate.type === 'table'
+-              ? `T${nextTableNumber}`
+-              : `${elementToDuplicate.subtype.charAt(0).toUpperCase() +
+-                  elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
+-          rotation: elementToDuplicate.rotation || 0,
+-        };
+-
+-        if (elementToDuplicate.type === 'table') {
+-          newElement.tableNumber = nextTableNumber;
+-          setNextTableNumber((prev) => prev + 1);
+-        }
+-
+-        // **Removed modal opening on duplication**
+-        // setSelectedElement(newElement);
+-        // setShowModal(true);
+-
+-        return [...prevElements, newElement];
+-      });
+-    },
+-    [floorPlanSize.width, floorPlanSize.height, nextTableNumber]
+-  );
+-
+-  const deleteElement = useCallback((id) => {
+-    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
+-  }, []);
+-
+-  const snapToGrid = (x, y, gridSize = 50) => {
+-    const snappedX = Math.round(x / gridSize) * gridSize;
+-    const snappedY = Math.round(y / gridSize) * gridSize;
+-    return [snappedX, snappedY];
+-  };
+-
+-  const [, drop] = useDrop({
+-    accept: 'ITEM',
+-    drop: (item, monitor) => {
+-      const offset = monitor.getClientOffset();
+-      const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+-
+-      let x = offset.x - floorPlanRect.left;
+-      let y = offset.y - floorPlanRect.top;
+-
+-      // Apply snapping only if the element is not a wall
+-      if (item.elementType !== 'wall') {
+-        const [snappedX, snappedY] = snapToGrid(x, y);
+-        x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+-        y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
+-      } else {
+-        // For walls, ensure they stay within boundaries without snapping
+-        x = Math.max(0, Math.min(x, floorPlanSize.width - item.width));
+-        y = Math.max(0, Math.min(y, floorPlanSize.height - item.height));
+-      }
+-
+-      if (item.id) {
+-        moveElement(item.id, x, y);
+-      } else {
+-        const id = Date.now();
+-        const newElement = {
+-          id,
+-          type: item.elementType,
+-          subtype: item.subtype,
+-          x,
+-          y,
+-          width: item.width,
+-          height: item.height,
+-          capacity: item.capacity,
+-          name:
+-            item.elementType === 'table'
+-              ? `T${nextTableNumber}`
+-              : `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Decoration ${id}`,
+-          minCapacity: item.minCapacity || 1,
+-          maxCapacity: item.maxCapacity || 10,
+-          priority: 'Medium',
+-          rotation: 0, // Initialize rotation
+-        };
+-
+-        // Assign a tableNumber if the element is a table
+-        if (item.elementType === 'table') {
+-          newElement.tableNumber = nextTableNumber;
+-          setNextTableNumber((prev) => prev + 1);
+-        }
+-
+-        addElement(newElement);
+-
+-        // **Open modal to edit table details only if needed**
+-        setSelectedElement(newElement);
+-        setShowModal(true);
+-      }
+-    },
+-  });
+-
+-  const handleModalClose = () => {
+-    setShowModal(false);
+-    setSelectedElement(null);
+-  };
+-
+-  const handleModalSave = (updatedElement) => {
+-    // Update the element in state
+-    updateElement(updatedElement);
+-    setShowModal(false);
+-    setSelectedElement(null);
+-
+-    // Save the element to API
+-    const saveElement = async () => {
+-      try {
+-        if (updatedElement._id) {
+-          // Existing table: use PUT request
+-          await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
+-        } else {
+-          // New table: use POST request
+-          await api.post(`${window.baseDomain}api/tables`, updatedElement);
+-        }
+-      } catch (error) {
+-        console.error('Error saving table:', error);
+-      }
+-    };
+-
+-    saveElement();
+-  };
+-
+-  return (
+-    <>
+-      <ResizableBox
+-        width={800}
+-        height={600}
+-        minConstraints={[400, 300]}
+-        maxConstraints={[1600, 1200]}
+-        className="table-plan-component resizable-floor-plan"
+-        onResizeStop={(e, data) => {
+-          // Directly set the new size without snapping
+-          setFloorPlanSize({ width: data.size.width, height: data.size.height });
+-        }}
+-        resizeHandles={['se']} // Optional: specify resize handles if needed
+-      >
+-        <div
+-          id="floor-plan-container"
+-          className="table-plan-component floor-plan"
+-          ref={(node) => {
+-            drop(node);
+-            floorPlanRef.current = node;
+-          }}
+-          style={{ position: 'relative', width: '100%', height: '100%' }}
+-        >
+-          {Array.isArray(elements) && elements.map((el) => (
+-            <FloorPlanElement
+-              key={el.id}
+-              element={el}
+-              moveElement={moveElement}
+-              rotateElement={rotateElement}
+-              duplicateElement={duplicateElement}
+-              deleteElement={deleteElement}
+-              floorPlanSize={floorPlanSize}
+-              tableNumber={el.tableNumber}
+-              openModal={(element) => {
+-                setSelectedElement(element);
+-                setShowModal(true);
+-              }}
+-            />
+-          ))}
+-        </div>
+-      </ResizableBox>
+-      {showModal && selectedElement && (
+-        <ModalWithoutTabs
+-          onClose={handleModalClose}
+-          content={
+-            <TableEditModalContent
+-              element={selectedElement}
+-              onSave={handleModalSave}
+-              onClose={handleModalClose}
+-            />
+-          }
+-        />
+-      )}
+-    </>
+-  );
+-};
+-
+-export default FloorPlan;
+-
+-
+---- FloorPlanElement.js ---
+-// FloorPlanElement.js
+-import React from 'react';
+-import Table from './Table.js';
+-import Walls from './Walls.js';
+-
+-const FloorPlanElement = ({
+-  element,
+-  moveElement,
+-  rotateElement,
+-  duplicateElement,
+-  deleteElement,
+-  floorPlanSize,
+-  tableNumber,
+-  openModal,
+-}) => {
+-  const [position, setPosition] = React.useState({ x: element.x, y: element.y });
+-  const [isDragging, setIsDragging] = React.useState(false);
+-  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+-
+-  React.useEffect(() => {
+-    setPosition({ x: element.x, y: element.y });
+-  }, [element.x, element.y]);
+-
+-  const handleMouseDown = (e) => {
+-    e.preventDefault(); // Prevent text selection
+-    setIsDragging(true);
+-    setOffset({
+-      x: e.clientX - position.x,
+-      y: e.clientY - position.y,
+-    });
+-  };
+-
+-  React.useEffect(() => {
+-    const handleMouseMove = (e) => {
+-      if (isDragging) {
+-        let newX = e.clientX - offset.x;
+-        let newY = e.clientY - offset.y;
+-
+-        // Constrain within floor plan boundaries
+-        newX = Math.max(0, Math.min(newX, floorPlanSize.width - element.width));
+-        newY = Math.max(0, Math.min(newY, floorPlanSize.height - element.height));
+-
+-        setPosition({
+-          x: newX,
+-          y: newY,
+-        });
+-
+-        // No alignment or snapping during dragging
+-      }
+-    };
+-
+-    const handleMouseUp = () => {
+-      if (isDragging) {
+-        setIsDragging(false);
+-
+-        // Apply snapping on mouse release for non-wall elements
+-        if (element.type !== 'wall') {
+-          const snapped = Math.round(position.x / 50) * 50; // Assuming grid size 50
+-          const snappedY = Math.round(position.y / 50) * 50;
+-          const finalX = Math.max(0, Math.min(snapped, floorPlanSize.width - element.width));
+-          const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
+-
+-          setPosition({ x: finalX, y: finalY });
+-          moveElement(element.id, finalX, finalY);
+-        } else {
+-          // For walls, no snapping
+-          moveElement(element.id, position.x, position.y);
+-        }
+-      }
+-    };
+-
+-    document.addEventListener('mousemove', handleMouseMove);
+-    document.addEventListener('mouseup', handleMouseUp);
+-
+-    return () => {
+-      document.removeEventListener('mousemove', handleMouseMove);
+-      document.removeEventListener('mouseup', handleMouseUp);
+-    };
+-  }, [
+-    isDragging,
+-    offset,
+-    position.x,
+-    position.y,
+-    moveElement,
+-    element.id,
+-    floorPlanSize,
+-    element.width,
+-    element.height,
+-    element.type,
+-  ]);
+-
+-  const style = {
+-    position: 'absolute',
+-    left: `${position.x}px`,
+-    top: `${position.y}px`,
+-    width: `${element.width}px`,
+-    height: `${element.height}px`,
+-    opacity: isDragging ? 0.5 : 1,
+-    cursor: 'move',
+-    transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
+-    zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
+-  };
+-
+-  return (
+-    <div
+-      className="table-plan-component floor-plan-element"
+-      onMouseDown={handleMouseDown}
+-      style={style}
+-    >
+-      {/* Rotated Content */}
+-      <div
+-        style={{
+-          transform: `rotate(${element.rotation || 0}deg)`,
+-          transformOrigin: 'center center',
+-          width: '100%',
+-          height: '100%',
+-          position: 'relative',
+-        }}
+-      >
+-        {element.type === 'table' ? (
+-          <Table
+-            numberOfGuests={element.capacity}
+-            tableNumber={tableNumber}
+-            rotate={() => rotateElement(element.id)}
+-            duplicate={() => duplicateElement(element.id)}
+-            deleteTable={() => deleteElement(element.id)}
+-            editTable={() => openModal(element)}
+-            showActions={true}
+-            rotation={element.rotation || 0} // Pass rotation to Table
+-          />
+-        ) : element.type === 'wall' ? (
+-          <Walls length={element.width / 20 + 1} />
+-        ) : null}
+-      </div>
+-      {/* Action Buttons are handled within Table component */}
+-    </div>
+-  );
+-};
+-
+-export default FloorPlanElement;
+-
+-
+---- Sidebar.js ---
+-// Sidebar.js
+-import React, { useState, useRef } from 'react';
+-import { useDrag } from 'react-dnd';
+-import { motion } from 'framer-motion';
+-import Table from './Table.js';
+-import Walls from './Walls.js';
+-import './css/sidebar.css';
+-
+-const TableItem = ({ table }) => {
+-  const [{ isDragging }, drag] = useDrag(() => ({
+-    type: 'ITEM',
+-    item: {
+-      elementType: 'table',
+-      subtype: 'round',
+-      width: 70,
+-      height: 70,
+-      capacity: table.numberOfGuests,
+-    },
+-    collect: (monitor) => ({
+-      isDragging: !!monitor.isDragging(),
+-    }),
+-  }), [table]);
+-
+-  return (
+-    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+-      {/* Pass showActions={false} to hide action buttons in Sidebar */}
+-      <Table numberOfGuests={table.numberOfGuests} showActions={false} />
+-      <div className="table-plan-component item-info">
+-        <p>Tafel {table.id}</p>
+-        <p>Gasten: {table.numberOfGuests}</p>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-const WallItem = ({ wall }) => {
+-  const [{ isDragging }, drag] = useDrag(() => ({
+-    type: 'ITEM',
+-    item: {
+-      elementType: 'wall',
+-      subtype: 'wall',
+-      width: wall.length * 20,
+-      height: 20,
+-    },
+-    collect: (monitor) => ({
+-      isDragging: !!monitor.isDragging(),
+-    }),
+-  }), [wall]);
+-
+-  return (
+-    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+-      <Walls length={wall.length} />
+-      <div className="table-plan-component item-info">
+-        <p>Muur {wall.id}</p>
+-        <p>Lengte: {wall.length} eenheden</p>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-const Sidebar = ({ tables, walls }) => {
+-  const [activeTab, setActiveTab] = useState('tables');
+-  const [searchTerm, setSearchTerm] = useState('');
+-  const [pendingTab, setPendingTab] = useState(null);
+-
+-  const tablesRef = useRef();
+-  const wallsRef = useRef();
+-
+-  const isIframe = typeof window !== 'undefined' && window.isIframe;
+-
+-  const tabs = [
+-    { id: 'tables', label: 'Tafels', title: "Beheer Tafels" },
+-    { id: 'walls', label: 'Muren', title: "Beheer Muren" },
+-  ];
+-
+-  const filteredTables = tables.filter(
+-    (table) =>
+-      table.id.toString().includes(searchTerm) ||
+-      table.numberOfGuests.toString().includes(searchTerm)
+-  );
+-
+-  const filteredWalls = walls.filter(
+-    (wall) =>
+-      wall.id.toString().includes(searchTerm) ||
+-      wall.length.toString().includes(searchTerm)
+-  );
+-
+-  const handleTabClick = async (tabId, tabTitle) => {
+-    let currentRef;
+-    if (activeTab === 'tables') {
+-      currentRef = tablesRef;
+-    } else if (activeTab === 'walls') {
+-      currentRef = wallsRef;
+-    }
+-
+-    if (currentRef && currentRef.current && currentRef.current.isDirty) {
+-      if (isIframe) {
+-        try {
+-          await currentRef.current.handleSave();
+-          setActiveTab(tabId);
+-        } catch (error) {
+-          console.error('Error saving before tab switch:', error);
+-        }
+-      } else {
+-        setPendingTab({ id: tabId, title: tabTitle });
+-      }
+-    } else {
+-      setActiveTab(tabId);
+-    }
+-  };
+-
+-  return (
+-    <div className="table-plan-component sidebar">
+-      <div className="table-plan-component tabs">
+-        <div className="table-plan-component buttons-container">
+-          {tabs.map((tab) => (
+-            <motion.button
+-              key={tab.id}
+-              type="button"
+-              className={`table-plan-component tab-button ${activeTab === tab.id ? 'active' : ''}`}
+-              onClick={() => handleTabClick(tab.id, tab.title)}
+-              whileHover={{ scale: 1.05 }}
+-              whileTap={{ scale: 0.95 }}
+-            >
+-              <span className="table-plan-component tab-label">{tab.label}</span>
+-              {activeTab === tab.id && (
+-                <motion.div
+-                  layoutId="underline-sidebar-tabs"
+-                  className="table-plan-component tab-underline"
+-                  initial={false}
+-                  animate={{ opacity: 1 }}
+-                  transition={{ duration: 0.3 }}
+-                />
+-              )}
+-            </motion.button>
+-          ))}
+-        </div>
+-      </div>
+-      <div className="table-plan-component search-bar">
+-        <input
+-          type="text"
+-          placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
+-          value={searchTerm}
+-          onChange={(e) => setSearchTerm(e.target.value)}
+-          aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
+-        />
+-      </div>
+-      <div className="table-plan-component items-list">
+-        {activeTab === 'tables' && filteredTables.length > 0 ? (
+-          <div className="table-plan-component grid-container">
+-            {filteredTables.map((table) => (
+-              <TableItem key={table.id} table={table} />
+-            ))}
+-          </div>
+-        ) : activeTab === 'walls' && filteredWalls.length > 0 ? (
+-          <div className="table-plan-component grid-container">
+-            {filteredWalls.map((wall) => (
+-              <WallItem key={wall.id} wall={wall} />
+-            ))}
+-          </div>
+-        ) : (
+-          <p className="table-plan-component no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
+-        )}
+-      </div>
+-    </div>
+-  );
+-};
+-
+-export default Sidebar;
+-
+-
+---- Table.js ---
+-// Table.js
+-import React, { useState } from 'react';
+-import './css/table.css';
+-import { FaSyncAlt, FaEdit, FaClone, FaTrash } from 'react-icons/fa';
+-
+-const Table = ({
+-  numberOfGuests,
+-  tableNumber,
+-  rotate,
+-  duplicate,
+-  deleteTable,
+-  editTable, // **Added editTable prop**
+-  showActions = true, // **Default to true**
+-}) => { 
+-  const [isHovered, setIsHovered] = useState(false);
+-  const isSquare = numberOfGuests === 4;
+-
+-  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
+-  const tableHeight = 70;
+-
+-  const chairsPerSide = Math.ceil(numberOfGuests / 2);
+-
+-  const topChairs = [];
+-  const bottomChairs = [];
+-
+-  for (let i = 0; i < chairsPerSide; i++) {
+-    topChairs.push(i);
+-    bottomChairs.push(i);
+-  }
+-
+-  return (
+-    <div
+-      className="table-plan-component table-container"
+-      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
+-      onMouseEnter={() => setIsHovered(true)}
+-      onMouseLeave={() => setIsHovered(false)}
+-    >
+-      {/* Action Buttons */}
+-      {showActions && isHovered && (
+-        <div className="table-plan-component action-buttons">
+-          <button
+-            className="table-plan-component action-button rotate-button"
+-            onClick={rotate}
+-            aria-label="Rotate Table"
+-          >
+-            <FaSyncAlt color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button duplicate-button"
+-            onClick={editTable}
+-            aria-label="Edit Table"
+-          >
+-            <FaEdit color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button duplicate-button"
+-            onClick={duplicate}
+-            aria-label="Duplicate Table"
+-          >
+-            <FaClone color="#555555" />
+-          </button>
+-          <button
+-            className="table-plan-component action-button delete-button"
+-            onClick={deleteTable}
+-            aria-label="Delete Table"
+-          >
+-            <FaTrash color="red" />
+-          </button>
+-        </div>
+-      )}
+-      <div
+-        className="table-plan-component chairs top-chairs"
+-        style={{
+-          width: `${tableWidth}px`,
+-        }}
+-      >
+-        {topChairs.slice(0, Math.floor(numberOfGuests / 2)).map((chair, index) => (
+-          <div key={`top-${index}`} className="table-plan-component chair"></div>
+-        ))}
+-      </div>
+-      <div
+-        className="table-plan-component table"
+-        style={{
+-          width: `${tableWidth}px`,
+-          height: `${tableHeight}px`,
+-        }}
+-      ></div>
+-      <div
+-        className="table-plan-component chairs bottom-chairs"
+-        style={{
+-          width: `${tableWidth}px`,
+-        }}
+-      >
+-        {bottomChairs.slice(0, Math.ceil(numberOfGuests / 2)).map((chair, index) => (
+-          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
+-        ))}
+-      </div>
+-      {/* **Render the table number if it exists** */}
+-      {tableNumber && (
+-        <div className="table-plan-component table-number">T{tableNumber}</div>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default Table;
+-
+-
+---- TableEditModalContent.js ---
+-// TableEditModalContent.js
+-import React, { useState } from 'react';
+-import './css/tableEditModalContent.css';
+-
+-const TableEditModalContent = ({ element, onSave, onClose }) => {
+-  const [tableNumber, setTableNumber] = useState(element.tableNumber || '');
+-  const [name, setName] = useState(element.name || '');
+-  const [shape, setShape] = useState(element.shape || 'rond');
+-  const [minCapacity, setMinCapacity] = useState(element.minCapacity || 1);
+-  const [maxCapacity, setMaxCapacity] = useState(element.maxCapacity || 10);
+-  const [priority, setPriority] = useState(element.priority || 'Medium');
+-
+-  const handleSave = () => {
+-    const updatedElement = {
+-      ...element,
+-      tableNumber,
+-      name,
+-      shape,
+-      minCapacity,
+-      maxCapacity,
+-      priority,
+-    };
+-    onSave(updatedElement);
+-  };
+-
+-  return (
+-    <div className="table-edit-modal-content">
+-      <h2>Bewerk Tafel</h2>
+-      <div className="settings-form">
+-        <div className="form-group">
+-          <label>Tafelnummer</label>
+-          <div className="input-container">
+-            <input
+-              type="text"
+-              value={tableNumber}
+-              onChange={(e) => setTableNumber(e.target.value)}
+-              placeholder="Voer het tafelnummer in"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Naam</label>
+-          <div className="input-container">
+-            <input
+-              type="text"
+-              value={name}
+-              onChange={(e) => setName(e.target.value)}
+-              placeholder="Voer de naam in"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Vorm</label>
+-          <div className="input-container">
+-            <select value={shape} onChange={(e) => setShape(e.target.value)}>
+-              <option value="rond">Rond</option>
+-              <option value="vierkant">Vierkant</option>
+-              <option value="metStoelen">Met Stoelen</option>
+-            </select>
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Min capaciteit</label>
+-          <div className="input-container">
+-            <input
+-              type="number"
+-              value={minCapacity}
+-              onChange={(e) => setMinCapacity(parseInt(e.target.value, 10))}
+-              min="1"
+-              placeholder="Minimum aantal gasten"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Max capaciteit</label>
+-          <div className="input-container">
+-            <input
+-              type="number"
+-              value={maxCapacity}
+-              onChange={(e) => setMaxCapacity(parseInt(e.target.value, 10))}
+-              min={minCapacity}
+-              placeholder="Maximum aantal gasten"
+-            />
+-          </div>
+-        </div>
+-        <div className="form-group">
+-          <label>Prioriteit</label>
+-          <div className="input-container">
+-            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+-              <option value="metVoorangInvullen">Met Voorang Invullen</option>
+-              <option value="snellerInvullen">Sneller Invullen</option>
+-              <option value="tragerInvullen">Trager Invullen</option>
+-              <option value="alsLaatsteIndelen">Als Laatste Indelen</option>
+-            </select>
+-          </div>
+-        </div>
+-        <button className="settings-button save-button" onClick={handleSave}>
+-          Opslaan
+-        </button>
+-      </div>
+-    </div>
+-  );
+-};
+-
+-export default TableEditModalContent;
+-
+-
+---- Walls.js ---
+-// Walls.js
+-import React from 'react';
+-import './css/walls.css';
+-
+-const Walls = ({ length }) => {
+-  const wallWidth = (length - 1) * 20;
+-  const wallHeight = 20;
+-
+-  return (
+-    <div
+-      className="table-plan-component walls-container"
+-      style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
+-    >
+-      <div className="table-plan-component wall"></div>
+-    </div>
+-  );
+-};
+-
+-export default Walls;
+-
+-
+---- css/app.css ---
+-/* css/app.css */
+-
+-.table-plan-component .app-container {
+-  display: flex;
+-  flex-direction: row;
+-  height: 100vh;
+-  width: 100vw;
+-  box-sizing: border-box;
+-}
+-
+-.table-plan-component .floor-plan {
+-  flex: 3;
+-  margin-right: 20px;
+-  background-color: #ffffff;
+-  border-radius: 8px;
+-  overflow: hidden;
+-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+-}
+-
+---- css/floorPlan.css ---
+-/* css/floorplan.css */
+-
+-.table-plan-component .floor-plan {
+-  position: relative;
+-  width: 100%;
+-  height: 100%;
+-  background-color: #ffffff;
+-  border: 2px solid #ccc;
+-  box-sizing: border-box;
+-  overflow: hidden;
+-  background-image:
+-    linear-gradient(to right, #ddd 1px, transparent 1px),
+-    linear-gradient(to bottom, #ddd 1px, transparent 1px);
+-  background-size: 50px 50px;
+-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+-  border-radius: 8px;
+-  transition: width 0.2s, height 0.2s;
+-}
+-
+-.table-plan-component .resizable-floor-plan {
+-  position: relative;
+-  width: 100%;
+-  height: 100%;
+-}
+-
+-.table-plan-component .alignment-line {
+-  position: absolute;
+-  background-color: red;
+-  z-index: 100;
+-}
+-
+-
+---- css/sidebar.css ---
+-/* css/sidebar.css */
+-
+-.table-plan-component .sidebar {
+-  width: 350px;
+-  position: fixed;
+-  height: calc(100% - 60px);
+-  right: 0;
+-  top: 60px;
+-  background-color: rgb(220, 220, 220);
+-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+-  padding: 20px;
+-  overflow-y: auto;
+-  z-index: 1000;
+-}
+-
+-.table-plan-component .tabs {
+-  width: 100%;
+-  align-items: center;
+-  justify-content: center;
+-  display: flex;
+-  margin-bottom: 30px;
+-  max-width: 800px;
+-  margin: 0 auto;
+-}
+-
+-.table-plan-component .tabs .buttons-container {
+-  display: flex;
+-}
+-
+-.table-plan-component .tabs .tab-button {
+-  position: relative;
+-  padding: 10px 20px;
+-  background: none;
+-  border: none;
+-  outline: none;
+-  cursor: pointer;
+-  font-size: 16px;
+-  color: #333;
+-  transition: color 0.3s;
+-}
+-
+-.table-plan-component .tabs .tab-button.active {
+-  color: var(--color-blue, #007bff);
+-}
+-
+-.table-plan-component .tabs .tab-button:hover {
+-  color: #555;
+-}
+-
+-.table-plan-component .tabs .tab-underline {
+-  position: absolute;
+-  bottom: -2px;
+-  left: 0;
+-  right: 0;
+-  height: 2px;
+-  background-color: var(--color-blue, #007bff);
+-  border-radius: 5px;
+-}
+-
+-.table-plan-component .search-bar {
+-  margin-bottom: 20px;
+-  margin-top: 20px;
+-}
+-
+-.table-plan-component .search-bar input {
+-  width: 100%;
+-  padding: 8px 12px;
+-  border: 1px solid #cccccc;
+-  border-radius: 4px;
+-  font-size: 14px;
+-}
+-
+-.table-plan-component .items-list {
+-  display: flex;
+-  flex-direction: column;
+-  gap: 20px;
+-}
+-
+-.table-plan-component .grid-container {
+-  display: grid;
+-  grid-template-columns: repeat(2, 1fr);
+-  gap: 20px;
+-}
+-
+-.table-plan-component .item {
+-  display: flex;
+-  flex-direction: column;
+-  align-items: center;
+-  border: 1px solid #e0e0e0;
+-  padding: 10px;
+-  border-radius: 8px;
+-  background-color: #fafafa;
+-  transition: box-shadow 0.2s, transform 0.2s;
+-}
+-
+-.table-plan-component .item:hover {
+-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+-  transform: translateY(-2px);
+-}
+-
+-.table-plan-component .item-info {
+-  margin-top: 10px;
+-  text-align: center;
+-}
+-
+-.table-plan-component .item-info p {
+-  margin: 2px 0;
+-  font-size: 14px;
+-  color: #555555;
+-}
+-
+-.table-plan-component .no-results {
+-  text-align: center;
+-  color: #888888;
+-}
+-
+-.table-plan-component .unsaved-changes-modal {
+-  position: fixed;
+-  top: 0;
+-  left: 0;
+-  width: 100%;
+-  height: 100%;
+-  background-color: rgba(0, 0, 0, 0.5);
+-  display: flex;
+-  justify-content: center;
+-  align-items: center;
+-}
+-
+-.table-plan-component .unsaved-changes-modal .modal-content {
+-  background-color: #fff;
+-  padding: 30px 20px;
+-  border-radius: 5px;
+-  width: 90%;
+-}
+-
+-.table-plan-component .unsaved-changes-modal .modal-content p {
+-  font-size: 16px;
+-  margin-bottom: 30px;
+-  text-align: center;
+-}
+-
+-.table-plan-component .unsaved-changes-modal .modal-buttons {
+-  display: flex;
+-  justify-content: center;
+-}
+-
+-.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button,
+-.table-plan-component .unsaved-changes-modal .modal-buttons .discard-button {
+-  padding: 10px 20px;
+-  font-size: 16px;
+-  cursor: pointer;
+-  border: none;
+-  position: relative;
+-  border-radius: 5px;
+-}
+-
+-.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button {
+-  margin-right: 10px;
+-  background-color: #f0f0f0;
+-  color: #333333;
+-}
+-
+-@media (max-width: 768px) {
+-  .table-plan-component .grid-container {
+-    grid-template-columns: 1fr;
+-  }
+-}
+-
+---- css/table.css ---
+-/* css/table.css */
+-
+-.table-plan-component .table-container {
+-  position: relative;
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  height: 80px;
+-}
+-
+-.table-plan-component .table {
+-  background-color: #f5f5dc;
+-  border: 2px solid #d2b48c;
+-  border-radius: 8px;
+-  position: absolute;
+-  top: 50%;
+-  left: 50%;
+-  transform: translate(-50%, -50%);
+-  z-index: 2;
+-}
+-
+-.table-plan-component .chairs {
+-  display: flex;
+-  justify-content: center;
+-  gap: 10px;
+-  position: absolute;
+-  left: 50%;
+-  transform: translateX(-50%);
+-  z-index: 1;
+-}
+-
+-.table-plan-component .top-chairs {
+-  top: 0;
+-  transform: translate(-50%, 150%);
+-}
+-
+-.table-plan-component .bottom-chairs {
+-  bottom: 0;
+-  transform: translate(-50%, -150%);
+-}
+-
+-.table-plan-component .chair {
+-  width: 20px;
+-  height: 20px;
+-  background-color: #f5f5dc;
+-  border: 2px solid #d2b48c;
+-  border-radius: 50%;
+-}
+-
+-/* **Styles for the table number** */
+-.table-plan-component .table-number {
+-  position: absolute;
+-  bottom: 5px;
+-  right: 5px; /* Changed from left to right */
+-  background-color: rgba(255, 255, 255, 0.7);
+-  padding: 2px 4px;
+-  border-radius: 3px;
+-  font-size: 12px;
+-  color: #333;
+-  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
+-  transition: transform 0.2s;
+-}
+-
+-/* **Styles for action buttons** */
+-.table-plan-component .action-buttons { 
+-  position: absolute;
+-  top: -20px; /* Position above the table */
+-  left: 50%;
+-  transform: translateX(-50%);
+-  display: flex;
+-  gap: 10px;
+-  opacity: 0; /* Hidden by default */
+-  pointer-events: none; /* Prevent buttons from blocking table interactions */
+-}
+-
+-.table-plan-component .table-container:hover .action-buttons {
+-  opacity: 1;
+-  pointer-events: auto;
+-}
+-
+-.table-plan-component .action-buttons .action-button {
+-  width: 35px; /* Slightly larger */
+-  height: 35px;
+-  background-color: #ffffff;
+-  border: none;
+-  border-radius: 50%;
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  cursor: pointer;
+-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+-  opacity: 1; /* Ensure buttons are fully opaque */
+-  transform: scale(1); /* No scaling */
+-  /* Removed animation properties */
+-}
+-
+-.table-plan-component .action-buttons .action-button:hover {
+-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+-}
+-
+-
+---- css/tableEditModalContent.css ---
+-/* css/tableEditModalContent.css */
+-
+-.table-edit-modal-content {
+-	display: flex;
+-	justify-content: center;
+-	align-items: center;
+-	flex-direction: column;
+-  }
+-  
+-  .table-edit-modal-content h2 {
+-	margin-top: 0;
+-	margin-bottom: 20px;
+-	font-size: 1.5rem;
+-	color: #333;
+-  }
+-  
+-  .table-edit-modal-content .settings-form {
+-	display: flex;
+-	flex-direction: column;
+-	gap: 15px;
+-	width: 100%;
+-  }
+-  
+-  .table-edit-modal-content .form-group {
+-	display: flex;
+-	flex-direction: column;
+-  }
+-  
+-  .table-edit-modal-content label {
+-	text-align: left;
+-	margin-bottom: 5px;
+-	font-weight: 500;
+-	color: #555;
+-  }
+-  
+-  .table-edit-modal-content .input-container {
+-	position: relative;
+-	width: 100%;
+-  }
+-  
+-  .table-edit-modal-content .input-container input,
+-  .table-edit-modal-content .input-container select {
+-	width: 100%;
+-	padding: 10px;
+-	border: 1px solid #ccc;
+-	border-radius: 5px;
+-	font-size: 1rem;
+-	transition: border-color 0.3s ease;
+-  }
+-  
+-  .table-edit-modal-content .input-container input:focus,
+-  .table-edit-modal-content .input-container select:focus {
+-	border-color: #0056b3;
+-	outline: none;
+-  }
+-  
+-  .table-edit-modal-content .settings-button {
+-	padding: 12px;
+-	background-color: #007bff;
+-	color: #fff;
+-	border: none;
+-	border-radius: 5px;
+-	cursor: pointer;
+-	font-size: 1.1rem;
+-	display: flex;
+-	align-items: center;
+-	justify-content: center;
+-	gap: 10px;
+-	transition: background-color 0.3s ease;
+-	width: 100%;
+-  }
+-  
+-  .table-edit-modal-content .settings-button:hover {
+-	background-color: #0056b3;
+-  }
+-  
+-  /* Tooltip styles */
+-  .table-edit-modal-content .label-with-tooltip {
+-	display: flex;
+-	align-items: center;
+-  }
+-  
+-  .table-edit-modal-content .label-with-tooltip label {
+-	margin-right: 5px;
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip {
+-	position: relative;
+-	display: inline-block;
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip .tooltip {
+-	display: none; /* Initially hidden */
+-	position: absolute;
+-	bottom: 125%; /* Position above the button */
+-	left: 50%;
+-	transform: translateX(-50%);
+-	width: 400px; /* Set fixed width */
+-	background-color: black;
+-	color: white;
+-	padding: 10px 15px; /* Increased padding for better spacing */
+-	border-radius: 4px;
+-	white-space: normal; /* Allow text to wrap */
+-	font-size: 14px;
+-	z-index: 1000;
+-	opacity: 0;
+-	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip .tooltip::before {
+-	content: '';
+-	position: absolute;
+-	top: 100%;
+-	left: 50%;
+-	transform: translateX(-50%);
+-	border-width: 5px;
+-	border-style: solid;
+-	border-color: black transparent transparent transparent;
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip:hover .tooltip {
+-	display: block;
+-	opacity: 1;
+-	transform: translateX(-50%) translateY(-5px);
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip svg {
+-	cursor: pointer;
+-	color: #555;
+-	font-size: 16px;
+-  }
+-  
+-  .table-edit-modal-content .button-with-tooltip svg:hover {
+-	color: #000;
+-  }
+-  
+-
+---- css/walls.css ---
+-/* css/walls.css */
+-
+-.table-plan-component .walls-container {
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  margin: 10px;
+-}
+-
+-.table-plan-component .wall {
+-  width: 100%;
+-  height: 100%;
+-  background-color: #8b4513;
+-  border: 2px solid #654321;
+-  border-radius: 4px;
+-}
+-
+---- index.js ---
+-// index.js
+-import React from 'react';
+-import FloorPlan from './FloorPlan.js';
+-import Sidebar from './Sidebar.js';
+-import { withHeader } from '../../../Components/Structural/Header/index.js';
+-import { DndProvider } from 'react-dnd';
+-import { HTML5Backend } from 'react-dnd-html5-backend';
+-import './css/app.css';
+-
+-const TableEditor = () => {
+-  const tables = [
+-    { id: 1, numberOfGuests: 1 },
+-    { id: 2, numberOfGuests: 2 },
+-    { id: 3, numberOfGuests: 3 },
+-    { id: 4, numberOfGuests: 4 },
+-    { id: 5, numberOfGuests: 5 },
+-    { id: 6, numberOfGuests: 6 },
+-    { id: 7, numberOfGuests: 7 },
+-    { id: 8, numberOfGuests: 8 },
+-  ];
+-
+-  const walls = [
+-    { id: 1, length: 3 },
+-    { id: 2, length: 5 },
+-    { id: 3, length: 2 },
+-    { id: 4, length: 4 },
+-    { id: 5, length: 6 },
+-  ];
+-
+-  return (
+-    <DndProvider backend={HTML5Backend}>
+-      <div className="table-plan-component">
+-        <div className="app-container">
+-          <FloorPlan />
+-          <Sidebar tables={tables} walls={walls} />
+-        </div>
+-      </div>
+-    </DndProvider>
+-  );
+-};
+-
+-export default withHeader(TableEditor);
+-
+-
+-
+-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TableEditor":
+-
+-├── FloorPlan.js
+-├── FloorPlanElement.js
+-├── Sidebar.js
+-├── Table.js
+-├── TableEditModalContent.js
+-├── Walls.js
+-├── css
+-│   ├── app.css
+-│   ├── floorPlan.css
+-│   ├── sidebar.css
+-│   ├── table.css
+-│   ├── tableEditModalContent.css
+-│   └── walls.css
+-└── index.js
+-
+-
+-List of Files:
+-FloorPlan.js
+-FloorPlanElement.js
+-Sidebar.js
+-Table.js
+-TableEditModalContent.js
+-Walls.js
+-css/app.css
+-css/floorPlan.css
+-css/sidebar.css
+-css/table.css
+-css/tableEditModalContent.css
+-css/walls.css
+-index.js
+-
+diff --git a/prompts/TablePlan-prompt-no-css.txt b/prompts/TablePlan-prompt-no-css.txt
+index 303cb81..8382177 100644
+--- a/prompts/TablePlan-prompt-no-css.txt
++++ b/prompts/TablePlan-prompt-no-css.txt
+@@ -172,6 +172,84 @@ const FloorPlanElement = ({
+ export default FloorPlanElement;
+ 
+ 
++--- Hooks/useReservations.js ---
++// src/Components/Calendar/Hooks/useReservations.js
++
++import { useState, useEffect } from 'react';
++import useApi from '../../../../Hooks/useApi';
++
++/**
++ * Custom hook to fetch and manage reservations data.
++ *
++ * @returns {Array} An array of reservation objects.
++ */
++const useReservations = () => {
++  const [reservations, setReservations] = useState([]);
++  const api = useApi();
++
++  useEffect(() => {
++    /**
++     * Fetches reservations from the backend API and processes them.
++     */
++    const fetchReservations = async () => {
++      try {
++        // Fetch raw data from the backend API
++        const data = await api.get(`${window.baseDomain}api/auth-reservations`, { noCache: true });
++
++        console.log('Raw data from backend:', data);
++
++        // Check if data is an array
++        if (!Array.isArray(data)) {
++          console.error('Unexpected data format: Expected an array of reservations.');
++          setReservations([]);
++          return;
++        }
++
++        // Process and map each reservation to the frontend format
++        const mappedReservations = data.map((reservation) => {
++          // Extract the reservation ID
++          const id = reservation._id?.$oid || reservation._id || `unknown-${Math.random()}`;
++
++          // Parse the number of guests
++          const guests = parseInt(reservation.guests?.$numberInt || reservation.guests, 10);
++          const numberOfGuests = isNaN(guests) ? 1 : guests; // Default to 1 if parsing fails
++
++          // Extract and trim extra information
++          const notes = reservation.extraInfo?.trim() || '';
++
++          // Return the mapped reservation object
++          return {
++            id,
++            date: reservation.date, // Ensure this is in 'YYYY-MM-DD' format or adjust as needed
++            time: reservation.time, // Ensure this is in 'HH:MM' format or adjust as needed
++            firstName: reservation.firstName || 'Unknown',
++            lastName: reservation.lastName || 'Guest',
++            numberOfGuests,
++            tableId: null, // Initialize as null; will be updated when assigned
++            notes,
++            email: reservation.email || '',
++            phone: reservation.phone || '',
++            reservationType: reservation.reservationType || 'common',
++            // Add other fields if necessary
++          };
++        });
++
++        setReservations(mappedReservations);
++      } catch (error) {
++        console.error('Error fetching reservations:', error);
++        setReservations([]); // Fallback to an empty array on error
++      }
++    };
++
++    fetchReservations();
++  }, [api]);
++
++  return reservations;
++};
++
++export default useReservations;
++
++
+ --- Sidebar.js ---
+ // Sidebar.js
+ import React, { useState, useMemo } from 'react';
+@@ -196,13 +274,16 @@ const Sidebar = ({ reservations }) => {
+ 
+   // Guest Block Component
+   const GuestBlock = ({ guest }) => {
+-    const [{ isDragging }, drag] = useDrag(() => ({
+-      type: 'GUEST',
+-      item: { id: guest.id, ...guest },
+-      collect: (monitor) => ({
+-        isDragging: !!monitor.isDragging(),
++    const [{ isDragging }, drag] = useDrag(
++      () => ({
++        type: 'GUEST',
++        item: { id: guest.id, ...guest },
++        collect: (monitor) => ({
++          isDragging: !!monitor.isDragging(),
++        }),
+       }),
+-    }), [guest]);
++      [guest]
++    );
+ 
+     return (
+       <div
+@@ -210,8 +291,12 @@ const Sidebar = ({ reservations }) => {
+         ref={drag}
+         style={{ opacity: isDragging ? 0.5 : 1 }}
+       >
+-        <p className="guest-name">{guest.firstName} {guest.lastName}</p>
+-        <p className="guest-details">{guest.numberOfGuests}p • {guest.time}</p>
++        <p className="guest-name">
++          {guest.firstName} {guest.lastName}
++        </p>
++        <p className="guest-details">
++          {guest.numberOfGuests}p • {guest.time}
++        </p>
+       </div>
+     );
+   };
+@@ -401,28 +486,25 @@ export default Walls;
+ 
+ --- index.js ---
+ // index.js
+-import React, { useState } from 'react';
++import React, { useState, useEffect } from 'react';
+ import FloorPlanGeneral from './FloorPlan.js';
+ import Sidebar from './Sidebar.js';
+ import { withHeader } from '../../../Components/Structural/Header/index.js';
+ import { DndProvider } from 'react-dnd';
+ import { HTML5Backend } from 'react-dnd-html5-backend';
++import useReservations from './Hooks/useReservations.js';
+ import './css/app.css';
+ 
+ const TablePlan = () => {
+-  // Dummy Reservations Data with 'notes' field
+-  const [reservations, setReservations] = useState([
+-    {
+-      id: 1,
+-      firstName: 'Jan',
+-      lastName: 'De Vries',
+-      numberOfGuests: 4,
+-      time: '18:30',
+-      tableId: null,
+-      notes: '',
+-    },
+-    // ... other reservations
+-  ]);
++  const fetchedReservations = useReservations();
++
++  const [reservations, setReservations] = useState([]);
++
++  useEffect(() => {
++    if (fetchedReservations.length > 0 && reservations.length === 0) {
++      setReservations(fetchedReservations);
++    }
++  }, [fetchedReservations, reservations]);
+ 
+   // Function to assign a reservation to a table
+   const assignReservation = (reservationId, targetTableId) => {
+@@ -476,6 +558,8 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
+ 
+ ├── FloorPlan.js
+ ├── FloorPlanElement.js
++├── Hooks
++│   └── useReservations.js
+ ├── Sidebar.js
+ ├── Table.js
+ ├── Walls.js
+@@ -491,6 +575,7 @@ Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/D
+ List of Files:
+ FloorPlan.js
+ FloorPlanElement.js
++Hooks/useReservations.js
+ Sidebar.js
+ Table.js
+ Walls.js
+diff --git a/prompts/lastFolder.json b/prompts/lastFolder.json
+index 55670e2..8ee5d40 100644
+--- a/prompts/lastFolder.json
++++ b/prompts/lastFolder.json
+@@ -1 +1 @@
+-{"lastFolder":"/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TableEditor"}
+\ No newline at end of file
++{"lastFolder":"/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TablePlan"}
+\ No newline at end of file
+diff --git a/src/Pages/Tables/TablePlan/TableSlots.js b/src/Pages/Tables/TablePlan/TableSlots.js
+new file mode 100644
+index 0000000..ef2f919
+--- /dev/null
++++ b/src/Pages/Tables/TablePlan/TableSlots.js
+@@ -0,0 +1,70 @@
++import React, { useRef, useEffect } from 'react';
++import './css/tableslots.css';
++
++const slotToTime = (slot) => {
++  const totalMinutes = (slot - 14) * 30 + 420;
++  const hours = Math.floor(totalMinutes / 60);
++  const minutes = totalMinutes % 60;
++  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
++};
++
++const getDateInDutch = (date) => {
++  const day = date.getDate();
++  const months = [
++    'januari', 'februari', 'maart', 'april', 'mei', 'juni',
++    'juli', 'augustus', 'september', 'oktober', 'november', 'december',
++  ];
++  const month = months[date.getMonth()];
++  return `${day} ${month}`;
++};
++
++const TableSlots = ({ selectedSlot, onSelectSlot, currentDate, floorPlanWidth }) => {
++  const slotsContainerRef = useRef(null);
++  const dateInDutch = getDateInDutch(currentDate);
++
++  const handleSlotClick = (slot) => {
++    if (onSelectSlot) {
++      onSelectSlot(slot);
++    }
++    centerSelectedSlot(slot - 14);
++  };
++
++  const centerSelectedSlot = (slotIndex) => {
++    const slotsContainer = slotsContainerRef.current;
++    const slotWidth = 120.85;
++    const containerWidth = slotsContainer.offsetWidth;
++    const newScrollPosition = slotIndex * slotWidth - (containerWidth / 2 - slotWidth / 2);
++    slotsContainer.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
++  };
++
++  useEffect(() => {
++    if (selectedSlot) {
++      centerSelectedSlot(selectedSlot - 14);
++    }
++  }, [selectedSlot]);
++
++  return (
++    <div
++      className="timeline-container"
++      ref={slotsContainerRef}
++      style={{ width: `${floorPlanWidth}px` }}
++    >
++      <div className="timeline" style={{ width: `${34 * 120.85}px` }}>
++        {Array.from({ length: 34 }, (_, i) => i + 14).map((slot) => (
++          <div
++            key={slot}
++            className={`timeline-slot ${selectedSlot === slot ? 'selected' : ''}`}
++            onClick={() => handleSlotClick(slot)}
++          >
++            <div className="slot-content">
++              <div className="slot-subtitle">{dateInDutch}</div>
++              <div className="slot-title">{slotToTime(slot)}</div>
++            </div>
++          </div>
++        ))}
++      </div>
++    </div>
++  );
++};
++
++export default TableSlots;
+diff --git a/src/Pages/Tables/TablePlan/css/tableslots.css b/src/Pages/Tables/TablePlan/css/tableslots.css
+new file mode 100644
+index 0000000..f785dae
+--- /dev/null
++++ b/src/Pages/Tables/TablePlan/css/tableslots.css
+@@ -0,0 +1,70 @@
++.timeline-container {
++	position: relative;
++	overflow-x: auto;
++	white-space: nowrap;
++	margin: 20px 0;
++	padding: 0 10px;
++	height: 80px;
++	-ms-overflow-style: none;  /* Internet Explorer 10+ */
++	scrollbar-width: none;  /* Firefox */
++  }
++  
++  .timeline-container::-webkit-scrollbar {
++	display: none;  /* Safari and Chrome */
++  }
++  
++  .timeline {
++	display: inline-block;
++  }
++  
++  
++  .timeline-slot {
++	display: inline-block;
++	width: 100px;
++	height: 70px;
++	background-color: #f8f9fa;
++	border-radius: 12px;
++	margin: 0 10px;
++	transition: transform 0.3s ease, background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
++	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
++	cursor: pointer;
++	text-align: center;
++	vertical-align: middle;
++	margin-top: 5px;
++	user-select: none;
++	line-height: 70px; /* Center text vertically */
++  }
++  
++  .timeline-slot:hover {
++	background-color: #e9ecef;
++  }
++  
++  .timeline-slot.selected {
++	background-color: #0073e6;
++	color: white;
++	border: 1px solid #005bb5;
++	width: 150px; /* Expanded width */
++	line-height: normal; /* Reset line-height */
++  }
++  
++  .slot-content {
++	text-align: center;
++  }
++  
++  .slot-title {
++	font-size: 18px;
++	font-weight: bold;
++	line-height: normal; /* Reset line-height */
++  }
++  
++  .slot-subtitle {
++	font-size: 14px;
++	margin-top: 14px;
++	color: #6c757d;
++	line-height: normal; /* Reset line-height */
++  }
++  
++  .timeline-slot.selected .slot-subtitle {
++	color: white;
++  }
++  
+\ No newline at end of file
+diff --git a/src/Pages/Tables/TablePlan/index.js b/src/Pages/Tables/TablePlan/index.js
+index d578da4..d8d17d1 100644
+--- a/src/Pages/Tables/TablePlan/index.js
++++ b/src/Pages/Tables/TablePlan/index.js
+@@ -1,4 +1,3 @@
+-// index.js
+ import React, { useState, useEffect } from 'react';
+ import FloorPlanGeneral from './FloorPlan.js';
+ import Sidebar from './Sidebar.js';
+@@ -7,11 +6,13 @@ import { DndProvider } from 'react-dnd';
+ import { HTML5Backend } from 'react-dnd-html5-backend';
+ import useReservations from './Hooks/useReservations.js';
+ import './css/app.css';
++import TableSlots from './TableSlots.js';
+ 
+ const TablePlan = () => {
+   const fetchedReservations = useReservations();
+ 
+   const [reservations, setReservations] = useState([]);
++  const [floorPlanWidth, setFloorPlanWidth] = useState(800);
+ 
+   useEffect(() => {
+     if (fetchedReservations.length > 0 && reservations.length === 0) {
+@@ -19,7 +20,6 @@ const TablePlan = () => {
+     }
+   }, [fetchedReservations, reservations]);
+ 
+-  // Function to assign a reservation to a table
+   const assignReservation = (reservationId, targetTableId) => {
+     setReservations((prevReservations) =>
+       prevReservations.map((res) =>
+@@ -28,7 +28,6 @@ const TablePlan = () => {
+     );
+   };
+ 
+-  // Function to remove a reservation from a table
+   const removeReservation = (reservationId) => {
+     setReservations((prevReservations) =>
+       prevReservations.map((res) =>
+@@ -37,7 +36,6 @@ const TablePlan = () => {
+     );
+   };
+ 
+-  // Function to update notes for a reservation
+   const updateNotes = (reservationId, newNotes) => {
+     setReservations((prevReservations) =>
+       prevReservations.map((res) =>
+@@ -49,6 +47,12 @@ const TablePlan = () => {
+   return (
+     <DndProvider backend={HTML5Backend}>
+       <div className="table-display-component">
++        <TableSlots
++          selectedSlot={null}
++          onSelectSlot={null}
++          currentDate={new Date()}
++          floorPlanWidth={floorPlanWidth} // Pass floor plan width
++        />
+         <div className="app-container">
+           <FloorPlanGeneral
+             reservations={reservations}

@@ -45,20 +45,20 @@ const TableSlots = ({ selectedSlot, onSelectSlot, currentDate, floorPlanWidth })
 
   return (
     <div
-      className="timeline-container"
+      className="tableslot-timeline-container"
       ref={slotsContainerRef}
       style={{ width: `${floorPlanWidth}px` }}
     >
-      <div className="timeline" style={{ width: `${34 * 120.85}px` }}>
+      <div className="tableslot-timeline" style={{ width: `${34 * 120.85}px` }}>
         {Array.from({ length: 34 }, (_, i) => i + 14).map((slot) => (
           <div
             key={slot}
-            className={`timeline-slot ${selectedSlot === slot ? 'selected' : ''}`}
+            className={`tableslot-timeline-slot ${selectedSlot === slot ? 'selected' : ''}`}
             onClick={() => handleSlotClick(slot)}
           >
-            <div className="slot-content">
-              <div className="slot-subtitle">{dateInDutch}</div>
-              <div className="slot-title">{slotToTime(slot)}</div>
+            <div className="tableslot-slot-content">
+              <div className="tableslot-slot-subtitle">{dateInDutch}</div>
+              <div className="tableslot-slot-title">{slotToTime(slot)}</div>
             </div>
           </div>
         ))}
