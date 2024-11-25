@@ -10,6 +10,10 @@ import TableEditModalContent from './TableEditModalContent'; // Ensure correct p
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
 import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
 
+// Import custom hooks
+import useElementActions from './Hooks/useElementsActions.js';
+import useLineActions from './Hooks/useLineActions';
+
 const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
 const FloorPlan = () => {
@@ -30,6 +34,26 @@ const FloorPlan = () => {
   const [startTableId, setStartTableId] = useState(null);
   const [currentMousePosition, setCurrentMousePosition] = useState({ x: 0, y: 0 });
   const [isAltPressed, setIsAltPressed] = useState(false);
+
+  // Use custom hooks for element and line actions
+  const {
+    addElement,
+    updateElement,
+    moveElement,
+    rotateElement,
+    duplicateElement,
+    deleteElement,
+  } = useElementActions(setElements, setLines, floorPlanSize, nextTableNumber, setNextTableNumber, api);
+
+  const { addLine, deleteLine } = useLineActions(setLines, api);
+
+  // Define handleMouseUp in the component's scope
+  const handleMouseUp = useCallback(() => {
+    if (isDrawingLine) {
+      setIsDrawingLine(false);
+      setStartTableId(null);
+    }
+  }, [isDrawingLine]);
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -124,88 +148,18 @@ const FloorPlan = () => {
     };
   }, [isDrawingLine]);
 
-  const addElement = (element) => {
-    setElements((prevElements) => [...prevElements, element]);
-  };
+  // Attach the global handleMouseUp
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp);
 
-  const updateElement = (updatedElement) => {
-    setElements((prevElements) =>
-      prevElements.map((el) => (el.id === updatedElement.id ? updatedElement : el))
-    );
-  };
-
-  const moveElement = useCallback((id, x, y) => {
-    setElements((prevElements) =>
-      prevElements.map((el) =>
-        el.id === id
-          ? {
-              ...el,
-              x,
-              y,
-            }
-          : el
-      )
-    );
-  }, []);
-
-  const rotateElement = useCallback((id) => {
-    setElements((prevElements) =>
-      prevElements.map((el) =>
-        el.id === id
-          ? {
-              ...el,
-              rotation: (el.rotation || 0) + 90, // Rotate by 90 degrees
-            }
-          : el
-      )
-    );
-  }, []);
-
-  const duplicateElement = useCallback(
-    (id) => {
-      setElements((prevElements) => {
-        const elementToDuplicate = prevElements.find((el) => el.id === id);
-        if (!elementToDuplicate) return prevElements;
-        const newId = Date.now();
-        const newElement = {
-          ...elementToDuplicate,
-          id: newId,
-          x: Math.min(
-            elementToDuplicate.x + 20,
-            floorPlanSize.width - elementToDuplicate.width
-          ),
-          y: Math.min(
-            elementToDuplicate.y + 20,
-            floorPlanSize.height - elementToDuplicate.height
-          ),
-          name:
-            elementToDuplicate.type === 'table'
-              ? `T${nextTableNumber}`
-              : `${elementToDuplicate.subtype.charAt(0).toUpperCase() +
-                  elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
-          rotation: elementToDuplicate.rotation || 0,
-        };
-
-        if (elementToDuplicate.type === 'table') {
-          newElement.tableNumber = nextTableNumber;
-          setNextTableNumber((prev) => prev + 1);
-        }
-
-        return [...prevElements, newElement];
-      });
-    },
-    [floorPlanSize.width, floorPlanSize.height, nextTableNumber]
-  );
-
-  const deleteElement = useCallback((id) => {
-    setElements((prevElements) => prevElements.filter((el) => el.id !== id));
-    // Remove any lines connected to this element
-    setLines((prevLines) => prevLines.filter((line) => line.from !== id && line.to !== id));
-  }, []);
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseUp]);
 
   const snapToGrid = (x, y, gridSize = 50) => {
-    const snappedX = Math.round(x / gridSize) * 50;
-    const snappedY = Math.round(y / gridSize) * 50;
+    const snappedX = Math.round(x / gridSize) * gridSize;
+    const snappedY = Math.round(y / gridSize) * gridSize;
     return [snappedX, snappedY];
   };
 
@@ -281,6 +235,10 @@ const FloorPlan = () => {
     // Save the element to API
     const saveElement = async () => {
       try {
+        if (updatedElement.type === 'line') {
+          // Lines are handled separately
+          return;
+        }
         if (updatedElement._id) {
           // Existing table: use PUT request
           await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
@@ -309,13 +267,6 @@ const FloorPlan = () => {
     });
   };
 
-  const handleMouseUp = (e) => {
-    if (isDrawingLine) {
-      setIsDrawingLine(false);
-      setStartTableId(null);
-    }
-  };
-
   const handleTableMouseUp = (tableId, e) => {
     if (isDrawingLine && startTableId && startTableId !== tableId) {
       // Create a new line
@@ -325,10 +276,15 @@ const FloorPlan = () => {
         from: startTableId,
         to: tableId,
       };
-      setLines((prevLines) => [...prevLines, newLine]);
+      addLine(newLine);
     }
     setIsDrawingLine(false);
     setStartTableId(null);
+  };
+
+  const handleLineClick = (lineId) => {
+    // Remove the line
+    deleteLine(lineId);
   };
 
   return (
@@ -353,7 +309,7 @@ const FloorPlan = () => {
             floorPlanRef.current = node;
           }}
           style={{ position: 'relative', width: '100%', height: '100%' }}
-          onMouseUp={handleMouseUp}
+          onMouseUp={handleMouseUp} // Now handleMouseUp is defined
         >
           <LinesLayer
             elements={elements}
@@ -361,6 +317,7 @@ const FloorPlan = () => {
             isDrawingLine={isDrawingLine}
             startTableId={startTableId}
             currentMousePosition={currentMousePosition}
+            handleLineClick={handleLineClick} // Pass handleLineClick
           />
           {Array.isArray(elements) &&
             elements.map((el) => (

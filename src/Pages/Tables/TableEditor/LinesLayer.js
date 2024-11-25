@@ -1,5 +1,6 @@
 // LinesLayer.js
-import React from 'react';
+import React, { useRef } from 'react';
+import './css/floorPlan.css'; // Ensure to import necessary styles
 
 const LinesLayer = ({
   elements,
@@ -7,7 +8,10 @@ const LinesLayer = ({
   isDrawingLine,
   startTableId,
   currentMousePosition,
+  handleLineClick,
 }) => {
+  const lineRefs = useRef({});
+
   const renderLines = () => {
     const renderedLines = [];
 
@@ -18,46 +22,65 @@ const LinesLayer = ({
 
       if (!fromElement || !toElement) return;
 
-      const fromX = fromElement.x + fromElement.width / 2;
-      const fromY = fromElement.y + fromElement.height / 2;
-      const toX = toElement.x + toElement.width / 2;
-      const toY = toElement.y + toElement.height / 2;
+      const fromCenter = getElementCenter(fromElement);
+      const toCenter = getElementCenter(toElement);
 
-      const length = Math.hypot(toX - fromX, toY - fromY);
-      const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
+      // Apply translation: 10px left and 50px down
+      const translatedFromX = fromCenter.x - 10;
+      const translatedFromY = fromCenter.y + 50;
+      const translatedToX = toCenter.x - 10;
+      const translatedToY = toCenter.y + 50;
+
+      const length = Math.hypot(translatedToX - translatedFromX, translatedToY - translatedFromY);
+      const angle = Math.atan2(translatedToY - translatedFromY, translatedToX - translatedFromX) * (180 / Math.PI);
 
       const lineStyle = {
         position: 'absolute',
-        left: `${fromX}px`,
-        top: `${fromY}px`,
+        left: `${translatedFromX}px`,
+        top: `${translatedFromY}px`,
         width: `${length}px`,
         height: '2px',
         backgroundColor: '#d2b48c', // Same as table border color
         transform: `rotate(${angle}deg)`,
         transformOrigin: '0 0',
-        pointerEvents: 'none',
+        pointerEvents: 'auto',
+        cursor: 'pointer',
         zIndex: 0,
       };
 
-      renderedLines.push(<div key={line.id} style={lineStyle}></div>);
+      renderedLines.push(
+        <div
+          key={line.id}
+          className="table-plan-component line"
+          style={lineStyle}
+          onClick={() => handleLineClick(line.id)}
+          ref={(el) => {
+            lineRefs.current[line.id] = el;
+          }}
+        ></div>
+      );
     });
 
     // Render the line being drawn
     if (isDrawingLine && startTableId) {
       const fromElement = elements.find((el) => el.id === startTableId);
       if (fromElement) {
-        const fromX = fromElement.x + fromElement.width / 2;
-        const fromY = fromElement.y + fromElement.height / 2;
-        const toX = currentMousePosition.x;
-        const toY = currentMousePosition.y;
+        const fromCenter = getElementCenter(fromElement);
 
-        const length = Math.hypot(toX - fromX, toY - fromY);
-        const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
+        // Apply translation: 10px left and 50px down
+        const translatedFromX = fromCenter.x - 10;
+        const translatedFromY = fromCenter.y + 50;
+
+        const toX = currentMousePosition.x - 10;
+        const toY = currentMousePosition.y + 50;
+
+        const length = Math.hypot(toX - translatedFromX, toY - translatedFromY);
+        const angle = Math.atan2(toY - translatedFromY, toX - translatedFromX) * (180 / Math.PI);
 
         const lineStyle = {
           position: 'absolute',
-          left: `${fromX}px`,
-          top: `${fromY}px`,
+          left: `${translatedFromX}px`,
+          top: `${translatedFromY}px`,
           width: `${length}px`,
           height: '2px',
           backgroundColor: '#d2b48c',
@@ -67,11 +90,23 @@ const LinesLayer = ({
           zIndex: 0,
         };
 
-        renderedLines.push(<div key="drawing-line" style={lineStyle}></div>);
+        renderedLines.push(
+          <div key="drawing-line" className="table-plan-component line" style={lineStyle}></div>
+        );
       }
     }
 
     return renderedLines;
+  };
+
+  const getElementCenter = (element) => {
+    const { x, y, width, height, rotation } = element;
+
+    // Calculate center based on current position and size
+    const centerX = x + width / 2;
+    const centerY = y + height / 2;
+
+    return { x: centerX, y: centerY };
   };
 
   return <>{renderLines()}</>;

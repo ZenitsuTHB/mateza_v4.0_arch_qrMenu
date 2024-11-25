@@ -144,6 +144,7 @@ const FloorPlanElement = ({
             editTable={() => openModal(element)}
             showActions={showActions}
             rotation={element.rotation || 0} // Pass rotation to Table
+            id={`table-${element.id}`} // Pass id to Table component
           />
         ) : element.type === 'wall' ? (
           <Walls length={element.width / 20 + 1} />
