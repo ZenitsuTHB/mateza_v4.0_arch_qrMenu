@@ -1,0 +1,74 @@
+/* css/tablesList.css */
+
+.tables-list-page {
+	padding: 20px;
+  }
+  
+  .tables-list-page h2 {
+	margin-bottom: 20px;
+	color: #333;
+  }
+  
+  .tables-list-page .tables-list,
+  .tables-list-page .table-groups-list {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 30px;
+	font-size: 14px;
+  }
+  
+  .tables-list-page th,
+  .tables-list-page td {
+	border: 1px solid #ddd;
+	padding: 12px 15px;
+	text-align: left;
+  }
+  
+  .tables-list-page th {
+	background-color: #f9f9f9;
+	font-weight: bold;
+	color: #555;
+  }
+  
+  .tables-list-page tr:nth-child(even) {
+	background-color: #f9f9f9;
+  }
+  
+  .tables-list-page input[type="text"],
+  .tables-list-page input[type="number"],
+  .tables-list-page select {
+	width: 100%;
+	padding: 8px 10px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+  }
+  
+  .tables-list-page input[type="text"]:focus,
+  .tables-list-page input[type="number"]:focus,
+  .tables-list-page select:focus {
+	border-color: #007bff;
+	outline: none;
+  }
+  
+  .tables-list-page button {
+	padding: 8px 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 14px;
+  }
+  
+  .tables-list-page button:hover {
+	background-color: #0056b3;
+  }
+  
+  .tables-list-page .tables-list-title {
+	font-size: 1.5rem;
+	margin-bottom: 10px;
+	color: #333;
+  }
+  

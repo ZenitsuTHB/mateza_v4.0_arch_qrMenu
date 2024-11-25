@@ -1,0 +1,1919 @@
+File Contents:
+
+--- FloorPlan.js ---
+// FloorPlan.js
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useDrop } from 'react-dnd';
+import './css/floorPlan.css';
+import { ResizableBox } from 'react-resizable';
+import 'react-resizable/css/styles.css';
+import FloorPlanElement from './FloorPlanElement.js';
+import LinesLayer from './LinesLayer.js'; // New component
+import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
+import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
+
+// Import custom hooks
+import useElementActions from './Hooks/useElementsActions.js';
+import useLineActions from './Hooks/useLineActions';
+
+const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
+
+const FloorPlan = () => {
+  const [elements, setElements] = useState([]);
+  const [lines, setLines] = useState([]); // State to store lines
+  const floorPlanRef = useRef(null);
+  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+  const [nextTableNumber, setNextTableNumber] = useState(1);
+
+  const api = useApi(); // Initialize useApi hook
+
+  // State for modal
+  const [selectedElement, setSelectedElement] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  // State for line drawing
+  const [isDrawingLine, setIsDrawingLine] = useState(false);
+  const [startTableId, setStartTableId] = useState(null);
+  const [currentMousePosition, setCurrentMousePosition] = useState({ x: 0, y: 0 });
+  const [isAltPressed, setIsAltPressed] = useState(false);
+
+  // Use custom hooks for element and line actions
+  const {
+    addElement,
+    updateElement,
+    moveElement,
+    rotateElement,
+    duplicateElement,
+    deleteElement,
+  } = useElementActions(setElements, setLines, floorPlanSize, nextTableNumber, setNextTableNumber, api);
+
+  const { addLine, deleteLine } = useLineActions(setLines, api);
+
+  // Define handleMouseUp in the component's scope
+  const handleMouseUp = useCallback(() => {
+    if (isDrawingLine) {
+      setIsDrawingLine(false);
+      setStartTableId(null);
+    }
+  }, [isDrawingLine]);
+
+  // Update floor plan size on mount and when resized
+  useEffect(() => {
+    const updateSize = () => {
+      if (floorPlanRef.current) {
+        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+        setFloorPlanSize({ width, height });
+      }
+    };
+
+    // Initial size
+    updateSize();
+
+    // Update size on window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  // Load tables and lines from API on mount
+  useEffect(() => {
+    const fetchTablesAndLines = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
+        // Ensure that data is an array
+        if (Array.isArray(data)) {
+          const elementsData = data.filter((item) => item.type !== 'line');
+          const linesData = data.filter((item) => item.type === 'line');
+          setElements(elementsData);
+          setLines(linesData);
+        } else if (data && Array.isArray(data.tables)) { // If API returns { tables: [...] }
+          const elementsData = data.tables.filter((item) => item.type !== 'line');
+          const linesData = data.tables.filter((item) => item.type === 'line');
+          setElements(elementsData);
+          setLines(linesData);
+        } else {
+          setElements([]); // Fallback to empty array
+          setLines([]);
+        }
+      } catch (error) {
+        console.error('Error fetching tables:', error);
+        setElements([]); // Fallback to empty array on error
+        setLines([]);
+      }
+    };
+
+    fetchTablesAndLines();
+  }, [api]);
+
+  // Handle keydown and keyup events for Alt key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Alt') {
+        setIsAltPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === 'Alt') {
+        setIsAltPressed(false);
+        setIsDrawingLine(false);
+        setStartTableId(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  // Handle mouse move when drawing line
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (isDrawingLine) {
+        const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+        setCurrentMousePosition({
+          x: e.clientX - floorPlanRect.left,
+          y: e.clientY - floorPlanRect.top,
+        });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isDrawingLine]);
+
+  // Attach the global handleMouseUp
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseUp]);
+
+  const snapToGrid = (x, y, gridSize = 50) => {
+    const snappedX = Math.round(x / gridSize) * gridSize;
+    const snappedY = Math.round(y / gridSize) * gridSize;
+    return [snappedX, snappedY];
+  };
+
+  const [, drop] = useDrop({
+    accept: 'ITEM',
+    drop: (item, monitor) => {
+      const offset = monitor.getClientOffset();
+      const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+
+      let x = offset.x - floorPlanRect.left;
+      let y = offset.y - floorPlanRect.top;
+
+      // Apply snapping only if the element is not a wall
+      if (item.elementType !== 'wall') {
+        const [snappedX, snappedY] = snapToGrid(x, y);
+        x = Math.max(0, Math.min(snappedX, floorPlanSize.width - item.width));
+        y = Math.max(0, Math.min(snappedY, floorPlanSize.height - item.height));
+      } else {
+        // For walls, ensure they stay within boundaries without snapping
+        x = Math.max(0, Math.min(x, floorPlanSize.width - item.width));
+        y = Math.max(0, Math.min(y, floorPlanSize.height - item.height));
+      }
+
+      if (item.id) {
+        moveElement(item.id, x, y);
+      } else {
+        const id = Date.now();
+        const newElement = {
+          id,
+          type: item.elementType,
+          subtype: item.subtype,
+          x,
+          y,
+          width: item.width,
+          height: item.height,
+          capacity: item.capacity,
+          name:
+            item.elementType === 'table'
+              ? `T${nextTableNumber}`
+              : `${item.subtype.charAt(0).toUpperCase() + item.subtype.slice(1)} Decoration ${id}`,
+          minCapacity: item.minCapacity || 1,
+          maxCapacity: item.maxCapacity || 10,
+          priority: 'Medium',
+          rotation: 0, // Initialize rotation
+        };
+
+        // Assign a tableNumber if the element is a table
+        if (item.elementType === 'table') {
+          newElement.tableNumber = nextTableNumber;
+          setNextTableNumber((prev) => prev + 1);
+        }
+
+        addElement(newElement);
+
+        // Open modal to edit table details only if needed
+        setSelectedElement(newElement);
+        setShowModal(true);
+      }
+    },
+  });
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedElement(null);
+  };
+
+  const handleModalSave = (updatedElement) => {
+    // Update the element in state
+    updateElement(updatedElement);
+    setShowModal(false);
+    setSelectedElement(null);
+
+    // Save the element to API
+    const saveElement = async () => {
+      try {
+        if (updatedElement.type === 'line') {
+          // Lines are handled separately
+          return;
+        }
+        if (updatedElement._id) {
+          // Existing table: use PUT request
+          await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
+        } else {
+          // New table: use POST request
+          await api.post(`${window.baseDomain}api/tables`, updatedElement);
+        }
+      } catch (error) {
+        console.error('Error saving table:', error);
+      }
+    };
+
+    saveElement();
+  };
+
+  const handleTableMouseDown = (tableId, e) => {
+    if (!isAltPressed) return;
+    e.stopPropagation();
+    setIsDrawingLine(true);
+    setStartTableId(tableId);
+
+    const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+    setCurrentMousePosition({
+      x: e.clientX - floorPlanRect.left,
+      y: e.clientY - floorPlanRect.top,
+    });
+  };
+
+  const handleTableMouseUp = (tableId, e) => {
+    if (isDrawingLine && startTableId && startTableId !== tableId) {
+      // Create a new line
+      const newLine = {
+        id: `line-${Date.now()}`,
+        type: 'line',
+        from: startTableId,
+        to: tableId,
+      };
+      addLine(newLine);
+    }
+    setIsDrawingLine(false);
+    setStartTableId(null);
+  };
+
+  const handleLineClick = (lineId) => {
+    // Remove the line
+    deleteLine(lineId);
+  };
+
+  return (
+    <>
+      <ResizableBox
+        width={800}
+        height={600}
+        minConstraints={[400, 300]}
+        maxConstraints={[1600, 1200]}
+        className="table-plan-component resizable-floor-plan"
+        onResizeStop={(e, data) => {
+          // Directly set the new size without snapping
+          setFloorPlanSize({ width: data.size.width, height: data.size.height });
+        }}
+        resizeHandles={['se']} // Optional: specify resize handles if needed
+      >
+        <div
+          id="floor-plan-container"
+          className="table-plan-component floor-plan"
+          ref={(node) => {
+            drop(node);
+            floorPlanRef.current = node;
+          }}
+          style={{ position: 'relative', width: '100%', height: '100%' }}
+          onMouseUp={handleMouseUp} // Now handleMouseUp is defined
+        >
+          <LinesLayer
+            elements={elements}
+            lines={lines}
+            isDrawingLine={isDrawingLine}
+            startTableId={startTableId}
+            currentMousePosition={currentMousePosition}
+            handleLineClick={handleLineClick} // Pass handleLineClick
+          />
+          {Array.isArray(elements) &&
+            elements.map((el) => (
+              <FloorPlanElement
+                key={el.id}
+                element={el}
+                moveElement={moveElement}
+                rotateElement={rotateElement}
+                duplicateElement={duplicateElement}
+                deleteElement={deleteElement}
+                floorPlanSize={floorPlanSize}
+                tableNumber={el.tableNumber}
+                openModal={(element) => {
+                  setSelectedElement(element);
+                  setShowModal(true);
+                }}
+                handleTableMouseDown={handleTableMouseDown}
+                handleTableMouseUp={handleTableMouseUp}
+                isAltPressed={isAltPressed}
+              />
+            ))}
+        </div>
+      </ResizableBox>
+      {showModal && selectedElement && (
+        <ModalWithoutTabs
+          onClose={handleModalClose}
+          content={
+            <TableEditModalContent
+              element={selectedElement}
+              onSave={handleModalSave}
+              onClose={handleModalClose}
+            />
+          }
+        />
+      )}
+    </>
+  );
+};
+
+export default FloorPlan;
+
+
+--- FloorPlanElement.js ---
+// FloorPlanElement.js
+import React from 'react';
+import Table from './Table.js';
+import Walls from './Walls.js';
+
+const FloorPlanElement = ({
+  element,
+  moveElement,
+  rotateElement,
+  duplicateElement,
+  deleteElement,
+  floorPlanSize,
+  tableNumber,
+  openModal,
+  handleTableMouseDown,
+  handleTableMouseUp,
+  isAltPressed,
+}) => {
+  const [position, setPosition] = React.useState({ x: element.x, y: element.y });
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    setPosition({ x: element.x, y: element.y });
+  }, [element.x, element.y]);
+
+  const handleMouseDown = (e) => {
+    if (isAltPressed) {
+      handleTableMouseDown(element.id, e);
+      return;
+    }
+    e.preventDefault(); // Prevent text selection
+    setIsDragging(true);
+    setOffset({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleMouseUp = (e) => {
+    if (isAltPressed) {
+      handleTableMouseUp(element.id, e);
+      return;
+    }
+    // Do nothing
+  };
+
+  React.useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (isDragging) {
+        let newX = e.clientX - offset.x;
+        let newY = e.clientY - offset.y;
+
+        // Constrain within floor plan boundaries
+        newX = Math.max(0, Math.min(newX, floorPlanSize.width - element.width));
+        newY = Math.max(0, Math.min(newY, floorPlanSize.height - element.height));
+
+        setPosition({
+          x: newX,
+          y: newY,
+        });
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+
+        // Apply snapping on mouse release for non-wall elements
+        if (element.type !== 'wall') {
+          const snappedX = Math.round(position.x / 50) * 50; // Assuming grid size 50
+          const snappedY = Math.round(position.y / 50) * 50;
+          const finalX = Math.max(0, Math.min(snappedX, floorPlanSize.width - element.width));
+          const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
+
+          setPosition({ x: finalX, y: finalY });
+          moveElement(element.id, finalX, finalY);
+        } else {
+          // For walls, no snapping
+          moveElement(element.id, position.x, position.y);
+        }
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [
+    isDragging,
+    offset,
+    position.x,
+    position.y,
+    moveElement,
+    element.id,
+    floorPlanSize,
+    element.width,
+    element.height,
+    element.type,
+  ]);
+
+  const style = {
+    position: 'absolute',
+    left: `${position.x}px`,
+    top: `${position.y}px`,
+    width: `${element.width}px`,
+    height: `${element.height}px`,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: 'move',
+    transition: isDragging ? 'none' : 'left 0.2s, top 0.2s',
+    zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
+  };
+
+  // Hide action buttons when Alt is pressed
+  const showActions = !isAltPressed;
+
+  return (
+    <div
+      className="table-plan-component floor-plan-element"
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      style={style}
+    >
+      {/* Rotated Content */}
+      <div
+        style={{
+          transform: `rotate(${element.rotation || 0}deg)`,
+          transformOrigin: 'center center',
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}
+      >
+        {element.type === 'table' ? (
+          <Table
+            numberOfGuests={element.capacity}
+            tableNumber={tableNumber}
+            rotate={() => rotateElement(element.id)}
+            duplicate={() => duplicateElement(element.id)}
+            deleteTable={() => deleteElement(element.id)}
+            editTable={() => openModal(element)}
+            showActions={showActions}
+            rotation={element.rotation || 0} // Pass rotation to Table
+            id={`table-${element.id}`} // Pass id to Table component
+          />
+        ) : element.type === 'wall' ? (
+          <Walls length={element.width / 20 + 1} />
+        ) : null}
+      </div>
+      {/* Action Buttons are handled within Table component */}
+    </div>
+  );
+};
+
+export default FloorPlanElement;
+
+
+--- Hooks/useElementsActions.js ---
+// hooks/useElementActions.js
+import { useCallback } from 'react';
+
+const useElementActions = (
+  setElements,
+  setLines,
+  floorPlanSize,
+  nextTableNumber,
+  setNextTableNumber,
+  api
+) => {
+  const addElement = useCallback(
+    (element) => {
+      setElements((prevElements) => [...prevElements, element]);
+
+      // Save the new element to API
+      const saveElement = async () => {
+        try {
+          await api.post(`${window.baseDomain}api/tables`, element);
+        } catch (error) {
+          console.error('Error saving element:', error);
+        }
+      };
+
+      if (element.type !== 'line') {
+        saveElement();
+      }
+    },
+    [setElements, api]
+  );
+
+  const updateElement = useCallback(
+    (updatedElement) => {
+      setElements((prevElements) =>
+        prevElements.map((el) => (el.id === updatedElement.id ? updatedElement : el))
+      );
+
+      // Save the updated element to API
+      const saveElement = async () => {
+        try {
+          if (updatedElement.type === 'line') {
+            // Lines are handled separately
+            return;
+          }
+          if (updatedElement._id) {
+            // Existing table: use PUT request
+            await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
+          } else {
+            // New table: use POST request
+            await api.post(`${window.baseDomain}api/tables`, updatedElement);
+          }
+        } catch (error) {
+          console.error('Error updating element:', error);
+        }
+      };
+
+      if (updatedElement.type !== 'line') {
+        saveElement();
+      }
+    },
+    [setElements, api]
+  );
+
+  const moveElement = useCallback((id, x, y) => {
+    setElements((prevElements) =>
+      prevElements.map((el) =>
+        el.id === id
+          ? {
+              ...el,
+              x,
+              y,
+            }
+          : el
+      )
+    );
+
+    // Save the moved element to API
+    const saveMove = async () => {
+      try {
+        const movedElement = { id, x, y };
+        await api.put(`${window.baseDomain}api/tables/${id}`, movedElement);
+      } catch (error) {
+        console.error('Error moving element:', error);
+      }
+    };
+
+    saveMove();
+  }, [setElements, api]);
+
+  const rotateElement = useCallback((id) => {
+    setElements((prevElements) =>
+      prevElements.map((el) =>
+        el.id === id
+          ? {
+              ...el,
+              rotation: (el.rotation || 0) + 90, // Rotate by 90 degrees
+            }
+          : el
+      )
+    );
+
+    // Save the rotated element to API
+    const saveRotate = async () => {
+      try {
+        const rotatedElement = { rotation: 90 };
+        await api.put(`${window.baseDomain}api/tables/${id}`, rotatedElement);
+      } catch (error) {
+        console.error('Error rotating element:', error);
+      }
+    };
+
+    saveRotate();
+  }, [setElements, api]);
+
+  const duplicateElement = useCallback(
+    (id) => {
+      setElements((prevElements) => {
+        const elementToDuplicate = prevElements.find((el) => el.id === id);
+        if (!elementToDuplicate) return prevElements;
+        const newId = Date.now();
+        const newElement = {
+          ...elementToDuplicate,
+          id: newId,
+          x: Math.min(
+            elementToDuplicate.x + 20,
+            floorPlanSize.width - elementToDuplicate.width
+          ),
+          y: Math.min(
+            elementToDuplicate.y + 20,
+            floorPlanSize.height - elementToDuplicate.height
+          ),
+          name:
+            elementToDuplicate.type === 'table'
+              ? `T${nextTableNumber}`
+              : `${elementToDuplicate.subtype.charAt(0).toUpperCase() +
+                  elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
+          rotation: elementToDuplicate.rotation || 0,
+        };
+
+        if (elementToDuplicate.type === 'table') {
+          newElement.tableNumber = nextTableNumber;
+          setNextTableNumber((prev) => prev + 1);
+        }
+
+        // Save the duplicated element to API
+        const saveDuplicate = async () => {
+          try {
+            await api.post(`${window.baseDomain}api/tables`, newElement);
+          } catch (error) {
+            console.error('Error duplicating element:', error);
+          }
+        };
+
+        saveDuplicate();
+
+        return [...prevElements, newElement];
+      });
+    },
+    [setElements, floorPlanSize.width, floorPlanSize.height, nextTableNumber, setNextTableNumber, api]
+  );
+
+  const deleteElement = useCallback(
+    (id) => {
+      setElements((prevElements) => prevElements.filter((el) => el.id !== id));
+      // Remove any lines connected to this element
+      setLines((prevLines) => prevLines.filter((line) => line.from !== id && line.to !== id));
+
+      // Delete the element from API
+      const deleteFromApi = async () => {
+        try {
+          await api.delete(`${window.baseDomain}api/tables/${id}`);
+        } catch (error) {
+          console.error('Error deleting element:', error);
+        }
+      };
+
+      deleteFromApi();
+    },
+    [setElements, setLines, api]
+  );
+
+  return {
+    addElement,
+    updateElement,
+    moveElement,
+    rotateElement,
+    duplicateElement,
+    deleteElement,
+  };
+};
+
+export default useElementActions;
+
+
+--- Hooks/useLineActions.js ---
+// hooks/useLineActions.js
+import { useCallback } from 'react';
+
+const useLineActions = (setLines, api) => {
+  const addLine = useCallback(
+    (line) => {
+      setLines((prevLines) => [...prevLines, line]);
+
+      // Save the new line to API
+      const saveLine = async () => {
+        try {
+          await api.post(`${window.baseDomain}api/tables`, line);
+        } catch (error) {
+          console.error('Error saving line:', error);
+        }
+      };
+
+      saveLine();
+    },
+    [setLines, api]
+  );
+
+  const deleteLine = useCallback(
+    (lineId) => {
+      setLines((prevLines) => prevLines.filter((line) => line.id !== lineId));
+
+      // Delete the line from API
+      const deleteFromApi = async () => {
+        try {
+          await api.delete(`${window.baseDomain}api/tables/${lineId}`);
+        } catch (error) {
+          console.error('Error deleting line:', error);
+        }
+      };
+
+      deleteFromApi();
+    },
+    [setLines, api]
+  );
+
+  return {
+    addLine,
+    deleteLine,
+  };
+};
+
+export default useLineActions;
+
+
+--- LinesLayer.js ---
+// LinesLayer.js
+import React, { useRef } from 'react';
+import './css/floorPlan.css'; // Ensure to import necessary styles
+
+const LinesLayer = ({
+  elements,
+  lines,
+  isDrawingLine,
+  startTableId,
+  currentMousePosition,
+  handleLineClick,
+}) => {
+  const lineRefs = useRef({});
+
+  const renderLines = () => {
+    const renderedLines = [];
+
+    // Render existing lines
+    lines.forEach((line) => {
+      const fromElement = elements.find((el) => el.id === line.from);
+      const toElement = elements.find((el) => el.id === line.to);
+
+      if (!fromElement || !toElement) return;
+
+      const fromCenter = getElementCenter(fromElement);
+      const toCenter = getElementCenter(toElement);
+
+      // Apply translation: 10px left and 50px down
+      const translatedFromX = fromCenter.x - 10;
+      const translatedFromY = fromCenter.y + 50;
+      const translatedToX = toCenter.x - 10;
+      const translatedToY = toCenter.y + 50;
+
+      const length = Math.hypot(translatedToX - translatedFromX, translatedToY - translatedFromY);
+      const angle = Math.atan2(translatedToY - translatedFromY, translatedToX - translatedFromX) * (180 / Math.PI);
+
+      const lineStyle = {
+        position: 'absolute',
+        left: `${translatedFromX}px`,
+        top: `${translatedFromY}px`,
+        width: `${length}px`,
+        height: '2px',
+        backgroundColor: '#d2b48c', // Same as table border color
+        transform: `rotate(${angle}deg)`,
+        transformOrigin: '0 0',
+        pointerEvents: 'auto',
+        cursor: 'pointer',
+        zIndex: 0,
+      };
+
+      renderedLines.push(
+        <div
+          key={line.id}
+          className="table-plan-component line"
+          style={lineStyle}
+          onClick={() => handleLineClick(line.id)}
+          ref={(el) => {
+            lineRefs.current[line.id] = el;
+          }}
+        ></div>
+      );
+    });
+
+    // Render the line being drawn
+    if (isDrawingLine && startTableId) {
+      const fromElement = elements.find((el) => el.id === startTableId);
+      if (fromElement) {
+        const fromCenter = getElementCenter(fromElement);
+
+        // Apply translation: 10px left and 50px down
+        const translatedFromX = fromCenter.x - 10;
+        const translatedFromY = fromCenter.y + 50;
+
+        const toX = currentMousePosition.x - 10;
+        const toY = currentMousePosition.y + 50;
+
+        const length = Math.hypot(toX - translatedFromX, toY - translatedFromY);
+        const angle = Math.atan2(toY - translatedFromY, toX - translatedFromX) * (180 / Math.PI);
+
+        const lineStyle = {
+          position: 'absolute',
+          left: `${translatedFromX}px`,
+          top: `${translatedFromY}px`,
+          width: `${length}px`,
+          height: '2px',
+          backgroundColor: '#d2b48c',
+          transform: `rotate(${angle}deg)`,
+          transformOrigin: '0 0',
+          pointerEvents: 'none',
+          zIndex: 0,
+        };
+
+        renderedLines.push(
+          <div key="drawing-line" className="table-plan-component line" style={lineStyle}></div>
+        );
+      }
+    }
+
+    return renderedLines;
+  };
+
+  const getElementCenter = (element) => {
+    const { x, y, width, height, rotation } = element;
+
+    // Calculate center based on current position and size
+    const centerX = x + width / 2;
+    const centerY = y + height / 2;
+
+    return { x: centerX, y: centerY };
+  };
+
+  return <>{renderLines()}</>;
+};
+
+export default LinesLayer;
+
+
+--- Sidebar.js ---
+// Sidebar.js
+import React, { useState, useRef } from 'react';
+import { useDrag } from 'react-dnd';
+import { motion } from 'framer-motion';
+import Table from './Table.js';
+import Walls from './Walls.js';
+import './css/sidebar.css';
+
+const TableItem = ({ table }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'ITEM',
+    item: {
+      elementType: 'table',
+      subtype: 'round',
+      width: 70,
+      height: 70,
+      capacity: table.numberOfGuests,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [table]);
+
+  return (
+    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+      {/* Pass showActions={false} to hide action buttons in Sidebar */}
+      <Table numberOfGuests={table.numberOfGuests} showActions={false} />
+      <div className="table-plan-component item-info">
+        <p>Tafel {table.id}</p>
+        <p>Gasten: {table.numberOfGuests}</p>
+      </div>
+    </div>
+  );
+};
+
+const WallItem = ({ wall }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'ITEM',
+    item: {
+      elementType: 'wall',
+      subtype: 'wall',
+      width: wall.length * 20,
+      height: 20,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [wall]);
+
+  return (
+    <div className="table-plan-component item" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <Walls length={wall.length} />
+      <div className="table-plan-component item-info">
+        <p>Muur {wall.id}</p>
+        <p>Lengte: {wall.length} eenheden</p>
+      </div>
+    </div>
+  );
+};
+
+const Sidebar = ({ tables, walls }) => {
+  const [activeTab, setActiveTab] = useState('tables');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pendingTab, setPendingTab] = useState(null);
+
+  const tablesRef = useRef();
+  const wallsRef = useRef();
+
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+
+  const tabs = [
+    { id: 'tables', label: 'Tafels', title: "Beheer Tafels" },
+    { id: 'walls', label: 'Muren', title: "Beheer Muren" },
+  ];
+
+  const filteredTables = tables.filter(
+    (table) =>
+      table.id.toString().includes(searchTerm) ||
+      table.numberOfGuests.toString().includes(searchTerm)
+  );
+
+  const filteredWalls = walls.filter(
+    (wall) =>
+      wall.id.toString().includes(searchTerm) ||
+      wall.length.toString().includes(searchTerm)
+  );
+
+  const handleTabClick = async (tabId, tabTitle) => {
+    let currentRef;
+    if (activeTab === 'tables') {
+      currentRef = tablesRef;
+    } else if (activeTab === 'walls') {
+      currentRef = wallsRef;
+    }
+
+    if (currentRef && currentRef.current && currentRef.current.isDirty) {
+      if (isIframe) {
+        try {
+          await currentRef.current.handleSave();
+          setActiveTab(tabId);
+        } catch (error) {
+          console.error('Error saving before tab switch:', error);
+        }
+      } else {
+        setPendingTab({ id: tabId, title: tabTitle });
+      }
+    } else {
+      setActiveTab(tabId);
+    }
+  };
+
+  return (
+    <div className="table-plan-component sidebar">
+      <div className="table-plan-component tabs">
+        <div className="table-plan-component buttons-container">
+          {tabs.map((tab) => (
+            <motion.button
+              key={tab.id}
+              type="button"
+              className={`table-plan-component tab-button ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => handleTabClick(tab.id, tab.title)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="table-plan-component tab-label">{tab.label}</span>
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="underline-sidebar-tabs"
+                  className="table-plan-component tab-underline"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+      <div className="table-plan-component search-bar">
+        <input
+          type="text"
+          placeholder={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}...`}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label={`Zoek ${activeTab === 'tables' ? 'Tafels' : 'Muren'}`}
+        />
+      </div>
+      <div className="table-plan-component items-list">
+        {activeTab === 'tables' && filteredTables.length > 0 ? (
+          <div className="table-plan-component grid-container">
+            {filteredTables.map((table) => (
+              <TableItem key={table.id} table={table} />
+            ))}
+          </div>
+        ) : activeTab === 'walls' && filteredWalls.length > 0 ? (
+          <div className="table-plan-component grid-container">
+            {filteredWalls.map((wall) => (
+              <WallItem key={wall.id} wall={wall} />
+            ))}
+          </div>
+        ) : (
+          <p className="table-plan-component no-results">Geen {activeTab === 'tables' ? 'tafels' : 'muren'} gevonden.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
+
+
+--- Table.js ---
+// Table.js
+import React, { useState } from 'react';
+import './css/table.css';
+import { FaSyncAlt, FaEdit, FaClone, FaTrash } from 'react-icons/fa';
+
+const Table = ({
+  numberOfGuests,
+  tableNumber,
+  rotate,
+  duplicate,
+  deleteTable,
+  editTable, // **Added editTable prop**
+  showActions = true, // **Default to true**
+}) => { 
+  const [isHovered, setIsHovered] = useState(false);
+  const isSquare = numberOfGuests === 4;
+
+  const tableWidth = isSquare ? 70 : 70 + (numberOfGuests - 4) * 15;
+  const tableHeight = 70;
+
+  const chairsPerSide = Math.ceil(numberOfGuests / 2);
+
+  const topChairs = [];
+  const bottomChairs = [];
+
+  for (let i = 0; i < chairsPerSide; i++) {
+    topChairs.push(i);
+    bottomChairs.push(i);
+  }
+
+  return (
+    <div
+      className="table-plan-component table-container"
+      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Action Buttons */}
+      {showActions && isHovered && (
+        <div className="table-plan-component action-buttons">
+          <button
+            className="table-plan-component action-button rotate-button"
+            onClick={rotate}
+            aria-label="Rotate Table"
+          >
+            <FaSyncAlt color="#555555" />
+          </button>
+          <button
+            className="table-plan-component action-button duplicate-button"
+            onClick={editTable}
+            aria-label="Edit Table"
+          >
+            <FaEdit color="#555555" />
+          </button>
+          <button
+            className="table-plan-component action-button duplicate-button"
+            onClick={duplicate}
+            aria-label="Duplicate Table"
+          >
+            <FaClone color="#555555" />
+          </button>
+          <button
+            className="table-plan-component action-button delete-button"
+            onClick={deleteTable}
+            aria-label="Delete Table"
+          >
+            <FaTrash color="red" />
+          </button>
+        </div>
+      )}
+      <div
+        className="table-plan-component chairs top-chairs"
+        style={{
+          width: `${tableWidth}px`,
+        }}
+      >
+        {topChairs.slice(0, Math.floor(numberOfGuests / 2)).map((chair, index) => (
+          <div key={`top-${index}`} className="table-plan-component chair"></div>
+        ))}
+      </div>
+      <div
+        className="table-plan-component table"
+        style={{
+          width: `${tableWidth}px`,
+          height: `${tableHeight}px`,
+        }}
+      ></div>
+      <div
+        className="table-plan-component chairs bottom-chairs"
+        style={{
+          width: `${tableWidth}px`,
+        }}
+      >
+        {bottomChairs.slice(0, Math.ceil(numberOfGuests / 2)).map((chair, index) => (
+          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
+        ))}
+      </div>
+      {/* **Render the table number if it exists** */}
+      {tableNumber && (
+        <div className="table-plan-component table-number">T{tableNumber}</div>
+      )}
+    </div>
+  );
+};
+
+export default Table;
+
+
+--- TableEditModalContent.js ---
+// TableEditModalContent.js
+import React, { useState } from 'react';
+import './css/tableEditModalContent.css';
+
+const TableEditModalContent = ({ element, onSave, onClose }) => {
+  const [tableNumber, setTableNumber] = useState(element.tableNumber || '');
+  const [name, setName] = useState(element.name || '');
+  const [shape, setShape] = useState(element.shape || 'rond');
+  const [minCapacity, setMinCapacity] = useState(element.minCapacity || 1);
+  const [maxCapacity, setMaxCapacity] = useState(element.maxCapacity || 10);
+  const [priority, setPriority] = useState(element.priority || 'Medium');
+
+  const handleSave = () => {
+    const updatedElement = {
+      ...element,
+      tableNumber,
+      name,
+      shape,
+      minCapacity,
+      maxCapacity,
+      priority,
+    };
+    onSave(updatedElement);
+  };
+
+  return (
+    <div className="table-edit-modal-content">
+      <h2>Bewerk Tafel</h2>
+      <div className="settings-form">
+        <div className="form-group">
+          <label>Tafelnummer</label>
+          <div className="input-container">
+            <input
+              type="text"
+              value={tableNumber}
+              onChange={(e) => setTableNumber(e.target.value)}
+              placeholder="Voer het tafelnummer in"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Naam</label>
+          <div className="input-container">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Voer de naam in"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Vorm</label>
+          <div className="input-container">
+            <select value={shape} onChange={(e) => setShape(e.target.value)}>
+              <option value="rond">Rond</option>
+              <option value="vierkant">Vierkant</option>
+              <option value="metStoelen">Met Stoelen</option>
+            </select>
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Min capaciteit</label>
+          <div className="input-container">
+            <input
+              type="number"
+              value={minCapacity}
+              onChange={(e) => setMinCapacity(parseInt(e.target.value, 10))}
+              min="1"
+              placeholder="Minimum aantal gasten"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Max capaciteit</label>
+          <div className="input-container">
+            <input
+              type="number"
+              value={maxCapacity}
+              onChange={(e) => setMaxCapacity(parseInt(e.target.value, 10))}
+              min={minCapacity}
+              placeholder="Maximum aantal gasten"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Prioriteit</label>
+          <div className="input-container">
+            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+              <option value="metVoorangInvullen">Met Voorang Invullen</option>
+              <option value="snellerInvullen">Sneller Invullen</option>
+              <option value="tragerInvullen">Trager Invullen</option>
+              <option value="alsLaatsteIndelen">Als Laatste Indelen</option>
+            </select>
+          </div>
+        </div>
+        <button className="settings-button save-button" onClick={handleSave}>
+          Opslaan
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default TableEditModalContent;
+
+
+--- Walls.js ---
+// Walls.js
+import React from 'react';
+import './css/walls.css';
+
+const Walls = ({ length }) => {
+  const wallWidth = (length - 1) * 20;
+  const wallHeight = 20;
+
+  return (
+    <div
+      className="table-plan-component walls-container"
+      style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
+    >
+      <div className="table-plan-component wall"></div>
+    </div>
+  );
+};
+
+export default Walls;
+
+
+--- css/app.css ---
+/* css/app.css */
+
+.table-plan-component .app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+.table-plan-component .floor-plan {
+  flex: 3;
+  margin-right: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Ensure lines are rendered below tables */
+.table-plan-component .floor-plan-element {
+  z-index: 1; /* Tables are on top */
+}
+
+.table-plan-component .line {
+  position: absolute;
+  background-color: #d2b48c;
+  height: 2px;
+  z-index: 0; /* Lines are below */
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
+--- css/floorPlan.css ---
+/* css/floorplan.css */
+
+.table-plan-component .floor-plan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-image:
+    linear-gradient(to right, #ddd 1px, transparent 1px),
+    linear-gradient(to bottom, #ddd 1px, transparent 1px);
+  background-size: 50px 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: width 0.2s, height 0.2s;
+}
+
+.table-plan-component .resizable-floor-plan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.table-plan-component .alignment-line {
+  position: absolute;
+  background-color: red;
+  z-index: 100;
+}
+
+
+--- css/sidebar.css ---
+/* css/sidebar.css */
+
+.table-plan-component .sidebar {
+  width: 350px;
+  position: fixed;
+  height: calc(100% - 60px);
+  right: 0;
+  top: 60px;
+  background-color: rgb(220, 220, 220);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.table-plan-component .tabs {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.table-plan-component .tabs .buttons-container {
+  display: flex;
+}
+
+.table-plan-component .tabs .tab-button {
+  position: relative;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.table-plan-component .tabs .tab-button.active {
+  color: var(--color-blue, #007bff);
+}
+
+.table-plan-component .tabs .tab-button:hover {
+  color: #555;
+}
+
+.table-plan-component .tabs .tab-underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-blue, #007bff);
+  border-radius: 5px;
+}
+
+.table-plan-component .search-bar {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.table-plan-component .search-bar input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.table-plan-component .items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.table-plan-component .grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.table-plan-component .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.table-plan-component .item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.table-plan-component .item-info {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.table-plan-component .item-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555555;
+}
+
+.table-plan-component .no-results {
+  text-align: center;
+  color: #888888;
+}
+
+.table-plan-component .unsaved-changes-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-content {
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 5px;
+  width: 90%;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-content p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button,
+.table-plan-component .unsaved-changes-modal .modal-buttons .discard-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  border-radius: 5px;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button {
+  margin-right: 10px;
+  background-color: #f0f0f0;
+  color: #333333;
+}
+
+@media (max-width: 768px) {
+  .table-plan-component .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+--- css/table.css ---
+/* css/table.css */
+
+.table-plan-component .table-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+}
+
+.table-plan-component .table {
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.table-plan-component .chairs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.table-plan-component .top-chairs {
+  top: 0;
+  transform: translate(-50%, 150%);
+}
+
+.table-plan-component .bottom-chairs {
+  bottom: 0;
+  transform: translate(-50%, -150%);
+}
+
+.table-plan-component .chair {
+  width: 20px;
+  height: 20px;
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 50%;
+}
+
+/* **Styles for the table number** */
+.table-plan-component .table-number {
+  position: absolute;
+  bottom: 5px;
+  right: 5px; /* Changed from left to right */
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #333;
+  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
+  transition: transform 0.2s;
+}
+
+/* **Styles for action buttons** */
+.table-plan-component .action-buttons { 
+  position: absolute;
+  top: -20px; /* Position above the table */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  opacity: 0; /* Hidden by default */
+  pointer-events: none; /* Prevent buttons from blocking table interactions */
+}
+
+.table-plan-component .table-container:hover .action-buttons {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.table-plan-component .action-buttons .action-button {
+  width: 35px; /* Slightly larger */
+  height: 35px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 1; /* Ensure buttons are fully opaque */
+  transform: scale(1); /* No scaling */
+  /* Removed animation properties */
+}
+
+.table-plan-component .action-buttons .action-button:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+--- css/tableEditModalContent.css ---
+/* css/tableEditModalContent.css */
+
+.table-edit-modal-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+  }
+  
+  .table-edit-modal-content h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 1.5rem;
+	color: #333;
+  }
+  
+  .table-edit-modal-content .settings-form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .form-group {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .table-edit-modal-content label {
+	text-align: left;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: #555;
+  }
+  
+  .table-edit-modal-content .input-container {
+	position: relative;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .input-container input,
+  .table-edit-modal-content .input-container select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+  
+  .table-edit-modal-content .input-container input:focus,
+  .table-edit-modal-content .input-container select:focus {
+	border-color: #0056b3;
+	outline: none;
+  }
+  
+  .table-edit-modal-content .settings-button {
+	padding: 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	transition: background-color 0.3s ease;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .settings-button:hover {
+	background-color: #0056b3;
+  }
+  
+  /* Tooltip styles */
+  .table-edit-modal-content .label-with-tooltip {
+	display: flex;
+	align-items: center;
+  }
+  
+  .table-edit-modal-content .label-with-tooltip label {
+	margin-right: 5px;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip .tooltip {
+	display: none; /* Initially hidden */
+	position: absolute;
+	bottom: 125%; /* Position above the button */
+	left: 50%;
+	transform: translateX(-50%);
+	width: 400px; /* Set fixed width */
+	background-color: black;
+	color: white;
+	padding: 10px 15px; /* Increased padding for better spacing */
+	border-radius: 4px;
+	white-space: normal; /* Allow text to wrap */
+	font-size: 14px;
+	z-index: 1000;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip .tooltip::before {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip:hover .tooltip {
+	display: block;
+	opacity: 1;
+	transform: translateX(-50%) translateY(-5px);
+  }
+  
+  .table-edit-modal-content .button-with-tooltip svg {
+	cursor: pointer;
+	color: #555;
+	font-size: 16px;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip svg:hover {
+	color: #000;
+  }
+  
+
+--- css/walls.css ---
+/* css/walls.css */
+
+.table-plan-component .walls-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.table-plan-component .wall {
+  width: 100%;
+  height: 100%;
+  background-color: #8b4513;
+  border: 2px solid #654321;
+  border-radius: 4px;
+}
+
+--- index.js ---
+// index.js
+import React from 'react';
+import FloorPlan from './FloorPlan.js';
+import Sidebar from './Sidebar.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import './css/app.css';
+
+const TableEditor = () => {
+  const tables = [
+    { id: 1, numberOfGuests: 1 },
+    { id: 2, numberOfGuests: 2 },
+    { id: 3, numberOfGuests: 3 },
+    { id: 4, numberOfGuests: 4 },
+    { id: 5, numberOfGuests: 5 },
+    { id: 6, numberOfGuests: 6 },
+    { id: 7, numberOfGuests: 7 },
+    { id: 8, numberOfGuests: 8 },
+  ];
+
+  const walls = [
+    { id: 1, length: 3 },
+    { id: 2, length: 5 },
+    { id: 3, length: 2 },
+    { id: 4, length: 4 },
+    { id: 5, length: 6 },
+  ];
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="table-plan-component">
+        <div className="app-container">
+          <FloorPlan />
+          <Sidebar tables={tables} walls={walls} />
+        </div>
+      </div>
+    </DndProvider>
+  );
+};
+
+export default withHeader(TableEditor);
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TableEditor":
+
+├── FloorPlan.js
+├── FloorPlanElement.js
+├── Hooks
+│   ├── useElementsActions.js
+│   └── useLineActions.js
+├── LinesLayer.js
+├── Sidebar.js
+├── Table.js
+├── TableEditModalContent.js
+├── Walls.js
+├── css
+│   ├── app.css
+│   ├── floorPlan.css
+│   ├── sidebar.css
+│   ├── table.css
+│   ├── tableEditModalContent.css
+│   └── walls.css
+└── index.js
+
+
+List of Files:
+FloorPlan.js
+FloorPlanElement.js
+Hooks/useElementsActions.js
+Hooks/useLineActions.js
+LinesLayer.js
+Sidebar.js
+Table.js
+TableEditModalContent.js
+Walls.js
+css/app.css
+css/floorPlan.css
+css/sidebar.css
+css/table.css
+css/tableEditModalContent.css
+css/walls.css
+index.js
+
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+**Examples:**
+
+*Encapsulation in index.js:*
+```jsx
+<div className="profile-component">
+    <h2 className="account-manage-title">Admin Reservaties</h2>
+    <div className="account-manage-container">
+        {/* ... */}
+        onClose={() => setIsModalOpen(false)}
+    </div>
+</div>
+```
+
+*Prefixed CSS Classes:*
+```css
+.component-name-component .account-manage-container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background-color: white;
+}
+
+.component-name-component .modal-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+``` Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
