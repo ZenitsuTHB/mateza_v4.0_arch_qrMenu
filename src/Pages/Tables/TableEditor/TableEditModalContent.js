@@ -25,7 +25,7 @@ const TableEditModalContent = ({ element, onSave, onClose }) => {
 
   return (
     <div className="table-edit-modal-content">
-      <h2>Bewerk Tafels</h2>
+      <h2>Bewerk Tafel</h2>
       <div className="settings-form">
         <div className="form-group">
           <label>Tafelnummer</label>
