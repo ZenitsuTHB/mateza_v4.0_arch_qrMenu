@@ -16,3 +16,13 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
+/* Ensure lines are behind tables */
+.table-plan-component .floor-plan-element {
+  z-index: 1;
+}
+
+.table-plan-component .line {
+  z-index: 0;
+}

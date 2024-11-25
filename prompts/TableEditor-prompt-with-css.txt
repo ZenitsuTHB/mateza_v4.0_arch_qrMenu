@@ -855,6 +855,486 @@ const Walls = ({ length }) => {
 export default Walls;
 
 
+--- css/app.css ---
+/* css/app.css */
+
+.table-plan-component .app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+.table-plan-component .floor-plan {
+  flex: 3;
+  margin-right: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+--- css/floorPlan.css ---
+/* css/floorplan.css */
+
+.table-plan-component .floor-plan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-image:
+    linear-gradient(to right, #ddd 1px, transparent 1px),
+    linear-gradient(to bottom, #ddd 1px, transparent 1px);
+  background-size: 50px 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: width 0.2s, height 0.2s;
+}
+
+.table-plan-component .resizable-floor-plan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.table-plan-component .alignment-line {
+  position: absolute;
+  background-color: red;
+  z-index: 100;
+}
+
+
+--- css/sidebar.css ---
+/* css/sidebar.css */
+
+.table-plan-component .sidebar {
+  width: 350px;
+  position: fixed;
+  height: calc(100% - 60px);
+  right: 0;
+  top: 60px;
+  background-color: rgb(220, 220, 220);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.table-plan-component .tabs {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.table-plan-component .tabs .buttons-container {
+  display: flex;
+}
+
+.table-plan-component .tabs .tab-button {
+  position: relative;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.table-plan-component .tabs .tab-button.active {
+  color: var(--color-blue, #007bff);
+}
+
+.table-plan-component .tabs .tab-button:hover {
+  color: #555;
+}
+
+.table-plan-component .tabs .tab-underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-blue, #007bff);
+  border-radius: 5px;
+}
+
+.table-plan-component .search-bar {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.table-plan-component .search-bar input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.table-plan-component .items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.table-plan-component .grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.table-plan-component .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.table-plan-component .item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.table-plan-component .item-info {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.table-plan-component .item-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555555;
+}
+
+.table-plan-component .no-results {
+  text-align: center;
+  color: #888888;
+}
+
+.table-plan-component .unsaved-changes-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-content {
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 5px;
+  width: 90%;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-content p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button,
+.table-plan-component .unsaved-changes-modal .modal-buttons .discard-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  border-radius: 5px;
+}
+
+.table-plan-component .unsaved-changes-modal .modal-buttons .cancel-button {
+  margin-right: 10px;
+  background-color: #f0f0f0;
+  color: #333333;
+}
+
+@media (max-width: 768px) {
+  .table-plan-component .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+--- css/table.css ---
+/* css/table.css */
+
+.table-plan-component .table-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+}
+
+.table-plan-component .table {
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.table-plan-component .chairs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.table-plan-component .top-chairs {
+  top: 0;
+  transform: translate(-50%, 150%);
+}
+
+.table-plan-component .bottom-chairs {
+  bottom: 0;
+  transform: translate(-50%, -150%);
+}
+
+.table-plan-component .chair {
+  width: 20px;
+  height: 20px;
+  background-color: #f5f5dc;
+  border: 2px solid #d2b48c;
+  border-radius: 50%;
+}
+
+/* **Styles for the table number** */
+.table-plan-component .table-number {
+  position: absolute;
+  bottom: 5px;
+  right: 5px; /* Changed from left to right */
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #333;
+  pointer-events: none; /* Ensure the number doesn't interfere with dragging */
+  transition: transform 0.2s;
+}
+
+/* **Styles for action buttons** */
+.table-plan-component .action-buttons { 
+  position: absolute;
+  top: -20px; /* Position above the table */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  opacity: 0; /* Hidden by default */
+  pointer-events: none; /* Prevent buttons from blocking table interactions */
+}
+
+.table-plan-component .table-container:hover .action-buttons {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.table-plan-component .action-buttons .action-button {
+  width: 35px; /* Slightly larger */
+  height: 35px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 1; /* Ensure buttons are fully opaque */
+  transform: scale(1); /* No scaling */
+  /* Removed animation properties */
+}
+
+.table-plan-component .action-buttons .action-button:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+--- css/tableEditModalContent.css ---
+/* css/tableEditModalContent.css */
+
+.table-edit-modal-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+  }
+  
+  .table-edit-modal-content h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 1.5rem;
+	color: #333;
+  }
+  
+  .table-edit-modal-content .settings-form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .form-group {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .table-edit-modal-content label {
+	text-align: left;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: #555;
+  }
+  
+  .table-edit-modal-content .input-container {
+	position: relative;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .input-container input,
+  .table-edit-modal-content .input-container select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+  
+  .table-edit-modal-content .input-container input:focus,
+  .table-edit-modal-content .input-container select:focus {
+	border-color: #0056b3;
+	outline: none;
+  }
+  
+  .table-edit-modal-content .settings-button {
+	padding: 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	transition: background-color 0.3s ease;
+	width: 100%;
+  }
+  
+  .table-edit-modal-content .settings-button:hover {
+	background-color: #0056b3;
+  }
+  
+  /* Tooltip styles */
+  .table-edit-modal-content .label-with-tooltip {
+	display: flex;
+	align-items: center;
+  }
+  
+  .table-edit-modal-content .label-with-tooltip label {
+	margin-right: 5px;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip .tooltip {
+	display: none; /* Initially hidden */
+	position: absolute;
+	bottom: 125%; /* Position above the button */
+	left: 50%;
+	transform: translateX(-50%);
+	width: 400px; /* Set fixed width */
+	background-color: black;
+	color: white;
+	padding: 10px 15px; /* Increased padding for better spacing */
+	border-radius: 4px;
+	white-space: normal; /* Allow text to wrap */
+	font-size: 14px;
+	z-index: 1000;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip .tooltip::before {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip:hover .tooltip {
+	display: block;
+	opacity: 1;
+	transform: translateX(-50%) translateY(-5px);
+  }
+  
+  .table-edit-modal-content .button-with-tooltip svg {
+	cursor: pointer;
+	color: #555;
+	font-size: 16px;
+  }
+  
+  .table-edit-modal-content .button-with-tooltip svg:hover {
+	color: #000;
+  }
+  
+
+--- css/walls.css ---
+/* css/walls.css */
+
+.table-plan-component .walls-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.table-plan-component .wall {
+  width: 100%;
+  height: 100%;
+  background-color: #8b4513;
+  border: 2px solid #654321;
+  border-radius: 4px;
+}
+
 --- index.js ---
 // index.js
 import React from 'react';
@@ -926,10 +1406,11 @@ Sidebar.js
 Table.js
 TableEditModalContent.js
 Walls.js
+css/app.css
+css/floorPlan.css
+css/sidebar.css
+css/table.css
+css/tableEditModalContent.css
+css/walls.css
 index.js
 
-**Instruction:**
-1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
-2. Prefix all CSS classes with the `.component-name-component` class. Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
-
-**Note:** CSS files have been excluded from this prompt.

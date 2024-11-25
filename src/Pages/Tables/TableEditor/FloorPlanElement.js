@@ -12,6 +12,9 @@ const FloorPlanElement = ({
   floorPlanSize,
   tableNumber,
   openModal,
+  handleTableMouseDown,
+  handleTableMouseUp,
+  isAltPressed,
 }) => {
   const [position, setPosition] = React.useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = React.useState(false);
@@ -22,12 +25,24 @@ const FloorPlanElement = ({
   }, [element.x, element.y]);
 
   const handleMouseDown = (e) => {
+    if (isAltPressed) {
+      handleTableMouseDown(element.id, e);
+      return;
+    }
     e.preventDefault(); // Prevent text selection
     setIsDragging(true);
     setOffset({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     });
+  };
+
+  const handleMouseUp = (e) => {
+    if (isAltPressed) {
+      handleTableMouseUp(element.id, e);
+      return;
+    }
+    // Do nothing
   };
 
   React.useEffect(() => {
@@ -44,8 +59,6 @@ const FloorPlanElement = ({
           x: newX,
           y: newY,
         });
-
-        // No alignment or snapping during dragging
       }
     };
 
@@ -55,9 +68,9 @@ const FloorPlanElement = ({
 
         // Apply snapping on mouse release for non-wall elements
         if (element.type !== 'wall') {
-          const snapped = Math.round(position.x / 50) * 50; // Assuming grid size 50
+          const snappedX = Math.round(position.x / 50) * 50; // Assuming grid size 50
           const snappedY = Math.round(position.y / 50) * 50;
-          const finalX = Math.max(0, Math.min(snapped, floorPlanSize.width - element.width));
+          const finalX = Math.max(0, Math.min(snappedX, floorPlanSize.width - element.width));
           const finalY = Math.max(0, Math.min(snappedY, floorPlanSize.height - element.height));
 
           setPosition({ x: finalX, y: finalY });
@@ -101,10 +114,14 @@ const FloorPlanElement = ({
     zIndex: isDragging ? 1000 : 'auto', // Bring to front when dragging
   };
 
+  // Hide action buttons when Alt is pressed
+  const showActions = !isAltPressed;
+
   return (
     <div
       className="table-plan-component floor-plan-element"
       onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       style={style}
     >
       {/* Rotated Content */}
@@ -125,7 +142,7 @@ const FloorPlanElement = ({
             duplicate={() => duplicateElement(element.id)}
             deleteTable={() => deleteElement(element.id)}
             editTable={() => openModal(element)}
-            showActions={true}
+            showActions={showActions}
             rotation={element.rotation || 0} // Pass rotation to Table
           />
         ) : element.type === 'wall' ? (

@@ -5,6 +5,7 @@ import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
+import LinesLayer from './LinesLayer.js'; // New component
 import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
 import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
@@ -13,6 +14,7 @@ const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
 const FloorPlan = () => {
   const [elements, setElements] = useState([]);
+  const [lines, setLines] = useState([]); // State to store lines
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
   const [nextTableNumber, setNextTableNumber] = useState(1);
@@ -22,6 +24,12 @@ const FloorPlan = () => {
   // State for modal
   const [selectedElement, setSelectedElement] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  // State for line drawing
+  const [isDrawingLine, setIsDrawingLine] = useState(false);
+  const [startTableId, setStartTableId] = useState(null);
+  const [currentMousePosition, setCurrentMousePosition] = useState({ x: 0, y: 0 });
+  const [isAltPressed, setIsAltPressed] = useState(false);
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -42,27 +50,79 @@ const FloorPlan = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  // Load tables from API on mount
+  // Load tables and lines from API on mount
   useEffect(() => {
-    const fetchTables = async () => {
+    const fetchTablesAndLines = async () => {
       try {
         const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
         // Ensure that data is an array
         if (Array.isArray(data)) {
-          setElements(data);
+          const elementsData = data.filter((item) => item.type !== 'line');
+          const linesData = data.filter((item) => item.type === 'line');
+          setElements(elementsData);
+          setLines(linesData);
         } else if (data && Array.isArray(data.tables)) { // If API returns { tables: [...] }
-          setElements(data.tables);
+          const elementsData = data.tables.filter((item) => item.type !== 'line');
+          const linesData = data.tables.filter((item) => item.type === 'line');
+          setElements(elementsData);
+          setLines(linesData);
         } else {
           setElements([]); // Fallback to empty array
+          setLines([]);
         }
       } catch (error) {
         console.error('Error fetching tables:', error);
         setElements([]); // Fallback to empty array on error
+        setLines([]);
       }
     };
 
-    fetchTables();
+    fetchTablesAndLines();
   }, [api]);
+
+  // Handle keydown and keyup events for Alt key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Alt') {
+        setIsAltPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === 'Alt') {
+        setIsAltPressed(false);
+        setIsDrawingLine(false);
+        setStartTableId(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  // Handle mouse move when drawing line
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (isDrawingLine) {
+        const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+        setCurrentMousePosition({
+          x: e.clientX - floorPlanRect.left,
+          y: e.clientY - floorPlanRect.top,
+        });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isDrawingLine]);
 
   const addElement = (element) => {
     setElements((prevElements) => [...prevElements, element]);
@@ -131,10 +191,6 @@ const FloorPlan = () => {
           setNextTableNumber((prev) => prev + 1);
         }
 
-        // **Removed modal opening on duplication**
-        // setSelectedElement(newElement);
-        // setShowModal(true);
-
         return [...prevElements, newElement];
       });
     },
@@ -143,11 +199,13 @@ const FloorPlan = () => {
 
   const deleteElement = useCallback((id) => {
     setElements((prevElements) => prevElements.filter((el) => el.id !== id));
+    // Remove any lines connected to this element
+    setLines((prevLines) => prevLines.filter((line) => line.from !== id && line.to !== id));
   }, []);
 
   const snapToGrid = (x, y, gridSize = 50) => {
-    const snappedX = Math.round(x / gridSize) * gridSize;
-    const snappedY = Math.round(y / gridSize) * gridSize;
+    const snappedX = Math.round(x / gridSize) * 50;
+    const snappedY = Math.round(y / gridSize) * 50;
     return [snappedX, snappedY];
   };
 
@@ -202,7 +260,7 @@ const FloorPlan = () => {
 
         addElement(newElement);
 
-        // **Open modal to edit table details only if needed**
+        // Open modal to edit table details only if needed
         setSelectedElement(newElement);
         setShowModal(true);
       }
@@ -238,6 +296,41 @@ const FloorPlan = () => {
     saveElement();
   };
 
+  const handleTableMouseDown = (tableId, e) => {
+    if (!isAltPressed) return;
+    e.stopPropagation();
+    setIsDrawingLine(true);
+    setStartTableId(tableId);
+
+    const floorPlanRect = floorPlanRef.current.getBoundingClientRect();
+    setCurrentMousePosition({
+      x: e.clientX - floorPlanRect.left,
+      y: e.clientY - floorPlanRect.top,
+    });
+  };
+
+  const handleMouseUp = (e) => {
+    if (isDrawingLine) {
+      setIsDrawingLine(false);
+      setStartTableId(null);
+    }
+  };
+
+  const handleTableMouseUp = (tableId, e) => {
+    if (isDrawingLine && startTableId && startTableId !== tableId) {
+      // Create a new line
+      const newLine = {
+        id: `line-${Date.now()}`,
+        type: 'line',
+        from: startTableId,
+        to: tableId,
+      };
+      setLines((prevLines) => [...prevLines, newLine]);
+    }
+    setIsDrawingLine(false);
+    setStartTableId(null);
+  };
+
   return (
     <>
       <ResizableBox
@@ -260,23 +353,35 @@ const FloorPlan = () => {
             floorPlanRef.current = node;
           }}
           style={{ position: 'relative', width: '100%', height: '100%' }}
+          onMouseUp={handleMouseUp}
         >
-          {Array.isArray(elements) && elements.map((el) => (
-            <FloorPlanElement
-              key={el.id}
-              element={el}
-              moveElement={moveElement}
-              rotateElement={rotateElement}
-              duplicateElement={duplicateElement}
-              deleteElement={deleteElement}
-              floorPlanSize={floorPlanSize}
-              tableNumber={el.tableNumber}
-              openModal={(element) => {
-                setSelectedElement(element);
-                setShowModal(true);
-              }}
-            />
-          ))}
+          <LinesLayer
+            elements={elements}
+            lines={lines}
+            isDrawingLine={isDrawingLine}
+            startTableId={startTableId}
+            currentMousePosition={currentMousePosition}
+          />
+          {Array.isArray(elements) &&
+            elements.map((el) => (
+              <FloorPlanElement
+                key={el.id}
+                element={el}
+                moveElement={moveElement}
+                rotateElement={rotateElement}
+                duplicateElement={duplicateElement}
+                deleteElement={deleteElement}
+                floorPlanSize={floorPlanSize}
+                tableNumber={el.tableNumber}
+                openModal={(element) => {
+                  setSelectedElement(element);
+                  setShowModal(true);
+                }}
+                handleTableMouseDown={handleTableMouseDown}
+                handleTableMouseUp={handleTableMouseUp}
+                isAltPressed={isAltPressed}
+              />
+            ))}
         </div>
       </ResizableBox>
       {showModal && selectedElement && (
