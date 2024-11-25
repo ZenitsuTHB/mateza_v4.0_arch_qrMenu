@@ -16,7 +16,9 @@ const TableRow = ({
         <input
           type="text"
           value={table.tableNumber || ''}
-          onChange={(e) => handleTableInputChange(table.id, 'tableNumber', e.target.value)}
+          onChange={(e) =>
+            handleTableInputChange(table.id, 'tableNumber', e.target.value)
+          }
         />
       </td>
       <td>
@@ -30,14 +32,18 @@ const TableRow = ({
         <input
           type="number"
           value={table.minCapacity || ''}
-          onChange={(e) => handleTableInputChange(table.id, 'minCapacity', parseInt(e.target.value, 10))}
+          onChange={(e) =>
+            handleTableInputChange(table.id, 'minCapacity', parseInt(e.target.value, 10))
+          }
         />
       </td>
       <td className="hide-on-mobile">
         <input
           type="number"
           value={table.maxCapacity || ''}
-          onChange={(e) => handleTableInputChange(table.id, 'maxCapacity', parseInt(e.target.value, 10))}
+          onChange={(e) =>
+            handleTableInputChange(table.id, 'maxCapacity', parseInt(e.target.value, 10))
+          }
         />
       </td>
       <td className="hide-on-mobile">
@@ -54,7 +60,9 @@ const TableRow = ({
       <td className="hide-on-mobile">
         <select
           value={table.priority || ''}
-          onChange={(e) => handleTableInputChange(table.id, 'priority', e.target.value)}
+          onChange={(e) =>
+            handleTableInputChange(table.id, 'priority', e.target.value)
+          }
         >
           <option value="">Selecteer Prioriteit</option>
           <option value="metVoorangInvullen">Met Voorrang Invullen</option>

@@ -194,7 +194,7 @@ const TablesList = () => {
             <th className="hide-on-mobile">Vorm</th>
             <th className="hide-on-mobile">Prioriteit</th>
             <th className="actions-column">Acties</th>
-            <th className="hide-on-mobile ellipsis-column"></th>
+            <th className="ellipsis-column"></th>
           </tr>
         </thead>
         <tbody>

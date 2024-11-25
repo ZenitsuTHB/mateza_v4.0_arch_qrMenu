@@ -16,7 +16,9 @@ const TableGroupRow = ({
       <td>
         <select
           value={line.from || ''}
-          onChange={(e) => handleLineInputChange(line.id, 'from', e.target.value)}
+          onChange={(e) =>
+            handleLineInputChange(line.id, 'from', e.target.value)
+          }
         >
           <option value="">Selecteer Tafel</option>
           {tableOptions.map((table) => (
@@ -29,7 +31,9 @@ const TableGroupRow = ({
       <td>
         <select
           value={line.to || ''}
-          onChange={(e) => handleLineInputChange(line.id, 'to', e.target.value)}
+          onChange={(e) =>
+            handleLineInputChange(line.id, 'to', e.target.value)
+          }
         >
           <option value="">Selecteer Tafel</option>
           {tableOptions.map((table) => (
