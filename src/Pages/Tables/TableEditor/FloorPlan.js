@@ -5,6 +5,9 @@ import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
+import useApi from '../../../Hooks/useApi.js'; // Adjust the path accordingly
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjust the path accordingly
+import TableEditModalContent from './TableEditModalContent'; // We will create this component
 
 const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
@@ -12,9 +15,13 @@ const FloorPlan = () => {
   const [elements, setElements] = useState([]);
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
-
-  // **Add this state to track the next table number**
   const [nextTableNumber, setNextTableNumber] = useState(1);
+
+  const api = useApi(); // Add this
+
+  // State for modal
+  const [selectedElement, setSelectedElement] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -35,8 +42,28 @@ const FloorPlan = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
+  // Load tables from API on mount
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const data = await api.get(window.baseDomain + 'api/tables');
+        setElements(data);
+      } catch (error) {
+        console.error('Error fetching tables:', error);
+      }
+    };
+
+    fetchTables();
+  }, [api]);
+
   const addElement = (element) => {
     setElements((prevElements) => [...prevElements, element]);
+  };
+
+  const updateElement = (updatedElement) => {
+    setElements((prevElements) =>
+      prevElements.map((el) => (el.id === updatedElement.id ? updatedElement : el))
+    );
   };
 
   const moveElement = useCallback((id, x, y) => {
@@ -66,31 +93,44 @@ const FloorPlan = () => {
     );
   }, []);
 
-  const duplicateElement = useCallback((id) => {
-    setElements((prevElements) => {
-      const elementToDuplicate = prevElements.find((el) => el.id === id);
-      if (!elementToDuplicate) return prevElements;
-      const newId = Date.now();
-      const newElement = {
-        ...elementToDuplicate,
-        id: newId,
-        x: Math.min(elementToDuplicate.x + 20, floorPlanSize.width - elementToDuplicate.width),
-        y: Math.min(elementToDuplicate.y + 20, floorPlanSize.height - elementToDuplicate.height),
-        name:
-          elementToDuplicate.type === 'table'
-            ? `T${nextTableNumber}`
-            : `${elementToDuplicate.subtype.charAt(0).toUpperCase() + elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
-        rotation: elementToDuplicate.rotation || 0,
-      };
+  const duplicateElement = useCallback(
+    (id) => {
+      setElements((prevElements) => {
+        const elementToDuplicate = prevElements.find((el) => el.id === id);
+        if (!elementToDuplicate) return prevElements;
+        const newId = Date.now();
+        const newElement = {
+          ...elementToDuplicate,
+          id: newId,
+          x: Math.min(
+            elementToDuplicate.x + 20,
+            floorPlanSize.width - elementToDuplicate.width
+          ),
+          y: Math.min(
+            elementToDuplicate.y + 20,
+            floorPlanSize.height - elementToDuplicate.height
+          ),
+          name:
+            elementToDuplicate.type === 'table'
+              ? `T${nextTableNumber}`
+              : `${elementToDuplicate.subtype.charAt(0).toUpperCase() +
+                  elementToDuplicate.subtype.slice(1)} Decoration ${newId}`,
+          rotation: elementToDuplicate.rotation || 0,
+        };
 
-      if (elementToDuplicate.type === 'table') {
-        newElement.tableNumber = nextTableNumber;
-        setNextTableNumber((prev) => prev + 1);
-      }
+        if (elementToDuplicate.type === 'table') {
+          newElement.tableNumber = nextTableNumber;
+          setNextTableNumber((prev) => prev + 1);
+        }
 
-      return [...prevElements, newElement];
-    });
-  }, [floorPlanSize.width, floorPlanSize.height, nextTableNumber]);
+        setSelectedElement(newElement);
+        setShowModal(true);
+
+        return [...prevElements, newElement];
+      });
+    },
+    [floorPlanSize.width, floorPlanSize.height, nextTableNumber]
+  );
 
   const deleteElement = useCallback((id) => {
     setElements((prevElements) => prevElements.filter((el) => el.id !== id));
@@ -145,56 +185,98 @@ const FloorPlan = () => {
           rotation: 0, // Initialize rotation
         };
 
-        // **Assign a tableNumber if the element is a table**
+        // Assign a tableNumber if the element is a table
         if (item.elementType === 'table') {
           newElement.tableNumber = nextTableNumber;
           setNextTableNumber((prev) => prev + 1);
         }
 
         addElement(newElement);
+
+        // Open modal to edit table details
+        setSelectedElement(newElement);
+        setShowModal(true);
       }
     },
   });
 
-  return (
-    <ResizableBox
-      width={800}
-      height={600}
-      minConstraints={[400, 300]}
-      maxConstraints={[1600, 1200]}
-      className="table-plan-component resizable-floor-plan"
-      onResizeStop={(e, data) => {
-        // Directly set the new size without snapping
-        setFloorPlanSize({ width: data.size.width, height: data.size.height });
-      }}
-      resizeHandles={['se']} // Optional: specify resize handles if needed
-    >
-      <div
-        id="floor-plan-container"
-        className="table-plan-component floor-plan"
-        ref={(node) => {
-          drop(node);
-          floorPlanRef.current = node;
-        }}
-        style={{ position: 'relative', width: '100%', height: '100%' }}
-      >
-        {/* Removed alignment lines rendering */}
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedElement(null);
+  };
 
-        {elements.map((el) => (
-          <FloorPlanElement
-            key={el.id}
-            element={el}
-            moveElement={moveElement}
-            rotateElement={rotateElement}
-            duplicateElement={duplicateElement}
-            deleteElement={deleteElement}
-            floorPlanSize={floorPlanSize}
-            // **Pass the tableNumber to FloorPlanElement**
-            tableNumber={el.tableNumber}
-          />
-        ))}
-      </div>
-    </ResizableBox>
+  const handleModalSave = (updatedElement) => {
+    // Update the element in state
+    updateElement(updatedElement);
+    setShowModal(false);
+    setSelectedElement(null);
+
+    // Save the element to API
+    const saveElement = async () => {
+      try {
+        await api.post(window.baseDomain + 'api/tables', updatedElement);
+      } catch (error) {
+        console.error('Error saving table:', error);
+      }
+    };
+
+    saveElement();
+  };
+
+  return (
+    <>
+      <ResizableBox
+        width={800}
+        height={600}
+        minConstraints={[400, 300]}
+        maxConstraints={[1600, 1200]}
+        className="table-plan-component resizable-floor-plan"
+        onResizeStop={(e, data) => {
+          // Directly set the new size without snapping
+          setFloorPlanSize({ width: data.size.width, height: data.size.height });
+        }}
+        resizeHandles={['se']} // Optional: specify resize handles if needed
+      >
+        <div
+          id="floor-plan-container"
+          className="table-plan-component floor-plan"
+          ref={(node) => {
+            drop(node);
+            floorPlanRef.current = node;
+          }}
+          style={{ position: 'relative', width: '100%', height: '100%' }}
+        >
+          {elements.map((el) => (
+            <FloorPlanElement
+              key={el.id}
+              element={el}
+              moveElement={moveElement}
+              rotateElement={rotateElement}
+              duplicateElement={duplicateElement}
+              deleteElement={deleteElement}
+              floorPlanSize={floorPlanSize}
+              tableNumber={el.tableNumber}
+              openModal={(element) => {
+                setSelectedElement(element);
+                setShowModal(true);
+              }}
+            />
+          ))}
+        </div>
+      </ResizableBox>
+      {showModal && selectedElement && (
+        <ModalWithoutTabs
+          onClose={handleModalClose}
+          content={
+            <TableEditModalContent
+              element={selectedElement}
+              onSave={handleModalSave}
+              onClose={handleModalClose}
+            />
+          }
+        />
+      )}
+    </>
   );
 };
 

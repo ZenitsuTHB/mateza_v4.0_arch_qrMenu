@@ -10,7 +10,8 @@ const FloorPlanElement = ({
   duplicateElement,
   deleteElement,
   floorPlanSize,
-  tableNumber, // **Add tableNumber to the props**
+  tableNumber,
+  openModal,
 }) => {
   const [position, setPosition] = useState({ x: element.x, y: element.y });
   const [isDragging, setIsDragging] = useState(false);
@@ -114,13 +115,13 @@ const FloorPlanElement = ({
       style={style}
     >
       {element.type === 'table' ? (
-        // **Pass tableNumber to the Table component**
         <Table
           numberOfGuests={element.capacity}
           tableNumber={tableNumber}
           rotate={() => rotateElement(element.id)}
           duplicate={() => duplicateElement(element.id)}
           deleteTable={() => deleteElement(element.id)}
+          editTable={() => openModal(element)}
         />
       ) : element.type === 'wall' ? (
         <Walls length={element.width / 20 + 1} />
