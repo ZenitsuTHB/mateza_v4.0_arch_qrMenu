@@ -38,6 +38,7 @@ import RootComponent from './RootComponent.js';
 import Settings from '../Pages/Settings/GeneralSettings/index.js';
 import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
 import TableEditor from '../Pages/Tables/TableEditor/index.js';
+import TableList from '../Pages/Tables/TableList/index.js';
 
 
 const routesConfig = [
@@ -162,7 +163,16 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: tableSecondaryTopBar,
   },
-
+  {
+    path: 'table/table-list',
+    element: <TableList title="Tafel Lijst" />,
+    label: 'Tafel Lijst',
+    icon: FaTable,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: tableSecondaryTopBar,
+  },
   {
     path: '/giftcard',
     element: <GiftCard title="Cadeaubonnen" />,

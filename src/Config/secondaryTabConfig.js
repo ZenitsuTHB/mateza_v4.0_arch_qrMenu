@@ -19,6 +19,10 @@ export const overviewSecondaryTopBar = [
 	{
 	  label: 'Bewerken',
 	  path: '/table/table-editor',
+	},
+	{
+		label: 'Lijst',
+		path: 'table/table-list'
 	}
   ];
 

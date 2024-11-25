@@ -6,13 +6,13 @@ import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
 import LinesLayer from './LinesLayer.js'; // New component
-import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
+import TableEditModalContent from './TableEditModalContent.js'; // Ensure correct path
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
 import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
 
 // Import custom hooks
 import useElementActions from './Hooks/useElementsActions.js';
-import useLineActions from './Hooks/useLineActions';
+import useLineActions from './Hooks/useLineActions.js';
 
 const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
