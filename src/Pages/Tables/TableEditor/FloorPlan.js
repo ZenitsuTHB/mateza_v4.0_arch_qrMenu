@@ -5,9 +5,9 @@ import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
-import TableEditModalContent from './TableEditModalContent'; // We will create this component
-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js';
-import useApi from '../../../Hooks/useApi.js';
+import TableEditModalContent from './TableEditModalContent'; // Ensure correct path
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js'; // Ensure correct path
+import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
 
 const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
@@ -17,7 +17,7 @@ const FloorPlan = () => {
   const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
   const [nextTableNumber, setNextTableNumber] = useState(1);
 
-  const api = useApi(); // Add this
+  const api = useApi(); // Initialize useApi hook
 
   // State for modal
   const [selectedElement, setSelectedElement] = useState(null);
@@ -131,8 +131,9 @@ const FloorPlan = () => {
           setNextTableNumber((prev) => prev + 1);
         }
 
-        setSelectedElement(newElement);
-        setShowModal(true);
+        // **Removed modal opening on duplication**
+        // setSelectedElement(newElement);
+        // setShowModal(true);
 
         return [...prevElements, newElement];
       });
@@ -201,7 +202,7 @@ const FloorPlan = () => {
 
         addElement(newElement);
 
-        // Open modal to edit table details
+        // **Open modal to edit table details only if needed**
         setSelectedElement(newElement);
         setShowModal(true);
       }
