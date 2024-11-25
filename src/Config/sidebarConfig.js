@@ -134,6 +134,41 @@ const routesConfig = [
     secondaryTopBar: accountSecondaryTopBar,
   },
   {
+    path: '/settings',
+    element: <Settings title="Administratie" />,
+    label: 'Administratie',
+    icon: FaCog,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: settingsSecondaryTopBar,
+  },
+
+];
+
+/*
+{
+    path: '/giftcard',
+    element: <GiftCard title="Cadeaubonnen" />,
+    label: 'Cadeaubonnen',
+    icon: FaGift,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: giftCardSecondaryTopBar,
+  },
+  {
+    path: '/giftcard/editor',
+    element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
+    label: 'Cadeaubonnen Ontwerpen',
+    icon: FaPencilAlt,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: giftCardSecondaryTopBar,
+  },
+
+  {
     path: '/table',
     element: <TablePlan title="Tafelplan" />,
     label: 'Tafelplan',
@@ -163,40 +198,9 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: tableSecondaryTopBar,
   },
-  {
-    path: '/giftcard',
-    element: <GiftCard title="Cadeaubonnen" />,
-    label: 'Cadeaubonnen',
-    icon: FaGift,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: giftCardSecondaryTopBar,
-  },
-  {
-    path: '/giftcard/editor',
-    element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
-    label: 'Cadeaubonnen Ontwerpen',
-    icon: FaPencilAlt,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: giftCardSecondaryTopBar,
-  },
-  {
-    path: '/settings',
-    element: <Settings title="Administratie" />,
-    label: 'Administratie',
-    icon: FaCog,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: settingsSecondaryTopBar,
-  },
-
-];
-
-
+*/
 
 
 export default routesConfig;
+
+
