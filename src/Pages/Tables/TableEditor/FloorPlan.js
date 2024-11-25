@@ -5,9 +5,9 @@ import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import FloorPlanElement from './FloorPlanElement.js';
-import useApi from '../../../Hooks/useApi.js'; // Adjust the path accordingly
-import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard'; // Adjust the path accordingly
 import TableEditModalContent from './TableEditModalContent'; // We will create this component
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js';
+import useApi from '../../../Hooks/useApi.js';
 
 const ALIGN_THRESHOLD = 15; // Threshold in pixels for alignment detection
 
@@ -47,9 +47,17 @@ const FloorPlan = () => {
     const fetchTables = async () => {
       try {
         const data = await api.get(window.baseDomain + 'api/tables');
-        setElements(data);
+        // Ensure that data is an array
+        if (Array.isArray(data)) {
+          setElements(data);
+        } else if (data && Array.isArray(data.tables)) { // If API returns { tables: [...] }
+          setElements(data.tables);
+        } else {
+          setElements([]); // Fallback to empty array
+        }
       } catch (error) {
         console.error('Error fetching tables:', error);
+        setElements([]); // Fallback to empty array on error
       }
     };
 
@@ -246,7 +254,7 @@ const FloorPlan = () => {
           }}
           style={{ position: 'relative', width: '100%', height: '100%' }}
         >
-          {elements.map((el) => (
+          {Array.isArray(elements) && elements.map((el) => (
             <FloorPlanElement
               key={el.id}
               element={el}

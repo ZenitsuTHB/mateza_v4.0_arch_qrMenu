@@ -9,6 +9,7 @@ const Table = ({
   rotate,
   duplicate,
   deleteTable,
+  editTable, // **Added editTable prop**
   showActions = true, // **Default to true**
 }) => { 
   const [isHovered, setIsHovered] = useState(false);
@@ -37,16 +38,32 @@ const Table = ({
       {/* Action Buttons */}
       {showActions && isHovered && (
         <div className="table-plan-component action-buttons">
-          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
+          <button
+            className="table-plan-component action-button rotate-button"
+            onClick={rotate}
+            aria-label="Rotate Table"
+          >
             <FaSyncAlt color="#555555" />
           </button>
-          <button className="table-plan-component action-button rotate-button" onClick={rotate}>
+          <button
+            className="table-plan-component action-button duplicate-button"
+            onClick={editTable}
+            aria-label="Edit Table"
+          >
             <FaEdit color="#555555" />
           </button>
-          <button className="table-plan-component action-button duplicate-button" onClick={duplicate}>
+          <button
+            className="table-plan-component action-button duplicate-button"
+            onClick={duplicate}
+            aria-label="Duplicate Table"
+          >
             <FaClone color="#555555" />
           </button>
-          <button className="table-plan-component action-button delete-button" onClick={deleteTable}>
+          <button
+            className="table-plan-component action-button delete-button"
+            onClick={deleteTable}
+            aria-label="Delete Table"
+          >
             <FaTrash color="red" />
           </button>
         </div>

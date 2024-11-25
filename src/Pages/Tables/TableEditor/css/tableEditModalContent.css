@@ -1,20 +1,29 @@
-/* CSS for TableEditModalContent */
+/* css/tableEditModalContent.css */
 
-.table-edit-modal-content label {
-	text-align: left;
-	margin-bottom: 5px;
-	font-weight: 500;
+.table-edit-modal-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
   }
   
   .table-edit-modal-content h2 {
 	margin-top: 0;
 	margin-bottom: 20px;
+	font-size: 1.5rem;
+	color: #333;
   }
   
   .table-edit-modal-content .form-group {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 15px;
+  }
+  
+  .table-edit-modal-content label {
+	text-align: left;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: #555;
   }
   
   .table-edit-modal-content .input-container {
@@ -24,7 +33,7 @@
   .table-edit-modal-content .input-container input,
   .table-edit-modal-content .input-container select {
 	width: 100%;
-	padding: 10px 10px 10px 10px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 1rem;
@@ -50,6 +59,8 @@
 	justify-content: center;
 	gap: 10px;
 	transition: background-color 0.3s ease;
+	width: 100%;
+	margin-top: 20px;
   }
   
   .table-edit-modal-content .save-button:hover {
@@ -72,17 +83,17 @@
   }
   
   .table-edit-modal-content .button-with-tooltip .tooltip {
-	display: none;
+	display: none; /* Initially hidden */
 	position: absolute;
-	bottom: 125%;
+	bottom: 125%; /* Position above the button */
 	left: 50%;
 	transform: translateX(-50%);
-	width: 400px;
+	width: 400px; /* Set fixed width */
 	background-color: black;
 	color: white;
-	padding: 10px 15px;
+	padding: 10px 15px; /* Increased padding for better spacing */
 	border-radius: 4px;
-	white-space: normal;
+	white-space: normal; /* Allow text to wrap */
 	font-size: 14px;
 	z-index: 1000;
 	opacity: 0;
