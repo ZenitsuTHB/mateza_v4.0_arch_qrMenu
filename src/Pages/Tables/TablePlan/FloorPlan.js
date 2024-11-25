@@ -1,14 +1,23 @@
 // FloorPlan.js
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
-import FloorPlanElementGeneral from './FloorPlanElement.js';
+import FloorPlanElement from './FloorPlanElement.js';
+import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
 
-const FloorPlanGeneral = ({ tables, reservations, assignReservation, removeReservation, updateNotes }) => {
+const FloorPlanGeneral = ({
+  reservations,
+  assignReservation,
+  removeReservation,
+  updateNotes,
+}) => {
   const floorPlanRef = useRef(null);
-  const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
+  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
+  const [tables, setTables] = useState([]);
+
+  const api = useApi(); // Initialize useApi hook
 
   // Update floor plan size on mount and when resized
   useEffect(() => {
@@ -29,11 +38,28 @@ const FloorPlanGeneral = ({ tables, reservations, assignReservation, removeReser
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  const snapToGrid = (x, y, gridSize = 50) => {
-    const snappedX = Math.round(x / gridSize) * gridSize;
-    const snappedY = Math.round(y / gridSize) * gridSize;
-    return [snappedX, snappedY];
-  };
+  // Load tables from API on mount
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const data = await api.get(window.baseDomain + 'api/tables');
+        // Ensure that data is an array
+        if (Array.isArray(data)) {
+          setTables(data);
+        } else if (data && Array.isArray(data.tables)) {
+          // If API returns { tables: [...] }
+          setTables(data.tables);
+        } else {
+          setTables([]); // Fallback to empty array
+        }
+      } catch (error) {
+        console.error('Error fetching tables:', error);
+        setTables([]); // Fallback to empty array on error
+      }
+    };
+
+    fetchTables();
+  }, [api]);
 
   const [, drop] = useDrop({
     accept: 'GUEST',
@@ -66,7 +92,7 @@ const FloorPlanGeneral = ({ tables, reservations, assignReservation, removeReser
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         {tables.map((table) => (
-          <FloorPlanElementGeneral
+          <FloorPlanElement
             key={table.id}
             table={table}
             reservations={reservations.filter((res) => res.tableId === table.id)}

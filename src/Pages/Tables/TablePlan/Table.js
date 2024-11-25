@@ -3,7 +3,15 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import './css/table.css';
 
-const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes, isActive }) => {
+const Table = ({
+  capacity,
+  reservations,
+  tableId,
+  tableName,
+  removeReservation,
+  updateNotes,
+  isActive,
+}) => {
   const isOccupied = reservations.length > 0;
 
   // Calculate table width based on capacity
@@ -31,7 +39,10 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
           {reservations.map((res) => (
             <div key={res.id} className="tooltip-content">
               <div className="reservation-summary">
-                <span className="reservation-name">{res.firstName} {res.lastName}</span> ({res.numberOfGuests}p) - {res.time}
+                <span className="reservation-name">
+                  {res.firstName} {res.lastName}
+                </span>{' '}
+                ({res.numberOfGuests}p) - {res.time}
               </div>
               <div className="reservation-notes">
                 <input
@@ -47,7 +58,7 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
         </div>
       )}
 
-<div
+      <div
         className="table-plan-component chairs top-chairs"
         style={{
           width: `${tableWidth}px`,
@@ -73,8 +84,8 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
             removeReservation={removeReservation}
           />
         ))}
-        {/* Table Number */}
-        <div className="table-number">T{tableId}</div>
+        {/* Table Name */}
+        <div className="table-number">{tableName}</div>
       </div>
       <div
         className="table-plan-component chairs bottom-chairs"
@@ -92,13 +103,16 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
 
 // Reservation Component
 const Reservation = ({ reservation, tableId, removeReservation }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'GUEST',
-    item: { id: reservation.id, ...reservation },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: 'GUEST',
+      item: { id: reservation.id, ...reservation },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
     }),
-  }), [reservation]);
+    [reservation]
+  );
 
   return (
     <div
@@ -106,7 +120,10 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
     >
-      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
+      <span className="reservation-name">
+        {reservation.firstName} {reservation.lastName}
+      </span>{' '}
+      ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
 };

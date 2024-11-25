@@ -3,7 +3,7 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import Table from './Table.js';
 
-const FloorPlanElementGeneral = ({
+const FloorPlanElement = ({
   table,
   reservations,
   assignReservation,
@@ -13,10 +13,10 @@ const FloorPlanElementGeneral = ({
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'GUEST',
-    drop: (item, monitor) => {
+    drop: (item) => {
       assignReservation(item.id, table.id);
     },
-    canDrop: (item, monitor) => {
+    canDrop: (item) => {
       // Check if table can accommodate the reservation
       const currentGuests = reservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
       return currentGuests + item.numberOfGuests <= table.capacity;
@@ -44,6 +44,7 @@ const FloorPlanElementGeneral = ({
         capacity={table.capacity}
         reservations={reservations}
         tableId={table.id}
+        tableName={table.name} // Display the table's name
         removeReservation={removeReservation}
         updateNotes={updateNotes}
         isActive={isActive}
@@ -52,4 +53,4 @@ const FloorPlanElementGeneral = ({
   );
 };
 
-export default FloorPlanElementGeneral;
+export default FloorPlanElement;

@@ -1,0 +1,508 @@
+File Contents:
+
+--- FloorPlan.js ---
+// FloorPlanGeneral.js
+import React, { useRef, useEffect, useState } from 'react';
+import { useDrop } from 'react-dnd';
+import './css/floorPlan.css';
+import { ResizableBox } from 'react-resizable';
+import 'react-resizable/css/styles.css';
+import FloorPlanElement from './FloorPlanElement.js';
+import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
+
+const FloorPlanGeneral = ({
+  reservations,
+  assignReservation,
+  removeReservation,
+  updateNotes,
+}) => {
+  const floorPlanRef = useRef(null);
+  const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
+  const [tables, setTables] = useState([]);
+
+  const api = useApi(); // Initialize useApi hook
+
+  // Update floor plan size on mount and when resized
+  useEffect(() => {
+    const updateSize = () => {
+      if (floorPlanRef.current) {
+        const { width, height } = floorPlanRef.current.getBoundingClientRect();
+        setFloorPlanSize({ width, height });
+      }
+    };
+
+    // Initial size
+    updateSize();
+
+    // Update size on window resize
+    window.addEventListener('resize', updateSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  // Load tables from API on mount
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const data = await api.get(window.baseDomain + 'api/tables');
+        // Ensure that data is an array
+        if (Array.isArray(data)) {
+          setTables(data);
+        } else if (data && Array.isArray(data.tables)) {
+          // If API returns { tables: [...] }
+          setTables(data.tables);
+        } else {
+          setTables([]); // Fallback to empty array
+        }
+      } catch (error) {
+        console.error('Error fetching tables:', error);
+        setTables([]); // Fallback to empty array on error
+      }
+    };
+
+    fetchTables();
+  }, [api]);
+
+  const snapToGrid = (x, y, gridSize = 50) => {
+    const snappedX = Math.round(x / gridSize) * gridSize;
+    const snappedY = Math.round(y / gridSize) * gridSize;
+    return [snappedX, snappedY];
+  };
+
+  const [, drop] = useDrop({
+    accept: 'GUEST',
+    drop: (item, monitor) => {
+      // Dropping on the floor plan background does nothing
+      // You might want to implement additional functionality here if needed
+    },
+  });
+
+  return (
+    <ResizableBox
+      width={800}
+      height={600}
+      minConstraints={[400, 300]}
+      maxConstraints={[1600, 1200]}
+      className="resizable-floor-plan"
+      onResizeStop={(e, data) => {
+        // Directly set the new size without snapping
+        setFloorPlanSize({ width: data.size.width, height: data.size.height });
+      }}
+      resizeHandles={['se']} // Optional: specify resize handles if needed
+    >
+      <div
+        id="floor-plan-container"
+        className="floor-plan"
+        ref={(node) => {
+          drop(node);
+          floorPlanRef.current = node;
+        }}
+        style={{ position: 'relative', width: '100%', height: '100%' }}
+      >
+        {tables.map((table) => (
+          <FloorPlanElement
+            key={table.id}
+            table={table}
+            reservations={reservations.filter((res) => res.tableId === table.id)}
+            assignReservation={assignReservation}
+            removeReservation={removeReservation}
+            updateNotes={updateNotes}
+            floorPlanSize={floorPlanSize}
+          />
+        ))}
+      </div>
+    </ResizableBox>
+  );
+};
+
+export default FloorPlanGeneral;
+
+
+--- FloorPlanElement.js ---
+// FloorPlanElement.js
+import React from 'react';
+import { useDrop } from 'react-dnd';
+import Table from './Table.js';
+
+const FloorPlanElementGeneral = ({
+  table,
+  reservations,
+  assignReservation,
+  removeReservation,
+  updateNotes,
+  floorPlanSize,
+}) => {
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'GUEST',
+    drop: (item, monitor) => {
+      assignReservation(item.id, table.id);
+    },
+    canDrop: (item, monitor) => {
+      // Check if table can accommodate the reservation
+      const currentGuests = reservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
+      return currentGuests + item.numberOfGuests <= table.capacity;
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
+
+  const isActive = isOver && canDrop;
+
+  return (
+    <div
+      ref={drop}
+      style={{
+        position: 'absolute',
+        left: `${table.x}px`,
+        top: `${table.y}px`,
+        border: isActive ? '2px dashed #4CAF50' : 'none', // Visual feedback
+        transition: 'border 0.2s ease',
+      }}
+    >
+      <Table
+        capacity={table.capacity}
+        reservations={reservations}
+        tableId={table.id}
+        removeReservation={removeReservation}
+        updateNotes={updateNotes}
+        isActive={isActive}
+      />
+    </div>
+  );
+};
+
+export default FloorPlanElementGeneral;
+
+
+--- Sidebar.js ---
+// Sidebar.js
+import React, { useState, useMemo } from 'react';
+import { useDrag } from 'react-dnd';
+import './css/sidebar.css';
+
+const Sidebar = ({ reservations }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter reservations based on search term and only show unassigned
+  const filteredReservations = useMemo(() => {
+    const lowerSearch = searchTerm.toLowerCase();
+    return reservations.filter(
+      (guest) =>
+        guest.tableId === null &&
+        (guest.firstName.toLowerCase().includes(lowerSearch) ||
+          guest.lastName.toLowerCase().includes(lowerSearch) ||
+          guest.numberOfGuests.toString().includes(lowerSearch) ||
+          guest.time.includes(lowerSearch))
+    );
+  }, [searchTerm, reservations]);
+
+  // Guest Block Component
+  const GuestBlock = ({ guest }) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+      type: 'GUEST',
+      item: { id: guest.id, ...guest },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }), [guest]);
+
+    return (
+      <div
+        className="guest-block"
+        ref={drag}
+        style={{ opacity: isDragging ? 0.5 : 1 }}
+      >
+        <p className="guest-name">{guest.firstName} {guest.lastName}</p>
+        <p className="guest-details">{guest.numberOfGuests}p • {guest.time}</p>
+      </div>
+    );
+  };
+
+  return (
+    <div className="sidebar">
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Zoek gasten..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label="Zoek gasten"
+        />
+      </div>
+      <div className="guests-list">
+        {filteredReservations.length > 0 ? (
+          filteredReservations.map((guest) => (
+            <GuestBlock key={guest.id} guest={guest} />
+          ))
+        ) : (
+          <p className="no-results">Geen gasten gevonden.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
+
+
+--- Table.js ---
+// Table.js
+import React from 'react';
+import { useDrag } from 'react-dnd';
+import './css/table.css';
+
+const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes, isActive }) => {
+  const isOccupied = reservations.length > 0;
+
+  // Calculate table width based on capacity
+  const tableWidth = 70 + (capacity > 4 ? (capacity - 4) * 10 : 0);
+  const tableHeight = 70;
+
+  const chairsPerSide = Math.ceil(capacity / 2);
+
+  const topChairs = [];
+  const bottomChairs = [];
+
+  for (let i = 0; i < chairsPerSide; i++) {
+    topChairs.push(i);
+    bottomChairs.push(i);
+  }
+
+  return (
+    <div
+      className={`table-container ${isOccupied ? 'occupied' : ''} ${isActive ? 'active' : ''}`}
+      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
+    >
+      {/* Tooltip */}
+      {isOccupied && (
+        <div className="tooltip">
+          {reservations.map((res) => (
+            <div key={res.id} className="tooltip-content">
+              <div className="reservation-summary">
+                <span className="reservation-name">{res.firstName} {res.lastName}</span> ({res.numberOfGuests}p) - {res.time}
+              </div>
+              <div className="reservation-notes">
+                <input
+                  type="text"
+                  placeholder="Add a note..."
+                  value={res.notes}
+                  onChange={(e) => updateNotes(res.id, e.target.value)}
+                  aria-label={`Add a note for reservation of ${res.firstName} ${res.lastName}`}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+<div
+        className="table-plan-component chairs top-chairs"
+        style={{
+          width: `${tableWidth}px`,
+        }}
+      >
+        {topChairs.slice(0, Math.floor(capacity / 2)).map((chair, index) => (
+          <div key={`top-${index}`} className="table-plan-component chair"></div>
+        ))}
+      </div>
+      <div
+        className={`table ${isOccupied ? 'table-occupied' : ''}`}
+        style={{
+          width: `${tableWidth}px`,
+          height: `${tableHeight}px`,
+        }}
+      >
+        {/* Display Reservations Assigned to This Table */}
+        {reservations.map((res) => (
+          <Reservation
+            key={res.id}
+            reservation={res}
+            tableId={tableId}
+            removeReservation={removeReservation}
+          />
+        ))}
+        {/* Table Number */}
+        <div className="table-number">T{tableId}</div>
+      </div>
+      <div
+        className="table-plan-component chairs bottom-chairs"
+        style={{
+          width: `${tableWidth}px`,
+        }}
+      >
+        {bottomChairs.slice(0, Math.ceil(capacity / 2)).map((chair, index) => (
+          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Reservation Component
+const Reservation = ({ reservation, tableId, removeReservation }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'GUEST',
+    item: { id: reservation.id, ...reservation },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }), [reservation]);
+
+  return (
+    <div
+      className="reservation"
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
+    >
+      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
+    </div>
+  );
+};
+
+export default Table;
+
+
+--- Walls.js ---
+// Walls.js
+import React from 'react';
+import './css/walls.css';
+
+const Walls = ({ length }) => {
+  const wallWidth = (length - 1) * 20;
+  const wallHeight = 20;
+
+  return (
+    <div
+      className="walls-container"
+      style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
+    >
+      <div className="wall"></div>
+    </div>
+  );
+};
+
+export default Walls;
+
+
+--- index.js ---
+// index.js
+import React, { useState } from 'react';
+import FloorPlanGeneral from './FloorPlan.js';
+import Sidebar from './Sidebar.js';
+import { withHeader } from '../../../Components/Structural/Header/index.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import './css/app.css';
+
+const TablePlan = () => {
+  // Dummy Reservations Data with 'notes' field
+  const [reservations, setReservations] = useState([
+    { id: 1, firstName: 'Jan', lastName: 'De Vries', numberOfGuests: 4, time: '18:30', tableId: null, notes: '' },
+    { id: 2, firstName: 'Marie', lastName: 'Jansen', numberOfGuests: 2, time: '19:00', tableId: null, notes: '' },
+    { id: 3, firstName: 'Pieter', lastName: 'Bakker', numberOfGuests: 5, time: '20:15', tableId: null, notes: '' },
+    { id: 4, firstName: 'Sophie', lastName: 'Visser', numberOfGuests: 3, time: '18:45', tableId: null, notes: '' },
+    { id: 5, firstName: 'Lars', lastName: 'Smit', numberOfGuests: 6, time: '19:30', tableId: null, notes: '' },
+    { id: 6, firstName: 'Emma', lastName: 'Meijer', numberOfGuests: 2, time: '20:00', tableId: null, notes: '' },
+    { id: 7, firstName: 'Tom', lastName: 'Kuiper', numberOfGuests: 4, time: '18:15', tableId: null, notes: '' },
+    { id: 8, firstName: 'Lisa', lastName: 'de Boer', numberOfGuests: 1, time: '19:45', tableId: null, notes: '' },
+    { id: 9, firstName: 'Kees', lastName: 'Vos', numberOfGuests: 3, time: '20:30', tableId: null, notes: '' },
+    { id: 10, firstName: 'Nina', lastName: 'Dijkstra', numberOfGuests: 5, time: '18:00', tableId: null, notes: '' },
+  ]);
+
+  // Dummy Tables Data with positions and capacities
+  const [tables, setTables] = useState([
+    { id: 1, capacity: 6, x: 100, y: 100 },
+    { id: 2, capacity: 2, x: 300, y: 100 },
+    { id: 3, capacity: 6, x: 500, y: 100 },
+    { id: 4, capacity: 3, x: 100, y: 300 },
+    { id: 5, capacity: 5, x: 300, y: 300 },
+    { id: 6, capacity: 2, x: 500, y: 300 },
+    { id: 7, capacity: 4, x: 100, y: 500 },
+    { id: 8, capacity: 3, x: 300, y: 500 },
+    { id: 9, capacity: 5, x: 500, y: 500 },
+  ]);
+
+  // Function to assign a reservation to a table
+  const assignReservation = (reservationId, targetTableId) => {
+    setReservations((prevReservations) => {
+      const targetTable = tables.find((t) => t.id === targetTableId);
+      if (!targetTable) return prevReservations;
+
+      const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
+      if (!reservationToAssign) return prevReservations;
+
+
+      // Assign the reservation to the target table without unassigning others
+      return prevReservations.map((res) =>
+        res.id === reservationId ? { ...res, tableId: targetTableId } : res
+      );
+    });
+  };
+
+  // Function to remove a reservation from a table
+  const removeReservation = (reservationId) => {
+    setReservations((prevReservations) =>
+      prevReservations.map((res) =>
+        res.id === reservationId ? { ...res, tableId: null } : res
+      )
+    );
+  };
+
+  // Function to update notes for a reservation
+  const updateNotes = (reservationId, newNotes) => {
+    setReservations((prevReservations) =>
+      prevReservations.map((res) =>
+        res.id === reservationId ? { ...res, notes: newNotes } : res
+      )
+    );
+  };
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="table-display-component">
+        <div className="app-container">
+          <FloorPlanGeneral
+            tables={tables}
+            reservations={reservations}
+            assignReservation={assignReservation}
+            removeReservation={removeReservation}
+            updateNotes={updateNotes}
+          />
+          <Sidebar reservations={reservations} />
+        </div>
+      </div>
+    </DndProvider>
+  );
+};
+
+export default withHeader(TablePlan);
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TablePlan":
+
+├── FloorPlan.js
+├── FloorPlanElement.js
+├── Sidebar.js
+├── Table.js
+├── Walls.js
+├── css
+│   ├── app.css
+│   ├── floorPlan.css
+│   ├── sidebar.css
+│   ├── table.css
+│   └── walls.css
+└── index.js
+
+
+List of Files:
+FloorPlan.js
+FloorPlanElement.js
+Sidebar.js
+Table.js
+Walls.js
+index.js
+
