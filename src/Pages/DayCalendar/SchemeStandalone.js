@@ -1,14 +1,16 @@
 // src/components/SchemeStandalone.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useSchemeValidation from './Modal/Hooks/useSchemeValidation';
 import SchemeItem from './Modal/Scheme/SchemeItem';
 import useTimeBlocks from './Hooks/fetchTimeblocks';
 import useNotification from '../../Components/Notification/index';
 import { withHeader } from '../../Components/Structural/Header';
-import './css/schemeStandalone.css'; // Import the CSS file
+import { ArcadeEmbed } from '../../Components/ArcadeEmbed';
+import './css/schemeStandalone.css';
 
 const SchemeStandalone = () => {
+  const arcadeRef = useRef(null);
   const { triggerNotification, NotificationComponent } = useNotification();
   const { blocks, updateTimeBlock } = useTimeBlocks(triggerNotification);
   const [schemeSettings, setschemeSettings] = useState(null);
@@ -24,6 +26,15 @@ const SchemeStandalone = () => {
         setTimeBlockId(firstBlockWithScheme._id);
         setDefaultStartTime(firstBlockWithScheme.startTime || '17:00');
         setDefaultEndTime(firstBlockWithScheme.endTime || '23:00');
+      }
+    }
+  }, [blocks]);
+
+  useEffect(() => {
+    if (blocks && blocks.length === 0 && !localStorage.getItem('firstTimeOpen')) {
+      localStorage.setItem('firstTimeOpen', 'true');
+      if (arcadeRef.current) {
+        arcadeRef.current.openArcade();
       }
     }
   }, [blocks]);
@@ -167,52 +178,57 @@ const SchemeStandalone = () => {
     }
   };
 
-  if (!schemeSettings) {
-    return (
-      <div className="scheme-page">
-        <div className="no-timeblock-message">
-          <a href="/#/scheme/calendar?action=create-timeblock">
-            Klik Hier Om Uw Eerste Tijdsblok Aan Te Maken
-          </a>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className='scheme-page'>
-      <div className='day-calendar-page'>
-        <div className='scheme-container'>
-          <NotificationComponent />
-          <h2 className="secondary-title">Openingsuren</h2>
-          <div className="scheme-list">
-            {items.map((item) => (
-              <SchemeItem
-                key={item.id}
-                item={item}
-                schemeSettings={schemeSettings}
-                handleToggle={handleToggle}
-                handleInputChange={handleInputChange}
-                errors={errors}
-                isSaveAttempted={isSaveAttempted}
-                handleShiftsToggle={handleShiftsToggle}
-                handleShiftInputChange={handleShiftInputChange}
-                addShift={addShift}
-                removeShift={removeShift}
-              />
-            ))}
-          </div>
-          <div className="modal-buttons">
-            <button
-              type="button"
-              className="standard-button blue"
-              onClick={handleSaveScheme}
-            >
-              Opslaan
-            </button>
+      {schemeSettings ? (
+        <div className='day-calendar-page'>
+          <div className='scheme-container'>
+            <NotificationComponent />
+            <h2 className="secondary-title">Openingsuren</h2>
+            <div className="scheme-list">
+              {items.map((item) => (
+                <SchemeItem
+                  key={item.id}
+                  item={item}
+                  schemeSettings={schemeSettings}
+                  handleToggle={handleToggle}
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                  isSaveAttempted={isSaveAttempted}
+                  handleShiftsToggle={handleShiftsToggle}
+                  handleShiftInputChange={handleShiftInputChange}
+                  addShift={addShift}
+                  removeShift={removeShift}
+                />
+              ))}
+            </div>
+            <div className="modal-buttons">
+              <button
+                type="button"
+                className="standard-button blue"
+                onClick={handleSaveScheme}
+              >
+                Opslaan
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="no-timeblock-message">
+          <a href="/#/scheme/calendar?action=create-timeblock">
+            Maak eerst een tijdsblok. Klik Hier
+          </a>
+          <button
+            type="button"
+            className="standard-button blue-dark"
+            onClick={() => arcadeRef.current && arcadeRef.current.openArcade()}
+            style={{ marginTop: '10px', border: 'solid 1px black' }} // Optional: Adds spacing between link and button
+          >
+            ✨ Open de Interactieve Uitleg ✨
+          </button>
+        </div>
+      )}
+      <ArcadeEmbed ref={arcadeRef} />
     </div>
   );
 };
