@@ -14,6 +14,13 @@
 	color: #333;
   }
   
+  .table-edit-modal-content .settings-form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+  }
+  
   .table-edit-modal-content .form-group {
 	display: flex;
 	flex-direction: column;
