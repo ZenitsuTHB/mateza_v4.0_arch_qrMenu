@@ -12,7 +12,7 @@ const ViewModeSelector = ({
   const viewModeButtonRef = useRef(null);
   const viewModeOptionsRef = useRef(null);
 
-  const viewModes = ['Algemeen', 'Bezettingsgraad', 'Bezettingspercentage', 'Voorspelling', 'Weer'];
+  const viewModes = ['Algemeen', 'Weer'];
 
   // Handle Click Outside for View Mode Options
   useEffect(() => {
