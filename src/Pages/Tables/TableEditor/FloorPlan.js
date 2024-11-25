@@ -46,7 +46,7 @@ const FloorPlan = () => {
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const data = await api.get(window.baseDomain + 'api/tables');
+        const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
         // Ensure that data is an array
         if (Array.isArray(data)) {
           setElements(data);
@@ -223,7 +223,13 @@ const FloorPlan = () => {
     // Save the element to API
     const saveElement = async () => {
       try {
-        await api.post(window.baseDomain + 'api/tables', updatedElement);
+        if (updatedElement._id) {
+          // Existing table: use PUT request
+          await api.put(`${window.baseDomain}api/tables/${updatedElement._id}`, updatedElement);
+        } else {
+          // New table: use POST request
+          await api.post(`${window.baseDomain}api/tables`, updatedElement);
+        }
       } catch (error) {
         console.error('Error saving table:', error);
       }
