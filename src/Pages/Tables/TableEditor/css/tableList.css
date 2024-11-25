@@ -52,80 +52,6 @@
 	outline: none;
   }
   
-  .tables-list-page .save-button,
-  .tables-list-page .delete-button {
-	padding: 8px 12px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	cursor: pointer;
-	border-radius: 4px;
-	font-size: 14px;
-  }
-  
-  .tables-list-page .delete-button {
-	background-color: #dc3545;
-  }
-  
-  .tables-list-page .save-button:hover,
-  .tables-list-page .delete-button:hover {
-	opacity: 0.9;
-  }
-  
-  .tables-list-page .save-button {
-	margin-top: 10px;
-  }
-  
-  .tables-list-page .tables-list-title {
-	font-size: 1.5rem;
-	margin-bottom: 10px;
-	color: #333;
-  }
-  
-  .tables-list-page .notification-component {
-	position: fixed;
-	top: 20px;
-	right: 20px;
-	z-index: 1000;
-  }
-  
-
-  /* css/tableList.css */
-
-.tables-list-page {
-	padding: 20px;
-  }
-  
-  .tables-list-page h2 {
-	margin-bottom: 20px;
-	color: #333;
-  }
-  
-  .tables-list-page .tables-list,
-  .tables-list-page .table-groups-list {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 30px;
-	font-size: 14px;
-  }
-  
-  .tables-list-page th,
-  .tables-list-page td {
-	border: 1px solid #ddd;
-	padding: 12px 15px;
-	text-align: left;
-  }
-  
-  .tables-list-page th {
-	background-color: #f9f9f9;
-	font-weight: bold;
-	color: #555;
-  }
-  
-  .tables-list-page tr:nth-child(even) {
-	background-color: #f9f9f9;
-  }
-  
   .tables-list-page .ellipsis-container {
 	position: relative;
 	display: inline-block;
@@ -167,22 +93,13 @@
 	background-color: #ffe6e6;
   }
   
-  .tables-list-page .save-button {
-	padding: 8px 12px;
-	background-color: #28a745;
-	color: #fff;
-	border: none;
-	cursor: pointer;
-	border-radius: 4px;
-	font-size: 14px;
-  }
-  
-  .tables-list-page .save-button:hover {
-	background-color: #218838;
-  }
-  
   .tables-list-page .actions-column {
 	width: 100px; /* Adjust the width as needed */
+	text-align: center;
+  }
+  
+  .tables-list-page .ellipsis-column {
+	width: 40px; /* Limit the width to the icon with some margin */
 	text-align: center;
   }
   
@@ -199,10 +116,6 @@
 	  padding: 8px 10px;
 	  font-size: 12px;
 	}
-	.tables-list-page .save-button {
-	  font-size: 12px;
-	  padding: 6px 10px;
-	}
 	.tables-list-page .ellipsis-icon {
 	  font-size: 14px;
 	}
@@ -210,6 +123,15 @@
 	/* Hide 'Vorm' and 'Prioriteit' columns on mobile */
 	.tables-list-page .hide-on-mobile {
 	  display: none;
+	}
+  
+	/* Adjust actions column width on mobile */
+	.tables-list-page .actions-column {
+	  width: 80px;
+	}
+  
+	.tables-list-page .ellipsis-column {
+	  width: 40px;
 	}
   }
   
