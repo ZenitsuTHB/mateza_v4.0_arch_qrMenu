@@ -3,7 +3,7 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import Table from './Table.js';
 
-const FloorPlanElement = ({
+const FloorPlanElementGeneral = ({
   table,
   reservations,
   assignReservation,
@@ -52,4 +52,4 @@ const FloorPlanElement = ({
   );
 };
 
-export default FloorPlanElement;
+export default FloorPlanElementGeneral;

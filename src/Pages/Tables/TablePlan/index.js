@@ -1,6 +1,6 @@
 // index.js
 import React, { useState } from 'react';
-import FloorPlan from './FloorPlan.js';
+import FloorPlanGeneral from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import { DndProvider } from 'react-dnd';
@@ -74,7 +74,7 @@ const TablePlan = () => {
     <DndProvider backend={HTML5Backend}>
       <div className="table-display-component">
         <div className="app-container">
-          <FloorPlan
+          <FloorPlanGeneral
             tables={tables}
             reservations={reservations}
             assignReservation={assignReservation}

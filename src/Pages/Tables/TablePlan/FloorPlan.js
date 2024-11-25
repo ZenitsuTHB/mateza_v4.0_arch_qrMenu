@@ -4,9 +4,9 @@ import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
-import FloorPlanElement from './FloorPlanElement.js';
+import FloorPlanElementGeneral from './FloorPlanElement.js';
 
-const FloorPlan = ({ tables, reservations, assignReservation, removeReservation, updateNotes }) => {
+const FloorPlanGeneral = ({ tables, reservations, assignReservation, removeReservation, updateNotes }) => {
   const floorPlanRef = useRef(null);
   const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
 
@@ -66,7 +66,7 @@ const FloorPlan = ({ tables, reservations, assignReservation, removeReservation,
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         {tables.map((table) => (
-          <FloorPlanElement
+          <FloorPlanElementGeneral
             key={table.id}
             table={table}
             reservations={reservations.filter((res) => res.tableId === table.id)}
@@ -81,4 +81,4 @@ const FloorPlan = ({ tables, reservations, assignReservation, removeReservation,
   );
 };
 
-export default FloorPlan;
+export default FloorPlanGeneral;
