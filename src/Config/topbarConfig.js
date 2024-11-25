@@ -21,7 +21,7 @@ const topBarConfig = [
   {
     label: 'Edit',
     icon: FaPencilAlt,
-    path: 'https://preview.reservaties.net/',
+    path: 'https://preview.reservaties.net/' + "?restaurantId=" + localStorage.getItem('username'),
     isExternal: true, // Indicates external URL
     hasDropdown: true,
     iconColor: 'black',
@@ -29,7 +29,7 @@ const topBarConfig = [
       {
         label: 'Bewerken',
         icon: FaPencilAlt,
-        path: 'https://preview.reservaties.net/',
+        path: 'https://preview.reservaties.net/' + "?restaurantId=" + localStorage.getItem('username'),
         isExternal: true, // Indicates external URL
       },
     ],
