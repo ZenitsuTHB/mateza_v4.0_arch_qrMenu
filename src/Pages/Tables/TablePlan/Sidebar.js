@@ -21,13 +21,16 @@ const Sidebar = ({ reservations }) => {
 
   // Guest Block Component
   const GuestBlock = ({ guest }) => {
-    const [{ isDragging }, drag] = useDrag(() => ({
-      type: 'GUEST',
-      item: { id: guest.id, ...guest },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
+    const [{ isDragging }, drag] = useDrag(
+      () => ({
+        type: 'GUEST',
+        item: { id: guest.id, ...guest },
+        collect: (monitor) => ({
+          isDragging: !!monitor.isDragging(),
+        }),
       }),
-    }), [guest]);
+      [guest]
+    );
 
     return (
       <div
@@ -35,8 +38,12 @@ const Sidebar = ({ reservations }) => {
         ref={drag}
         style={{ opacity: isDragging ? 0.5 : 1 }}
       >
-        <p className="guest-name">{guest.firstName} {guest.lastName}</p>
-        <p className="guest-details">{guest.numberOfGuests}p • {guest.time}</p>
+        <p className="guest-name">
+          {guest.firstName} {guest.lastName}
+        </p>
+        <p className="guest-details">
+          {guest.numberOfGuests}p • {guest.time}
+        </p>
       </div>
     );
   };

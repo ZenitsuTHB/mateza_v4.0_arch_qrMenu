@@ -1,7 +1,7 @@
 File Contents:
 
 --- FloorPlan.js ---
-// FloorPlanGeneral.js
+// FloorPlan.js
 import React, { useRef, useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import './css/floorPlan.css';
@@ -17,7 +17,7 @@ const FloorPlanGeneral = ({
   updateNotes,
 }) => {
   const floorPlanRef = useRef(null);
-  const [floorPlanSize, setFloorPlanSize] = React.useState({ width: 800, height: 600 });
+  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
   const [tables, setTables] = useState([]);
 
   const api = useApi(); // Initialize useApi hook
@@ -45,7 +45,7 @@ const FloorPlanGeneral = ({
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const data = await api.get(window.baseDomain + 'api/tables');
+        const data = await api.get(window.baseDomain + 'api/tables', { noCache: true });
         // Ensure that data is an array
         if (Array.isArray(data)) {
           setTables(data);
@@ -63,12 +63,6 @@ const FloorPlanGeneral = ({
 
     fetchTables();
   }, [api]);
-
-  const snapToGrid = (x, y, gridSize = 50) => {
-    const snappedX = Math.round(x / gridSize) * gridSize;
-    const snappedY = Math.round(y / gridSize) * gridSize;
-    return [snappedX, snappedY];
-  };
 
   const [, drop] = useDrop({
     accept: 'GUEST',
@@ -125,7 +119,7 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import Table from './Table.js';
 
-const FloorPlanElementGeneral = ({
+const FloorPlanElement = ({
   table,
   reservations,
   assignReservation,
@@ -135,10 +129,10 @@ const FloorPlanElementGeneral = ({
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'GUEST',
-    drop: (item, monitor) => {
+    drop: (item) => {
       assignReservation(item.id, table.id);
     },
-    canDrop: (item, monitor) => {
+    canDrop: (item) => {
       // Check if table can accommodate the reservation
       const currentGuests = reservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
       return currentGuests + item.numberOfGuests <= table.capacity;
@@ -166,6 +160,7 @@ const FloorPlanElementGeneral = ({
         capacity={table.capacity}
         reservations={reservations}
         tableId={table.id}
+        tableName={table.name} // Display the table's name
         removeReservation={removeReservation}
         updateNotes={updateNotes}
         isActive={isActive}
@@ -174,7 +169,7 @@ const FloorPlanElementGeneral = ({
   );
 };
 
-export default FloorPlanElementGeneral;
+export default FloorPlanElement;
 
 
 --- Sidebar.js ---
@@ -254,7 +249,15 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import './css/table.css';
 
-const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes, isActive }) => {
+const Table = ({
+  capacity,
+  reservations,
+  tableId,
+  tableName,
+  removeReservation,
+  updateNotes,
+  isActive,
+}) => {
   const isOccupied = reservations.length > 0;
 
   // Calculate table width based on capacity
@@ -282,7 +285,10 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
           {reservations.map((res) => (
             <div key={res.id} className="tooltip-content">
               <div className="reservation-summary">
-                <span className="reservation-name">{res.firstName} {res.lastName}</span> ({res.numberOfGuests}p) - {res.time}
+                <span className="reservation-name">
+                  {res.firstName} {res.lastName}
+                </span>{' '}
+                ({res.numberOfGuests}p) - {res.time}
               </div>
               <div className="reservation-notes">
                 <input
@@ -298,7 +304,7 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
         </div>
       )}
 
-<div
+      <div
         className="table-plan-component chairs top-chairs"
         style={{
           width: `${tableWidth}px`,
@@ -324,8 +330,8 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
             removeReservation={removeReservation}
           />
         ))}
-        {/* Table Number */}
-        <div className="table-number">T{tableId}</div>
+        {/* Table Name */}
+        <div className="table-number">{tableName}</div>
       </div>
       <div
         className="table-plan-component chairs bottom-chairs"
@@ -343,13 +349,16 @@ const Table = ({ capacity, reservations, tableId, removeReservation, updateNotes
 
 // Reservation Component
 const Reservation = ({ reservation, tableId, removeReservation }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'GUEST',
-    item: { id: reservation.id, ...reservation },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: 'GUEST',
+      item: { id: reservation.id, ...reservation },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
     }),
-  }), [reservation]);
+    [reservation]
+  );
 
   return (
     <div
@@ -357,7 +366,10 @@ const Reservation = ({ reservation, tableId, removeReservation }) => {
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
     >
-      <span className="reservation-name">{reservation.firstName} {reservation.lastName}</span> ({reservation.numberOfGuests}p) - {reservation.time}
+      <span className="reservation-name">
+        {reservation.firstName} {reservation.lastName}
+      </span>{' '}
+      ({reservation.numberOfGuests}p) - {reservation.time}
     </div>
   );
 };
@@ -400,46 +412,25 @@ import './css/app.css';
 const TablePlan = () => {
   // Dummy Reservations Data with 'notes' field
   const [reservations, setReservations] = useState([
-    { id: 1, firstName: 'Jan', lastName: 'De Vries', numberOfGuests: 4, time: '18:30', tableId: null, notes: '' },
-    { id: 2, firstName: 'Marie', lastName: 'Jansen', numberOfGuests: 2, time: '19:00', tableId: null, notes: '' },
-    { id: 3, firstName: 'Pieter', lastName: 'Bakker', numberOfGuests: 5, time: '20:15', tableId: null, notes: '' },
-    { id: 4, firstName: 'Sophie', lastName: 'Visser', numberOfGuests: 3, time: '18:45', tableId: null, notes: '' },
-    { id: 5, firstName: 'Lars', lastName: 'Smit', numberOfGuests: 6, time: '19:30', tableId: null, notes: '' },
-    { id: 6, firstName: 'Emma', lastName: 'Meijer', numberOfGuests: 2, time: '20:00', tableId: null, notes: '' },
-    { id: 7, firstName: 'Tom', lastName: 'Kuiper', numberOfGuests: 4, time: '18:15', tableId: null, notes: '' },
-    { id: 8, firstName: 'Lisa', lastName: 'de Boer', numberOfGuests: 1, time: '19:45', tableId: null, notes: '' },
-    { id: 9, firstName: 'Kees', lastName: 'Vos', numberOfGuests: 3, time: '20:30', tableId: null, notes: '' },
-    { id: 10, firstName: 'Nina', lastName: 'Dijkstra', numberOfGuests: 5, time: '18:00', tableId: null, notes: '' },
-  ]);
-
-  // Dummy Tables Data with positions and capacities
-  const [tables, setTables] = useState([
-    { id: 1, capacity: 6, x: 100, y: 100 },
-    { id: 2, capacity: 2, x: 300, y: 100 },
-    { id: 3, capacity: 6, x: 500, y: 100 },
-    { id: 4, capacity: 3, x: 100, y: 300 },
-    { id: 5, capacity: 5, x: 300, y: 300 },
-    { id: 6, capacity: 2, x: 500, y: 300 },
-    { id: 7, capacity: 4, x: 100, y: 500 },
-    { id: 8, capacity: 3, x: 300, y: 500 },
-    { id: 9, capacity: 5, x: 500, y: 500 },
+    {
+      id: 1,
+      firstName: 'Jan',
+      lastName: 'De Vries',
+      numberOfGuests: 4,
+      time: '18:30',
+      tableId: null,
+      notes: '',
+    },
+    // ... other reservations
   ]);
 
   // Function to assign a reservation to a table
   const assignReservation = (reservationId, targetTableId) => {
-    setReservations((prevReservations) => {
-      const targetTable = tables.find((t) => t.id === targetTableId);
-      if (!targetTable) return prevReservations;
-
-      const reservationToAssign = prevReservations.find((res) => res.id === reservationId);
-      if (!reservationToAssign) return prevReservations;
-
-
-      // Assign the reservation to the target table without unassigning others
-      return prevReservations.map((res) =>
+    setReservations((prevReservations) =>
+      prevReservations.map((res) =>
         res.id === reservationId ? { ...res, tableId: targetTableId } : res
-      );
-    });
+      )
+    );
   };
 
   // Function to remove a reservation from a table
@@ -465,7 +456,6 @@ const TablePlan = () => {
       <div className="table-display-component">
         <div className="app-container">
           <FloorPlanGeneral
-            tables={tables}
             reservations={reservations}
             assignReservation={assignReservation}
             removeReservation={removeReservation}
@@ -506,3 +496,8 @@ Table.js
 Walls.js
 index.js
 
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class. Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
+
+**Note:** CSS files have been excluded from this prompt.

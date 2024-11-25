@@ -1,26 +1,23 @@
 // index.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FloorPlanGeneral from './FloorPlan.js';
 import Sidebar from './Sidebar.js';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import useReservations from './Hooks/useReservations.js';
 import './css/app.css';
 
 const TablePlan = () => {
-  // Dummy Reservations Data with 'notes' field
-  const [reservations, setReservations] = useState([
-    {
-      id: 1,
-      firstName: 'Jan',
-      lastName: 'De Vries',
-      numberOfGuests: 4,
-      time: '18:30',
-      tableId: null,
-      notes: '',
-    },
-    // ... other reservations
-  ]);
+  const fetchedReservations = useReservations();
+
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    if (fetchedReservations.length > 0 && reservations.length === 0) {
+      setReservations(fetchedReservations);
+    }
+  }, [fetchedReservations, reservations]);
 
   // Function to assign a reservation to a table
   const assignReservation = (reservationId, targetTableId) => {
