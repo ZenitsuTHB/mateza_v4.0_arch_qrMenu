@@ -16,6 +16,7 @@ const ReservationRow = ({
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
+  triggerNotification, // Receive triggerNotification via props
 }) => {
   const seenKey = `seen-data-${reservation.id}`;
   const expiryTimeString = localStorage.getItem(seenKey);
@@ -57,6 +58,8 @@ const ReservationRow = ({
   const handleDeleteSuccess = (deletedReservationId) => {
     if (deletedReservationId === reservation.id) {
       setIsVisible(false); // Hide the row
+      // Trigger a success notification
+      triggerNotification('Reservatie verwijderd', 'success');
     }
     // If you need to notify a parent component, you can add that logic here
   };
@@ -82,6 +85,8 @@ const ReservationRow = ({
       setDeleteError(
         error.response?.data?.error || error.message || 'Failed to delete the reservation.'
       );
+      // Optionally, trigger an error notification
+      triggerNotification('Fout bij het verwijderen van de reservatie.', 'error');
     } finally {
       setIsDeleting(false);
     }

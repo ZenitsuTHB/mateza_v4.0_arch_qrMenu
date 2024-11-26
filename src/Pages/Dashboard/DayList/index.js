@@ -13,7 +13,6 @@ import ShiftSelector from './Filters/ShiftSelector.js';
 import DatePickerComponent from './Filters/DatePicker.js';
 import useSortedReservations from './Hooks/useSortedReservation.js';
 import { getNewSortConfig } from './Utils/sortUtils.js';
-
 import { shifts } from './Utils/constants.js';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
 import './css/reservationList.css';
@@ -21,6 +20,9 @@ import './css/settingsTabs.css';
 
 // Import the new useReservationsList hook
 import useReservationsList from './Hooks/useReservationsList.js';
+import useNotification from '../../../Components/Notification/index.js';
+
+// Import useNotification
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +41,9 @@ const ReservationsList = () => {
 
   // Use the new hook to fetch reservations data
   const { reservationsData, loading, error } = useReservationsList();
+
+  // Initialize the useNotification hook
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   // Filter, sort, and paginate the reservations data
   const filteredReservationsData = useFilteredReservations(reservationsData, {
@@ -87,6 +92,9 @@ const ReservationsList = () => {
 
   return (
     <div className="reservations-page">
+      {/* Render the NotificationComponent */}
+      <NotificationComponent />
+
       <DatePickerComponent
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
@@ -181,6 +189,8 @@ const ReservationsList = () => {
                     isTooltipOpen={openTooltipId === reservation.id}
                     onTooltipToggle={handleTooltipToggle}
                     onTooltipClose={handleTooltipClose}
+                    // Pass the triggerNotification function to ReservationRow
+                    triggerNotification={triggerNotification}
                   />
                 ))
               ) : (
@@ -190,7 +200,7 @@ const ReservationsList = () => {
                   }`}
                 >
                   <span>
-                    {selectedShift === "Dag"
+                    {selectedShift === 'Dag'
                       ? 'Geen reservaties voor deze dag.'
                       : 'Geen reservaties voor deze shift.'}
                   </span>
