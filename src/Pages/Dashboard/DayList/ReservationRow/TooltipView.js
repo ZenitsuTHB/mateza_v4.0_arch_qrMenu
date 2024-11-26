@@ -124,7 +124,7 @@ const Tooltip = ({
 
   const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(
     reservationId
-  )}`;
+  )}&admin=true`;
 
   const handleDeleteClick = (e) => {
     e.preventDefault();

@@ -100,7 +100,7 @@ const ReservationRow = ({ reservation, triggerNotification, onDelete }) => {
   const handleEditClick = () => {
     const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(
       reservation.id
-    )}`;
+    )}&admin=true`;
     window.open(editUrl, '_blank');
   };
 
