@@ -73,7 +73,13 @@ const ReservationRow = ({ reservation, triggerNotification, onDelete }) => {
         onDelete(reservation.id); // Remove the reservation from the list
       }
       console.log(`Reservation ${reservation.id} has been deleted.`);
+
+
       triggerNotification('Reservatie verwijderd', 'success');
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Error deleting reservation:', error);
       setDeleteError(
