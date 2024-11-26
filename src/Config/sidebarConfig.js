@@ -21,6 +21,7 @@ import DayList from '../Pages/Dashboard/DayList/index.js';
 import GiftCard from '../Pages/Giftcard/GiftCard'
 import GiftcardEditor from '../Pages/Giftcard/GiftcardEditor'
 import TablePlan from '../Pages/Tables/TablePlan/index.js'
+import SettingsTabsWithHeader from '../Pages/FormEditor/index.js'
 
 
 import {

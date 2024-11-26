@@ -1,8 +1,16 @@
-// Tooltip.js
+// src/components/Tooltip.jsx
 
 import React, { useEffect, useRef, useState } from 'react';
-import { FaEllipsisV, FaPencilAlt, FaTrashAlt, FaStickyNote, FaBirthdayCake } from 'react-icons/fa';
+import {
+  FaEllipsisV,
+  FaPencilAlt,
+  FaTrashAlt,
+  FaStickyNote,
+  FaBirthdayCake,
+} from 'react-icons/fa';
 import './css/tooltip.css';
+import ConfirmationModal from '../../../../Components/Structural/Modal/Delete';
+import useApi from '../../../../Hooks/useApi';
 
 const Tooltip = ({
   reservationId,
@@ -10,12 +18,18 @@ const Tooltip = ({
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
+  onDeleteSuccess,
 }) => {
   const tooltipTimerRef = useRef(null);
   const tooltipRef = useRef(null);
   const [isIconHovered, setIsIconHovered] = useState(false);
   const [isParentHovered, setIsParentHovered] = useState(false);
   const [isEllipsisHovered, setIsEllipsisHovered] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
+  const api = useApi();
 
   const handleEllipsisClick = () => {
     onTooltipToggle(reservationId);
@@ -77,31 +91,71 @@ const Tooltip = ({
 
   const shouldShowExtraIcon = extraInfo && extraInfo.trim() !== '';
 
-  const isExtraTooltipOpen = (isIconHovered || isParentHovered) && !isTooltipOpen && !isEllipsisHovered;
+  const isExtraTooltipOpen =
+    (isIconHovered || isParentHovered) &&
+    !isTooltipOpen &&
+    !isEllipsisHovered;
 
-  // List of words to check for birthday or anniversary in 5 languages
   const birthdayWords = [
-    'birthday', 'anniversary',           // English
-    'anniversaire',                      // French
-    'geburtstag', 'jahrestag',           // German
-    'jarig', 'verjaardag', 'jubileum',   // Dutch
-    'cumpleaños', 'aniversario',         // Spanish
+    'birthday',
+    'anniversary',
+    'anniversaire',
+    'geburtstag',
+    'jahrestag',
+    'jarig',
+    'verjaardag',
+    'jubileum',
+    'cumpleaños',
+    'aniversario',
   ];
 
   let iconToUse = FaStickyNote;
 
   if (shouldShowExtraIcon) {
     const extraInfoLower = extraInfo.toLowerCase();
-    const containsBirthdayWord = birthdayWords.some(word => extraInfoLower.includes(word));
+    const containsBirthdayWord = birthdayWords.some((word) =>
+      extraInfoLower.includes(word)
+    );
 
     if (containsBirthdayWord) {
       iconToUse = FaBirthdayCake;
     }
   }
 
-  // Construct the external URL with reservationId
-  const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(reservationId)}`;
-  const deleteUrl = `https://view.reservaties.net/?action=delete&reservationId=${encodeURIComponent(reservationId)}`;
+  const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(
+    reservationId
+  )}`;
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    setDeleteError(null);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleteModalVisible(false);
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await api.delete(window.baseDomain + `api/auth-reservations/${reservationId}`);
+      if (onDeleteSuccess) {
+        onDeleteSuccess(reservationId);
+      }
+      console.log(`Reservation ${reservationId} has been deleted.`);
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+      setDeleteError(
+        error.response?.data?.error || error.message || 'Failed to delete the reservation.'
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalVisible(false);
+  };
 
   return (
     <div className="extra-column" ref={tooltipRef}>
@@ -114,9 +168,7 @@ const Tooltip = ({
           >
             {React.createElement(iconToUse, { className: 'extra-icon' })}
             {isExtraTooltipOpen && (
-              <div className="extra-tooltip">
-                {extraInfo}
-              </div>
+              <div className="extra-tooltip">{extraInfo}</div>
             )}
           </div>
         )}
@@ -139,9 +191,8 @@ const Tooltip = ({
               </a>
               <div className="tooltip-separator"></div>
               <a
-                href={deleteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={handleDeleteClick}
                 className="tooltip-item delete-item no-style"
               >
                 <FaTrashAlt className="tooltip-icon" />
@@ -151,6 +202,20 @@ const Tooltip = ({
           )}
         </div>
       </div>
+
+      <ConfirmationModal
+        isVisible={isDeleteModalVisible}
+        title="Reservatie Verwijderen"
+        message="Wilt u deze reservatie verwijderen?"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        confirmText="Verwijderen"
+        cancelText="Annuleren"
+        confirmButtonClass="discard-button red"
+        cancelButtonClass="cancel-button"
+        isLoading={isDeleting}
+        errorMessage={deleteError}
+      />
     </div>
   );
 };

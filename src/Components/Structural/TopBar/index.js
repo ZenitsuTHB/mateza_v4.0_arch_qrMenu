@@ -83,6 +83,7 @@ const TopBar = () => {
           onMouseEnter={handleAppsMouseEnter}
           onMouseLeave={handleAppsMouseLeave}
         >
+          
           <div className={`nine-dots-wrapper ${isAppsMenuOpen ? 'active' : ''}`}>
             <div className="nine-dots">
               {[...Array(9)].map((_, index) => (
@@ -92,12 +93,16 @@ const TopBar = () => {
           </div>
           <h3 className="top-bar-title">Mateza Booking</h3>
           <img src={logoImage} alt="Logo" className="title-image" />
+          {
+          /*
           {isAppsMenuOpen && (
             <AppsMenu
               onMouseEnter={handleAppsMouseEnter}
               onMouseLeave={handleAppsMouseLeave}
             />
           )}
+            */
+          }
         </div>
 
         {/* Middle Side */}
