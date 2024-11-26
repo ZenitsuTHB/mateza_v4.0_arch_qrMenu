@@ -120,10 +120,10 @@ const Settings = forwardRef((props, ref) => {
       if (saveTimeoutRef.current) {
         // Timer is running
         // Increase expiryTime by 2000 ms
-        expiryTimeRef.current += 2000;
+        expiryTimeRef.current += 3000;
       } else {
         // No timer running
-        expiryTimeRef.current = currentTime + 5000; // 5 seconds from now
+        expiryTimeRef.current = currentTime + 1500; // 5 seconds from now
       }
 
       const delay = expiryTimeRef.current - currentTime;
