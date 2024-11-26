@@ -13,7 +13,7 @@ const EmailSettingsTabs = () => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   const defaultSettings = {
-    aanpassingenDoorKlant: 'Geen notificatie',
+    nieuweReservatie: 'Geen notificatie',
     annulatieDoorKlant: 'Geen notificatie',
     antwoordEmail: '',
     groetNaam: '',

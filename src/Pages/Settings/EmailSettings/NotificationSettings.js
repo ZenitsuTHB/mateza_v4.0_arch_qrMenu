@@ -7,11 +7,11 @@ const NotificationSettings = ({ settings, handleChange, handleSave, isDirty }) =
     <form className="settings-form" onSubmit={handleSave} noValidate>
       {/* Bewerking door klant */}
       <div className="form-group">
-        <label>Bewerking door klant</label>
+        <label>Nieuwe Reservatie Ontvangen</label>
         <div className="input-container">
           <select
-            name="aanpassingenDoorKlant"
-            value={settings.aanpassingenDoorKlant}
+            name="nieuweReservatie"
+            value={settings.nieuweReservatie}
             onChange={handleChange}
           >
             <option value="Geen notificatie">Geen notificatie</option>
@@ -22,7 +22,7 @@ const NotificationSettings = ({ settings, handleChange, handleSave, isDirty }) =
 
       {/* Annulatie door klant */}
       <div className="form-group">
-        <label>Annulatie door klant</label>
+        <label>Reservatie Geannulleerd</label>
         <div className="input-container">
           <select
             name="annulatieDoorKlant"

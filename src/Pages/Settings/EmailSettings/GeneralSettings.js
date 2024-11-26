@@ -33,7 +33,7 @@ const GeneralSettings = ({ settings, handleChange, handleSave, isDirty }) => {
             name="groetNaam"
             value={settings.groetNaam}
             onChange={handleChange}
-            placeholder="Voer de groet naam in"
+            placeholder="Voer de groetnaam in"
             required
           />
         </div>
