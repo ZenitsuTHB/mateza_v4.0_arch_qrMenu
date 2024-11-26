@@ -1,12 +1,14 @@
 // ReservationRow.js
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReservationNumber from './ReservationNumber.js';
 import NameColumn from './NameColumn.js';
 import Tooltip from './TooltipView.js';
+import ConfirmationModal from '../../../../Components/Structural/Modal/Delete';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import './css/reservationRow.css';
 import './css/mobile.css';
+import useApi from '../../../../Hooks/useApi';
 
 const ReservationRow = ({
   reservation,
@@ -14,9 +16,17 @@ const ReservationRow = ({
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
+  onDeleteSuccess, // Pass this prop if needed
 }) => {
   const seenKey = `seen-data-${reservation.id}`;
   const expiryTimeString = localStorage.getItem(seenKey);
+  
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  
+  const api = useApi();
+
   function getCurrentTimeInCEST() {
     const now = new Date();
     const nowInCESTString = now.toLocaleString('en-US', {
@@ -42,6 +52,47 @@ const ReservationRow = ({
       localStorage.setItem(seenKey, expiryTime.toISOString());
     }
   }, [expiryTimeString, seenKey]);
+
+  // Handler for opening the delete confirmation modal
+  const handleDeleteClick = () => {
+    setDeleteError(null);
+    setIsDeleteModalVisible(true);
+  };
+
+  // Handler for confirming deletion
+  const handleConfirmDelete = async () => {
+    setIsDeleteModalVisible(false);
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await api.delete(`${window.baseDomain}api/auth-reservations/${reservation.id}`);
+      if (onDeleteSuccess) {
+        onDeleteSuccess(reservation.id);
+      }
+      console.log(`Reservation ${reservation.id} has been deleted.`);
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+      setDeleteError(
+        error.response?.data?.error || error.message || 'Failed to delete the reservation.'
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Handler for canceling deletion
+  const handleCancelDelete = () => {
+    setIsDeleteModalVisible(false);
+  };
+
+  // Handler for editing reservation
+  const handleEditClick = () => {
+    const editUrl = `https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(
+      reservation.id
+    )}`;
+    window.open(editUrl, '_blank');
+  };
 
   if (isMobile) {
     return (
@@ -75,15 +126,29 @@ const ReservationRow = ({
           <div>{reservation.extra || 'Geen extra info'}</div>
         </div>
         <div className="reservation-item buttons-container">
-          <button className="edit-button">
+          <button className="edit-button" onClick={handleEditClick}>
             <FaPencilAlt className="button-icon" />
             Bewerk
           </button>
-          <button className="delete-button">
+          <button className="delete-button" onClick={handleDeleteClick}>
             <FaTrashAlt className="button-icon" />
             Verwijderen
           </button>
         </div>
+
+        <ConfirmationModal
+          isVisible={isDeleteModalVisible}
+          title="Reservatie Verwijderen"
+          message="Wilt u deze reservatie verwijderen?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          confirmText="Verwijderen"
+          cancelText="Annuleren"
+          confirmButtonClass="discard-button red"
+          cancelButtonClass="cancel-button"
+          isLoading={isDeleting}
+          errorMessage={deleteError}
+        />
       </div>
     );
   } else {
@@ -104,6 +169,8 @@ const ReservationRow = ({
           isTooltipOpen={isTooltipOpen}
           onTooltipToggle={onTooltipToggle}
           onTooltipClose={onTooltipClose}
+          onEdit={handleEditClick}
+          onDelete={handleDeleteClick}
         />
       </div>
     );
