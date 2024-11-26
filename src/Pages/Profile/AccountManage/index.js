@@ -1,7 +1,7 @@
 // src/components/Profile/AccountManage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils } from 'react-icons/fa';
+import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils, FaEnvelope } from 'react-icons/fa'; // Added FaEnvelope
 import useNotification from '../../../Components/Notification';
 import { validateAccountData } from './Utils/validationUtils';
 import FormField from './FormField';
@@ -14,6 +14,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const [formData, setFormData] = useState({
     first_name: accountData.first_name || '',
     last_name: accountData.last_name || '',
+    email: accountData.email || '', // Added email
     phone_number: accountData.phone_number || '',
     street: accountData.street || '',
     house_number: accountData.house_number || '',
@@ -31,6 +32,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     setFormData({
       first_name: accountData.first_name || '',
       last_name: accountData.last_name || '',
+      email: accountData.email || '', // Added email
       phone_number: accountData.phone_number || '',
       street: accountData.street || '',
       house_number: accountData.house_number || '',
@@ -99,6 +101,16 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
             onChange={handleChange}
             error={errors.last_name}
             icon={FaUser}
+          />
+          <FormField
+            label="Email" // New Email Field
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+            icon={FaEnvelope}
           />
           <FormField
             label="Telefoonnummer"
