@@ -17,7 +17,7 @@ import useDates from './Hooks/useDates';
 import useWeatherData from './Hooks/useWeatherData';
 import { getMonday } from './Utils/dateUtils';
 import { formatDateForFilter } from '../../../Utils/dateUtils';
-
+import useNotification from '../../../Components/Notification/index.js';
 
 const CalendarComponent = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -56,6 +56,8 @@ const CalendarComponent = () => {
   }, [currentDate, weekOrMonthView]);
 
   const weatherDataByDate = useWeatherData(startDate, endDate, selectedViewMode === 'Weer');
+
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   const handlePrev = () => {
     if (weekOrMonthView === 'week') {
@@ -119,6 +121,7 @@ const CalendarComponent = () => {
 
   return (
     <div className="calendar-page">
+      <NotificationComponent />
       <CalendarHeader
         currentDate={currentDate}
         onPrev={handlePrev}
@@ -174,6 +177,7 @@ const CalendarComponent = () => {
         <ReservationDetailsModal
           reservationsData={selectedDateReservations}
           onClose={handleCloseModal}
+          triggerNotification={triggerNotification}
         />
       )}
 
