@@ -1,4 +1,4 @@
-// src/components/Tooltip.jsx
+// Tooltip.jsx
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -18,7 +18,7 @@ const Tooltip = ({
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
-  onDeleteSuccess,
+  onDeleteSuccess, // This should be the internal handler from ReservationRow
 }) => {
   const tooltipTimerRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -132,15 +132,16 @@ const Tooltip = ({
     setIsDeleteModalVisible(true);
   };
 
+  // Handler for confirming deletion
   const handleConfirmDelete = async () => {
     setIsDeleteModalVisible(false);
     setIsDeleting(true);
     setDeleteError(null);
 
     try {
-      await api.delete(window.baseDomain + `api/auth-reservations/${reservationId}`);
+      await api.delete(`${window.baseDomain}api/auth-reservations/${reservationId}`);
       if (onDeleteSuccess) {
-        onDeleteSuccess(reservationId);
+        onDeleteSuccess(reservationId); // Invoke the handler passed from ReservationRow
       }
       console.log(`Reservation ${reservationId} has been deleted.`);
     } catch (error) {
@@ -153,6 +154,7 @@ const Tooltip = ({
     }
   };
 
+  // Handler for canceling deletion
   const handleCancelDelete = () => {
     setIsDeleteModalVisible(false);
   };
@@ -207,7 +209,7 @@ const Tooltip = ({
         isVisible={isDeleteModalVisible}
         title="Reservatie Verwijderen"
         message="Wilt u deze reservatie verwijderen?"
-        onConfirm={handleConfirmDelete}
+        onConfirm={handleConfirmDelete} // Uses Tooltip's confirm handler
         onCancel={handleCancelDelete}
         confirmText="Verwijderen"
         cancelText="Annuleren"
