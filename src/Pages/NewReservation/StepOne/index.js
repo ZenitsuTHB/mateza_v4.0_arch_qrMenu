@@ -55,7 +55,7 @@ const ReservationStepOne = ({
   }
 
   if (timeblocksError) {
-    return <div>Error loading timeblocks: {timeblocksError.message}</div>;
+    return <div>Stel eerst uw openingsuren in!</div>;
   }
 
   return (
