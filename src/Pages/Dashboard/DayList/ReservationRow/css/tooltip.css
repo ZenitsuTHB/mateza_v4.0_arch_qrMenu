@@ -98,7 +98,9 @@
   }
   
 
-  .reservations-page a.no-style {
+  /* Attention */
+  /* Don't add a prefix class here */
+  a.no-style { 
     text-decoration: none;
     color: inherit;
     background: none;
