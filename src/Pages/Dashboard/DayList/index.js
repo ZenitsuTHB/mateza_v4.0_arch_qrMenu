@@ -14,15 +14,29 @@ import DatePickerComponent from './Filters/DatePicker.js';
 import useSortedReservations from './Hooks/useSortedReservation.js';
 import { getNewSortConfig } from './Utils/sortUtils.js';
 import { shifts } from './Utils/constants.js';
-import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import { FaSortUp, FaSortDown, FaFilter, FaPrint } from 'react-icons/fa'; // Import icons
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
 // Import the new useReservationsList hook
 import useReservationsList from './Hooks/useReservationsList.js';
 import useNotification from '../../../Components/Notification/index.js';
+import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js';
 
-// Import useNotification
+// Import ModalWithoutTabs
+
+const FIELD_CONFIG = [
+  { key: 'aantalGasten', label: 'Aantal Gasten', alwaysVisible: true },
+  { key: 'tijdstip', label: 'Tijdstip', alwaysVisible: true },
+  { key: 'fullName', label: 'Naam', defaultVisible: true },
+  { key: 'email', label: 'Email', defaultVisible: true },
+  { key: 'phone', label: 'Telefoon', defaultVisible: true },
+  { key: 'extra', label: 'Extra Informatie', defaultVisible: false },
+  { key: 'language', label: 'Taal', defaultVisible: false },
+  { key: 'menu', label: 'Menu', defaultVisible: false },
+  { key: 'createdAt', label: 'Aangemaakt Op', defaultVisible: false },
+  { key: 'actions', label: '', alwaysVisible: true }, // For actions
+];
 
 const ReservationsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,10 +104,77 @@ const ReservationsList = () => {
     setSortConfig(newSortConfig);
   };
 
+  const [visibleFields, setVisibleFields] = useState(
+    FIELD_CONFIG.filter((field) => field.defaultVisible || field.alwaysVisible).map((field) => field.key)
+  );
+
+  const [isFieldSelectorModalOpen, setIsFieldSelectorModalOpen] = useState(false);
+
+  const handleFilterClick = () => {
+    setIsFieldSelectorModalOpen(true);
+  };
+
+  const handlePrintClick = () => {
+    window.print();
+  };
+
+  const FieldSelectorModal = ({ visibleFields, setVisibleFields, onClose }) => {
+    const [selectedFields, setSelectedFields] = useState(visibleFields);
+
+    const handleCheckboxChange = (fieldKey) => {
+      if (selectedFields.includes(fieldKey)) {
+        setSelectedFields(selectedFields.filter((key) => key !== fieldKey));
+      } else {
+        setSelectedFields([...selectedFields, fieldKey]);
+      }
+    };
+
+    const handleApply = () => {
+      setVisibleFields(selectedFields);
+      onClose();
+    };
+
+    return (
+      <ModalWithoutTabs
+        content={
+          <div className="field-selector-modal">
+            <h2>Selecteer velden om weer te geven</h2>
+            <div className="field-options">
+              {FIELD_CONFIG.map((field) => (
+                <div key={field.key} className="field-option">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedFields.includes(field.key)}
+                      onChange={() => handleCheckboxChange(field.key)}
+                      disabled={field.alwaysVisible}
+                    />
+                    {field.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+            <button onClick={handleApply}>Toepassen</button>
+          </div>
+        }
+        onClose={onClose}
+      />
+    );
+  };
+
   return (
     <div className="reservations-page">
       {/* Render the NotificationComponent */}
       <NotificationComponent />
+
+      {/* Include the FieldSelectorModal */}
+      {isFieldSelectorModalOpen && (
+        <FieldSelectorModal
+          visibleFields={visibleFields}
+          setVisibleFields={setVisibleFields}
+          onClose={() => setIsFieldSelectorModalOpen(false)}
+        />
+      )}
 
       <DatePickerComponent
         selectedDate={selectedDate}
@@ -126,57 +207,31 @@ const ReservationsList = () => {
           <div>Error loading reservations: {error.message}</div>
         ) : (
           <>
-            <div className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}>
+            <div
+              className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}
+              style={{ '--columns': visibleFields.length }}
+            >
               {!isMobile && (
                 <div className="reservations-header reservation-row">
-                  <div
-                    className="header-cell guests-header"
-                    onClick={() => handleSort('aantalGasten')}
-                    style={{ cursor: 'pointer', userSelect: 'none' }}
-                  >
-                    #
-                    <span className="sort-icon">
-                      {sortConfig.key === 'aantalGasten' && sortConfig.direction === 'asc' && (
-                        <FaSortUp />
-                      )}
-                      {sortConfig.key === 'aantalGasten' && sortConfig.direction === 'desc' && (
-                        <FaSortDown />
-                      )}
-                    </span>
-                  </div>
-                  <div
-                    className="header-cell hour-header"
-                    onClick={() => handleSort('tijdstip')}
-                    style={{ cursor: 'pointer', userSelect: 'none' }}
-                  >
-                    Uur
-                    <span className="sort-icon">
-                      {sortConfig.key === 'tijdstip' && sortConfig.direction === 'asc' && (
-                        <FaSortUp />
-                      )}
-                      {sortConfig.key === 'tijdstip' && sortConfig.direction === 'desc' && (
-                        <FaSortDown />
-                      )}
-                    </span>
-                  </div>
-                  <div
-                    className="header-cell name-header"
-                    onClick={() => handleSort('fullName')}
-                    style={{ cursor: 'pointer', userSelect: 'none' }}
-                  >
-                    Naam
-                    <span className="sort-icon">
-                      {sortConfig.key === 'fullName' && sortConfig.direction === 'asc' && (
-                        <FaSortUp />
-                      )}
-                      {sortConfig.key === 'fullName' && sortConfig.direction === 'desc' && (
-                        <FaSortDown />
-                      )}
-                    </span>
-                  </div>
-                  <div>Email</div>
-                  <div>Telefoon</div>
-                  <div></div>
+                  {visibleFields.map((fieldKey) => {
+                    const fieldConfig = FIELD_CONFIG.find((field) => field.key === fieldKey);
+                    return (
+                      <div
+                        key={fieldKey}
+                        className={`header-cell ${fieldKey}-header`}
+                        onClick={() => handleSort(fieldKey)}
+                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                      >
+                        {fieldConfig.label}
+                        {fieldConfig.label && (
+                          <span className="sort-icon">
+                            {sortConfig.key === fieldKey && sortConfig.direction === 'asc' && <FaSortUp />}
+                            {sortConfig.key === fieldKey && sortConfig.direction === 'desc' && <FaSortDown />}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
@@ -185,11 +240,11 @@ const ReservationsList = () => {
                   <ReservationRow
                     key={reservation.id}
                     reservation={reservation}
+                    visibleFields={visibleFields}
                     isMobile={isMobile}
                     isTooltipOpen={openTooltipId === reservation.id}
                     onTooltipToggle={handleTooltipToggle}
                     onTooltipClose={handleTooltipClose}
-                    // Pass the triggerNotification function to ReservationRow
                     triggerNotification={triggerNotification}
                   />
                 ))
@@ -214,6 +269,18 @@ const ReservationsList = () => {
                 handlePageClick={handlePageClick}
               />
             )}
+
+            {/* Buttons below the pagination */}
+            <div className="buttons-container">
+              <button className="filter-button" onClick={handleFilterClick}>
+                <FaFilter className="button-icon" />
+                Filter
+              </button>
+              <button className="print-button" onClick={handlePrintClick}>
+                <FaPrint className="button-icon" />
+                Print
+              </button>
+            </div>
           </>
         )}
       </div>

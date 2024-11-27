@@ -10,13 +10,28 @@ import './css/reservationRow.css';
 import './css/mobile.css';
 import useApi from '../../../../Hooks/useApi';
 
+
+const FIELD_CONFIG = [
+  { key: 'aantalGasten', label: 'Aantal Gasten', alwaysVisible: true },
+  { key: 'tijdstip', label: 'Tijdstip', alwaysVisible: true },
+  { key: 'fullName', label: 'Naam', defaultVisible: true },
+  { key: 'email', label: 'Email', defaultVisible: true },
+  { key: 'phone', label: 'Telefoon', defaultVisible: true },
+  { key: 'extra', label: 'Extra Informatie', defaultVisible: false },
+  { key: 'language', label: 'Taal', defaultVisible: false },
+  { key: 'menu', label: 'Menu', defaultVisible: false },
+  { key: 'createdAt', label: 'Aangemaakt Op', defaultVisible: false },
+  { key: 'actions', label: '', alwaysVisible: true }, // For actions
+];
+
 const ReservationRow = ({
   reservation,
+  visibleFields,
   isMobile,
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
-  triggerNotification, // Receive triggerNotification via props
+  triggerNotification,
 }) => {
   const seenKey = `seen-data-${reservation.id}`;
   const expiryTimeString = localStorage.getItem(seenKey);
@@ -109,82 +124,82 @@ const ReservationRow = ({
     return null; // Do not render the row if it's not visible
   }
 
-  return (
-    <>
-      {isMobile ? (
-        <div className="reservation-row-mobile">
-          <div className="reservation-item">
-            <div className="label">Aantal Gasten</div>
-            <ReservationNumber aantalGasten={reservation.aantalGasten} />
-          </div>
-          <div className="reservation-item">
-            <div className="label">Tijdstip</div>
-            <div>{reservation.tijdstip}</div>
-          </div>
-          <div className="reservation-item">
-            <div className="label">Naam</div>
-            <NameColumn
-              isNewReservationHere={isNewReservationHere}
-              firstName={reservation.firstName}
-              lastName={reservation.lastName}
-            />
-          </div>
-          <div className="reservation-item">
-            <div className="label">Email</div>
-            <div>{reservation.email}</div>
-          </div>
-          <div className="reservation-item">
-            <div className="label">Telefoon</div>
-            <div>{reservation.phone}</div>
-          </div>
-          <div className="reservation-item">
-            <div className="label">Extra Info / Allergenen</div>
-            <div>{reservation.extra || 'Geen extra info'}</div>
-          </div>
-          <div className="reservation-item buttons-container">
-            <button className="edit-button" onClick={handleEditClick}>
-              <FaPencilAlt className="button-icon" />
-              Bewerk
-            </button>
-            <button className="delete-button" onClick={handleDeleteClick}>
-              <FaTrashAlt className="button-icon" />
-              Verwijderen
-            </button>
-          </div>
-
-          <ConfirmationModal
-            isVisible={isDeleteModalVisible}
-            title="Reservatie Verwijderen"
-            message="Wilt u deze reservatie verwijderen?"
-            onConfirm={handleConfirmDelete}
-            onCancel={handleCancelDelete}
-            confirmText="Verwijderen"
-            cancelText="Annuleren"
-            confirmButtonClass="discard-button red"
-            cancelButtonClass="cancel-button"
-            isLoading={isDeleting}
-            errorMessage={deleteError}
-          />
-        </div>
-      ) : (
-        <div className="reservation-row reservation-row-desktop">
-          <ReservationNumber aantalGasten={reservation.aantalGasten} />
-          <div>{reservation.tijdstip}</div>
+  const renderField = (reservation, fieldKey) => {
+    switch (fieldKey) {
+      case 'aantalGasten':
+        return <ReservationNumber aantalGasten={reservation.aantalGasten} />;
+      case 'tijdstip':
+        return reservation.tijdstip;
+      case 'fullName':
+        return (
           <NameColumn
             isNewReservationHere={isNewReservationHere}
             firstName={reservation.firstName}
             lastName={reservation.lastName}
           />
-          <div>{reservation.email}</div>
-          <div>{reservation.phone}</div>
-          <Tooltip
-            reservationId={reservation.id}
-            extraInfo={reservation.extra}
-            isTooltipOpen={isTooltipOpen}
-            onTooltipToggle={onTooltipToggle}
-            onTooltipClose={onTooltipClose}
-            onDeleteSuccess={handleDeleteSuccess} // Pass internal handler
-          />
+        );
+      case 'email':
+        return reservation.email;
+      case 'phone':
+        return reservation.phone;
+      case 'extra':
+        if (isMobile) {
+          return reservation.extra || 'Geen extra info';
+        } else {
+          return reservation.extra || 'Geen extra info';
+        }
+      case 'language':
+        return reservation.language;
+      case 'menu':
+        return reservation.menu;
+      case 'createdAt':
+        return new Date(reservation.createdAt).toLocaleString();
+      case 'actions':
+        return (
+          <div className="actions-cell">
+            <button className="edit-button" onClick={handleEditClick}>
+              <FaPencilAlt className="button-icon" />
+            </button>
+            <button className="delete-button" onClick={handleDeleteClick}>
+              <FaTrashAlt className="button-icon" />
+            </button>
+
+            <ConfirmationModal
+              isVisible={isDeleteModalVisible}
+              title="Reservatie Verwijderen"
+              message="Wilt u deze reservatie verwijderen?"
+              onConfirm={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+              confirmText="Verwijderen"
+              cancelText="Annuleren"
+              confirmButtonClass="discard-button red"
+              cancelButtonClass="cancel-button"
+              isLoading={isDeleting}
+              errorMessage={deleteError}
+            />
+          </div>
+        );
+      default:
+        return reservation[fieldKey];
+    }
+  };
+
+  return (
+    <>
+      {isMobile ? (
+        <div className="reservation-row-mobile">
+          {visibleFields.map((fieldKey) => (
+            <div key={fieldKey} className="reservation-item">
+              <div className="label">{FIELD_CONFIG.find((field) => field.key === fieldKey).label}</div>
+              <div>{renderField(reservation, fieldKey)}</div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="reservation-row reservation-row-desktop">
+          {visibleFields.map((fieldKey) => (
+            <div key={fieldKey}>{renderField(reservation, fieldKey)}</div>
+          ))}
         </div>
       )}
     </>

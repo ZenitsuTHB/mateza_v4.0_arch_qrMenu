@@ -82,6 +82,8 @@
 	font-size: 12px;
 	z-index: 1000;
 	opacity: 0.9;
+	max-width: 200px !important;
+	text-wrap: wrap;
   }
   
   .reservations-page .extra-tooltip::after {
