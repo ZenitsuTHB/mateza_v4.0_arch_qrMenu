@@ -12,11 +12,10 @@ import useApi from '../../../../Hooks/useApi';
 
 const FIELD_CONFIG = [
   { key: 'aantalGasten', label: '#', alwaysVisible: true },
-  { key: 'tijdstip', label: 'Tijdstip', alwaysVisible: true },
+  { key: 'tijdstip', label: 'Uur', alwaysVisible: true },
   { key: 'fullName', label: 'Naam', defaultVisible: true },
   { key: 'email', label: 'Email', defaultVisible: true },
   { key: 'phone', label: 'Telefoon', defaultVisible: true },
-  { key: 'language', label: 'Taal', defaultVisible: false },
   { key: 'menu', label: 'Menu', defaultVisible: false },
   // Removed 'extra' and 'actions' fields
 ];

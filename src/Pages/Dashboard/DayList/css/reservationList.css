@@ -1,7 +1,6 @@
 /* reservationList.css */
 .reservations-page .reservations-grid {
 	display: grid;
-	grid-template-columns: repeat(var(--columns), 1fr);
 	gap: 10px;
   }
   
@@ -60,6 +59,12 @@
 	color: #555;
   }
   
+  /* Updated styles for Version 1 */
+  .reservations-page .reservations-grid {
+	display: grid;
+	gap: 10px;
+  }
+  
   .reservations-page .no-reservations-row {
 	display: flex;
 	justify-content: center;
@@ -67,20 +72,22 @@
 	padding: 20px;
 	font-size: 0.9em;
 	color: #555;
+	grid-column: 1 / -1; /* Span all columns */
+	height: 100%;        /* Ensure it takes full height */
   }
   
-  .reservations-page .no-reservations-desktop {
-	grid-column: span var(--columns);
-  }
-  
+  .reservations-page .no-reservations-desktop,
   .reservations-page .no-reservations-mobile {
-	width: 100%;
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
   }
+  
   
   .reservations-page .buttons-container {
 	display: flex;
 	margin-top: 20px;
+	padding-bottom: 40px;
   }
   
   .reservations-page .filter-button,

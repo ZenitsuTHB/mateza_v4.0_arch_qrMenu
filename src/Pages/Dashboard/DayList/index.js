@@ -27,14 +27,11 @@ import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/inde
 
 const FIELD_CONFIG = [
   { key: 'aantalGasten', label: '#', alwaysVisible: true },
-  { key: 'tijdstip', label: 'Tijdstip', alwaysVisible: true },
+  { key: 'tijdstip', label: 'Uur', alwaysVisible: true },
   { key: 'fullName', label: 'Naam', defaultVisible: true },
   { key: 'email', label: 'Email', defaultVisible: true },
   { key: 'phone', label: 'Telefoon', defaultVisible: true },
-  { key: 'language', label: 'Taal', defaultVisible: false },
   { key: 'menu', label: 'Menu', defaultVisible: false },
-  { key: 'createdAt', label: 'Aangemaakt Op', defaultVisible: false },
-  // Removed 'extra' and 'actions' fields
 ];
 
 const ReservationsList = () => {
@@ -49,7 +46,7 @@ const ReservationsList = () => {
   const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('');
   const { searchQuery } = useContext(SearchContext);
-  const itemsPerPage = 12;
+  const itemsPerPage = 11;
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   // Use the new hook to fetch reservations data
@@ -211,7 +208,7 @@ const ReservationsList = () => {
           <>
             <div
               className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}
-              style={{ '--columns': columnsCount }}
+              style={{ gridTemplateColumns: `60px  70px repeat(${columnsCount - 2}, 1fr)` }}
             >
               {!isMobile && (
                 <div className="reservations-header reservation-row">
