@@ -1,59 +1,28 @@
-/* src/components/ReservationForm/css/reservationForm.css */
-
-
-
 .new-reservation-page {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-}
-
-
-.new-reservation-page .account-manage-container {
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	position: relative;
-	width: 100%;
-	max-width: 600px;
+	padding: 20px;
+  }
+  
+  .account-manage-title {
 	text-align: center;
-	background-color: white;
-  }
-
-
-  .new-reservation-page .modal-title {
-	text-align: center;
-	width: 100%;
-	margin-top: 20px;
-	margin-bottom: 40px;
-  }
-
-
-.new-reservation-page .account-manage-container {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 30px;
-	width: 100%;
-  }
-
-  .new-reservation-page .account-manage-title {
-	margin-top: 30px;
 	margin-bottom: 30px;
   }
   
-
-  .new-reservation-page .account-manage-form {
+  .account-manage-container {
+	max-width: 800px;
+	margin: 0 auto;
+  }
+  
+  .account-manage-form {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
   }
-
-  .new-reservation-page .input-container {
+  
+  .input-container {
 	position: relative;
   }
   
-  .new-reservation-page .input-icon {
+  .input-icon {
 	position: absolute;
 	top: 50%;
 	left: 10px;
@@ -62,7 +31,8 @@
 	pointer-events: none;
   }
   
-  .new-reservation-page .input-container input {
+  .input-container input,
+  .input-container textarea {
 	width: 100%;
 	padding: 10px 10px 10px 35px;
 	border: 1px solid #ccc;
@@ -70,8 +40,8 @@
 	font-size: 1rem;
 	transition: border-color 0.3s ease;
   }
-
-  .new-reservation-page .form-error {
+  
+  .form-error {
 	color: #dc3545;
 	font-size: 0.9rem;
 	margin-top: 5px;
@@ -79,9 +49,8 @@
 	align-items: center;
 	gap: 5px;
   }
-
-
-  .new-reservation-page .account-manage__button {
+  
+  .account-manage__button {
 	padding: 12px;
 	background-color: #007bff;
 	color: #fff;
@@ -95,4 +64,4 @@
 	gap: 10px;
 	transition: background-color 0.3s ease;
   }
-
+  

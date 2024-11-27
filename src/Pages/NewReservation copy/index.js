@@ -1,10 +1,13 @@
+// src/Pages/NewReservation/NewReservationAdmin.jsx
+
 import React, { useState } from 'react';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import useApi from '../../Hooks/useApi';
-import ReservationSidebar from './ReservationSidebar';
-import { withHeader } from '../../Components/Structural/Header';
-import { FaPlus } from 'react-icons/fa';
-import './css/newReservationAdmin.css';
+import ReservationStepOne from './StepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
 import ReservationSummary from './ReservationSummary';
+import { withHeader } from '../../Components/Structural/Header';
+import './css/newReservationAdmin.css';
 
 const NewReservationAdmin = () => {
   const api = useApi();
@@ -18,12 +21,11 @@ const NewReservationAdmin = () => {
     email: '',
     phone: '',
     extraInfo: '',
-    notes: '',
   });
 
   const [errors, setErrors] = useState({});
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reservationSubmitted, setReservationSubmitted] = useState(false);
 
@@ -51,13 +53,22 @@ const NewReservationAdmin = () => {
     return errors;
   };
 
-  const handleFinalSubmit = async (e) => {
+  const handleStepOneSubmit = (e) => {
     e.preventDefault();
     const stepOneErrors = validateStepOne();
+    if (Object.keys(stepOneErrors).length > 0) {
+      setErrors(stepOneErrors);
+    } else {
+      setErrors({});
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
     const stepTwoErrors = validateStepTwo();
-    const allErrors = { ...stepOneErrors, ...stepTwoErrors };
-    if (Object.keys(allErrors).length > 0) {
-      setErrors(allErrors);
+    if (Object.keys(stepTwoErrors).length > 0) {
+      setErrors(stepTwoErrors);
     } else {
       setErrors({});
       setIsSubmitting(true);
@@ -70,12 +81,11 @@ const NewReservationAdmin = () => {
         email: formData.email,
         phone: formData.phone,
         extraInfo: formData.extraInfo,
-        notes: formData.notes,
       };
 
       try {
         await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
-        setIsSidebarOpen(false);
+        setIsModalOpen(false);
         setReservationSubmitted(true);
       } catch (error) {
         console.error('Error submitting reservation:', error);
@@ -108,51 +118,37 @@ const NewReservationAdmin = () => {
                 email: '',
                 phone: '',
                 extraInfo: '',
-                notes: '',
               });
               setReservationSubmitted(false);
             }}
           />
         ) : (
           <>
-            {/* Existing content, e.g., list of reservations */}
+            <ReservationStepOne
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleStepOneSubmit={handleStepOneSubmit}
+              setFormData={setFormData}
+            />
+
+            {isModalOpen && (
+              <ModalWithoutTabs
+                content={
+                  <ReservationStepTwoModal
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleFinalSubmit={handleFinalSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                }
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
           </>
         )}
       </div>
-      {/* Plus Button */}
-      <button
-        className="open-sidebar-button"
-        onClick={() => setIsSidebarOpen(true)}
-        style={{ zIndex: isSidebarOpen ? 0 : 1000 }}
-      >
-        <FaPlus size={24} color="#fff" />
-      </button>
-      {/* Sidebar */}
-      <ReservationSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        formData={formData}
-        errors={errors}
-        handleChange={handleChange}
-        handleFinalSubmit={handleFinalSubmit}
-        setFormData={setFormData}
-        isSubmitting={isSubmitting}
-        reservationSubmitted={reservationSubmitted}
-        onNewReservation={() => {
-          setFormData({
-            numberOfGuests: '',
-            date: '',
-            time: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            extraInfo: '',
-            notes: '',
-          });
-          setReservationSubmitted(false);
-        }}
-      />
     </div>
   );
 };

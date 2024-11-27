@@ -1,668 +1,869 @@
-File Contents:
+### **Implementation Plan: Transforming the Reservation Form into a Sidebar Layout**
 
---- FloorPlan.js ---
-// FloorPlan.js
-import React, { useRef, useEffect, useState } from 'react';
-import { useDrop } from 'react-dnd';
-import './css/floorPlan.css';
-import { ResizableBox } from 'react-resizable';
-import 'react-resizable/css/styles.css';
-import FloorPlanElement from './FloorPlanElement.js';
-import useApi from '../../../Hooks/useApi.js'; // Ensure correct path
+---
 
-const FloorPlanGeneral = ({
-  reservations,
-  assignReservation,
-  removeReservation,
-  updateNotes,
-}) => {
-  const floorPlanRef = useRef(null);
-  const [floorPlanSize, setFloorPlanSize] = useState({ width: 800, height: 600 });
-  const [tables, setTables] = useState([]);
+#### **1. Overview of the Desired Sidebar Structure**
 
-  const api = useApi(); // Initialize useApi hook
+- **Layout**: A right-floating sidebar with a fixed width (e.g., 400px) that slides in from the right side of the screen.
 
-  // Update floor plan size on mount and when resized
-  useEffect(() => {
-    const updateSize = () => {
-      if (floorPlanRef.current) {
-        const { width, height } = floorPlanRef.current.getBoundingClientRect();
-        setFloorPlanSize({ width, height });
-      }
-    };
+- **Sections**:
+  - **Section 1**: Guest Selection, Date Picker, and Time Selector.
+  - **Section 2**: Personal Information and Additional Details (currently in the modal).
 
-    // Initial size
-    updateSize();
+- **Footer**: A persistent button to store the reservation and an extra field for notes.
 
-    // Update size on window resize
-    window.addEventListener('resize', updateSize);
+- **Behavior**: Both sections are visible simultaneously, allowing users to interact with them independently. The sidebar should be responsive and maintain the existing logic for date and time selections.
 
-    // Cleanup
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
+---
 
-  // Load tables from API on mount
-  useEffect(() => {
-    const fetchTables = async () => {
-      try {
-        const data = await api.get(window.baseDomain + 'api/tables', { noCache: true });
-        // Ensure that data is an array
-        if (Array.isArray(data)) {
-          setTables(data);
-        } else if (data && Array.isArray(data.tables)) {
-          // If API returns { tables: [...] }
-          setTables(data.tables);
-        } else {
-          setTables([]); // Fallback to empty array
-        }
-      } catch (error) {
-        console.error('Error fetching tables:', error);
-        setTables([]); // Fallback to empty array on error
-      }
-    };
+#### **2. Component Mapping and Structure**
 
-    fetchTables();
-  }, [api]);
+##### **2.1. Existing Components**
 
-  const [, drop] = useDrop({
-    accept: 'GUEST',
-    drop: (item, monitor) => {
-      // Dropping on the floor plan background does nothing
-      // You might want to implement additional functionality here if needed
-    },
-  });
+- **Section 1 Components**:
+  - `ValueSelectorGuests` (formerly `ValueSelector.js`)
+  - `DateSelector` (includes `Calendar.js` and related utilities)
+  - `TimeSelector`
 
-  return (
-    <ResizableBox
-      width={800}
-      height={600}
-      minConstraints={[400, 300]}
-      maxConstraints={[1600, 1200]}
-      className="resizable-floor-plan"
-      onResizeStop={(e, data) => {
-        // Directly set the new size without snapping
-        setFloorPlanSize({ width: data.size.width, height: data.size.height });
-      }}
-      resizeHandles={['se']} // Optional: specify resize handles if needed
-    >
-      <div
-        id="floor-plan-container"
-        className="floor-plan"
-        ref={(node) => {
-          drop(node);
-          floorPlanRef.current = node;
-        }}
-        style={{ position: 'relative', width: '100%', height: '100%' }}
-      >
-        {tables.map((table) => (
-          <FloorPlanElement
-            key={table.id}
-            table={table}
-            reservations={reservations.filter((res) => res.tableId === table.id)}
-            assignReservation={assignReservation}
-            removeReservation={removeReservation}
-            updateNotes={updateNotes}
-            floorPlanSize={floorPlanSize}
-          />
-        ))}
-      </div>
-    </ResizableBox>
-  );
-};
+- **Section 2 Components**:
+  - `ReservationStepTwoModal` (to be adapted into the sidebar)
+  - `FormField` (used within `ReservationStepTwoModal`)
 
-export default FloorPlanGeneral;
+- **Shared Components**:
+  - `FormField.js`
+  - Utility files (`dateUtils.js`, `exceptions.js`, `generateDates.js`, `generateTimes.js`, etc.)
 
+##### **2.2. New Components Needed**
 
---- FloorPlanElement.js ---
-// FloorPlanElement.js
-import React from 'react';
-import { useDrop } from 'react-dnd';
-import Table from './Table.js';
+- **Sidebar Container**:
+  - **`ReservationSidebar.jsx`**: A new main component that encapsulates both sections and manages the overall layout.
 
-const FloorPlanElement = ({
-  table,
-  reservations,
-  assignReservation,
-  removeReservation,
-  updateNotes,
-  floorPlanSize,
-}) => {
-  const [{ isOver, canDrop }, drop] = useDrop({
-    accept: 'GUEST',
-    drop: (item) => {
-      assignReservation(item.id, table.id);
-    },
-    canDrop: (item) => {
-      // Check if table can accommodate the reservation
-      const currentGuests = reservations.reduce((acc, res) => acc + res.numberOfGuests, 0);
-      return currentGuests + item.numberOfGuests <= table.capacity;
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  });
+- **Footer Section**:
+  - **`ReservationFooter.jsx`**: Contains the "Store Reservation" button and the "Notes" field.
 
-  const isActive = isOver && canDrop;
+- **Optional Enhancements**:
+  - **`SidebarHeader.jsx`**: If a header (e.g., title or navigation) is desired within the sidebar.
+  - **`SidebarSection.jsx`**: A reusable component for individual sections within the sidebar to maintain consistency and modularity.
 
-  return (
-    <div
-      ref={drop}
-      style={{
-        position: 'absolute',
-        left: `${table.x}px`,
-        top: `${table.y}px`,
-        border: isActive ? '2px dashed #4CAF50' : 'none', // Visual feedback
-        transition: 'border 0.2s ease',
-      }}
-    >
-      <Table
-        capacity={table.capacity}
-        reservations={reservations}
-        tableId={table.id}
-        tableName={table.name} // Display the table's name
-        removeReservation={removeReservation}
-        updateNotes={updateNotes}
-        isActive={isActive}
-      />
-    </div>
-  );
-};
+---
 
-export default FloorPlanElement;
+#### **3. Detailed Component Integration**
 
+##### **3.1. Creating the `ReservationSidebar` Component**
 
---- Hooks/useReservations.js ---
-// src/Components/Calendar/Hooks/useReservations.js
+- **Purpose**: Acts as the main container for the reservation form, housing both sections and the footer.
 
-import { useState, useEffect } from 'react';
-import useApi from '../../../../Hooks/useApi';
+- **Structure**:
+  ```jsx
+  // src/Pages/NewReservation/ReservationSidebar.jsx
 
-/**
- * Custom hook to fetch and manage reservations data.
- *
- * @returns {Array} An array of reservation objects.
- */
-const useReservations = () => {
-  const [reservations, setReservations] = useState([]);
-  const api = useApi();
+  import React from 'react';
+  import ReservationStepOne from './StepOne';
+  import ReservationStepTwo from './ReservationStepTwo';
+  import ReservationFooter from './ReservationFooter';
+  import './css/reservationSidebar.css'; // New CSS file for sidebar styling
 
-  useEffect(() => {
-    /**
-     * Fetches reservations from the backend API and processes them.
-     */
-    const fetchReservations = async () => {
-      try {
-        // Fetch raw data from the backend API
-        const data = await api.get(`${window.baseDomain}api/auth-reservations`, { noCache: true });
-
-        console.log('Raw data from backend:', data);
-
-        // Check if data is an array
-        if (!Array.isArray(data)) {
-          console.error('Unexpected data format: Expected an array of reservations.');
-          setReservations([]);
-          return;
-        }
-
-        // Process and map each reservation to the frontend format
-        const mappedReservations = data.map((reservation) => {
-          // Extract the reservation ID
-          const id = reservation._id?.$oid || reservation._id || `unknown-${Math.random()}`;
-
-          // Parse the number of guests
-          const guests = parseInt(reservation.guests?.$numberInt || reservation.guests, 10);
-          const numberOfGuests = isNaN(guests) ? 1 : guests; // Default to 1 if parsing fails
-
-          // Extract and trim extra information
-          const notes = reservation.extraInfo?.trim() || '';
-
-          // Return the mapped reservation object
-          return {
-            id,
-            date: reservation.date, // Ensure this is in 'YYYY-MM-DD' format or adjust as needed
-            time: reservation.time, // Ensure this is in 'HH:MM' format or adjust as needed
-            firstName: reservation.firstName || 'Unknown',
-            lastName: reservation.lastName || 'Guest',
-            numberOfGuests,
-            tableId: null, // Initialize as null; will be updated when assigned
-            notes,
-            email: reservation.email || '',
-            phone: reservation.phone || '',
-            reservationType: reservation.reservationType || 'common',
-            // Add other fields if necessary
-          };
-        });
-
-        setReservations(mappedReservations);
-      } catch (error) {
-        console.error('Error fetching reservations:', error);
-        setReservations([]); // Fallback to an empty array on error
-      }
-    };
-
-    fetchReservations();
-  }, [api]);
-
-  return reservations;
-};
-
-export default useReservations;
-
-
---- Sidebar.js ---
-// Sidebar.js
-import React, { useState, useMemo } from 'react';
-import { useDrag } from 'react-dnd';
-import './css/sidebar.css';
-
-const Sidebar = ({ reservations }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  // Filter reservations based on search term and only show unassigned
-  const filteredReservations = useMemo(() => {
-    const lowerSearch = searchTerm.toLowerCase();
-    return reservations.filter(
-      (guest) =>
-        guest.tableId === null &&
-        (guest.firstName.toLowerCase().includes(lowerSearch) ||
-          guest.lastName.toLowerCase().includes(lowerSearch) ||
-          guest.numberOfGuests.toString().includes(lowerSearch) ||
-          guest.time.includes(lowerSearch))
-    );
-  }, [searchTerm, reservations]);
-
-  // Guest Block Component
-  const GuestBlock = ({ guest }) => {
-    const [{ isDragging }, drag] = useDrag(
-      () => ({
-        type: 'GUEST',
-        item: { id: guest.id, ...guest },
-        collect: (monitor) => ({
-          isDragging: !!monitor.isDragging(),
-        }),
-      }),
-      [guest]
-    );
-
+  const ReservationSidebar = ({
+    formData,
+    errors,
+    handleChange,
+    handleFinalSubmit,
+    handleStepOneSubmit,
+    setFormData,
+    isSubmitting,
+    reservationSubmitted,
+    onNewReservation,
+  }) => {
     return (
-      <div
-        className="guest-block"
-        ref={drag}
-        style={{ opacity: isDragging ? 0.5 : 1 }}
-      >
-        <p className="guest-name">
-          {guest.firstName} {guest.lastName}
-        </p>
-        <p className="guest-details">
-          {guest.numberOfGuests}p • {guest.time}
-        </p>
+      <div className="reservation-sidebar-component">
+        <div className="sidebar-section-one">
+          <ReservationStepOne
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleStepOneSubmit={handleStepOneSubmit}
+            setFormData={setFormData}
+          />
+        </div>
+        <div className="sidebar-section-two">
+          <ReservationStepTwo
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleFinalSubmit={handleFinalSubmit}
+            isSubmitting={isSubmitting}
+          />
+        </div>
+        <ReservationFooter
+          onSubmit={handleFinalSubmit}
+          formData={formData}
+          handleChange={handleChange}
+        />
       </div>
     );
   };
 
-  return (
-    <div className="sidebar">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Zoek gasten..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label="Zoek gasten"
-        />
+  export default ReservationSidebar;
+  ```
+
+
+##### **3.2. Adapting `ReservationStepTwoModal` into `ReservationStepTwo`**
+
+- **Purpose**: Convert the modal content into a sidebar-friendly layout.
+
+- **Changes**:
+  - Rename `ReservationStepTwoModal.js` to `ReservationStepTwo.jsx`.
+  - Remove modal-specific wrappers and ensure the component fits seamlessly within the sidebar.
+  - Adjust CSS classes to include the `.reservation-sidebar-component` prefix.
+
+- **Structure**:
+  ```jsx
+  // src/Pages/NewReservation/ReservationStepTwo.jsx
+
+  import React from 'react';
+  import FormField from '../FormField';
+  import { FaUser, FaPhone, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
+
+  const ReservationStepTwo = ({
+    formData,
+    errors,
+    handleChange,
+    handleFinalSubmit,
+    isSubmitting,
+  }) => {
+    return (
+      <div className="reservation-step-two">
+        <h2 className="modal-title">Persoonlijke Informatie</h2>
+        <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
+          {/* Form fields similar to ReservationStepTwoModal */}
+          <FormField /* ...props */ />
+          {/* ...other FormFields */}
+          <button type="submit" className="account-manage__button" disabled={isSubmitting}>
+            {isSubmitting ? 'Verzenden...' : 'Reserveren'}
+          </button>
+        </form>
       </div>
-      <div className="guests-list">
-        {filteredReservations.length > 0 ? (
-          filteredReservations.map((guest) => (
-            <GuestBlock key={guest.id} guest={guest} />
-          ))
+    );
+  };
+
+  export default ReservationStepTwo;
+  ```
+
+##### **3.3. Updating `NewReservationAdmin` to Incorporate the Sidebar**
+
+- **Purpose**: Replace the existing modal-based workflow with the new sidebar structure.
+
+- **Changes**:
+  - Remove modal-related state (`isModalOpen`) and handlers.
+  - Integrate the `ReservationSidebar` component directly into the main layout.
+  - Ensure that `ReservationSidebar` receives all necessary props for managing form data and submission.
+
+- **Structure**:
+  ```jsx
+// src/Pages/NewReservation/NewReservationAdmin.jsx
+
+import React, { useState } from 'react';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import useApi from '../../Hooks/useApi';
+import ReservationStepOne from './StepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
+import ReservationSummary from './ReservationSummary';
+import { withHeader } from '../../Components/Structural/Header';
+import './css/newReservationAdmin.css';
+
+const NewReservationAdmin = () => {
+  const api = useApi();
+
+  const [formData, setFormData] = useState({
+    numberOfGuests: '',
+    date: '',
+    time: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    extraInfo: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationSubmitted, setReservationSubmitted] = useState(false);
+
+  const validateStepOne = () => {
+    const errors = {};
+    if (!formData.numberOfGuests) {
+      errors.numberOfGuests = 'Aantal gasten is verplicht';
+    }
+    if (!formData.date) {
+      errors.date = 'Datum is verplicht';
+    }
+    if (!formData.time) {
+      errors.time = 'Tijd is verplicht';
+    }
+    return errors;
+  };
+
+  const validateStepTwo = () => {
+    const errors = {};
+
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'E-mail is ongeldig';
+    }
+
+    return errors;
+  };
+
+  const handleStepOneSubmit = (e) => {
+    e.preventDefault();
+    const stepOneErrors = validateStepOne();
+    if (Object.keys(stepOneErrors).length > 0) {
+      setErrors(stepOneErrors);
+    } else {
+      setErrors({});
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    const stepTwoErrors = validateStepTwo();
+    if (Object.keys(stepTwoErrors).length > 0) {
+      setErrors(stepTwoErrors);
+    } else {
+      setErrors({});
+      setIsSubmitting(true);
+      const submissionData = {
+        numberOfGuests: formData.numberOfGuests,
+        date: formData.date,
+        time: formData.time,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        extraInfo: formData.extraInfo,
+      };
+
+      try {
+        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
+        setIsModalOpen(false);
+        setReservationSubmitted(true);
+      } catch (error) {
+        console.error('Error submitting reservation:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  return (
+    <div className="new-reservation-page">
+      <h2 className="account-manage-title">Admin Reservaties</h2>
+      <div className="account-manage-container">
+        {reservationSubmitted ? (
+          <ReservationSummary
+            formData={formData}
+            onNewReservation={() => {
+              setFormData({
+                numberOfGuests: '',
+                date: '',
+                time: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                extraInfo: '',
+              });
+              setReservationSubmitted(false);
+            }}
+          />
         ) : (
-          <p className="no-results">Geen gasten gevonden.</p>
+          <>
+            <ReservationStepOne
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleStepOneSubmit={handleStepOneSubmit}
+              setFormData={setFormData}
+            />
+
+            {isModalOpen && (
+              <ModalWithoutTabs
+                content={
+                  <ReservationStepTwoModal
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleFinalSubmit={handleFinalSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                }
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
   );
 };
 
-export default Sidebar;
+export default withHeader(NewReservationAdmin);
+
+  ```
+
+##### **3.4. Developing the `ReservationFooter` Component**
+
+- **Purpose**: Provides the "Store Reservation" button and the "Notes" field at the bottom of the sidebar.
+
+- **Structure**:
+  ```jsx
+  // src/Pages/NewReservation/ReservationFooter.jsx
+
+  import React from 'react';
+  import FormField from '../FormField';
+
+  const ReservationFooter = ({ onSubmit, formData, handleChange }) => {
+    return (
+      <div className="reservation-footer">
+        <FormField
+          label="Notities"
+          name="notes"
+          type="textarea"
+          placeholder="Voeg hier extra informatie toe..."
+          value={formData.notes}
+          onChange={handleChange}
+          error={null} // Assuming notes are optional
+        />
+        <button type="button" className="store-reservation-button" onClick={onSubmit}>
+          Opslaan
+        </button>
+      </div>
+    );
+  };
+
+  export default ReservationFooter;
+  ```
 
 
---- Table.js ---
-// Table.js
+##### **3.5. Maintaining Existing Logic Files**
+
+- **Integrity**: Ensure that the existing utility files (`dateUtils.js`, `exceptions.js`, `generateDates.js`, `generateTimes.js`, `Calendar.js`, `DateSelector.js`, `TimeSelector.js`, `ValueSelector.js`) remain untouched to preserve the date and time selection logic.
+
+- **Usage**: These components will continue to be imported and used within `ReservationStepOne` and `ReservationStepTwo` as needed without any modifications.
+
+---
+
+#### **4. CSS Adjustments and Encapsulation**
+
+
+##### **4.2. Sidebar-Specific Styling**
+
+- **`reservationSidebar.css`**:
+  - Define styles for the sidebar layout, including positioning, background, padding, and responsiveness.
+  - Example:
+    ```css
+    .reservation-sidebar-component {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 400px;
+      height: 100%;
+      background-color: #f8f9fa;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 1000;
+      overflow-y: auto;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    @media screen and (max-width: 480px) {
+      .reservation-sidebar-component {
+        width: 100%;
+      }
+    }
+    ```
+
+- **Form and Button Styles**:
+  - Ensure buttons and form fields within the sidebar align with the overall design.
+  - Reuse existing styles from `newReservationAdmin.css` by ensuring class names are correctly prefixed.
+
+---
+
+#### **5. Managing State and Form Submission**
+
+[...Additional sections...]
+
+---
+
+**Note**: Throughout the transformation, ensure that all existing logic files and components retain their original functionality. The primary focus is on restructuring the UI into a sidebar without altering the underlying reservation logic.
+
+---
+
+**Instruction:**
+
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+
+**Relevant Code Files:**
+
+---
+
+**index.js**
+```jsx
+// src/Pages/NewReservation/NewReservationAdmin.jsx
+
+import React, { useState } from 'react';
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
+import useApi from '../../Hooks/useApi';
+import ReservationStepOne from './StepOne';
+import ReservationStepTwoModal from './ReservationStepTwoModal';
+import ReservationSummary from './ReservationSummary';
+import { withHeader } from '../../Components/Structural/Header';
+import './css/newReservationAdmin.css';
+
+const NewReservationAdmin = () => {
+  const api = useApi();
+
+  const [formData, setFormData] = useState({
+    numberOfGuests: '',
+    date: '',
+    time: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    extraInfo: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationSubmitted, setReservationSubmitted] = useState(false);
+
+  const validateStepOne = () => {
+    const errors = {};
+    if (!formData.numberOfGuests) {
+      errors.numberOfGuests = 'Aantal gasten is verplicht';
+    }
+    if (!formData.date) {
+      errors.date = 'Datum is verplicht';
+    }
+    if (!formData.time) {
+      errors.time = 'Tijd is verplicht';
+    }
+    return errors;
+  };
+
+  const validateStepTwo = () => {
+    const errors = {};
+
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'E-mail is ongeldig';
+    }
+
+    return errors;
+  };
+
+  const handleStepOneSubmit = (e) => {
+    e.preventDefault();
+    const stepOneErrors = validateStepOne();
+    if (Object.keys(stepOneErrors).length > 0) {
+      setErrors(stepOneErrors);
+    } else {
+      setErrors({});
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    const stepTwoErrors = validateStepTwo();
+    if (Object.keys(stepTwoErrors).length > 0) {
+      setErrors(stepTwoErrors);
+    } else {
+      setErrors({});
+      setIsSubmitting(true);
+      const submissionData = {
+        numberOfGuests: formData.numberOfGuests,
+        date: formData.date,
+        time: formData.time,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        extraInfo: formData.extraInfo,
+      };
+
+      try {
+        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
+        setIsModalOpen(false);
+        setReservationSubmitted(true);
+      } catch (error) {
+        console.error('Error submitting reservation:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  return (
+    <div className="new-reservation-page">
+      <h2 className="account-manage-title">Admin Reservaties</h2>
+      <div className="account-manage-container">
+        {reservationSubmitted ? (
+          <ReservationSummary
+            formData={formData}
+            onNewReservation={() => {
+              setFormData({
+                numberOfGuests: '',
+                date: '',
+                time: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                extraInfo: '',
+              });
+              setReservationSubmitted(false);
+            }}
+          />
+        ) : (
+          <>
+            <ReservationStepOne
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              handleStepOneSubmit={handleStepOneSubmit}
+              setFormData={setFormData}
+            />
+
+            {isModalOpen && (
+              <ModalWithoutTabs
+                content={
+                  <ReservationStepTwoModal
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleFinalSubmit={handleFinalSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                }
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default withHeader(NewReservationAdmin);
+
+
+```
+
+---
+
+**css/newReservationAdmin.css**
+```css
+/* src/components/ReservationForm/css/reservationForm.css */
+
+.new-reservation-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+
+.new-reservation-page .account-manage-container {
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+	text-align: center;
+	background-color: white;
+  }
+
+
+  .new-reservation-page .modal-title {
+	text-align: center;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 40px;
+  }
+
+
+.new-reservation-page .account-manage-container {
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 30px;
+	width: 100%;
+  }
+
+  .new-reservation-page .account-manage-title {
+	margin-top: 30px;
+	margin-bottom: 30px;
+  }
+  
+
+  .new-reservation-page .account-manage-form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+  }
+
+  .new-reservation-page .input-container {
+	position: relative;
+  }
+  
+  .new-reservation-page .input-icon {
+	position: absolute;
+	top: 50%;
+	left: 10px;
+	transform: translateY(-50%);
+	color: #6c757d;
+	pointer-events: none;
+  }
+  
+  .new-reservation-page .input-container input {
+	width: 100%;
+	padding: 10px 10px 10px 35px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+
+  .new-reservation-page .form-error {
+	color: #dc3545;
+	font-size: 0.9rem;
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+
+
+  .new-reservation-page .account-manage__button {
+	padding: 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	transition: background-color 0.3s ease;
+  }
+
+
+```
+// src/components/ReservationForm/ReservationStepTwoModal.jsx
+
 import React from 'react';
-import { useDrag } from 'react-dnd';
-import './css/table.css';
+import FormField from './FormField';
+import { FaUser, FaPhone, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 
-const Table = ({
-  capacity,
-  reservations,
-  tableId,
-  tableName,
-  removeReservation,
-  updateNotes,
-  isActive,
+const ReservationStepTwoModal = ({
+  formData,
+  errors,
+  handleChange,
+  handleFinalSubmit,
+  isSubmitting,
 }) => {
-  const isOccupied = reservations.length > 0;
+  return (
+    <div>
+      <h2 className="modal-title">Persoonlijke Informatie</h2>
+      <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
+        <FormField
+          label="Voornaam"
+          name="firstName"
+          placeholder="Voornaam"
+          value={formData.firstName}
+          onChange={handleChange}
+          error={errors.firstName}
+          icon={FaUser}
+        />
+        <FormField
+          label="Achternaam"
+          name="lastName"
+          placeholder="Achternaam"
+          value={formData.lastName}
+          onChange={handleChange}
+          error={errors.lastName}
+          icon={FaUser}
+        />
+        <FormField
+          label="E-mail"
+          name="email"
+          type="email"
+          placeholder="E-mailadres"
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+          icon={FaEnvelope}
+        />
+        <FormField
+          label="Telefoonnummer"
+          name="phone"
+          type="tel"
+          placeholder="Telefoonnummer"
+          value={formData.phone}
+          onChange={handleChange}
+          error={errors.phone}
+          icon={FaPhone}
+        />
+        <FormField
+          label="Extra info"
+          name="extraInfo"
+          type="textarea"
+          placeholder="Extra informatie"
+          value={formData.extraInfo}
+          onChange={handleChange}
+          error={errors.extraInfo}
+          icon={FaInfoCircle}
+        />
+        <button type="submit" className="account-manage__button" disabled={isSubmitting}>
+          {isSubmitting ? 'Verzenden...' : 'Reserveren'}
+        </button>
+      </form>
+    </div>
+  );
+};
 
-  // Calculate table width based on capacity
-  const tableWidth = 70 + (capacity > 4 ? (capacity - 4) * 10 : 0);
-  const tableHeight = 70;
+export default ReservationStepTwoModal;
 
-  const chairsPerSide = Math.ceil(capacity / 2);
+// src/Pages/NewReservation/ReservationStepOne.jsx
 
-  const topChairs = [];
-  const bottomChairs = [];
+import React, { useState, useEffect } from 'react';
+import ValueSelectorGuests from './ValueSelector';
+import DateSelector from './DateSelector';
+import TimeSelector from './TimeSelector';
+import useApi from '../../../Hooks/useApi';
 
-  for (let i = 0; i < chairsPerSide; i++) {
-    topChairs.push(i);
-    bottomChairs.push(i);
+const ReservationStepOne = ({
+  formData,
+  errors,
+  handleChange,
+  handleStepOneSubmit,
+  setFormData,
+}) => {
+  const api = useApi();
+
+  // State for timeblocks
+  const [timeblocks, setTimeblocks] = useState([]);
+  const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
+  const [timeblocksError, setTimeblocksError] = useState(null);
+
+  // Fetch timeblocks and general settings on component mount
+  useEffect(() => {
+    const fetchTimeblocks = async () => {
+      try {
+        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`, { noCache: true });
+        setTimeblocks(data.timeblocks || []);
+        window.timeblocks = data.timeblocks || []; // Retain globally if needed
+        const generalSettings = data['general-settings'] || {};
+        window.generalSettings = generalSettings; // Retain globally
+      } catch (err) {
+        setTimeblocksError(err);
+        console.error('Error fetching timeblocks:', err);
+      } finally {
+        setLoadingTimeblocks(false);
+      }
+    };
+
+    fetchTimeblocks();
+  }, [api]);
+
+  const resetFormDataFields = (fieldsToReset) => {
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData };
+      fieldsToReset.forEach((field) => {
+        newFormData[field] = '';
+      });
+      return newFormData;
+    });
+  };
+
+
+  if (timeblocksError) {
+    return (
+      <div>
+        <a
+          href="https://dashboard.reservaties.net/#/scheme"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#007BFF', textDecoration: 'underline' }}
+        >
+          Klik hier
+        </a>{' '}
+        om uw openingsuren in te stellen.
+      </div>
+    );
   }
 
   return (
-    <div
-      className={`table-container ${isOccupied ? 'occupied' : ''} ${isActive ? 'active' : ''}`}
-      style={{ width: `${tableWidth}px`, height: `${tableHeight + 80}px` }}
-    >
-      {/* Tooltip */}
-      {isOccupied && (
-        <div className="tooltip">
-          {reservations.map((res) => (
-            <div key={res.id} className="tooltip-content">
-              <div className="reservation-summary">
-                <span className="reservation-name">
-                  {res.firstName} {res.lastName}
-                </span>{' '}
-                ({res.numberOfGuests}p) - {res.time}
-              </div>
-              <div className="reservation-notes">
-                <input
-                  type="text"
-                  placeholder="Add a note..."
-                  value={res.notes}
-                  onChange={(e) => updateNotes(res.id, e.target.value)}
-                  aria-label={`Add a note for reservation of ${res.firstName} ${res.lastName}`}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
+      <ValueSelectorGuests
+        value={formData.numberOfGuests}
+        onChange={handleChange}
+        error={errors.numberOfGuests}
+      />
+
+      {formData.numberOfGuests && (
+        <DateSelector
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          timeblocks={timeblocks}
+        />
       )}
 
-      <div
-        className="table-plan-component chairs top-chairs"
-        style={{
-          width: `${tableWidth}px`,
-        }}
-      >
-        {topChairs.slice(0, Math.floor(capacity / 2)).map((chair, index) => (
-          <div key={`top-${index}`} className="table-plan-component chair"></div>
-        ))}
-      </div>
-      <div
-        className={`table ${isOccupied ? 'table-occupied' : ''}`}
-        style={{
-          width: `${tableWidth}px`,
-          height: `${tableHeight}px`,
-        }}
-      >
-        {/* Display Reservations Assigned to This Table */}
-        {reservations.map((res) => (
-          <Reservation
-            key={res.id}
-            reservation={res}
-            tableId={tableId}
-            removeReservation={removeReservation}
-          />
-        ))}
-        {/* Table Name */}
-        <div className="table-number">{tableName}</div>
-      </div>
-      <div
-        className="table-plan-component chairs bottom-chairs"
-        style={{
-          width: `${tableWidth}px`,
-        }}
-      >
-        {bottomChairs.slice(0, Math.ceil(capacity / 2)).map((chair, index) => (
-          <div key={`bottom-${index}`} className="table-plan-component chair"></div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Reservation Component
-const Reservation = ({ reservation, tableId, removeReservation }) => {
-  const [{ isDragging }, drag] = useDrag(
-    () => ({
-      type: 'GUEST',
-      item: { id: reservation.id, ...reservation },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    }),
-    [reservation]
-  );
-
-  return (
-    <div
-      className="reservation"
-      ref={drag}
-      style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
-    >
-      <span className="reservation-name">
-        {reservation.firstName} {reservation.lastName}
-      </span>{' '}
-      ({reservation.numberOfGuests}p) - {reservation.time}
-    </div>
-  );
-};
-
-export default Table;
-
-
---- TableSlots.js ---
-import React, { useRef, useEffect } from 'react';
-import './css/tableslots.css';
-
-const slotToTime = (slot) => {
-  const totalMinutes = (slot - 14) * 30 + 420;
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-};
-
-const getDateInDutch = (date) => {
-  const day = date.getDate();
-  const months = [
-    'januari', 'februari', 'maart', 'april', 'mei', 'juni',
-    'juli', 'augustus', 'september', 'oktober', 'november', 'december',
-  ];
-  const month = months[date.getMonth()];
-  return `${day} ${month}`;
-};
-
-const TableSlots = ({ selectedSlot, onSelectSlot, currentDate, floorPlanWidth }) => {
-  const slotsContainerRef = useRef(null);
-  const dateInDutch = getDateInDutch(currentDate);
-
-  const handleSlotClick = (slot) => {
-    if (onSelectSlot) {
-      onSelectSlot(slot);
-    }
-    centerSelectedSlot(slot - 14);
-  };
-
-  const centerSelectedSlot = (slotIndex) => {
-    const slotsContainer = slotsContainerRef.current;
-    const slotWidth = 120.85;
-    const containerWidth = slotsContainer.offsetWidth;
-    const newScrollPosition = slotIndex * slotWidth - (containerWidth / 2 - slotWidth / 2);
-    slotsContainer.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    if (selectedSlot) {
-      centerSelectedSlot(selectedSlot - 14);
-    }
-  }, [selectedSlot]);
-
-  return (
-    <div
-      className="timeline-container"
-      ref={slotsContainerRef}
-      style={{ width: `${floorPlanWidth}px` }}
-    >
-      <div className="timeline" style={{ width: `${34 * 120.85}px` }}>
-        {Array.from({ length: 34 }, (_, i) => i + 14).map((slot) => (
-          <div
-            key={slot}
-            className={`timeline-slot ${selectedSlot === slot ? 'selected' : ''}`}
-            onClick={() => handleSlotClick(slot)}
-          >
-            <div className="slot-content">
-              <div className="slot-subtitle">{dateInDutch}</div>
-              <div className="slot-title">{slotToTime(slot)}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default TableSlots;
-
-
---- Walls.js ---
-// Walls.js
-import React from 'react';
-import './css/walls.css';
-
-const Walls = ({ length }) => {
-  const wallWidth = (length - 1) * 20;
-  const wallHeight = 20;
-
-  return (
-    <div
-      className="walls-container"
-      style={{ width: `${wallWidth}px`, height: `${wallHeight}px` }}
-    >
-      <div className="wall"></div>
-    </div>
-  );
-};
-
-export default Walls;
-
-
---- index.js ---
-import React, { useState, useEffect } from 'react';
-import FloorPlanGeneral from './FloorPlan.js';
-import Sidebar from './Sidebar.js';
-import { withHeader } from '../../../Components/Structural/Header/index.js';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import useReservations from './Hooks/useReservations.js';
-import './css/app.css';
-import TableSlots from './TableSlots.js';
-
-const TablePlan = () => {
-  const fetchedReservations = useReservations();
-
-  const [reservations, setReservations] = useState([]);
-  const [floorPlanWidth, setFloorPlanWidth] = useState(800);
-
-  useEffect(() => {
-    if (fetchedReservations.length > 0 && reservations.length === 0) {
-      setReservations(fetchedReservations);
-    }
-  }, [fetchedReservations, reservations]);
-
-  const assignReservation = (reservationId, targetTableId) => {
-    setReservations((prevReservations) =>
-      prevReservations.map((res) =>
-        res.id === reservationId ? { ...res, tableId: targetTableId } : res
-      )
-    );
-  };
-
-  const removeReservation = (reservationId) => {
-    setReservations((prevReservations) =>
-      prevReservations.map((res) =>
-        res.id === reservationId ? { ...res, tableId: null } : res
-      )
-    );
-  };
-
-  const updateNotes = (reservationId, newNotes) => {
-    setReservations((prevReservations) =>
-      prevReservations.map((res) =>
-        res.id === reservationId ? { ...res, notes: newNotes } : res
-      )
-    );
-  };
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="table-display-component">
-        <TableSlots
-          selectedSlot={null}
-          onSelectSlot={null}
-          currentDate={new Date()}
-          floorPlanWidth={floorPlanWidth} // Pass floor plan width
+      {formData.date && (
+        <TimeSelector
+          formData={formData}
+          handleChange={handleChange}
+          field={{ id: 'time', label: 'Tijd' }}
+          selectedDate={formData.date}
         />
-        <div className="app-container">
-          <FloorPlanGeneral
-            reservations={reservations}
-            assignReservation={assignReservation}
-            removeReservation={removeReservation}
-            updateNotes={updateNotes}
-          />
-          <Sidebar reservations={reservations} />
-        </div>
-      </div>
-    </DndProvider>
+      )}
+
+      <button type="submit" className="account-manage__button">
+        Verder
+      </button>
+    </form>
   );
 };
 
-export default withHeader(TablePlan);
+export default ReservationStepOne;
 
+Print the new components needed for the sidebar that appears on the right of the screen. It should have a cancel X shaped button on the top left to close this sidebar and let it float back to the right, when being triggered the sidebar floats in from the left, for testing purpose already let it be present on the right.
 
+Transform the relevant code above to fit inside the sidebar as described by the prompt. Print the new code in full.
 
-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Tables/TablePlan":
-
-├── FloorPlan.js
-├── FloorPlanElement.js
-├── Hooks
-│   └── useReservations.js
-├── Sidebar.js
-├── Table.js
-├── TableSlots.js
-├── Walls.js
-├── css
-│   ├── app.css
-│   ├── floorPlan.css
-│   ├── sidebar.css
-│   ├── table.css
-│   ├── tableslots.css
-│   └── walls.css
-└── index.js
-
-
-List of Files:
-FloorPlan.js
-FloorPlanElement.js
-Hooks/useReservations.js
-Sidebar.js
-Table.js
-TableSlots.js
-Walls.js
-index.js
-
-**Instruction:**
-1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
-2. Prefix all CSS classes with the `.component-name-component` class. Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
-
-**Note:** CSS files have been excluded from this prompt.
