@@ -134,7 +134,7 @@ const ReservationsList = () => {
       <ModalWithoutTabs
         content={
           <div className="field-selector-modal">
-            <h2>Selecteer velden om weer te geven</h2>
+            <h2 className='secondary-title'>Selecteer velden om weer te geven</h2>
             <div className="field-options">
               {FIELD_CONFIG.map((field) => (
                 <div key={field.key} className="field-option">

@@ -5,7 +5,7 @@ import SidebarItem from './SidebarItem';
 import { useNavigate, useLocation } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
 import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa';
-import './css/style.css';
+import './css/sidebar.css';
 import './css/mobile.css';
 
 const Sidebar = () => {
