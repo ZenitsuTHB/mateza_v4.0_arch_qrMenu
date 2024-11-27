@@ -18,7 +18,8 @@ const Tooltip = ({
   isTooltipOpen,
   onTooltipToggle,
   onTooltipClose,
-  onDeleteSuccess, // This should be the internal handler from ReservationRow
+  onDeleteSuccess,
+  triggerNotification,
 }) => {
   const tooltipTimerRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -151,6 +152,9 @@ const Tooltip = ({
       setDeleteError(
         error.response?.data?.error || error.message || 'Failed to delete the reservation.'
       );
+      if (triggerNotification) {
+        triggerNotification('Fout bij het verwijderen van de reservatie.', 'error');
+      }
     } finally {
       setIsDeleting(false);
     }
@@ -211,7 +215,7 @@ const Tooltip = ({
         isVisible={isDeleteModalVisible}
         title="Reservatie Verwijderen"
         message="Wilt u deze reservatie verwijderen?"
-        onConfirm={handleConfirmDelete} // Uses Tooltip's confirm handler
+        onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         confirmText="Verwijderen"
         cancelText="Annuleren"

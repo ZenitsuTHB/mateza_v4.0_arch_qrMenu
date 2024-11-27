@@ -26,16 +26,15 @@ import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/inde
 // Import ModalWithoutTabs
 
 const FIELD_CONFIG = [
-  { key: 'aantalGasten', label: 'Aantal Gasten', alwaysVisible: true },
+  { key: 'aantalGasten', label: '#', alwaysVisible: true },
   { key: 'tijdstip', label: 'Tijdstip', alwaysVisible: true },
   { key: 'fullName', label: 'Naam', defaultVisible: true },
   { key: 'email', label: 'Email', defaultVisible: true },
   { key: 'phone', label: 'Telefoon', defaultVisible: true },
-  { key: 'extra', label: 'Extra Informatie', defaultVisible: false },
   { key: 'language', label: 'Taal', defaultVisible: false },
   { key: 'menu', label: 'Menu', defaultVisible: false },
   { key: 'createdAt', label: 'Aangemaakt Op', defaultVisible: false },
-  { key: 'actions', label: '', alwaysVisible: true }, // For actions
+  // Removed 'extra' and 'actions' fields
 ];
 
 const ReservationsList = () => {
@@ -162,6 +161,9 @@ const ReservationsList = () => {
     );
   };
 
+  // Adjust the number of columns to include the Tooltip column
+  const columnsCount = visibleFields.length + 1; // +1 for the Tooltip column
+
   return (
     <div className="reservations-page">
       {/* Render the NotificationComponent */}
@@ -209,7 +211,7 @@ const ReservationsList = () => {
           <>
             <div
               className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}
-              style={{ '--columns': visibleFields.length }}
+              style={{ '--columns': columnsCount }}
             >
               {!isMobile && (
                 <div className="reservations-header reservation-row">
@@ -232,6 +234,8 @@ const ReservationsList = () => {
                       </div>
                     );
                   })}
+                  {/* Always render the last column header for Tooltip */}
+                  <div className="header-cell extra-header"></div>
                 </div>
               )}
 
