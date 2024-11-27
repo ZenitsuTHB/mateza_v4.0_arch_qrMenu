@@ -71,5 +71,44 @@
 	.reservations-container .reservation-row {
 	  page-break-inside: avoid;
 	}
-  }
+
+	.reservations-page .new-reservation {
+	  font-weight: normal;
+	}
+
+	.reservations-container .pagination {
+		display: none;
+	}
+
+	.reservations-container .name-link {
+		color: black
+	}
   
+	.reservations-page .icons-container,
+	.reservations-page .ellipsis-container,
+	.reservations-page .extra-icon-container,
+	.reservations-page .tooltip-container,
+	.reservations-page .extra-tooltip {
+	  display: none !important;
+	}
+  
+	/* Show Extra Info as Full Row */
+	.reservations-page .extra-info-print {
+	  display: block !important;
+	}
+  
+	/* Ensure full width */
+	.reservations-page .extra-info-print {
+	  width: 100%;
+	  box-sizing: border-box;
+	}
+  
+	/* Ensure .new-reservation is not bold */
+	.reservations-page .new-reservation {
+	  font-weight: normal !important;
+	}
+
+	.reservations-container .buttons-container {
+		display: none !important;
+	}
+  }

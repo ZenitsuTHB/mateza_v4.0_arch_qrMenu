@@ -1,4 +1,4 @@
-// Tooltip.jsx
+// src/Components/ReservationsList/Tooltip.jsx
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -209,6 +209,11 @@ const Tooltip = ({
             </div>
           )}
         </div>
+      </div>
+
+      {/* Extra Info Text for Printing */}
+      <div className="extra-info-print">
+        {extraInfo}
       </div>
 
       <ConfirmationModal
