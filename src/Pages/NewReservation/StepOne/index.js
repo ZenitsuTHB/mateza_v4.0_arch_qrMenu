@@ -50,12 +50,21 @@ const ReservationStepOne = ({
     });
   };
 
-  if (loadingTimeblocks) {
-    return <div>Loading timeblocks...</div>;
-  }
 
   if (timeblocksError) {
-    return <div>Stel eerst uw openingsuren in!</div>;
+    return (
+      <div>
+        <a
+          href="https://dashboard.reservaties.net/#/scheme"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#007BFF', textDecoration: 'underline' }}
+        >
+          Klik hier
+        </a>{' '}
+        om uw openingsuren in te stellen.
+      </div>
+    );
   }
 
   return (
