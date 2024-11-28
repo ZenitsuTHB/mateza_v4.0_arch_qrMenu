@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ModalWithTabs from '../../../Components/Structural/Modal/WithTabs';
 import ModalContent from './ModalContent';
 import Scheme from './Scheme';
-import ExceptionalDays from './Exceptions/index.js'; // Ensure correct import path
+import ExceptionalDays from './Exceptions'; // Updated import path
 import { formatDateKey } from '../Utils/dateFormat';
 
 const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, triggerNotification }) => {
@@ -15,7 +15,6 @@ const Modal = ({ onClose, onSave, onDelete, existingBlock, selectedDate, trigger
   const [exceptionalDays, setExceptionalDays] = useState(() => {
     const defaultExceptionalDays = {
       sluitingsperiode: [],
-      sluitingsdag: [],
       uitzonderlijkeOpeningsuren: [],
       uitzonderlijkeCapaciteit: [],
     };

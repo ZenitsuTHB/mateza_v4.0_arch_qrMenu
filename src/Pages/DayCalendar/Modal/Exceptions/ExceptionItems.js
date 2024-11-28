@@ -46,12 +46,6 @@ const ExceptionItems = ({
     } else {
       label = `Periode ${index + 1}`;
     }
-  } else if (type === 'sluitingsdag') {
-    if (item.date) {
-      label = `${formatDateDutch(new Date(item.date))}`;
-    } else {
-      label = `Dag ${index + 1}`;
-    }
   } else if (type === 'uitzonderlijkeOpeningsuren') {
     if (item.date && item.startTime && item.endTime) {
       label = `${formatDateDutch(new Date(item.date))} - (${item.startTime} - ${item.endTime})`;
@@ -126,19 +120,6 @@ const ExceptionItems = ({
                   />
                 </label>
               </>
-            )}
-            {type === 'sluitingsdag' && (
-              <label className="modal-label date-input">
-                Datum:
-                <input
-                  type="date"
-                  value={item.date}
-                  onChange={(e) =>
-                    handleInputChange(type, index, 'date', e.target.value)
-                  }
-                  required
-                />
-              </label>
             )}
             {type === 'uitzonderlijkeOpeningsuren' && (
               <>

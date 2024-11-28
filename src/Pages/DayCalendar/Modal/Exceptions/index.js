@@ -33,8 +33,6 @@ const ExceptionalDays = ({
       if (type === 'sluitingsperiode') {
         newException.startDate = '';
         newException.endDate = '';
-      } else if (type === 'sluitingsdag') {
-        newException.date = '';
       } else if (type === 'uitzonderlijkeOpeningsuren') {
         newException.date = '';
         newException.startTime = '';
