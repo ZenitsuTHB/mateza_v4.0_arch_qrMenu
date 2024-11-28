@@ -252,7 +252,7 @@
   
   .menu-component__submit-button {
 	padding: 12px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -324,7 +324,7 @@
   
   .menu-icon {
 	font-size: 24px;
-	color: #007bff;
+	color: var(--color-blue);
   }
   
   /* Responsive Design */

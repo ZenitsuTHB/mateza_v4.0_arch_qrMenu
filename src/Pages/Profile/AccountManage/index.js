@@ -175,7 +175,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
             error={errors.restaurant_name}
             icon={FaUtensils}
           />
-          <button type="submit" className="account-manage__button" disabled={loading}>
+          <button type="submit" className="button-style-3" disabled={loading}>
             {loading ? 'Opslaan...' : 'Opslaan'}
           </button>
         </form>

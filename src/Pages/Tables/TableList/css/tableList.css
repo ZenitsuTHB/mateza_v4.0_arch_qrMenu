@@ -48,7 +48,7 @@
   .tables-list-page input[type='text']:focus,
   .tables-list-page input[type='number']:focus,
   .tables-list-page select:focus {
-	border-color: #007bff;
+	border-color: var(--color-blue);
 	outline: none;
   }
   

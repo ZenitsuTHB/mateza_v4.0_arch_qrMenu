@@ -289,7 +289,7 @@ const Settings = () => {
             </div>
           )}
 
-          <button type="submit" className="settings-button" disabled={!isDirty}>
+          <button type="submit" className="button-style-3" disabled={!isDirty}>
             Opslaan
           </button>
         </form>

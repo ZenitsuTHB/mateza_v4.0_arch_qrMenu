@@ -536,7 +536,7 @@ START-FILE-(path:css/sidebar.css)
 }
 
 .table-plan-component .tabs .tab-button.active {
-  color: var(--color-blue, #007bff);
+  color: var(--color-blue, var(--color-blue));
 }
 
 .table-plan-component .tabs .tab-button:hover {
@@ -549,7 +549,7 @@ START-FILE-(path:css/sidebar.css)
   left: 0;
   right: 0;
   height: 2px;
-  background-color: var(--color-blue, #007bff);
+  background-color: var(--color-blue, var(--color-blue));
   border-radius: 5px;
 }
 

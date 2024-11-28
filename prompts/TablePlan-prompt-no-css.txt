@@ -669,7 +669,7 @@ export default withHeader(NewReservationAdmin);
 
   .new-reservation-page .account-manage__button {
 	padding: 12px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -819,7 +819,7 @@ const ReservationStepOne = ({
           href="https://dashboard.reservaties.net/#/scheme"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: '#007BFF', textDecoration: 'underline' }}
+          style={{ color: 'var(--color-blue)', textDecoration: 'underline' }}
         >
           Klik hier
         </a>{' '}

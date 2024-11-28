@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import BannerUploadComponent from './BannerUploadComponent';
+import logo from '../../../Assets/logos/logo.webp'
 
 const EmailPreview = ({ settings, handleChange }) => {
   // Sample data for placeholders
@@ -184,7 +185,7 @@ const EmailPreview = ({ settings, handleChange }) => {
           }
 
           .email-preview-container .email-body h2 {
-            color: #FB5B86;
+            color: var(--color-blue);
             font-size: 24px;
             margin-bottom: 16px;
           }
@@ -278,7 +279,7 @@ const EmailPreview = ({ settings, handleChange }) => {
               handleChange={handleChange}
               element="span"
               className=""
-              style={{ color: '#FB5B86', fontSize: '24px' }}
+              style={{ color: 'var(--color-blue)', fontSize: '24px' }}
             />{' '}
             {sampleData.firstName},
           </h2>
@@ -381,7 +382,7 @@ const EmailPreview = ({ settings, handleChange }) => {
           <p>
             <a href="https://mateza.be">
               <img
-                src="https://static.reservaties.net/images/logo/logo.png"
+                src={logo}
                 alt="Mateza Logo"
                 style={{ width: '35px', height: '35px' }}
               />

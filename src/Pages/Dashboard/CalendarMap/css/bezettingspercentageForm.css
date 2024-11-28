@@ -52,7 +52,7 @@
   }
   
   .calendar-page .standard-input:focus {
-	border-color: #007bff; /* Match var(--color-blue) */
+	border-color: var(--color-blue); /* Match var(--color-blue) */
 	outline: none;
   }
   

@@ -43,14 +43,14 @@
   }
   
   .login-input:focus {
-	border-color: #007BFF; /* Subtle focus effect */
+	border-color: var(--color-blue); /* Subtle focus effect */
 	outline: none;
   }
   
   .login-button {
 	width: 100%;
 	padding: 8px 10px;
-	background-color: #007BFF; /* Primary button color */
+	background-color: var(--color-blue); /* Primary button color */
 	color: #fff;
 	border: none;
 	border-radius: 3px;

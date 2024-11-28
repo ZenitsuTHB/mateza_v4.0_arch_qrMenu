@@ -183,7 +183,7 @@ const useChartData = ({
             ? '#016FB9'
             : selectedShift === 'Avond'
             ? '#22AED1'
-            : '#007bff';
+            : 'var(--color-blue)';
       } else if (selectedViewMode === 'Voorspelling') {
         backgroundColor = '#ff0000';
       } else {
@@ -194,7 +194,7 @@ const useChartData = ({
             ? '#016FB9'
             : selectedShift === 'Avond'
             ? '#22AED1'
-            : '#007bff';
+            : 'var(--color-blue)';
       }
 
       datasets = [

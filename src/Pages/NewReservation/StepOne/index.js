@@ -34,7 +34,7 @@ const ReservationStepOne = ({
           href="https://dashboard.reservaties.net/#/scheme"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: '#007BFF', textDecoration: 'underline' }}
+          style={{ color: 'var(--color-blue)', textDecoration: 'underline' }}
         >
           Klik hier
         </a>{' '}

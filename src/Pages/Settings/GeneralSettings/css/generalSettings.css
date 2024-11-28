@@ -59,7 +59,7 @@
   
   .general-settings-page .settings-button {
 	padding: 12px;
-	background-color: #007bff;
+	background-color: var(--color-blue);
 	color: #fff;
 	border: none;
 	border-radius: 5px;
