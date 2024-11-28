@@ -3,8 +3,10 @@
 import { DateTime } from 'luxon';
 
 export const collectExceptions = (timeblocks) => {
+    // Initialize global exception containers
     window.closedDates = new Set();
     window.exceptionalOpenings = {};
+    window.uitzonderlijkeCapaciteit = {}; // Initialize capaciteit exceptions
 
     timeblocks.forEach((block) => {
         if (!block.exceptionalDays) {
@@ -31,6 +33,7 @@ export const collectExceptions = (timeblocks) => {
                 }
             });
         }
+
         // Process uitzonderlijkeOpeningsuren (exceptional opening hours)
         if (Array.isArray(exceptionalDays.uitzonderlijkeOpeningsuren)) {
             exceptionalDays.uitzonderlijkeOpeningsuren.forEach((opening) => {
@@ -42,6 +45,25 @@ export const collectExceptions = (timeblocks) => {
                             endTime,
                         };
                         console.log(`[collectExceptions] Adding exceptional opening for ${date}: ${startTime} - ${endTime}`);
+                    }
+                }
+            });
+        }
+
+        // Process uitzonderlijkeCapaciteit (exceptional capacity)
+        if (Array.isArray(exceptionalDays.uitzonderlijkeCapaciteit)) {
+            exceptionalDays.uitzonderlijkeCapaciteit.forEach((capacityEntry) => {
+                if (capacityEntry.enabled) {
+                    const { date, capacity } = capacityEntry;
+                    if (date && capacity !== undefined && capacity !== null) {
+                        // Convert capacity to a number if it's a string
+                        const numericCapacity = Number(capacity);
+                        if (!isNaN(numericCapacity)) {
+                            window.uitzonderlijkeCapaciteit[date] = numericCapacity;
+                            console.log(`[collectExceptions] Setting exceptional capacity for ${date}: ${numericCapacity}`);
+                        } else {
+                            console.warn(`[collectExceptions] Invalid capacity value for ${date}: ${capacity}`);
+                        }
                     }
                 }
             });

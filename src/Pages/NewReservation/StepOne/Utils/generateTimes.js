@@ -60,9 +60,9 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
             });
 
             while (startDateTime < endDateTime) {
-                    const timeString = startDateTime.toFormat('HH:mm');
-                    times.push(timeString);
-                
+                const timeString = startDateTime.toFormat('HH:mm');
+                times.push(timeString);
+
                 startDateTime = startDateTime.plus({ minutes: intervalMinutes });
             }
         });
@@ -77,15 +77,31 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
         }));
     }
 
-    // Filter timeButtons based on countingDictionary
-    const capacityLimit = window.generalSettings?.zitplaatsen || 0;
+    // Determine capacityLimit: use uitzonderlijkeCapaciteit if defined, else use general zitplaatsen
+    const uitzonderlijkeCapaciteit = window.uitzonderlijkeCapaciteit || {};
+    const exceptionalCapacity = uitzonderlijkeCapaciteit[dateKey];
+    const capacityLimit = (typeof exceptionalCapacity === 'number') 
+        ? exceptionalCapacity 
+        : (window.generalSettings?.zitplaatsen || 0);
+
+    if (typeof capacityLimit !== 'number' || capacityLimit < 0) {
+        console.warn(
+            `[generateAvailableTimesForDate] Invalid capacityLimit value "${capacityLimit}". Defaulting to 0.`
+        );
+    }
+
+    const finalCapacityLimit = (typeof capacityLimit === 'number' && capacityLimit >= 0) 
+        ? capacityLimit 
+        : 0;
+
+    // Filter timeButtons based on countingDictionary and capacityLimit
     const countingDictionary = window.countingDictionary || {};
 
     if (countingDictionary[dateKey]) {
         timeButtons = timeButtons.filter(button => {
             const time = button.value;
             const guestsCount = countingDictionary[dateKey][time] || 0;     
-            return (guestsCount + guests) <= capacityLimit;
+            return (guestsCount + guests) <= finalCapacityLimit;
         });
     }
 
