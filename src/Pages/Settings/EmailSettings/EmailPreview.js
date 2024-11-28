@@ -272,14 +272,14 @@ const EmailPreview = ({ settings, handleChange }) => {
         <div className="email-body">
 
 		{settings.showBanner && <BannerUploadComponent />}
-          <h2>
+          <h2 style={{ color: '#FB5B86'}}>
             <EditableText
               value={settings.startGreeting || 'Beste'}
               name="startGreeting"
               handleChange={handleChange}
               element="span"
               className=""
-              style={{ color: '#000', fontSize: '24px' }}
+              style={{ color: '#FB5B86', fontSize: '24px' }}
             />{' '}
             {sampleData.firstName},
           </h2>
