@@ -1,6 +1,6 @@
 /* css/schemeStandalone.css */
 
-.no-timeblock-message {
+.scheme-page .no-timeblock-message {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -9,12 +9,17 @@
 	flex-direction: column;
   }
   
-  .no-timeblock-message a {
+  .scheme-page .no-timeblock-message a {
 	font-size: 1em;
 	color: var(--color-blue);
   }
   
-  .no-timeblock-message a:hover {
+  .scheme-page .no-timeblock-message a:hover {
 	text-decoration: underline;
   }
-  
+
+  @media (max-width: 900px) {
+	.scheme-page {
+		padding-bottom: 60px;
+	  } 
+  }
