@@ -16,7 +16,6 @@ const FormField = ({
 }) => {
   return (
     <div className={`form-group ${halfWidth ? 'half-width' : ''}`}>
-      {label && <label htmlFor={name}>{label}</label>}
       <div className="input-container">
         {Icon && <Icon className="input-icon" />}
         
@@ -28,7 +27,7 @@ const FormField = ({
             aria-label={label}
             className={`form-control ${error ? 'input-error' : ''}`}
           >
-            <option value="">Selecteer een optie</option>
+            <option value="">Selecteer een menu</option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
