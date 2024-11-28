@@ -57,7 +57,7 @@
   }
   
   .button-style-3:hover {
-	background-color: #0056b3;
+	background-color: var(--color-blue-hover-accent);
   }
 
 

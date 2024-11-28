@@ -75,6 +75,11 @@
 	height: 50px;
 	cursor: pointer;
 	z-index: var(--z-index-modal) !important;
+	transition: all 0.3s ease;
+  }
+
+  .new-reservation-page .open-sidebar-button:hover {
+	background-color: var(--color-blue-hover-accent) !important;
   }
   
   .new-reservation-page .open-sidebar-button svg {
