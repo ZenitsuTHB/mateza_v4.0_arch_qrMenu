@@ -1,23 +1,8 @@
 // topBarConfig.js
 
-import { FaPlus, FaPencilAlt, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaPlus, FaPencilAlt, FaUser, FaSignOutAlt, FaCalendar } from 'react-icons/fa';
 
 const topBarConfig = [
-  {
-    label: 'Add',
-    icon: FaPlus,
-    path: '/new-reservation',
-    hasDropdown: true,
-    iconColor: 'black',
-    dropdownItems: [
-      {
-        label: 'Reserveren',
-        icon: FaPlus,
-        path: '/new-reservation',
-        isExternal: false, // Optional, defaults to false
-      },
-    ],
-  },
   {
     label: 'Edit',
     icon: FaPencilAlt,
