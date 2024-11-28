@@ -22,7 +22,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
-	max-width: 400px;
+	max-width: 100%;
   }
   
   .menu-component__form-group {
@@ -32,12 +32,15 @@
   
   .menu-component__form-group label {
 	margin-bottom: 5px;
+	font-weight: 500;
   }
   
-  .menu-component__form-group input {
+  .menu-component__input {
+	width: 100%;
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
+	font-size: 1rem;
   }
   
   .menu-component__checkbox-group {
@@ -46,22 +49,28 @@
 	gap: 10px;
   }
   
-  .menu-component__checkbox-group label {
+  .menu-component__checkbox-label {
 	display: flex;
 	align-items: center;
   }
   
-  .menu-component__checkbox-group input {
+  .menu-component__checkbox {
 	margin-right: 5px;
   }
   
   .menu-component__submit-button {
-	padding: 10px;
+	padding: 12px;
 	background-color: var(--color-blue);
 	color: #fff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	font-size: 1.1rem;
+	transition: background-color 0.3s ease;
+  }
+  
+  .menu-component__submit-button:hover {
+	background-color: #0056b3;
   }
   
   .menu-component__error {
@@ -70,7 +79,7 @@
   }
   
   .menu-component__list {
-	flex: 2;
+	flex: 1;
   }
   
   .menu-component__menu-list {
@@ -102,30 +111,41 @@
 	font-size: 18px;
 	color: #555;
   }
-  
-  .menu-component__tooltip {
-	position: absolute;
-	top: 100%;
-	right: 0;
-	transform: translateY(5px);
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 5px 0;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-	z-index: 1000;
-  }
+
   
   .menu-component__tooltip-item {
 	padding: 8px 15px;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
   }
   
   .menu-component__tooltip-item:hover {
 	background-color: #f0f0f0;
   }
   
-  /* Tooltip styles */
+  .menu-component__tooltip-item.delete-item {
+	color: red;
+  }
+  
+  .menu-component__tooltip-item.delete-item:hover {
+	background-color: #ffe6e6;
+  }
+  
+  .menu-component__modal-title {
+	text-align: center;
+	margin-bottom: 20px;
+  }
+  
+  .menu-component__edit-modal {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+  }
+  
+  /* Remove existing tooltip styles from menu.css */
+  /* The following tooltip-related styles have been removed:
   .menu-component .label-with-tooltip {
 	display: flex;
 	align-items: center;
@@ -142,57 +162,17 @@
   
   .menu-component .button-with-tooltip .tooltip {
 	display: none; /* Initially hidden */
-	position: absolute;
-	bottom: 125%; /* Position above the button */
-	left: 50%;
-	transform: translateX(-50%);
-	width: 200px; /* Set fixed width */
-	background-color: black;
-	color: white;
-	padding: 10px 15px;
-	border-radius: 4px;
-	white-space: normal; /* Allow text to wrap */
-	font-size: 14px;
-	z-index: 1000;
-	opacity: 0;
-	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-  }
-  
-  .menu-component .button-with-tooltip .tooltip::before {
-	content: '';
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	transform: translateX(-50%);
-	border-width: 5px;
-	border-style: solid;
-	border-color: black transparent transparent transparent;
-  }
-  
-  .menu-component .button-with-tooltip:hover .tooltip {
-	display: block;
-	opacity: 1;
-	transform: translateX(-50%) translateY(-5px);
-  }
-  
+  /*   ... */
+  /* }
   .menu-component .button-with-tooltip svg {
 	cursor: pointer;
 	color: #555;
 	font-size: 16px;
   }
-  
   .menu-component .button-with-tooltip svg:hover {
 	color: #000;
   }
-  
-  /* Modal styling */
-  .menu-component__edit-modal {
-	padding: 20px;
-  }
-  
-  .menu-component__edit-modal h3 {
-	margin-top: 0;
-  }
+  */
   
   @media (max-width: 768px) {
 	.menu-component__container {
@@ -210,4 +190,6 @@
 	  right: 15px;
 	}
   }
+  
+
   

@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard'; // Adjust the path as necessary
+import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import './css/menu.css';
-import { FaInfoCircle } from 'react-icons/fa';
 
-const EditMenuModal = ({ isVisible, menu, api, triggerNotification, refreshMenus, onClose }) => {
+const EditMenuModal = ({
+  isVisible,
+  menu,
+  api,
+  triggerNotification,
+  refreshMenus,
+  onClose,
+}) => {
   const [formData, setFormData] = useState({
     name: menu.name || '',
     startDate: menu.startDate || '',
@@ -13,23 +19,21 @@ const EditMenuModal = ({ isVisible, menu, api, triggerNotification, refreshMenus
     daysOfWeek: menu.daysOfWeek || [],
   });
 
-  // State for errors
   const [errors, setErrors] = useState({});
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     if (type === 'checkbox') {
       const day = value;
-      setFormData((prevFormData) => {
-        let daysOfWeek = [...prevFormData.daysOfWeek];
+      setFormData((prev) => {
+        let daysOfWeek = [...prev.daysOfWeek];
         if (checked) {
           daysOfWeek.push(day);
         } else {
           daysOfWeek = daysOfWeek.filter((d) => d !== day);
         }
-        return { ...prevFormData, daysOfWeek };
+        return { ...prev, daysOfWeek };
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -37,95 +41,134 @@ const EditMenuModal = ({ isVisible, menu, api, triggerNotification, refreshMenus
     setErrors({ ...errors, [name]: '' });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form data
     const validationErrors = {};
-    if (!formData.name.trim()) {
-      validationErrors.name = 'Menu naam is verplicht.';
-    }
-    if (!formData.startDate) {
-      validationErrors.startDate = 'Startdatum is verplicht.';
-    }
-    if (!formData.endDate) {
-      validationErrors.endDate = 'Einddatum is verplicht.';
-    }
-    if (!formData.startHour) {
-      validationErrors.startHour = 'Startuur is verplicht.';
-    }
-    if (!formData.endHour) {
-      validationErrors.endHour = 'Einduur is verplicht.';
-    }
-    if (formData.daysOfWeek.length === 0) {
-      validationErrors.daysOfWeek = 'Selecteer minstens één dag.';
-    }
+    if (!formData.name.trim()) validationErrors.name = 'Menu naam is verplicht.';
+    if (!formData.startDate) validationErrors.startDate = 'Startdatum is verplicht.';
+    if (!formData.endDate) validationErrors.endDate = 'Einddatum is verplicht.';
+    if (!formData.startHour) validationErrors.startHour = 'Startuur is verplicht.';
+    if (!formData.endHour) validationErrors.endHour = 'Einduur is verplicht.';
+    if (formData.daysOfWeek.length === 0) validationErrors.daysOfWeek = 'Selecteer minstens één dag.';
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      // PUT data to api/menu/:id
-      try {
-        const response = await api.put(`${window.baseDomain}api/menu/${menu._id}`, formData);
-        if (response) {
-          // Success
-          triggerNotification('Menu succesvol bijgewerkt', 'success');
-          refreshMenus();
-          onClose();
-        } else {
-          setErrors({ server: 'Er is een fout opgetreden bij het bijwerken van het menu.' });
-        }
-      } catch (error) {
-        console.error('Error updating menu:', error);
-        setErrors({ server: 'Er is een fout opgetreden bij het bijwerken van het menu.' });
+      return;
+    }
+
+    const payload = {
+      ...formData,
+    };
+
+    try {
+      const response = await api.put(`${window.baseDomain}api/menu/${menu._id}`, payload);
+      if (response) {
+        triggerNotification('Menu succesvol bijgewerkt', 'success');
+        refreshMenus();
+        onClose();
+      } else {
         triggerNotification('Fout bij het bijwerken van het menu', 'error');
       }
+    } catch (error) {
+      console.error('Error updating menu:', error);
+      triggerNotification('Fout bij het bijwerken van het menu', 'error');
     }
   };
 
-  if (!isVisible) {
-    return null;
-  }
+  if (!isVisible) return null;
 
   return (
     <ModalWithoutTabs
       onClose={onClose}
       content={
         <div className="menu-component__edit-modal">
-          <h3>Menu Bewerken</h3>
           <form className="menu-component__form" onSubmit={handleSubmit}>
-            {/* Menu Naam */}
             <div className="menu-component__form-group">
-              <div className="label-with-tooltip">
-                <label>Menu Naam</label>
-                <div className="button-with-tooltip">
-                  <FaInfoCircle />
-                  <div className="tooltip">
-                    De naam van het menu.
-                  </div>
-                </div>
-              </div>
-              <div className="input-container">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              </div>
+              <label>Menu Naam</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="menu-component__input"
+              />
               {errors.name && <p className="menu-component__error">{errors.name}</p>}
             </div>
 
-            {/* Other form fields with tooltips (similar to MenuForm) */}
+            <div className="menu-component__form-group">
+              <label>Start Datum</label>
+              <input
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                className="menu-component__input"
+              />
+              {errors.startDate && <p className="menu-component__error">{errors.startDate}</p>}
+            </div>
 
-            {/* ... (include other form fields with tooltips) */}
+            <div className="menu-component__form-group">
+              <label>Eind Datum</label>
+              <input
+                type="date"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                className="menu-component__input"
+              />
+              {errors.endDate && <p className="menu-component__error">{errors.endDate}</p>}
+            </div>
+
+            <div className="menu-component__form-group">
+              <label>Start Uur</label>
+              <input
+                type="time"
+                name="startHour"
+                value={formData.startHour}
+                onChange={handleChange}
+                className="menu-component__input"
+              />
+              {errors.startHour && <p className="menu-component__error">{errors.startHour}</p>}
+            </div>
+
+            <div className="menu-component__form-group">
+              <label>Eind Uur</label>
+              <input
+                type="time"
+                name="endHour"
+                value={formData.endHour}
+                onChange={handleChange}
+                className="menu-component__input"
+              />
+              {errors.endHour && <p className="menu-component__error">{errors.endHour}</p>}
+            </div>
+
+            <div className="menu-component__form-group">
+              <label>Dagen van de week</label>
+              <div className="menu-component__checkbox-group">
+                {['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'].map(
+                  (day) => (
+                    <label key={day} className="menu-component__checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="daysOfWeek"
+                        value={day}
+                        checked={formData.daysOfWeek.includes(day)}
+                        onChange={handleChange}
+                        className="menu-component__checkbox"
+                      />
+                      {day}
+                    </label>
+                  )
+                )}
+              </div>
+              {errors.daysOfWeek && <p className="menu-component__error">{errors.daysOfWeek}</p>}
+            </div>
 
             <button type="submit" className="menu-component__submit-button">
               Menu Bijwerken
             </button>
-            {errors.server && <p className="menu-component__error">{errors.server}</p>}
           </form>
         </div>
       }

@@ -14,6 +14,7 @@ import {
   FaPencilAlt,
   FaChair,
   FaFileDownload,
+  FaUtensilSpoon,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -56,14 +57,13 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
-    path: '/menu',
+    path: '/menu-app',
     element: <Menu title="Menu Beheer"/>, // Use RootComponent here
     label: 'Menu Beheer',
-    icon: FaFileDownload,
+    icon: FaUtensilSpoon,
     isMenu: true,
     isMobile: true,
     isTab: true,
-    secondaryTopBar: overviewSecondaryTopBar,
   },
   {
     path: '/day',

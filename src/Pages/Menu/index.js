@@ -53,7 +53,6 @@ const Menu = () => {
   return (
     <div className="menu-component">
       <NotificationComponent />
-      <h2 className="menu-component__title">Menu Beheer</h2>
       <div className="menu-component__container">
         <MenuForm
           api={api}
