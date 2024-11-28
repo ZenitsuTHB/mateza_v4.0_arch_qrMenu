@@ -15,6 +15,11 @@
 	overflow-y: auto;
 	transition: right 0.3s ease-in-out;
   }
+
+  .admin-title {
+	text-align: center;
+	margin-bottom: 30px;
+  }
   
   .reservation-sidebar-component.open {
 	right: 0;

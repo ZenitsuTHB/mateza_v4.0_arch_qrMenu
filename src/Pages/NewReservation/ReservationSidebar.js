@@ -20,6 +20,8 @@ const ReservationSidebar = ({
   return (
     <div className={`reservation-sidebar-component ${isOpen ? 'open' : ''}`}>
       <div className="reservation-sidebar-content">
+	  <h2 className='admin-title'>Admin Reservaties</h2>
+
         <button className="close-sidebar-button" onClick={onClose}>
           <FaTimes size={20} color="#000" />
         </button>

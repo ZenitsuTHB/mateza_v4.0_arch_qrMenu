@@ -1,0 +1,5 @@
+/* Name Fields Container */
+.name-fields {
+	display: flex;
+	gap: 20px;
+  }

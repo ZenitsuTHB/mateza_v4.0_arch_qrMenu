@@ -92,10 +92,6 @@ const ReservationStepOne = ({
           selectedDate={formData.date}
         />
       )}
-
-      <button type="submit" className="account-manage__button">
-        Verder
-      </button>
     </form>
   );
 };

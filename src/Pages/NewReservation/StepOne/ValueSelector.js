@@ -45,7 +45,7 @@ const ValueSelectorGuests = ({ value, onChange }) => {
             }`}
             onClick={() => handlePredefinedValueClick(val)}
           >
-            {val === '4+' ? '4+' : `${val} ${val === 1 ? '' : ''}`}
+            {val === '4+' ? '4+' : `${val} ${val === 1 ? 'p' : 'p'}`}
           </button>
         ))}
       </div>

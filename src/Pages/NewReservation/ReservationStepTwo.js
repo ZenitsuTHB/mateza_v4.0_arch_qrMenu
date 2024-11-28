@@ -1,6 +1,9 @@
+// src/Pages/NewReservation/ReservationStepTwo.jsx
+
 import React from 'react';
 import FormField from './FormField';
 import { FaUser, FaPhone, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
+import './css/reservationsStepTwo.css'; // Ensure you have this CSS file
 
 const ReservationStepTwo = ({
   formData,
@@ -10,26 +13,31 @@ const ReservationStepTwo = ({
 }) => {
   return (
     <div className="reservation-step-two">
-      <h2 className="modal-title">Persoonlijke Informatie</h2>
       <div className="account-manage-form" noValidate>
-        <FormField
-          label="Voornaam"
-          name="firstName"
-          placeholder="Voornaam"
-          value={formData.firstName}
-          onChange={handleChange}
-          error={errors.firstName}
-          icon={FaUser}
-        />
-        <FormField
-          label="Achternaam"
-          name="lastName"
-          placeholder="Achternaam"
-          value={formData.lastName}
-          onChange={handleChange}
-          error={errors.lastName}
-          icon={FaUser}
-        />
+        
+        {/* Name Fields Container */}
+        <div className="name-fields">
+          <FormField
+            label="Voornaam"
+            name="firstName"
+            placeholder="Voornaam"
+            value={formData.firstName}
+            onChange={handleChange}
+            error={errors.firstName}
+            icon={FaUser}
+          />
+          <FormField
+            label="Achternaam"
+            name="lastName"
+            placeholder="Achternaam"
+            value={formData.lastName}
+            onChange={handleChange}
+            error={errors.lastName}
+            icon={FaUser}
+          />
+        </div>
+        
+        {/* Other Form Fields */}
         <FormField
           label="E-mail"
           name="email"

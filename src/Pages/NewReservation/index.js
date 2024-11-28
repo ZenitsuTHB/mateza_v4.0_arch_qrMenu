@@ -93,8 +93,8 @@ const NewReservationAdmin = () => {
 
   return (
     <div className="new-reservation-page">
-      <h2 className="account-manage-title">Admin Reservaties</h2>
       <div className="account-manage-container">
+      
         {reservationSubmitted ? (
           <ReservationSummary
             formData={formData}
