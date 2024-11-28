@@ -52,7 +52,7 @@ const useReservations = () => {
     const [hours, minutes] = time.split(':').map(Number);
     if (hours >= 6 && hours < 12) {
       return 0; // Morning
-    } else if (hours >= 12 && hours < 18) {
+    } else if (hours >= 12 && hours < 17) {
       return 1; // Afternoon
     } else {
       return 2; // Evening
