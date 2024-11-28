@@ -11,7 +11,7 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
     const dateDictionary = window.dateDictionary;
     const shiftsPerDate = window.shiftsPerDate;
     const dateKey = formatDateKey(selectedDate);
-    
+
     // Retrieve intervalReservatie and validate it
     const intervalReservatie = window.generalSettings?.intervalReservatie;
     let intervalMinutes = 30; // Default value
@@ -84,14 +84,7 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
     if (countingDictionary[dateKey]) {
         timeButtons = timeButtons.filter(button => {
             const time = button.value;
-            const guestsCount = countingDictionary[dateKey][time] || 0;
-
-            console.log("CALCULATION")
-            console.log(guestsCount);
-            console.log(guests);
-            console.log("SELECTED: " + guests);
-            console.log(capacityLimit);
-            
+            const guestsCount = countingDictionary[dateKey][time] || 0;     
             return (guestsCount + guests) <= capacityLimit;
         });
     }

@@ -178,8 +178,6 @@ export const generateAvailableDates = (guests, timeblocks = [], reservations = [
     const datesToRemove = [];
     uniqueDates.forEach(dateKey => {
         const selectedDate = DateTime.fromISO(dateKey, { zone: "Europe/Brussels" }).toJSDate();
-
-        console.log("GUESSST" + guests);
         const availableTimeButtons = generateAvailableTimesForDate(guests, selectedDate);
 
         if (availableTimeButtons.length === 0) {
