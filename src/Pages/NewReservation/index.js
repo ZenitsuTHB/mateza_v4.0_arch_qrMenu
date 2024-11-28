@@ -3,8 +3,9 @@ import useApi from '../../Hooks/useApi';
 import ReservationSidebar from './ReservationSidebar';
 import { withHeader } from '../../Components/Structural/Header';
 import { FaPlus } from 'react-icons/fa';
+import { AiOutlinePlus } from 'react-icons/ai';
+
 import './css/newReservationAdmin.css';
-import ReservationSummary from './ReservationSummary';
 
 const NewReservationAdmin = () => {
   const api = useApi();
@@ -75,7 +76,6 @@ const NewReservationAdmin = () => {
 
       try {
         await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
-        setIsSidebarOpen(false);
         setReservationSubmitted(true);
       } catch (error) {
         console.error('Error submitting reservation:', error);
@@ -94,30 +94,8 @@ const NewReservationAdmin = () => {
   return (
     <div className="new-reservation-page">
       <div className="account-manage-container">
-      
-        {reservationSubmitted ? (
-          <ReservationSummary
-            formData={formData}
-            onNewReservation={() => {
-              setFormData({
-                guests: '',
-                date: '',
-                time: '',
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                extraInfo: '',
-                notes: '',
-              });
-              setReservationSubmitted(false);
-            }}
-          />
-        ) : (
-          <>
-            {/* Existing content, e.g., list of reservations */}
-          </>
-        )}
+        {/* Removed ReservationSummary from here */}
+        {/* You can add other content here if needed */}
       </div>
       {/* Plus Button */}
       <button
@@ -125,7 +103,7 @@ const NewReservationAdmin = () => {
         onClick={() => setIsSidebarOpen(true)}
         style={{ zIndex: isSidebarOpen ? 0 : 1000 }}
       >
-        <FaPlus size={24} color="#fff" />
+        <AiOutlinePlus size={24} color="#fff" />
       </button>
       {/* Sidebar */}
       <ReservationSidebar

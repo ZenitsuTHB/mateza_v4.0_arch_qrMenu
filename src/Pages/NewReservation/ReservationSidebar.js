@@ -1,5 +1,3 @@
-// src/Pages/NewReservation/ReservationSidebar.jsx
-
 import React from 'react';
 import ReservationStepOne from './StepOne';
 import ReservationStepTwo from './ReservationStepTwo';
