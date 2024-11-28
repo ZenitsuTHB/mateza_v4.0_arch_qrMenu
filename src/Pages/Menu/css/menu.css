@@ -192,4 +192,141 @@
   }
   
 
+  /* Existing Menu Form Styles */
+
+.menu-component__form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+  }
+  
+  .menu-component__form-group {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .menu-component__label-with-tooltip {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+  }
+  
+  .menu-component__input-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+  }
+  
+  .menu-component__date-time-group {
+	display: flex;
+	gap: 20px;
+	width: 100%;
+  }
+  
+  .menu-component__date-picker-wrapper,
+  .menu-component__time-picker-wrapper {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .menu-component__checkbox-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 10px; /* Added margin for spacing */
+  }
+  
+  .menu-component__checkbox-label {
+	display: flex;
+	align-items: center;
+  }
+  
+  .menu-component__checkbox {
+	margin-right: 5px;
+  }
+  
+  .menu-component__submit-button {
+	padding: 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	transition: background-color 0.3s ease;
+	align-self: flex-start;
+  }
+  
+  .menu-component__submit-button:hover {
+	background-color: #0056b3;
+  }
+  
+  .menu-component__error {
+	color: red;
+	font-size: 0.9rem;
+  }
+  
+  /* Tooltip styles for Actions (Bewerken & Verwijderen) */
+  .tooltip-container {
+	position: absolute;
+	bottom: 100%;
+	right: 0;
+	transform: translateY(-10px);
+	background-color: white;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	padding: 5px 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+  }
+  
+  .tooltip-item {
+	display: flex;
+	align-items: center;
+	padding: 8px 15px;
+	cursor: pointer;
+  }
+  
+  .tooltip-item:hover {
+	background-color: #f0f0f0;
+  }
+  
+  .tooltip-icon {
+	margin-right: 8px;
+  }
+  
+  .tooltip-item.delete-item {
+	color: red;
+  }
+  
+  .tooltip-item.delete-item .tooltip-icon {
+	color: red;
+  }
+  
+  .tooltip-separator {
+	height: 1px;
+	background-color: lightgray;
+	margin: 5px 0;
+  }
+  
+  /* Header with Icon */
+  .menu-component__header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+  }
+  
+  .menu-icon {
+	font-size: 24px;
+	color: #007bff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.menu-component__date-time-group {
+	  flex-direction: column;
+	}
+  }
   

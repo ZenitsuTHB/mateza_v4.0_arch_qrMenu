@@ -1,8 +1,6 @@
-// src/Pages/Menu/MenuItem.js
-
 import React, { useState } from 'react';
 import './css/menu.css';
-import { FaEllipsisV } from 'react-icons/fa';
+import { FaEllipsisV, FaPencilAlt, FaTrashAlt } from 'react-icons/fa'; // Import additional icons
 import ConfirmationModal from '../../Components/Structural/Modal/Delete'; // Adjust the path if necessary
 import EditMenuModal from './EditMenuModal';
 
@@ -56,11 +54,14 @@ const MenuItem = ({ menu, api, triggerNotification, refreshMenus }) => {
       <div className="menu-component__menu-actions">
         <FaEllipsisV onClick={handleEllipsisClick} className="menu-component__ellipsis-icon" />
         {isTooltipOpen && (
-          <div className="menu-component__tooltip">
-            <div className="menu-component__tooltip-item" onClick={handleEditClick}>
+          <div className="tooltip-container">
+            <div className="tooltip-item" onClick={handleEditClick}>
+              <FaPencilAlt className="tooltip-icon" />
               Bewerken
             </div>
-            <div className="menu-component__tooltip-item menu-component__tooltip-item--delete" onClick={handleDeleteClick}>
+            <div className="tooltip-separator"></div>
+            <div className="tooltip-item delete-item" onClick={handleDeleteClick}>
+              <FaTrashAlt className="tooltip-icon" />
               Verwijderen
             </div>
           </div>

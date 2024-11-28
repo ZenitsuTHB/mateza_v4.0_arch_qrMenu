@@ -166,7 +166,7 @@ const EditMenuModal = ({
               {errors.daysOfWeek && <p className="menu-component__error">{errors.daysOfWeek}</p>}
             </div>
 
-            <button type="submit" className="menu-component__submit-button">
+            <button type="submit" className="button-style-3">
               Menu Bijwerken
             </button>
           </form>
