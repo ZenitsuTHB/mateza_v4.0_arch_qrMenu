@@ -1,8 +1,8 @@
 // src/components/Modal/ExceptionalDays.jsx
 
 import React from 'react';
-import ExceptionItem from './ExceptionItems'; // Corrected import path
-import './css/exceptions.css';
+import ExceptionItems from './ExceptionItems'; // Correct import path
+import './css/exceptionalDays.css';
 
 const ExceptionalDays = ({
   exceptionalDays,
@@ -39,6 +39,9 @@ const ExceptionalDays = ({
         newException.date = '';
         newException.startTime = '';
         newException.endTime = '';
+      } else if (type === 'uitzonderlijkeCapaciteit') {
+        newException.date = '';
+        newException.capacity = '';
       }
       return {
         ...prev,
@@ -48,14 +51,14 @@ const ExceptionalDays = ({
   };
 
   return (
-    <div>
-      <h2 className="secondary-title">Sluitingsdagen</h2>
+    <div className="exceptional-days">
+      <h2 className="secondary-title">Uitzonderingen</h2>
 
       {/* Sluitingsperiode Section */}
       <div className="exception-type-section">
         <h3>Sluitingsperiode</h3>
         {exceptionalDays.sluitingsperiode.map((item, index) => (
-          <ExceptionItem
+          <ExceptionItems
             key={index}
             type="sluitingsperiode"
             item={item}
@@ -74,32 +77,12 @@ const ExceptionalDays = ({
       </div>
 
       {/* Sluitingsdag Section */}
-      <div className="exception-type-section">
-        <h3>Sluitingsdag</h3>
-        {exceptionalDays.sluitingsdag.map((item, index) => (
-          <ExceptionItem
-            key={index}
-            type="sluitingsdag"
-            item={item}
-            index={index}
-            handleToggle={handleToggle}
-            handleInputChange={handleInputChange}
-          />
-        ))}
-        <button
-          type="button"
-          className="add-exception-button"
-          onClick={() => addNewException('sluitingsdag')}
-        >
-          + Voeg Sluitingsdag Toe
-        </button>
-      </div>
 
       {/* Uitzonderlijke Openingsuren Section */}
       <div className="exception-type-section">
         <h3>Uitzonderlijke Openingsuren</h3>
         {exceptionalDays.uitzonderlijkeOpeningsuren.map((item, index) => (
-          <ExceptionItem
+          <ExceptionItems
             key={index}
             type="uitzonderlijkeOpeningsuren"
             item={item}
@@ -114,6 +97,28 @@ const ExceptionalDays = ({
           onClick={() => addNewException('uitzonderlijkeOpeningsuren')}
         >
           + Voeg Uitzonderlijke Openingsuren Toe
+        </button>
+      </div>
+
+      {/* Uitzonderlijke Capaciteit Section */}
+      <div className="exception-type-section">
+        <h3>Zitplaatsen Limiteren</h3>
+        {exceptionalDays.uitzonderlijkeCapaciteit.map((item, index) => (
+          <ExceptionItems
+            key={index}
+            type="uitzonderlijkeCapaciteit"
+            item={item}
+            index={index}
+            handleToggle={handleToggle}
+            handleInputChange={handleInputChange}
+          />
+        ))}
+        <button
+          type="button"
+          className="add-exception-button"
+          onClick={() => addNewException('uitzonderlijkeCapaciteit')}
+        >
+          + Voeg Uitzonderlijke Capaciteit Toe
         </button>
       </div>
 
