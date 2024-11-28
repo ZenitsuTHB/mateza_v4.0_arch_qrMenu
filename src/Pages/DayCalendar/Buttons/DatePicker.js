@@ -45,20 +45,6 @@ const DatePickerComponent = ({
           : 'Datum'}
       </button>
 
-      <button
-        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-        className="button-style-1 date-button"
-      >
-
-		
-        <FaCalendarAlt className="button-style-1-icon date-button-icon" />
-        {selectedDate
-          ? isToday(selectedDate)
-            ? 'Vandaag'
-            : `${formatDateDutch(selectedDate)}`
-          : 'Datum'}
-      </button>
-
       {isDatePickerOpen && (
         <div className="date-picker-popup">
           <DatePicker
