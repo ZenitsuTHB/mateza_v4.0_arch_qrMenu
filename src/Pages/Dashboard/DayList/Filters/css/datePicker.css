@@ -163,6 +163,12 @@
 
 @media (max-width: 900px) {
 	.date-picker-component {
-		margin-top: 50px;
+		margin-top: 100px;
+	}
+
+	.date-picker-component .selected-date {
+		text-align: center;
+		font-size: 16px;
+		margin-top: 12px;
 	}
 }
