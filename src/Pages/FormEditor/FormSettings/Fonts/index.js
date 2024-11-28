@@ -44,6 +44,7 @@ const Fonts = forwardRef((props, ref) => {
     const fetchFonts = async () => {
       try {
         const endpoint = `${window.baseDomain}api/fonts/`;
+        console.log("Fonts GET");
         const response = await api.get(endpoint);
 
         if (response && Object.keys(response).length > 0) {

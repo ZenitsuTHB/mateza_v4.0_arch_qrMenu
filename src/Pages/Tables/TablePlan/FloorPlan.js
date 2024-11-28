@@ -42,6 +42,7 @@ const FloorPlanGeneral = ({
   useEffect(() => {
     const fetchTables = async () => {
       try {
+        console.log("Floorplan GET");
         const data = await api.get(window.baseDomain + 'api/tables', { noCache: true });
         // Ensure that data is an array
         if (Array.isArray(data)) {

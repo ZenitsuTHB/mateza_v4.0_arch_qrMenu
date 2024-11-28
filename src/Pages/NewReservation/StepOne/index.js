@@ -24,6 +24,7 @@ const ReservationStepOne = ({
   useEffect(() => {
     const fetchTimeblocks = async () => {
       try {
+        console.log("New Reservation GET");
         const data = await api.get(`${window.baseDomain}api/auth-restaurant/`, { noCache: true });
         setTimeblocks(data.timeblocks || []);
         window.timeblocks = data.timeblocks || []; // Retain globally if needed

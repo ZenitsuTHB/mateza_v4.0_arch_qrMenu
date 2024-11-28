@@ -78,6 +78,7 @@ const FloorPlan = () => {
   useEffect(() => {
     const fetchTablesAndLines = async () => {
       try {
+        console.log("TableEditor GET");
         const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
         // Ensure that data is an array
         if (Array.isArray(data)) {

@@ -27,6 +27,7 @@ const OverviewSectionFlex = () => {
   useEffect(() => {
     const fetchGiftCards = async () => {
       try {
+        console.log("Giftcards GET");
         const data = await api.get(window.baseDomain + 'api/giftcards', { noCache: true });
 
         if (Array.isArray(data)) {

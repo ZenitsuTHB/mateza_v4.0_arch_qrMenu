@@ -97,6 +97,8 @@ const useApi = () => {
 
       const now = Date.now();
 
+      console.log(endpoint);
+
       // Check in-memory cache first
       const cached = cache.get(cacheKey);
       if (cached) {

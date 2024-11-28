@@ -19,6 +19,7 @@ const useReservations = () => {
     const fetchReservations = async () => {
       try {
         // Fetch raw data from the backend API
+        console.log("Tableplan GET");
         const data = await api.get(`${window.baseDomain}api/auth-reservations`, { noCache: true });
 
         console.log('Raw data from backend:', data);

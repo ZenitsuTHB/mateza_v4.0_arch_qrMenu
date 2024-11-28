@@ -27,6 +27,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
+        console.log("General Settings GET");
         const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
         const data = response || {};
 

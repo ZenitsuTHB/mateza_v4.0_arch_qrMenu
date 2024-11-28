@@ -20,6 +20,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
+        console.log("Account Settings GET");
         const data = await api.get(`${window.baseDomain}api/account`, { noCache: true });
         setAccountData(data);
         setLoading(false);

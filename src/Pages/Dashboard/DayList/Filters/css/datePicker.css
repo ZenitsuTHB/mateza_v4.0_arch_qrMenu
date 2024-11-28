@@ -1,12 +1,71 @@
 /* datePicker.css */
 
+.date-picker-component {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .date-picker-component .selected-date-container {
+	display: flex;
+	align-items: center;
+	position: relative;
+  }
+  
+  .date-picker-component .nav-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 6px;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+	color: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .date-picker-component .nav-button:hover {
+	background-color: #e0e0e0;
+	color: var(--color-blue);
+  }
+  
+  .date-picker-component .selected-date {
+	text-align: center;
+	margin: 0 10px;
+	font-size: 1.5em;
+	color: #333;
+	display: flex;
+	align-items: center;
+	position: relative;
+  }
+  
+  .date-picker-component .print-icon {
+	margin-left: 8px;
+	color: lightgray;
+	opacity: 0;
+	font-size: 20px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+  }
+  
+  .date-picker-component .selected-date:hover .print-icon,
+  .date-picker-component .print-icon:hover {
+	opacity: 1;
+  }
+  
+  .date-picker-component .print-icon:hover {
+	color: gray; 
+  }
+  
   .date-picker-component .date-button {
 	position: absolute;
 	top: -80px;
 	right: 10px;
   }
   
-  .reservations-page .date-picker-popup {
+  .date-picker-component .date-picker-popup {
 	position: absolute;
 	top: -30px;
 	right: 10px;
@@ -18,33 +77,56 @@
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
-  .reservations-page .selected-date {
-	text-align: center;
-	margin: 20px 0;
-	font-size: 1.5em;
-	color: #333;
+  /* Tooltip styles */
+  .date-picker-component .button-with-tooltip {
+	position: relative;
+	display: inline-block;
+	margin: 0 5px;
   }
   
-  .reservations-page .print-icon {
-	margin-left: 8px;
-	color: lightgray;
+  .date-picker-component .button-with-tooltip .tooltip {
+	display: none;
+	position: absolute;
+	bottom: 125%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: black;
+	color: white;
+	padding: 6px 8px;
+	border-radius: 4px;
+	white-space: nowrap;
+	font-size: 14px;
+	z-index: 1000;
 	opacity: 0;
-	font-size: 20px;
-	transition: all 0.3s ease;
-	cursor: pointer;
+	transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   }
   
-  .reservations-page .selected-date:hover .print-icon,
-  .reservations-page .print-icon:hover {
+  .date-picker-component .button-with-tooltip .tooltip::before {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+  }
+  
+  .date-picker-component .button-with-tooltip:hover .tooltip {
+	display: block;
 	opacity: 1;
+	transform: translateX(-50%) translateY(-5px);
   }
   
-  .reservations-page .selected-date:hover .print-icon {
-	opacity: 1;
+  /* Ensure the selected-date is centered */
+  .date-picker-component .selected-date-container {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
   }
   
-  .reservations-page .print-icon:hover {
-	color: gray; 
+  /* Adjust margins to prevent overlap */
+  .date-picker-component .selected-date {
+	margin: 0 40px; /* Adjust as needed based on chevron sizes */
   }
   
- 

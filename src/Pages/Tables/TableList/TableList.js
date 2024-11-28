@@ -21,6 +21,7 @@ const TablesList = () => {
   useEffect(() => {
     const fetchTablesAndLines = async () => {
       try {
+        console.log("TableList GET");
         const data = await api.get(`${window.baseDomain}api/tables`, { noCache: true });
         if (Array.isArray(data)) {
           const elementsData = data.filter((item) => item.type !== 'line');

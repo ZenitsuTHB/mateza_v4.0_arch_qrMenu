@@ -63,6 +63,7 @@ const Calendar = ({
         const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
 
         try {
+          console.log("Calendar Slots GET");
           const data = await api.get(endpoint, { noCache: true });
           setReservations(data); // Update local state with fetched reservations
           console.log('Fetched reservations:', data);

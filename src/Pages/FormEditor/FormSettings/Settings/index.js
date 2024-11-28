@@ -30,6 +30,7 @@ const Settings = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
+        console.log("Settings GET");
         const settingsResponse = await api.get(`${window.baseDomain}api/settings/`);
         if (settingsResponse) {
           const data = settingsResponse;
@@ -51,6 +52,7 @@ const Settings = forwardRef((props, ref) => {
 
     const fetchTheme = async () => {
       try {
+        console.log("Theme GET");
         const themeResponse = await api.get(`${window.baseDomain}api/theme/`);
         setSelectedTheme(themeResponse);
       } catch (error) {

@@ -201,9 +201,9 @@ const ReservationsList = () => {
 
       <div className="reservations-container">
         {loading ? (
-          <div>Loading reservations...</div>
+          <div></div>
         ) : error ? (
-          <div>Error loading reservations: {error.message}</div>
+          <div>Fout bij het laden</div>
         ) : (
           <>
             <div

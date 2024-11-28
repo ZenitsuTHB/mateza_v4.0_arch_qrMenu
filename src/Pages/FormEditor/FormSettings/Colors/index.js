@@ -37,6 +37,7 @@ const Colors = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchColors = async () => {
       try {
+        console.log("Colors GET");
         const response = await api.get(`${window.baseDomain}api/colors/`);
         const data = response || {};
         const mergedData = { ...defaultAppearanceData, ...data };

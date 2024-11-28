@@ -13,7 +13,7 @@ const useCanvasItems = (triggerNotification) => {
   useEffect(() => {
     const fetchCanvasItems = async () => {
       try {
-        console.log('Fetching canvas items from server...');
+        console.log("Fields GET");
         const response = await api.get(`${window.baseDomain}api/fields/`);
         console.log('Raw data received from server:', response);
 

@@ -29,6 +29,7 @@ const EmailSettingsTabs = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
+        console.log("Email Settings GET");
         const response = await api.get(
           window.baseDomain + 'api/email-settings',
           { noCache: true }
