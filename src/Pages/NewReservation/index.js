@@ -92,11 +92,6 @@ const NewReservationAdmin = () => {
 
   return (
     <div className="new-reservation-page">
-      <div className="account-manage-container">
-        {/* Removed ReservationSummary from here */}
-        {/* You can add other content here if needed */}
-      </div>
-      {/* Plus Button */}
       <button
         className="open-sidebar-button"
         onClick={() => setIsSidebarOpen(true)}
