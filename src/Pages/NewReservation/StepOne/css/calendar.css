@@ -92,15 +92,7 @@
 	vertical-align: middle;
 	cursor: pointer;
 	border: none;
-	opacity: 0;
-	animation: fadeInDay 0.5s forwards;
-	animation-delay: calc(var(--animation-order) * 50ms);
-}
-
-@keyframes fadeInDay {
-	to {
-	  opacity: 1;
-	}
+	opacity: 1;
 }
 
 .new-reservation-page .calendar-container .calendar-table td:hover .day-square.available {
