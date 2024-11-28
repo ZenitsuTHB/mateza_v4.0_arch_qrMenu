@@ -15,7 +15,7 @@ const ReservationStepOne = ({
   loadingTimeblocks,
   timeblocksError,
 }) => {
-  // Remove the useEffect hook and any related state variables
+  const [guests, setGuests] = useState(1);
   
   const resetFormDataFields = (fieldsToReset) => {
     setFormData((prevFormData) => {
@@ -26,6 +26,12 @@ const ReservationStepOne = ({
       return newFormData;
     });
   };
+
+  useEffect(() => {
+      resetFormDataFields(['date', 'time']);
+  }, [guests]);
+
+
 
   if (timeblocksError) {
     return (
@@ -46,6 +52,7 @@ const ReservationStepOne = ({
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests
+        setGuests={setGuests}
         value={formData.guests}
         onChange={handleChange}
         error={errors.guests}
@@ -53,6 +60,7 @@ const ReservationStepOne = ({
 
       {formData.guests && (
         <DateSelector
+          guests={formData.guests}
           formData={formData}
           handleChange={handleChange}
           resetFormDataFields={resetFormDataFields}
@@ -62,6 +70,7 @@ const ReservationStepOne = ({
 
       {formData.date && (
         <TimeSelector
+          guests={formData.guests}
           formData={formData}
           handleChange={handleChange}
           field={{ id: 'time', label: 'Tijd' }}

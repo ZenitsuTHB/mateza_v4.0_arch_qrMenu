@@ -1,94 +1,119 @@
-// src/Pages/NewReservation/Utils/generateTimes.js
+// generateTimes.js
 
 import { DateTime } from 'luxon';
 
 const formatDateKey = (date) => {
-  const formattedDate = DateTime.fromJSDate(date).toISODate();
-  return formattedDate;
+    const formattedDate = DateTime.fromJSDate(date).toISODate();
+    return formattedDate;
 };
 
-export const generateAvailableTimesForDate = (selectedDate) => {
-  const dateDictionary = window.dateDictionary;
-  const shiftsPerDate = window.shiftsPerDate;
-  const dateKey = formatDateKey(selectedDate);
-  const now = DateTime.now().setZone('Europe/Brussels');
+export const generateAvailableTimesForDate = (guests, selectedDate) => {
+    const dateDictionary = window.dateDictionary;
+    const shiftsPerDate = window.shiftsPerDate;
+    const dateKey = formatDateKey(selectedDate);
+    const now = DateTime.now().setZone("Europe/Brussels");
+    const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone("Europe/Brussels");
+    const isToday = selectedDateTime.hasSame(now, 'day');
 
-  // Retrieve intervalReservatie and validate it
-  const intervalReservatie = window.generalSettings?.intervalReservatie;
-  let intervalMinutes = 30; // Default value
+    // Retrieve uurOpVoorhand and validate it
+    const uurOpVoorhandRaw = window.generalSettings?.uurOpVoorhand;
+    let uurOpVoorhand = 4; // Default value
 
-  if (
-    typeof intervalReservatie === 'number' &&
-    Number.isInteger(intervalReservatie) &&
-    intervalReservatie > 0
-  ) {
-    intervalMinutes = intervalReservatie;
-  } else {
-    console.warn(
-      `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
-    );
-  }
+    if (typeof uurOpVoorhandRaw === 'number' && uurOpVoorhandRaw >= 0) {
+        uurOpVoorhand = uurOpVoorhandRaw;
+    }
 
-  if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
-    return [];
-  }
+    let minAllowedTime;
+    if (isToday) {
+        minAllowedTime = now.plus({ hours: uurOpVoorhand });
+    } else {
+        minAllowedTime = selectedDateTime.startOf('day');
+    }
 
-  const shiftData =
-    shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
+    // Retrieve intervalReservatie and validate it
+    const intervalReservatie = window.generalSettings?.intervalReservatie;
+    let intervalMinutes = 30; // Default value
 
-  let timeButtons = [];
+    if (
+        typeof intervalReservatie === 'number' &&
+        Number.isInteger(intervalReservatie) &&
+        intervalReservatie > 0
+    ) {
+        intervalMinutes = intervalReservatie;
+    } else {
+        console.warn(
+            `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
+        );
+    }
 
-  if (shiftData.length > 0) {
-    timeButtons = shiftData.map((shift) => ({
-      label: shift.name,
-      value: shift.startTime,
-    }));
-  } else {
-    const times = [];
+    if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
+        return [];
+    }
 
-    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
-      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
+    const shiftData =
+        shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
 
-      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
+    let timeButtons = [];
 
-      while (startDateTime < endDateTime) {
-        if (startDateTime > now) {
-          const timeString = startDateTime.toFormat('HH:mm');
-          times.push(timeString);
-        }
-        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
-      }
-    });
+    if (shiftData.length > 0) {
+        timeButtons = shiftData.map((shift) => ({
+            label: shift.name,
+            value: shift.startTime,
+        }));
+    } else {
+        const times = [];
 
-    const uniqueTimes = [...new Set(times)].sort(
-      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
-    );
+        dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
 
-    timeButtons = uniqueTimes.map((time) => ({
-      label: time,
-      value: time,
-    }));
-  }
+            let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
 
-  // Filter timeButtons based on countingDictionary
-  const capacityLimit = 3;
-  const countingDictionary = window.countingDictionary || {};
+            const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: "Europe/Brussels" }).set({
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate()
+            });
 
-  if (countingDictionary[dateKey]) {
-    timeButtons = timeButtons.filter((button) => {
-      const time = button.value;
-      const guestsCount = countingDictionary[dateKey][time] || 0;
-      return guestsCount < capacityLimit;
-    });
-  }
+            while (startDateTime < endDateTime) {
+                if (startDateTime >= minAllowedTime) {
+                    const timeString = startDateTime.toFormat('HH:mm');
+                    times.push(timeString);
+                }
+                startDateTime = startDateTime.plus({ minutes: intervalMinutes });
+            }
+        });
 
-  return timeButtons;
+        const uniqueTimes = [...new Set(times)].sort(
+            (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
+        );
+
+        timeButtons = uniqueTimes.map((time) => ({
+            label: time,
+            value: time,
+        }));
+    }
+
+    // Filter timeButtons based on countingDictionary
+    const capacityLimit = window.generalSettings?.zitplaatsen || 0;
+    const countingDictionary = window.countingDictionary || {};
+
+    if (countingDictionary[dateKey]) {
+        timeButtons = timeButtons.filter(button => {
+            const time = button.value;
+            const guestsCount = countingDictionary[dateKey][time] || 0;
+
+            console.log("CALCULATION")
+            console.log(guestsCount);
+            console.log(guests);
+            console.log("SELECTED: " + guests);
+            console.log(capacityLimit);
+            
+            return (guestsCount + guests) <= capacityLimit;
+        });
+    }
+
+    return timeButtons;
 };

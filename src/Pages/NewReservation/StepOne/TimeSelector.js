@@ -5,6 +5,7 @@ import { generateAvailableTimesForDate } from './Utils/generateTimes';
 import './css/timeSelector.css';
 
 const TimeSelector = ({
+  guests, 
   formData,
   handleChange,
   field,
@@ -18,7 +19,7 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate) {
-      const times = generateAvailableTimesForDate(new Date(selectedDate));
+      const times = generateAvailableTimesForDate(guests, new Date(selectedDate));
       setAvailableTimes(times);
     } else {
       setAvailableTimes([]);

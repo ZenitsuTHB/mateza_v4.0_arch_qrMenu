@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/valueSelector.css';
 
-const ValueSelectorGuests = ({ value, onChange }) => {
+const ValueSelectorGuests = ({ setGuests, value, onChange }) => {
   const predefinedValues = [1, 2, 3, '4+'];
   const [selectedValue, setSelectedValue] = useState(value || '');
   const [showSlider, setShowSlider] = useState(false);
@@ -13,10 +13,12 @@ const ValueSelectorGuests = ({ value, onChange }) => {
     if (val === '4+') {
       setShowSlider(true);
       setSelectedValue(4);
+      setGuests(4);
       onChange({ target: { name: 'guests', value: 4 } });
     } else {
       setShowSlider(false);
       setSelectedValue(val);
+      setGuests(val);
       onChange({ target: { name: 'guests', value: val } });
     }
   };
@@ -24,12 +26,14 @@ const ValueSelectorGuests = ({ value, onChange }) => {
   const handleSliderChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
+    setGuests(val);
     onChange({ target: { name: 'guests', value: val } });
   };
 
   const handleInputChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
+    setGuests(val);
     onChange({ target: { name: 'guests', value: val } });
   };
 

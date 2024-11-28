@@ -6,6 +6,7 @@ import { generateAvailableDates } from './Utils/generateDates';
 import moment from 'moment';
 
 const DateSelector = ({
+  guests,
   formData,
   handleChange,
   resetFormDataFields,
@@ -16,13 +17,13 @@ const DateSelector = ({
 
   useEffect(() => {
     if (Array.isArray(timeblocks)) {
-      const dates = generateAvailableDates(timeblocks, reservations);
+      const dates = generateAvailableDates(guests, timeblocks, reservations);
       setAvailableDates(dates);
     } else {
       console.error('timeblocks is undefined or not an array:', timeblocks);
       setAvailableDates([]);
     }
-  }, [timeblocks, reservations]);
+  }, [formData.guests, timeblocks, reservations]);
 
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
