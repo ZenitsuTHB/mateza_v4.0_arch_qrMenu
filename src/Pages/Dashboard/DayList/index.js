@@ -1,6 +1,6 @@
 // src/Components/ReservationsList/ReservationsList.js
 
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import ReservationRow from './ReservationRow/index.js';
 import Pagination from './Pagination.js';
@@ -23,6 +23,13 @@ import useReservationsList from './Hooks/useReservationsList.js';
 import useNotification from '../../../Components/Notification/index.js';
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js';
 
+// Import localStorage utility functions
+import { loadFromLocalStorage, saveToLocalStorage } from './Utils/localStorageUtils.js';
+
+// Define a constant key for localStorage
+const LOCAL_STORAGE_KEY = 'reservationsListVisibleFields';
+
+// Define the FIELD_CONFIG outside the component to ensure consistency
 const FIELD_CONFIG = [
   { key: 'aantalGasten', label: '#', alwaysVisible: true },
   { key: 'tijdstip', label: 'Uur', alwaysVisible: true },
@@ -106,9 +113,19 @@ const ReservationsList = () => {
     setSortConfig(newSortConfig);
   };
 
-  const [visibleFields, setVisibleFields] = useState(
-    FIELD_CONFIG.filter((field) => field.defaultVisible || field.alwaysVisible).map((field) => field.key)
+  // Initialize visibleFields from localStorage or use default
+  const defaultVisibleFields = FIELD_CONFIG.filter(
+    (field) => field.defaultVisible || field.alwaysVisible
+  ).map((field) => field.key);
+
+  const [visibleFields, setVisibleFields] = useState(() =>
+    loadFromLocalStorage(LOCAL_STORAGE_KEY, defaultVisibleFields)
   );
+
+  // Persist visibleFields to localStorage whenever it changes
+  useEffect(() => {
+    saveToLocalStorage(LOCAL_STORAGE_KEY, visibleFields);
+  }, [visibleFields]);
 
   const [isFieldSelectorModalOpen, setIsFieldSelectorModalOpen] = useState(false);
 
@@ -134,13 +151,14 @@ const ReservationsList = () => {
     const handleApply = () => {
       setVisibleFields(selectedFields);
       onClose();
+      triggerNotification('Velden bijgewerkt', 'success'); // Optional: Notify the user
     };
 
     return (
       <ModalWithoutTabs
         content={
           <div className="field-selector-modal">
-            <h2 className='secondary-title'>Selecteer velden om weer te geven</h2>
+            <h2 className="secondary-title">Selecteer velden om weer te geven</h2>
             <div className="field-options">
               {FIELD_CONFIG.map((field) => (
                 <div key={field.key} className="field-option">
@@ -156,7 +174,11 @@ const ReservationsList = () => {
                 </div>
               ))}
             </div>
-            <button onClick={handleApply}>Toepassen</button>
+            <div className="modal-buttons">
+              <button className="confirm-button" onClick={handleApply}>
+                Toepassen
+              </button>
+            </div>
           </div>
         }
         onClose={onClose}
