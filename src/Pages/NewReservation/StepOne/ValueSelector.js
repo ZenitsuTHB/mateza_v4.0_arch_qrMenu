@@ -13,24 +13,24 @@ const ValueSelectorGuests = ({ value, onChange }) => {
     if (val === '4+') {
       setShowSlider(true);
       setSelectedValue(4);
-      onChange({ target: { name: 'numberOfGuests', value: 4 } });
+      onChange({ target: { name: 'guests', value: 4 } });
     } else {
       setShowSlider(false);
       setSelectedValue(val);
-      onChange({ target: { name: 'numberOfGuests', value: val } });
+      onChange({ target: { name: 'guests', value: val } });
     }
   };
 
   const handleSliderChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
-    onChange({ target: { name: 'numberOfGuests', value: val } });
+    onChange({ target: { name: 'guests', value: val } });
   };
 
   const handleInputChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
-    onChange({ target: { name: 'numberOfGuests', value: val } });
+    onChange({ target: { name: 'guests', value: val } });
   };
 
   return (
@@ -68,7 +68,7 @@ const ValueSelectorGuests = ({ value, onChange }) => {
             />
             <input
               type="number"
-              name="numberOfGuests"
+              name="guests"
               value={selectedValue}
               onChange={handleInputChange}
               className="value-input"

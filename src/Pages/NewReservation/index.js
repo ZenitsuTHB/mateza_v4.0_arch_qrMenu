@@ -10,7 +10,7 @@ const NewReservationAdmin = () => {
   const api = useApi();
 
   const [formData, setFormData] = useState({
-    numberOfGuests: '',
+    guests: '',
     date: '',
     time: '',
     firstName: '',
@@ -29,8 +29,8 @@ const NewReservationAdmin = () => {
 
   const validateStepOne = () => {
     const errors = {};
-    if (!formData.numberOfGuests) {
-      errors.numberOfGuests = 'Aantal gasten is verplicht';
+    if (!formData.guests) {
+      errors.guests = 'Aantal gasten is verplicht';
     }
     if (!formData.date) {
       errors.date = 'Datum is verplicht';
@@ -62,7 +62,7 @@ const NewReservationAdmin = () => {
       setErrors({});
       setIsSubmitting(true);
       const submissionData = {
-        numberOfGuests: formData.numberOfGuests,
+        guests: formData.guests,
         date: formData.date,
         time: formData.time,
         firstName: formData.firstName,
@@ -100,7 +100,7 @@ const NewReservationAdmin = () => {
             formData={formData}
             onNewReservation={() => {
               setFormData({
-                numberOfGuests: '',
+                guests: '',
                 date: '',
                 time: '',
                 firstName: '',
@@ -140,7 +140,7 @@ const NewReservationAdmin = () => {
         reservationSubmitted={reservationSubmitted}
         onNewReservation={() => {
           setFormData({
-            numberOfGuests: '',
+            guests: '',
             date: '',
             time: '',
             firstName: '',

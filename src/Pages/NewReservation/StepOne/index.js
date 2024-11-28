@@ -70,12 +70,12 @@ const ReservationStepOne = ({
   return (
     <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
       <ValueSelectorGuests
-        value={formData.numberOfGuests}
+        value={formData.guests}
         onChange={handleChange}
-        error={errors.numberOfGuests}
+        error={errors.guests}
       />
 
-      {formData.numberOfGuests && (
+      {formData.guests && (
         <DateSelector
           formData={formData}
           handleChange={handleChange}
