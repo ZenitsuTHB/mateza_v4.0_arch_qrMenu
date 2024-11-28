@@ -1,5 +1,5 @@
 
-
+/* calendar.css */
 .new-reservation-page .calendar-container {
 	position: relative;
 	width: 100%;
@@ -108,13 +108,13 @@
 }
 
 .new-reservation-page .calendar-container .day-square {
-	width: 44px;
-	height: 44px;
+	width: 37px;
+	height: 37px;
 	line-height: 40px;
 	border-radius: 5px;
 	display: inline-block;
 	transition: all 0.3s ease;
-	font-size: 17px;
+	font-size: 16px;
 }
 
 .new-reservation-page .calendar-container .available .day-square {
@@ -167,14 +167,15 @@
 	align-items: center;
 }
 
-@media screen and (max-width: 480px) {
-	.new-reservation-page .calendar-container .day-square {
-	  width: 30px;
-	  height: 30px;
-	  line-height: 30px;
+@media screen and (max-width: 900px) {
+	.calendar-container .day-square {
+	  width: 35px !important;
+	  height: 35px !important;
+	  line-height: 35px !important;
+	  font-size: 15px !important;
 	}
   
-	.new-reservation-page .calendar-container .calendar-header span {
-	  font-size: 14px;
+	.calendar-container .calendar-header span {
+	  font-size: 12px;
 	}
-}
+  }

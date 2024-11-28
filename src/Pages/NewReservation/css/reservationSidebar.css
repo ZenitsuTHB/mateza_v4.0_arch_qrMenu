@@ -1,3 +1,6 @@
+
+/* reservationSidebar.js */
+
 .reservation-sidebar-component {
 	position: fixed;
 	top: 0;
@@ -6,9 +9,9 @@
 	height: 100%;
 	background-color: #fff;
 	box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+	z-index: var(--z-index-sidebar-reservation); /* Updated z-index */
 	display: flex;
 	flex-direction: column;
-	z-index: 999;
 	overflow-y: auto;
 	transition: right 0.3s ease-in-out;
   }

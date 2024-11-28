@@ -14,7 +14,7 @@
   
   .new-reservation-page .predefined-value-button {
 	flex: 1;
-	padding: 12px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: var(--border-radius);
 	background-color: var(--color-white);

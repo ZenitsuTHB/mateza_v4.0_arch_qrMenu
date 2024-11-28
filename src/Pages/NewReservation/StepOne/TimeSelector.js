@@ -49,10 +49,6 @@ const TimeSelector = ({
 
   return (
     <div className="form-group time-selector-container" ref={timeSelectorRef}>
-      <label className="default-text-color" htmlFor={field.id}>
-        {field.label}
-        <span className="required">*</span>
-      </label>
 
       {!selectedDate ? (
         <p className="info-text">Selecteer eerst een datum.</p>

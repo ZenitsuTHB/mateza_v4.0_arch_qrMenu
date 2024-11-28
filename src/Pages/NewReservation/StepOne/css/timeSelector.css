@@ -100,12 +100,12 @@
   
 /* ... existing styles ... */
 
-.time-option {
+.new-reservation-pag .time-option {
 	padding: 6px 10px; /* Reduced padding */
 	font-size: 0.9rem; /* Reduced font size */
   }
   
-  .time-selector {
+  .new-reservation-pag .time-selector {
 	top: 65px; /* Adjusted position */
   }
   

@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './css/valueSelector.css';
 
 const ValueSelectorGuests = ({ value, onChange }) => {
-  const predefinedValues = [1, 2, 3, '4+ Gasten'];
+  const predefinedValues = [1, 2, 3, '4+'];
   const [selectedValue, setSelectedValue] = useState(value || '');
   const [showSlider, setShowSlider] = useState(false);
 
   const handlePredefinedValueClick = (val) => {
-    if (val === '4+ Gasten') {
+    if (val === '4+') {
       setShowSlider(true);
       setSelectedValue(4);
       onChange({ target: { name: 'numberOfGuests', value: 4 } });
@@ -41,11 +41,11 @@ const ValueSelectorGuests = ({ value, onChange }) => {
             key={val}
             type="button"
             className={`predefined-value-button ${
-              selectedValue == val || (val === '4+ Gasten' && showSlider) ? 'active' : ''
+              selectedValue == val || (val === '4+' && showSlider) ? 'active' : ''
             }`}
             onClick={() => handlePredefinedValueClick(val)}
           >
-            {val === '4+ Gasten' ? '4+ Gasten' : `${val} ${val === 1 ? 'Gast' : 'Gasten'}`}
+            {val === '4+' ? '4+' : `${val} ${val === 1 ? '' : ''}`}
           </button>
         ))}
       </div>

@@ -40,9 +40,6 @@ const DateSelector = ({
 
   return (
     <div className="form-group date-selector-container">
-      <label htmlFor="date" className="default-text-color">
-        Datum<span className="required">*</span>
-      </label>
       <Calendar
         availableDates={availableDates}
         selectedDate={formData.date || null}
