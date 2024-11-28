@@ -145,7 +145,7 @@
   }
   
   /* Responsive Design */
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
 	.email-settings-page .email-settings-grid {
 	  grid-template-columns: 1fr;
 	}
@@ -160,3 +160,10 @@
 	}
   }
   
+
+  @media (max-width: 900px) {
+	.email-settings-page {
+		padding-bottom: 60px !important;
+	  }
+	  
+  }

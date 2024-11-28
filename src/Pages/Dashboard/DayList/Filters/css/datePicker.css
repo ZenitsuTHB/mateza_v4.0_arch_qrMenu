@@ -160,3 +160,9 @@
 		margin-bottom: 30px !important;
 	}
 }
+
+@media (max-width: 900px) {
+	.date-picker-component {
+		margin-top: 50px;
+	}
+}

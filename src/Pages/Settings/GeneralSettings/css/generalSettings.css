@@ -139,3 +139,10 @@
 	color: #000;
   }
   
+
+  @media (max-width: 900px) {
+	.general-settings-page {
+		padding-bottom: 60px !important;
+	  }
+	  
+  }
