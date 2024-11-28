@@ -136,6 +136,8 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
+
+
   {
     path: '/settings',
     element: <Settings title="Administratie" />,
@@ -149,59 +151,62 @@ const routesConfig = [
 
 ];
 
-/*
-{
-    path: '/giftcard',
-    element: <GiftCard title="Cadeaubonnen" />,
-    label: 'Cadeaubonnen',
-    icon: FaGift,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: giftCardSecondaryTopBar,
-  },
-  {
-    path: '/giftcard/editor',
-    element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
-    label: 'Cadeaubonnen Ontwerpen',
-    icon: FaPencilAlt,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: giftCardSecondaryTopBar,
-  },
 
-  {
-    path: '/table',
-    element: <TablePlan title="Tafelplan" />,
-    label: 'Tafelplan',
-    icon: FaChair,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    secondaryTopBar: tableSecondaryTopBar,
-  },
-  {
-    path: 'table/table-editor',
-    element: <TableEditor title="Tafels Bewerken" />,
-    label: 'Tafels Bewerken',
-    icon: FaTable,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: tableSecondaryTopBar,
-  },
-  {
-    path: 'table/table-list',
-    element: <TableList title="Tafel Lijst" />,
-    label: 'Tafel Lijst',
-    icon: FaTable,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: tableSecondaryTopBar,
-  },
+/*
+
+{
+  path: '/giftcard',
+  element: <GiftCard title="Cadeaubonnen" />,
+  label: 'Cadeaubonnen',
+  icon: FaGift,
+  isMenu: true,
+  isMobile: true,
+  isTab: true,
+  secondaryTopBar: giftCardSecondaryTopBar,
+},
+{
+  path: '/giftcard/editor',
+  element: <GiftcardEditor title="Cadeaubonnen Ontwerpen" />,
+  label: 'Cadeaubonnen Ontwerpen',
+  icon: FaPencilAlt,
+  isMenu: false,
+  isMobile: false,
+  isTab: false,
+  secondaryTopBar: giftCardSecondaryTopBar,
+},
+
+{
+  path: '/table',
+  element: <TablePlan title="Tafelplan" />,
+  label: 'Tafelplan',
+  icon: FaChair,
+  isMenu: true,
+  isMobile: true,
+  isTab: true,
+  secondaryTopBar: tableSecondaryTopBar,
+},
+{
+  path: 'table/table-editor',
+  element: <TableEditor title="Tafels Bewerken" />,
+  label: 'Tafels Bewerken',
+  icon: FaTable,
+  isMenu: false,
+  isMobile: false,
+  isTab: false,
+  secondaryTopBar: tableSecondaryTopBar,
+},
+{
+  path: 'table/table-list',
+  element: <TableList title="Tafel Lijst" />,
+  label: 'Tafel Lijst',
+  icon: FaTable,
+  isMenu: false,
+  isMobile: false,
+  isTab: false,
+  secondaryTopBar: tableSecondaryTopBar,
+},
 */
+
 
 
 export default routesConfig;

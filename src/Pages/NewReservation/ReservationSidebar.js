@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReservationStepOne from './StepOne';
-import ReservationStepTwo from './ReservationStepTwo';
+import ReservationStepTwoFiltering from './ReservationStepTwo';
 import ReservationSummary from './ReservationSummary';
 import { FaTimes } from 'react-icons/fa';
 import './css/reservationSidebar.css';
@@ -87,7 +87,7 @@ const ReservationSidebar = ({
               />
             </div>
             <div className="sidebar-section-two">
-              <ReservationStepTwo
+              <ReservationStepTwoFiltering
                 formData={formData}
                 errors={errors}
                 handleChange={handleChange}

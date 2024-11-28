@@ -185,7 +185,7 @@ const EmailPreview = ({ settings, handleChange }) => {
           }
 
           .email-preview-container .email-body h2 {
-            color: var(--color-blue);
+            color: #000;
             font-size: 24px;
             margin-bottom: 16px;
           }
@@ -279,7 +279,7 @@ const EmailPreview = ({ settings, handleChange }) => {
               handleChange={handleChange}
               element="span"
               className=""
-              style={{ color: 'var(--color-blue)', fontSize: '24px' }}
+              style={{ color: '#000', fontSize: '24px' }}
             />{' '}
             {sampleData.firstName},
           </h2>

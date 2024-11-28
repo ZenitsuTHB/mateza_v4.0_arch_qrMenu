@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment/locale/nl'; // Import Dutch locale
 import './css/reservationsStepTwo.css';
 
-const ReservationStepTwo = ({
+const ReservationStepTwoFiltering = ({
   formData,
   errors,
   handleChange,
@@ -123,4 +123,4 @@ const ReservationStepTwo = ({
   );
 };
 
-export default ReservationStepTwo;
+export default ReservationStepTwoFiltering;
