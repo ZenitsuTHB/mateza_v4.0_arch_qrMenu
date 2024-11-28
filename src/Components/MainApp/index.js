@@ -7,6 +7,7 @@ import SecondaryTopBar from '../Structural/SecondaryTopBar';
 import Sidebar from '../Structural/Sidebar';
 import ContentRouting from '../Structural/ContentRouting';
 import routesConfig from '../../Config/sidebarConfig';
+import NewReservation from '../../Pages/NewReservation';
 
 const MainApp = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const MainApp = () => {
 
   return (
     <div className={`app-component ${isSidebarHidden ? 'sidebar-hidden' : ''}`}>
+      <NewReservation/>
       <TopBar />
       {showSecondaryTopBar && <SecondaryTopBar />}
       {!isSidebarHidden && <Sidebar />}

@@ -96,16 +96,6 @@ const routesConfig = [
     secondaryTopBar: settingsSecondaryTopBar,
   },
   {
-    path: '/new-reservation',
-    element: <NewReservationAdmin title="Reserveren" />,
-    label: 'Reserveren',
-    icon: FaPlus,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    sidebarHidden: false,
-  },
-  {
     path: '/account',
     element: <Profile title="Account" />,
     label: 'Account',

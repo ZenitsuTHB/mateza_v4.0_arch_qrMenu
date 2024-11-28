@@ -14,10 +14,10 @@ const useFetchRestaurantData = () => {
         const endpoint = `${window.baseDomain}api/auth-restaurant/`;
         const response = await api.get(endpoint);
 
-
         if (response) {
           setRestaurantData(response);
         }
+
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
         const errorCode = error.response?.status || 'unknown';

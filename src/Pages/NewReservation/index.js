@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import useApi from '../../Hooks/useApi';
 import ReservationSidebar from './ReservationSidebar';
-import { withHeader } from '../../Components/Structural/Header';
-import { FaPlus } from 'react-icons/fa';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import './css/newReservationAdmin.css';
@@ -135,4 +133,4 @@ const NewReservationAdmin = () => {
   );
 };
 
-export default withHeader(NewReservationAdmin);
+export default NewReservationAdmin;
