@@ -7,7 +7,7 @@ import qs from 'qs'; // For query string serialization
 // Cache durations
 const TEN_MINUTES = 60 * 10 * 1000;
 const CACHE_EXPIRY = TEN_MINUTES;
-const MIN_CACHE_EXPIRY = 15000; // 15 seconds
+const MIN_CACHE_EXPIRY = 1000; // 15 seconds
 
 // Singleton in-memory cache
 const cache = new Map();
