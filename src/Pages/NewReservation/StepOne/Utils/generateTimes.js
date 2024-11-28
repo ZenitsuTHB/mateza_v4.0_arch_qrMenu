@@ -11,25 +11,7 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
     const dateDictionary = window.dateDictionary;
     const shiftsPerDate = window.shiftsPerDate;
     const dateKey = formatDateKey(selectedDate);
-    const now = DateTime.now().setZone("Europe/Brussels");
-    const selectedDateTime = DateTime.fromJSDate(selectedDate).setZone("Europe/Brussels");
-    const isToday = selectedDateTime.hasSame(now, 'day');
-
-    // Retrieve uurOpVoorhand and validate it
-    const uurOpVoorhandRaw = window.generalSettings?.uurOpVoorhand;
-    let uurOpVoorhand = 4; // Default value
-
-    if (typeof uurOpVoorhandRaw === 'number' && uurOpVoorhandRaw >= 0) {
-        uurOpVoorhand = uurOpVoorhandRaw;
-    }
-
-    let minAllowedTime;
-    if (isToday) {
-        minAllowedTime = now.plus({ hours: uurOpVoorhand });
-    } else {
-        minAllowedTime = selectedDateTime.startOf('day');
-    }
-
+    
     // Retrieve intervalReservatie and validate it
     const intervalReservatie = window.generalSettings?.intervalReservatie;
     let intervalMinutes = 30; // Default value
@@ -78,10 +60,9 @@ export const generateAvailableTimesForDate = (guests, selectedDate) => {
             });
 
             while (startDateTime < endDateTime) {
-                if (startDateTime >= minAllowedTime) {
                     const timeString = startDateTime.toFormat('HH:mm');
                     times.push(timeString);
-                }
+                
                 startDateTime = startDateTime.plus({ minutes: intervalMinutes });
             }
         });
