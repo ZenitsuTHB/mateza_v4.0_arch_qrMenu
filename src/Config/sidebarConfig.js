@@ -13,6 +13,7 @@ import {
   FaGift,
   FaPencilAlt,
   FaChair,
+  FaFileDownload,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -40,6 +41,7 @@ import Settings from '../Pages/Settings/GeneralSettings/index.js';
 import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
 import TableEditor from '../Pages/Tables/TableEditor/index.js';
 import TableList from '../Pages/Tables/TableList/index.js';
+import Menu from '../Pages/Menu/index.js';
 
 
 const routesConfig = [
@@ -48,6 +50,16 @@ const routesConfig = [
     element: <RootComponent />, // Use RootComponent here
     label: 'Dashboard',
     icon: FaStar,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    secondaryTopBar: overviewSecondaryTopBar,
+  },
+  {
+    path: '/menu',
+    element: <Menu title="Menu Beheer"/>, // Use RootComponent here
+    label: 'Menu Beheer',
+    icon: FaFileDownload,
     isMenu: true,
     isMobile: true,
     isTab: true,

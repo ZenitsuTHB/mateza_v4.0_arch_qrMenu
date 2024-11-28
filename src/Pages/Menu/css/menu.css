@@ -1,0 +1,89 @@
+/* src/Pages/Menu/css/menu.css */
+
+.menu-component {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin-top: 30px;
+  }
+  
+  .menu-component__title {
+	font-size: 2rem;
+	text-align: center;
+  }
+  
+  .menu-component__container {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+  }
+  
+  .menu-component__form {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+  }
+  
+  .menu-component__form-group {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .menu-component__form-group label {
+	margin-bottom: 5px;
+  }
+  
+  .menu-component__form-group input {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+  
+  .menu-component__checkbox-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+  }
+  
+  .menu-component__checkbox-group label {
+	display: flex;
+	align-items: center;
+  }
+  
+  .menu-component__checkbox-group input {
+	margin-right: 5px;
+  }
+  
+  .menu-component__submit-button {
+	padding: 10px;
+	background-color: var(--color-blue);
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+  
+  .menu-component__error {
+	color: var(--color-red);
+	font-size: 0.9rem;
+  }
+  
+  .menu-component__list {
+	flex: 1;
+  }
+  
+  .menu-component__menu-list {
+	list-style-type: none;
+	padding: 0;
+  }
+  
+  .menu-component__menu-item {
+	border-bottom: 1px solid #ccc;
+	padding: 10px 0;
+  }
+  
+  .menu-component__menu-item h4 {
+	margin: 0 0 5px 0;
+  }
+  
