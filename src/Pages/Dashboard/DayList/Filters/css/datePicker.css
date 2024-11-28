@@ -131,13 +131,6 @@
 	transform: translateX(-50%) translateY(-5px);
   }
   
-  /* Ensure the selected-date is centered */
-  .date-picker-component .selected-date-container {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-  }
-  
   /* Adjust margins to prevent overlap */
   .date-picker-component .selected-date {
 	margin: 0 40px; /* Adjust as needed based on chevron sizes */
@@ -157,8 +150,12 @@
 
   @media (max-width: 900px) {
 	.date-picker-component .selected-date-container {
-		margin-bottom: 30px !important;
+		margin-bottom: 0px;
 	}
+}
+
+.date-picker-component {
+	margin-bottom: 40px;
 }
 
 @media (max-width: 900px) {
@@ -168,7 +165,12 @@
 
 	.date-picker-component .selected-date {
 		text-align: center;
-		font-size: 16px;
+		font-size: 23px;
 		margin-top: 12px;
 	}
+
+	.date-picker-component {
+		margin-bottom: 0px;
+	}
 }
+
