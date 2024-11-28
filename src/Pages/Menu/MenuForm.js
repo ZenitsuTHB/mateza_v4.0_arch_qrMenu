@@ -1,13 +1,16 @@
+// src/Pages/Menu/MenuForm.js
+
 import React, { useState } from 'react';
 import './css/menu.css';
 import { FaInfoCircle } from 'react-icons/fa';
+import DatePik$ from '../ReservationsList/Filters/DatePickerComponent'; // Adjust the path if necessary
 
 const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
   // State for the form data
   const [formData, setFormData] = useState({
     name: '',
-    startDate: '',
-    endDate: '',
+    startDate: new Date(),
+    endDate: new Date(),
     startHour: '',
     endHour: '',
     daysOfWeek: [],
@@ -15,6 +18,7 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
 
   // State for errors
   const [errors, setErrors] = useState({});
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -35,6 +39,17 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
       setFormData({ ...formData, [name]: value });
     }
     setErrors({ ...errors, [name]: '' });
+  };
+
+  // Handle date changes using DatePickerComponent
+  const handleStartDateChange = (date) => {
+    setFormData({ ...formData, startDate: date });
+    setIsDatePickerOpen(false);
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormData({ ...formData, endDate: date });
+    setIsDatePickerOpen(false);
   };
 
   // Handle form submission
@@ -65,15 +80,25 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
+      // Prepare data for API
+      const payload = {
+        name: formData.name,
+        startDate: formData.startDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
+        endDate: formData.endDate.toISOString().split('T')[0],
+        startHour: formData.startHour,
+        endHour: formData.endHour,
+        daysOfWeek: formData.daysOfWeek,
+      };
+
       // Post data to api/menu
       try {
-        const response = await api.post(window.baseDomain + 'api/menu', formData);
+        const response = await api.post(window.baseDomain + 'api/menu', payload);
         if (response) {
           // Success, reset form and refresh menus
           setFormData({
             name: '',
-            startDate: '',
-            endDate: '',
+            startDate: new Date(),
+            endDate: new Date(),
             startHour: '',
             endHour: '',
             daysOfWeek: [],
@@ -84,6 +109,7 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
           refreshMenus();
         } else {
           setErrors({ server: 'Er is een fout opgetreden bij het toevoegen van het menu.' });
+          triggerNotification('Fout bij het toevoegen van het menu', 'error');
         }
       } catch (error) {
         console.error('Error adding menu:', error);
@@ -97,22 +123,23 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
     <form className="menu-component__form" onSubmit={handleSubmit}>
       {/* Menu Naam */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Menu Naam</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               De naam van het menu.
             </div>
           </div>
         </div>
-        <div className="input-container">
+        <div className="menu-component__input-container">
           <input
             type="text"
             id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
+            placeholder="Menu Naam"
           />
         </div>
         {errors.name && <p className="menu-component__error">{errors.name}</p>}
@@ -120,45 +147,46 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
 
       {/* Start Datum */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Start Datum</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               De startdatum vanaf wanneer het menu beschikbaar is.
             </div>
           </div>
         </div>
-        <div className="input-container">
-          <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
+        <div className="menu-component__input-container">
+          <DatePickerComponent
+            selectedDate={formData.startDate}
+            setSelectedDate={(date) => setFormData({ ...formData, startDate: date })}
+            isDatePickerOpen={false}
+            setIsDatePickerOpen={() => {}}
+            handleDateChange={handleStartDateChange}
           />
+          {/* Alternatively, you can toggle DatePickerComponent's visibility as needed */}
         </div>
         {errors.startDate && <p className="menu-component__error">{errors.startDate}</p>}
       </div>
 
       {/* Eind Datum */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Eind Datum</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               De einddatum tot wanneer het menu beschikbaar is.
             </div>
           </div>
         </div>
-        <div className="input-container">
-          <input
-            type="date"
-            id="endDate"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
+        <div className="menu-component__input-container">
+          <DatePickerComponent
+            selectedDate={formData.endDate}
+            setSelectedDate={(date) => setFormData({ ...formData, endDate: date })}
+            isDatePickerOpen={false}
+            setIsDatePickerOpen={() => {}}
+            handleDateChange={handleEndDateChange}
           />
         </div>
         {errors.endDate && <p className="menu-component__error">{errors.endDate}</p>}
@@ -166,22 +194,23 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
 
       {/* Start Uur */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Start Uur</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               Het beginuur waarop het menu beschikbaar is.
             </div>
           </div>
         </div>
-        <div className="input-container">
+        <div className="menu-component__input-container">
           <input
             type="time"
             id="startHour"
             name="startHour"
             value={formData.startHour}
             onChange={handleChange}
+            placeholder="Start Uur"
           />
         </div>
         {errors.startHour && <p className="menu-component__error">{errors.startHour}</p>}
@@ -189,22 +218,23 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
 
       {/* Eind Uur */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Eind Uur</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               Het einduur waarop het menu beschikbaar is.
             </div>
           </div>
         </div>
-        <div className="input-container">
+        <div className="menu-component__input-container">
           <input
             type="time"
             id="endHour"
             name="endHour"
             value={formData.endHour}
             onChange={handleChange}
+            placeholder="Eind Uur"
           />
         </div>
         {errors.endHour && <p className="menu-component__error">{errors.endHour}</p>}
@@ -212,11 +242,11 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
 
       {/* Dagen van de week */}
       <div className="menu-component__form-group">
-        <div className="label-with-tooltip">
+        <div className="menu-component__label-with-tooltip">
           <label>Dagen van de week</label>
-          <div className="button-with-tooltip">
+          <div className="menu-component__button-with-tooltip">
             <FaInfoCircle />
-            <div className="tooltip">
+            <div className="menu-component__tooltip">
               Selecteer de dagen waarop het menu beschikbaar is.
             </div>
           </div>
@@ -232,7 +262,7 @@ const MenuForm = ({ api, triggerNotification, refreshMenus }) => {
                   checked={formData.daysOfWeek.includes(day)}
                   onChange={handleChange}
                 />
-                {day}
+                {day.charAt(0).toUpperCase() + day.slice(1)}
               </label>
             )
           )}

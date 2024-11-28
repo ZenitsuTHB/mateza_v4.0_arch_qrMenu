@@ -1,7 +1,9 @@
+// src/Pages/Menu/MenuItem.js
+
 import React, { useState } from 'react';
 import './css/menu.css';
 import { FaEllipsisV } from 'react-icons/fa';
-import ConfirmationModal from '../../Components/Structural/Modal/Delete'; // Adjust the path as necessary
+import ConfirmationModal from '../../Components/Structural/Modal/Delete'; // Adjust the path if necessary
 import EditMenuModal from './EditMenuModal';
 
 const MenuItem = ({ menu, api, triggerNotification, refreshMenus }) => {
@@ -58,7 +60,7 @@ const MenuItem = ({ menu, api, triggerNotification, refreshMenus }) => {
             <div className="menu-component__tooltip-item" onClick={handleEditClick}>
               Bewerken
             </div>
-            <div className="menu-component__tooltip-item" onClick={handleDeleteClick}>
+            <div className="menu-component__tooltip-item menu-component__tooltip-item--delete" onClick={handleDeleteClick}>
               Verwijderen
             </div>
           </div>

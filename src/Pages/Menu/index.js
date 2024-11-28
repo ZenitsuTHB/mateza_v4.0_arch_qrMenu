@@ -1,10 +1,12 @@
+// src/Pages/Menu/index.js
+
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
 import './css/menu.css';
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
-import MenuForm from './MenuForm.js';
-import MenuList from './MenuList.js';
+import MenuForm from './MenuForm';
+import MenuList from './MenuList';
 
 const Menu = () => {
   const api = useApi();
@@ -26,10 +28,11 @@ const Menu = () => {
       } catch (error) {
         console.error('Error fetching menus:', error);
         setMenus([]);
+        triggerNotification('Fout bij het ophalen van menu\'s.', 'error');
       }
     };
     fetchMenus();
-  }, [api]);
+  }, [api, triggerNotification]);
 
   // Handler to refresh menus
   const refreshMenus = async () => {
@@ -43,6 +46,7 @@ const Menu = () => {
     } catch (error) {
       console.error('Error fetching menus:', error);
       setMenus([]);
+      triggerNotification('Fout bij het ophalen van menu\'s.', 'error');
     }
   };
 
