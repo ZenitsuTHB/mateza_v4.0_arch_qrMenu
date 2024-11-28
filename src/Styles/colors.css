@@ -10,7 +10,14 @@
 	--color-modal-bg: rgba(0, 0, 0, 0.5);
 
 	--color-blue: #007BFF;
+	--color-blue: #48aaaf;
+	
+	--color-blue-transparant: #48aaaf4a;
+	--color-blue-block: #3e9498;
+
 	--color-blue-hover:rgb(0, 91, 189);
+
+	--color-blue-hover: #1e7d82;
 
 	--color-lightblue: #00bbff;
 

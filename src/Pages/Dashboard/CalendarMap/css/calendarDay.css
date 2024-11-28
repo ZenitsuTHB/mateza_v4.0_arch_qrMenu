@@ -41,7 +41,8 @@
   }
   
   .calendar-page .calendar-day--today {
-	background-color: lightblue;
+	background-color: var(--color-blue-transparant);
+
 	border: 2px solid var(--color-blue);
   }
   
