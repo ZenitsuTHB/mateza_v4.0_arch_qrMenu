@@ -12,6 +12,7 @@ const NewReservationAdmin = () => {
     guests: '',
     date: '',
     time: '',
+    menu: '', // Add this line
     firstName: '',
     lastName: '',
     email: '',

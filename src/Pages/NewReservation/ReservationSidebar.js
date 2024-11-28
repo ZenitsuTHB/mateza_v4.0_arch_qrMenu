@@ -22,6 +22,7 @@ const ReservationSidebar = ({
   const [timeblocks, setTimeblocks] = useState([]);
   const [loadingTimeblocks, setLoadingTimeblocks] = useState(false);
   const [timeblocksError, setTimeblocksError] = useState(null);
+  const [menuData, setMenuData] = useState([]); // Add this line
 
   useEffect(() => {
     if (isOpen) {
@@ -34,6 +35,7 @@ const ReservationSidebar = ({
           window.timeblocks = data.timeblocks || []; // Retain globally if needed
           const generalSettings = data['general-settings'] || {};
           window.generalSettings = generalSettings; // Retain globally
+		  setMenuData(data.menu || []); // Fetch and set menu data
         } catch (err) {
           setTimeblocksError(err);
           console.error('Error fetching timeblocks:', err);
@@ -90,6 +92,8 @@ const ReservationSidebar = ({
                 errors={errors}
                 handleChange={handleChange}
                 isSubmitting={isSubmitting}
+				menuData={menuData} // Pass menuData to ReservationStepTwo
+
               />
             </div>
             <div className="reservation-footer">
