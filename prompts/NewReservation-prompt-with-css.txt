@@ -1,142 +1,628 @@
-File Contents:
+**Overview of the Task**
 
---- FormField.js ---
-// src/components/Profile/FormField.jsx
+You aim to integrate the `ReservationStepOne` component into the `EditDate`, `EditTime`, and `EditGuests` components within your application. Each of these components should feature the full `ReservationStepOne` functionality but with certain fields pre-selected based on the context:
 
+- **EditDate**: The number of guests is already selected. Users can change the date.
+- **EditTime**: The number of guests and date are already selected. Users can change the time.
+- **EditGuests**: Users can change the number of guests.
+
+The algorithms in `generateDates.js`, `exceptions.js`, `generateTimes.js`, `blockDates.js`, and `schemeDates.js` should be implemented and used as they are, without modifications.
+
+**Architectural Implementation**
+
+To accomplish this task, follow these steps:
+
+1. **Data Preparation**: Ensure you have the necessary data available in each component:
+   - **Timeblocks**: Fetch timeblocks data from the unauthenticated endpoint:  
+     ```javascript
+     const endpoint = `${window.baseDomain}api/restaurant/${window.restaurantId}`;
+     ```
+   - **Reservations/Slots**: Fetch reservations data from the unauthenticated endpoint:
+     ```javascript
+     const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
+     ```
+   - **General Settings**: Store general settings like `dagenInToekomst`, `intervalReservatie`, `duurReservatie`, and `zitplaatsen` in `window.generalSettings`.
+
+2. **Implement ReservationStepOne in Components**:
+   - **EditDate**:
+     - Use `ReservationStepOne` but pre-fill the `guests` field with the existing reservation data.
+     - Hide or disable the guests selector since guests are already selected.
+   - **EditTime**:
+     - Pre-fill both `guests` and `date` fields with existing data.
+     - Hide or disable the guests and date selectors.
+   - **EditGuests**:
+     - Allow users to change the number of guests.
+     - Upon changing guests, reset the date and time fields to ensure availability is recalculated.
+
+3. **Use Existing Algorithms**:
+   - Integrate the existing algorithms in your components without modifications.
+   - Ensure that `generateAvailableDates` and `generateAvailableTimesForDate` receive the correct parameters.
+
+4. **Handle API Calls**:
+   - Replace authenticated API calls with unauthenticated ones as specified.
+   - Use `useApi` hook or a similar mechanism to fetch data without authentication.
+
+**Code Structure and Files**
+
+Below is a summary of the files and the adjustments needed:
+
+- **EditDate.js**:
+  - Import `ReservationStepOne`.
+  - Pre-fill `guests` data.
+  - Allow changing the date.
+
+- **EditTime.js**:
+  - Import `ReservationStepOne`.
+  - Pre-fill `guests` and `date` data.
+  - Allow changing the time.
+
+- **EditGuests.js**:
+  - Import `ReservationStepOne`.
+  - Allow changing the number of guests.
+  - Reset date and time upon guest number change.
+
+**Relevant Code Snippets and Suggestions**
+
+Here's how you might adjust each component:
+
+**EditDate.js**
+```javascript
+import React from 'react';
+import ReservationStepOne from './ReservationStepOne';
+
+const EditDate = ({ reservationData, onUpdate }) => {
+  const [formData, setFormData] = useState({
+    guests: reservationData.guests,
+    date: '',
+    time: '',
+  });
+
+  // Handle changes and updates...
+
+  return (
+    <ReservationStepOne
+      formData={formData}
+      setFormData={setFormData}
+      // Pass other necessary props
+    />
+  );
+};
+
+export default EditDate;
+```
+
+**EditTime.js**
+```javascript
+import React from 'react';
+import ReservationStepOne from './ReservationStepOne';
+
+const EditTime = ({ reservationData, onUpdate }) => {
+  const [formData, setFormData] = useState({
+    guests: reservationData.guests,
+    date: reservationData.date,
+    time: '',
+  });
+
+  // Handle changes and updates...
+
+  return (
+    <ReservationStepOne
+      formData={formData}
+      setFormData={setFormData}
+      // Pass other necessary props
+    />
+  );
+};
+
+export default EditTime;
+```
+
+**EditGuests.js**
+```javascript
+import React from 'react';
+import ReservationStepOne from './ReservationStepOne';
+
+const EditGuests = ({ reservationData, onUpdate }) => {
+  const [formData, setFormData] = useState({
+    guests: reservationData.guests,
+    date: '',
+    time: '',
+  });
+
+  // Reset date and time when guests change
+  const handleGuestsChange = (newGuests) => {
+    setFormData({ guests: newGuests, date: '', time: '' });
+  };
+
+  return (
+    <ReservationStepOne
+      formData={formData}
+      setFormData={setFormData}
+      // Pass other necessary props
+    />
+  );
+};
+
+export default EditGuests;
+```
+
+**Tips for Implementation**
+
+- **Data Flow**: Ensure that `formData` is correctly managed within each component, and updates are handled appropriately.
+
+- **API Hooks**: Modify the `useApi` hook to accommodate unauthenticated requests if necessary.
+
+- **UI Adjustments**: Hide or disable UI elements that should not be changed in a particular context (e.g., guests selector in `EditTime`).
+
+- **State Management**: Use `useEffect` to reset dependent fields (e.g., reset `date` and `time` when `guests` change).
+
+- **Error Handling**: Ensure that errors from the API or validation are handled gracefully in the UI.
+
+**Files to Create or Modify**
+
+- `EditDate.js`
+- `EditTime.js`
+- `EditGuests.js`
+- `ReservationStepOne.jsx` (if adjustments are needed to accommodate pre-filled data)
+- Ensure that supporting files like `generateDates.js`, `generateTimes.js`, and related utilities are properly imported and used.
+
+**Conclusion**
+
+By integrating `ReservationStepOne` into your editing components and pre-filling or locking certain fields, you can provide a seamless experience for users to update their reservations. Remember to handle data fetching carefully and maintain the integrity of the existing algorithms.
+
+If you need further assistance with specific parts of the code or encounter issues during implementation, feel free to ask!
+
+
+*
+
+
+
+*Relevant Code Files**
+
+To integrate `ReservationStepOne` into the `EditDate`, `EditTime`, and `EditGuests` components, the following files are relevant:
+
+1. **`src/Components/EditDate.js`**
+2. **`src/Components/EditTime.js`**
+3. **`src/Components/EditGuests/index.js`**
+4. **`src/Hooks/useHandleEditClick.js`**
+5. **`src/Pages/NewReservation/ReservationStepOne.jsx`**
+6. **`src/Pages/NewReservation/DateSelector.jsx`**
+7. **`src/Pages/NewReservation/TimeSelector.jsx`**
+8. **`src/Pages/NewReservation/Calendar.jsx`**
+9. **`src/Pages/NewReservation/ValueSelector.jsx`**
+10. **`src/Pages/NewReservation/Utils/`** (All utility files)
+11. **`src/App.js`**
+12. **`src/Components/ReservationDetails.js`**
+
+These files are crucial for implementing `ReservationStepOne` within the editing components and ensuring that the necessary data is fetched and utilized by the existing algorithms.
+
+Below are the contents of the relevant files:
+
+---
+
+### **`src/Components/EditDate.js`**
+
+```javascript
 import React from 'react';
 
-const FormField = ({ label, name, type = 'text', icon: Icon, value, onChange, error, placeholder, halfWidth }) => (
-  <div className={`form-group ${halfWidth ? 'half-width' : ''}`}>
-    <div className="input-container">
-      {Icon && <Icon className="input-icon" />}
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        aria-label={label}
-      />
+const EditDate = ({ reservationData }) => {
+  return (
+    <div>
+      <p>Hier kunt u de datum van uw reservering wijzigen.</p>
+      {/* Add date picker to change the date */}
     </div>
-    {error && <p className="form-error">{error}</p>}
-  </div>
-);
+  );
+};
 
-export default FormField;
+export default EditDate;
+```
 
+---
 
---- ReservationStepTwoModal.js ---
-// src/components/ReservationForm/ReservationStepTwoModal.jsx
+### **`src/Components/EditTime.js`**
 
+```javascript
 import React from 'react';
-import FormField from './FormField';
-import { FaUser, FaPhone, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 
-const ReservationStepTwoModal = ({
+const EditTime = ({ reservationData }) => {
+  return (
+    <div>
+      <p>Hier kunt u de tijd van uw reservering wijzigen.</p>
+      {/* Add time picker to change the time */}
+    </div>
+  );
+};
+
+export default EditTime;
+```
+
+---
+
+### **`src/Components/EditGuests/index.js`**
+
+```javascript
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import './css/editGuests.css'; // Ensure this path is correct
+
+const EditGuests = ({ reservationData, onUpdate }) => {
+  return <div></div>;
+};
+
+export default EditGuests;
+```
+
+---
+
+### **`src/Hooks/useHandleEditClick.js`**
+
+```javascript
+import React from 'react';
+import EditInfo from '../Components/EditInfo';
+import EditGuests from '../Components/EditGuests/index.js';
+import EditDate from '../Components/EditDate';
+import EditTime from '../Components/EditTime';
+
+const useHandleEditClick = ({
+  setModalTitle,
+  setModalContent,
+  openModal,
+  reservationData,
+  fetchReservationData,
+  isMobile,
+  initializeDesktopContent,
+  closeModal,
+}) => {
+  const handleEditClick = (title) => {
+    setModalTitle(title);
+    let content;
+
+    switch (title) {
+      case 'Info Wijzigen':
+        content = (
+          <EditInfo
+            reservationData={reservationData}
+            onUpdate={() => {
+              fetchReservationData();
+              if (!isMobile) {
+                initializeDesktopContent();
+              }
+              closeModal();
+            }}
+          />
+        );
+        break;
+      case 'Aantal Gasten Wijzigen':
+        content = (
+          <EditGuests
+            reservationData={reservationData}
+            onUpdate={() => {
+              fetchReservationData();
+              if (!isMobile) {
+                initializeDesktopContent();
+              }
+              closeModal();
+            }}
+          />
+        );
+        break;
+      case 'Datum Wijzigen':
+        content = (
+          <EditDate
+            reservationData={reservationData}
+            onUpdate={() => {
+              fetchReservationData();
+              if (!isMobile) {
+                initializeDesktopContent();
+              }
+              closeModal();
+            }}
+          />
+        );
+        break;
+      case 'Tijd Wijzigen':
+        content = (
+          <EditTime
+            reservationData={reservationData}
+            onUpdate={() => {
+              fetchReservationData();
+              if (!isMobile) {
+                initializeDesktopContent();
+              }
+              closeModal();
+            }}
+          />
+        );
+        break;
+      default:
+        content = (
+          <div>
+            <p>You clicked on "{title}".</p>
+          </div>
+        );
+        break;
+    }
+
+    setModalContent(content);
+    openModal();
+  };
+
+  return handleEditClick;
+};
+
+export default useHandleEditClick;
+```
+
+---
+
+### **`src/Pages/NewReservation/ReservationStepOne.jsx`**
+
+```javascript
+import React, { useState, useEffect } from 'react';
+import ValueSelectorGuests from './ValueSelector';
+import DateSelector from './DateSelector';
+import TimeSelector from './TimeSelector';
+
+const ReservationStepOne = ({
   formData,
   errors,
   handleChange,
-  handleFinalSubmit,
-  isSubmitting,
+  handleStepOneSubmit,
+  setFormData,
+  timeblocks,
+  loadingTimeblocks,
+  timeblocksError,
 }) => {
+  const [guests, setGuests] = useState(1);
+
+  const resetFormDataFields = (fieldsToReset) => {
+    setFormData((prevFormData) => {
+      const newFormData = { ...prevFormData };
+      fieldsToReset.forEach((field) => {
+        newFormData[field] = '';
+      });
+      return newFormData;
+    });
+  };
+
+  useEffect(() => {
+    resetFormDataFields(['date', 'time']);
+  }, [guests]);
+
+  if (timeblocksError) {
+    return (
+      <div>
+        <a
+          href="https://dashboard.reservaties.net/#/scheme"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'var(--color-blue)', textDecoration: 'underline' }}
+        >
+          Klik hier
+        </a>{' '}
+        om uw openingsuren in te stellen.
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <h2 className="modal-title">Persoonlijke Informatie</h2>
-      <form className="account-manage-form" onSubmit={handleFinalSubmit} noValidate>
-        <FormField
-          label="Voornaam"
-          name="firstName"
-          placeholder="Voornaam"
-          value={formData.firstName}
-          onChange={handleChange}
-          error={errors.firstName}
-          icon={FaUser}
+    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
+      <ValueSelectorGuests
+        setGuests={setGuests}
+        value={formData.guests}
+        onChange={handleChange}
+        error={errors.guests}
+      />
+
+      {formData.guests && (
+        <DateSelector
+          guests={formData.guests}
+          formData={formData}
+          handleChange={handleChange}
+          resetFormDataFields={resetFormDataFields}
+          timeblocks={timeblocks}
         />
-        <FormField
-          label="Achternaam"
-          name="lastName"
-          placeholder="Achternaam"
-          value={formData.lastName}
-          onChange={handleChange}
-          error={errors.lastName}
-          icon={FaUser}
+      )}
+
+      {formData.date && (
+        <TimeSelector
+          guests={formData.guests}
+          formData={formData}
+          handleChange={handleChange}
+          field={{ id: 'time', label: 'Tijd' }}
+          selectedDate={formData.date}
         />
-        <FormField
-          label="E-mail"
-          name="email"
-          type="email"
-          placeholder="E-mailadres"
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
-          icon={FaEnvelope}
-        />
-        <FormField
-          label="Telefoonnummer"
-          name="phone"
-          type="tel"
-          placeholder="Telefoonnummer"
-          value={formData.phone}
-          onChange={handleChange}
-          error={errors.phone}
-          icon={FaPhone}
-        />
-        <FormField
-          label="Extra info"
-          name="extraInfo"
-          type="textarea"
-          placeholder="Extra informatie"
-          value={formData.extraInfo}
-          onChange={handleChange}
-          error={errors.extraInfo}
-          icon={FaInfoCircle}
-        />
-        <button type="submit" className="account-manage__button" disabled={isSubmitting}>
-          {isSubmitting ? 'Verzenden...' : 'Reserveren'}
-        </button>
-      </form>
+      )}
+    </form>
+  );
+};
+
+export default ReservationStepOne;
+```
+
+---
+
+### **`src/Pages/NewReservation/DateSelector.jsx`**
+
+```javascript
+import React, { useEffect, useState, useCallback } from 'react';
+import Calendar from './Calendar';
+import { generateAvailableDates } from './Utils/generateDates';
+import moment from 'moment';
+
+const DateSelector = ({
+  guests,
+  formData,
+  handleChange,
+  resetFormDataFields,
+  timeblocks,
+}) => {
+  const [availableDates, setAvailableDates] = useState([]);
+  const [reservations, setReservations] = useState([]); // New state for reservations
+
+  useEffect(() => {
+    if (Array.isArray(timeblocks)) {
+      const dates = generateAvailableDates(guests, timeblocks, reservations);
+      setAvailableDates(dates);
+    } else {
+      console.error('timeblocks is undefined or not an array:', timeblocks);
+      setAvailableDates([]);
+    }
+  }, [formData.guests, timeblocks, reservations]);
+
+  const handleDateSelect = (date) => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    console.log('Selected date:', formattedDate);
+    handleChange({
+      target: { name: 'date', value: formattedDate },
+    });
+    resetFormDataFields(['time']);
+  };
+
+  // Memoize the callback to prevent unnecessary re-renders
+  const handleReservationsFetched = useCallback((data) => {
+    setReservations(data); // Update the reservations state
+  }, []);
+
+  return (
+    <div className="form-group date-selector-container">
+      <Calendar
+        availableDates={availableDates}
+        selectedDate={formData.date || null}
+        onSelectDate={handleDateSelect}
+        autoExpand={false}
+        onReservationsFetched={handleReservationsFetched} // Pass the handler as prop
+      />
     </div>
   );
 };
 
-export default ReservationStepTwoModal;
+export default DateSelector;
+```
 
+---
 
---- ReservationSummary.js ---
-// src/components/ReservationForm/ReservationSummary.jsx
+### **`src/Pages/NewReservation/TimeSelector.jsx`**
 
-import React from 'react';
-import './css/reservationSummary.css'; // Import the CSS file
+```javascript
+import React, { useState, useEffect, useRef } from 'react';
+import { generateAvailableTimesForDate } from './Utils/generateTimes';
+import './css/timeSelector.css';
 
-const ReservationSummary = ({ formData, onNewReservation }) => {
+const TimeSelector = ({
+  guests,
+  formData,
+  handleChange,
+  field,
+  selectedDate,
+  expanded,
+  setCurrentExpandedField,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(expanded || false);
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const timeSelectorRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const times = generateAvailableTimesForDate(guests, new Date(selectedDate));
+      setAvailableTimes(times);
+    } else {
+      setAvailableTimes([]);
+    }
+  }, [selectedDate]);
+
+  const handleTimeSelect = (timeValue) => {
+    handleChange({
+      target: { name: field.id, value: timeValue },
+    });
+    setIsExpanded(false);
+    if (setCurrentExpandedField) {
+      setCurrentExpandedField(null);
+    }
+  };
+
+  const formatDisplayTime = () => {
+    if (formData[field.id]) {
+      const selected = availableTimes.find((time) => time.value === formData[field.id]);
+      return selected ? selected.label : 'Selecteer een tijd';
+    }
+    return 'Selecteer een tijd';
+  };
+
+  if (!field) {
+    return null;
+  }
+
   return (
-    <div className="reservation-summary">
-      <h2 className="modal-title">Reservatie Aangemaakt!</h2>
-      <ul className="reservation-details">
-        <li><strong>Aantal gasten:</strong> {formData.guests}</li>
-        <li><strong>Datum:</strong> {formData.date}</li>
-        <li><strong>Tijd:</strong> {formData.time}</li>
-        <li><strong>Voornaam:</strong> {formData.firstName}</li>
-        <li><strong>Achternaam:</strong> {formData.lastName}</li>
-        <li><strong>Email:</strong> {formData.email}</li>
-        <li><strong>Telefoonnummer:</strong> {formData.phone}</li>
-        {formData.extraInfo && (
-          <li><strong>Extra informatie:</strong> {formData.extraInfo}</li>
-        )}
-      </ul>
-      <button className="button-style-3" onClick={onNewReservation}>
-        Nieuwe Reservatie Maken
-      </button>
+    <div className="form-group time-selector-container" ref={timeSelectorRef}>
+      {!selectedDate ? (
+        <p className="info-text">Selecteer eerst een datum.</p>
+      ) : (
+        <>
+          <div
+            className="time-display"
+            onClick={() => {
+              setIsExpanded(!isExpanded);
+              if (!isExpanded && setCurrentExpandedField) {
+                setCurrentExpandedField('time');
+              }
+            }}
+          >
+            <span>{formatDisplayTime()}</span>
+            <span className="arrow">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                style={{
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                <path
+                  d="M7 10l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </span>
+          </div>
+          {isExpanded && (
+            <div className="time-selector">
+              {availableTimes.length === 0 ? (
+                <div className="no-times">Geen beschikbare tijden.</div>
+              ) : (
+                <div className="time-options">
+                  {availableTimes.map((time) => (
+                    <div
+                      key={time.value}
+                      className={`time-option ${
+                        formData[field.id] === time.value ? 'selected' : ''
+                      }`}
+                      onClick={() => handleTimeSelect(time.value)}
+                    >
+                      {time.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-export default ReservationSummary;
+export default TimeSelector;
+```
 
+---
 
---- StepOne/Calendar.js ---
-// src/Pages/NewReservation/Calendar.jsx
+### **`src/Pages/NewReservation/Calendar.jsx`**
 
+```javascript
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/nl';
@@ -178,10 +664,7 @@ const Calendar = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target)
-      ) {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
         setIsExpanded(false);
       }
     };
@@ -200,6 +683,7 @@ const Calendar = ({
         const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
 
         try {
+          console.log('Calendar Slots GET');
           const data = await api.get(endpoint, { noCache: true });
           setReservations(data); // Update local state with fetched reservations
           console.log('Fetched reservations:', data);
@@ -388,830 +872,48 @@ const Calendar = ({
 };
 
 export default Calendar;
+```
 
+---
 
---- StepOne/DateSelector.js ---
-// src/Pages/NewReservation/DateSelector.jsx
+### **`src/Pages/NewReservation/ValueSelector.jsx`**
 
-import React, { useEffect, useState, useCallback } from 'react';
-import Calendar from './Calendar';
-import { generateAvailableDates } from './Utils/generateDates';
-import moment from 'moment';
-
-const DateSelector = ({
-  formData,
-  handleChange,
-  resetFormDataFields,
-  timeblocks,
-}) => {
-  const [availableDates, setAvailableDates] = useState([]);
-  const [reservations, setReservations] = useState([]); // New state for reservations
-
-  useEffect(() => {
-    if (Array.isArray(timeblocks)) {
-      const dates = generateAvailableDates(timeblocks, reservations);
-      setAvailableDates(dates);
-    } else {
-      console.error('timeblocks is undefined or not an array:', timeblocks);
-      setAvailableDates([]);
-    }
-  }, [timeblocks, reservations]);
-
-  const handleDateSelect = (date) => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    console.log('Selected date:', formattedDate);
-    handleChange({
-      target: { name: 'date', value: formattedDate },
-    });
-    resetFormDataFields(['time']);
-  };
-
-  // Memoize the callback to prevent unnecessary re-renders
-  const handleReservationsFetched = useCallback((data) => {
-    setReservations(data); // Update the reservations state
-  }, []);
-
-  return (
-    <div className="form-group date-selector-container">
-      <label htmlFor="date" className="default-text-color">
-        Datum<span className="required">*</span>
-      </label>
-      <Calendar
-        availableDates={availableDates}
-        selectedDate={formData.date || null}
-        onSelectDate={handleDateSelect}
-        autoExpand={false}
-        onReservationsFetched={handleReservationsFetched} // Pass the handler as prop
-      />
-    </div>
-  );
-};
-
-export default DateSelector;
-
-
---- StepOne/Hooks/useFetchRestaurantData.js ---
-// src/Hooks/useFetchRestaurantData.js
-
-import { useState, useEffect } from 'react';
-import useApi from '../../../../Hooks/useApi';
-
-const useFetchRestaurantData = () => {
-  const [restaurantData, setRestaurantData] = useState(null);
-  const api = useApi();
-
-
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        const endpoint = `${window.baseDomain}api/auth-restaurant/`;
-        const response = await api.get(endpoint);
-
-
-        if (response) {
-          setRestaurantData(response);
-        }
-      } catch (error) {
-        console.error('Error fetching restaurant data:', error);
-        const errorCode = error.response?.status || 'unknown';
-      }
-    };
-
-    fetchRestaurantData();
-  }, [api]);
-
-  return restaurantData;
-};
-
-export default useFetchRestaurantData;
-
-
---- StepOne/TimeSelector.js ---
-// src/Pages/NewReservation/TimeSelector.jsx
-
-import React, { useState, useEffect, useRef } from 'react';
-import { generateAvailableTimesForDate } from './Utils/generateTimes';
-import './css/timeSelector.css';
-
-const TimeSelector = ({
-  formData,
-  handleChange,
-  field,
-  selectedDate,
-  expanded,
-  setCurrentExpandedField,
-}) => {
-  const [isExpanded, setIsExpanded] = useState(expanded || false);
-  const [availableTimes, setAvailableTimes] = useState([]);
-  const timeSelectorRef = useRef(null);
-
-  useEffect(() => {
-    if (selectedDate) {
-      const times = generateAvailableTimesForDate(new Date(selectedDate));
-      setAvailableTimes(times);
-    } else {
-      setAvailableTimes([]);
-    }
-  }, [selectedDate]);
-
-  const handleTimeSelect = (timeValue) => {
-    handleChange({
-      target: { name: field.id, value: timeValue },
-    });
-    setIsExpanded(false);
-    if (setCurrentExpandedField) {
-      setCurrentExpandedField(null);
-    }
-  };
-
-  const formatDisplayTime = () => {
-    if (formData[field.id]) {
-      const selected = availableTimes.find((time) => time.value === formData[field.id]);
-      return selected ? selected.label : 'Selecteer een tijd';
-    }
-    return 'Selecteer een tijd';
-  };
-
-  if (!field) {
-    return null;
-  }
-
-  return (
-    <div className="form-group time-selector-container" ref={timeSelectorRef}>
-      <label className="default-text-color" htmlFor={field.id}>
-        {field.label}
-        <span className="required">*</span>
-      </label>
-
-      {!selectedDate ? (
-        <p className="info-text">Selecteer eerst een datum.</p>
-      ) : (
-        <>
-          <div
-            className="time-display"
-            onClick={() => {
-              setIsExpanded(!isExpanded);
-              if (!isExpanded && setCurrentExpandedField) {
-                setCurrentExpandedField('time');
-              }
-            }}
-          >
-            <span>{formatDisplayTime()}</span>
-            <span className="arrow">
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                style={{
-                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s',
-                }}
-              >
-                <path
-                  d="M7 10l5 5 5-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-              </svg>
-            </span>
-          </div>
-          {isExpanded && (
-            <div className="time-selector">
-              {availableTimes.length === 0 ? (
-                <div className="no-times">Geen beschikbare tijden.</div>
-              ) : (
-                <div className="time-options">
-                  {availableTimes.map((time) => (
-                    <div
-                      key={time.value}
-                      className={`time-option ${
-                        formData[field.id] === time.value ? 'selected' : ''
-                      }`}
-                      onClick={() => handleTimeSelect(time.value)}
-                    >
-                      {time.label}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-};
-
-export default TimeSelector;
-
-
---- StepOne/Utils/dateUtils.js ---
-// src/Pages/NewReservation/Utils/dateUtils.js
-
-import moment from 'moment-timezone';
-
-export const isWeekInPast = (weekStartDate) => {
-  const today = moment().tz('Europe/Brussels').startOf('day');
-  const weekEndDate = weekStartDate.clone().add(6, 'days').endOf('day');
-  return weekEndDate.isBefore(today);
-};
-
-export const isSameDay = (date1, date2) => date1.isSame(date2, 'day');
-
-
---- StepOne/Utils/dates/blockDates.js ---
-// src/Pages/NewReservation/Utils/dates/blockDates.js
-
-import { DateTime } from 'luxon';
-
-const getOrInitializeArray = (dict, key) => {
-  if (!Array.isArray(dict[key])) {
-    dict[key] = [];
-  }
-  return dict[key];
-};
-
-const initializeDictionaries = () => {
-  window.dateDictionary = window.dateDictionary || {};
-  window.shiftsPerDate = window.shiftsPerDate || {};
-};
-
-const processTimeblock = (block) => {
-  if (!block.date) {
-    return;
-  }
-
-  const dateString = DateTime.fromISO(block.date, { zone: 'Europe/Brussels' }).toISODate();
-
-  // Check if date is in closedDates
-  if (window.closedDates.has(dateString)) {
-    return;
-  }
-
-  // Check for exceptional openings
-  if (window.exceptionalOpenings[dateString]) {
-    const exceptionalOpening = window.exceptionalOpenings[dateString];
-    window.dateDictionary[dateString] = [
-      {
-        startTime: exceptionalOpening.startTime,
-        endTime: exceptionalOpening.endTime,
-      },
-    ];
-  } else {
-    // Use the block's times
-    if (!window.dateDictionary[dateString]) {
-      window.dateDictionary[dateString] = [];
-    }
-    window.dateDictionary[dateString].push({
-      startTime: block.startTime || null,
-      endTime: block.endTime || null,
-    });
-  }
-
-  // Process shifts
-  if (block.shifts && Array.isArray(block.shifts) && block.shifts.length > 0) {
-    const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
-
-    block.shifts.forEach((shift) => {
-      const exists = shiftsArray.some(
-        (existingShift) =>
-          existingShift.name === shift.name && existingShift.startTime === shift.startTime
-      );
-      if (!exists) {
-        shiftsArray.push({
-          name: shift.name || '',
-          startTime: shift.startTime || '',
-          endTime: shift.endTime || null,
-        });
-      }
-    });
-  }
-};
-
-export const getBlockSettingsDates = (timeblocks) => {
-  initializeDictionaries();
-  const dates = [];
-
-  timeblocks.forEach((block) => {
-    processTimeblock(block);
-    // Do not add date if not in dateDictionary (i.e., date was skipped)
-    if (block.date) {
-      const dateString = DateTime.fromISO(block.date, { zone: 'Europe/Brussels' }).toISODate();
-      if (window.dateDictionary[dateString]) {
-        dates.push(dateString);
-      }
-    }
-  });
-
-  return dates;
-};
-
-
---- StepOne/Utils/dates/schemeDates.js ---
-// src/Pages/NewReservation/Utils/dates/schemeDates.js
-
-import { DateTime } from 'luxon';
-
-const getOrInitializeArray = (dict, key) => {
-  if (!Array.isArray(dict[key])) {
-    dict[key] = [];
-  }
-  return dict[key];
-};
-
-const initializeDictionaries = () => {
-  window.dateDictionary = window.dateDictionary || {};
-  window.shiftsPerDate = window.shiftsPerDate || {};
-};
-
-const isWithinPeriod = (currentDate, endDate) => {
-  return currentDate <= endDate;
-};
-
-const processDaySetting = (dateString, daySetting) => {
-  // Check if date is in closedDates
-  if (window.closedDates.has(dateString)) {
-    return;
-  }
-
-  // Check for exceptional openings
-  if (window.exceptionalOpenings[dateString]) {
-    const exceptionalOpening = window.exceptionalOpenings[dateString];
-    window.dateDictionary[dateString] = [
-      {
-        startTime: exceptionalOpening.startTime,
-        endTime: exceptionalOpening.endTime,
-      },
-    ];
-  } else {
-    // Use the daySetting's times
-    if (!window.dateDictionary[dateString]) {
-      window.dateDictionary[dateString] = [];
-    }
-    window.dateDictionary[dateString].push({
-      startTime: daySetting.startTime || null,
-      endTime: daySetting.endTime || null,
-    });
-  }
-
-  // Process shifts
-  if (
-    daySetting.shiftsEnabled &&
-    Array.isArray(daySetting.shifts) &&
-    daySetting.shifts.length > 0
-  ) {
-    const shiftsArray = getOrInitializeArray(window.shiftsPerDate, dateString);
-
-    daySetting.shifts.forEach((shift) => {
-      const exists = shiftsArray.some(
-        (existingShift) =>
-          existingShift.name === shift.name && existingShift.startTime === shift.startTime
-      );
-      if (!exists) {
-        shiftsArray.push({
-          name: shift.name || '',
-          startTime: shift.startTime || '',
-          endTime: shift.endTime || null,
-        });
-      }
-    });
-  }
-};
-
-export const getSchemeSettingsDates = (timeblocks, maxDate) => {
-  initializeDictionaries();
-  const dates = [];
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-  timeblocks.forEach((block) => {
-    if (!block.schemeSettings) {
-      return;
-    }
-
-    const { schemeSettings } = block;
-    let currentDate = DateTime.now().setZone('Europe/Brussels').startOf('day');
-
-    // Adjust endDate based on dagenInToekomst
-    let endDate = maxDate;
-
-    if (schemeSettings.period && schemeSettings.period.enabled) {
-      const { startDate, endDate: periodEndDate } = schemeSettings.period;
-      if (startDate && periodEndDate) {
-        currentDate = DateTime.fromISO(startDate, { zone: 'Europe/Brussels' }).startOf('day');
-        const schemeEndDate = DateTime.fromISO(periodEndDate, { zone: 'Europe/Brussels' }).endOf('day');
-        // Use the minimum of schemeEndDate and maxDate
-        endDate = schemeEndDate < maxDate ? schemeEndDate : maxDate;
-      }
-    }
-
-    while (isWithinPeriod(currentDate, endDate)) {
-      const dayOfWeek = currentDate.weekday % 7;
-      const dayName = dayNames[dayOfWeek];
-      const daySetting = schemeSettings[dayName];
-      const dateString = currentDate.toISODate();
-      if (daySetting && daySetting.enabled) {
-        processDaySetting(dateString, daySetting);
-        if (window.dateDictionary[dateString]) {
-          dates.push(dateString);
-        }
-      }
-      currentDate = currentDate.plus({ days: 1 });
-    }
-  });
-  return dates;
-};
-
-
---- StepOne/Utils/exceptions.js ---
-// src/Pages/NewReservation/Utils/exceptions.js
-
-import { DateTime } from 'luxon';
-
-export const collectExceptions = (timeblocks) => {
-  window.closedDates = new Set();
-  window.exceptionalOpenings = {};
-
-  timeblocks.forEach((block) => {
-    if (!block.exceptionalDays) {
-      return;
-    }
-
-    const { exceptionalDays } = block;
-
-    // Process sluitingsperiode (closing periods)
-    if (Array.isArray(exceptionalDays.sluitingsperiode)) {
-      exceptionalDays.sluitingsperiode.forEach((period) => {
-        if (period.enabled) {
-          const { startDate, endDate } = period;
-          if (startDate && endDate) {
-            let currentDate = DateTime.fromISO(startDate, { zone: 'Europe/Brussels' }).startOf('day');
-            const endDateObj = DateTime.fromISO(endDate, { zone: 'Europe/Brussels' }).startOf('day');
-            while (currentDate <= endDateObj) {
-              const dateString = currentDate.toISODate();
-              window.closedDates.add(dateString);
-              currentDate = currentDate.plus({ days: 1 });
-            }
-          }
-        }
-      });
-    }
-
-    // Process sluitingsdag (closing days)
-    if (Array.isArray(exceptionalDays.sluitingsdag)) {
-      exceptionalDays.sluitingsdag.forEach((day) => {
-        if (day.enabled) {
-          const { date } = day;
-          if (date) {
-            window.closedDates.add(date);
-          }
-        }
-      });
-    }
-
-    // Process uitzonderlijkeOpeningsuren (exceptional opening hours)
-    if (Array.isArray(exceptionalDays.uitzonderlijkeOpeningsuren)) {
-      exceptionalDays.uitzonderlijkeOpeningsuren.forEach((opening) => {
-        if (opening.enabled) {
-          const { date, startTime, endTime } = opening;
-          if (date && startTime && endTime) {
-            window.exceptionalOpenings[date] = {
-              startTime,
-              endTime,
-            };
-          }
-        }
-      });
-    }
-  });
-};
-
-
---- StepOne/Utils/generateDates.js ---
-// src/Pages/NewReservation/Utils/generateDates.js
-
-import { DateTime } from 'luxon';
-import { collectExceptions } from './exceptions';
-import { getSchemeSettingsDates } from './dates/schemeDates';
-import { getBlockSettingsDates } from './dates/blockDates';
-import { generateAvailableTimesForDate } from './generateTimes';
-
-const initializeDictionaries = () => {
-  window.dateDictionary = window.dateDictionary || {};
-  window.shiftsPerDate = window.shiftsPerDate || {};
-};
-
-export const generateAvailableDates = (timeblocks = [], reservations = []) => {
-  initializeDictionaries();
-  collectExceptions(timeblocks);
-
-  const dagenInToekomstRaw = window.generalSettings?.dagenInToekomst;
-  let dagenInToekomst = 365;
-
-  if (dagenInToekomstRaw) {
-    if (typeof dagenInToekomstRaw === 'number') {
-      dagenInToekomst = dagenInToekomstRaw;
-    } else if (typeof dagenInToekomstRaw === 'string') {
-      dagenInToekomst = parseInt(dagenInToekomstRaw, 10);
-      if (isNaN(dagenInToekomst)) {
-        dagenInToekomst = 365;
-      }
-    }
-  }
-
-  const today = DateTime.now().setZone('Europe/Brussels').startOf('day');
-  const maxDate = today.plus({ days: dagenInToekomst - 1 }).endOf('day');
-
-  const blockDates = getBlockSettingsDates(timeblocks);
-  const schemeDates = getSchemeSettingsDates(timeblocks, maxDate);
-  const combinedDates = [...blockDates, ...schemeDates];
-
-  const filteredDates = combinedDates.filter((dateStr) => {
-    const date = DateTime.fromISO(dateStr, { zone: 'Europe/Brussels' }).startOf('day');
-    return date >= today && date <= maxDate;
-  });
-
-  let uniqueDates = Array.from(new Set(filteredDates)).sort();
-
-  // Initialize countingDictionary
-  const countingDictionary = {};
-
-  // Retrieve intervalReservatie and validate it
-  const intervalReservatie = window.generalSettings?.intervalReservatie;
-  let intervalMinutes = 30; // Default value
-
-  if (
-    typeof intervalReservatie === 'number' &&
-    Number.isInteger(intervalReservatie) &&
-    intervalReservatie > 0
-  ) {
-    intervalMinutes = intervalReservatie;
-  } else {
-    console.warn(
-      `[generateAvailableDates] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
-    );
-  }
-
-  // Retrieve duurReservatie and validate it
-  const duurReservatieRaw = window.generalSettings?.duurReservatie;
-  let duurReservatieMinutes = 120; // Default duration in minutes (2 hours)
-
-  if (
-    typeof duurReservatieRaw === 'number' &&
-    Number.isInteger(duurReservatieRaw) &&
-    duurReservatieRaw > 0
-  ) {
-    duurReservatieMinutes = duurReservatieRaw;
-  } else {
-    console.warn(
-      `[generateAvailableDates] Invalid duurReservatie value "${duurReservatieRaw}". Using default duurReservatieMinutes = 120`
-    );
-  }
-
-  // Function to generate times for a given dateKey
-  const generateAvailableTimesForDateKey = (dateKey) => {
-    const dateDictionary = window.dateDictionary;
-    const shiftsPerDate = window.shiftsPerDate;
-
-    if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
-      return [];
-    }
-
-    const shiftData =
-      shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
-
-    if (shiftData.length > 0) {
-      const shiftButtons = shiftData.map((shift) => ({
-        label: shift.name,
-        value: shift.startTime,
-      }));
-      return shiftButtons.map((button) => button.value);
-    }
-
-    const times = [];
-    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
-
-    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
-      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
-
-      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
-
-      while (startDateTime < endDateTime) {
-        const timeString = startDateTime.toFormat('HH:mm');
-        times.push(timeString);
-        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
-      }
-    });
-
-    const uniqueTimes = [...new Set(times)].sort(
-      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
-    );
-
-    return uniqueTimes;
-  };
-
-  // Generate countingDictionary with initial counts
-  uniqueDates.forEach((dateKey) => {
-    const times = generateAvailableTimesForDateKey(dateKey);
-    countingDictionary[dateKey] = {};
-
-    times.forEach((time) => {
-      countingDictionary[dateKey][time] = 0;
-    });
-  });
-
-  // Process reservations to update counts
-  reservations.forEach((reservation) => {
-    const reservationDate = reservation.date; // string in "YYYY-MM-DD" format
-    const reservationTime = reservation.time; // string in "HH:mm"
-    const numberOfGuests = reservation.guests;
-
-    if (countingDictionary[reservationDate]) {
-      const resStartDateTime = DateTime.fromISO(
-        `${reservationDate}T${reservationTime}`,
-        { zone: 'Europe/Brussels' }
-      );
-
-      // Use duurReservatieMinutes instead of fixed 2 hours
-      const resEndDateTime = resStartDateTime.plus({ minutes: duurReservatieMinutes });
-
-      // For each time period in countingDictionary[reservationDate]
-      Object.keys(countingDictionary[reservationDate]).forEach((timePeriodStart) => {
-        const timePeriodStartDateTime = DateTime.fromISO(
-          `${reservationDate}T${timePeriodStart}`,
-          { zone: 'Europe/Brussels' }
-        );
-        const timePeriodEndDateTime = timePeriodStartDateTime.plus({ minutes: intervalMinutes });
-
-        // Check if reservation interval collides with time period
-        if (resStartDateTime < timePeriodEndDateTime && resEndDateTime > timePeriodStartDateTime) {
-          // There is a collision
-          countingDictionary[reservationDate][timePeriodStart] += numberOfGuests;
-        }
-      });
-    }
-  });
-
-  // Store countingDictionary in window for access in generateAvailableTimesForDate
-  window.countingDictionary = countingDictionary;
-
-  // Remove dates with no available time buttons
-  const datesToRemove = [];
-  uniqueDates.forEach((dateKey) => {
-    const selectedDate = DateTime.fromISO(dateKey, { zone: 'Europe/Brussels' }).toJSDate();
-    const availableTimeButtons = generateAvailableTimesForDate(selectedDate);
-
-    if (availableTimeButtons.length === 0) {
-      datesToRemove.push(dateKey);
-    }
-  });
-
-  // Filter out the dates to remove
-  uniqueDates = uniqueDates.filter((dateKey) => !datesToRemove.includes(dateKey));
-
-  return uniqueDates;
-};
-
-
---- StepOne/Utils/generateTimes.js ---
-// src/Pages/NewReservation/Utils/generateTimes.js
-
-import { DateTime } from 'luxon';
-
-const formatDateKey = (date) => {
-  const formattedDate = DateTime.fromJSDate(date).toISODate();
-  return formattedDate;
-};
-
-export const generateAvailableTimesForDate = (selectedDate) => {
-  const dateDictionary = window.dateDictionary;
-  const shiftsPerDate = window.shiftsPerDate;
-  const dateKey = formatDateKey(selectedDate);
-  const now = DateTime.now().setZone('Europe/Brussels');
-
-  // Retrieve intervalReservatie and validate it
-  const intervalReservatie = window.generalSettings?.intervalReservatie;
-  let intervalMinutes = 30; // Default value
-
-  if (
-    typeof intervalReservatie === 'number' &&
-    Number.isInteger(intervalReservatie) &&
-    intervalReservatie > 0
-  ) {
-    intervalMinutes = intervalReservatie;
-  } else {
-    console.warn(
-      `[generateAvailableTimesForDate] Invalid intervalReservatie value "${intervalReservatie}". Using default intervalMinutes = 30`
-    );
-  }
-
-  if (!dateDictionary[dateKey] || dateDictionary[dateKey].length === 0) {
-    return [];
-  }
-
-  const shiftData =
-    shiftsPerDate && Array.isArray(shiftsPerDate[dateKey]) ? shiftsPerDate[dateKey] : [];
-
-  let timeButtons = [];
-
-  if (shiftData.length > 0) {
-    timeButtons = shiftData.map((shift) => ({
-      label: shift.name,
-      value: shift.startTime,
-    }));
-  } else {
-    const times = [];
-
-    dateDictionary[dateKey].forEach(({ startTime, endTime }) => {
-      let startDateTime = DateTime.fromFormat(startTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
-
-      const endDateTime = DateTime.fromFormat(endTime, 'HH:mm', { zone: 'Europe/Brussels' }).set({
-        year: selectedDate.getFullYear(),
-        month: selectedDate.getMonth() + 1,
-        day: selectedDate.getDate(),
-      });
-
-      while (startDateTime < endDateTime) {
-        if (startDateTime > now) {
-          const timeString = startDateTime.toFormat('HH:mm');
-          times.push(timeString);
-        }
-        startDateTime = startDateTime.plus({ minutes: intervalMinutes });
-      }
-    });
-
-    const uniqueTimes = [...new Set(times)].sort(
-      (a, b) => DateTime.fromFormat(a, 'HH:mm') - DateTime.fromFormat(b, 'HH:mm')
-    );
-
-    timeButtons = uniqueTimes.map((time) => ({
-      label: time,
-      value: time,
-    }));
-  }
-
-  // Filter timeButtons based on countingDictionary
-  const capacityLimit = 3;
-  const countingDictionary = window.countingDictionary || {};
-
-  if (countingDictionary[dateKey]) {
-    timeButtons = timeButtons.filter((button) => {
-      const time = button.value;
-      const guestsCount = countingDictionary[dateKey][time] || 0;
-      return guestsCount < capacityLimit;
-    });
-  }
-
-  return timeButtons;
-};
-
-
---- StepOne/ValueSelector.js ---
-// src/Pages/NewReservation/ValueSelector.jsx
-
+```javascript
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './css/valueSelector.css';
 
-const ValueSelectorGuests = ({ value, onChange }) => {
-  const predefinedValues = [1, 2, 3, '4+ Gasten'];
+const ValueSelectorGuests = ({ setGuests, value, onChange }) => {
+  const predefinedValues = [1, 2, 3, '4+'];
   const [selectedValue, setSelectedValue] = useState(value || '');
   const [showSlider, setShowSlider] = useState(false);
 
   const handlePredefinedValueClick = (val) => {
-    if (val === '4+ Gasten') {
+    if (val === '4+') {
       setShowSlider(true);
       setSelectedValue(4);
-      onChange({ target: { name: 'numberOfGuests', value: 4 } });
+      setGuests(4);
+      onChange({ target: { name: 'guests', value: 4 } });
     } else {
       setShowSlider(false);
       setSelectedValue(val);
-      onChange({ target: { name: 'numberOfGuests', value: val } });
+      setGuests(val);
+      onChange({ target: { name: 'guests', value: val } });
     }
   };
 
   const handleSliderChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
-    onChange({ target: { name: 'numberOfGuests', value: val } });
+    setGuests(val);
+    onChange({ target: { name: 'guests', value: val } });
   };
 
   const handleInputChange = (e) => {
     const val = e.target.value;
     setSelectedValue(val);
-    onChange({ target: { name: 'numberOfGuests', value: val } });
+    setGuests(val);
+    onChange({ target: { name: 'guests', value: val } });
   };
 
   return (
@@ -1222,11 +924,11 @@ const ValueSelectorGuests = ({ value, onChange }) => {
             key={val}
             type="button"
             className={`predefined-value-button ${
-              selectedValue == val || (val === '4+ Gasten' && showSlider) ? 'active' : ''
+              selectedValue == val || (val === '4+' && showSlider) ? 'active' : ''
             }`}
             onClick={() => handlePredefinedValueClick(val)}
           >
-            {val === '4+ Gasten' ? '4+ Gasten' : `${val} ${val === 1 ? 'Gast' : 'Gasten'}`}
+            {val === '4+' ? '4+' : `${val} ${val === 1 ? 'p' : 'p'}`}
           </button>
         ))}
       </div>
@@ -1249,7 +951,7 @@ const ValueSelectorGuests = ({ value, onChange }) => {
             />
             <input
               type="number"
-              name="numberOfGuests"
+              name="guests"
               value={selectedValue}
               onChange={handleInputChange}
               className="value-input"
@@ -1265,850 +967,218 @@ const ValueSelectorGuests = ({ value, onChange }) => {
 };
 
 export default ValueSelectorGuests;
+```
 
+---
 
---- StepOne/css/calendar.css ---
+### **`src/Pages/NewReservation/Utils/`**
 
+Include all utility files in the `Utils` directory, such as:
 
-.new-reservation-page .calendar-container {
-	position: relative;
-	width: 100%;
-}
+- `dateUtils.js`
+- `exceptions.js`
+- `generateDates.js`
+- `generateTimes.js`
+- `dates/blockDates.js`
+- `dates/schemeDates.js`
 
-.new-reservation-page .calendar-container .calendar-display {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: 10px;
-	background-color: #fff;
-	border: 1px solid var(--theme-color, #5DADE2);
-	cursor: pointer;
-	user-select: none;
-	text-align: left;
-	border-radius: 5px;
-}
+These files contain the algorithms needed for generating available dates and times.
 
-.new-reservation-page .calendar-container .calendar-display span:first-child {
-	flex-grow: 1;
-}
+---
 
-.new-reservation-page .calendar-container .calendar {
-	position: absolute;
-	z-index: 1000;
-	width: 100%;
-	background-color: rgba(255, 255, 255, 1);
-	border: 1px solid #ccc;
-	margin-top: 5px;
-	padding: 10px;
-	border-radius: 10px;
-	animation: fadeInCalendar 0.3s ease-in-out;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+### **`src/App.js`**
 
-@keyframes fadeInCalendar {
-	from {
-	  opacity: 0;
-	}
-	to {
-	  opacity: 1;
-	}
-}
+```javascript
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import './mobile.css';
+import Modal from './Components/Modal';
+import LeftSide from './Components/LeftSide';
+import RightSide from './Components/RightSide';
+import useReservationData from './Hooks/useReservationData';
+import useModalManagement from './Hooks/useModalManagement';
+import useIsMobile from './Hooks/useIsMobile';
+import useHandleEditClick from './Hooks/useHandleEditClick';
+import useHandleButtonClick from './Hooks/useHandleButtonClick.js';
+import InitPage from './Loading/InitPage.js';
 
-.new-reservation-page .calendar-container .calendar-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-}
+window.baseDomain = "http://localhost:5000/";
+window.baseDomain = "https://squid-app-aychi.ondigitalocean.app/";
 
-.new-reservation-page .calendar-container .calendar-header button {
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-	font-size: 18px;
-}
+function App() {
+  const [showInitPage, setShowInitPage] = useState(true); // State to control InitPage visibility
+  const { reservationData, fetchReservationData, fetchError } = useReservationData();
+  const {
+    isModalOpen,
+    modalContent,
+    modalTitle,
+    openModal,
+    closeModal,
+    setModalContent,
+    setModalTitle,
+  } = useModalManagement();
 
-.new-reservation-page .calendar-container .calendar-header span {
-	font-size: 15px;
-	color: gray;
-}
+  const {
+    isMobile,
+    isEditing,
+    selectedContent,
+    setIsEditing,
+    handleGoBack,
+    initializeDesktopContent,
+  } = useIsMobile(reservationData, closeModal);
 
-.new-reservation-page .calendar-container .calendar-weeks-wrapper {
-	overflow: hidden;
-	position: relative;
-	width: 100%;
-}
+  const handleEditClick = useHandleEditClick({
+    setModalTitle,
+    setModalContent,
+    openModal,
+    reservationData,
+    fetchReservationData,
+    isMobile,               // Added isMobile
+    initializeDesktopContent, // Added initializeDesktopContent
+    closeModal,
+  });
 
-.new-reservation-page .calendar-container .calendar-table {
-	width: 100%;
-	border-collapse: collapse;
-}
+  const handleButtonClick = useHandleButtonClick({
+    setModalTitle,
+    setModalContent,
+    openModal,
+    closeModal,
+    reservationData,
+    fetchReservationData,
+    isMobile,
+    initializeDesktopContent,
+    isEditing,
+    setIsEditing,
+    handleEditClick,
+  });
 
-.new-reservation-page .calendar-container .calendar-table th,
-.new-reservation-page .calendar-container .calendar-table td {
-	width: 14.28%;
-	text-align: center;
-	padding: 5px;
-}
-
-.calendar-container .calendar-table th {
-	color: #666;
-	font-weight: normal;
-	padding-bottom: 10px;
-}
-
-.new-reservation-page .calendar-container .calendar-table td {
-	vertical-align: middle;
-	cursor: pointer;
-	border: none;
-	opacity: 0;
-	animation: fadeInDay 0.5s forwards;
-	animation-delay: calc(var(--animation-order) * 50ms);
-}
-
-@keyframes fadeInDay {
-	to {
-	  opacity: 1;
-	}
-}
-
-.new-reservation-page .calendar-container .calendar-table td:hover .day-square.available {
-	transform: scale(1.05);
-}
-
-.new-reservation-page .calendar-container .day-square {
-	width: 44px;
-	height: 44px;
-	line-height: 40px;
-	border-radius: 5px;
-	display: inline-block;
-	transition: all 0.3s ease;
-	font-size: 17px;
-}
-
-.new-reservation-page .calendar-container .available .day-square {
-	background-color: #ccffcc;
-	color: #006600;
-}
-
-.new-reservation-page .calendar-container .available:hover .day-square {
-	background-color: #b3ffb3;
-}
-
-.new-reservation-page .calendar-container .available:active .day-square {
-	background-color: #99ff99;
-}
-
-.new-reservation-page .calendar-container .unavailable .day-square {
-	background-color: rgba(139, 0, 0, 0.13);
-	color: darkred;
-}
-
-.new-reservation-page .calendar-container .gray-out .day-square {
-	background-color: #e0e0e0;
-	color: #999;
-	cursor: not-allowed;
-}
-
-.new-reservation-page .calendar-container .selected .day-square {
-	background-color: #006600;
-	color: #ccffcc;
-}
-
-.new-reservation-page .calendar-container .calendar-table td.unavailable,
-.new-reservation-page .calendar-container .calendar-table td.gray-out {
-	cursor: not-allowed;
-}
-
-.new-reservation-page .calendar-container .calendar-table td.unavailable:hover .day-square,
-.new-reservation-page .calendar-container .calendar-table td.gray-out:hover .day-square {
-	transform: none;
-}
-
-.new-reservation-page .calendar-container .calendar-table td {
-	border: none;
-}
-
-.new-reservation-page .calendar-container .arrow {
-	margin-left: auto;
-	color: gray;
-	display: flex;
-	align-items: center;
-}
-
-@media screen and (max-width: 480px) {
-	.new-reservation-page .calendar-container .day-square {
-	  width: 30px;
-	  height: 30px;
-	  line-height: 30px;
-	}
-  
-	.new-reservation-page .calendar-container .calendar-header span {
-	  font-size: 14px;
-	}
-}
-
-
---- StepOne/css/timeSelector.css ---
-/* src/components/NewReservation/css/timeSelector.css */
-
-.new-reservation-page .time-selector-container {
-	position: relative;
-  }
-  
-  .new-reservation-page .time-display {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: 10px;
-	background-color: #fff;
-	border: 1px solid var(--theme-color, #5DADE2);
-	cursor: pointer;
-	user-select: none;
-	text-align: left;
-	border-radius: 5px;
-  }
-  
-  .new-reservation-page .time-display span:first-child {
-	flex-grow: 1;
-  }
-  
-  .new-reservation-page .time-selector {
-	position: absolute;
-	z-index: 1000;
-	width: 100%;
-	max-height: 300px;
-	overflow-y: auto;
-	background-color: rgba(255, 255, 255, 1);
-	border: 1px solid #ccc;
-	margin-top: 5px;
-	padding: 10px;
-	border-radius: 10px;
-	animation: fadeInTimeSelector 0.3s ease-in-out;
-	top: 75px;
-  }
-  
-  @keyframes fadeInTimeSelector {
-	from {
-	  opacity: 0;
-	}
-	to {
-	  opacity: 1;
-	}
-  }
-  
-  .new-reservation-page .time-period {
-	margin-bottom: 15px;
-  }
-  
-  .new-reservation-page .time-period-label {
-	font-weight: bold;
-	margin-bottom: 5px;
-  }
-  
-  .new-reservation-page .time-options {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 5px;
-  }
-  
-  .new-reservation-page .time-option {
-	padding: 8px 12px;
-	background-color: #ccffcc; /* Green background for available times */
-	color: #006600;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-  }
-  
-  .new-reservation-page .time-option:hover {
-	background-color: #b3ffb3;
-  }
-  
-  .new-reservation-page .time-option.selected {
-	background-color: #006600;
-	color: #ccffcc;
-  }
-  
-  .new-reservation-page .info-text {
-	color: #666;
-	font-style: italic;
-  }
-  
-  .new-reservation-page .arrow {
-	margin-left: auto;
-	color: gray;
-	display: flex;
-	align-items: center;
-  }
-  
-  @media screen and (max-width: 480px) {
-	.new-reservation-page .time-option {
-	  padding: 6px 10px;
-	  font-size: 14px;
-	}
-  }
-  
-
---- StepOne/css/valueSelector.css ---
-/* Use the same CSS provided, adjusted for the value selector */
-
-.new-reservation-page .value-selector {
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-	margin-bottom: 20px;
-  }
-  
-  .new-reservation-page .predefined-values {
-	display: flex;
-	gap: 10px;
-  }
-  
-  .new-reservation-page .predefined-value-button {
-	flex: 1;
-	padding: 12px;
-	border: 1px solid #ccc;
-	border-radius: var(--border-radius);
-	background-color: var(--color-white);
-	cursor: pointer;
-	font-size: 1rem;
-	transition: background-color 0.3s ease;
-  }
-  
-  .new-reservation-page .predefined-value-button.active,
-  .new-reservation-page .predefined-value-button:hover {
-	background-color: var(--color-blue);
-	color: var(--color-white);
-  }
-  
-  .new-reservation-page .slider-container {
-	display: flex;
-	align-items: center;
-	gap: 15px;
-  }
-  
-  .new-reservation-page .slider {
-	flex: 1;
-	appearance: none;
-	-webkit-appearance: none;
-	height: 5px;
-	background: #ddd;
-	border-radius: 5px;
-	outline: none;
-  }
-  
-  .new-reservation-page .slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 20px;
-	height: 20px;
-	background: var(--color-blue);
-	cursor: pointer;
-	border-radius: 50%;
-  }
-  
-  .new-reservation-page .value-input {
-	width: 80px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: var(--border-radius);
-	font-size: 1rem;
-  }
-  
-
---- StepOne/index.js ---
-// src/Pages/NewReservation/ReservationStepOne.jsx
-
-import React, { useState, useEffect } from 'react';
-import ValueSelectorGuests from './ValueSelector';
-import DateSelector from './DateSelector';
-import TimeSelector from './TimeSelector';
-import useApi from '../../../Hooks/useApi';
-
-const ReservationStepOne = ({
-  formData,
-  errors,
-  handleChange,
-  handleStepOneSubmit,
-  setFormData,
-}) => {
-  const api = useApi();
-
-  // State for timeblocks
-  const [timeblocks, setTimeblocks] = useState([]);
-  const [loadingTimeblocks, setLoadingTimeblocks] = useState(true);
-  const [timeblocksError, setTimeblocksError] = useState(null);
-
-  // Fetch timeblocks and general settings on component mount
   useEffect(() => {
-    const fetchTimeblocks = async () => {
-      try {
-        const data = await api.get(`${window.baseDomain}api/auth-restaurant/`, { noCache: true });
-        setTimeblocks(data.timeblocks || []);
-        window.timeblocks = data.timeblocks || []; // Retain globally if needed
-        const generalSettings = data['general-settings'] || {};
-        window.generalSettings = generalSettings; // Retain globally
-      } catch (err) {
-        setTimeblocksError(err);
-        console.error('Error fetching timeblocks:', err);
-      } finally {
-        setLoadingTimeblocks(false);
-      }
-    };
+    const params = new URLSearchParams(window.location.search);
+    const admin = params.get('admin');
+    if (admin === 'true') {
+      setIsEditing(true);
+    }
+  }, [setIsEditing]);
 
-    fetchTimeblocks();
-  }, [api]);
+  // If InitPage is visible, render it and do not render the rest of the app
+  if (showInitPage) {
+    return <InitPage onInitComplete={() => setShowInitPage(false)} />;
+  }
 
-  const resetFormDataFields = (fieldsToReset) => {
-    setFormData((prevFormData) => {
-      const newFormData = { ...prevFormData };
-      fieldsToReset.forEach((field) => {
-        newFormData[field] = '';
-      });
-      return newFormData;
-    });
-  };
-
-
-  if (timeblocksError) {
+  // After InitPage is hidden, render the main application
+  if (fetchError) {
     return (
-      <div>
-        <a
-          href="https://dashboard.reservaties.net/#/scheme"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: 'var(--color-blue)', textDecoration: 'underline' }}
-        >
-          Klik hier
-        </a>{' '}
-        om uw openingsuren in te stellen.
+      <div className="error-container">
+        <h1>Deze Reservatie Bestaat Niet Meer</h1>
       </div>
     );
   }
 
   return (
-    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
-      <ValueSelectorGuests
-        value={formData.numberOfGuests}
-        onChange={handleChange}
-        error={errors.numberOfGuests}
-      />
-
-      {formData.numberOfGuests && (
-        <DateSelector
-          formData={formData}
-          handleChange={handleChange}
-          resetFormDataFields={resetFormDataFields}
-          timeblocks={timeblocks}
+    <div className="app-container dark-mode">
+      <div className="split-container">
+        <LeftSide
+          reservationData={reservationData}
+          selectedContent={selectedContent}
+          isMobile={isMobile}
+          handleEditClick={handleEditClick} // Passed handleEditClick
+        />
+        <RightSide
+          handleButtonClick={handleButtonClick}
+          isEditing={isEditing}
+          isMobile={isMobile}
+          handleGoBack={handleGoBack}
+        />
+      </div>
+      {isModalOpen && (
+        <Modal
+          title={modalTitle}
+          content={modalContent}
+          onClose={closeModal}
+          darkMode={true}
         />
       )}
-
-      {formData.date && (
-        <TimeSelector
-          formData={formData}
-          handleChange={handleChange}
-          field={{ id: 'time', label: 'Tijd' }}
-          selectedDate={formData.date}
-        />
-      )}
-
-      <button type="submit" className="account-manage__button">
-        Verder
-      </button>
-    </form>
+    </div>
   );
-};
-
-export default ReservationStepOne;
-
-
---- css/newReservationAdmin.css ---
-/* src/components/ReservationForm/css/reservationForm.css */
-
-
-
-.new-reservation-page {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
 }
 
-
-.new-reservation-page .account-manage-container {
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	position: relative;
-	width: 100%;
-	max-width: 600px;
-	text-align: center;
-	background-color: white;
-  }
-
-
-  .new-reservation-page .modal-title {
-	text-align: center;
-	width: 100%;
-	margin-top: 20px;
-	margin-bottom: 40px;
-  }
-
-
-.new-reservation-page .account-manage-container {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 30px;
-	width: 100%;
-  }
-
-  .new-reservation-page .account-manage-title {
-	margin-top: 30px;
-	margin-bottom: 30px;
-  }
-  
-
-  .new-reservation-page .account-manage-form {
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-  }
-
-  .new-reservation-page .input-container {
-	position: relative;
-  }
-  
-  .new-reservation-page .input-icon {
-	position: absolute;
-	top: 50%;
-	left: 10px;
-	transform: translateY(-50%);
-	color: #6c757d;
-	pointer-events: none;
-  }
-  
-  .new-reservation-page .input-container input {
-	width: 100%;
-	padding: 10px 10px 10px 35px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	font-size: 1rem;
-	transition: border-color 0.3s ease;
-  }
-
-  .new-reservation-page .form-error {
-	color: #dc3545;
-	font-size: 0.9rem;
-	margin-top: 5px;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-  }
-
-
-  .new-reservation-page .account-manage__button {
-	padding: 12px;
-	background-color: var(--color-blue);
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 1.1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	transition: background-color 0.3s ease;
-  }
-
-
-
---- css/reservationSummary.css ---
-/* src/components/ReservationForm/css/reservationSummary.css */
-
-
-  
-  .reservation-summary .modal-title {
-	margin-top: 0;
-	margin-bottom: 20px;
-  }
-  
-  
-  .reservation-summary .reservation-details {
-	list-style-type: none;
-	padding: 0;
-	margin: 0 0 20px 0;
-	width: 100%;
-  }
-  
-  .reservation-summary .reservation-details li {
-	margin-bottom: 10px;
-	font-size: 16px;
-	align-items: left;
-	text-align: left;
-  }
-  
-  .reservation-summary .reservation-details li strong {
-	font-weight: bold;
-  }
-  
-
-  .reservation-summary {
-	align-items: left;
-  }
-
-
---- index.js ---
-// src/Pages/NewReservation/NewReservationAdmin.jsx
-
-import React, { useState } from 'react';
-import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
-import useApi from '../../Hooks/useApi';
-import ReservationStepOne from './StepOne';
-import ReservationStepTwoModal from './ReservationStepTwoModal';
-import ReservationSummary from './ReservationSummary';
-import { withHeader } from '../../Components/Structural/Header';
-import './css/newReservationAdmin.css';
-
-const NewReservationAdmin = () => {
-  const api = useApi();
-
-  const [formData, setFormData] = useState({
-    numberOfGuests: '',
-    date: '',
-    time: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    extraInfo: '',
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [reservationSubmitted, setReservationSubmitted] = useState(false);
-
-  const validateStepOne = () => {
-    const errors = {};
-    if (!formData.numberOfGuests) {
-      errors.numberOfGuests = 'Aantal gasten is verplicht';
-    }
-    if (!formData.date) {
-      errors.date = 'Datum is verplicht';
-    }
-    if (!formData.time) {
-      errors.time = 'Tijd is verplicht';
-    }
-    return errors;
-  };
-
-  const validateStepTwo = () => {
-    const errors = {};
-
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'E-mail is ongeldig';
-    }
-
-    return errors;
-  };
-
-  const handleStepOneSubmit = (e) => {
-    e.preventDefault();
-    const stepOneErrors = validateStepOne();
-    if (Object.keys(stepOneErrors).length > 0) {
-      setErrors(stepOneErrors);
-    } else {
-      setErrors({});
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleFinalSubmit = async (e) => {
-    e.preventDefault();
-    const stepTwoErrors = validateStepTwo();
-    if (Object.keys(stepTwoErrors).length > 0) {
-      setErrors(stepTwoErrors);
-    } else {
-      setErrors({});
-      setIsSubmitting(true);
-      const submissionData = {
-        numberOfGuests: formData.numberOfGuests,
-        date: formData.date,
-        time: formData.time,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        extraInfo: formData.extraInfo,
-      };
-
-      try {
-        await api.post(`${window.baseDomain}api/auth-reservations/`, submissionData);
-        setIsModalOpen(false);
-        setReservationSubmitted(true);
-      } catch (error) {
-        console.error('Error submitting reservation:', error);
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' });
-  };
-
-  return (
-    <div className="new-reservation-page">
-      <h2 className="account-manage-title">Admin Reservaties</h2>
-      <div className="account-manage-container">
-        {reservationSubmitted ? (
-          <ReservationSummary
-            formData={formData}
-            onNewReservation={() => {
-              setFormData({
-                numberOfGuests: '',
-                date: '',
-                time: '',
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                extraInfo: '',
-              });
-              setReservationSubmitted(false);
-            }}
-          />
-        ) : (
-          <>
-            <ReservationStepOne
-              formData={formData}
-              errors={errors}
-              handleChange={handleChange}
-              handleStepOneSubmit={handleStepOneSubmit}
-              setFormData={setFormData}
-            />
-
-            {isModalOpen && (
-              <ModalWithoutTabs
-                content={
-                  <ReservationStepTwoModal
-                    formData={formData}
-                    errors={errors}
-                    handleChange={handleChange}
-                    handleFinalSubmit={handleFinalSubmit}
-                    isSubmitting={isSubmitting}
-                  />
-                }
-                onClose={() => setIsModalOpen(false)}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default withHeader(NewReservationAdmin);
-
-
-
-Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/NewReservation":
-
-├── FormField.js
-├── ReservationStepTwoModal.js
-├── ReservationSummary.js
-├── StepOne
-│   ├── Calendar.js
-│   ├── DateSelector.js
-│   ├── Hooks
-│   │   └── useFetchRestaurantData.js
-│   ├── TimeSelector.js
-│   ├── Utils
-│   │   ├── dateUtils.js
-│   │   ├── dates
-│   │   │   ├── blockDates.js
-│   │   │   └── schemeDates.js
-│   │   ├── exceptions.js
-│   │   ├── generateDates.js
-│   │   └── generateTimes.js
-│   ├── ValueSelector.js
-│   ├── css
-│   │   ├── calendar.css
-│   │   ├── timeSelector.css
-│   │   └── valueSelector.css
-│   └── index.js
-├── css
-│   ├── newReservationAdmin.css
-│   └── reservationSummary.css
-└── index.js
-
-
-List of Files:
-FormField.js
-ReservationStepTwoModal.js
-ReservationSummary.js
-StepOne/Calendar.js
-StepOne/DateSelector.js
-StepOne/Hooks/useFetchRestaurantData.js
-StepOne/TimeSelector.js
-StepOne/Utils/dateUtils.js
-StepOne/Utils/dates/blockDates.js
-StepOne/Utils/dates/schemeDates.js
-StepOne/Utils/exceptions.js
-StepOne/Utils/generateDates.js
-StepOne/Utils/generateTimes.js
-StepOne/ValueSelector.js
-StepOne/css/calendar.css
-StepOne/css/timeSelector.css
-StepOne/css/valueSelector.css
-StepOne/index.js
-css/newReservationAdmin.css
-css/reservationSummary.css
-index.js
-
-**Instruction:**
-1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
-2. Prefix all CSS classes with the `.component-name-component` class.
-
-**Examples:**
-
-*Encapsulation in index.js:*
-```jsx
-<div className="profile-component">
-    <h2 className="account-manage-title">Admin Reservaties</h2>
-    <div className="account-manage-container">
-        {/* ... */}
-        onClose={() => setIsModalOpen(false)}
-    </div>
-</div>
+export default App;
 ```
 
-*Prefixed CSS Classes:*
-```css
-.component-name-component .account-manage-container {
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    background-color: white;
-}
+---
 
-.component-name-component .modal-title {
-    text-align: center;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 40px;
-}
-``` 
+### **`src/Components/ReservationDetails.js`**
+
+```javascript
+import React from 'react';
+import ReservationField from './ReservationField';
+
+const ReservationDetails = ({ reservationData, onEditClick }) => {
+  return (
+    <div>
+      <h3>Reservatie Informatie</h3>
+      <ReservationField
+        label="Naam"
+        value={`${reservationData.firstName} ${reservationData.lastName}`}
+        onEdit={() => onEditClick('Info Wijzigen')}
+      />
+      <ReservationField
+        label="Email"
+        value={reservationData.email}
+        onEdit={() => onEditClick('Info Wijzigen')}
+      />
+      <ReservationField
+        label="Telefoon"
+        value={reservationData.phone}
+        onEdit={() => onEditClick('Info Wijzigen')}
+      />
+      <ReservationField
+        label="Extra Info"
+        value={reservationData.extraInfo}
+        onEdit={() => onEditClick('Info Wijzigen')}
+      />
+      <ReservationField
+        label="Datum"
+        value={reservationData.date}
+        onEdit={() => onEditClick('Datum Wijzigen')}
+      />
+      <ReservationField
+        label="Tijd"
+        value={reservationData.time}
+        onEdit={() => onEditClick('Tijd Wijzigen')}
+      />
+      <ReservationField
+        label="Aantal Gasten"
+        value={reservationData.guests}
+        onEdit={() => onEditClick('Aantal Gasten Wijzigen')}
+      />
+    </div>
+  );
+};
+
+export default ReservationDetails;
+```
+
+---
+
+**Summary of the Structure**
+
+- **`EditDate`, `EditTime`, `EditGuests` Components**: These components should import and utilize `ReservationStepOne` with pre-filled data based on the reservation. For example, in `EditTime`, the guests and date are pre-selected, and the user can change the time.
+
+- **Data Integration**: Use the existing `reservationData` to pre-fill fields in `ReservationStepOne`. Pass necessary props to control which fields are editable.
+
+- **API Requests**: Ensure that the necessary unauthenticated API requests are made to fetch timeblocks and slots. Use the provided endpoints:
+  - Timeblocks: `const endpoint = `${window.baseDomain}api/restaurant/${window.restaurantId}`;`
+  - Reservations/Slots: `const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;`
+
+- **Algorithms**: The algorithms in the `Utils` directory (`generateDates.js`, `generateTimes.js`, etc.) are utilized within the `DateSelector` and `TimeSelector` components to generate available dates and times.
+
+- **Modal Integration**: In the `App.js` file, when an edit action is initiated, the corresponding `EditDate`, `EditTime`, or `EditGuests` component is rendered within a modal, utilizing `ReservationStepOne` to provide the user interface.
+
+- **No Changes to Layout**: The layout of the calendar, time selector, and guest selector remains unchanged. These components are reused within the editing components to maintain consistency.
+
+---
+
+By integrating these files as shown, you can implement `ReservationStepOne` within the `EditDate`, `EditTime`, and `EditGuests` components, ensuring that users can modify their reservations seamlessly using the existing algorithms and UI components.
+
+Accomplish the task. Print the new code files in full.
