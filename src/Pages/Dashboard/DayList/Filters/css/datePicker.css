@@ -12,6 +12,19 @@
 	align-items: center;
 	position: relative;
   }
+
+  /* src/Components/ReservationsList/Filters/css/datePicker.css */
+
+  .date-picker-component .total-guests-container {
+	border: 1px solid #b0b0b0;
+	border-radius: 25px; /* 50% rounded corners */
+	padding: 4px 12px; /* Small padding */
+	display: block;
+	margin-left: 10px;
+	font-size: 0.875rem; /* Small font size */
+	text-align: center;
+  }
+  
   
   .date-picker-component .nav-button {
 	background: none;
@@ -130,3 +143,20 @@
 	margin: 0 40px; /* Adjust as needed based on chevron sizes */
   }
   
+  @media (max-width: 1200px) {
+	.date-picker-component .total-guests-container {
+		display: none;
+	}
+  }
+
+  @media (max-width: 1100px) {
+	.date-picker-component .nav-button {
+		display: none;
+	}
+  }
+
+  @media (max-width: 900px) {
+	.date-picker-component .selected-date-container {
+		margin-bottom: 30px !important;
+	}
+}

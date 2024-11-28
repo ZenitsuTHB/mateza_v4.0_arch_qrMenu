@@ -1,6 +1,6 @@
 // src/Components/ReservationsList/ReservationsList.js
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import { withHeader } from '../../../Components/Structural/Header/index.js';
 import ReservationRow from './ReservationRow/index.js';
 import Pagination from './Pagination.js';
@@ -14,7 +14,7 @@ import DatePickerComponent from './Filters/DatePicker.js';
 import useSortedReservations from './Hooks/useSortedReservation.js';
 import { getNewSortConfig } from './Utils/sortUtils.js';
 import { shifts } from './Utils/constants.js';
-import { FaSortUp, FaSortDown, FaFilter, FaPrint } from 'react-icons/fa'; // Import icons
+import { FaSortUp, FaSortDown, FaFilter, FaPrint } from 'react-icons/fa';
 import './css/reservationList.css';
 import './css/settingsTabs.css';
 
@@ -22,8 +22,6 @@ import './css/settingsTabs.css';
 import useReservationsList from './Hooks/useReservationsList.js';
 import useNotification from '../../../Components/Notification/index.js';
 import ModalWithoutTabs from '../../../Components/Structural/Modal/Standard/index.js';
-
-// Import ModalWithoutTabs
 
 const FIELD_CONFIG = [
   { key: 'aantalGasten', label: '#', alwaysVisible: true },
@@ -66,6 +64,14 @@ const ReservationsList = () => {
   });
 
   const sortedReservationsData = useSortedReservations(filteredReservationsData, sortConfig);
+
+  // Calculate the total number of guests for the selected date
+  const totalGuests = useMemo(() => {
+    return sortedReservationsData.reduce((total, reservation) => {
+      const guests = Number(reservation.aantalGasten);
+      return total + (isNaN(guests) ? 0 : guests);
+    }, 0);
+  }, [sortedReservationsData]);
 
   const { currentData: currentReservations, totalPages } = usePagination(
     sortedReservationsData,
@@ -181,6 +187,7 @@ const ReservationsList = () => {
         isDatePickerOpen={isDatePickerOpen}
         setIsDatePickerOpen={setIsDatePickerOpen}
         handleDateChange={handleDateChange}
+        totalGuests={totalGuests} // Pass the totalGuests prop
       />
       <ShiftSelector
         shifts={shifts}
@@ -201,14 +208,14 @@ const ReservationsList = () => {
 
       <div className="reservations-container">
         {loading ? (
-          <div></div>
+          <div>Loading...</div>
         ) : error ? (
           <div>Fout bij het laden</div>
         ) : (
           <>
             <div
               className={`reservations-grid ${isMobile ? 'mobile-grid' : ''}`}
-              style={{ gridTemplateColumns: `60px  70px repeat(${columnsCount - 2}, 1fr)` }}
+              style={{ gridTemplateColumns: `60px 70px repeat(${columnsCount - 2}, 1fr)` }}
             >
               {!isMobile && (
                 <div className="reservations-header reservation-row">

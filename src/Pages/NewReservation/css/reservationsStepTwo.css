@@ -1,5 +1,5 @@
 /* Name Fields Container */
-.name-fields {
+.new-reservation-page .name-fields {
 	display: flex;
 	gap: 20px;
   }

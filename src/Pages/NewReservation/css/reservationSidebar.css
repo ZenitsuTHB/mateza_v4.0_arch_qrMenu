@@ -1,7 +1,7 @@
 
 /* reservationSidebar.js */
 
-.reservation-sidebar-component {
+.new-reservation-page .reservation-sidebar-component {
 	position: fixed;
 	top: 0;
 	right: -400px; /* Start off-screen */
@@ -16,21 +16,21 @@
 	transition: right 0.3s ease-in-out;
   }
 
-  .admin-title {
+  .new-reservation-page .admin-title {
 	text-align: center;
 	margin-bottom: 30px;
   }
   
-  .reservation-sidebar-component.open {
+  .new-reservation-page .reservation-sidebar-component.open {
 	right: 0;
   }
   
-  .reservation-sidebar-content {
+  .new-reservation-page .reservation-sidebar-content {
 	padding: 20px;
 	padding-top: 60px; /* To make room for the close button */
   }
   
-  .close-sidebar-button {
+  .new-reservation-page .close-sidebar-button {
 	position: absolute;
 	top: 10px;
 	left: 10px;
@@ -39,20 +39,20 @@
 	cursor: pointer;
   }
   
-  .close-sidebar-button svg {
+  .new-reservation-page .close-sidebar-button svg {
 	color: #000;
   }
   
-  .sidebar-section-one,
-  .sidebar-section-two {
+  .new-reservation-page .sidebar-section-one,
+  .new-reservation-page .sidebar-section-two {
 	margin-bottom: 20px;
   }
   
-  .reservation-footer {
+  .new-reservation-page .reservation-footer {
 	margin-top: auto;
   }
   
-  .store-reservation-button {
+  .new-reservation-page .store-reservation-button {
 	width: 100%;
 	padding: 12px;
 	background-color: var(--color-blue);
@@ -63,7 +63,7 @@
 	font-size: 1.1rem;
   }
   
-  .open-sidebar-button {
+  .new-reservation-page .open-sidebar-button {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
@@ -77,13 +77,13 @@
 	z-index: var(--z-index-modal) !important;
   }
   
-  .open-sidebar-button svg {
+  .new-reservation-page .open-sidebar-button svg {
 	position: relative;
 	top: 2px;
   }
   
   @media screen and (max-width: 480px) {
-	.reservation-sidebar-component {
+	.new-reservation-page .reservation-sidebar-component {
 	  width: 100%;
 	}
   }

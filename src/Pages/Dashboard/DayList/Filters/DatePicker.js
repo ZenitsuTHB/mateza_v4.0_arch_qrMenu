@@ -1,8 +1,8 @@
-// DatePickerComponent.js
+// src/Components/ReservationsList/Filters/DatePickerComponent.js
 
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import { FaCalendarAlt, FaPrint, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // Import FaChevronLeft and FaChevronRight
+import { FaCalendarAlt, FaPrint, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
@@ -17,6 +17,7 @@ const DatePickerComponent = ({
   isDatePickerOpen,
   setIsDatePickerOpen,
   handleDateChange,
+  totalGuests, // New prop
 }) => {
   // Handler to decrement the date by one day
   const handlePrevDate = () => {
@@ -54,12 +55,15 @@ const DatePickerComponent = ({
           {/* Selected Date with Print Icon */}
           <h2 className="selected-date">
             {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
-            <FaPrint
-              className="print-icon"
-              onClick={handlePrintClick}
-              title="Print"
-            />
+    
+            {selectedDate && (
+            <div className="total-guests-container">
+              {totalGuests} gasten
+            </div>
+          )}
           </h2>
+
+          
 
           {/* Next Date Button */}
           <div className="button-with-tooltip">
@@ -72,6 +76,9 @@ const DatePickerComponent = ({
           </div>
         </div>
       )}
+
+      {/* Total Guests Container */}
+      
 
       <button
         onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}

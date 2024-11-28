@@ -6,10 +6,17 @@
 
 	.title {
 		padding-left: 25px;
+		display: none;
+	}
+
+	.withHeader {
+		padding-top: 130px;
+		padding-right: 10px;
 	}
 
 	.breadcrumb  {
 		text-align: center;
 		padding-left: 25px;
+		display: none !important;
 	}
 }
