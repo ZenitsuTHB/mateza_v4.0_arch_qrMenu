@@ -27,6 +27,7 @@ const useReservations = () => {
             email: reservation.email,
             phone: reservation.phone,
             aantalGasten: reservation.guests,
+            menu: reservation.menu,
             extra: reservation.extraInfo && reservation.extraInfo.trim() !== '' ? reservation.extraInfo : null,
             timeSlot: getTimeSlot(reservation.time),
           };

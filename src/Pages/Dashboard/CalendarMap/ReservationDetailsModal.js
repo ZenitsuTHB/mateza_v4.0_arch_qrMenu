@@ -126,6 +126,7 @@ const ReservationRow = ({ reservation, triggerNotification, onDelete }) => {
           >
             <div>Email: {reservation.email}</div>
             <div>Telefoon: {reservation.phone}</div>
+            {reservation.menu && <div>Menu: {reservation.menu}</div>}
             {reservation.extra && <div>Extra: {reservation.extra}</div>}
             <div className="reservation-buttons">
               <button className="standard-button red" onClick={handleDeleteClick}>
