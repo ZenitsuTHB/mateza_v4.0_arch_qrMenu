@@ -57,7 +57,7 @@ const ReservationStepTwoFiltering = ({
             name="menu"
             type="select"
             options={availableMenus.map((menu) => ({
-              value: menu._id.$oid || menu._id, // Adjust according to your data structure
+              value: menu.name, // Adjust according to your data structure
               label: menu.name,
             }))}
             value={formData.menu}

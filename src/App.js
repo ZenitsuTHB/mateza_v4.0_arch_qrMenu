@@ -5,8 +5,8 @@ import Login from './Pages/Login';
 import WelcomeAnimation from './Components/Animations/index.js';
 import './Styles/all-styles.js';
 
-window.baseDomain = "http://localhost:5000/";
 window.baseDomain = "https://squid-app-aychi.ondigitalocean.app/";
+window.baseDomain = "http://localhost:5000/";
 
 
 window.viewMode = 'full-screen';

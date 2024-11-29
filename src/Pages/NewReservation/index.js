@@ -18,7 +18,7 @@ const NewReservationAdmin = () => {
     email: '',
     phone: '',
     extraInfo: '',
-    notes: '',
+    menu: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -70,7 +70,7 @@ const NewReservationAdmin = () => {
         email: formData.email,
         phone: formData.phone,
         extraInfo: formData.extraInfo,
-        notes: formData.notes,
+        menu: formData.menu,
       };
 
       try {
@@ -120,7 +120,7 @@ const NewReservationAdmin = () => {
             email: '',
             phone: '',
             extraInfo: '',
-            notes: '',
+            menu: '',
           });
           setReservationSubmitted(false);
         }}

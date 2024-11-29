@@ -68,7 +68,7 @@ const ReservationSidebar = ({
                 email: '',
                 phone: '',
                 extraInfo: '',
-                notes: '',
+                menu: '',
               });
               onNewReservation();
             }}

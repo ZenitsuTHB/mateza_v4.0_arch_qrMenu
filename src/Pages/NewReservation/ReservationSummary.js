@@ -15,6 +15,9 @@ const ReservationSummary = ({ formData, onNewReservation }) => {
         <li><strong>Achternaam:</strong> {formData.lastName}</li>
         <li><strong>Email:</strong> {formData.email}</li>
         <li><strong>Telefoonnummer:</strong> {formData.phone}</li>
+        {formData.menu && (
+          <li><strong>Menu:</strong> {formData.menu}</li>
+        )}
         {formData.extraInfo && (
           <li><strong>Extra informatie:</strong> {formData.extraInfo}</li>
         )}
