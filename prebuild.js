@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+require('./checkBaseDomain.js');
 
 // Directory to check
 const srcDirectory = path.join(__dirname, 'src');
