@@ -124,7 +124,7 @@ const ReservationRow = ({
             <div>{reservation.extra || 'Geen extra info'}</div>
           </div>
           <div className="reservation-item buttons-container">
-            <button className="edit-button" onClick={() => window.open(`https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(reservation.id)}&admin=true`, '_blank')}>
+            <button className="edit-button" onClick={() => window.open(`https://view.reservaties.net/?action=edit&reservationId=${encodeURIComponent(reservation.id)}&admin=true` + "&restaurantId=" + localStorage.getItem('username'), '_blank')}>
               <FaPencilAlt className="button-icon" />
               Bewerk
             </button>
