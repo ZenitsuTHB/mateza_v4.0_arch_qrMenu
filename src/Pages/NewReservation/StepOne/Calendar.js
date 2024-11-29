@@ -15,6 +15,7 @@ const Calendar = ({
   onSelectDate,
   autoExpand,
   onReservationsFetched, // New prop for callback
+  reservationMode, // NEW: accept reservationMode prop
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const [startDate, setStartDate] = useState(null);
@@ -88,7 +89,7 @@ const Calendar = ({
     let date = startDate.clone();
     while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
       const formattedDate = date.format('YYYY-MM-DD');
-      const isAvailable = availableDates.includes(formattedDate);
+      const isAvailable = reservationMode === 'zonder_regels' ? true : availableDates.includes(formattedDate);
 
       days.push({
         date: date.clone(),

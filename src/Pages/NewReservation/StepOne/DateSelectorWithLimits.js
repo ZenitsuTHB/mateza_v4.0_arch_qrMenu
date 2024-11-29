@@ -1,11 +1,11 @@
-// src/Pages/NewReservation/DateSelector.jsx
+// src/Pages/NewReservation/DateSelectorWithLimits.jsx
 
 import React, { useEffect, useState, useCallback } from 'react';
 import Calendar from './Calendar';
 import { generateAvailableDates } from './Utils/generateDates';
 import moment from 'moment';
 
-const DateSelector = ({
+const DateSelectorWithLimits = ({
   guests,
   formData,
   handleChange,
@@ -23,7 +23,7 @@ const DateSelector = ({
       console.error('timeblocks is undefined or not an array:', timeblocks);
       setAvailableDates([]);
     }
-  }, [formData.guests, timeblocks, reservations]);
+  }, [guests, timeblocks, reservations]);
 
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
@@ -52,4 +52,4 @@ const DateSelector = ({
   );
 };
 
-export default DateSelector;
+export default DateSelectorWithLimits;

@@ -1,10 +1,10 @@
-// src/Pages/NewReservation/TimeSelector.jsx
+// src/Pages/NewReservation/TimeSelectorWithoutLimits.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import { generateAvailableTimesForDate } from './Utils/generateTimes';
 import './css/timeSelector.css';
+import moment from 'moment-timezone';
 
-const TimeSelector = ({
+const TimeSelectorWithoutLimits = ({
   guests, 
   formData,
   handleChange,
@@ -19,8 +19,18 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate) {
-      const times = generateAvailableTimesForDate(guests, new Date(selectedDate));
-      setAvailableTimes(times);
+      // In 'zonder_regels' mode, generate all times without constraints
+      const allTimes = [];
+      const startOfDay = moment(selectedDate).startOf('day').hour(0).minute(0);
+      const endOfDay = moment(selectedDate).endOf('day').hour(23).minute(59);
+      let currentTime = startOfDay.clone();
+
+      while (currentTime.isBefore(endOfDay)) {
+        allTimes.push(currentTime.format('HH:mm'));
+        currentTime.add(30, 'minutes'); // Assuming 30-minute intervals
+      }
+
+      setAvailableTimes(allTimes);
     } else {
       setAvailableTimes([]);
     }
@@ -38,8 +48,8 @@ const TimeSelector = ({
 
   const formatDisplayTime = () => {
     if (formData[field.id]) {
-      const selected = availableTimes.find((time) => time.value === formData[field.id]);
-      return selected ? selected.label : 'Selecteer een tijd';
+      const selected = availableTimes.find((time) => time === formData[field.id]);
+      return selected ? selected : 'Selecteer een tijd';
     }
     return 'Selecteer een tijd';
   };
@@ -90,15 +100,15 @@ const TimeSelector = ({
                 <div className="no-times">Geen beschikbare tijden.</div>
               ) : (
                 <div className="time-options">
-                  {availableTimes.map((time) => (
+                  {availableTimes.map((time, index) => (
                     <div
-                      key={time.value}
+                      key={index}
                       className={`time-option ${
-                        formData[field.id] === time.value ? 'selected' : ''
+                        formData[field.id] === time ? 'selected' : ''
                       }`}
-                      onClick={() => handleTimeSelect(time.value)}
+                      onClick={() => handleTimeSelect(time)}
                     >
-                      {time.label}
+                      {time}
                     </div>
                   ))}
                 </div>
@@ -111,4 +121,4 @@ const TimeSelector = ({
   );
 };
 
-export default TimeSelector;
+export default TimeSelectorWithoutLimits;
