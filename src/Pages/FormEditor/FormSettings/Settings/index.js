@@ -12,8 +12,8 @@ const Settings = forwardRef((props, ref) => {
   const defaultSettings = {
     pageTitle: 'Reserveer Nu',
     generalNotification: '',
-    alignment: 'fullScreenColor', // Default alignment
-    backgroundBlur: 'sharpPicture', // Default background blur
+    alignment: 'fullScreenPicture', // Default alignment
+    backgroundBlur: 'blurBackground', // Default background blur
   };
 
   const [formData, setFormData] = useState(defaultSettings);
