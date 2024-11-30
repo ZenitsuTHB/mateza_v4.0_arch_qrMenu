@@ -15,9 +15,10 @@ const Settings = () => {
     dagenInToekomst: 0,
     maxGasten: 0,
     intervalReservatie: 0,
-    duurReservatie: 60, // New field: Standard duration of a reservation in minutes
-    showNoticeForMaxGuests: 'Nee', // New field
-    noticePhoneNumber: '',         // New field
+    duurReservatie: 60, // Existing field: Standard duration of a reservation in minutes
+    minutenTotEinde: 120, // New field: Minutes before end of time block to stop reservations
+    showNoticeForMaxGuests: 'Nee', // Existing field
+    noticePhoneNumber: '',         // Existing field
   };  
 
   const [settings, setSettings] = useState(defaultSettings);
@@ -31,13 +32,14 @@ const Settings = () => {
         const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
         const data = response || {};
 
-        // Ensure intervalReservatie is a number
+        // Ensure numerical fields are parsed correctly
         const mergedData = { 
           ...defaultSettings, 
           ...data,
           dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
           intervalReservatie: data.intervalReservatie !== undefined ? Number(data.intervalReservatie) : defaultSettings.intervalReservatie,
           duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie, // Parsing duurReservatie
+          minutenTotEinde: data.minutenTotEinde !== undefined ? Number(data.minutenTotEinde) : defaultSettings.minutenTotEinde, // Parsing minutenTotEinde
         };
 
         setSettings(mergedData);
@@ -65,7 +67,6 @@ const Settings = () => {
         parsedValue = 0; // Default or handle as needed
       }
     }
-
 
     setSettings((prev) => ({
       ...prev,
@@ -168,10 +169,10 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Duur Reservatie (min) */}
+          {/* Interval Reservatie (min) */}
           <div className="form-group">
             <div className="label-with-tooltip">
-              <label>Interval Reservatie (min)</label>
+              <label>Interval Tussen Reservaties (min)</label>
               <div className="button-with-tooltip">
                 <FaInfoCircle />
                 <div className="tooltip">
@@ -183,7 +184,7 @@ const Settings = () => {
               <input
                 type="number"
                 name="intervalReservatie"
-                placeholder="Duur reservatie"
+                placeholder="Interval tussen reservaties"
                 value={settings.intervalReservatie}
                 onChange={handleChange}
                 min="5"
@@ -212,6 +213,31 @@ const Settings = () => {
                 value={settings.duurReservatie}
                 onChange={handleChange}
                 min="5"
+                max="720"
+                step="1"
+              />
+            </div>
+          </div>
+
+          {/* Reserveren tot Min. Voor Einde Tijdsblok */}
+          <div className="form-group">
+            <div className="label-with-tooltip">
+              <label>Reserveren tot Min. Voor Einde Tijdsblok</label>
+              <div className="button-with-tooltip">
+                <FaInfoCircle />
+                <div className="tooltip">
+                  Het aantal minuten vóór het einde van een tijdsblok waarbinnen geen nieuwe reservaties meer kunnen worden gemaakt.
+                </div>
+              </div>
+            </div>
+            <div className="input-container">
+              <input
+                type="number"
+                name="minutenTotEinde"
+                placeholder="Minuten tot einde tijdsblok"
+                value={settings.minutenTotEinde}
+                onChange={handleChange}
+                min="0"
                 max="720"
                 step="1"
               />
