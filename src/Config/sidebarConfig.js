@@ -46,6 +46,7 @@ import TableEditor from '../Pages/Tables/TableEditor/index.js';
 import TableList from '../Pages/Tables/TableList/index.js';
 import Menu from '../Pages/Menu/index.js';
 import Personeel from '../Pages/Personeel/index.js';
+import Mededeling from '../Pages/Mededeling/index.js';
 
 
 const routesConfig = [
@@ -72,6 +73,15 @@ const routesConfig = [
     path: '/team',
     element: <Personeel title="Personeel" />,
     label: 'Personeel',
+    icon: FaUserFriends,
+    isMenu: true,
+    isMobile: false,
+    isTab: false,
+  },
+  {
+    path: '/notification',
+    element: <Mededeling title="Mededeling" />,
+    label: 'Mededeling',
     icon: FaUserFriends,
     isMenu: true,
     isMobile: false,
