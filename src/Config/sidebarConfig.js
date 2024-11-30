@@ -17,6 +17,7 @@ import {
   FaUtensilSpoon,
   FaPeopleCarry,
   FaUserFriends,
+  FaBell,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -82,7 +83,7 @@ const routesConfig = [
     path: '/notification',
     element: <Mededeling title="Mededeling" />,
     label: 'Mededeling',
-    icon: FaUserFriends,
+    icon: FaBell,
     isMenu: true,
     isMobile: false,
     isTab: false,
