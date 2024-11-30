@@ -22,14 +22,16 @@
 	.reservations-container {
 	  position: absolute;
 	  left: 0;
-	  top: 50px; /* Adjust as needed to position below .selected-date */
+	  margin-top: -120px;
+	  top: -120px;
 	  width: 100%;
 	}
   
 	.selected-date {
 	  position: absolute;
 	  left: 0;
-	  top: 0;
+	  margin-top: -120px;
+	  top: -160px;
 	  width: 100%;
 	  margin-bottom: 20px;
 	  font-size: 18pt;

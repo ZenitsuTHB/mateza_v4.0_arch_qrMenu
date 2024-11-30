@@ -53,9 +53,11 @@ const ReservationsList = () => {
   const [isShiftOptionsOpen, setIsShiftOptionsOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('');
   const { searchQuery } = useContext(SearchContext);
-  const itemsPerPage = 11;
+  const [itemsPerPage, setItemsPerPage] = useState(11);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-
+  const [isReadyToPrint, setIsReadyToPrint] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false); // New state for tracking print status
+  
   // Use the new hook to fetch reservations data
   const { reservationsData, loading, error } = useReservationsList();
 
@@ -136,8 +138,21 @@ const ReservationsList = () => {
   };
 
   const handlePrintClick = () => {
-    window.print();
+    setItemsPerPage(100000); // Increase items per page for printing
+    setIsReadyToPrint(true); // Mark ready to wait for data to load
+    setIsPrinting(true);
   };
+
+  useEffect(() => {
+    if (isReadyToPrint) {
+      // Check if data is loaded and then trigger print
+      if (!loading && reservationsData.length > 0) {
+        window.print();
+        setItemsPerPage(11); // Reset items per page
+        setIsReadyToPrint(false); // Reset the print state
+      }
+    }
+  }, [isReadyToPrint, loading, reservationsData]);
 
   const FieldSelectorModal = ({ visibleFields, setVisibleFields, onClose }) => {
     const [selectedFields, setSelectedFields] = useState(visibleFields);
@@ -212,6 +227,8 @@ const ReservationsList = () => {
         setIsDatePickerOpen={setIsDatePickerOpen}
         handleDateChange={handleDateChange}
         totalGuests={totalGuests} // Pass the totalGuests prop
+        selectedShift={selectedShift} // Pass the selectedShift prop
+        isPrinting={isPrinting}
       />
       <ShiftSelector
         shifts={shifts}

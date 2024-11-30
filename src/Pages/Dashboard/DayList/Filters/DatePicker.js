@@ -18,6 +18,8 @@ const DatePickerComponent = ({
   setIsDatePickerOpen,
   handleDateChange,
   totalGuests, // New prop
+  selectedShift, // New prop
+  isPrinting, // New prop
 }) => {
   // Handler to decrement the date by one day
   const handlePrevDate = () => {
@@ -52,18 +54,20 @@ const DatePickerComponent = ({
             </div>
           </div>
 
-          {/* Selected Date with Print Icon */}
+          {/* Selected Date with Shift Name */}
           <h2 className="selected-date">
-            {isToday(selectedDate) ? 'Vandaag' : formatDateDutch(selectedDate)}
-    
+            {isPrinting
+              ? formatDateDutch(selectedDate) // Always show the formatted date when printing
+              : isToday(selectedDate)
+              ? 'Vandaag' // Show 'Vandaag' if it's today and not printing
+              : formatDateDutch(selectedDate)} {/* Show formatted date if not today and not printing */}
+            {selectedShift && ` - ${selectedShift}`} {/* Append shift name if selected */}
             {selectedDate && (
-            <div className="total-guests-container">
-              {totalGuests} gasten
-            </div>
-          )}
+              <div className="total-guests-container">
+                {totalGuests} gasten
+              </div>
+            )}
           </h2>
-
-          
 
           {/* Next Date Button */}
           <div className="button-with-tooltip">
@@ -77,9 +81,7 @@ const DatePickerComponent = ({
         </div>
       )}
 
-      {/* Total Guests Container */}
-      
-
+      {/* Date Picker Toggle Button */}
       <button
         onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
         className="button-style-1 date-button"
