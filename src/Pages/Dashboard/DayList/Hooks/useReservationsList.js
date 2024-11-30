@@ -30,6 +30,7 @@ const useReservationsList = () => {
             phone: reservation.phone,
             menu: reservation.menu,
             zitplaats: reservation.zitplaats,
+            personeel: reservation.personeel,
             extra: reservation.extraInfo && reservation.extraInfo.trim() !== '' ? reservation.extraInfo : null,
             createdAt: reservation.createdAt,
           };

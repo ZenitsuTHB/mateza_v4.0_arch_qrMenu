@@ -37,6 +37,7 @@ const FIELD_CONFIG = [
   { key: 'fullName', label: 'Naam', defaultVisible: true },
   { key: 'email', label: 'Email', defaultVisible: true },
   { key: 'phone', label: 'Telefoon', defaultVisible: false },
+  { key: 'personeel', label: 'Toewijzing', alwaysVisible: false },
   { key: 'menu', label: 'Menu', defaultVisible: false },
 ];
 

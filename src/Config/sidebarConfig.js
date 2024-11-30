@@ -69,9 +69,9 @@ const routesConfig = [
     isTab: true,
   },
   {
-    path: '/day',
+    path: '/team',
     element: <Personeel title="Personeel" />,
-    label: 'Team',
+    label: 'Personeel',
     icon: FaUserFriends,
     isMenu: true,
     isMobile: false,
