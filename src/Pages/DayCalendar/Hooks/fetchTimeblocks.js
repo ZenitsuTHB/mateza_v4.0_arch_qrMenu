@@ -22,7 +22,36 @@ const useTimeBlocks = (triggerNotification) => {
     fetchTimeBlocks();
   }, [api]);
 
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const isOverlapping = (newBlock, existingBlocks) => {
+    const newStart = parseTime(newBlock.startTime);
+    const newEnd = parseTime(newBlock.endTime);
+
+    for (const block of existingBlocks) {
+      if (block._id === newBlock._id) continue;
+      const blockStart = parseTime(block.startTime);
+      const blockEnd = parseTime(block.endTime);
+
+      if (
+        (newStart >= blockStart && newStart < blockEnd) ||
+        (newEnd > blockStart && newEnd <= blockEnd) ||
+        (newStart <= blockStart && newEnd >= blockEnd)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const addTimeBlock = async (block) => {
+    if (isOverlapping(block, blocks)) {
+      triggerNotification('Tijdsblok overlapt met een bestaand tijdsblok', 'warning');
+      return;
+    }
 
     try {
       const response = await api.post(`${window.baseDomain}api/timeblocks/`, block);
