@@ -11,7 +11,7 @@ const Colors = forwardRef((props, ref) => {
 
   const defaultAppearanceData = {
     backgroundType: 'solid',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#000',
     gradientStartColor: '#FFFFFF',
     gradientEndColor: '#000000',
     animationType: 'none',
