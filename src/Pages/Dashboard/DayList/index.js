@@ -33,9 +33,10 @@ const LOCAL_STORAGE_KEY = 'reservationsListVisibleFields';
 const FIELD_CONFIG = [
   { key: 'aantalGasten', label: '#', alwaysVisible: true },
   { key: 'tijdstip', label: 'Uur', alwaysVisible: true },
+  { key: 'zitplaats', label: 'Zitplaats', alwaysVisible: false },
   { key: 'fullName', label: 'Naam', defaultVisible: true },
   { key: 'email', label: 'Email', defaultVisible: true },
-  { key: 'phone', label: 'Telefoon', defaultVisible: true },
+  { key: 'phone', label: 'Telefoon', defaultVisible: false },
   { key: 'menu', label: 'Menu', defaultVisible: false },
 ];
 

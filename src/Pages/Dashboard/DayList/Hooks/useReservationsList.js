@@ -29,6 +29,7 @@ const useReservationsList = () => {
             email: reservation.email,
             phone: reservation.phone,
             menu: reservation.menu,
+            zitplaats: reservation.zitplaats,
             extra: reservation.extraInfo && reservation.extraInfo.trim() !== '' ? reservation.extraInfo : null,
             createdAt: reservation.createdAt,
           };
