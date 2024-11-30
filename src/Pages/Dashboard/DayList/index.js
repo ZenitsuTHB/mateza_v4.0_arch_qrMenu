@@ -57,7 +57,7 @@ const ReservationsList = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [isReadyToPrint, setIsReadyToPrint] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false); // New state for tracking print status
-  
+
   // Use the new hook to fetch reservations data
   const { reservationsData, loading, error } = useReservationsList();
 
@@ -150,6 +150,7 @@ const ReservationsList = () => {
         window.print();
         setItemsPerPage(11); // Reset items per page
         setIsReadyToPrint(false); // Reset the print state
+        setIsPrinting(false); // Reset the printing state
       }
     }
   }, [isReadyToPrint, loading, reservationsData]);
@@ -286,16 +287,30 @@ const ReservationsList = () => {
 
               {currentReservations.length > 0 ? (
                 currentReservations.map((reservation) => (
-                  <ReservationRow
-                    key={reservation.id}
-                    reservation={reservation}
-                    visibleFields={visibleFields}
-                    isMobile={isMobile}
-                    isTooltipOpen={openTooltipId === reservation.id}
-                    onTooltipToggle={handleTooltipToggle}
-                    onTooltipClose={handleTooltipClose}
-                    triggerNotification={triggerNotification}
-                  />
+                  <React.Fragment key={reservation.id}>
+                    <ReservationRow
+                      reservation={reservation}
+                      visibleFields={visibleFields}
+                      isMobile={isMobile}
+                      isTooltipOpen={openTooltipId === reservation.id}
+                      onTooltipToggle={handleTooltipToggle}
+                      onTooltipClose={handleTooltipClose}
+                      triggerNotification={triggerNotification}
+                    />
+
+                    {/* Extra Info Row - Visible Only When Printing */}
+                    {/* Extra Info Row - Visible Only When Printing */}
+                    {reservation.extra && reservation.extra !== '' && (
+                      <div className="extra-info-row">
+                        <div className="extra-info-content">
+                          <strong>Extra info:</strong> {reservation.extra}
+                        </div>
+                      </div>
+                    )}
+
+                    
+                  </React.Fragment>
+                  
                 ))
               ) : (
                 <div

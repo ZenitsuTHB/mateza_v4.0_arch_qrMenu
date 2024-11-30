@@ -170,7 +170,7 @@ const ReservationRow = ({
           {visibleFields.map((fieldKey) => (
             <div key={fieldKey}>{renderField(reservation, fieldKey)}</div>
           ))}
-          {/* Always render the Tooltip as the last column */}
+
           <Tooltip
             reservationId={reservation.id}
             extraInfo={reservation.extra}

@@ -142,4 +142,52 @@
 	cursor: pointer;
 	border-radius: 5px;
   }
+  /* src/Components/ReservationsList/css/reservationList.css */
+
+/* Existing styles ... */
+
+/* New styles for the extra info row */
+.reservations-page .extra-info-row {
+	display: none; /* Hide by default */
+  }
+  
+  .reservations-page .extra-info-row .extra-info-content {
+	border-bottom: 1px solid #ccc;
+  }
+  
+  @media print {
+	/* Show the extra info row only when printing */
+	.reservations-page .extra-info-row {
+	  display: block;
+	  grid-column: 1 / -1; /* Span all columns */
+	  
+	}
+  
+	/* Optional: Adjust grid layout for printing */
+	.reservations-page .reservations-grid {
+	  grid-template-columns: 60px 70px repeat(auto-fill, minmax(100px, 1fr));
+	}
+  
+	/* Hide elements that are not needed in print */
+	.reservations-page .filter-button,
+	.reservations-page .print-button,
+	.reservations-page .pagination,
+	.reservations-page .header-cell.sortable {
+	  display: none;
+	}
+  
+	/* Ensure the extra info content is styled appropriately */
+	.reservations-page .extra-info-content {
+	  font-size: 0.9em;
+	  color: #333;
+	}
+
+	.reservations-page .reservation-row > div {
+		border-bottom: 1px solid #ccc;
+	  }
+
+	  .reservations-page .new-user-icon {
+		display: none;
+	  }
+  }
   

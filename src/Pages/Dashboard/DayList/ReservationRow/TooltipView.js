@@ -211,11 +211,6 @@ const Tooltip = ({
         </div>
       </div>
 
-      {/* Extra Info Text for Printing */}
-      <div className="extra-info-print">
-        {extraInfo}
-      </div>
-
       <ConfirmationModal
         isVisible={isDeleteModalVisible}
         title="Reservatie Verwijderen"
