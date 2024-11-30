@@ -189,5 +189,9 @@
 	  .reservations-page .new-user-icon {
 		display: none;
 	  }
+
+	  .reservations-page .users-icon-gray {
+		display: none;
+	  }
   }
   

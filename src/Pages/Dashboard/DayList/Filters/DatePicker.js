@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import { FaCalendarAlt, FaPrint, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaCalendarAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   formatDateDutch,
