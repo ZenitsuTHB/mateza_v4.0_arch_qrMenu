@@ -13,6 +13,7 @@ const FormField = ({
   placeholder,
   halfWidth,
   options = [], // New prop for select options
+  selectPlaceholder = 'Selecteer een menu', // New prop for select placeholder
 }) => {
   return (
     <div className={`form-group ${halfWidth ? 'half-width' : ''}`}>
@@ -27,7 +28,7 @@ const FormField = ({
             aria-label={label}
             className={`form-control ${error ? 'input-error' : ''}`}
           >
-            <option value="">Selecteer een menu</option>
+            <option value="">{selectPlaceholder}</option> {/* Dynamic placeholder */}
             {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}

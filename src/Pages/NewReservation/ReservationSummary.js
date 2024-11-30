@@ -7,7 +7,7 @@ const ReservationSummary = ({ formData, onNewReservation }) => {
   return (
     <div className="reservation-summary">
       <ul className="reservation-details">
-      <li><strong>Reservatie Gegevens:</strong></li> 
+        <li><strong>Reservatie Gegevens:</strong></li> 
         <li><strong>Aantal gasten:</strong> {formData.guests}</li> {/* Uses guests */}
         <li><strong>Datum:</strong> {formData.date}</li>
         <li><strong>Tijd:</strong> {formData.time}</li>
@@ -17,6 +17,9 @@ const ReservationSummary = ({ formData, onNewReservation }) => {
         <li><strong>Telefoonnummer:</strong> {formData.phone}</li>
         {formData.menu && (
           <li><strong>Menu:</strong> {formData.menu}</li>
+        )}
+        {formData.personeel && (
+          <li><strong>Aangemaakt door:</strong> {formData.personeel}</li>
         )}
         {formData.extraInfo && (
           <li><strong>Extra informatie:</strong> {formData.extraInfo}</li>

@@ -15,6 +15,8 @@ import {
   FaChair,
   FaFileDownload,
   FaUtensilSpoon,
+  FaPeopleCarry,
+  FaUserFriends,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -43,6 +45,7 @@ import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
 import TableEditor from '../Pages/Tables/TableEditor/index.js';
 import TableList from '../Pages/Tables/TableList/index.js';
 import Menu from '../Pages/Menu/index.js';
+import Personeel from '../Pages/Personeel/index.js';
 
 
 const routesConfig = [
@@ -64,6 +67,15 @@ const routesConfig = [
     isMenu: true,
     isMobile: true,
     isTab: true,
+  },
+  {
+    path: '/day',
+    element: <Personeel title="Personeel" />,
+    label: 'Team',
+    icon: FaUserFriends,
+    isMenu: true,
+    isMobile: false,
+    isTab: false,
   },
   {
     path: '/day',

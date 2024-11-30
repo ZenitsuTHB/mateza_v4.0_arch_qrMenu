@@ -4,7 +4,7 @@
 	gap: 20px;
   }
 
-  .input-container .form-control {
+  .input-container .form-control { /* New reservation prefix can't be added here*/
 	display: flex;
 		align-items: center;
 		justify-content: space-between;

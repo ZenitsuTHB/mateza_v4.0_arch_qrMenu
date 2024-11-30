@@ -1,3 +1,5 @@
+// src/components/NewReservationAdmin.js
+
 import React, { useState } from 'react';
 import useApi from '../../Hooks/useApi';
 import ReservationSidebar from './ReservationSidebar';
@@ -12,13 +14,13 @@ const NewReservationAdmin = () => {
     guests: '',
     date: '',
     time: '',
-    menu: '', // Add this line
+    menu: '', // Existing
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     extraInfo: '',
-    menu: '',
+    personeel: '', // Add personeel field
   });
 
   const [errors, setErrors] = useState({});
@@ -48,6 +50,12 @@ const NewReservationAdmin = () => {
       errors.email = 'E-mail is ongeldig';
     }
 
+    // Optional: Validate personeel selection if necessary
+    // For example, require selecting personeel
+    // if (!formData.personeel) {
+    //   errors.personeel = 'Selecteer een personeel';
+    // }
+
     return errors;
   };
 
@@ -71,6 +79,7 @@ const NewReservationAdmin = () => {
         phone: formData.phone,
         extraInfo: formData.extraInfo,
         menu: formData.menu,
+        personeel: formData.personeel, // Include personeel in submission
       };
 
       try {
@@ -121,6 +130,7 @@ const NewReservationAdmin = () => {
             phone: '',
             extraInfo: '',
             menu: '',
+            personeel: '', // Reset personeel selection
           });
           setReservationSubmitted(false);
         }}
