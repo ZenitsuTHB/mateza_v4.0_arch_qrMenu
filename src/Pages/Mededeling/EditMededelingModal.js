@@ -168,7 +168,7 @@ const EditMededelingModal = ({
               {errors.daysOfWeek && <p className="mededeling-component__error">{errors.daysOfWeek}</p>}
             </div>
 
-            <button type="submit" className="mededeling-component__submit-button">
+            <button type="submit" className="button-style-3">
               Mededeling Bijwerken
             </button>
           </form>
