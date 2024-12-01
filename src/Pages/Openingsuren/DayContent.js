@@ -107,7 +107,7 @@ const DayContent = ({ dayId, days }) => {
   return (
     <div className="schedule-page">
       {/* Title outside the container with the same class as AccountManage */}
-      <h1 className="schedule-page-title">{day.label}</h1>
+      <h1 className="schedule-page-title">{day.title}</h1>
 
       <NotificationComponent />
 
