@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './css/dayContent.css';
+import MaxCapacityAccordion from './MaxCapacityAccordion';
 
 const DayContent = ({ dayId, days }) => {
   const day = days.find((d) => d.id === dayId);
@@ -15,26 +16,29 @@ const DayContent = ({ dayId, days }) => {
       <div className="day-content scheme-container">
         <div className="time-inputs-container">
           <div className="input-container">
-			<label htmlFor="startTime">
-				Start Tijd
-			</label>
-			<input
-			type="time"
-			id="startTime"
-			name="startTime"
-			/>
-		</div>
-		<div className="input-container">
-			<label htmlFor="endTime">
-				Eind Tijd
-			</label>
-			<input
-			type="time"
-			id="endTime"
-			name="endTime"
-			/>
-		</div>
+            <label htmlFor="startTime">
+              Start Tijd
+            </label>
+            <input
+              type="time"
+              id="startTime"
+              name="startTime"
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="endTime">
+              Eind Tijd
+            </label>
+            <input
+              type="time"
+              id="endTime"
+              name="endTime"
+            />
+          </div>
         </div>
+
+        {/* Insert the MaxCapacityAccordion here */}
+        <MaxCapacityAccordion />
       </div>
     </div>
   );
