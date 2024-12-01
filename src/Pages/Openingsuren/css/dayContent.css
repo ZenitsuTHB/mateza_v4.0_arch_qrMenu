@@ -9,5 +9,6 @@
   .schedule-page .day-content h1 {
 	text-align: center; /* Keep the title centered */
 	width: 100%;
+	margin-bottom: 20px;
   }
   

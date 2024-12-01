@@ -16,6 +16,11 @@
 	padding: 10px 0;
 	overflow: hidden;
 	background-color: transparent;
+	transition: transform 0.3s;
+  }
+  
+  .schedule-page .navigation-item.selected {
+	z-index: 2; /* Ensure selected item is above others */
   }
   
   .schedule-page .navigation-item .icon {
@@ -38,6 +43,7 @@
 	bottom: 20%;
 	width: 1px;
 	background-color: #ccc;
+	z-index: 0;
   }
   
   .schedule-page .navigation-item .selected-day-background {
@@ -57,14 +63,11 @@
   }
   
   .schedule-page .navigation-item:hover {
-	background-color: transparent;
-  }
-  
-  .schedule-page .navigation-item {
-	transition: transform 0.3s;
-  }
-  
-  .schedule-page .navigation-item:hover {
 	transform: scale(1.05);
+  }
+  
+  .schedule-page .navigation-item.selected .icon,
+  .schedule-page .navigation-item.selected .label {
+	color: var(--color-blue);
   }
   

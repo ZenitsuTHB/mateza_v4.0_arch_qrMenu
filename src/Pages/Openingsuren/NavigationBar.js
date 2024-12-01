@@ -33,7 +33,7 @@ const NavigationBar = ({ days, selectedDay, onDayClick }) => {
             return (
               <motion.div
                 key={day.id}
-                className="navigation-item"
+                className={`navigation-item ${isSelected ? 'selected' : ''}`}
                 onClick={() => onDayClick(day.id)}
                 whileHover={{ scale: 1.05 }}
                 animate={{ scale: isSelected ? 1.1 : 1 }}
@@ -48,7 +48,10 @@ const NavigationBar = ({ days, selectedDay, onDayClick }) => {
                 )}
                 <div className="icon">{icons[day.icon]}</div>
                 <div className="label">{day.label}</div>
-                {index < days.length - 1 && <div className="border-right"></div>}
+                {/* Render border-right only if not selected and not the last item */}
+                {!isSelected && index < days.length - 1 && (
+                  <div className="border-right"></div>
+                )}
               </motion.div>
             );
           })}

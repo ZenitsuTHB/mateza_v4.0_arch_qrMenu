@@ -9,6 +9,7 @@ const DayContent = ({ dayId, days }) => {
   return (
     <div className="schedule-page day-content">
       <h1>{day.label}</h1>
+      {/* Future content can be added here */}
     </div>
   );
 };

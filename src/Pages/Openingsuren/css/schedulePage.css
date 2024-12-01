@@ -5,6 +5,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	font-family: Arial, sans-serif;
   }
   
   .schedule-page .navigation-bar {
@@ -24,9 +25,10 @@
 	align-items: flex-start; /* Align content to the left */
   }
   
-  .schedule-page h1 {
-	width: 100%;
+  .schedule-page .day-content h1 {
 	text-align: center; /* Keep the title centered */
-	margin-bottom: 20px;
+	width: 100%;
+	font-size: 24px;
+	color: #333;
   }
   
