@@ -1,76 +1,83 @@
-.shifts-accordion {
+.schedule-page-component .shifts-accordion {
 	margin-top: 20px;
 	width: 100%;
   }
   
-  .item-header {
+  .schedule-page-component .item-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	cursor: pointer;
 	padding: 10px;
-	background-color: #f5f5f5; /* Adjust as needed */
+	background-color: #f5f5f5;
 	border-radius: 5px;
 	transition: background-color 0.3s ease;
   }
   
-  .item-header:hover {
+  .schedule-page-component .item-header:hover {
 	background-color: #e0e0e0;
   }
   
-  .item-label {
+  .schedule-page-component .item-label {
 	display: flex;
 	align-items: center;
 	font-size: 16px;
   }
   
-  .item-label.disabled {
+  .schedule-page-component .item-label.disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
   }
   
-  .arrow-icon {
+  .schedule-page-component .arrow-icon {
 	margin-right: 8px;
 	transition: transform 0.3s ease;
   }
   
-  .arrow-icon.expanded {
+  .schedule-page-component .arrow-icon.expanded {
 	transform: rotate(180deg);
   }
   
-  .item-content {
+  .schedule-page-component .item-content {
 	margin-top: 10px;
 	padding: 10px;
-	background-color: #ffffff; /* White background */
+	background-color: #ffffff;
 	border: 1px solid #ddd;
 	border-radius: 5px;
   }
   
-  .shift-row {
+  .schedule-page-component .shift-row {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 10px;
+	gap: 10px; /* Adds space between time and name fields */
   }
   
-  .shift-row input[type="text"] {
-	flex: 2;
-	margin-right: 10px;
-	padding: 8px;
+  .schedule-page-component .shift-row input {
+	width: 50%; /* Equal width for time and name inputs */
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
   }
   
-  .shift-row input[type="time"] {
-	flex: 1;
-	padding: 8px;
+  .schedule-page-component .shift-row input:focus {
+	border-color: var(--color-blue); /* Use your variable for blue color */
+	outline: none;
   }
   
-  .add-shift {
+  .schedule-page-component .add-shift {
 	text-align: center;
 	cursor: pointer;
 	text-decoration: underline;
-	margin-top: 10px;
+	color: var(--color-blue);
+	padding: 10px;
+	font-size: 1rem;
   }
   
-  .add-shift:hover {
-	color: #007bff; /* Adjust hover color as needed */
+  .schedule-page-component .add-shift:hover {
+	opacity: 0.8;
   }
   

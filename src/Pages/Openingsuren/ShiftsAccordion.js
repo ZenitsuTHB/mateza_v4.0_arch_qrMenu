@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import ToggleSwitch from './ToggleSwitch'; // Adjust the path based on your project structure
-import './css/shiftsAccordion.css'; // Create this CSS file for styling
+import './css/shiftsAccordion.css';
 
 const ShiftsAccordion = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [enabled, setEnabled] = useState(false);
-  const [shifts, setShifts] = useState([]);
+  const [shifts, setShifts] = useState([{ name: '', time: '' }]); // Always start with one shift
+
+  useEffect(() => {
+    if (!enabled) {
+      setIsExpanded(false);
+    }
+  }, [enabled]);
 
   const handleHeaderClick = () => {
     if (enabled) {
@@ -54,15 +60,16 @@ const ShiftsAccordion = () => {
           {shifts.map((shift, index) => (
             <div key={index} className="shift-row">
               <input
+                type="time"
+                value={shift.time}
+                onChange={(e) => handleShiftChange(index, 'time', e.target.value)}
+                placeholder="Tijd"
+              />
+              <input
                 type="text"
                 placeholder="Shift Naam"
                 value={shift.name}
                 onChange={(e) => handleShiftChange(index, 'name', e.target.value)}
-              />
-              <input
-                type="time"
-                value={shift.time}
-                onChange={(e) => handleShiftChange(index, 'time', e.target.value)}
               />
             </div>
           ))}
