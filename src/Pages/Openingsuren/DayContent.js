@@ -1,8 +1,7 @@
-// src/pages/SchedulePage/DayContent.js
-
 import React from 'react';
 import './css/dayContent.css';
 import MaxCapacityAccordion from './MaxCapacityAccordion';
+import ShiftsAccordion from './ShiftsAccordion'; // Import the ShiftsAccordion
 
 const DayContent = ({ dayId, days }) => {
   const day = days.find((d) => d.id === dayId);
@@ -16,29 +15,20 @@ const DayContent = ({ dayId, days }) => {
       <div className="day-content scheme-container">
         <div className="time-inputs-container">
           <div className="input-container">
-            <label htmlFor="startTime">
-              Start Tijd
-            </label>
-            <input
-              type="time"
-              id="startTime"
-              name="startTime"
-            />
+            <label htmlFor="startTime">Start Tijd</label>
+            <input type="time" id="startTime" name="startTime" />
           </div>
           <div className="input-container">
-            <label htmlFor="endTime">
-              Eind Tijd
-            </label>
-            <input
-              type="time"
-              id="endTime"
-              name="endTime"
-            />
+            <label htmlFor="endTime">Eind Tijd</label>
+            <input type="time" id="endTime" name="endTime" />
           </div>
         </div>
 
-        {/* Insert the MaxCapacityAccordion here */}
+        {/* Existing MaxCapacityAccordion */}
         <MaxCapacityAccordion />
+
+        {/* New ShiftsAccordion */}
+        <ShiftsAccordion />
       </div>
     </div>
   );

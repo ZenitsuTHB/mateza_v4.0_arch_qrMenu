@@ -1,0 +1,76 @@
+.shifts-accordion {
+	margin-top: 20px;
+	width: 100%;
+  }
+  
+  .item-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	padding: 10px;
+	background-color: #f5f5f5; /* Adjust as needed */
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .item-header:hover {
+	background-color: #e0e0e0;
+  }
+  
+  .item-label {
+	display: flex;
+	align-items: center;
+	font-size: 16px;
+  }
+  
+  .item-label.disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+  }
+  
+  .arrow-icon {
+	margin-right: 8px;
+	transition: transform 0.3s ease;
+  }
+  
+  .arrow-icon.expanded {
+	transform: rotate(180deg);
+  }
+  
+  .item-content {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #ffffff; /* White background */
+	border: 1px solid #ddd;
+	border-radius: 5px;
+  }
+  
+  .shift-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+  }
+  
+  .shift-row input[type="text"] {
+	flex: 2;
+	margin-right: 10px;
+	padding: 8px;
+  }
+  
+  .shift-row input[type="time"] {
+	flex: 1;
+	padding: 8px;
+  }
+  
+  .add-shift {
+	text-align: center;
+	cursor: pointer;
+	text-decoration: underline;
+	margin-top: 10px;
+  }
+  
+  .add-shift:hover {
+	color: #007bff; /* Adjust hover color as needed */
+  }
+  
