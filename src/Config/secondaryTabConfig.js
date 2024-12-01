@@ -48,6 +48,21 @@ export const overviewSecondaryTopBar = [
 	  path: '/scheme/calendar',
 	},
   ];
+
+  export const openinghoursSecondaryTopBar = [
+	{
+	  label: 'Ontbijt',
+	  path: '/openinghours',
+	},
+	{
+	  label: 'Lunch',
+	  path: '/openinghours/lunch',
+	},
+	{
+		label: 'Diner',
+		path: '/openinghours/dinner',
+	},
+  ];
   
   export const designSecondaryTopBar = [
 	{

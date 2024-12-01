@@ -7,7 +7,7 @@ import DayContent from './DayContent';
 import { withHeader } from '../../Components/Structural/Header';
 import useWindowWidth from './Hooks/useWindowWidth'; // Import the custom hook
 
-const SchedulePage = () => {
+const SchedulePage = ({ mealType }) => { // Accept mealType as a prop
   const [selectedDay, setSelectedDay] = useState('Monday');
   const windowWidth = useWindowWidth(); // Use the custom hook
 
@@ -31,7 +31,7 @@ const SchedulePage = () => {
     <div className="schedule-page-component">
       <div className="schedule-page">
         <NavigationBar days={days} selectedDay={selectedDay} onDayClick={handleDayClick} />
-        {selectedDay && <DayContent dayId={selectedDay} days={days} />}
+        {selectedDay && <DayContent dayId={selectedDay} days={days} mealType={mealType} />} {/* Pass mealType here */}
       </div>
     </div>
   );

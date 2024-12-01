@@ -35,6 +35,7 @@ import {
   calendarSecondaryTopBar,
   accountSecondaryTopBar,
   settingsSecondaryTopBar,
+  openinghoursSecondaryTopBar,
   giftCardSecondaryTopBar,
   tableSecondaryTopBar
 } from './secondaryTabConfig.js';
@@ -49,6 +50,7 @@ import TableList from '../Pages/Tables/TableList/index.js';
 import Menu from '../Pages/Menu/index.js';
 import Personeel from '../Pages/Personeel/index.js';
 import Mededeling from '../Pages/Mededeling/index.js';
+import Openingsuren from '../Pages/Openingsuren/index.js';
 
 
 const routesConfig = [
@@ -69,7 +71,7 @@ const routesConfig = [
     icon: FaUtensilSpoon,
     isMenu: true,
     isMobile: true,
-    isTab: true,
+    isTab: false,
   },
   
   {
@@ -103,14 +105,34 @@ const routesConfig = [
     secondaryTopBar: calendarSecondaryTopBar,
   },
   {
-    path: '/schedule',
-    element: <SchedulePage title="Openingsuren"/>,
+    path: '/openinghours',
+    element: <Openingsuren title="Openingsuren" mealType="ontbijt"/>, // Use RootComponent here
     label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: true,
-    isMobile: true,
-    isTab: true,
-    sidebarHidden: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: openinghoursSecondaryTopBar,
+  },
+  {
+    path: '/openinghours/lunch',
+    element: <Openingsuren title="Openingsuren" mealType="lunch"/>, // Use RootComponent here
+    label: 'Openingsuren',
+    icon: FaCalendarAlt,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: openinghoursSecondaryTopBar,
+  },
+  {
+    path: '/openinghours/dinner',
+    element: <Openingsuren title="Openingsuren" mealType="diner"/>, // Use RootComponent here
+    label: 'Openingsuren',
+    icon: FaCalendarAlt,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: openinghoursSecondaryTopBar,
   },
   {
     path: '/scheme/calendar',

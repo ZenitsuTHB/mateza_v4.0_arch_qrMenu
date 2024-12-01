@@ -7,7 +7,7 @@ import ShiftsAccordion from './ShiftsAccordion';
 import useApi from '../../Hooks/useApi'; // Adjust the path based on your project structure
 import useNotification from '../../Components/Notification';
 
-const DayContent = ({ dayId, days }) => {
+const DayContent = ({ dayId, days, mealType }) => {
   const api = useApi();
   const day = days.find((d) => d.id === dayId);
 
@@ -30,7 +30,7 @@ const DayContent = ({ dayId, days }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(window.baseDomain + 'api/openingsuren');
+        const response = await api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType);
         // Assume the response has a structure similar to:
         // { schemeSettings: { Monday: { ... }, ... } }
 
@@ -67,7 +67,7 @@ const DayContent = ({ dayId, days }) => {
     };
 
     fetchData();
-  }, [api, day.id]);
+  }, [api, day.id, mealType]);
 
   const handleSave = async () => {
     // Prepare data to send
@@ -88,10 +88,10 @@ const DayContent = ({ dayId, days }) => {
     try {
       if (dataExists) {
         // Do PUT request
-        await api.put(window.baseDomain + 'api/openingsuren', updatedData);
+        await api.put(window.baseDomain + 'api/openingsuren' + '-' + mealType, updatedData);
       } else {
         // Do POST request
-        await api.post(window.baseDomain + 'api/openingsuren', updatedData);
+        await api.post(window.baseDomain + 'api/openingsuren'+ '-' + mealType, updatedData);
       }
       triggerNotification('Data succesvol opgeslagen', 'success');
     } catch (error) {
