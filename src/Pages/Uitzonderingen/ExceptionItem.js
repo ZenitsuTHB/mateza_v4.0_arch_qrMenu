@@ -41,12 +41,30 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
     setIsDeleteModalVisible(false);
   };
 
+  // Determine the color class based on the type
+  const typeColorClass = () => {
+    switch (exception.type) {
+      case 'Opening':
+        return 'tag-green';
+      case 'Uitzondering':
+        return 'tag-blue';
+      case 'Sluitingsdag':
+        return 'tag-orange';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="exceptions-page__exception-item">
       <div className="exceptions-page__exception-content">
-        <h4>{exception.title}</h4>
-        <p>Type: {exception.type}</p>
-        {exception.type !== 'Sluitingsdag' && <p>Toepassing: {exception.toepassing}</p>}
+        <h4>
+          {exception.title}{' '}
+          <span className={`exceptions-page__tag ${typeColorClass()}`}>{exception.type}</span>
+        </h4>
+        {exception.type !== 'Sluitingsdag' && exception.toepassing && (
+          <p>Toepassing: {exception.toepassing}</p>
+        )}
         <p>
           Geldig van {exception.startDate} tot {exception.endDate}
         </p>

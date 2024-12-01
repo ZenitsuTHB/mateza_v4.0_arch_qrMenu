@@ -183,4 +183,32 @@
   }
   
   /* Additional styles as needed */
+
+  /* src/Pages/Uitzonderingen/css/exceptions.css */
+
+/* ... (existing styles) */
+
+.exceptions-page__tag {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: white;
+	font-size: 0.8rem;
+	margin-left: 10px;
+  }
+  
+  .tag-green {
+	background-color: green;
+  }
+  
+  .tag-blue {
+	background-color: blue;
+  }
+  
+  .tag-orange {
+	background-color: orange;
+  }
+  
+  /* ... (rest of the existing styles) */
+  
   
