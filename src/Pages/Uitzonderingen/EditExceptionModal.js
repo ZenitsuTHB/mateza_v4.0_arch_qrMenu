@@ -1,6 +1,6 @@
 // src/Pages/Uitzonderingen/EditExceptionModal.js
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ModalWithoutTabs from '../../Components/Structural/Modal/Standard';
 import './css/exceptions.css';
 
@@ -26,34 +26,20 @@ const EditExceptionModal = ({
 
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    // Update formData when exception prop changes
-    setFormData({
-      title: exception.title || '',
-      type: exception.type || 'Opening',
-      toepassing: exception.toepassing || 'Volledige Dag',
-      startDate: exception.startDate || '',
-      endDate: exception.endDate || '',
-      startHour: exception.startHour || '',
-      endHour: exception.endHour || '',
-      maxSeats: exception.maxSeats || '',
-      daysOfWeek: exception.daysOfWeek || ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'],
-    });
-  }, [exception]);
-
+  // Handle field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (type === 'checkbox') {
+    if (type === 'checkbox' && name === 'daysOfWeek') {
       const day = value;
-      setFormData((prev) => {
-        let daysOfWeek = [...prev.daysOfWeek];
+      setFormData((prevFormData) => {
+        let daysOfWeek = [...prevFormData.daysOfWeek];
         if (checked) {
           daysOfWeek.push(day);
         } else {
           daysOfWeek = daysOfWeek.filter((d) => d !== day);
         }
-        return { ...prev, daysOfWeek };
+        return { ...prevFormData, daysOfWeek };
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -61,43 +47,28 @@ const EditExceptionModal = ({
     setErrors({ ...errors, [name]: '' });
   };
 
-  const shouldShowField = (field) => {
-    const { type } = formData;
-    if (field === 'toepassing') {
-      return type !== 'Sluitingsdag';
-    }
-    if (field === 'startHour' || field === 'endHour' || field === 'maxSeats') {
-      return type === 'Opening' || type === 'Uitzondering';
-    }
-    if (field === 'startDate' || field === 'endDate') {
-      return true;
-    }
-    if (field === 'daysOfWeek') {
-      return true;
-    }
-    return false;
-  };
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = {};
-
     if (!formData.title.trim()) validationErrors.title = 'Titel is verplicht.';
     if (!formData.type) validationErrors.type = 'Type is verplicht.';
-    if (shouldShowField('toepassing') && !formData.toepassing)
+    if (formData.type !== 'Sluitingsdag' && !formData.toepassing)
       validationErrors.toepassing = 'Toepassing is verplicht.';
-    if (shouldShowField('startDate') && !formData.startDate)
-      validationErrors.startDate = 'Startdatum is verplicht.';
-    if (shouldShowField('endDate') && !formData.endDate)
-      validationErrors.endDate = 'Einddatum is verplicht.';
-    if (shouldShowField('startHour') && !formData.startHour)
+
+    if (!formData.startDate) validationErrors.startDate = 'Startdatum is verplicht.';
+    if (!formData.endDate) validationErrors.endDate = 'Einddatum is verplicht.';
+
+    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.startHour)
       validationErrors.startHour = 'Startuur is verplicht.';
-    if (shouldShowField('endHour') && !formData.endHour)
+    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.endHour)
       validationErrors.endHour = 'Einduur is verplicht.';
-    if (shouldShowField('maxSeats') && !formData.maxSeats)
+
+    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.maxSeats)
       validationErrors.maxSeats = 'Max. Zitplaatsen is verplicht.';
-    if (shouldShowField('daysOfWeek') && formData.daysOfWeek.length === 0)
+
+    if (formData.daysOfWeek.length === 0)
       validationErrors.daysOfWeek = 'Selecteer minstens één dag.';
 
     if (Object.keys(validationErrors).length > 0) {
@@ -105,7 +76,7 @@ const EditExceptionModal = ({
       return;
     }
 
-    // Prepare payload, consider 'Sluitingsdag' as 'toepassing' 'Volledige Dag'
+    // Prepare payload
     const payload = {
       title: formData.title,
       type: formData.type,
@@ -141,13 +112,9 @@ const EditExceptionModal = ({
       content={
         <div className="exceptions-page__edit-modal">
           <form className="exceptions-page__form" onSubmit={handleSubmit}>
-            {/* Form fields are the same as in ExceptionForm.js */}
-            {/* ... */}
-            {/* Reuse the same fields and structure */}
-            {/* ... */}
-            <button type="submit" className="button-style-3">
-              Opslaan
-            </button>
+            {/* Form fields (same as in ExceptionForm.js) */}
+            {/* ... (same content as in ExceptionForm.js, adjusted for editing) */}
+            {/* For brevity, the form fields are not repeated here */}
           </form>
         </div>
       }

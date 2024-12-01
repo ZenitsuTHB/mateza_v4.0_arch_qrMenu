@@ -46,16 +46,18 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
       <div className="exceptions-page__exception-content">
         <h4>{exception.title}</h4>
         <p>Type: {exception.type}</p>
-        {exception.toepassing && <p>Toepassing: {exception.toepassing}</p>}
+        {exception.type !== 'Sluitingsdag' && <p>Toepassing: {exception.toepassing}</p>}
         <p>
           Geldig van {exception.startDate} tot {exception.endDate}
         </p>
-        {(exception.startHour || exception.endHour) && (
-          <p>
-            Van {exception.startHour} tot {exception.endHour}
-          </p>
+        {(exception.type === 'Opening' || exception.type === 'Uitzondering') && (
+          <>
+            <p>
+              Van {exception.startHour} tot {exception.endHour}
+            </p>
+            <p>Max. Zitplaatsen: {exception.maxSeats}</p>
+          </>
         )}
-        {exception.maxSeats && <p>Max. Zitplaatsen: {exception.maxSeats}</p>}
         <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
       </div>
       <div className="exceptions-page__exception-actions">

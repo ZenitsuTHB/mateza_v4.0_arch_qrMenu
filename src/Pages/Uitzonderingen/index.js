@@ -6,9 +6,9 @@ import './css/exceptions.css';
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
 import ExceptionForm from './ExceptionForm';
-import ExceptionList from './ExceptionItem.js';
+import ExceptionList from './ExceptionList';
 
-const ExceptionsPage = () => {
+const Uitzonderingen = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
 
@@ -70,4 +70,4 @@ const ExceptionsPage = () => {
   );
 };
 
-export default withHeader(ExceptionsPage);
+export default withHeader(Uitzonderingen);

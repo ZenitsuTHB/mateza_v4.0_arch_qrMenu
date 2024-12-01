@@ -38,7 +38,8 @@
 	font-weight: 500;
   }
   
-  .exceptions-page__input {
+  .exceptions-page__input,
+  .exceptions-page__select {
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -180,4 +181,6 @@
 	  right: 15px;
 	}
   }
+  
+  /* Additional styles as needed */
   
