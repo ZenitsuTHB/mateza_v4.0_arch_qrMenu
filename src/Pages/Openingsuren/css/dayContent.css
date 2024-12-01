@@ -1,0 +1,13 @@
+/* src/pages/SchedulePage/css/dayContent.css */
+
+.schedule-page .day-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start; /* Align content to the left */
+  }
+  
+  .schedule-page .day-content h1 {
+	text-align: center; /* Keep the title centered */
+	width: 100%;
+  }
+  

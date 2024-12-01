@@ -27,6 +27,7 @@ import GiftCard from '../Pages/Giftcard/GiftCard'
 import GiftcardEditor from '../Pages/Giftcard/GiftcardEditor'
 import TablePlan from '../Pages/Tables/TablePlan/index.js'
 import SettingsTabsWithHeader from '../Pages/FormEditor/index.js'
+import SchedulePage from '../Pages/Openingsuren/index.js'; 
 
 
 import {
@@ -100,6 +101,16 @@ const routesConfig = [
     isTab: true,
     sidebarHidden: false,
     secondaryTopBar: calendarSecondaryTopBar,
+  },
+  {
+    path: '/schedule',
+    element: <SchedulePage/>,
+    label: 'Openingsuren',
+    icon: FaCalendarAlt,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
+    sidebarHidden: false,
   },
   {
     path: '/scheme/calendar',

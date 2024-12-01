@@ -1,0 +1,21 @@
+/* src/pages/SchedulePage/css/accordion.css */
+
+.schedule-page .accordion {
+	width: 100%;
+	margin-bottom: 20px;
+  }
+  
+  .schedule-page .accordion-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	padding: 10px;
+	background-color: #f5f5f5;
+  }
+  
+  .schedule-page .accordion-content {
+	padding: 10px;
+	border-top: 1px solid #ccc;
+  }
+  

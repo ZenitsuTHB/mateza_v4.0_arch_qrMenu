@@ -1,0 +1,32 @@
+/* src/pages/SchedulePage/css/schedulePage.css */
+
+.schedule-page {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .schedule-page .navigation-bar {
+	width: 80%;
+	background-color: transparent;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	margin-top: 20px;
+  }
+  
+  .schedule-page .day-content {
+	width: 80%;
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start; /* Align content to the left */
+  }
+  
+  .schedule-page h1 {
+	width: 100%;
+	text-align: center; /* Keep the title centered */
+	margin-bottom: 20px;
+  }
+  
