@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import './css/exceptions.css';
-import { FaEllipsisV, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
+import { FaEllipsisV, FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../Components/Structural/Modal/Delete';
-import EditExceptionModal from './EditExceptionModal';
 
 const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions }) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -82,10 +81,6 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
         <FaEllipsisV onClick={handleEllipsisClick} className="exceptions-page__ellipsis-icon" />
         {isTooltipOpen && (
           <div className="tooltip-container">
-            <div className="tooltip-item" onClick={handleEditClick}>
-              <FaPencilAlt className="tooltip-icon" />
-              Bewerken
-            </div>
             <div className="tooltip-separator"></div>
             <div className="tooltip-item delete-item" onClick={handleDeleteClick}>
               <FaTrashAlt className="tooltip-icon" />
@@ -105,16 +100,6 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
           cancelText="Annuleren"
           confirmButtonClass="discard-button red"
           cancelButtonClass="cancel-button"
-        />
-      )}
-      {isEditModalVisible && (
-        <EditExceptionModal
-          isVisible={isEditModalVisible}
-          exception={exception}
-          api={api}
-          triggerNotification={triggerNotification}
-          refreshExceptions={refreshExceptions}
-          onClose={() => setIsEditModalVisible(false)}
         />
       )}
     </div>

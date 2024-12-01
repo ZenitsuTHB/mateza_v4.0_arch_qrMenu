@@ -221,9 +221,36 @@
 	margin-bottom: 20px;
   }
   
-  .exceptions-page__calendar h3 {
-	text-align: center;
+  .exceptions-page__calendar-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
 	margin-bottom: 10px;
+  }
+  
+  .exceptions-page__calendar-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 1.5rem;
+	cursor: pointer;
+  }
+  
+  .exceptions-page__calendar-nav:hover {
+	color: var(--color-blue);
+  }
+  
+  .exceptions-page__calendar-nav:first-child {
+	left: 10px;
+  }
+  
+  .exceptions-page__calendar-nav:last-child {
+	right: 10px;
+  }
+  
+  .exceptions-page__calendar h3 {
+	margin: 0;
   }
   
   .exceptions-page__calendar-table {
@@ -241,14 +268,15 @@
   .exceptions-page__calendar-cell {
 	height: 50px;
   }
-  
-  
+
   .exceptions-page__calendar-day {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 40px;
-	border-radius: 4px;
+	width: 40px;
+	margin: auto;
+	border-radius: 5px;
 	cursor: pointer;
   }
   
@@ -271,6 +299,7 @@
 	color: white;
   }
   
+  /* Legend Styles */
   .exceptions-page__calendar-legend {
 	display: flex;
 	justify-content: center;
@@ -284,6 +313,7 @@
 	height: 15px;
 	margin-right: 5px;
 	vertical-align: middle;
+	border-radius: 50%;
   }
   
   .exceptions-page__calendar-legend .tag-opening {
@@ -299,10 +329,15 @@
   }
   
   /* Tabs Styles */
+  .exceptions-page__tabs-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+  }
+  
   .exceptions-page__tabs {
 	display: flex;
 	gap: 10px;
-	margin-bottom: 20px;
   }
   
   .exceptions-page__tab {
@@ -326,6 +361,22 @@
 	margin-bottom: 20px;
   }
   
+  /* ExceptionItem Styles */
+  .exceptions-page__exception-actions {
+	display: flex;
+	align-items: center;
+  }
+  
+  .exceptions-page__delete-icon {
+	cursor: pointer;
+	font-size: 18px;
+	color: red;
+  }
+  
+  .exceptions-page__delete-icon:hover {
+	color: darkred;
+  }
+  
   @media (max-width: 768px) {
 	.exceptions-page__calendar-table th,
 	.exceptions-page__calendar-table td {
@@ -334,13 +385,25 @@
   
 	.exceptions-page__calendar-day {
 	  height: 30px;
+	  width: 30px;
 	}
   
 	.exceptions-page__tab {
 	  padding: 8px 10px;
 	  font-size: 0.9rem;
 	}
+  
+	.exceptions-page__calendar-nav {
+	  font-size: 1.2rem;
+	}
   }
   
   /* ... (rest of the existing styles) */
   
+  .exceptions-page__tabs-container {
+	margin-bottom: 30px;
+  }
+
+  .exceptions-page__list h3 {
+	margin-bottom: 10px;
+  }

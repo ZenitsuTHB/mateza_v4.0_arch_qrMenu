@@ -7,10 +7,9 @@ import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
 import ExceptionForm from './ExceptionForm';
 import ExceptionList from './ExceptionList';
-import ExceptionCalendar from './ExceptionCalendar';  // Import the new component
-import ExceptionTabs from './ExceptionTabs';          // Import the new component
-import ExceptionItem from './ExceptionItem';          // Import the new component
-
+import ExceptionCalendar from './ExceptionCalendar';
+import ExceptionTabs from './ExceptionTabs';
+import ExceptionItem from './ExceptionItem.js';
 const Uitzonderingen = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
@@ -20,6 +19,7 @@ const Uitzonderingen = () => {
   const [filteredExceptions, setFilteredExceptions] = useState([]);
   const [activeTab, setActiveTab] = useState('current');
   const [selectedDateExceptions, setSelectedDateExceptions] = useState([]);
+  const [calendarMonthOffset, setCalendarMonthOffset] = useState(0); // For navigating months
 
   // Fetch the exceptions at component mount
   useEffect(() => {
@@ -108,6 +108,12 @@ const Uitzonderingen = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedDateExceptions([]);
+    setCalendarMonthOffset(tab === 'current' ? 0 : tab === 'next' ? 1 : 0);
+  };
+
+  // Handle month navigation in calendar
+  const handleMonthChange = (offset) => {
+    setCalendarMonthOffset((prevOffset) => prevOffset + offset);
   };
 
   return (
@@ -120,12 +126,16 @@ const Uitzonderingen = () => {
           refreshExceptions={refreshExceptions}
         />
         <div className="exceptions-page__content">
+
           <ExceptionCalendar
             exceptions={exceptions}
             onDateClick={handleDateClick}
-            activeTab={activeTab}
+            monthOffset={calendarMonthOffset}
+            onMonthChange={handleMonthChange}
           />
-          <ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
+		
+			<ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
+
           {selectedDateExceptions.length > 0 && (
             <div className="exceptions-page__selected-date-exceptions">
               <h3>Uitzonderingen op geselecteerde datum:</h3>

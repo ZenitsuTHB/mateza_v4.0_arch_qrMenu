@@ -14,24 +14,26 @@ const ExceptionTabs = ({ activeTab, onTabChange }) => {
   const nextMonth = months[(today.getMonth() + 1) % 12];
 
   return (
-    <div className="exceptions-page__tabs">
-      <div
-        className={`exceptions-page__tab ${activeTab === 'current' ? 'active' : ''}`}
-        onClick={() => onTabChange('current')}
-      >
-        {currentMonth}
-      </div>
-      <div
-        className={`exceptions-page__tab ${activeTab === 'next' ? 'active' : ''}`}
-        onClick={() => onTabChange('next')}
-      >
-        {nextMonth}
-      </div>
-      <div
-        className={`exceptions-page__tab ${activeTab === 'all' ? 'active' : ''}`}
-        onClick={() => onTabChange('all')}
-      >
-        Alle Maanden
+    <div className="exceptions-page__tabs-container">
+      <div className="exceptions-page__tabs">
+        <div
+          className={`exceptions-page__tab ${activeTab === 'current' ? 'active' : ''}`}
+          onClick={() => onTabChange('current')}
+        >
+          {currentMonth}
+        </div>
+        <div
+          className={`exceptions-page__tab ${activeTab === 'next' ? 'active' : ''}`}
+          onClick={() => onTabChange('next')}
+        >
+          {nextMonth}
+        </div>
+        <div
+          className={`exceptions-page__tab ${activeTab === 'all' ? 'active' : ''}`}
+          onClick={() => onTabChange('all')}
+        >
+          Alle Maanden
+        </div>
       </div>
     </div>
   );

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import './css/exceptions.css';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const ExceptionCalendar = ({ exceptions, onDateClick, activeTab }) => {
+const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange }) => {
   const [calendarData, setCalendarData] = useState([]);
 
   const daysOfWeekShort = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
@@ -14,30 +15,32 @@ const ExceptionCalendar = ({ exceptions, onDateClick, activeTab }) => {
 
   useEffect(() => {
     generateCalendar();
-  }, [exceptions, activeTab]);
+  }, [exceptions, monthOffset]);
 
   const generateCalendar = () => {
     const today = new Date();
-    let monthToDisplay = today.getMonth();
+    let monthToDisplay = today.getMonth() + monthOffset;
     let yearToDisplay = today.getFullYear();
 
-    if (activeTab === 'next') {
-      monthToDisplay = (monthToDisplay + 1) % 12;
-      if (monthToDisplay === 0) yearToDisplay += 1;
-    } else if (activeTab === 'all') {
-      // For 'all', display the current month
+    // Adjust for year overflow
+    if (monthToDisplay > 11) {
+      monthToDisplay = monthToDisplay % 12;
+      yearToDisplay += Math.floor((today.getMonth() + monthOffset) / 12);
+    } else if (monthToDisplay < 0) {
+      monthToDisplay = 12 + (monthToDisplay % 12);
+      yearToDisplay -= Math.ceil(Math.abs(monthOffset) / 12);
     }
 
     const firstDayOfMonth = new Date(yearToDisplay, monthToDisplay, 1);
     const daysInMonth = new Date(yearToDisplay, monthToDisplay + 1, 0).getDate();
 
-    const startDay = firstDayOfMonth.getDay() || 7; // Adjust for Sunday as 7
+    const startDay = (firstDayOfMonth.getDay() + 6) % 7; // Adjust so Monday is 0
     const weeks = [];
-    let dayCounter = 1 - (startDay - 1);
+    let dayCounter = 1 - startDay;
 
     for (let week = 0; week < 6; week++) {
       const days = [];
-      for (let day = 1; day <= 7; day++) {
+      for (let day = 0; day < 7; day++) {
         if (dayCounter > 0 && dayCounter <= daysInMonth) {
           const dateObj = new Date(yearToDisplay, monthToDisplay, dayCounter);
           const dateStr = dateObj.toISOString().split('T')[0];
@@ -74,7 +77,7 @@ const ExceptionCalendar = ({ exceptions, onDateClick, activeTab }) => {
             </td>
           );
         } else {
-          days.push(<td key={`${week}-${day}`} className="exceptions-page__calendar-cell empty"></td>);
+          days.push(<td key={`${week}-${day}`} className="exceptions-page__calendar-cell"></td>);
         }
         dayCounter++;
       }
@@ -90,9 +93,19 @@ const ExceptionCalendar = ({ exceptions, onDateClick, activeTab }) => {
 
   return (
     <div className="exceptions-page__calendar">
-      <h3>
-        {calendarData.month} {calendarData.year}
-      </h3>
+      <div className="exceptions-page__calendar-header">
+        <FaChevronLeft
+          className="exceptions-page__calendar-nav"
+          onClick={() => onMonthChange(-1)}
+        />
+        <h3>
+          {calendarData.month} {calendarData.year}
+        </h3>
+        <FaChevronRight
+          className="exceptions-page__calendar-nav"
+          onClick={() => onMonthChange(1)}
+        />
+      </div>
       <table className="exceptions-page__calendar-table">
         <thead>
           <tr>
