@@ -5,10 +5,13 @@ import './css/dayContent.css';
 import MaxCapacityAccordion from './MaxCapacityAccordion';
 import ShiftsAccordion from './ShiftsAccordion';
 import useApi from '../../Hooks/useApi'; // Adjust the path based on your project structure
+import useNotification from '../../Components/Notification';
 
 const DayContent = ({ dayId, days }) => {
   const api = useApi();
   const day = days.find((d) => d.id === dayId);
+
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   const [dayData, setDayData] = useState({
     startTime: '',
@@ -20,40 +23,57 @@ const DayContent = ({ dayId, days }) => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [dataExists, setDataExists] = useState(false);
 
   useEffect(() => {
     // Fetch data from api/openingsuren
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await api.get('api/openingsuren');
+        const response = await api.get(window.baseDomain + 'api/openingsuren');
         // Assume the response has a structure similar to:
         // { schemeSettings: { Monday: { ... }, ... } }
 
-        const dataForDay = response.schemeSettings[day.label] || {};
-        setDayData({
-          startTime: dataForDay.startTime || '',
-          endTime: dataForDay.endTime || '',
-          maxCapacityEnabled: dataForDay.maxCapacityEnabled || false,
-          maxCapacity: dataForDay.maxCapacity || '',
-          shiftsEnabled: dataForDay.shiftsEnabled || false,
-          shifts: dataForDay.shifts || [],
-        });
+        if (response && response.schemeSettings && response.schemeSettings[day.id]) {
+          const dataForDay = response.schemeSettings[day.id];
+          setDayData({
+            startTime: dataForDay.startTime || '',
+            endTime: dataForDay.endTime || '',
+            maxCapacityEnabled: dataForDay.maxCapacityEnabled || false,
+            maxCapacity: dataForDay.maxCapacity || '',
+            shiftsEnabled: dataForDay.shiftsEnabled || false,
+            shifts: dataForDay.shifts || [],
+          });
+          setDataExists(true);
+        } else {
+          // No data exists
+          setDayData({
+            startTime: '',
+            endTime: '',
+            maxCapacityEnabled: false,
+            maxCapacity: '',
+            shiftsEnabled: false,
+            shifts: [],
+          });
+          setDataExists(false);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
         // Handle error, perhaps set default values or show an error message
+        setDataExists(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [api, day.label]);
+  }, [api, day.id]);
 
   const handleSave = async () => {
     // Prepare data to send
     const updatedData = {
       schemeSettings: {
-        [day.label]: {
+        [day.id]: {
           enabled: true, // Assuming the day is enabled
           startTime: dayData.startTime,
           endTime: dayData.endTime,
@@ -66,11 +86,17 @@ const DayContent = ({ dayId, days }) => {
     };
 
     try {
-      await api.put(window.baseDomain + 'api/openingsuren-ontbijt', updatedData);
-      alert('Data succesvol opgeslagen');
+      if (dataExists) {
+        // Do PUT request
+        await api.put(window.baseDomain + 'api/openingsuren', updatedData);
+      } else {
+        // Do POST request
+        await api.post(window.baseDomain + 'api/openingsuren', updatedData);
+      }
+      triggerNotification('Data succesvol opgeslagen', 'success');
     } catch (error) {
       console.error('Error saving data:', error);
-      alert('Fout bij het opslaan van data');
+      triggerNotification('Fout bij het opslaan van data', 'error');
     }
   };
 
@@ -82,6 +108,8 @@ const DayContent = ({ dayId, days }) => {
     <div className="schedule-page">
       {/* Title outside the container with the same class as AccountManage */}
       <h1 className="schedule-page-title">{day.label}</h1>
+
+      <NotificationComponent />
 
       {/* White container for input fields */}
       <div className="day-content scheme-container">
