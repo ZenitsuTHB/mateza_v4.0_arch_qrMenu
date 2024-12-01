@@ -1,0 +1,414 @@
+File Contents:
+
+--- DayContent.js ---
+// src/pages/SchedulePage/DayContent.js
+
+import React from 'react';
+import './css/dayContent.css';
+
+const DayContent = ({ dayId, days }) => {
+  const day = days.find((d) => d.id === dayId);
+
+  return (
+    <div className="schedule-page">
+      {/* Title outside the container with the same class as AccountManage */}
+      <h1 className="schedule-page-title">{day.label}</h1>
+      
+      {/* White container for input fields */}
+      <div className="day-content scheme-container">
+        <div className="time-inputs-container">
+          <div className="input-container">
+			<label htmlFor="startTime">
+				Start Tijd
+			</label>
+			<input
+			type="time"
+			id="startTime"
+			name="startTime"
+			/>
+		</div>
+		<div className="input-container">
+			<label htmlFor="endTime">
+				Eind Tijd
+			</label>
+			<input
+			type="time"
+			id="endTime"
+			name="endTime"
+			/>
+		</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DayContent;
+
+
+--- NavigationBar.js ---
+// src/pages/SchedulePage/NavigationBar.js
+
+import React from 'react';
+import './css/navigationBar.css';
+import {
+  FaSun,
+  FaCloud,
+  FaUmbrella,
+  FaBolt,
+  FaRainbow,
+  FaSnowflake,
+  FaMoon,
+} from 'react-icons/fa';
+import { motion, LayoutGroup } from 'framer-motion';
+
+const NavigationBar = ({ days, selectedDay, onDayClick }) => {
+  const icons = {
+    FaSun: <FaSun />,
+    FaCloud: <FaCloud />,
+    FaUmbrella: <FaUmbrella />,
+    FaBolt: <FaBolt />,
+    FaRainbow: <FaRainbow />,
+    FaSnowflake: <FaSnowflake />,
+    FaMoon: <FaMoon />,
+  };
+
+  return (
+    <div className="schedule-page navigation-bar">
+      <div className="navigation-container">
+        <LayoutGroup>
+          {days.map((day, index) => {
+            const isSelected = selectedDay === day.id;
+            return (
+              <motion.div
+                key={day.id}
+                className={`navigation-item ${isSelected ? 'selected' : ''}`}
+                onClick={() => onDayClick(day.id)}
+                whileHover={{ scale: 1.05 }}
+                animate={{ scale: isSelected ? 1.1 : 1 }}
+                layout
+              >
+                {isSelected && (
+                  <motion.div
+                    className="selected-day-background"
+                    layoutId="selected-day-background"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <div className="icon">{icons[day.icon]}</div>
+                <div className="label">{day.label}</div>
+                {/* Render border-right only if not selected and not the last item */}
+                {!isSelected && index < days.length - 1 && (
+                  <div className="border-right"></div>
+                )}
+              </motion.div>
+            );
+          })}
+        </LayoutGroup>
+      </div>
+    </div>
+  );
+};
+
+export default NavigationBar;
+
+
+--- css/dayContent.css ---
+/* src/pages/SchedulePage/css/dayContent.css */
+
+/* Ensure the scheme-container has a white background and consistent padding */
+.scheme-container {
+	max-width: 600px;
+	padding: 20px;
+	border-radius: 12px;
+	margin: 0 auto;
+	width: 100%;
+	background-color: #fff; /* Added white background */
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow */
+  }
+  
+  /* Styling for the labels */
+  .scheme-container label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: #333;
+  }
+  
+  /* Styling for the input containers */
+  .input-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+  }
+  
+  /* Styling for the input fields */
+  .input-container input {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+  }
+  
+  .input-container input:focus {
+	border-color: #0056b3; /* Matches your primary color */
+	outline: none;
+  }
+  
+  /* Optional: Add spacing between the two input fields */
+  .time-inputs-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-top: 20px;
+  }
+  
+
+  .schedule-page-title {
+	margin-top: 40px;
+  }
+
+  /* src/pages/SchedulePage/css/dayContent.css */
+
+/* Ensure the scheme-container has a white background and consistent padding */
+.scheme-container {
+	max-width: 600px;
+	padding: 20px;
+	border-radius: 12px;
+	margin: 0 auto;
+	background-color: #fff; /* Added white background */
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow */
+  }
+  
+  .account-manage-title {
+	margin-top: 30px;
+	margin-bottom: 30px;
+  }
+
+  .time-inputs-container {
+	width: 100%;
+  }
+
+  /* Styling for the labels */
+  .scheme-container label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 500;
+	color: #333;
+  }
+  
+  /* Styling for the input containers */
+  .input-container {
+	display: flex;
+	flex-direction: column;
+  }
+
+
+  
+
+--- css/navigationBar.css ---
+/* src/pages/SchedulePage/css/navigationBar.css */
+
+.schedule-page .navigation-container {
+	display: flex;
+	width: 100%;
+	position: relative;
+  }
+  
+  .schedule-page .navigation-item {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+	position: relative;
+	padding: 10px 0;
+	overflow: hidden;
+	background-color: transparent;
+	transition: transform 0.3s;
+  }
+  
+  .schedule-page .navigation-item.selected {
+	z-index: 2; /* Ensure selected item is above others */
+  }
+  
+  .schedule-page .navigation-item .icon {
+	font-size: 24px;
+	color: #000;
+	z-index: 1;
+  }
+  
+  .schedule-page .navigation-item .label {
+	font-size: 13px;
+	margin-top: 5px;
+	color: #000;
+	z-index: 1;
+  }
+  
+  .schedule-page .navigation-item .border-right {
+	position: absolute;
+	right: 0;
+	top: 20%;
+	bottom: 20%;
+	width: 1px;
+	background-color: #ccc;
+	z-index: 0;
+  }
+  
+  .schedule-page .navigation-item .selected-day-background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	z-index: 0;
+	border-radius: 8px;
+  }
+  
+  .schedule-page .navigation-item:hover .icon,
+  .schedule-page .navigation-item:hover .label {
+	color: var(--color-blue);
+  }
+  
+  .schedule-page .navigation-item:hover {
+	transform: scale(1.05);
+  }
+  
+  .schedule-page .navigation-item.selected .icon,
+  .schedule-page .navigation-item.selected .label {
+	color: var(--color-blue);
+  }
+  
+
+--- css/schedulePage.css ---
+/* src/pages/SchedulePage/css/schedulePage.css */
+
+.schedule-page {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: Arial, sans-serif;
+  }
+  
+  .schedule-page .navigation-bar {
+	width: 80%;
+	background-color: transparent;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	margin-top: 20px;
+  }
+  
+  .schedule-page .day-content {
+	width: 80%;
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start; /* Align content to the left */
+  }
+  
+  .schedule-page .day-content h1 {
+	text-align: center; /* Keep the title centered */
+	width: 100%;
+	font-size: 24px;
+	color: #333;
+  }
+  
+
+--- index.js ---
+// src/pages/SchedulePage/index.js
+
+import React, { useState } from 'react';
+import './css/schedulePage.css';
+import NavigationBar from './NavigationBar';
+import DayContent from './DayContent';
+import { withHeader } from '../../Components/Structural/Header';
+
+const SchedulePage = () => {
+  const [selectedDay, setSelectedDay] = useState('Monday');
+
+  const days = [
+    { id: 'Monday', label: 'Maandag', icon: 'FaSun' },
+    { id: 'Tuesday', label: 'Dinsdag', icon: 'FaCloud' },
+    { id: 'Wednesday', label: 'Woensdag', icon: 'FaUmbrella' },
+    { id: 'Thursday', label: 'Donderdag', icon: 'FaBolt' },
+    { id: 'Friday', label: 'Vrijdag', icon: 'FaRainbow' },
+    { id: 'Saturday', label: 'Zaterdag', icon: 'FaSnowflake' },
+    { id: 'Sunday', label: 'Zondag', icon: 'FaMoon' },
+  ];
+
+  const handleDayClick = (dayId) => {
+    setSelectedDay(dayId);
+  };
+
+  return (
+    <div className="schedule-page">
+      <NavigationBar days={days} selectedDay={selectedDay} onDayClick={handleDayClick} />
+      {selectedDay && <DayContent dayId={selectedDay} days={days} />}
+    </div>
+  );
+};
+
+export default withHeader(SchedulePage);
+
+
+
+Directory Structure for "/Users/thibaultvandesompele/Desktop/Mateza 4.0/Client/Dashboard/dashboard-general/src/Pages/Openingsuren":
+
+├── DayContent.js
+├── NavigationBar.js
+├── css
+│   ├── dayContent.css
+│   ├── navigationBar.css
+│   └── schedulePage.css
+└── index.js
+
+
+List of Files:
+DayContent.js
+NavigationBar.js
+css/dayContent.css
+css/navigationBar.css
+css/schedulePage.css
+index.js
+
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+**Examples:**
+
+*Encapsulation in index.js:*
+```jsx
+<div className="profile-component">
+    <h2 className="account-manage-title">Admin Reservaties</h2>
+    <div className="account-manage-container">
+        {/* ... */}
+        onClose={() => setIsModalOpen(false)}
+    </div>
+</div>
+```
+
+*Prefixed CSS Classes:*
+```css
+.component-name-component .account-manage-container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background-color: white;
+}
+
+.component-name-component .modal-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+``` Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.

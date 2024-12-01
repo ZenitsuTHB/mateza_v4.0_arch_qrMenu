@@ -1,34 +1,31 @@
-/* src/pages/SchedulePage/css/schedulePage.css */
-
-.schedule-page {
+.schedule-page-component .schedule-page {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	font-family: Arial, sans-serif;
-  }
+}
   
-  .schedule-page .navigation-bar {
+.schedule-page-component .schedule-page .navigation-bar {
 	width: 80%;
 	background-color: transparent;
 	display: flex;
 	justify-content: center;
 	position: relative;
 	margin-top: 20px;
-  }
+}
   
-  .schedule-page .day-content {
+.schedule-page-component .schedule-page .day-content {
 	width: 80%;
 	margin-top: 40px;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start; /* Align content to the left */
-  }
+	align-items: flex-start;
+}
   
-  .schedule-page .day-content h1 {
-	text-align: center; /* Keep the title centered */
+.schedule-page-component .schedule-page .day-content h1 {
+	text-align: center;
 	width: 100%;
 	font-size: 24px;
 	color: #333;
-  }
-  
+}

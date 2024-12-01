@@ -1,92 +1,76 @@
-/* src/pages/SchedulePage/css/dayContent.css */
-
-/* Ensure the scheme-container has a white background and consistent padding */
-.scheme-container {
+.schedule-page-component .scheme-container {
 	max-width: 600px;
 	padding: 20px;
 	border-radius: 12px;
 	margin: 0 auto;
 	width: 100%;
-	background-color: #fff; /* Added white background */
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow */
-  }
-  
-  /* Styling for the labels */
-  .scheme-container label {
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-page-component .scheme-container label {
 	display: block;
 	margin-bottom: 5px;
 	font-weight: 500;
 	color: #333;
-  }
-  
-  /* Styling for the input containers */
-  .input-container {
+}
+
+.schedule-page-component .input-container {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-  }
-  
-  /* Styling for the input fields */
-  .input-container input {
+}
+
+.schedule-page-component .input-container input {
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 1rem;
 	transition: border-color 0.3s ease;
-  }
-  
-  .input-container input:focus {
-	border-color: #0056b3; /* Matches your primary color */
+}
+
+.schedule-page-component .input-container input:focus {
+	border-color: #0056b3;
 	outline: none;
-  }
-  
-  /* Optional: Add spacing between the two input fields */
-  .time-inputs-container {
+}
+
+.schedule-page-component .time-inputs-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
 	margin-top: 20px;
-  }
-  
+}
 
-  .schedule-page-title {
+.schedule-page-component .schedule-page-title {
 	margin-top: 40px;
-  }
+}
 
-  /* src/pages/SchedulePage/css/dayContent.css */
-
-/* Ensure the scheme-container has a white background and consistent padding */
-.scheme-container {
+.schedule-page-component .scheme-container {
 	max-width: 600px;
 	padding: 20px;
 	border-radius: 12px;
 	margin: 0 auto;
-	background-color: #fff; /* Added white background */
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow */
-  }
-  
-  .account-manage-title {
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-page-component .account-manage-title {
 	margin-top: 30px;
 	margin-bottom: 30px;
-  }
+}
 
-  .time-inputs-container {
+.schedule-page-component .time-inputs-container {
 	width: 100%;
-  }
+}
 
-  /* Styling for the labels */
-  .scheme-container label {
+.schedule-page-component .scheme-container label {
 	display: block;
 	margin-bottom: 5px;
 	font-weight: 500;
 	color: #333;
-  }
-  
-  /* Styling for the input containers */
-  .input-container {
+}
+
+.schedule-page-component .input-container {
 	display: flex;
 	flex-direction: column;
-  }
-
-
-  
+}
