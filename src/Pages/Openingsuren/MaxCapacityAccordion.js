@@ -1,14 +1,21 @@
-// src/components/MaxCapacityAccordion.js
+// MaxCapacityAccordion.js
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FaChevronDown } from 'react-icons/fa';
-import ToggleSwitch from './ToggleSwitch'; // Adjust the path based on your project structure
-import './css/maxCapacityAccordion.css'; // Create this CSS file for styling
+import ToggleSwitch from './ToggleSwitch';
+import './css/maxCapacityAccordion.css';
 
-const MaxCapacityAccordion = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [enabled, setEnabled] = useState(false);
-  const [maxCapacity, setMaxCapacity] = useState('');
+const MaxCapacityAccordion = ({
+  enabled,
+  setEnabled,
+  maxCapacity,
+  setMaxCapacity,
+}) => {
+  const [isExpanded, setIsExpanded] = React.useState(enabled);
+
+  React.useEffect(() => {
+    setIsExpanded(enabled);
+  }, [enabled]);
 
   const handleHeaderClick = () => {
     if (enabled) {
@@ -19,9 +26,9 @@ const MaxCapacityAccordion = () => {
   const handleToggle = () => {
     setEnabled(!enabled);
     if (!enabled) {
-      setIsExpanded(true); // Optionally expand when enabled
+      setIsExpanded(true);
     } else {
-      setIsExpanded(false); // Collapse when disabled
+      setIsExpanded(false);
     }
   };
 
@@ -38,10 +45,7 @@ const MaxCapacityAccordion = () => {
           <span>Max Capaciteit</span>
         </div>
         <div className="toggle-middle" onClick={(e) => e.stopPropagation()}>
-          <ToggleSwitch
-            checked={enabled}
-            onChange={handleToggle}
-          />
+          <ToggleSwitch checked={enabled} onChange={handleToggle} />
         </div>
       </div>
       {isExpanded && enabled && (

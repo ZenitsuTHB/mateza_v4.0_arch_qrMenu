@@ -1,21 +1,16 @@
+// ShiftsAccordion.js
+
 import React, { useState, useEffect } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
-import ToggleSwitch from './ToggleSwitch'; // Adjust the path based on your project structure
+import ToggleSwitch from './ToggleSwitch';
 import './css/shiftsAccordion.css';
 
-const ShiftsAccordion = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [enabled, setEnabled] = useState(false);
-  const [shifts, setShifts] = useState([{ name: '', time: '' }]); // Always start with one shift
+const ShiftsAccordion = ({ enabled, setEnabled, shifts, setShifts }) => {
+  const [isExpanded, setIsExpanded] = useState(enabled);
 
   useEffect(() => {
-    if (!enabled) {
-      setIsExpanded(false);
-    } else if (shifts.length === 0) {
-      // Ensure at least one shift is present when enabled
-      setShifts([{ name: '', time: '' }]);
-    }
-  }, [enabled, shifts.length]);
+    setIsExpanded(enabled);
+  }, [enabled]);
 
   const handleHeaderClick = () => {
     if (enabled) {
@@ -26,9 +21,9 @@ const ShiftsAccordion = () => {
   const handleToggle = () => {
     setEnabled(!enabled);
     if (!enabled) {
-      setIsExpanded(true); // Optionally expand when enabled
+      setIsExpanded(true);
     } else {
-      setIsExpanded(false); // Collapse when disabled
+      setIsExpanded(false);
     }
   };
 
@@ -52,7 +47,7 @@ const ShiftsAccordion = () => {
           {enabled && (
             <FaChevronDown className={`arrow-icon ${isExpanded ? 'expanded' : ''}`} />
           )}
-          <span>Shifts ({shifts.length})</span> {/* Display number of shifts */}
+          <span>Shifts ({shifts.length})</span>
         </div>
         <div className="toggle-middle" onClick={(e) => e.stopPropagation()}>
           <ToggleSwitch checked={enabled} onChange={handleToggle} />
