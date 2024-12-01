@@ -46,7 +46,7 @@ const MaxCapacityAccordion = () => {
       </div>
       {isExpanded && enabled && (
         <div className="item-content">
-          <label htmlFor="maxCapacity">Max capaciteit</label>
+          <label htmlFor="maxCapacity">Max Capaciteit</label>
           <input
             type="number"
             id="maxCapacity"
