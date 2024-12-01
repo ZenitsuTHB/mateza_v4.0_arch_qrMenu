@@ -20,7 +20,7 @@ const OTPLogin = () => {
           otp: otp,
         };
 
-        const response = await api.post(window.baseDomain + 'api/auth/login/one-time-password', data);
+        const response = await api.post(window.baseDomain + 'api/auth/login/one-time-password/' + username, data);
 
 		console.log(response);
 		
