@@ -33,7 +33,7 @@ const SchedulePage = ({ mealType }) => {
 
   const refreshData = () => {
     // Refetch data after saving
-    api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType)
+    api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType, { noCache: true })
       .then(response => setScheduleData(response.schemeSettings || {}))
       .catch(error => console.error('Error refreshing data:', error));
   };

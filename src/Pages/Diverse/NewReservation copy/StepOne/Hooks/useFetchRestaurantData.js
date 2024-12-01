@@ -12,7 +12,7 @@ const useFetchRestaurantData = () => {
     const fetchRestaurantData = async () => {
       try {
         const endpoint = `${window.baseDomain}api/auth-restaurant/`;
-        const response = await api.get(endpoint);
+        const response = await api.get(endpoint, { noCache: true });
 
 
         if (response) {
