@@ -1,12 +1,12 @@
-// App.js
 import React from 'react';
 import MainApp from './Components/MainApp';
 import Login from './Pages/Login';
 import WelcomeAnimation from './Components/Animations/index.js';
 import './Styles/all-styles.js';
+import OTPLogin from './Pages/Login/OTPLogin/index.js';
 
-window.baseDomain = "https://squid-app-aychi.ondigitalocean.app/";
-window.baseDomain = "http://localhost:5000/";
+window.baseDomain = 'https://squid-app-aychi.ondigitalocean.app/';
+window.baseDomain = 'http://localhost:5000/';
 
 window.viewMode = 'full-screen';
 window.isProduction = false;
@@ -18,15 +18,20 @@ const App = () => {
 
   console.log('Current document cookies:', document.cookie);
 
+  // Check if there's an OTP in the URL search params
+  const urlParams = new URLSearchParams(window.location.search);
+  const otp = urlParams.get('otp');
+
+  // If there's an OTP, render the OTPLogin component
+  if (otp) {
+    return <OTPLogin otp={otp} />;
+  }
+
   if (!loginDone) {
     return <Login />;
-  } 
-  else if (shouldShowAnimation)
-  {
+  } else if (shouldShowAnimation) {
     return <WelcomeAnimation />;
-  }
-  else 
-  {
+  } else {
     return <MainApp />;
   }
 };
