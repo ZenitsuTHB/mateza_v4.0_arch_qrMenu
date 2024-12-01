@@ -70,15 +70,7 @@ const routesConfig = [
     isMobile: true,
     isTab: true,
   },
-  {
-    path: '/team',
-    element: <Personeel title="Personeel" />,
-    label: 'Personeel',
-    icon: FaUserFriends,
-    isMenu: true,
-    isMobile: false,
-    isTab: false,
-  },
+  
   {
     path: '/notification',
     element: <Mededeling title="Mededeling" />,
@@ -138,6 +130,17 @@ const routesConfig = [
     isMenu: false,
     isMobile: false,
     isTab: false,
+    secondaryTopBar: accountSecondaryTopBar,
+  },
+  {
+    path: '/team',
+    element: <Personeel title="Personeel" />,
+    label: 'Personeel',
+    icon: FaUserFriends,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: accountSecondaryTopBar,
   },
   {
     path: '/account/language',

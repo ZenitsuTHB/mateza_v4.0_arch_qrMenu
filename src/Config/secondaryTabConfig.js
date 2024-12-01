@@ -66,20 +66,15 @@ export const overviewSecondaryTopBar = [
 
   export const accountSecondaryTopBar = [
 	{
-	  label: 'Profiel',
+	  label: 'Account',
 	  path: '/account/',
 	},
-	/*
 	{
-	  label: 'Taal',
-	  path: '/account/language',
+	  label: 'Personeel',
+	  path: '/team',
 	},
-	
-	{
-	  label: 'Beveilinging',
-	  path: '/account/security',
-	},*/
   ];
+  
   
   export const giftCardSecondaryTopBar = [
 	{
