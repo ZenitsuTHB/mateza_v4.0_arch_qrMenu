@@ -927,3 +927,50 @@ MenuItem.js
 MenuList.js
 css/menu.css
 index.js
+
+Look at the style of this menu component. I want to create another component that uses an identical layout, but uses different names for the classes and has different content.
+
+This component should be called Uitzonderingen.
+
+In the Uitzondering form, we see selection boxes for the following:
+- Title (String)
+- Type (selection box with options Opening, Sluiting, Sluitingsdag, Uitzondering)
+- Toepassing (selection box with options Volledige Dag, Ontbijt, Lunch, Diner)
+
+When selected Sluiting show the following:
+- Start Datum (Date)
+- Einde Datum (Date)
+
+When selected Opening show the following:
+- Start Datum (Date)
+- Einde Datum (Date)
+- Start Uur (Time)
+- Eind Uur (Time)
+- Max. Zitplaatsen (Number)
+
+When selected Uitzondering show the following:
+- Start Datum (Date)
+- Einde Datum (Date)
+- Start Uur (Time)
+- Eind Uur (Time)
+- Max. Zitplaatsen (Number)
+
+When Sluitingsdag is selected as Type skip the Toepassing and consider it as if the Toepassing Volledige Dag was selected in the data submission, show the same fields as in Sluiting. We show these fields:
+- Start Datum (Date)
+- Einde Datum (Date)
+
+Show at the end the dagen van de week for Opening, Sluiting, Sluitingsdag and Uitzondering and select all dagen van de week by default.
+
+At the end of the form we have the Opslaan button.
+
+The data is shown in UitzonderingenList with as title the title.
+
+Make sure that we consider that the data is different for the different toepassingen.
+
+Use the endpoint api/uitzonderingen and handle the adding, deleting and changing of data exactly the same way as in Menu but instead with other data.
+
+Use english names to store the data as in menu like startDate, startHour, daysOfWeek...
+
+Print the code in full. Maintain the same layout as in menu but give the classes unique names that fit the Uitzonderingen.
+
+Print the code in full. Be complete. Use the same layout. Prefix all styling classes with .exceptions-page .other-classes. and have .exceptions-page as the parent class in index.js. 

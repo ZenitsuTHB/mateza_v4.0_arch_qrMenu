@@ -18,6 +18,7 @@ import {
   FaPeopleCarry,
   FaUserFriends,
   FaBell,
+  FaLock,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -51,6 +52,7 @@ import Menu from '../Pages/Menu/index.js';
 import Personeel from '../Pages/Personeel/index.js';
 import Mededeling from '../Pages/Mededeling/index.js';
 import Openingsuren from '../Pages/Openingsuren/index.js';
+import Uitzonderingen from '../Pages/Uitzonderingen/index.js';
 
 
 const routesConfig = [
@@ -65,10 +67,19 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
-    path: '/menu-app',
+    path: '/menu',
     element: <Menu title="Menu Beheer"/>, // Use RootComponent here
     label: 'Menu Beheer',
     icon: FaUtensilSpoon,
+    isMenu: true,
+    isMobile: true,
+    isTab: false,
+  },
+  {
+    path: '/exceptions',
+    element: <Uitzonderingen title="Uitzonderingen Beheer"/>, // Use RootComponent here
+    label: 'Uitzonderingen Beheer',
+    icon: FaLock,
     isMenu: true,
     isMobile: true,
     isTab: false,
@@ -109,7 +120,7 @@ const routesConfig = [
     element: <Openingsuren title="Openingsuren" mealType="ontbijt"/>, // Use RootComponent here
     label: 'Openingsuren',
     icon: FaCalendarAlt,
-    isMenu: false,
+    isMenu: true,
     isMobile: false,
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
