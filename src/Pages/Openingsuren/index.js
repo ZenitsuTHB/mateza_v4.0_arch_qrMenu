@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './css/schedulePage.css';
 import NavigationBar from './NavigationBar';
 import DayContent from './DayContent';
+import { withHeader } from '../../Components/Structural/Header';
 
 const SchedulePage = () => {
   const [selectedDay, setSelectedDay] = useState('Monday');
@@ -30,4 +31,4 @@ const SchedulePage = () => {
   );
 };
 
-export default SchedulePage;
+export default withHeader(SchedulePage);

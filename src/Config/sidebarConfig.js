@@ -104,7 +104,7 @@ const routesConfig = [
   },
   {
     path: '/schedule',
-    element: <SchedulePage/>,
+    element: <SchedulePage title="Openingsuren"/>,
     label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: true,
