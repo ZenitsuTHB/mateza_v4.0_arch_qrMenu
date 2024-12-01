@@ -1,17 +1,44 @@
 // src/pages/SchedulePage/index.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/schedulePage.css';
 import NavigationBar from './NavigationBar';
 import DayContent from './DayContent';
 import { withHeader } from '../../Components/Structural/Header';
-import useWindowWidth from './Hooks/useWindowWidth'; // Import the custom hook
+import useWindowWidth from './Hooks/useWindowWidth';
+import useApi from '../../Hooks/useApi';
 
-const SchedulePage = ({ mealType }) => { // Accept mealType as a prop
+const SchedulePage = ({ mealType }) => {
   const [selectedDay, setSelectedDay] = useState('Monday');
-  const windowWidth = useWindowWidth(); // Use the custom hook
+  const [scheduleData, setScheduleData] = useState({});
+  const windowWidth = useWindowWidth();
+  const api = useApi();
 
-  const isMobile = windowWidth < 900; // Determine if the screen is mobile-sized
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType);
+        if (response) {
+          setScheduleData(response.schemeSettings || {});
+        } else {
+          setScheduleData({});
+        }
+      } catch (error) {
+        console.error('Error fetching schedule data:', error);
+        setScheduleData({});
+      }
+    };
+    fetchData();
+  }, [api, mealType]);
+
+  const refreshData = () => {
+    // Refetch data after saving
+    api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType)
+      .then(response => setScheduleData(response.schemeSettings || {}))
+      .catch(error => console.error('Error refreshing data:', error));
+  };
+
+  const isMobile = windowWidth < 900;
 
   const days = [
     { id: 'Monday', title: 'Maandag', label: isMobile ? 'Ma' : 'Maandag', icon: 'FaSun' },
@@ -30,8 +57,21 @@ const SchedulePage = ({ mealType }) => { // Accept mealType as a prop
   return (
     <div className="schedule-page-component">
       <div className="schedule-page">
-        <NavigationBar days={days} selectedDay={selectedDay} onDayClick={handleDayClick} />
-        {selectedDay && <DayContent dayId={selectedDay} days={days} mealType={mealType} />} {/* Pass mealType here */}
+        <NavigationBar
+          days={days}
+          selectedDay={selectedDay}
+          onDayClick={handleDayClick}
+          scheduleData={scheduleData}
+        />
+        {selectedDay && (
+          <DayContent
+            dayId={selectedDay}
+            days={days}
+            mealType={mealType}
+            scheduleData={scheduleData}
+            refreshData={refreshData}
+          />
+        )}
       </div>
     </div>
   );

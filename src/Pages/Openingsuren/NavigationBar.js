@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fa';
 import { motion, LayoutGroup } from 'framer-motion';
 
-const NavigationBar = ({ days, selectedDay, onDayClick }) => {
+const NavigationBar = ({ days, selectedDay, onDayClick, scheduleData }) => {
   const icons = {
     FaSun: <FaSun />,
     FaCloud: <FaCloud />,
@@ -30,6 +30,11 @@ const NavigationBar = ({ days, selectedDay, onDayClick }) => {
         <LayoutGroup>
           {days.map((day, index) => {
             const isSelected = selectedDay === day.id;
+            const dataForDay = scheduleData ? scheduleData[day.id] : null;
+            const hasStartEndTime =
+              dataForDay && dataForDay.startTime && dataForDay.endTime;
+            const opacityStyle = !hasStartEndTime ? { opacity: 0.4 } : {};
+
             return (
               <motion.div
                 key={day.id}
@@ -38,6 +43,7 @@ const NavigationBar = ({ days, selectedDay, onDayClick }) => {
                 whileHover={{ scale: 1.05 }}
                 animate={{ scale: isSelected ? 1.1 : 1 }}
                 layout
+                style={opacityStyle}
               >
                 {isSelected && (
                   <motion.div
@@ -48,7 +54,6 @@ const NavigationBar = ({ days, selectedDay, onDayClick }) => {
                 )}
                 <div className="icon">{icons[day.icon]}</div>
                 <div className="label">{day.label}</div>
-                {/* Render border-right only if not selected and not the last item */}
                 {!isSelected && index < days.length - 1 && (
                   <div className="border-right"></div>
                 )}
