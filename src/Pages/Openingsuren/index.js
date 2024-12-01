@@ -28,6 +28,7 @@ const SchedulePage = () => {
       <div className="schedule-page">
         <NavigationBar days={days} selectedDay={selectedDay} onDayClick={handleDayClick} />
         {selectedDay && <DayContent dayId={selectedDay} days={days} />}
+		
       </div>
     </div>
   );

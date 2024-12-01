@@ -11,8 +11,11 @@ const ShiftsAccordion = () => {
   useEffect(() => {
     if (!enabled) {
       setIsExpanded(false);
+    } else if (shifts.length === 0) {
+      // Ensure at least one shift is present when enabled
+      setShifts([{ name: '', time: '' }]);
     }
-  }, [enabled]);
+  }, [enabled, shifts.length]);
 
   const handleHeaderClick = () => {
     if (enabled) {
@@ -49,7 +52,7 @@ const ShiftsAccordion = () => {
           {enabled && (
             <FaChevronDown className={`arrow-icon ${isExpanded ? 'expanded' : ''}`} />
           )}
-          <span>Shifts</span>
+          <span>Shifts ({shifts.length})</span> {/* Display number of shifts */}
         </div>
         <div className="toggle-middle" onClick={(e) => e.stopPropagation()}>
           <ToggleSwitch checked={enabled} onChange={handleToggle} />

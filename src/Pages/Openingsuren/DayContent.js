@@ -29,6 +29,7 @@ const DayContent = ({ dayId, days }) => {
 
         {/* New ShiftsAccordion */}
         <ShiftsAccordion />
+		<button className='button-style-3'>Opslaan</button>
       </div>
     </div>
   );
