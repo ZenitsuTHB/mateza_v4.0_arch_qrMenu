@@ -109,7 +109,7 @@ const routesConfig = [
     element: <Openingsuren title="Openingsuren" mealType="ontbijt"/>, // Use RootComponent here
     label: 'Openingsuren',
     icon: FaCalendarAlt,
-    isMenu: true,
+    isMenu: false,
     isMobile: false,
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
