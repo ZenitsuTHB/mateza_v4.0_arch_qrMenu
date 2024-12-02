@@ -77,8 +77,8 @@ const routesConfig = [
   },
   {
     path: '/exceptions',
-    element: <Uitzonderingen title="Uitzonderingen Beheer"/>, // Use RootComponent here
-    label: 'Uitzonderingen Beheer',
+    element: <Uitzonderingen title="Uitzonderingen"/>, // Use RootComponent here
+    label: 'Uitzonderingen',
     icon: FaLock,
     isMenu: true,
     isMobile: true,
