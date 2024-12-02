@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
+import './css/exceptions.css';
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
 import ExceptionForm from './ExceptionForm';
@@ -100,7 +101,21 @@ const Uitzonderingen = () => {
     const overlappingExceptions = exceptions.filter((exception) => {
       const startDate = new Date(exception.startDate);
       const endDate = new Date(exception.endDate);
-      return clickedDate >= startDate && clickedDate <= endDate;
+
+      // Check if the exception applies on this day of the week
+      const dayOfWeekIndex = clickedDate.getDay();
+      const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+      const dayName = dayOfWeekNames[dayOfWeekIndex];
+
+      if (exception.type === 'Sluiting' || exception.type === 'Sluitingsdag') {
+        return clickedDate >= startDate && clickedDate <= endDate;
+      } else {
+        return (
+          clickedDate >= startDate &&
+          clickedDate <= endDate &&
+          exception.daysOfWeek.includes(dayName)
+        );
+      }
     });
     setSelectedDateExceptions(overlappingExceptions);
   };

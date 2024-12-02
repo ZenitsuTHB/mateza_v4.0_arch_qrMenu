@@ -64,7 +64,9 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
             <p>Max. Zitplaatsen: {exception.maxSeats}</p>
           </>
         )}
-        <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
+        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && (
+          <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
+        )}
       </div>
       <div className="exceptions-page__exception-actions">
         <FaTrashAlt onClick={handleDeleteClick} className="exceptions-page__delete-icon" />

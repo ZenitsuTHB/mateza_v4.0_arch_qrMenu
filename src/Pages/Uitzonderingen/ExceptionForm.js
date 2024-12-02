@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/components/ExceptionForm.js
+// src/Pages/Uitzonderingen/ExceptionForm.js
 
-import React, { useState } from 'react';
-import './css/exceptionForm.css';
+import React, { useState, useEffect, useRef } from 'react';
+import './css/exceptions.css';
 import { shifts } from './constants';
 
 const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
@@ -19,29 +19,20 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [startHourOptions, setStartHourOptions] = useState([]);
-  const [endHourOptions, setEndHourOptions] = useState([]);
+  const startDateRef = useRef(null);
+  const endDateRef = useRef(null);
 
-  // Function to generate time options
-  const generateTimeOptions = (start, end) => {
-    const options = [];
-    const [startHour, startMinute] = start.split(':').map(Number);
-    const [endHour, endMinute] = end.split(':').map(Number);
-
-    let current = new Date();
-    current.setHours(startHour, startMinute, 0, 0);
-
-    const endTime = new Date();
-    endTime.setHours(endHour, endMinute, 0, 0);
-
-    while (current <= endTime) {
-      const timeString = current.toTimeString().substr(0, 5);
-      options.push(timeString);
-      current.setMinutes(current.getMinutes() + 15);
+  // Focus shift when start date is selected
+  useEffect(() => {
+    if (formData.startDate && !formData.endDate && endDateRef.current) {
+      endDateRef.current.focus();
+      // Animation to guide user
+      endDateRef.current.classList.add('highlight-animation');
+      setTimeout(() => {
+        endDateRef.current.classList.remove('highlight-animation');
+      }, 2000);
     }
-
-    return options;
-  };
+  }, [formData.startDate]);
 
   // Handle field changes
   const handleChange = (e) => {
@@ -58,40 +49,24 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
         }
         return { ...prevFormData, daysOfWeek };
       });
-    } else if (name === 'toepassing') {
-      const toepassing = value;
-      if (shifts[toepassing]) {
-        const options = generateTimeOptions(shifts[toepassing].start, shifts[toepassing].end);
-        setStartHourOptions(options);
-        setEndHourOptions(options);
-        setFormData({
-          ...formData,
-          [name]: value,
-          startHour: '', // Reset startHour and endHour when toepassing changes
-          endHour: '',
-        });
-      } else {
-        setStartHourOptions([]);
-        setEndHourOptions([]);
-        setFormData({
-          ...formData,
-          [name]: value,
-          startHour: '',
-          endHour: '',
-        });
-      }
-      setErrors({ ...errors, [name]: '' });
     } else {
       setFormData({ ...formData, [name]: value });
-      setErrors({ ...errors, [name]: '' });
     }
+    setErrors({ ...errors, [name]: '' });
+  };
 
-    // Shift focus to endDate after selecting startDate
-    if (name === 'startDate') {
-      setTimeout(() => {
-        document.getElementById('endDate')?.focus();
-      }, 100);
-    }
+  // Validation helper functions
+  const isDateInPast = (dateStr) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    // Adjust for CEST timezone if necessary
+    return date < now;
+  };
+
+  const isStartDateAfterEndDate = (startDateStr, endDateStr) => {
+    const startDate = new Date(startDateStr);
+    const endDate = new Date(endDateStr);
+    return startDate > endDate;
   };
 
   // Handle form submission
@@ -104,50 +79,62 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     if (formData.type !== 'Sluitingsdag' && formData.type !== 'Sluitingsdagen' && !formData.toepassing)
       validationErrors.toepassing = 'Toepassing is verplicht.';
 
-    // Date Validations
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set to midnight
+    if (formData.type === 'Sluitingsdag' && !formData.date)
+      validationErrors.date = 'Datum is verplicht.';
+    if (formData.type === 'Sluitingsdagen' && !formData.startDate)
+      validationErrors.startDate = 'Startdatum is verplicht.';
+    if (formData.type === 'Sluitingsdagen' && !formData.endDate)
+      validationErrors.endDate = 'Einddatum is verplicht.';
 
-    let startDateObj, endDateObj, dateObj;
-
-    if (formData.type === 'Sluitingsdag') {
-      if (!formData.date) validationErrors.date = 'Datum is verplicht.';
-      else {
-        dateObj = new Date(formData.date);
-        if (dateObj < today) validationErrors.date = 'Datum kan niet in het verleden liggen.';
-      }
-    } else {
-      if (!formData.startDate) validationErrors.startDate = 'Startdatum is verplicht.';
-      if (!formData.endDate) validationErrors.endDate = 'Einddatum is verplicht.';
-
-      if (formData.startDate) startDateObj = new Date(formData.startDate);
-      if (formData.endDate) endDateObj = new Date(formData.endDate);
-
-      if (startDateObj && startDateObj < today)
-        validationErrors.startDate = 'Startdatum kan niet in het verleden liggen.';
-      if (endDateObj && endDateObj < today)
-        validationErrors.endDate = 'Einddatum kan niet in het verleden liggen.';
-      if (startDateObj && endDateObj && startDateObj > endDateObj)
-        validationErrors.startDate = 'Startdatum kan niet na de einddatum liggen.';
-    }
-
-    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.startHour)
+    if (
+      (formData.type === 'Opening' ||
+        formData.type === 'Uitzondering' ||
+        formData.type === 'Sluiting') &&
+      !formData.startDate
+    )
+      validationErrors.startDate = 'Startdatum is verplicht.';
+    if (
+      (formData.type === 'Opening' ||
+        formData.type === 'Uitzondering' ||
+        formData.type === 'Sluiting') &&
+      !formData.endDate
+    )
+      validationErrors.endDate = 'Einddatum is verplicht.';
+    if (
+      (formData.type === 'Opening' || formData.type === 'Uitzondering') &&
+      !formData.startHour
+    )
       validationErrors.startHour = 'Startuur is verplicht.';
-    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.endHour)
+    if (
+      (formData.type === 'Opening' || formData.type === 'Uitzondering') &&
+      !formData.endHour
+    )
       validationErrors.endHour = 'Einduur is verplicht.';
-    if ((formData.type === 'Opening' || formData.type === 'Uitzondering') && !formData.maxSeats)
+    if (
+      (formData.type === 'Opening' || formData.type === 'Uitzondering') &&
+      !formData.maxSeats
+    )
       validationErrors.maxSeats = 'Max. Zitplaatsen is verplicht.';
 
-    if (formData.daysOfWeek.length === 0 && formData.type !== '' && formData.type !== 'Sluitingsdag')
+    if (
+      formData.daysOfWeek.length === 0 &&
+      formData.type !== '' &&
+      formData.type !== 'Sluitingsdag'
+    )
       validationErrors.daysOfWeek = 'Selecteer minstens één dag.';
 
-    // Time Validations
-    if (formData.startHour && formData.endHour) {
-      const startHourObj = new Date(`1970-01-01T${formData.startHour}:00`);
-      const endHourObj = new Date(`1970-01-01T${formData.endHour}:00`);
-      if (startHourObj >= endHourObj) {
-        validationErrors.endHour = 'Einduur moet na startuur liggen.';
-      }
+    // Additional date validations
+    if (formData.startDate && isDateInPast(formData.startDate))
+      validationErrors.startDate = 'Startdatum mag niet in het verleden liggen.';
+    if (formData.endDate && isDateInPast(formData.endDate))
+      validationErrors.endDate = 'Einddatum mag niet in het verleden liggen.';
+    if (
+      formData.startDate &&
+      formData.endDate &&
+      isStartDateAfterEndDate(formData.startDate, formData.endDate)
+    ) {
+      validationErrors.startDate = 'Startdatum mag niet na de einddatum liggen.';
+      validationErrors.endDate = 'Einddatum mag niet voor de startdatum liggen.';
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -158,7 +145,9 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     // Prepare payload
     let payload = {
       title: formData.title,
-      type: ['Sluitingsdag', 'Sluitingsdagen'].includes(formData.type) ? 'Sluiting' : formData.type,
+      type: ['Sluitingsdag', 'Sluitingsdagen'].includes(formData.type)
+        ? 'Sluiting'
+        : formData.type,
       toepassing:
         formData.type === 'Sluitingsdag' || formData.type === 'Sluitingsdagen'
           ? 'Volledige Dag'
@@ -210,6 +199,30 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     }
   };
 
+  // Generate time options based on 'Toepassing'
+  const getTimeOptions = (shift) => {
+    const options = [];
+    const startTime = shifts[shift].start;
+    const endTime = shifts[shift].end;
+
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+
+    let currentTime = new Date();
+    currentTime.setHours(startHour, startMinute, 0, 0);
+
+    const endTimeObj = new Date();
+    endTimeObj.setHours(endHour, endMinute, 0, 0);
+
+    while (currentTime <= endTimeObj) {
+      const timeStr = currentTime.toTimeString().substring(0, 5);
+      options.push(timeStr);
+      currentTime.setMinutes(currentTime.getMinutes() + 15);
+    }
+
+    return options;
+  };
+
   return (
     <form className="exceptions-page__form" onSubmit={handleSubmit}>
       <div className="exceptions-page__form-group">
@@ -253,7 +266,6 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             className="exceptions-page__select"
           >
             <option value="">Selecteer Toepassing</option>
-            {/* Exclude "Volledige Dag" for types 'Opening', 'Uitzondering', 'Sluiting' */}
             <option value="Ontbijt">Ontbijt</option>
             <option value="Lunch">Lunch</option>
             <option value="Diner">Diner</option>
@@ -283,10 +295,10 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             <input
               type="date"
               name="startDate"
-              id="startDate"
               value={formData.startDate}
               onChange={handleChange}
               className="exceptions-page__input"
+              ref={startDateRef}
             />
             {errors.startDate && <p className="exceptions-page__error">{errors.startDate}</p>}
           </div>
@@ -296,27 +308,29 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             <input
               type="date"
               name="endDate"
-              id="endDate"
               value={formData.endDate}
               onChange={handleChange}
               className="exceptions-page__input"
+              ref={endDateRef}
             />
             {errors.endDate && <p className="exceptions-page__error">{errors.endDate}</p>}
           </div>
         </>
       )}
 
-      {(formData.type === 'Opening' || formData.type === 'Uitzondering' || formData.type === 'Sluiting') && (
+      {(formData.type === 'Opening' ||
+        formData.type === 'Uitzondering' ||
+        formData.type === 'Sluiting') && (
         <>
           <div className="exceptions-page__form-group">
             <label>Start Datum</label>
             <input
               type="date"
               name="startDate"
-              id="startDate"
               value={formData.startDate}
               onChange={handleChange}
               className="exceptions-page__input"
+              ref={startDateRef}
             />
             {errors.startDate && <p className="exceptions-page__error">{errors.startDate}</p>}
           </div>
@@ -326,10 +340,10 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             <input
               type="date"
               name="endDate"
-              id="endDate"
               value={formData.endDate}
               onChange={handleChange}
               className="exceptions-page__input"
+              ref={endDateRef}
             />
             {errors.endDate && <p className="exceptions-page__error">{errors.endDate}</p>}
           </div>
@@ -347,11 +361,12 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               className="exceptions-page__select"
             >
               <option value="">Selecteer Start Uur</option>
-              {startHourOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
+              {formData.toepassing &&
+                getTimeOptions(formData.toepassing).map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
             </select>
             {errors.startHour && <p className="exceptions-page__error">{errors.startHour}</p>}
           </div>
@@ -365,11 +380,12 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               className="exceptions-page__select"
             >
               <option value="">Selecteer Eind Uur</option>
-              {endHourOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
+              {formData.toepassing &&
+                getTimeOptions(formData.toepassing).map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
             </select>
             {errors.endHour && <p className="exceptions-page__error">{errors.endHour}</p>}
           </div>

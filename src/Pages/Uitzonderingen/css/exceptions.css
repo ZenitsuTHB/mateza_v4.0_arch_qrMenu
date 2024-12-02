@@ -469,4 +469,27 @@
   }
   
   /* ... rest of the existing styles ... */
+  /* src/Pages/Uitzonderingen/css/exceptions.css */
+
+/* ... existing styles ... */
+
+/* Validation Error Messages in Orange */
+.exceptions-page__error {
+	color: var(--color-orange);
+	font-size: 0.9rem;
+  }
+  
+  /* Calendar Day Animation */
+  .exceptions-page__calendar-day {
+	opacity: 0;
+	animation: fadeIn 0.5s forwards;
+  }
+  
+  @keyframes fadeIn {
+	to {
+	  opacity: 1;
+	}
+  }
+  
+  /* ... rest of the existing styles ... */
   

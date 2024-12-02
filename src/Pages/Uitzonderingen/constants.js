@@ -1,4 +1,4 @@
-// constants.js
+// src/Pages/Uitzonderingen/constants.js
 
 export const shifts = {
 	Ontbijt: { start: '04:00', end: '11:00' },

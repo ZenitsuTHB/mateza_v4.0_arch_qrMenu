@@ -6,6 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange }) => {
   const [calendarData, setCalendarData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const daysOfWeekShort = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
   const months = [
@@ -59,7 +60,7 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
             return (
               dateObj >= startDate &&
               dateObj <= endDate &&
-              exceptionDaysOfWeek.includes(dayName)
+              (exception.type === 'Sluiting' || exception.type === 'Sluitingsdag' || exceptionDaysOfWeek.includes(dayName))
             );
           });
 
@@ -82,6 +83,7 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
                   exceptionType ? `tag-${exceptionType.toLowerCase()}` : ''
                 }`}
                 onClick={() => onDateClick(dateStr)}
+                style={{ animationDelay: `${dayCounter * 50}ms` }}
               >
                 {dayCounter}
               </div>
@@ -100,6 +102,8 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
       month: months[monthToDisplay],
       year: yearToDisplay,
     });
+
+    setIsLoaded(true);
   };
 
   return (
