@@ -75,15 +75,6 @@ const routesConfig = [
     isMobile: true,
     isTab: false,
   },
-  {
-    path: '/exceptions',
-    element: <Uitzonderingen title="Uitzonderingen"/>, // Use RootComponent here
-    label: 'Uitzonderingen',
-    icon: FaLock,
-    isMenu: true,
-    isMobile: true,
-    isTab: false,
-  },
   
   {
     path: '/notification',
@@ -105,6 +96,15 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
+    path: '/exceptions',
+    element: <Uitzonderingen title="Uitzonderingen"/>, // Use RootComponent here
+    label: 'Uitzonderingen',
+    icon: FaLock,
+    isMenu: true,
+    isMobile: true,
+    isTab: false,
+  },
+  {
     path: '/scheme',
     element: <SchemeStandalone title="Openingsuren" />,
     label: 'Openingsuren',
@@ -115,6 +115,7 @@ const routesConfig = [
     sidebarHidden: false,
     secondaryTopBar: calendarSecondaryTopBar,
   },
+  
   {
     path: '/openinghours',
     element: <Openingsuren title="Openingsuren" mealType="ontbijt"/>, // Use RootComponent here
@@ -135,6 +136,7 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
   },
+  
   {
     path: '/openinghours/dinner',
     element: <Openingsuren title="Openingsuren" mealType="diner"/>, // Use RootComponent here
