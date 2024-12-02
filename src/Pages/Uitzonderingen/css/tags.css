@@ -1,0 +1,39 @@
+/* src/Pages/Uitzonderingen/css/tags.css */
+
+.exceptions-page__tag {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: white;
+	font-size: 0.8rem;
+	margin-left: 10px;
+  }
+  
+  .tag-green {
+	background-color: var(--color-green);
+  }
+  
+  .tag-blue {
+	background-color: var(--color-blue);
+  }
+  
+  .tag-orange {
+	background-color: var(--color-orange);
+  }
+  
+  /* Calendar Day Colors */
+  .exceptions-page__calendar-day.tag-opening {
+	background-color: var(--color-green);
+	color: white;
+  }
+  
+  .exceptions-page__calendar-day.tag-uitzondering {
+	background-color: var(--color-blue);
+	color: white;
+  }
+  
+  .exceptions-page__calendar-day.tag-sluiting {
+	background-color: var(--color-orange);
+	color: white;
+  }
+  

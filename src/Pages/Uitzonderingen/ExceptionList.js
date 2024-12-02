@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/ExceptionList.js
+// src/Pages/Uitzonderingen/components/ExceptionList.js
 
 import React from 'react';
-import './css/exceptions.css';
+import './css/exceptionList.css';
 import ExceptionItem from './ExceptionItem';
 
 const ExceptionList = ({ exceptions, api, triggerNotification, refreshExceptions }) => {

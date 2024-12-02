@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/ExceptionCalendar.js
+// src/Pages/Uitzonderingen/components/ExceptionCalendar.js
 
 import React, { useState, useEffect } from 'react';
-import './css/exceptions.css';
+import './css/calendar.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange }) => {
@@ -45,20 +45,31 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
           const dateObj = new Date(yearToDisplay, monthToDisplay, dayCounter);
           const dateStr = dateObj.toISOString().split('T')[0];
 
-          // Determine the exceptions on this date
+          // Determine the exceptions on this date considering daysOfWeek
           const dateExceptions = exceptions.filter((exception) => {
             const startDate = new Date(exception.startDate);
             const endDate = new Date(exception.endDate);
-            return dateObj >= startDate && dateObj <= endDate;
+            const exceptionDaysOfWeek = exception.daysOfWeek || [];
+
+            // Get the day index (0: Sunday, 1: Monday, ..., 6: Saturday)
+            const dayOfWeekIndex = dateObj.getDay();
+            const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+            const dayName = dayOfWeekNames[dayOfWeekIndex];
+
+            return (
+              dateObj >= startDate &&
+              dateObj <= endDate &&
+              exceptionDaysOfWeek.includes(dayName)
+            );
           });
 
           // Determine the highest priority exception type
           let exceptionType = null;
           if (dateExceptions.length > 0) {
-            const typePriority = ['Opening', 'Uitzondering', 'Sluitingsdag'];
+            const typePriority = ['Opening', 'Uitzondering', 'Sluiting'];
             for (const type of typePriority) {
-              if (dateExceptions.some((ex) => ex.type === type)) {
-                exceptionType = type;
+              if (dateExceptions.some((ex) => ex.type === type || ex.type === 'Sluitingsdag')) {
+                exceptionType = type === 'Sluitingsdag' ? 'Sluiting' : type;
                 break;
               }
             }
@@ -71,6 +82,7 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
                   exceptionType ? `tag-${exceptionType.toLowerCase()}` : ''
                 }`}
                 onClick={() => onDateClick(dateStr)}
+                style={{ animationDelay: `${(dayCounter - 1) * 50}ms` }} // Animation delay
               >
                 {dayCounter}
               </div>
@@ -124,7 +136,7 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
           <span className="exceptions-page__calendar-legend-box tag-uitzondering"></span> Uitzondering
         </span>
         <span>
-          <span className="exceptions-page__calendar-legend-box tag-sluitingsdag"></span> Sluitingsdag
+          <span className="exceptions-page__calendar-legend-box tag-sluiting"></span> Sluiting
         </span>
       </div>
     </div>

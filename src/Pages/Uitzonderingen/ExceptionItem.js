@@ -1,27 +1,15 @@
-// src/Pages/Uitzonderingen/ExceptionItem.js
+// src/Pages/Uitzonderingen/components/ExceptionItem.js
 
 import React, { useState } from 'react';
-import './css/exceptions.css';
-import { FaEllipsisV, FaTrashAlt } from 'react-icons/fa';
+import './css/exceptionItem.css';
+import { FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../Components/Structural/Modal/Delete';
 
 const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions }) => {
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-
-  const handleEllipsisClick = () => {
-    setIsTooltipOpen(!isTooltipOpen);
-  };
 
   const handleDeleteClick = () => {
     setIsDeleteModalVisible(true);
-    setIsTooltipOpen(false);
-  };
-
-  const handleEditClick = () => {
-    setIsEditModalVisible(true);
-    setIsTooltipOpen(false);
   };
 
   const handleConfirmDelete = async () => {
@@ -47,6 +35,7 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
         return 'tag-green';
       case 'Uitzondering':
         return 'tag-blue';
+      case 'Sluiting':
       case 'Sluitingsdag':
         return 'tag-orange';
       default:
@@ -61,7 +50,7 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
           {exception.title}{' '}
           <span className={`exceptions-page__tag ${typeColorClass()}`}>{exception.type}</span>
         </h4>
-        {exception.type !== 'Sluitingsdag' && exception.toepassing && (
+        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && exception.toepassing && (
           <p>Toepassing: {exception.toepassing}</p>
         )}
         <p>
@@ -75,19 +64,12 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
             <p>Max. Zitplaatsen: {exception.maxSeats}</p>
           </>
         )}
-        <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
+        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && (
+          <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
+        )}
       </div>
       <div className="exceptions-page__exception-actions">
-        <FaEllipsisV onClick={handleEllipsisClick} className="exceptions-page__ellipsis-icon" />
-        {isTooltipOpen && (
-          <div className="tooltip-container">
-            <div className="tooltip-separator"></div>
-            <div className="tooltip-item delete-item" onClick={handleDeleteClick}>
-              <FaTrashAlt className="tooltip-icon" />
-              Verwijderen
-            </div>
-          </div>
-        )}
+        <FaTrashAlt onClick={handleDeleteClick} className="exceptions-page__delete-icon" />
       </div>
       {isDeleteModalVisible && (
         <ConfirmationModal

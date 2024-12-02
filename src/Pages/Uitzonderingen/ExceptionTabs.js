@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/ExceptionTabs.js
+// src/Pages/Uitzonderingen/components/ExceptionTabs.js
 
 import React from 'react';
-import './css/exceptions.css';
+import './css/exceptionTab.css';
 
 const ExceptionTabs = ({ activeTab, onTabChange }) => {
   const months = [

@@ -10,6 +10,7 @@ import ExceptionList from './ExceptionList';
 import ExceptionCalendar from './ExceptionCalendar';
 import ExceptionTabs from './ExceptionTabs';
 import ExceptionItem from './ExceptionItem.js';
+
 const Uitzonderingen = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
@@ -126,19 +127,17 @@ const Uitzonderingen = () => {
           refreshExceptions={refreshExceptions}
         />
         <div className="exceptions-page__content">
-
           <ExceptionCalendar
             exceptions={exceptions}
             onDateClick={handleDateClick}
             monthOffset={calendarMonthOffset}
             onMonthChange={handleMonthChange}
           />
-		
-			<ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
+          <ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
           {selectedDateExceptions.length > 0 && (
             <div className="exceptions-page__selected-date-exceptions">
-              <h3>Uitzonderingen op geselecteerde datum:</h3>
+              <h3>Uitzonderingen op Geselecteerde Datum</h3>
               {selectedDateExceptions.map((exception) => (
                 <ExceptionItem
                   key={exception._id}
