@@ -18,6 +18,11 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
     generateCalendar();
   }, [exceptions, monthOffset]);
 
+  // Helper function to normalize dates to midnight
+  const normalizeDate = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  };
+
   const generateCalendar = () => {
     const today = new Date();
     let monthToDisplay = today.getMonth() + monthOffset;
@@ -46,20 +51,27 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
           const dateObj = new Date(yearToDisplay, monthToDisplay, dayCounter);
           const dateStr = dateObj.toISOString().split('T')[0];
 
+          // Normalize dateObj
+          const normalizedDateObj = normalizeDate(dateObj);
+
           // Determine the exceptions on this date considering daysOfWeek
           const dateExceptions = exceptions.filter((exception) => {
             const startDate = new Date(exception.startDate);
             const endDate = new Date(exception.endDate);
             const exceptionDaysOfWeek = exception.daysOfWeek || [];
 
+            // Normalize dates
+            const normalizedStartDate = normalizeDate(startDate);
+            const normalizedEndDate = normalizeDate(endDate);
+
             // Get the day index (0: Sunday, 1: Monday, ..., 6: Saturday)
-            const dayOfWeekIndex = dateObj.getDay();
+            const dayOfWeekIndex = normalizedDateObj.getDay();
             const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
             const dayName = dayOfWeekNames[dayOfWeekIndex];
 
             return (
-              dateObj >= startDate &&
-              dateObj <= endDate &&
+              normalizedDateObj >= normalizedStartDate &&
+              normalizedDateObj <= normalizedEndDate &&
               (exception.type === 'Sluiting' || exception.type === 'Sluitingsdag' || exceptionDaysOfWeek.includes(dayName))
             );
           });
