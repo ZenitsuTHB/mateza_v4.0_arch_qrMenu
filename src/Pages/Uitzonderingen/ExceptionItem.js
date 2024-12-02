@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/components/ExceptionItem.js
+// src/Pages/Uitzonderingen/ExceptionItem.js
 
 import React, { useState } from 'react';
-import './css/exceptionItem.css';
+import './css/exceptions.css';
 import { FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../Components/Structural/Modal/Delete';
 
@@ -64,9 +64,7 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
             <p>Max. Zitplaatsen: {exception.maxSeats}</p>
           </>
         )}
-        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && (
-          <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
-        )}
+        <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
       </div>
       <div className="exceptions-page__exception-actions">
         <FaTrashAlt onClick={handleDeleteClick} className="exceptions-page__delete-icon" />

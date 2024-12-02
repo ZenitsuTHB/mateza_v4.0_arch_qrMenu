@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js';
-import './css/exceptions.css';
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
 import ExceptionForm from './ExceptionForm';
@@ -10,6 +9,7 @@ import ExceptionList from './ExceptionList';
 import ExceptionCalendar from './ExceptionCalendar';
 import ExceptionTabs from './ExceptionTabs';
 import ExceptionItem from './ExceptionItem.js';
+import './css/exceptions.css';
 
 const Uitzonderingen = () => {
   const api = useApi();
@@ -134,10 +134,9 @@ const Uitzonderingen = () => {
             onMonthChange={handleMonthChange}
           />
           <ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
-
           {selectedDateExceptions.length > 0 && (
             <div className="exceptions-page__selected-date-exceptions">
-              <h3>Uitzonderingen op Geselecteerde Datum</h3>
+              <h3>Uitzonderingen op geselecteerde datum:</h3>
               {selectedDateExceptions.map((exception) => (
                 <ExceptionItem
                   key={exception._id}

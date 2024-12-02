@@ -1,7 +1,7 @@
-// src/Pages/Uitzonderingen/components/ExceptionCalendar.js
+// src/Pages/Uitzonderingen/ExceptionCalendar.js
 
 import React, { useState, useEffect } from 'react';
-import './css/calendar.css';
+import './css/exceptions.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange }) => {
@@ -82,7 +82,6 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
                   exceptionType ? `tag-${exceptionType.toLowerCase()}` : ''
                 }`}
                 onClick={() => onDateClick(dateStr)}
-                style={{ animationDelay: `${(dayCounter - 1) * 50}ms` }} // Animation delay
               >
                 {dayCounter}
               </div>

@@ -407,3 +407,66 @@
   .exceptions-page__list h3 {
 	margin-bottom: 10px;
   }
+
+  /* src/Pages/Uitzonderingen/css/exceptions.css */
+
+/* ... existing styles ... */
+
+/* Tag Colors */
+.exceptions-page__tag {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: white;
+	font-size: 0.8rem;
+	margin-left: 10px;
+  }
+  
+  .tag-green {
+	background-color: var(--color-green);
+  }
+  
+  .tag-blue {
+	background-color: var(--color-blue);
+  }
+  
+  .tag-orange {
+	background-color: var(--color-orange);
+  }
+  
+  .tag-sluiting {
+	background-color: var(--color-orange);
+	color: white;
+  }
+  
+  /* Calendar Day Colors */
+  .exceptions-page__calendar-day.tag-opening {
+	background-color: var(--color-green);
+	color: white;
+  }
+  
+  .exceptions-page__calendar-day.tag-uitzondering {
+	background-color: var(--color-blue);
+	color: white;
+  }
+  
+  .exceptions-page__calendar-day.tag-sluiting {
+	background-color: var(--color-orange);
+	color: white;
+  }
+  
+  /* Legend Colors */
+  .exceptions-page__calendar-legend .tag-opening {
+	background-color: var(--color-green);
+  }
+  
+  .exceptions-page__calendar-legend .tag-uitzondering {
+	background-color: var(--color-blue);
+  }
+  
+  .exceptions-page__calendar-legend .tag-sluiting {
+	background-color: var(--color-orange);
+  }
+  
+  /* ... rest of the existing styles ... */
+  
