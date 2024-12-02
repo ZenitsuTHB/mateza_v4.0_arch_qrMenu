@@ -96,6 +96,13 @@ const Uitzonderingen = () => {
   // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    if (tab === 'current') {
+      setCalendarMonthOffset(0);
+    } else if (tab === 'next') {
+      setCalendarMonthOffset(1);
+    } else if (tab === 'all') {
+      setCalendarMonthOffset(0); // Or handle 'all' differently
+    }
   };
 
   // Handle month navigation in calendar
@@ -119,14 +126,15 @@ const Uitzonderingen = () => {
           refreshExceptions={refreshExceptions}
         />
         <div className="exceptions-page__content">
-          <ExceptionCalendar
-            exceptions={exceptions}
-            onDateClick={handleDateClick}
-            monthOffset={calendarMonthOffset}
-            onMonthChange={handleMonthChange}
-          />
+          {activeTab !== 'all' && (
+            <ExceptionCalendar
+              exceptions={exceptions}
+              onDateClick={handleDateClick}
+              monthOffset={calendarMonthOffset}
+              onMonthChange={handleMonthChange}
+            />
+          )}
           <ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
-          {/* Removed selectedDateExceptions section */}
           <ExceptionList
             exceptions={filteredExceptions}
             api={api}
