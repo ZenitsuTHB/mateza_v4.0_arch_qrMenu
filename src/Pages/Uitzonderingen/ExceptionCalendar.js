@@ -95,7 +95,6 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
                   exceptionType ? `tag-${exceptionType.toLowerCase()}` : ''
                 }`}
                 onClick={() => onDateClick(dateStr)}
-                style={{ animationDelay: `${dayCounter * 50}ms` }}
               >
                 {dayCounter}
               </div>
