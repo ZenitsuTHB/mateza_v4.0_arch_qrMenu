@@ -10,7 +10,6 @@ import ExceptionList from './ExceptionList';
 import ExceptionCalendar from './ExceptionCalendar';
 import ExceptionTabs from './ExceptionTabs';
 import ExceptionItem from './ExceptionItem.js';
-import './css/exceptions.css';
 
 const Uitzonderingen = () => {
   const api = useApi();
@@ -20,7 +19,6 @@ const Uitzonderingen = () => {
   const [exceptions, setExceptions] = useState([]);
   const [filteredExceptions, setFilteredExceptions] = useState([]);
   const [activeTab, setActiveTab] = useState('current');
-  const [selectedDateExceptions, setSelectedDateExceptions] = useState([]);
   const [calendarMonthOffset, setCalendarMonthOffset] = useState(0); // For navigating months
 
   // Fetch the exceptions at component mount
@@ -95,41 +93,20 @@ const Uitzonderingen = () => {
     }
   };
 
-  // Handle date click in calendar
-  const handleDateClick = (date) => {
-    const clickedDate = new Date(date);
-    const overlappingExceptions = exceptions.filter((exception) => {
-      const startDate = new Date(exception.startDate);
-      const endDate = new Date(exception.endDate);
-
-      // Check if the exception applies on this day of the week
-      const dayOfWeekIndex = clickedDate.getDay();
-      const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
-      const dayName = dayOfWeekNames[dayOfWeekIndex];
-
-      if (exception.type === 'Sluiting' || exception.type === 'Sluitingsdag') {
-        return clickedDate >= startDate && clickedDate <= endDate;
-      } else {
-        return (
-          clickedDate >= startDate &&
-          clickedDate <= endDate &&
-          exception.daysOfWeek.includes(dayName)
-        );
-      }
-    });
-    setSelectedDateExceptions(overlappingExceptions);
-  };
-
   // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setSelectedDateExceptions([]);
-    setCalendarMonthOffset(tab === 'current' ? 0 : tab === 'next' ? 1 : 0);
   };
 
   // Handle month navigation in calendar
   const handleMonthChange = (offset) => {
     setCalendarMonthOffset((prevOffset) => prevOffset + offset);
+  };
+
+  // Optional: If you still want to handle date clicks without displaying exceptions
+  const handleDateClick = (date) => {
+    // Implement any other logic you need when a date is clicked
+    console.log('Date clicked:', date);
   };
 
   return (
@@ -149,20 +126,7 @@ const Uitzonderingen = () => {
             onMonthChange={handleMonthChange}
           />
           <ExceptionTabs activeTab={activeTab} onTabChange={handleTabChange} />
-          {selectedDateExceptions.length > 0 && (
-            <div className="exceptions-page__selected-date-exceptions">
-              <h3>Uitzonderingen op geselecteerde datum:</h3>
-              {selectedDateExceptions.map((exception) => (
-                <ExceptionItem
-                  key={exception._id}
-                  exception={exception}
-                  api={api}
-                  triggerNotification={triggerNotification}
-                  refreshExceptions={refreshExceptions}
-                />
-              ))}
-            </div>
-          )}
+          {/* Removed selectedDateExceptions section */}
           <ExceptionList
             exceptions={filteredExceptions}
             api={api}
