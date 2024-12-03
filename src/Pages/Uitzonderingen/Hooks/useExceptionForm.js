@@ -89,13 +89,6 @@ const useExceptionForm = (initialFormData, api, triggerNotification, refreshExce
     )
       validationErrors.maxSeats = 'Max. Zitplaatsen is verplicht.';
 
-    if (
-      formData.daysOfWeek.length === 0 &&
-      formData.type !== '' &&
-      formData.type !== 'Sluitingsdag'
-    )
-      validationErrors.daysOfWeek = 'Selecteer minstens één dag.';
-
     // Additional date validations
     if (formData.startDate && isDateInPast(formData.startDate))
       validationErrors.startDate = 'Startdatum mag niet in het verleden liggen.';
