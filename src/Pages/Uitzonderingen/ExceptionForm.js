@@ -32,6 +32,14 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
 
+  const getTodayDateString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Focus shift when start date is selected
   useEffect(() => {
     if (formData.startDate && !formData.endDate && endDateRef.current) {
@@ -297,6 +305,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             value={formData.date}
             onChange={handleChange}
             className="exceptions-page__input"
+            min={getTodayDateString()}
           />
           {errors.date && <p className="exceptions-page__error">{errors.date}</p>}
         </div>
@@ -313,6 +322,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               onChange={handleChange}
               className="exceptions-page__input"
               ref={startDateRef}
+              min={getTodayDateString()}
             />
             {errors.startDate && <p className="exceptions-page__error">{errors.startDate}</p>}
           </div>
@@ -326,6 +336,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               onChange={handleChange}
               className="exceptions-page__input"
               ref={endDateRef}
+              min={getTodayDateString()}
             />
             {errors.endDate && <p className="exceptions-page__error">{errors.endDate}</p>}
           </div>
@@ -345,6 +356,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               onChange={handleChange}
               className="exceptions-page__input"
               ref={startDateRef}
+              min={getTodayDateString()}
             />
             {errors.startDate && <p className="exceptions-page__error">{errors.startDate}</p>}
           </div>
@@ -358,6 +370,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               onChange={handleChange}
               className="exceptions-page__input"
               ref={endDateRef}
+              min={getTodayDateString()}
             />
             {errors.endDate && <p className="exceptions-page__error">{errors.endDate}</p>}
           </div>
