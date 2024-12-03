@@ -263,7 +263,8 @@ const DayContent = ({ dayId, days, mealType, scheduleData, setScheduleData }) =>
           setEnabled={(enabled) => setDayData({ ...dayData, shiftsEnabled: enabled })}
           shifts={dayData.shifts}
           setShifts={(shifts) => setDayData({ ...dayData, shifts })}
-          mealType={mealType}
+          startTime={dayData.startTime}
+          endTime={dayData.endTime}
         />
 
         <button className="button-style-3" onClick={handleSave}>

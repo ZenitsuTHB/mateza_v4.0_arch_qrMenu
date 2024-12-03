@@ -49,24 +49,39 @@
   
   .schedule-page-component .shift-row {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 10px;
-	gap: 10px; /* Adds space between time and name fields */
+	gap: 10px;
   }
   
-  .schedule-page-component .shift-row input {
-	width: 50%; /* Equal width for time and name inputs */
+  .schedule-page-component .shift-select,
+  .schedule-page-component .shift-input {
+	flex: 1;
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 1rem;
-	transition: border-color 0.3s ease;
   }
   
-  .schedule-page-component .shift-row input:focus {
-	border-color: var(--color-blue); /* Use your variable for blue color */
+  .schedule-page-component .shift-select:focus,
+  .schedule-page-component .shift-input:focus {
+	border-color: #0056b3;
 	outline: none;
+  }
+  
+  .schedule-page-component .remove-shift-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #d9534f;
+	font-size: 1.2rem;
+	padding: 0;
+	width: 50px;
+	text-align: center;
+  }
+  
+  .schedule-page-component .remove-shift-button:hover {
+	color: #c9302c;
   }
   
   .schedule-page-component .add-shift {
