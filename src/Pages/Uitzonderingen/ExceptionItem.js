@@ -50,8 +50,8 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
           {exception.title}{' '}
           <span className={`exceptions-page__tag ${typeColorClass()}`}>{exception.type}</span>
         </h4>
-        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && exception.toepassing && (
-          <p>Toepassing: {exception.toepassing}</p>
+        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && exception.timeframe && (
+          <p>Toepassing: {exception.timeframe}</p>
         )}
         <p>
           Geldig van {exception.startDate} tot {exception.endDate}

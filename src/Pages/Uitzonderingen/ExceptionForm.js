@@ -8,7 +8,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
   const [formData, setFormData] = useState({
     title: '',
     type: '',
-    toepassing: '',
+    timeframe: '',
     date: '',
     startDate: '',
     endDate: '',
@@ -86,8 +86,8 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     const validationErrors = {};
     if (!formData.title.trim()) validationErrors.title = 'Titel is verplicht.';
     if (!formData.type) validationErrors.type = 'Type is verplicht.';
-    if (formData.type !== 'Sluitingsdag' && formData.type !== 'Sluitingsdagen' && !formData.toepassing)
-      validationErrors.toepassing = 'Toepassing is verplicht.';
+    if (formData.type !== 'Sluitingsdag' && formData.type !== 'Sluitingsdagen' && !formData.timeframe)
+      validationErrors.timeframe = 'Toepassing is verplicht.';
 
     if (formData.type === 'Sluitingsdag' && !formData.date)
       validationErrors.date = 'Datum is verplicht.';
@@ -158,10 +158,10 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
       type: ['Sluitingsdag', 'Sluitingsdagen'].includes(formData.type)
         ? 'Sluiting'
         : formData.type,
-      toepassing:
+      timeframe:
         formData.type === 'Sluitingsdag' || formData.type === 'Sluitingsdagen'
           ? 'Volledige Dag'
-          : formData.toepassing,
+          : formData.timeframe,
       startDate: formData.startDate,
       endDate: formData.endDate,
       startHour: formData.startHour,
@@ -183,8 +183,8 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     }
 
     payload = Object.fromEntries(
-      Object.entries(payload).filter(([_, value]) => value != null && value !== '')
-    );
+    Object.entries(payload).filter(([_, value]) => value != null && value !== '')
+  );
 
     try {
       const response = await api.post(`${window.baseDomain}api/exceptions`, payload);
@@ -274,8 +274,8 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
         <div className="exceptions-page__form-group">
           <label>Toepassing</label>
           <select
-            name="toepassing"
-            value={formData.toepassing}
+            name="timeframe"
+            value={formData.timeframe}
             onChange={handleChange}
             className="exceptions-page__select"
           >
@@ -284,7 +284,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             <option value="lunch">Middag</option>
             <option value="dinner">Avond</option>
           </select>
-          {errors.toepassing && <p className="exceptions-page__error">{errors.toepassing}</p>}
+          {errors.timeframe && <p className="exceptions-page__error">{errors.timeframe}</p>}
         </div>
       )}
 
@@ -375,8 +375,8 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               className="exceptions-page__select"
             >
               <option value="">Selecteer Start Uur</option>
-              {formData.toepassing &&
-                getTimeOptions(formData.toepassing).map((time) => (
+              {formData.timeframe &&
+                getTimeOptions(formData.timeframe).map((time) => (
                   <option key={time} value={time}>
                     {time}
                   </option>
@@ -394,8 +394,8 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
               className="exceptions-page__select"
             >
               <option value="">Selecteer Eind Uur</option>
-              {formData.toepassing &&
-                getTimeOptions(formData.toepassing).map((time) => (
+              {formData.timeframe &&
+                getTimeOptions(formData.timeframe).map((time) => (
                   <option key={time} value={time}>
                     {time}
                   </option>
