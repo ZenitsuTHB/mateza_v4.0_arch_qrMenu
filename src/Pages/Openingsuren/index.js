@@ -17,7 +17,9 @@ const SchedulePage = ({ mealType }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(window.baseDomain + 'api/openinghours' + '-' + mealType);
+        const response = await api.get(
+          `${window.baseDomain}api/openinghours-${mealType}`
+        );
         if (response) {
           setScheduleData(response.schemeSettings || {});
         } else {
@@ -31,23 +33,51 @@ const SchedulePage = ({ mealType }) => {
     fetchData();
   }, [api, mealType]);
 
-  const refreshData = () => {
-    // Refetch data after saving
-    api.get(window.baseDomain + 'api/openinghours' + '-' + mealType, { noCache: true })
-      .then(response => setScheduleData(response.schemeSettings || {}))
-      .catch(error => console.error('Error refreshing data:', error));
-  };
-
   const isMobile = windowWidth < 900;
 
   const days = [
-    { id: 'Monday', title: 'Maandag', label: isMobile ? 'Ma' : 'Maandag', icon: 'FaSun' },
-    { id: 'Tuesday', title: 'Dinsdag', label: isMobile ? 'Di' : 'Dinsdag', icon: 'FaCloud' },
-    { id: 'Wednesday', title: 'Woensdag', label: isMobile ? 'Wo' : 'Woensdag', icon: 'FaUmbrella' },
-    { id: 'Thursday', title: 'Donderdag', label: isMobile ? 'Do' : 'Donderdag', icon: 'FaBolt' },
-    { id: 'Friday', title: 'Vrijdag', label: isMobile ? 'Vr' : 'Vrijdag', icon: 'FaRainbow' },
-    { id: 'Saturday', title: 'Zaterdag', label: isMobile ? 'Za' : 'Zaterdag', icon: 'FaSnowflake' },
-    { id: 'Sunday', title: 'Zondag', label: isMobile ? 'Zo' : 'Zondag', icon: 'FaMoon' },
+    {
+      id: 'Monday',
+      title: 'Maandag',
+      label: isMobile ? 'Ma' : 'Maandag',
+      icon: 'FaSun',
+    },
+    {
+      id: 'Tuesday',
+      title: 'Dinsdag',
+      label: isMobile ? 'Di' : 'Dinsdag',
+      icon: 'FaCloud',
+    },
+    {
+      id: 'Wednesday',
+      title: 'Woensdag',
+      label: isMobile ? 'Wo' : 'Woensdag',
+      icon: 'FaUmbrella',
+    },
+    {
+      id: 'Thursday',
+      title: 'Donderdag',
+      label: isMobile ? 'Do' : 'Donderdag',
+      icon: 'FaBolt',
+    },
+    {
+      id: 'Friday',
+      title: 'Vrijdag',
+      label: isMobile ? 'Vr' : 'Vrijdag',
+      icon: 'FaRainbow',
+    },
+    {
+      id: 'Saturday',
+      title: 'Zaterdag',
+      label: isMobile ? 'Za' : 'Zaterdag',
+      icon: 'FaSnowflake',
+    },
+    {
+      id: 'Sunday',
+      title: 'Zondag',
+      label: isMobile ? 'Zo' : 'Zondag',
+      icon: 'FaMoon',
+    },
   ];
 
   const handleDayClick = (dayId) => {
@@ -69,7 +99,7 @@ const SchedulePage = ({ mealType }) => {
             days={days}
             mealType={mealType}
             scheduleData={scheduleData}
-            refreshData={refreshData}
+            setScheduleData={setScheduleData} // Pass the setter to DayContent
           />
         )}
       </div>

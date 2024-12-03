@@ -8,7 +8,7 @@ import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
 import { shifts } from './constants';
 
-const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
+const DayContent = ({ dayId, days, mealType, scheduleData, setScheduleData }) => {
   const api = useApi();
   const day = days.find((d) => d.id === dayId);
 
@@ -23,7 +23,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
     shifts: [],
   });
 
-  const [dataExists, setDataExists] = useState(false);
   const [errors, setErrors] = useState({});
 
   const endTimeRef = useRef(null);
@@ -39,7 +38,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
         shiftsEnabled: dataForDay.shiftsEnabled || false,
         shifts: dataForDay.shifts || [],
       });
-      setDataExists(true);
     } else {
       setDayData({
         startTime: '',
@@ -49,7 +47,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
         shiftsEnabled: false,
         shifts: [],
       });
-      setDataExists(false);
     }
     setErrors({});
   }, [scheduleData, dayId]);
@@ -89,9 +86,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
     if (!dayData.startTime) return generateTimeOptions(mealType);
 
     const [startHour, startMinute] = dayData.startTime.split(':').map(Number);
-    const [mealStartHour, mealStartMinute] = shifts[mealType].start
-      .split(':')
-      .map(Number);
     const [mealEndHour, mealEndMinute] = shifts[mealType].end.split(':').map(Number);
 
     const start = new Date();
@@ -105,22 +99,9 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
     current.setMinutes(current.getMinutes() + 15);
 
     while (current <= end) {
-      const now = new Date();
-      // If the start date is today, prevent selecting past times
-      if (
-        new Date().toDateString() ===
-        new Date().toDateString() // Assuming schedule is for today; adjust as needed
-      ) {
-        if (current >= now) {
-          const hours = current.getHours().toString().padStart(2, '0');
-          const minutes = current.getMinutes().toString().padStart(2, '0');
-          options.push(`${hours}:${minutes}`);
-        }
-      } else {
-        const hours = current.getHours().toString().padStart(2, '0');
-        const minutes = current.getMinutes().toString().padStart(2, '0');
-        options.push(`${hours}:${minutes}`);
-      }
+      const hours = current.getHours().toString().padStart(2, '0');
+      const minutes = current.getMinutes().toString().padStart(2, '0');
+      options.push(`${hours}:${minutes}`);
       current.setMinutes(current.getMinutes() + 15);
     }
 
@@ -175,7 +156,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      // Trigger notification for validation errors
       triggerNotification(
         Object.values(validationErrors).join(' '),
         'error'
@@ -183,28 +163,29 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
       return;
     }
 
-    const updatedData = {
-      schemeSettings: {
-        [day.id]: {
-          enabled: true,
-          startTime: dayData.startTime,
-          endTime: dayData.endTime,
-          maxCapacityEnabled: dayData.maxCapacityEnabled,
-          maxCapacity: dayData.maxCapacity,
-          shiftsEnabled: dayData.shiftsEnabled,
-          shifts: dayData.shifts,
-        },
+    // Merge existing scheduleData with the updated data for the current day
+    const updatedSchemeSettings = {
+      ...scheduleData,
+      [day.id]: {
+        enabled: true,
+        startTime: dayData.startTime,
+        endTime: dayData.endTime,
+        maxCapacityEnabled: dayData.maxCapacityEnabled,
+        maxCapacity: dayData.maxCapacity,
+        shiftsEnabled: dayData.shiftsEnabled,
+        shifts: dayData.shifts,
       },
     };
 
+    const updatedData = {
+      schemeSettings: updatedSchemeSettings,
+    };
+
     try {
-      if (dataExists) {
-        await api.put(`${window.baseDomain}api/openinghours-${mealType}`, updatedData);
-      } else {
-        await api.post(`${window.baseDomain}api/openinghours-${mealType}`, updatedData);
-      }
+      await api.put(`${window.baseDomain}api/openinghours-${mealType}`, updatedData);
       triggerNotification('Data succesvol opgeslagen', 'success');
-      refreshData(); // Refresh data in parent component
+      // Update local scheduleData without reloading from backend
+      setScheduleData(updatedSchemeSettings);
     } catch (error) {
       console.error('Error saving data:', error);
       triggerNotification('Fout bij het opslaan van data', 'error');
@@ -238,7 +219,9 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
                 </option>
               ))}
             </select>
-            {errors.startTime && <p className="exceptions-page__error">{errors.startTime}</p>}
+            {errors.startTime && (
+              <p className="exceptions-page__error">{errors.startTime}</p>
+            )}
           </div>
           <div className="input-container">
             <label htmlFor="endTime">Eind Tijd</label>
@@ -258,7 +241,9 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
                 </option>
               ))}
             </select>
-            {errors.endTime && <p className="exceptions-page__error">{errors.endTime}</p>}
+            {errors.endTime && (
+              <p className="exceptions-page__error">{errors.endTime}</p>
+            )}
           </div>
         </div>
 
@@ -268,7 +253,9 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
             setDayData({ ...dayData, maxCapacityEnabled: enabled, maxCapacity: '' })
           }
           maxCapacity={dayData.maxCapacity}
-          setMaxCapacity={(maxCapacity) => setDayData({ ...dayData, maxCapacity })}
+          setMaxCapacity={(maxCapacity) =>
+            setDayData({ ...dayData, maxCapacity })
+          }
         />
 
         <ShiftsAccordion
@@ -276,7 +263,7 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
           setEnabled={(enabled) => setDayData({ ...dayData, shiftsEnabled: enabled })}
           shifts={dayData.shifts}
           setShifts={(shifts) => setDayData({ ...dayData, shifts })}
-          mealType={mealType} // Pass mealType to generate shifts accordingly
+          mealType={mealType}
         />
 
         <button className="button-style-3" onClick={handleSave}>
