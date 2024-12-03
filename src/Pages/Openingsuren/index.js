@@ -17,7 +17,7 @@ const SchedulePage = ({ mealType }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType);
+        const response = await api.get(window.baseDomain + 'api/openinghours' + '-' + mealType);
         if (response) {
           setScheduleData(response.schemeSettings || {});
         } else {
@@ -33,7 +33,7 @@ const SchedulePage = ({ mealType }) => {
 
   const refreshData = () => {
     // Refetch data after saving
-    api.get(window.baseDomain + 'api/openingsuren' + '-' + mealType, { noCache: true })
+    api.get(window.baseDomain + 'api/openinghours' + '-' + mealType, { noCache: true })
       .then(response => setScheduleData(response.schemeSettings || {}))
       .catch(error => console.error('Error refreshing data:', error));
   };

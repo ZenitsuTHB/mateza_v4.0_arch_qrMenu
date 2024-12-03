@@ -15,7 +15,7 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
   const handleConfirmDelete = async () => {
     setIsDeleteModalVisible(false);
     try {
-      await api.delete(`${window.baseDomain}api/uitzonderingen/${exception._id}`);
+      await api.delete(`${window.baseDomain}api/exceptions/${exception._id}`);
       triggerNotification('Uitzondering succesvol verwijderd', 'success');
       refreshExceptions();
     } catch (error) {

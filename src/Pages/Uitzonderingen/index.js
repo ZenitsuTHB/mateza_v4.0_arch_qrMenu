@@ -25,7 +25,7 @@ const Uitzonderingen = () => {
   useEffect(() => {
     const fetchExceptions = async () => {
       try {
-        const data = await api.get(window.baseDomain + 'api/uitzonderingen', { noCache: true });
+        const data = await api.get(window.baseDomain + 'api/exceptions', { noCache: true });
         if (Array.isArray(data)) {
           setExceptions(data);
         } else {
@@ -80,7 +80,7 @@ const Uitzonderingen = () => {
   // Handler to refresh exceptions
   const refreshExceptions = async () => {
     try {
-      const data = await api.get(window.baseDomain + 'api/uitzonderingen', { noCache: true });
+      const data = await api.get(window.baseDomain + 'api/exceptions', { noCache: true });
       if (Array.isArray(data)) {
         setExceptions(data);
       } else {

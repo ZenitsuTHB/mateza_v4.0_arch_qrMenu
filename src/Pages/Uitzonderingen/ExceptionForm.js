@@ -18,6 +18,16 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     daysOfWeek: [],
   });
 
+  const daysOfWeekMap = {
+    maandag: 'Monday',
+    dinsdag: 'Tuesday',
+    woensdag: 'Wednesday',
+    donderdag: 'Thursday',
+    vrijdag: 'Friday',
+    zaterdag: 'Saturday',
+    zondag: 'Sunday',
+  };
+
   const [errors, setErrors] = useState({});
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
@@ -173,7 +183,7 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
     }
 
     try {
-      const response = await api.post(`${window.baseDomain}api/uitzonderingen`, payload);
+      const response = await api.post(`${window.baseDomain}api/exceptions`, payload);
       if (response) {
         setFormData({
           title: '',
@@ -266,9 +276,9 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
             className="exceptions-page__select"
           >
             <option value="">Selecteer Toepassing</option>
-            <option value="Ontbijt">Ontbijt</option>
-            <option value="Lunch">Lunch</option>
-            <option value="Diner">Diner</option>
+            <option value="breakfast">Ochtend</option>
+            <option value="lunch">Middag</option>
+            <option value="dinner">Avond</option>
           </select>
           {errors.toepassing && <p className="exceptions-page__error">{errors.toepassing}</p>}
         </div>

@@ -199,9 +199,9 @@ const DayContent = ({ dayId, days, mealType, scheduleData, refreshData }) => {
 
     try {
       if (dataExists) {
-        await api.put(`${window.baseDomain}api/openingsuren-${mealType}`, updatedData);
+        await api.put(`${window.baseDomain}api/openinghours-${mealType}`, updatedData);
       } else {
-        await api.post(`${window.baseDomain}api/openingsuren-${mealType}`, updatedData);
+        await api.post(`${window.baseDomain}api/openinghours-${mealType}`, updatedData);
       }
       triggerNotification('Data succesvol opgeslagen', 'success');
       refreshData(); // Refresh data in parent component

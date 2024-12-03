@@ -118,7 +118,7 @@ const routesConfig = [
   
   {
     path: '/openinghours',
-    element: <Openingsuren title="Openingsuren" mealType="ontbijt"/>, // Use RootComponent here
+    element: <Openingsuren title="Openingsuren" mealType="breakfast"/>, // Use RootComponent here
     label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: true,
@@ -139,7 +139,7 @@ const routesConfig = [
   
   {
     path: '/openinghours/dinner',
-    element: <Openingsuren title="Openingsuren" mealType="diner"/>, // Use RootComponent here
+    element: <Openingsuren title="Openingsuren" mealType="dinner"/>, // Use RootComponent here
     label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: false,
