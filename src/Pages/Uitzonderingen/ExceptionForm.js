@@ -182,13 +182,17 @@ const ExceptionForm = ({ api, triggerNotification, refreshExceptions }) => {
       delete payload.daysOfWeek;
     }
 
+    payload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value != null && value !== '')
+    );
+
     try {
       const response = await api.post(`${window.baseDomain}api/exceptions`, payload);
       if (response) {
         setFormData({
           title: '',
           type: '',
-          toepassing: '',
+          timeframe: '',
           date: '',
           startDate: '',
           endDate: '',
