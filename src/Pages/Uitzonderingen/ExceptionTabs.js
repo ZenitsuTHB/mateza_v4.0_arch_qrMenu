@@ -32,7 +32,7 @@ const ExceptionTabs = ({ activeTab, onTabChange }) => {
           className={`exceptions-page__tab ${activeTab === 'all' ? 'active' : ''}`}
           onClick={() => onTabChange('all')}
         >
-          Alle Maanden
+          Alle
         </div>
       </div>
     </div>
