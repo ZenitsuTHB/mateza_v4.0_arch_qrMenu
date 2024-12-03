@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './css/exceptions.css';
-import { shifts } from './constants'; // Adjust the import path if necessary
+import { shifts } from './constants';
 import useExceptionForm from './Hooks/useExceptionForm';
 import { getTodayDateString, getTimeOptions } from './Utils/utils';
 

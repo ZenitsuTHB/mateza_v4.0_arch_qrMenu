@@ -50,21 +50,17 @@ const ExceptionItem = ({ exception, api, triggerNotification, refreshExceptions 
           {exception.title}{' '}
           <span className={`exceptions-page__tag ${typeColorClass()}`}>{exception.type}</span>
         </h4>
-        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && exception.timeframe && (
-          <p>Toepassing: {exception.timeframe}</p>
-        )}
+        {exception.timeframe && <p>Toepassing: {exception.timeframe}</p>}
         <p>
           Geldig van {exception.startDate} tot {exception.endDate}
         </p>
-        {(exception.type === 'Opening' || exception.type === 'Uitzondering') && (
-          <>
-            <p>
-              Van {exception.startHour} tot {exception.endHour}
-            </p>
-            <p>Max. Zitplaatsen: {exception.maxSeats}</p>
-          </>
+        {exception.startHour && exception.endHour && (
+          <p>
+            Van {exception.startHour} tot {exception.endHour}
+          </p>
         )}
-        {exception.type !== 'Sluiting' && exception.type !== 'Sluitingsdag' && (
+        {exception.maxSeats && <p>Max. Zitplaatsen: {exception.maxSeats}</p>}
+        {exception.daysOfWeek && exception.daysOfWeek.length > 0 && (
           <p>Dagen: {exception.daysOfWeek.join(', ')}</p>
         )}
       </div>

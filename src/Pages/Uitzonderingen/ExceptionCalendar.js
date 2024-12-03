@@ -54,6 +54,11 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
           // Normalize dateObj
           const normalizedDateObj = normalizeDate(dateObj);
 
+          // Get the day index (0: Sunday, 1: Monday, ..., 6: Saturday)
+          const dayOfWeekIndex = normalizedDateObj.getDay();
+          const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+          const dayName = dayOfWeekNames[dayOfWeekIndex];
+
           // Determine the exceptions on this date considering daysOfWeek
           const dateExceptions = exceptions.filter((exception) => {
             const startDate = new Date(exception.startDate);
@@ -64,16 +69,21 @@ const ExceptionCalendar = ({ exceptions, onDateClick, monthOffset, onMonthChange
             const normalizedStartDate = normalizeDate(startDate);
             const normalizedEndDate = normalizeDate(endDate);
 
-            // Get the day index (0: Sunday, 1: Monday, ..., 6: Saturday)
-            const dayOfWeekIndex = normalizedDateObj.getDay();
-            const dayOfWeekNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
-            const dayName = dayOfWeekNames[dayOfWeekIndex];
-
-            return (
+            const dateInRange =
               normalizedDateObj >= normalizedStartDate &&
-              normalizedDateObj <= normalizedEndDate &&
-              (exception.type === 'Sluiting' || exception.type === 'Sluitingsdag' || exceptionDaysOfWeek.includes(dayName))
-            );
+              normalizedDateObj <= normalizedEndDate;
+
+            if (!dateInRange) {
+              return false;
+            }
+
+            // If daysOfWeek is specified and not empty, check if the dayName is included
+            if (exceptionDaysOfWeek.length > 0) {
+              return exceptionDaysOfWeek.includes(dayName);
+            } else {
+              // If daysOfWeek is not specified or empty, exception applies to all dates in range
+              return true;
+            }
           });
 
           // Determine the highest priority exception type
