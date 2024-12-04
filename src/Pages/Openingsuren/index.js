@@ -86,21 +86,7 @@ const SchedulePage = ({ mealType }) => {
 
   return (
     <div className="schedule-page-component">
-		<div
-  style={{
-    backgroundColor: '#f0f8ff', // AliceBlue background
-    border: '1px solid #add8e6', // LightBlue border
-    borderRadius: '5px',
-    padding: '15px',
-    margin: '20px 0',
-    color: '#333',
-    fontSize: '16px',
-    textAlign: 'center',
-  }}
->
-  Deze functie wordt ingeschakeld bij de berekening van reserveringen op de nacht van 4 naar 5 december.
-  De instellingen worden echter al opgeslagen.
-</div>
+		
       <div className="schedule-page">
         <NavigationBar
           days={days}
@@ -118,6 +104,21 @@ const SchedulePage = ({ mealType }) => {
           />
         )}
       </div>
+	  <div
+  style={{
+    backgroundColor: '#f0f8ff', // AliceBlue background
+    border: '1px solid #add8e6', // LightBlue border
+    borderRadius: '5px',
+    padding: '30px',
+    margin: '20px 0',
+    color: '#333',
+    fontSize: '16px',
+    textAlign: 'center',
+  }}
+>
+  Deze functie wordt ingeschakeld bij de berekening van reserveringen op de nacht van 4 naar 5 december.
+  De instellingen worden echter al opgeslagen.
+</div>
     </div>
   );
 };
