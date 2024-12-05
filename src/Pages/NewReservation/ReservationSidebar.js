@@ -27,6 +27,7 @@ const ReservationSidebar = ({
   const [loadingTimeblocks, setLoadingTimeblocks] = useState(false);
   const [timeblocksError, setTimeblocksError] = useState(null);
   const [menuData, setMenuData] = useState([]);
+  const [restaurantData, setRestaurantData] = useState([]);
   
   // New states for personeel
   const [availablePersoneel, setAvailablePersoneel] = useState([]);
@@ -43,6 +44,8 @@ const ReservationSidebar = ({
           const generalSettings = data['general-settings'] || {};
           window.generalSettings = generalSettings;
           setMenuData(data.menu || []);
+          setRestaurantData(data);
+
           
           // Fetch personeel data
           const personeelData = await api.get(`${window.baseDomain}api/personeel`, { noCache: true });
@@ -123,6 +126,7 @@ const ReservationSidebar = ({
                 timeblocks={timeblocks}
                 loadingTimeblocks={loadingTimeblocks}
                 timeblocksError={timeblocksError}
+                restaurantData={restaurantData}
               />
             </div>
             <div className="sidebar-section-two">

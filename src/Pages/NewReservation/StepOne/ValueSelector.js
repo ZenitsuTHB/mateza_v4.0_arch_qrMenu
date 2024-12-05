@@ -68,7 +68,7 @@ const ValueSelectorGuests = ({ setGuests, value, onChange }) => {
               step="1"
               value={selectedValue}
               onChange={handleSliderChange}
-              className="slider"
+              className="slider non-absolute"
             />
             <input
               type="number"

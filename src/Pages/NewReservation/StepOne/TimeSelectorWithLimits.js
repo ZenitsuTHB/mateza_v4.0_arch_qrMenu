@@ -1,31 +1,50 @@
-// src/Pages/NewReservation/TimeSelectorWithLimits.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
-import { generateAvailableTimesForDate } from './Utils/generateTimes';
+// Removed import of generateAvailableTimesForDate
 import './css/timeSelector.css';
-import moment from 'moment-timezone';
+import { getAvailableTimeblocks } from './algorithm/getAvailableTimeblocks'; // Import getAvailableTimeblocks
 
 const TimeSelectorWithLimits = ({
-  guests, 
+  guests,
   formData,
   handleChange,
   field,
   selectedDate,
   expanded,
   setCurrentExpandedField,
+  restaurantData,
+  reservations, // Accept reservations as prop
 }) => {
   const [isExpanded, setIsExpanded] = useState(expanded || false);
   const [availableTimes, setAvailableTimes] = useState([]);
   const timeSelectorRef = useRef(null);
 
   useEffect(() => {
-    if (selectedDate) {
-      const times = generateAvailableTimesForDate(guests, new Date(selectedDate));
+    if (selectedDate && guests && restaurantData && reservations) {
+      const timeblocks = getAvailableTimeblocks(
+        restaurantData,
+        selectedDate,
+        reservations,
+        guests
+      );
+
+      // Convert timeblocks object to array suitable for rendering
+      const times = Object.keys(timeblocks).map((time) => ({
+        value: time,
+        label: timeblocks[time].name || time,
+      }));
+
+      // Sort times
+      times.sort((a, b) => {
+        const [aHours, aMinutes] = a.value.split(':').map(Number);
+        const [bHours, bMinutes] = b.value.split(':').map(Number);
+        return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
+      });
+
       setAvailableTimes(times);
     } else {
       setAvailableTimes([]);
     }
-  }, [selectedDate, guests]);
+  }, [selectedDate, guests, restaurantData, reservations]);
 
   const handleTimeSelect = (timeValue) => {
     handleChange({
@@ -39,7 +58,9 @@ const TimeSelectorWithLimits = ({
 
   const formatDisplayTime = () => {
     if (formData[field.id]) {
-      const selected = availableTimes.find((time) => time.value === formData[field.id]);
+      const selected = availableTimes.find(
+        (time) => time.value === formData[field.id]
+      );
       return selected ? selected.label : 'Selecteer een tijd';
     }
     return 'Selecteer een tijd';
@@ -51,7 +72,6 @@ const TimeSelectorWithLimits = ({
 
   return (
     <div className="form-group time-selector-container" ref={timeSelectorRef}>
-
       {!selectedDate ? (
         <p className="info-text">Selecteer eerst een datum.</p>
       ) : (

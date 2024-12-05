@@ -1,8 +1,5 @@
-// src/Pages/NewReservation/DateSelectorWithLimits.jsx
-
-import React, { useEffect, useState, useCallback } from 'react';
+import React from 'react';
 import Calendar from './Calendar';
-import { generateAvailableDates } from './Utils/generateDates';
 import moment from 'moment';
 
 const DateSelectorWithLimits = ({
@@ -11,20 +8,11 @@ const DateSelectorWithLimits = ({
   handleChange,
   resetFormDataFields,
   timeblocks,
+  restaurantData,
+  reservations, // Receive reservations as prop
+  startDate, // Receive startDate as prop
+  onWeekChange, // Receive onWeekChange as prop
 }) => {
-  const [availableDates, setAvailableDates] = useState([]);
-  const [reservations, setReservations] = useState([]); // New state for reservations
-
-  useEffect(() => {
-    if (Array.isArray(timeblocks)) {
-      const dates = generateAvailableDates(guests, timeblocks, reservations);
-      setAvailableDates(dates);
-    } else {
-      console.error('timeblocks is undefined or not an array:', timeblocks);
-      setAvailableDates([]);
-    }
-  }, [guests, timeblocks, reservations]);
-
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     console.log('Selected date:', formattedDate);
@@ -34,19 +22,18 @@ const DateSelectorWithLimits = ({
     resetFormDataFields(['time']);
   };
 
-  // Memoize the callback to prevent unnecessary re-renders
-  const handleReservationsFetched = useCallback((data) => {
-    setReservations(data); // Update the reservations state
-  }, []);
-
   return (
     <div className="form-group date-selector-container">
       <Calendar
-        availableDates={availableDates}
+        guests={guests} // Pass down guests
         selectedDate={formData.date || null}
         onSelectDate={handleDateSelect}
         autoExpand={false}
-        onReservationsFetched={handleReservationsFetched} // Pass the handler as prop
+        reservationMode={formData.reservationMode}
+        restaurantData={restaurantData}
+        startDate={startDate} // Pass down startDate
+        onWeekChange={onWeekChange} // Pass down onWeekChange handler
+        reservations={reservations} // Pass down reservations
       />
     </div>
   );

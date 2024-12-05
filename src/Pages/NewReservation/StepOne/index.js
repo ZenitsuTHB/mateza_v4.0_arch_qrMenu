@@ -1,12 +1,13 @@
-// src/Pages/NewReservation/ReservationStepOne.jsx
-
 import React, { useState, useEffect } from 'react';
 import ValueSelectorGuests from './ValueSelector';
 import DateSelectorWithLimits from './DateSelectorWithLimits';
 import DateSelectorWithoutLimits from './DateSelectorWithoutLimits';
 import TimeSelectorWithLimits from './TimeSelectorWithLimits';
 import TimeSelectorWithoutLimits from './TimeSelectorWithoutLimits';
-import './css/reservationMode.css'; // NEW: Import CSS for reservation mode
+import './css/reservationMode.css'; // Import CSS for reservation mode
+import moment from 'moment';
+import useApi from '../../../Hooks/useApi'; // Import useApi
+import { isWeekInPast } from './Utils/dateUtils';
 
 const ReservationStepOne = ({
   formData,
@@ -17,9 +18,13 @@ const ReservationStepOne = ({
   timeblocks,
   loadingTimeblocks,
   timeblocksError,
+  restaurantData,
 }) => {
   const [guests, setGuests] = useState(1);
-  
+  const [startDate, setStartDate] = useState(null); // startDate state
+  const [reservations, setReservations] = useState([]); // reservations state
+  const api = useApi(); // Initialize useApi hook
+
   const resetFormDataFields = (fieldsToReset) => {
     setFormData((prevFormData) => {
       const newFormData = { ...prevFormData };
@@ -28,6 +33,44 @@ const ReservationStepOne = ({
       });
       return newFormData;
     });
+  };
+
+  // Initialize startDate
+  useEffect(() => {
+    const today = moment().tz('Europe/Amsterdam').startOf('day');
+    let firstWeekStart = today.clone().startOf('isoWeek');
+    while (isWeekInPast(firstWeekStart)) {
+      firstWeekStart.add(1, 'week');
+    }
+    setStartDate(firstWeekStart);
+  }, []);
+
+  // Fetch reservations when startDate changes
+  useEffect(() => {
+    const fetchReservations = async () => {
+      if (startDate) {
+        const beginDate = startDate.format('YYYY-MM-DD');
+        const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
+        const restaurantId = localStorage.getItem('username');
+        const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
+
+        try {
+          console.log('Calendar Slots GET');
+          const data = await api.get(endpoint, { noCache: true });
+          setReservations(data); // Update reservations state
+          console.log('Fetched reservations:', data);
+        } catch (error) {
+          console.error('Error fetching reservations:', error);
+        }
+      }
+    };
+
+    fetchReservations();
+  }, [startDate, api]);
+
+  // Handler for week change
+  const handleWeekChange = (newStartDate) => {
+    setStartDate(newStartDate);
   };
 
   // Set default reservation mode to 'met_limieten' on component mount
@@ -40,7 +83,7 @@ const ReservationStepOne = ({
   }, [formData.reservationMode, handleChange]);
 
   useEffect(() => {
-      resetFormDataFields(['date', 'time']);
+    resetFormDataFields(['date', 'time']);
   }, [guests]);
 
   if (timeblocksError) {
@@ -69,8 +112,12 @@ const ReservationStepOne = ({
   };
 
   return (
-    <form className="account-manage-form" onSubmit={handleStepOneSubmit} noValidate>
-      {/* NEW: Reservation Mode Selection */}
+    <form
+      className="account-manage-form"
+      onSubmit={handleStepOneSubmit}
+      noValidate
+    >
+      {/* Reservation Mode Selection */}
       <div className="form-group reservation-mode">
         <div className="reservation-mode-buttons">
           <button
@@ -112,6 +159,10 @@ const ReservationStepOne = ({
               handleChange={handleChange}
               resetFormDataFields={resetFormDataFields}
               timeblocks={timeblocks}
+              restaurantData={restaurantData}
+              reservations={reservations} // Pass down reservations
+              startDate={startDate} // Pass down startDate
+              onWeekChange={handleWeekChange} // Pass down onWeekChange handler
             />
           ) : (
             <DateSelectorWithoutLimits
@@ -135,6 +186,8 @@ const ReservationStepOne = ({
               field={{ id: 'time', label: 'Tijd' }}
               selectedDate={formData.date}
               setCurrentExpandedField={() => {}}
+              restaurantData={restaurantData}
+              reservations={reservations} 
             />
           ) : (
             <TimeSelectorWithoutLimits

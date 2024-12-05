@@ -1,27 +1,27 @@
-// src/Pages/NewReservation/Calendar.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/nl';
 import { isWeekInPast, isSameDay } from './Utils/dateUtils';
 import './css/calendar.css';
 import useApi from '../../../Hooks/useApi';
+import { isDateAvailable } from './algorithm/isDateAvailable'; // Import isDateAvailable
 
 moment.locale('nl'); // Set moment to Dutch locale
 
 const Calendar = ({
-  availableDates,
+  // Removed availableDates,
+  guests, // Add guests prop
   selectedDate,
   onSelectDate,
   autoExpand,
-  onReservationsFetched, // New prop for callback
-  reservationMode, // NEW: accept reservationMode prop
+  reservationMode, // Accept reservationMode prop
+  restaurantData,
+  startDate, // Receive startDate as prop
+  onWeekChange, // Callback when week changes
+  reservations, // Receive reservations as prop
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
-  const [startDate, setStartDate] = useState(null);
-  const [reservations, setReservations] = useState(null); // Local state for reservations
   const calendarRef = useRef(null);
-  const api = useApi(); // Initialize useApi hook
 
   const maxDate = moment().tz('Europe/Amsterdam').add(1, 'year').endOf('day');
 
@@ -30,15 +30,6 @@ const Calendar = ({
       setIsExpanded(true);
     }
   }, [autoExpand]);
-
-  useEffect(() => {
-    const today = moment().tz('Europe/Amsterdam').startOf('day');
-    let firstWeekStart = today.clone().startOf('isoWeek');
-    while (isWeekInPast(firstWeekStart)) {
-      firstWeekStart.add(1, 'week');
-    }
-    setStartDate(firstWeekStart);
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,32 +46,6 @@ const Calendar = ({
     };
   }, []);
 
-  useEffect(() => {
-    const fetchAndHandleReservations = async () => {
-      if (startDate) {
-        const beginDate = startDate.format('YYYY-MM-DD');
-        const endDate = startDate.clone().add(13, 'days').format('YYYY-MM-DD');
-        const restaurantId = localStorage.getItem('username');
-        const endpoint = `${window.baseDomain}api/slots/${restaurantId}/${beginDate}/${endDate}`;
-
-        try {
-          console.log("Calendar Slots GET");
-          const data = await api.get(endpoint, { noCache: true });
-          setReservations(data); // Update local state with fetched reservations
-          console.log('Fetched reservations:', data);
-
-          if (onReservationsFetched && typeof onReservationsFetched === 'function') {
-            onReservationsFetched(data); // Invoke callback with fetched data
-          }
-        } catch (error) {
-          console.error('Error fetching reservations:', error);
-        }
-      }
-    };
-
-    fetchAndHandleReservations();
-  }, [startDate, api, onReservationsFetched]);
-
   const generateCalendarDays = (startDate) => {
     const days = [];
     const today = moment().tz('Europe/Amsterdam').startOf('day');
@@ -89,7 +54,18 @@ const Calendar = ({
     let date = startDate.clone();
     while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
       const formattedDate = date.format('YYYY-MM-DD');
-      const isAvailable = reservationMode === 'zonder_regels' ? true : availableDates.includes(formattedDate);
+      let isAvailable = true;
+
+      if (reservationMode === 'zonder_regels') {
+        isAvailable = true;
+      } else {
+        isAvailable = isDateAvailable(
+          restaurantData,
+          formattedDate,
+          reservations,
+          guests
+        );
+      }
 
       days.push({
         date: date.clone(),
@@ -120,12 +96,12 @@ const Calendar = ({
       console.log('Cannot go to previous week. It is in the past.');
       return;
     }
-    setStartDate(newStartDate);
+    onWeekChange(newStartDate);
   };
 
   const handleNextWeek = () => {
     const newStartDate = startDate.clone().add(1, 'week');
-    setStartDate(newStartDate);
+    onWeekChange(newStartDate);
   };
 
   const formatDisplayDate = () => {
@@ -137,7 +113,10 @@ const Calendar = ({
       .tz('Europe/Amsterdam')
       .startOf('day');
     const today = moment().tz('Europe/Amsterdam').startOf('day');
-    const tomorrow = moment().tz('Europe/Amsterdam').add(1, 'day').startOf('day');
+    const tomorrow = moment()
+      .tz('Europe/Amsterdam')
+      .add(1, 'day')
+      .startOf('day');
 
     if (selectedMoment.isSame(today, 'day')) {
       return 'Vandaag'; // "Today" in Dutch
@@ -149,6 +128,7 @@ const Calendar = ({
     }
   };
 
+  // Recalculate days whenever startDate, guests, reservations, restaurantData change
   const days = startDate ? generateCalendarDays(startDate) : [];
 
   return (
@@ -212,7 +192,9 @@ const Calendar = ({
                           selectedDate &&
                           isSameDay(
                             dayObj.date,
-                            moment(selectedDate, 'YYYY-MM-DD').tz('Europe/Amsterdam')
+                            moment(selectedDate, 'YYYY-MM-DD').tz(
+                              'Europe/Amsterdam'
+                            )
                           );
                         const classNames = [];
                         if (dayObj.isPast) {
