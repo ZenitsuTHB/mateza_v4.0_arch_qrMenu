@@ -192,9 +192,18 @@ const DayContent = ({ dayId, days, mealType, scheduleData, setScheduleData }) =>
     }
   };
 
+  let mealTypeLabel = '';
+  if (mealType === 'breakfast') {
+    mealTypeLabel = 'ochtend';
+  } else if (mealType === 'lunch') {
+    mealTypeLabel = 'middag';
+  } else if (mealType === 'dinner') {
+    mealTypeLabel = 'avond';
+  }
+
   return (
     <div className="schedule-page">
-      <h1 className="schedule-page-title">{day.title}</h1>
+      <h1 className="schedule-page-title">{day.title}{mealTypeLabel}</h1>
 
       <NotificationComponent />
 
