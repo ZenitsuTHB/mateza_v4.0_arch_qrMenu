@@ -136,7 +136,7 @@ const ReservationStepOne = ({
             onClick={() => handleReservationModeSelect('zonder_regels')}
             aria-pressed={formData.reservationMode === 'zonder_regels'}
           >
-            Vrij Reserveren
+            Onbeperkt
           </button>
         </div>
       </div>
@@ -150,32 +150,34 @@ const ReservationStepOne = ({
 
       {formData.guests && (
         <>
-            <DateSelector
-              guests={formData.guests}
-              formData={formData}
-              handleChange={handleChange}
-              resetFormDataFields={resetFormDataFields}
-              timeblocks={timeblocks}
-              restaurantData={restaurantData}
-              reservations={reservations} // Pass down reservations
-              startDate={startDate} // Pass down startDate
-              onWeekChange={handleWeekChange} // Pass down onWeekChange handler
-            />
+          <DateSelector
+            guests={formData.guests}
+            formData={formData}
+            handleChange={handleChange}
+            resetFormDataFields={resetFormDataFields}
+            timeblocks={timeblocks}
+            restaurantData={restaurantData}
+            reservations={reservations} // Pass down reservations
+            startDate={startDate} // Pass down startDate
+            onWeekChange={handleWeekChange} // Pass down onWeekChange handler
+            reservationMode={formData.reservationMode} // Pass reservationMode
+          />
         </>
       )}
 
       {formData.date && (
         <>
-            <TimeSelector
-              guests={formData.guests}
-              formData={formData}
-              handleChange={handleChange}
-              field={{ id: 'time', label: 'Tijd' }}
-              selectedDate={formData.date}
-              setCurrentExpandedField={() => {}}
-              restaurantData={restaurantData}
-              reservations={reservations} 
-            />
+          <TimeSelector
+            guests={formData.guests}
+            formData={formData}
+            handleChange={handleChange}
+            field={{ id: 'time', label: 'Tijd' }}
+            selectedDate={formData.date}
+            setCurrentExpandedField={() => {}}
+            restaurantData={restaurantData}
+            reservations={reservations}
+            reservationMode={formData.reservationMode} // Pass reservationMode
+          />
         </>
       )}
     </form>

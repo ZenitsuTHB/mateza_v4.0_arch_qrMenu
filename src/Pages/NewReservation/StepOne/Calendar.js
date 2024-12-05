@@ -3,22 +3,20 @@ import moment from 'moment-timezone';
 import 'moment/locale/nl';
 import { isWeekInPast, isSameDay } from './Utils/dateUtils';
 import './css/calendar.css';
-import useApi from '../../../Hooks/useApi';
 import { isDateAvailable } from './algorithm/isDateAvailable'; // Import isDateAvailable
 
 moment.locale('nl'); // Set moment to Dutch locale
 
 const Calendar = ({
-  // Removed availableDates,
-  guests, // Add guests prop
+  guests,
   selectedDate,
   onSelectDate,
   autoExpand,
-  reservationMode, // Accept reservationMode prop
+  reservationMode, // Receive reservationMode as prop
   restaurantData,
-  startDate, // Receive startDate as prop
-  onWeekChange, // Callback when week changes
-  reservations, // Receive reservations as prop
+  startDate,
+  onWeekChange,
+  reservations,
 }) => {
   const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const calendarRef = useRef(null);
@@ -54,18 +52,15 @@ const Calendar = ({
     let date = startDate.clone();
     while (date.isSameOrBefore(twoWeeksFromStart, 'day')) {
       const formattedDate = date.format('YYYY-MM-DD');
-      let isAvailable = true;
+      const adjustedGuests =
+        reservationMode !== 'met_limieten' ? -10000 : guests; // Adjust guests
 
-      if (reservationMode === 'zonder_regels') {
-        isAvailable = true;
-      } else {
-        isAvailable = isDateAvailable(
-          restaurantData,
-          formattedDate,
-          reservations,
-          guests
-        );
-      }
+      const isAvailable = isDateAvailable(
+        restaurantData,
+        formattedDate,
+        reservations,
+        adjustedGuests // Use adjustedGuests
+      );
 
       days.push({
         date: date.clone(),
@@ -128,7 +123,7 @@ const Calendar = ({
     }
   };
 
-  // Recalculate days whenever startDate, guests, reservations, restaurantData change
+  // Recalculate days whenever startDate, guests, reservations, restaurantData, or reservationMode change
   const days = startDate ? generateCalendarDays(startDate) : [];
 
   return (

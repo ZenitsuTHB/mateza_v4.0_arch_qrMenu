@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-// Removed import of generateAvailableTimesForDate
 import './css/timeSelector.css';
-import { getAvailableTimeblocks } from './algorithm/getAvailableTimeblocks'; // Import getAvailableTimeblocks
+import { getAvailableTimeblocks } from './algorithm/getAvailableTimeblocks';
 
 const TimeSelector = ({
   guests,
@@ -12,7 +11,8 @@ const TimeSelector = ({
   expanded,
   setCurrentExpandedField,
   restaurantData,
-  reservations, // Accept reservations as prop
+  reservations,
+  reservationMode, // Receive reservationMode as prop
 }) => {
   const [isExpanded, setIsExpanded] = useState(expanded || false);
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -20,11 +20,13 @@ const TimeSelector = ({
 
   useEffect(() => {
     if (selectedDate && guests && restaurantData && reservations) {
+      const adjustedGuests =
+        reservationMode !== 'met_limieten' ? -10000 : guests; // Adjust guests
       const timeblocks = getAvailableTimeblocks(
         restaurantData,
         selectedDate,
         reservations,
-        guests
+        adjustedGuests // Use adjustedGuests
       );
 
       // Convert timeblocks object to array suitable for rendering
@@ -44,7 +46,13 @@ const TimeSelector = ({
     } else {
       setAvailableTimes([]);
     }
-  }, [selectedDate, guests, restaurantData, reservations]);
+  }, [
+    selectedDate,
+    guests,
+    restaurantData,
+    reservations,
+    reservationMode, // Add reservationMode to dependencies
+  ]);
 
   const handleTimeSelect = (timeValue) => {
     handleChange({

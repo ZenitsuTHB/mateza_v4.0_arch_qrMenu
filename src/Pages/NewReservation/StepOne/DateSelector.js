@@ -9,10 +9,10 @@ const DateSelector = ({
   resetFormDataFields,
   timeblocks,
   restaurantData,
-  reservations, // Receive reservations as prop
-  startDate, // Receive startDate as prop
-  onWeekChange, // Receive onWeekChange as prop
-  reservationMode,
+  reservations,
+  startDate,
+  onWeekChange,
+  reservationMode, // Receive reservationMode as prop
 }) => {
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
@@ -26,15 +26,15 @@ const DateSelector = ({
   return (
     <div className="form-group date-selector-container">
       <Calendar
-        guests={guests} // Pass down guests
+        guests={guests}
         selectedDate={formData.date || null}
         onSelectDate={handleDateSelect}
         autoExpand={false}
-        reservationMode={formData.reservationMode}
+        reservationMode={reservationMode} // Pass reservationMode to Calendar
         restaurantData={restaurantData}
-        startDate={startDate} // Pass down startDate
-        onWeekChange={onWeekChange} // Pass down onWeekChange handler
-        reservations={reservations} // Pass down reservations
+        startDate={startDate}
+        onWeekChange={onWeekChange}
+        reservations={reservations}
       />
     </div>
   );
