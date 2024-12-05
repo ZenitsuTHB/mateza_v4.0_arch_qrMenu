@@ -1,5 +1,6 @@
 // src/utils/utils.js
 
+
 // Function to get today's date in YYYY-MM-DD format
 export const getTodayDateString = () => {
 	const today = new Date();
@@ -7,13 +8,6 @@ export const getTodayDateString = () => {
 	const month = String(today.getMonth() + 1).padStart(2, '0');
 	const day = String(today.getDate()).padStart(2, '0');
 	return `${year}-${month}-${day}`;
-  };
-  
-  // Validation helper functions
-  export const isDateInPast = (dateStr) => {
-	const date = new Date(dateStr);
-	const now = new Date();
-	return date < now;
   };
   
   export const isStartDateAfterEndDate = (startDateStr, endDateStr) => {

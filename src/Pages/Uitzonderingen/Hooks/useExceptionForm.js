@@ -1,7 +1,7 @@
 // src/hooks/useExceptionForm.js
 
 import { useState, useEffect, useRef } from 'react';
-import { getTodayDateString, isDateInPast, isStartDateAfterEndDate } from '../Utils/utils.js';
+import { getTodayDateString, isStartDateAfterEndDate } from '../Utils/utils.js';
 
 const useExceptionForm = (initialFormData, api, triggerNotification, refreshExceptions) => {
   const [formData, setFormData] = useState(initialFormData);
@@ -89,11 +89,6 @@ const useExceptionForm = (initialFormData, api, triggerNotification, refreshExce
     )
       validationErrors.maxSeats = 'Max. Zitplaatsen is verplicht.';
 
-    // Additional date validations
-    if (formData.startDate && isDateInPast(formData.startDate))
-      validationErrors.startDate = 'Startdatum mag niet in het verleden liggen.';
-    if (formData.endDate && isDateInPast(formData.endDate))
-      validationErrors.endDate = 'Einddatum mag niet in het verleden liggen.';
     if (
       formData.startDate &&
       formData.endDate &&
