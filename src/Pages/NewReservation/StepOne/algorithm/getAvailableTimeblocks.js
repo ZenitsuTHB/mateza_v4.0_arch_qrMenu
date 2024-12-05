@@ -32,14 +32,7 @@ function parseDateTimeInTimeZone(dateStr, timeStr, timeZone) {
  */
 function getAvailableTimeblocks(data, dateStr, reservations, guests) {
   // Get 'uurOpVoorhand' from general settings, default to 4 if not defined or zero
-  let uurOpVoorhand = 4; // Default value in hours
-  if (
-    data['general-settings'] &&
-    data['general-settings'].uurOpVoorhand &&
-    parseInt(data['general-settings'].uurOpVoorhand, 10) >= 0
-  ) {
-    uurOpVoorhand = parseInt(data['general-settings'].uurOpVoorhand, 10);
-  }
+  let uurOpVoorhand = 0;
 
   // Time zone for CEST/CET (Europe/Amsterdam)
   const timeZone = 'Europe/Amsterdam';
