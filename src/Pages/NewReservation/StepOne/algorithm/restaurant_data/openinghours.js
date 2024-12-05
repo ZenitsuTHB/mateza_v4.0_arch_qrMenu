@@ -9,21 +9,11 @@ const shifts = {
   dinner: { start: '16:00', end: '23:00' },
 };
 
-/**
- * Parses a time string in "HH:MM" format into minutes since midnight.
- * @param {string} timeStr - Time string in "HH:MM" format.
- * @returns {number} Minutes since midnight.
- */
 function parseTime(timeStr) {
   const [hours, minutes] = timeStr.split(':').map(Number);
   return hours * 60 + minutes;
 }
 
-/**
- * Determines the meal type based on the provided time.
- * @param {string} timeStr - Time string in "HH:MM" format.
- * @returns {string|null} The meal type ("breakfast", "lunch", "dinner") or null if none match.
- */
 function getMealTypeByTime(timeStr) {
   const time = parseTime(timeStr);
   for (const [mealType, shift] of Object.entries(shifts)) {
@@ -36,13 +26,6 @@ function getMealTypeByTime(timeStr) {
   return null;
 }
 
-/**
- * Retrieves meal data for a specific day of the week and meal type.
- * @param {Object} data - The input data object.
- * @param {string} dayOfWeek - Day of the week in English (e.g., "Monday").
- * @param {string} mealType - Meal type ("breakfast", "lunch", "dinner").
- * @returns {Object|null} The meal data or null if not found.
- */
 function getDataByDayAndMeal(data, dayOfWeek, mealType) {
   const mealKey = `openinghours-${mealType}`;
   if (!data[mealKey]) {
@@ -53,63 +36,62 @@ function getDataByDayAndMeal(data, dayOfWeek, mealType) {
   if (!dayData) {
     return null;
   }
-  return { ...dayData }; // Return a shallow copy to avoid mutating original data
+  return { ...dayData };
 }
 
-/**
- * Adjusts meal data to use general settings if maxCapacityEnabled is false.
- * @param {Object} mealData - The meal data object to adjust.
- * @param {Object} generalSettings - The general settings object.
- */
 function adjustMealData(mealData, generalSettings) {
   if (mealData.maxCapacityEnabled === false) {
-    // Fallback to general-settings.zitplaatsen
     if (generalSettings && generalSettings.zitplaatsen) {
       mealData.maxCapacity = generalSettings.zitplaatsen;
       mealData.maxCapacityEnabled = true;
     } else {
-      // If zitplaatsen is not set, set maxCapacity to 0
       mealData.maxCapacity = '0';
       mealData.maxCapacityEnabled = true;
     }
   }
 }
 
-/**
- * Retrieves meal data based on a date and meal type.
- * Returns null if the meal is not enabled.
- * @param {Object} data - The input data object.
- * @param {string} dateStr - Date string in "YYYY-MM-DD" format.
- * @param {string} mealType - Meal type ("breakfast", "lunch", "dinner").
- * @returns {Object|null} The meal data or null if not enabled/not found.
- */
+function getDuurReservatie(data) {
+  let duurReservatie = 120;
+  if (
+    data['general-settings'] &&
+    data['general-settings'].duurReservatie &&
+    parseInt(data['general-settings'].duurReservatie, 10) > 0
+  ) {
+    duurReservatie = parseInt(data['general-settings'].duurReservatie, 10);
+  }
+  return duurReservatie;
+}
+
+function addDuurReservatieToEndTime(mealData, data) {
+  const duurReservatie = getDuurReservatie(data);
+  const endMinutes = parseTime(mealData.endTime);
+  const newEndMinutes = endMinutes + duurReservatie;
+  const hours = String(Math.floor(newEndMinutes / 60)).padStart(2, '0');
+  const minutes = String(newEndMinutes % 60).padStart(2, '0');
+  mealData.endTime = `${hours}:${minutes}`;
+}
+
 function getDataByDateAndMeal(data, dateStr, mealType) {
   const date = new Date(dateStr);
   if (isNaN(date)) {
-    // Invalid date
     return null;
   }
-  const dayOfWeekIndex = date.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const dayOfWeekIndex = date.getDay();
   const dayOfWeek = daysOfWeekEnglish[dayOfWeekIndex];
   let mealData = getDataByDayAndMeal(data, dayOfWeek, mealType);
   if (!mealData || mealData.enabled !== true) {
     return null;
   }
 
-  // Adjust mealData if maxCapacityEnabled is false
   adjustMealData(mealData, data['general-settings']);
+
+  // Add duurReservatie to endTime
+  addDuurReservatieToEndTime(mealData, data);
 
   return mealData;
 }
 
-/**
- * Retrieves meal data based on a date and time.
- * Returns null if the meal is not enabled or the time is outside operating hours.
- * @param {Object} data - The input data object.
- * @param {string} dateStr - Date string in "YYYY-MM-DD" format.
- * @param {string} timeStr - Time string in "HH:MM" format.
- * @returns {Object|null} The meal data or null if not enabled/not found/outside operating hours.
- */
 function getDataByDateAndTime(data, dateStr, timeStr) {
   const mealType = getMealTypeByTime(timeStr);
   if (!mealType) {
@@ -122,7 +104,6 @@ function getDataByDateAndTime(data, dateStr, timeStr) {
   const requestedTime = parseTime(timeStr);
   const startTime = parseTime(mealData.startTime);
   const endTime = parseTime(mealData.endTime);
-  // Check if requested time is within the mealData's start and end times
   if (requestedTime >= startTime && requestedTime < endTime) {
     return mealData;
   } else {
