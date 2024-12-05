@@ -1,8 +1,15 @@
 // topBarConfig.js
 
-import { FaPlus, FaPencilAlt, FaUser, FaSignOutAlt, FaCalendar } from 'react-icons/fa';
+import { FaLock, FaPencilAlt, FaUser, FaSignOutAlt, FaCalendar } from 'react-icons/fa';
 
 const topBarConfig = [
+
+  {
+    label: 'Uitzonderingen',
+    icon: FaLock,
+    path: '/exceptions',
+    hasDropdown: false,
+  },
   {
     label: 'Edit',
     icon: FaPencilAlt,

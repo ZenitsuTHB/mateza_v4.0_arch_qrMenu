@@ -22,7 +22,6 @@ import {
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
-import DayCalendar from '../Pages/DayCalendar/index.js';
 import DayList from '../Pages/Dashboard/DayList/index.js';
 import GiftCard from '../Pages/Giftcard/GiftCard'
 import GiftcardEditor from '../Pages/Giftcard/GiftcardEditor'
@@ -42,7 +41,6 @@ import {
 } from './secondaryTabConfig.js';
 import Language from '../Pages/Profile/Language/index.js';
 import NewReservationAdmin from '../Pages/NewReservation/index.js';
-import SchemeStandalone from '../Pages/DayCalendar/SchemeStandalone.js';
 import RootComponent from './RootComponent.js';
 import Settings from '../Pages/Settings/GeneralSettings/index.js';
 import EmailSettings from '../Pages/Settings/EmailSettings/index.js';
@@ -96,33 +94,20 @@ const routesConfig = [
     secondaryTopBar: overviewSecondaryTopBar,
   },
   {
-    path: '/scheme',
-    element: <SchemeStandalone title="Openingsuren" />,
-    label: 'Openingsuren',
-    icon: FaCalendarAlt,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
-    sidebarHidden: false,
-    secondaryTopBar: calendarSecondaryTopBar,
-  },
-  {
     path: '/exceptions',
     element: <Uitzonderingen title="Uitzonderingen"/>, // Use RootComponent here
-    label: 'Uitzonderingen (beta)',
+    label: 'Uitzonderingen',
     icon: FaLock,
     isMenu: true,
     isMobile: true,
     isTab: false,
   },
-  
-  
   {
     path: '/openinghours',
     element: <Openingsuren title="Openingsuren" mealType="breakfast"/>, // Use RootComponent here
-    label: 'Openingsuren (beta)',
+    label: 'Openingsuren',
     icon: FaCalendarAlt,
-    isMenu: true,
+    isMenu: false,
     isMobile: false,
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
@@ -130,35 +115,23 @@ const routesConfig = [
   {
     path: '/openinghours/lunch',
     element: <Openingsuren title="Openingsuren" mealType="lunch"/>, // Use RootComponent here
-    label: 'Openingsuren (beta)',
+    label: 'Openingsuren',
     icon: FaCalendarAlt,
     isMenu: false,
     isMobile: false,
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
   },
-  
   {
     path: '/openinghours/dinner',
     element: <Openingsuren title="Openingsuren" mealType="dinner"/>, // Use RootComponent here
-    label: 'Openingsuren (beta)',
+    label: 'Openingsuren',
     icon: FaCalendarAlt,
-    isMenu: false,
+    isMenu: true,
     isMobile: false,
     isTab: false,
     secondaryTopBar: openinghoursSecondaryTopBar,
   },
-  {
-    path: '/scheme/calendar',
-    element: <DayCalendar title="Openingskalender" />,
-    label: 'Openingskalender',
-    icon: FaTable,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: calendarSecondaryTopBar,
-  },
-
   {
     path: '/settings/email',
     element: <EmailSettings title="Administratie" />,
