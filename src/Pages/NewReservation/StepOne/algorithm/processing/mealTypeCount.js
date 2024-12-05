@@ -41,6 +41,14 @@ function getMealTypesWithShifts(data, dateStr) {
   return mealTypesWithShifts;
 }
 
+function shouldIncludeEndTime(mealType, endTime) {  
+  if ((mealType === 'breakfast' && endTime === '11:00') ||
+      (mealType === 'lunch' && endTime === '16:00')) {
+    return false; // Do not include endTime for breakfast at 11:00 and lunch at 16:00
+  }
+  return true; // Include endTime for all other cases
+}
+
 /**
  * Calculates guest counts for each interval during a meal period or at shift times.
  * @param {Object} data - The main data object.
@@ -92,11 +100,14 @@ function getGuestCountsForMeal(data, dateStr, mealType, reservations) {
     const startTime = mealData.startTime;
     const endTime = mealData.endTime;
 
+    // Determine if endTime should be included
+    const includeEndTime = shouldIncludeEndTime(mealType, endTime);
+
     // Convert startTime and endTime to minutes since midnight
     let currentTime = parseTime(startTime);
     const endTimeMinutes = parseTime(endTime);
 
-    while (currentTime < endTimeMinutes) {
+    while (includeEndTime ? currentTime <= endTimeMinutes : currentTime < endTimeMinutes) {
       // Convert currentTime back to "HH:MM" format
       const hours = Math.floor(currentTime / 60).toString().padStart(2, '0');
       const minutes = (currentTime % 60).toString().padStart(2, '0');

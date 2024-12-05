@@ -78,16 +78,11 @@ function timeblocksAvailable(data, dateStr, reservations, guests) {
     // Go through the time slots to find sequences of consecutive slots with enough available seats
     for (let i = 0; i <= timeSlots.length - slotsNeeded; i++) {
       let consecutiveSlotsAvailable = true;
-      const consecutiveSlots = {};
 
       // Check if the current time slot has enough available seats
       if (guestCounts[timeSlots[i]] < guests) {
         continue;
       }
-
-      consecutiveSlots[timeSlots[i]] = {
-		name: timeSlots[i],
-      };
 
       // Start time of the current slot
       let previousTime = parseTime(timeSlots[i]);
@@ -110,18 +105,15 @@ function timeblocksAvailable(data, dateStr, reservations, guests) {
           break;
         }
 
-        // Add to consecutive slots
-        consecutiveSlots[currentTimeSlot] = {
-          name: currentTimeSlot,
-        };
-
         // Update for next iteration
         previousTime = currentTime;
       }
 
       if (consecutiveSlotsAvailable) {
-        // Merge the consecutive slots into availableTimeblocks
-        Object.assign(availableTimeblocks, consecutiveSlots);
+        // Add the starting time slot into availableTimeblocks
+        availableTimeblocks[timeSlots[i]] = {
+          name: timeSlots[i],
+        };
       }
     }
   }

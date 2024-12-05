@@ -123,6 +123,14 @@ const {
 	// If no exceptions apply, proceed to get the data as usual
 	return getDataByDateAndMeal(data, dateStr, mealType);
   }
+
+  function shouldIncludeEndTime(mealType, endTime) {
+	if ((mealType === 'breakfast' && endTime === '11:00') ||
+		(mealType === 'lunch' && endTime === '16:00')) {
+	  return false; // Do not include endTime for breakfast at 11:00 and lunch at 16:00
+	}
+	return true; // Include endTime for all other cases
+  }
   
   /**
    * Handles exceptions for getDataByDateAndTime.
@@ -132,7 +140,6 @@ const {
    * @returns {Object|null} The meal data or null if an exception applies.
    */
   function getDataByDateAndTimeWithExceptions(data, dateStr, timeStr) {
-	// Determine the mealType based on time
 	const mealType = getMealTypeByTime(timeStr);
 	if (!mealType) {
 	  return null;
@@ -142,17 +149,20 @@ const {
 	  return null;
 	}
   
-	// Check if the time falls within the mealData's operating hours
 	const requestedTime = parseTime(timeStr);
 	const startTime = parseTime(mealData.startTime);
 	const endTime = parseTime(mealData.endTime);
   
-	if (requestedTime >= startTime && requestedTime < endTime) {
-	  return mealData;
-	} else {
-	  return null;
-	}
-  }
+	// Determine if endTime should be included
+	const includeEndTime = shouldIncludeEndTime(mealType, mealData.endTime);
+  
+	const timeFallsWithin =
+	  includeEndTime
+		? requestedTime >= startTime && requestedTime <= endTime
+		: requestedTime >= startTime && requestedTime < endTime;
+  
+	return timeFallsWithin ? mealData : null;
+  }  
   
   module.exports = {
 	getDataByDateAndMealWithExceptions,
