@@ -2,7 +2,7 @@ import React from 'react';
 import Calendar from './Calendar';
 import moment from 'moment';
 
-const DateSelectorWithLimits = ({
+const DateSelector = ({
   guests,
   formData,
   handleChange,
@@ -12,6 +12,7 @@ const DateSelectorWithLimits = ({
   reservations, // Receive reservations as prop
   startDate, // Receive startDate as prop
   onWeekChange, // Receive onWeekChange as prop
+  reservationMode,
 }) => {
   const handleDateSelect = (date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
@@ -39,4 +40,4 @@ const DateSelectorWithLimits = ({
   );
 };
 
-export default DateSelectorWithLimits;
+export default DateSelector;

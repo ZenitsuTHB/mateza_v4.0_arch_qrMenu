@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ValueSelectorGuests from './ValueSelector';
-import DateSelectorWithLimits from './DateSelectorWithLimits';
-import DateSelectorWithoutLimits from './DateSelectorWithoutLimits';
-import TimeSelectorWithLimits from './TimeSelectorWithLimits';
-import TimeSelectorWithoutLimits from './TimeSelectorWithoutLimits';
+import DateSelector from './DateSelector';
+import TimeSelector from './TimeSelector';
 import './css/reservationMode.css'; // Import CSS for reservation mode
 import moment from 'moment';
 import useApi from '../../../Hooks/useApi'; // Import useApi
@@ -152,8 +150,7 @@ const ReservationStepOne = ({
 
       {formData.guests && (
         <>
-          {formData.reservationMode === 'met_limieten' ? (
-            <DateSelectorWithLimits
+            <DateSelector
               guests={formData.guests}
               formData={formData}
               handleChange={handleChange}
@@ -164,22 +161,12 @@ const ReservationStepOne = ({
               startDate={startDate} // Pass down startDate
               onWeekChange={handleWeekChange} // Pass down onWeekChange handler
             />
-          ) : (
-            <DateSelectorWithoutLimits
-              guests={formData.guests}
-              formData={formData}
-              handleChange={handleChange}
-              resetFormDataFields={resetFormDataFields}
-              timeblocks={timeblocks}
-            />
-          )}
         </>
       )}
 
       {formData.date && (
         <>
-          {formData.reservationMode === 'met_limieten' ? (
-            <TimeSelectorWithLimits
+            <TimeSelector
               guests={formData.guests}
               formData={formData}
               handleChange={handleChange}
@@ -189,16 +176,6 @@ const ReservationStepOne = ({
               restaurantData={restaurantData}
               reservations={reservations} 
             />
-          ) : (
-            <TimeSelectorWithoutLimits
-              guests={formData.guests}
-              formData={formData}
-              handleChange={handleChange}
-              field={{ id: 'time', label: 'Tijd' }}
-              selectedDate={formData.date}
-              setCurrentExpandedField={() => {}}
-            />
-          )}
         </>
       )}
     </form>

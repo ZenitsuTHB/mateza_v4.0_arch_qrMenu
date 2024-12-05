@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './css/timeSelector.css';
 import { getAvailableTimeblocks } from './algorithm/getAvailableTimeblocks'; // Import getAvailableTimeblocks
 
-const TimeSelectorWithLimits = ({
+const TimeSelector = ({
   guests,
   formData,
   handleChange,
@@ -132,4 +132,4 @@ const TimeSelectorWithLimits = ({
   );
 };
 
-export default TimeSelectorWithLimits;
+export default TimeSelector;
