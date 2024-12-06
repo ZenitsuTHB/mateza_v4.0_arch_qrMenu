@@ -34,6 +34,10 @@ export const overviewSecondaryTopBar = [
 	{
 	  label: 'Email',
 	  path: '/settings/email',
+	},
+	{
+		label: 'Pdf Menu',
+		path: '/settings/pdf-menu',
 	}
   ];
   
@@ -86,7 +90,7 @@ export const overviewSecondaryTopBar = [
 	},
 	{
 	  label: 'Personeel',
-	  path: '/team',
+	  path: '/account/team',
 	},
   ];
   

@@ -19,6 +19,7 @@ import {
   FaUserFriends,
   FaBell,
   FaLock,
+  FaFilePdf,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -154,7 +155,7 @@ const routesConfig = [
     secondaryTopBar: accountSecondaryTopBar,
   },
   {
-    path: '/team',
+    path: '/account/team',
     element: <Personeel title="Personeel" />,
     label: 'Personeel',
     icon: FaUserFriends,
@@ -183,18 +184,16 @@ const routesConfig = [
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
   },
-
   {
-    path: '/pdf-menu',
+    path: '/settings/pdf-menu',
     element: <UploadPdf title="Pdf Menu" />,
     label: 'Pdf Menu',
-    icon: FaCog,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
+    icon: FaFilePdf,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
+    secondaryTopBar: settingsSecondaryTopBar,
   },
-
-
   {
     path: '/settings',
     element: <Settings title="Administratie" />,
