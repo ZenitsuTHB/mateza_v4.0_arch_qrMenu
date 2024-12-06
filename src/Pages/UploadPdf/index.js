@@ -132,7 +132,7 @@ const PdfUpload = () => {
                 <div style={{ display: 'none' }} ref={qrDownloadRef}>
                   <QRCodeCanvas
                     value={pdfUrl}
-                    size={1000}
+                    size={800}
                     fgColor={qrColor}
                     bgColor="#ffffff"
                     includeMargin={true}
