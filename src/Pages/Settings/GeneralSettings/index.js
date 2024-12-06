@@ -170,7 +170,7 @@ const Settings = () => {
                 value={settings.uurOpVoorhand}
                 onChange={handleChange}
               >
-                {Array.from({ length: 13 }, (_, i) => (
+                {Array.from({ length: 17 }, (_, i) => (
                   <option key={i} value={i}>
                     {i} uur
                   </option>
