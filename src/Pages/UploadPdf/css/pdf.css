@@ -82,7 +82,6 @@
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-radius: 8px;
-	/* Make the container a perfect square */
 	width: 200px;
 	height: 200px;
 	display: flex;
@@ -91,7 +90,6 @@
   }
   
   .pdf-page__qr-code {
-	/* Remove margins so it's centered perfectly */
 	margin: 0;
   }
   
@@ -141,7 +139,7 @@
 	flex-direction: column;
 	gap: 10px;
 	align-items: center;
-	z-index: 999; /* Ensure pop-up is on top */
+	z-index: 999;
   }
   
   .pdf-page__color-editor h4 {
@@ -172,6 +170,7 @@
   .pdf-page__no-pdf {
 	font-size: 1.1rem;
 	color: #555;
+	text-align: center;
   }
   
   @media (max-width: 900px) {

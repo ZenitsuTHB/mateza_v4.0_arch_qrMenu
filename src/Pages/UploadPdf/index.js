@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { withHeader } from '../../Components/Structural/Header/index.js'; 
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
-import { QRCodeCanvas } from 'qrcode.react'; // Use QRCodeCanvas instead of QRCodeSVG
+import { QRCodeCanvas } from 'qrcode.react'; // Using QRCodeCanvas for PNG download
 import './css/pdf.css';
 
 const PdfUpload = () => {
@@ -16,9 +16,6 @@ const PdfUpload = () => {
   const [qrColor, setQrColor] = useState('#000000');
   const [showColorEditor, setShowColorEditor] = useState(false);
 
-  const placeholderUrl = 'https://example.com'; // Placeholder if no PDF uploaded
-
-  // Ref for the QR Canvas
   const qrCanvasRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -69,7 +66,6 @@ const PdfUpload = () => {
     const canvas = qrCanvasRef.current.querySelector('canvas');
     if (!canvas) return;
 
-    // Convert canvas to PNG data URL
     const dataURL = canvas.toDataURL("image/png");
     const a = document.createElement('a');
     a.href = dataURL;
@@ -104,56 +100,62 @@ const PdfUpload = () => {
           </button>
         </form>
 
-        {/* Right side: QR Code and Buttons */}
+        {/* Right side */}
         <div className="pdf-page__content">
           <div className="pdf-page__qr-section">
             <h3>QR Code</h3>
-            <div className="pdf-page__qr-container" ref={qrCanvasRef}>
-              <QRCodeCanvas
-                value={pdfUrl || placeholderUrl}
-                size={150}
-                fgColor={qrColor}
-                className="pdf-page__qr-code"
-              />
-            </div>
-
-            {/* Button Group */}
-            <div className="pdf-page__button-group">
-              <button onClick={handleDownloadQR} className="pdf-page__download-button">
-                Download QR Code
-              </button>
-              <button
-                className="pdf-page__edit-color-button"
-                onClick={() => setShowColorEditor(!showColorEditor)}
-              >
-                Kleur Bewerken
-              </button>
-              <button
-                className="pdf-page__view-link-button"
-                onClick={handleViewLink}
-                disabled={!pdfUrl}
-              >
-                Bekijk Link
-              </button>
-
-              {showColorEditor && (
-                <div className="pdf-page__color-editor">
-                  <h4>Pas QR Kleur aan</h4>
-                  <input
-                    type="color"
-                    value={qrColor}
-                    onChange={(e) => setQrColor(e.target.value)}
-                    className="pdf-page__input pdf-page__color-picker"
+            {pdfUrl ? (
+              <>
+                <div className="pdf-page__qr-container" ref={qrCanvasRef}>
+                  <QRCodeCanvas
+                    value={pdfUrl}
+                    size={150}
+                    fgColor={qrColor}
+                    className="pdf-page__qr-code"
                   />
-                  <button
-                    className="pdf-page__close-color-editor"
-                    onClick={() => setShowColorEditor(false)}
-                  >
-                    Sluiten
-                  </button>
                 </div>
-              )}
-            </div>
+
+                {/* Button Group */}
+                <div className="pdf-page__button-group">
+                  <button onClick={handleDownloadQR} className="pdf-page__download-button">
+                    Download QR Code
+                  </button>
+                  <button
+                    className="pdf-page__edit-color-button"
+                    onClick={() => setShowColorEditor(!showColorEditor)}
+                  >
+                    Kleur Bewerken
+                  </button>
+                  <button
+                    className="pdf-page__view-link-button"
+                    onClick={handleViewLink}
+                    disabled={!pdfUrl}
+                  >
+                    Bekijk Link
+                  </button>
+
+                  {showColorEditor && (
+                    <div className="pdf-page__color-editor">
+                      <h4>Pas QR Kleur aan</h4>
+                      <input
+                        type="color"
+                        value={qrColor}
+                        onChange={(e) => setQrColor(e.target.value)}
+                        className="pdf-page__input pdf-page__color-picker"
+                      />
+                      <button
+                        className="pdf-page__close-color-editor"
+                        onClick={() => setShowColorEditor(false)}
+                      >
+                        Sluiten
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="pdf-page__no-pdf">Upload een nieuwe pdf</p>
+            )}
           </div>
         </div>
       </div>
