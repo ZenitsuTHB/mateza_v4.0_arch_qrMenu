@@ -7,7 +7,6 @@ import OTPLogin from './Pages/Login/OTPLogin/index.js';
 
 //window.baseDomain = "http://localhost:5000/";
 window.baseDomain = "https://squid-app-aychi.ondigitalocean.app/";
-window.baseDomain = "http://localhost:5000/";
 
 window.viewMode = 'full-screen';
 window.isProduction = false;
