@@ -165,17 +165,20 @@ const Settings = () => {
               </div>
             </div>
             <div className="input-container">
-              <input
-                type="number"
+              <select
                 name="uurOpVoorhand"
-                placeholder="Hoeveel uur op voorhand"
                 value={settings.uurOpVoorhand}
                 onChange={handleChange}
-                min="0"
-                max="400"
-              />
+              >
+                {Array.from({ length: 13 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} uur
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
+
 
           {/* Max. Aantal Dagen in de Toekomst te Reserveren */}
           <div className="form-group">
