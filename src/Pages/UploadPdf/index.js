@@ -56,9 +56,14 @@ const PdfUpload = () => {
         },
       });
 
-      if (response && response.pdfUrl) {
-        setPdfUrl(response.pdfUrl);
-        localStorage.setItem('pdfUrl', response.pdfUrl);
+      if (response) {
+        // Get the restaurantId from localStorage (username)
+        const restaurantId = localStorage.getItem('username');
+        const menuUrl = `http://menu.reservaties.net/?restaurantId=${restaurantId}`;
+
+        // Set pdfUrl to our menu link instead of the response.pdfUrl
+        setPdfUrl(menuUrl);
+        localStorage.setItem('pdfUrl', menuUrl);
         triggerNotification('PDF succesvol geüpload.', 'success');
       } else {
         triggerNotification('Fout bij het uploaden van de PDF.', 'error');
