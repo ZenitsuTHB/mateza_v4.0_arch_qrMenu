@@ -16,7 +16,6 @@ const Settings = () => {
     maxGasten: 0,
     intervalReservatie: 0,
     duurReservatie: 60, // Existing field: Standard duration of a reservation in minutes
-    minutenTotEinde: 120, // New field: Minutes before end of time block to stop reservations
     showNoticeForMaxGuests: 'Nee', // Existing field
     noticePhoneNumber: '',         // Existing field
   };  
@@ -39,7 +38,6 @@ const Settings = () => {
           dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
           intervalReservatie: data.intervalReservatie !== undefined ? Number(data.intervalReservatie) : defaultSettings.intervalReservatie,
           duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie, // Parsing duurReservatie
-          minutenTotEinde: data.minutenTotEinde !== undefined ? Number(data.minutenTotEinde) : defaultSettings.minutenTotEinde, // Parsing minutenTotEinde
         };
 
         setSettings(mergedData);
@@ -213,31 +211,6 @@ const Settings = () => {
                 value={settings.duurReservatie}
                 onChange={handleChange}
                 min="5"
-                max="720"
-                step="1"
-              />
-            </div>
-          </div>
-
-          {/* Reserveren tot Min. Voor Einde Tijdsblok */}
-          <div className="form-group">
-            <div className="label-with-tooltip">
-              <label>Reserveren tot Min. Voor Einde Tijdsblok</label>
-              <div className="button-with-tooltip">
-                <FaInfoCircle />
-                <div className="tooltip">
-                  Het aantal minuten vóór het einde van een tijdsblok waarbinnen geen nieuwe reservaties meer kunnen worden gemaakt.
-                </div>
-              </div>
-            </div>
-            <div className="input-container">
-              <input
-                type="number"
-                name="minutenTotEinde"
-                placeholder="Minuten tot einde tijdsblok"
-                value={settings.minutenTotEinde}
-                onChange={handleChange}
-                min="0"
                 max="720"
                 step="1"
               />

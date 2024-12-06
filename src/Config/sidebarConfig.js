@@ -51,6 +51,7 @@ import Personeel from '../Pages/Personeel/index.js';
 import Mededeling from '../Pages/Mededeling/index.js';
 import Openingsuren from '../Pages/Openingsuren/index.js';
 import Uitzonderingen from '../Pages/Uitzonderingen/index.js';
+import UploadPdf from '../Pages/UploadPdf/index.js';
 
 
 const routesConfig = [
@@ -181,6 +182,16 @@ const routesConfig = [
     isMobile: false,
     isTab: false,
     secondaryTopBar: accountSecondaryTopBar,
+  },
+
+  {
+    path: '/pdf-menu',
+    element: <UploadPdf title="Pdf Menu" />,
+    label: 'Pdf Menu',
+    icon: FaCog,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
 
 
