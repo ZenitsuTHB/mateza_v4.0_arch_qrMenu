@@ -6,6 +6,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const api = useApi();
 
@@ -15,6 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(''); // Reset error message on new attempt
 
     try {
       const data = {
@@ -30,14 +32,11 @@ const Login = () => {
         localStorage.setItem('loginSuccessful', true);
         localStorage.setItem('username', username);
 
-        // Set the JWT as a cookie based on the environment
         const cookieDomain = window.isProduction ? '.reservaties.net' : 'localhost';
         const cookieSettings = `authToken=${accessToken}; path=/; ${
           window.isProduction ? `domain=${cookieDomain}; Secure; SameSite=None` : ''
         }`;
         document.cookie = cookieSettings;
-
-        console.log('Current document cookies:', document.cookie);
 
         window.location.reload();
       } else {
@@ -45,6 +44,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error('Login failed:', err);
+      setError('Onjuiste gebruikersnaam of wachtwoord.');
     } finally {
       setLoading(false);
     }
@@ -54,6 +54,9 @@ const Login = () => {
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
         <h2 className="login-title">Login</h2>
+
+        {error && <p className="error-message">{error}</p>}
+
         <input
           type="text"
           placeholder="Gebruikersnaam"

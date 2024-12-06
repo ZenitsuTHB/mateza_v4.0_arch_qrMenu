@@ -63,3 +63,10 @@
 	background-color: #0056b3; /* Darker shade on hover */
   }
   
+  .error-message {
+	color: rgb(255, 153, 0);
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
+	text-align: center;
+  }
+  
