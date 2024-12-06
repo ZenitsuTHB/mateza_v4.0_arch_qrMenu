@@ -15,9 +15,9 @@ const Settings = () => {
     dagenInToekomst: 0,
     maxGasten: 0,
     intervalReservatie: 0,
-    duurReservatie: 60, // Existing field: Standard duration of a reservation in minutes
-    showNoticeForMaxGuests: 'Nee', // Existing field
-    noticePhoneNumber: '',         // Existing field
+    duurReservatie: 60,
+    showNoticeForMaxGuests: 'Nee',
+    noticePhoneNumber: '',
   };  
 
   const [settings, setSettings] = useState(defaultSettings);
@@ -31,13 +31,12 @@ const Settings = () => {
         const response = await api.get(window.baseDomain + 'api/general-settings', { noCache: true });
         const data = response || {};
 
-        // Ensure numerical fields are parsed correctly
         const mergedData = { 
           ...defaultSettings, 
           ...data,
           dagenInToekomst: data.dagenInToekomst !== undefined ? Number(data.dagenInToekomst) : defaultSettings.dagenInToekomst,
           intervalReservatie: data.intervalReservatie !== undefined ? Number(data.intervalReservatie) : defaultSettings.intervalReservatie,
-          duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie, // Parsing duurReservatie
+          duurReservatie: data.duurReservatie !== undefined ? Number(data.duurReservatie) : defaultSettings.duurReservatie,
         };
 
         setSettings(mergedData);
@@ -57,12 +56,13 @@ const Settings = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let parsedValue = value;
 
-    if (name === 'intervalReservatie' || 'dagenInToekomst' || name === 'duurReservatie') {
+    let parsedValue = value;
+    // Parse numerical fields properly
+    if (['intervalReservatie', 'dagenInToekomst', 'duurReservatie'].includes(name)) {
       parsedValue = value === '' ? '' : Number(value);
       if (isNaN(parsedValue)) {
-        parsedValue = 0; // Default or handle as needed
+        parsedValue = 0; 
       }
     }
 
@@ -88,6 +88,40 @@ const Settings = () => {
     () => JSON.stringify(settings) !== JSON.stringify(initialSettings),
     [settings, initialSettings]
   );
+
+  // Generate increments
+  const generateIncrements = () => {
+    const increments = [];
+
+    // 5 min increments up to 60
+    for (let i = 5; i <= 60; i += 5) {
+      increments.push(i);
+    }
+
+    // 10 min increments from 70 to 90
+    for (let i = 70; i <= 90; i += 10) {
+      increments.push(i);
+    }
+
+    // 15 min increments from 105 to 180
+    for (let i = 105; i <= 180; i += 15) {
+      increments.push(i);
+    }
+
+    // 30 min increments from 210 to 300
+    for (let i = 210; i <= 300; i += 30) {
+      increments.push(i);
+    }
+
+    // 60 min increments from 360 to 600
+    for (let i = 360; i <= 600; i += 60) {
+      increments.push(i);
+    }
+
+    return increments;
+  };
+
+  const timeOptions = generateIncrements();
 
   return (
     <div className="general-settings-page">
@@ -167,7 +201,7 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Interval Reservatie (min) */}
+          {/* Interval Reservatie */}
           <div className="form-group">
             <div className="label-with-tooltip">
               <label>Interval Tussen Reservaties (min)</label>
@@ -179,20 +213,22 @@ const Settings = () => {
               </div>
             </div>
             <div className="input-container">
-              <input
-                type="number"
+              <select
                 name="intervalReservatie"
-                placeholder="Interval tussen reservaties"
                 value={settings.intervalReservatie}
                 onChange={handleChange}
-                min="5"
-                max="10000"
-                step="1"
-              />
+              >
+                <option value={0}>Selecteer interval</option>
+                {timeOptions.map((val) => (
+                  <option key={val} value={val}>
+                    {val} min
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Duur Reservatie (min) */}
+          {/* Duur Reservatie */}
           <div className="form-group">
             <div className="label-with-tooltip">
               <label>Duur Reservatie (min)</label>
@@ -204,16 +240,18 @@ const Settings = () => {
               </div>
             </div>
             <div className="input-container">
-              <input
-                type="number"
+              <select
                 name="duurReservatie"
-                placeholder="Duur reservatie"
                 value={settings.duurReservatie}
                 onChange={handleChange}
-                min="5"
-                max="720"
-                step="1"
-              />
+              >
+                <option value={0}>Selecteer duur</option>
+                {timeOptions.map((val) => (
+                  <option key={val} value={val}>
+                    {val} min
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
