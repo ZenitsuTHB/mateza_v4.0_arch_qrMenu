@@ -10,11 +10,18 @@ import './css/pdf.css';
 const PdfUpload = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
+
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+
   const [qrColor, setQrColor] = useState('#000000');
   const [showColorEditor, setShowColorEditor] = useState(false);
+
+  const [restaurantName, setRestaurantName] = useState(() => {
+    // Load stored restaurantName from localStorage if available
+    return localStorage.getItem('restaurantName') || '';
+  });
 
   const qrCanvasRef = useRef(null);
   const qrDownloadRef = useRef(null);
@@ -40,12 +47,19 @@ const PdfUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!pdfFile) {
       triggerNotification('Selecteer eerst een PDF bestand.', 'error');
       return;
     }
 
+    if (!restaurantName.trim()) {
+      triggerNotification('Vul een restaurantnaam in.', 'error');
+      return;
+    }
+
     setIsUploading(true);
+
     const formData = new FormData();
     formData.append('pdf', pdfFile);
 
@@ -57,13 +71,15 @@ const PdfUpload = () => {
       });
 
       if (response) {
-        // Get the restaurantId from localStorage (username)
-        const restaurantId = localStorage.getItem('username');
-        const menuUrl = `http://menu.reservaties.net/?restaurantId=${restaurantId}`;
+        const restaurantId = localStorage.getItem('username'); // Existing logic for ID
+        const encodedName = encodeURIComponent(restaurantName.trim());
+        const menuUrl = `http://menu.reservaties.net/?restaurantId=${restaurantId}&restaurantName=${encodedName}`;
 
-        // Set pdfUrl to our menu link instead of the response.pdfUrl
+        // Save URL and restaurantName to localStorage
         setPdfUrl(menuUrl);
         localStorage.setItem('pdfUrl', menuUrl);
+        localStorage.setItem('restaurantName', restaurantName.trim());
+
         triggerNotification('PDF succesvol geüpload.', 'success');
       } else {
         triggerNotification('Fout bij het uploaden van de PDF.', 'error');
@@ -101,6 +117,15 @@ const PdfUpload = () => {
       <div className="pdf-page__container">
         {/* Left side: Upload Form */}
         <form className="pdf-page__form" onSubmit={handleSubmit}>
+          <div className="pdf-page__form-group">
+            <label>Restaurant Naam</label>
+            <input
+              type="text"
+              value={restaurantName}
+              onChange={(e) => setRestaurantName(e.target.value)}
+              className="pdf-page__input"
+            />
+          </div>
           <div className="pdf-page__form-group">
             <label>Kies een PDF</label>
             <input
