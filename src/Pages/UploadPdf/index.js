@@ -1,40 +1,33 @@
 // src/Pages/UploadPdf/index.js
 
 import React, { useState, useRef, useEffect } from 'react';
-import { withHeader } from '../../Components/Structural/Header/index.js'; 
+import { withHeader } from '../../Components/Structural/Header/index.js';
 import useApi from '../../Hooks/useApi';
 import useNotification from '../../Components/Notification';
-import { QRCodeCanvas } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react'; 
 import './css/pdf.css';
 
 const PdfUpload = () => {
   const api = useApi();
   const { triggerNotification, NotificationComponent } = useNotification();
-  
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [qrColor, setQrColor] = useState('#000000');
   const [showColorEditor, setShowColorEditor] = useState(false);
 
   const qrCanvasRef = useRef(null);
+  const qrDownloadRef = useRef(null);
 
-  // On mount, load pdfUrl and imageUrl from localStorage if present
   useEffect(() => {
-    const storedPdfUrl = localStorage.getItem('uploadedPdfUrl');
+    // Load stored pdfUrl from localStorage if available
+    const storedPdfUrl = localStorage.getItem('pdfUrl');
     if (storedPdfUrl) {
       setPdfUrl(storedPdfUrl);
     }
-    const storedImageUrl = localStorage.getItem('uploadedLogoUrl');
-    if (storedImageUrl) {
-      setImageUrl(storedImageUrl);
-    }
   }, []);
 
-  const handlePdfFileChange = (e) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.type === 'application/pdf') {
@@ -45,18 +38,7 @@ const PdfUpload = () => {
     }
   };
 
-  const handleImageFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (file.type.startsWith('image/')) {
-        setImageFile(file);
-      } else {
-        triggerNotification('Alleen afbeeldingen zijn toegestaan.', 'error');
-      }
-    }
-  };
-
-  const handlePdfUpload = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!pdfFile) {
       triggerNotification('Selecteer eerst een PDF bestand.', 'error');
@@ -76,7 +58,7 @@ const PdfUpload = () => {
 
       if (response && response.pdfUrl) {
         setPdfUrl(response.pdfUrl);
-        localStorage.setItem('uploadedPdfUrl', response.pdfUrl); // Store in localStorage
+        localStorage.setItem('pdfUrl', response.pdfUrl);
         triggerNotification('PDF succesvol geüpload.', 'success');
       } else {
         triggerNotification('Fout bij het uploaden van de PDF.', 'error');
@@ -89,41 +71,9 @@ const PdfUpload = () => {
     }
   };
 
-  const handleImageUpload = async () => {
-    if (!imageFile) {
-      triggerNotification('Selecteer eerst een afbeelding.', 'error');
-      return;
-    }
-
-    setIsUploadingImage(true);
-    const formData = new FormData();
-    formData.append('image', imageFile);
-
-    try {
-      const response = await api.post(`${window.baseDomain}api/upload-image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response && response.imageUrl) {
-        setImageUrl(response.imageUrl);
-        localStorage.setItem('uploadedLogoUrl', response.imageUrl); // Store image URL
-        triggerNotification('Afbeelding succesvol geüpload.', 'success');
-      } else {
-        triggerNotification('Fout bij het uploaden van de afbeelding.', 'error');
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      triggerNotification('Fout bij het uploaden van de afbeelding.', 'error');
-    } finally {
-      setIsUploadingImage(false);
-    }
-  };
-
   const handleDownloadQR = () => {
-    if (!qrCanvasRef.current) return;
-    const canvas = qrCanvasRef.current.querySelector('canvas');
+    if (!qrDownloadRef.current) return;
+    const canvas = qrDownloadRef.current.querySelector('canvas');
     if (!canvas) return;
 
     const dataURL = canvas.toDataURL("image/png");
@@ -140,52 +90,23 @@ const PdfUpload = () => {
     window.open(pdfUrl, '_blank');
   };
 
-  // imageSettings for QRCodeCanvas to display the logo/image in the center
-  const imageSettings = imageUrl
-    ? {
-        src: imageUrl,
-        height: 40, // Adjust as needed
-        width: 40,  // Adjust as needed
-        excavate: false
-      }
-    : undefined;
-
   return (
     <div className="pdf-page">
       <NotificationComponent />
-      <h1 className="pdf-page__title">PDF Beheer</h1>
       <div className="pdf-page__container">
         {/* Left side: Upload Form */}
-        <form className="pdf-page__form" onSubmit={handlePdfUpload}>
+        <form className="pdf-page__form" onSubmit={handleSubmit}>
           <div className="pdf-page__form-group">
             <label>Kies een PDF</label>
             <input
               type="file"
               accept="application/pdf"
-              onChange={handlePdfFileChange}
+              onChange={handleFileChange}
               className="pdf-page__input"
             />
           </div>
           <button type="submit" className="button-style-3" disabled={isUploading}>
-            {isUploading ? 'Bezig met uploaden...' : 'Uploaden PDF'}
-          </button>
-
-          <div className="pdf-page__form-group" style={{ marginTop: '20px' }}>
-            <label>Kies een Afbeelding (voor midden van QR)</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageFileChange}
-              className="pdf-page__input"
-            />
-          </div>
-          <button
-            type="button"
-            className="button-style-3"
-            disabled={isUploadingImage}
-            onClick={handleImageUpload}
-          >
-            {isUploadingImage ? 'Bezig met uploaden...' : 'Uploaden Afbeelding'}
+            {isUploading ? 'Bezig met uploaden...' : 'Uploaden'}
           </button>
         </form>
 
@@ -195,13 +116,26 @@ const PdfUpload = () => {
             <h3>QR Code</h3>
             {pdfUrl ? (
               <>
+                {/* Visible QR Code (small, no margin) */}
                 <div className="pdf-page__qr-container" ref={qrCanvasRef}>
                   <QRCodeCanvas
                     value={pdfUrl}
                     size={150}
                     fgColor={qrColor}
+                    bgColor="#ffffff"
+                    includeMargin={false}
                     className="pdf-page__qr-code"
-                    imageSettings={imageSettings}
+                  />
+                </div>
+
+                {/* Hidden larger QR code for high-res download with white margin */}
+                <div style={{ display: 'none' }} ref={qrDownloadRef}>
+                  <QRCodeCanvas
+                    value={pdfUrl}
+                    size={1000}
+                    fgColor={qrColor}
+                    bgColor="#ffffff"
+                    includeMargin={true}
                   />
                 </div>
 
@@ -244,7 +178,7 @@ const PdfUpload = () => {
                 </div>
               </>
             ) : (
-              <p className="pdf-page__no-pdf">geen pdf gevonden</p>
+              <p className="pdf-page__no-pdf">Upload een nieuwe pdf</p>
             )}
           </div>
         </div>
