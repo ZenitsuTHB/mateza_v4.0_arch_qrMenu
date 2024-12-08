@@ -1484,3 +1484,41 @@ Utils/utils.js
 constants.js
 css/exceptions.css
 index.js
+
+**Instruction:**
+1. Please encapsulate the main component in index.js inside the `.component-name-component` class.
+2. Prefix all CSS classes with the `.component-name-component` class.
+
+**Examples:**
+
+*Encapsulation in index.js:*
+```jsx
+<div className="profile-component">
+    <h2 className="account-manage-title">Admin Reservaties</h2>
+    <div className="account-manage-container">
+        {/* ... */}
+        onClose={() => setIsModalOpen(false)}
+    </div>
+</div>
+```
+
+*Prefixed CSS Classes:*
+```css
+.component-name-component .account-manage-container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background-color: white;
+}
+
+.component-name-component .modal-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+``` Sometimes the encapsulation is already done, and we don't need to do it twice. Don't write any comments. Delete all comments and don't write any extra comments. Only print the code with changes. Print the codes in full. Don't skip anything print them full. Mark all changed files with CHANGED before printing the file else mark them with --unchanged and don't print them. Only print every file once.
