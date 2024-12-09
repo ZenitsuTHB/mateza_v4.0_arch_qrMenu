@@ -9,14 +9,16 @@ import './css/sidebar.css';
 import './css/mobile.css';
 
 const Sidebar = () => {
+  const isIframe = typeof window !== 'undefined' && window.isIframe;
+  
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900);
   const [isPinned, setIsPinned] = useState(false);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation(); // Import useLocation
+  const location = useLocation();
 
-  // Function to handle item clicks
+
   const handleItemClick = (path) => {
     setActiveTab(path);
     navigate(path);
@@ -61,7 +63,6 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    // Clean up the timeout when component unmounts
     return () => {
       if (collapseTimeout) {
         clearTimeout(collapseTimeout);
@@ -69,7 +70,6 @@ const Sidebar = () => {
     };
   }, [collapseTimeout]);
 
-  // Adjust padding of .withHeader elements based on sidebar expansion
   useEffect(() => {
     const adjustPadding = () => {
       const elements = document.querySelectorAll('.withHeader');
@@ -82,7 +82,6 @@ const Sidebar = () => {
       });
     };
 
-    // Use a timeout to ensure elements are present in the DOM
     const timeoutId = setTimeout(adjustPadding, 0);
 
     return () => {
@@ -92,20 +91,23 @@ const Sidebar = () => {
         el.style.paddingLeft = '';
       });
     };
-  }, [isExpanded, isPinned, activeTab, location.pathname]); // Add location.pathname as dependency
+  }, [isExpanded, isPinned, activeTab, location.pathname]);
 
-  // Polling: Check window.innerWidth every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
       const mobile = window.innerWidth < 900;
       if (mobile) {
         setIsExpanded(false);
       }
-    }, 100); // 100 milliseconds
+    }, 100);
 
-    // Clean up the interval on unmount
     return () => clearInterval(intervalId);
   }, [isPinned]);
+
+    // If isIframe is true, do not render sidebar
+    if (isIframe) {
+      return null;
+    }  
 
   return (
     <motion.div

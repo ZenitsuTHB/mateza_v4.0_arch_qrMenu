@@ -20,6 +20,7 @@ import {
   FaBell,
   FaLock,
   FaFilePdf,
+  FaSafari,
 } from 'react-icons/fa';
 
 import Profile from '../Pages/Profile/index.js';
@@ -75,7 +76,6 @@ const routesConfig = [
     isMobile: true,
     isTab: false,
   },
-  
   {
     path: '/notification',
     element: <Mededeling title="Mededeling" />,
