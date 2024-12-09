@@ -130,28 +130,6 @@ const DayContent = ({ dayId, days, mealType, scheduleData, setScheduleData }) =>
       }
     }
 
-    // Prevent selecting times in the past
-    const now = new Date();
-    if (dayData.startTime) {
-      const [startHour, startMinute] = dayData.startTime.split(':').map(Number);
-      const startDate = new Date();
-      startDate.setHours(startHour, startMinute, 0, 0);
-
-      if (startDate < now) {
-        validationErrors.startTime = 'Starttijd mag niet in het verleden liggen.';
-      }
-    }
-
-    if (dayData.endTime) {
-      const [endHour, endMinute] = dayData.endTime.split(':').map(Number);
-      const endDate = new Date();
-      endDate.setHours(endHour, endMinute, 0, 0);
-
-      if (endDate < now) {
-        validationErrors.endTime = 'Eindtijd mag niet in het verleden liggen.';
-      }
-    }
-
     // Additional validations can be added here as needed
 
     if (Object.keys(validationErrors).length > 0) {
