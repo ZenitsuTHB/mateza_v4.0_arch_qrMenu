@@ -198,9 +198,9 @@ const routesConfig = [
     element: <Settings title="Administratie" />,
     label: 'Administratie',
     icon: FaCog,
-    isMenu: true,
-    isMobile: true,
-    isTab: true,
+    isMenu: false,
+    isMobile: false,
+    isTab: false,
     secondaryTopBar: settingsSecondaryTopBar,
   },
 

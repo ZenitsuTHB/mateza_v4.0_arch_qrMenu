@@ -1,9 +1,10 @@
+// Sidebar.jsx
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem';
 import { useNavigate, useLocation } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
-import { FaChevronRight, FaChevronLeft, FaPencilAlt } from 'react-icons/fa';
+import { FaChevronRight, FaChevronLeft, FaPencilAlt, FaCog } from 'react-icons/fa';
 import './css/sidebar.css';
 import './css/mobile.css';
 
@@ -152,6 +153,21 @@ const Sidebar = ({ onToggleExpand }) => {
         item={{ id: 'ontwerp', title: 'Ontwerp', icon: FaPencilAlt }}
         activeTab={activeTab}
         handleItemClick={handleOntwerpClick}
+        isExpanded={isExpanded}
+        activeColor={colors[0]}
+      />
+
+      {isExpanded && !isMobile && (
+        <div className="sidebar-subsection-title">
+          ADMINISTRATIE
+        </div>
+      )}
+
+      {/* Administratie Item that leads to /settings */}
+      <SidebarItem
+        item={{ id: '/settings', title: 'Administratie', icon: FaCog }}
+        activeTab={activeTab}
+        handleItemClick={() => handleItemClick('/settings')}
         isExpanded={isExpanded}
         activeColor={colors[0]}
       />
