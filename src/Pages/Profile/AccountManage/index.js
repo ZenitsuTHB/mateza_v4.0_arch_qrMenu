@@ -10,17 +10,19 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   // Determine the greeting based on the current time
+// Determine the greeting based on the current time
   const hour = new Date().getHours();
   let greeting;
   if (hour < 6) {
-    greeting = 'Goedenacht,';
+    greeting = 'Goedenacht 🌙';
   } else if (hour < 12) {
-    greeting = 'Goedemorgen,';
+    greeting = 'Goedemorgen 👋'; // Hand for morning
   } else if (hour < 18) {
-    greeting = 'Goedemiddag,';
+    greeting = 'Goedemiddag ☀️';
   } else {
-    greeting = 'Goedenavond,';
+    greeting = 'Goedenavond 😊'; // Smiley for evening
   }
+
 
   const [formData, setFormData] = useState({
     first_name: accountData.first_name || '',
