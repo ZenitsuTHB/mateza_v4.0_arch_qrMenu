@@ -1,25 +1,24 @@
+// AccountManage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils, FaEnvelope } from 'react-icons/fa';
-import useNotification from '../../../Components/Notification';
 import { validateAccountData } from './Utils/validationUtils';
 import FormField from './FormField';
 import './css/accountManage.css';
 import './css/mobile.css';
 
-const AccountManage = ({ accountData, setAccountData, api }) => {
-  const { triggerNotification, NotificationComponent } = useNotification();
-
+const AccountManage = ({ accountData, setAccountData, api, triggerNotification }) => {
   // Determine the greeting based on the current time
   const hour = new Date().getHours();
   let greeting;
   if (hour < 6) {
     greeting = 'Goedenacht 🌙';
   } else if (hour < 12) {
-    greeting = 'Goedemorgen 👋'; // Hand for morning
+    greeting = 'Goedemorgen 👋'; 
   } else if (hour < 18) {
     greeting = 'Goedemiddag ☀️';
   } else {
-    greeting = 'Goedenavond 😊'; // Smiley for evening
+    greeting = 'Goedenavond 😊';
   }
 
   const [formData, setFormData] = useState({
@@ -65,7 +64,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
       ...prevData,
       [name]: value,
     }));
-    setErrors({ ...errors, [name]: '' });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
   };
 
   const handleSave = async (e) => {
@@ -77,15 +76,14 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     } else {
       try {
         setLoading(true);
-        let responseData;
         if (accountData._id) {
-          responseData = await api.put(`${window.baseDomain}api/account`, formData);
+          await api.put(`${window.baseDomain}api/account`, formData);
           triggerNotification('Account bijgewerkt', 'success');
         } else {
-          responseData = await api.post(`${window.baseDomain}api/account`, formData);
+          await api.post(`${window.baseDomain}api/account`, formData);
           triggerNotification('Gegevens toegevoegd', 'success');
         }
-        // On successful save, store the restaurant name in localStorage
+
         if (formData.restaurant_name) {
           localStorage.setItem('restaurantName', formData.restaurant_name);
         }
@@ -101,13 +99,11 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     localStorage.setItem('loginSuccessful', false);
     window.location.reload();
   };
-  
 
   return (
     <div className="profile-page">
       <h2 className="account-manage-title">{greeting}</h2>
       <div className="account-manage-container">
-        <NotificationComponent />
         <form className="account-manage-form" onSubmit={handleSave} noValidate>
           <FormField
             label="Voornaam"
