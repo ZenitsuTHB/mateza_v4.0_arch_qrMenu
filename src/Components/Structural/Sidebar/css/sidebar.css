@@ -188,3 +188,8 @@
 	font-weight: 600; /* Slightly bold to stand out */
   }
   
+  /* Highlight active item text in white */
+.sidebar-item__active .sidebar-item__text {
+	color: #ffffff !important;
+  }
+  
