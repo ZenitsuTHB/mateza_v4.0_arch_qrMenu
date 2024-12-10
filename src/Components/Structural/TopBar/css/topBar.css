@@ -10,7 +10,7 @@
 	align-items: center;
 	padding: 0 20px;
 	background-color: var(--color-bg);
-	z-index: 100000;
+	z-index: 1000;
   }
   
   .top-bar-component .top-bar-left,
