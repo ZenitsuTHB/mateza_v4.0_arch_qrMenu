@@ -110,6 +110,9 @@ const Sidebar = ({ onToggleExpand }) => {
     return null;
   }
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 900;
+
+
   return (
     <motion.div
       className={`sidebar-component ${isExpanded ? 'expanded' : ''}`}
@@ -117,18 +120,26 @@ const Sidebar = ({ onToggleExpand }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {routesConfig
-        .filter((route) => route.isMenu)
-        .map((route, index) => (
-          <SidebarItem
-            key={route.path}
-            item={{ id: route.path, title: route.label, icon: route.icon }}
-            activeTab={activeTab}
-            handleItemClick={handleItemClick}
-            isExpanded={isExpanded}
-            activeColor={colors[index % colors.length]} // Assign subtle variant color for icon
-          />
-        ))}
+     {routesConfig
+  .filter((route) => route.isMenu)
+  .map((route, index) => (
+    <React.Fragment key={route.path}>
+      <SidebarItem
+        item={{ id: route.path, title: route.label, icon: route.icon }}
+        activeTab={activeTab}
+        handleItemClick={handleItemClick}
+        isExpanded={isExpanded}
+        activeColor={colors[index % colors.length]}
+      />
+      {index === 0 && isExpanded && !isMobile && (
+        <div className="sidebar-subsection-title">
+          MODULES
+        </div>
+      )}
+    </React.Fragment>
+  ))}
+
+
       <div className="sidebar-controls">
         <div className="sidebar-toggle-group">
           <div className="sidebar-toggle" onClick={toggleSidebar}>

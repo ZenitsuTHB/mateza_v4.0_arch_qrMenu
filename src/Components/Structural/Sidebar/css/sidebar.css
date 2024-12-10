@@ -175,3 +175,15 @@
 .sidebar-pin:hover {
 	color: #ffffff; /* Theme 11 hoverText */
 }
+
+
+.sidebar-subsection-title {
+	margin-top: 15px;
+	margin-left: 16px;
+	font-size: 0.75rem; /* Small font size */
+	letter-spacing: 1px; /* Optional for a bit more spacing */
+	text-transform: uppercase; /* Capital letters */
+	color: var(--color-blue);
+	font-weight: 600; /* Slightly bold to stand out */
+  }
+  
