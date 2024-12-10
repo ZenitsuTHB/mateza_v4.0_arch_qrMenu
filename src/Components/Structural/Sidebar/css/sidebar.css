@@ -1,7 +1,8 @@
-/* Reset to full height layout, pinned to left with top:60px */
+/* sidebar.css */
+
 .sidebar-component {
 	position: fixed;
-	top: 60px; /* Offset from the top */
+	top: 0px; /* Offset from the top */
 	left: 0;
 	bottom: 0; /* Full height down to bottom */
 	z-index: 1000;
