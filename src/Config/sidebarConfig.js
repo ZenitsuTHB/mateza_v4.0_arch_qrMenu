@@ -69,8 +69,8 @@ const routesConfig = [
   },
   {
     path: '/menu',
-    element: <Menu title="Menu Beheer"/>, // Use RootComponent here
-    label: 'Menu Beheer',
+    element: <Menu title="Menu"/>, // Use RootComponent here
+    label: 'Menu',
     icon: FaUtensilSpoon,
     isMenu: true,
     isMobile: true,

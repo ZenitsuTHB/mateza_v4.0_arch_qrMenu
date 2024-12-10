@@ -275,3 +275,24 @@
   .top-bar-component .dropdown-icon.logout {
 	color: red;
   }
+/* When sidebar is visible and expanded */
+.app-component:not(.sidebar-hidden).sidebar-expanded .top-bar-component .top-bar {
+	left: 200px;
+	width: calc(100% - 200px);
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  
+  /* When sidebar is visible but collapsed */
+  .app-component:not(.sidebar-hidden):not(.sidebar-expanded) .top-bar-component .top-bar {
+	left: 60px;
+	width: calc(100% - 60px);
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  
+  /* If sidebar is hidden entirely, topbar is full width */
+  .app-component.sidebar-hidden .top-bar-component .top-bar {
+	left: 0;
+	width: 100%;
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  

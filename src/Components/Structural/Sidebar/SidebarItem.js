@@ -1,3 +1,4 @@
+// SidebarItem.jsx
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
@@ -16,7 +17,6 @@ const SidebarItem = ({
 
   const handleItemClickWrapper = (id) => {
     handleItemClick(id);
-    // No need to disable text permanently; just rely on conditions
   };
 
   // Determine if the main item is active
@@ -60,7 +60,6 @@ const SidebarItem = ({
               </motion.span>
             )}
           </AnimatePresence>
-          {/* Tooltip only when not expanded, not mobile, and no click behavior needed */}
           {!isExpanded && !isMobile && (
             <span className="tooltip">{item.title}</span>
           )}

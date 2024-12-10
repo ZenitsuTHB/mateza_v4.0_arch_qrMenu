@@ -1,3 +1,4 @@
+// Sidebar.jsx
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem';
@@ -7,7 +8,7 @@ import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import './css/sidebar.css';
 import './css/mobile.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onToggleExpand }) => {
   const isIframe = typeof window !== 'undefined' && window.isIframe;
 
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
@@ -98,6 +99,12 @@ const Sidebar = () => {
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    if (onToggleExpand) {
+      onToggleExpand(isExpanded);
+    }
+  }, [isExpanded, onToggleExpand]);
 
   if (isIframe) {
     return null;
