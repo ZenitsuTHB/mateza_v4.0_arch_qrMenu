@@ -12,7 +12,9 @@ const SidebarItem = ({
   const [tooltipDisabled, setTooltipDisabled] = useState(false);
   const IconComponent = item.icon;
 
-  // Wrapper function to handle item clicks and disable tooltip if necessary
+  // Determine if we are on a mobile screen
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 900;
+
   const handleItemClickWrapper = (id) => {
     handleItemClick(id);
     if (isExpanded) {
@@ -49,7 +51,7 @@ const SidebarItem = ({
             <IconComponent />
           </span>
           <AnimatePresence>
-            {isExpanded && (
+            {(isExpanded || isMobile) && (
               <motion.span
                 className="sidebar-item__text"
                 initial={{ opacity: 0, x: -10 }}
@@ -61,7 +63,8 @@ const SidebarItem = ({
               </motion.span>
             )}
           </AnimatePresence>
-          {!isExpanded && !tooltipDisabled && (
+          {/* Do not show tooltip on mobile or when expanded */}
+          {!isExpanded && !isMobile && !tooltipDisabled && (
             <span className="tooltip">{item.title}</span>
           )}
         </div>

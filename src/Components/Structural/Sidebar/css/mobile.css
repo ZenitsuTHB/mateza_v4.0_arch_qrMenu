@@ -1,3 +1,5 @@
+/* mobile.css */
+
 @media (max-width: 900px) {
 	.sidebar-component {
 		position: fixed;
