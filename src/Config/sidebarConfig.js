@@ -159,10 +159,9 @@ const routesConfig = [
     element: <Personeel title="Personeel" />,
     label: 'Personeel',
     icon: FaUserFriends,
-    isMenu: false,
-    isMobile: false,
-    isTab: false,
-    secondaryTopBar: accountSecondaryTopBar,
+    isMenu: true,
+    isMobile: true,
+    isTab: true,
   },
   {
     path: '/account/language',

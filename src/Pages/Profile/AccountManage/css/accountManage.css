@@ -7,7 +7,7 @@
 	width: 100%;
   }
 
-  .account-manage-title {
+  .profile-page .account-manage-title {
 	max-width: 200px; /* Limit title width */
 	margin: 20px auto; /* Center it horizontally */
 	text-align: center;
@@ -101,9 +101,7 @@
 	background-color: #0056b3;
   }
   
-
-  
-  .button-style-logout {
+  .profile-page .button-style-logout {
 	background-color: transparent !important; /* Remove background color */
 	color: darkred !important; /* Set dark red text color */
 	text-decoration: underline; /* Underline the text */
