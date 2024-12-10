@@ -1,18 +1,16 @@
-// src/components/Profile/Profile.jsx
+// Profile.jsx
 
 import React, { useState, useEffect } from 'react';
 import ProfileImage from './ProfileImage';
 import ProfileBio from './ProfileBio';
 import AccountManage from './AccountManage';
 import useApi from '../../Hooks/useApi';
-import useNotification from '../../Components/Notification';
 import { avatarMapping, defaultAvatar } from './Hooks/avatarMapping';
 import './css/style.css';
 
-const Profile = () => {
+const Profile = ({ triggerNotification }) => {
   const api = useApi();
-  const { triggerNotification, NotificationComponent } = useNotification();
-
+  
   const [accountData, setAccountData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +28,7 @@ const Profile = () => {
     };
 
     fetchAccountData();
-  }, []);
+  }, [api, triggerNotification]);
 
   const updateAccountData = (updatedData) => {
     setAccountData(updatedData);
@@ -40,7 +38,6 @@ const Profile = () => {
     return (
       <div className="profile-page">
         <div className="profile-page__container">
-          <NotificationComponent />
           <p>Loading...</p>
         </div>
       </div>
@@ -51,7 +48,6 @@ const Profile = () => {
     return (
       <div className="profile-page">
         <div className="profile-page__container">
-          <NotificationComponent />
           <p>Geen accountgegevens beschikbaar.</p>
         </div>
       </div>
@@ -64,30 +60,12 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="profile-page__container">
-        <NotificationComponent />
-        
-        {/*
-        <ProfileImage
-          profileImage={accountData.imageId ? avatarMapping[accountData.imageId] : defaultAvatar}
-          avatarMapping={accountData.avatarMapping}
-          imageId={accountData.imageId}
-          api={api}
-          updateAccountData={updateAccountData}
-        />
-
-        <ProfileBio
-          name={fullName || 'Gebruiker'}
-          bio={accountData.bio}
-          interests={accountData.interests || []}
-          api={api}
-          updateAccountData={updateAccountData}
-          restaurant_name={accountData.restaurant_name}
-        />*/}
-
+        {/* Pass triggerNotification down to AccountManage */}
         <AccountManage
           accountData={accountData}
           setAccountData={setAccountData}
           api={api}
+          triggerNotification={triggerNotification}
         />
       </div>
     </div>

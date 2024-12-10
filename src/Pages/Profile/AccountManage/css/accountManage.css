@@ -103,3 +103,10 @@
   
 
   
+  .button-style-logout {
+	background-color: transparent !important; /* Remove background color */
+	color: darkred !important; /* Set dark red text color */
+	text-decoration: underline; /* Underline the text */
+	border: none !important; /* Remove any border */
+  }
+  

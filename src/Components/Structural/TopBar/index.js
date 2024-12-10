@@ -1,3 +1,5 @@
+// TopBar.jsx
+
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
@@ -8,7 +10,8 @@ import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
 import { FaUser, FaChevronDown } from 'react-icons/fa';
-import Profile from '../../../Pages/Profile'; // Adjust this import based on your file structure
+import Profile from '../../../Pages/Profile'; 
+import useNotification from '../../../Components/Notification';
 
 const TopBar = () => {
   const menuTimeoutRef = useRef(null);
@@ -21,6 +24,9 @@ const TopBar = () => {
 
   // Get the restaurant name from localStorage or default to "Mijn Restaurant"
   const [restaurantName, setRestaurantName] = useState('Mijn Restaurant');
+
+  // Use notification at the top level
+  const { triggerNotification, NotificationComponent } = useNotification();
 
   useEffect(() => {
     const storedName = localStorage.getItem('restaurantName');
@@ -56,6 +62,7 @@ const TopBar = () => {
 
   return (
     <div className="top-bar-component">
+      <NotificationComponent /> {/* Notification at the top level */}
       <div className="top-bar">
         {/* Left Side */}
         <div
@@ -103,7 +110,8 @@ const TopBar = () => {
             <span className="profile-modal-close" onClick={() => setIsProfileModalOpen(false)}>
               &times;
             </span>
-            <Profile /> 
+            {/* Pass triggerNotification down to Profile */}
+            <Profile triggerNotification={triggerNotification} />
           </div>
         </div>
       )}

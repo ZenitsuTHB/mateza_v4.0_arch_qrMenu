@@ -39,7 +39,6 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // When accountData changes, update formData and also store restaurant name in localStorage if present
   useEffect(() => {
     setFormData({
       first_name: accountData.first_name || '',
@@ -97,6 +96,12 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
       }
     }
   };
+
+  const handleLogout = () => {
+    localStorage.setItem('loginSuccessful', false);
+    window.location.reload();
+  };
+  
 
   return (
     <div className="profile-page">
@@ -195,9 +200,18 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
             error={errors.restaurant_name}
             icon={FaUtensils}
           />
-          <button type="submit" className="button-style-3" disabled={loading}>
-            {loading ? 'Opslaan...' : 'Opslaan'}
-          </button>
+          <div className="button-row">
+            <button type="submit" className="button-style-3" disabled={loading}>
+              {loading ? 'Opslaan...' : 'Opslaan'}
+            </button>
+            <button
+              type="button"
+              className="button-style-3 button-style-logout"
+              onClick={handleLogout}
+            >
+              Uitloggen
+            </button>
+          </div>
         </form>
       </div>
     </div>

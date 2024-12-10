@@ -350,8 +350,7 @@
 
   /* topBar.css */
 
-/* The overlay that blurs the background */
-.profile-modal-overlay {
+  .profile-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -364,7 +363,7 @@
     align-items: center;
     z-index: 9999; /* Ensure on top of everything else */
     animation: fadeIn 0.3s ease forwards;
-    overflow: auto;
+    overflow: hidden; /* The overlay itself shouldn't scroll, only the modal content should. */
 }
 
 .profile-modal-content {
@@ -377,22 +376,26 @@
     animation: modalScaleUp 0.3s ease forwards;
     opacity: 0;
     transform: scale(0.8);
+
+    /* New additions for scrolling within the modal */
+    max-height: 90vh; /* The modal will not exceed 90% of the viewport height */
+    overflow-y: auto; /* Internally scroll if content is taller than 90vh */
 }
 
 .profile-modal-close {
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 28px; /* Larger icon size */
+    font-size: 28px;
     cursor: pointer;
-    background: #eee; /* A light background to show the clickable area */
+    background: #eee;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #333; /* Icon color */
+    color: #333;
     transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -401,17 +404,11 @@
     color: #000;
 }
 
-/* Keyframes for overlay fade-in */
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
-/* Keyframes for modal scale and fade-in */
 @keyframes modalScaleUp {
     0% {
         transform: scale(0.8);
@@ -423,48 +420,6 @@
     }
 }
 
-  
-  /* The modal content container */
-  .profile-modal-content {
-	position: relative;
-	background: #ffffff;
-	border-radius: 10px;
-	width: 90%;
-	max-width: 600px;
-	padding: 20px;
-	animation: scaleUp 0.3s ease forwards;
-	opacity: 0;
-	transform: scale(0.8);
-  }
-  
-  /* Close button inside the modal */
-  .profile-modal-close {
-	position: absolute;
-	top: 10px;
-	right: 15px;
-	font-size: 24px;
-	cursor: pointer;
-  }
-  
-  /* Keyframes for fade-in of overlay */
-  @keyframes fadeIn {
-	from {
-	  opacity: 0;
-	}
-	to {
-	  opacity: 1;
-	}
-  }
-  
-  /* Keyframes for scaling up the modal */
-  @keyframes scaleUp {
-	0% {
-	  transform: scale(0.8);
-	  opacity: 0;
-	}
-	100% {
-	  transform: scale(1);
-	  opacity: 1;
-	}
-  }
-  
+
+
+
