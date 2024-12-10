@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem';
 import { useNavigate, useLocation } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
-import { FaChevronRight, FaChevronLeft, FaThumbtack } from 'react-icons/fa';
+import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import './css/sidebar.css';
 import './css/mobile.css';
 
@@ -12,7 +12,6 @@ const Sidebar = () => {
 
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900);
-  const [isPinned, setIsPinned] = useState(false);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +33,7 @@ const Sidebar = () => {
   const handleItemClick = (path) => {
     setActiveTab(path);
     navigate(path);
-    if (isExpanded && !isPinned) {
+    if (isExpanded) {
       setIsExpanded(false);
     }
     if (collapseTimeout) {
@@ -49,13 +48,6 @@ const Sidebar = () => {
       clearTimeout(collapseTimeout);
       setCollapseTimeout(null);
     }
-    if (isExpanded && isPinned) {
-      setIsPinned(false);
-    }
-  };
-
-  const togglePin = () => {
-    setIsPinned((prev) => !prev);
   };
 
   const handleMouseEnter = () => {
@@ -66,7 +58,7 @@ const Sidebar = () => {
   };
 
   const handleMouseLeave = () => {
-    if (isExpanded && !isPinned) {
+    if (isExpanded) {
       const timeout = setTimeout(() => {
         setIsExpanded(false);
       }, 5000);
@@ -84,11 +76,7 @@ const Sidebar = () => {
     const adjustPadding = () => {
       const elements = document.querySelectorAll('.withHeader');
       elements.forEach((el) => {
-        if (isPinned) {
-          el.style.paddingLeft = '200px';
-        } else {
-          el.style.paddingLeft = isExpanded ? '200px' : '60px';
-        }
+        el.style.paddingLeft = isExpanded ? '200px' : '60px';
       });
     };
 
@@ -99,7 +87,7 @@ const Sidebar = () => {
         el.style.paddingLeft = '';
       });
     };
-  }, [isExpanded, isPinned, activeTab, location.pathname]);
+  }, [isExpanded, activeTab, location.pathname]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -109,7 +97,7 @@ const Sidebar = () => {
       }
     }, 100);
     return () => clearInterval(intervalId);
-  }, [isPinned]);
+  }, []);
 
   if (isIframe) {
     return null;
@@ -131,8 +119,6 @@ const Sidebar = () => {
             activeTab={activeTab}
             handleItemClick={handleItemClick}
             isExpanded={isExpanded}
-            isPinned={isPinned}
-            secondaryTopBar={route.secondaryTopBar}
             activeColor={colors[index % colors.length]} // Assign subtle variant color for icon
           />
         ))}
@@ -141,20 +127,6 @@ const Sidebar = () => {
           <div className="sidebar-toggle" onClick={toggleSidebar}>
             {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}
           </div>
-          <AnimatePresence>
-            {isExpanded && (
-              <motion.div
-                className="sidebar-pin"
-                onClick={togglePin}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <FaThumbtack color={isPinned ? '#5fa5bf' : 'inherit'} />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
     </motion.div>
