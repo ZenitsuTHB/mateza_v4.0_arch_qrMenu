@@ -20,6 +20,7 @@
 		background-color: #1e3a3f; /* Keep mobile background consistent */
 		overflow-x: auto;
 		transition: none;
+		padding-top: 10px;
 	}
 	
 	/* Hide expanded text on mobile */

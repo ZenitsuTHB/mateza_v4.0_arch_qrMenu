@@ -62,11 +62,19 @@
 	transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+/* Remove from here */
 .sidebar-item__content {
 	display: flex;
 	align-items: center;
 	position: relative;
-}
+	/* margin-top: 100px; remove this */
+  }
+  
+  /* Add here */
+  .sidebar-component {
+	padding-top: 50px;
+  }
+  
 
 /* Sidebar Item Icon */
 .sidebar-item__icon {

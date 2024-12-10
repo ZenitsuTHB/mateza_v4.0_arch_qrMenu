@@ -34,7 +34,6 @@
   }
   
   .top-bar-component .top-bar-title {
-	margin-left: 45.5px;
 	font-size: 18px;
 	font-weight: 500;
 	position: relative;
@@ -77,6 +76,7 @@
 	height: 21px;
 	cursor: pointer;
 	position: relative;
+	display: none;
   }
   
   .top-bar-component .nine-dots .dot {
