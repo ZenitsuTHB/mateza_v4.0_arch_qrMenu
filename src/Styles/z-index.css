@@ -2,6 +2,7 @@
 	--z-index-notifications: 2147483647;
 	--z-index-foreground: 2147483647;
 	--z-index-sidebar-reservation: 2147483646;
+	--z-index-topbar-reservation: 2147483646;
 	--z-index-modal: 2147483645;
 	--z-index-nav-top: 2147483644;
 	--z-index-nav: 2147483643;

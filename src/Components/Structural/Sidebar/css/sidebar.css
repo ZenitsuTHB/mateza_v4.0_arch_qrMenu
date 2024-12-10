@@ -113,6 +113,7 @@
 	visibility: hidden;
 	backdrop-filter: blur(30px);
 	transition: opacity 0.3s ease, visibility 0.3s ease;
+	z-index: var(--z-index-foreground);
 }
 
 .sidebar-item__icon:hover + .tooltip,
