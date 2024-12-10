@@ -1,23 +1,20 @@
-// Sidebar.jsx
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SidebarItem from './SidebarItem';
 import { useNavigate, useLocation } from 'react-router-dom';
 import routesConfig from '../../../Config/sidebarConfig.js';
-import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import { FaChevronRight, FaChevronLeft, FaPencilAlt } from 'react-icons/fa';
 import './css/sidebar.css';
 import './css/mobile.css';
 
 const Sidebar = ({ onToggleExpand }) => {
   const isIframe = typeof window !== 'undefined' && window.isIframe;
-
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Define a fixed array of subtle variants of #48aaaf
   const colors = [
     "#48aaaf",
     "#4bb0b5",
@@ -41,6 +38,12 @@ const Sidebar = ({ onToggleExpand }) => {
       clearTimeout(collapseTimeout);
       setCollapseTimeout(null);
     }
+  };
+
+  const handleOntwerpClick = () => {
+    const username = localStorage.getItem('username');
+    const ontwerpUrl = 'https://preview.reservaties.net/?restaurantId=' + username + '&admin=true';
+    window.open(ontwerpUrl, '_blank');
   };
 
   const toggleSidebar = () => {
@@ -112,7 +115,6 @@ const Sidebar = ({ onToggleExpand }) => {
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 900;
 
-
   return (
     <motion.div
       className={`sidebar-component ${isExpanded ? 'expanded' : ''}`}
@@ -120,25 +122,39 @@ const Sidebar = ({ onToggleExpand }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-     {routesConfig
-  .filter((route) => route.isMenu)
-  .map((route, index) => (
-    <React.Fragment key={route.path}>
-      <SidebarItem
-        item={{ id: route.path, title: route.label, icon: route.icon }}
-        activeTab={activeTab}
-        handleItemClick={handleItemClick}
-        isExpanded={isExpanded}
-        activeColor={colors[index % colors.length]}
-      />
-      {index === 0 && isExpanded && !isMobile && (
+      {routesConfig
+        .filter((route) => route.isMenu)
+        .map((route, index) => (
+          <React.Fragment key={route.path}>
+            <SidebarItem
+              item={{ id: route.path, title: route.label, icon: route.icon }}
+              activeTab={activeTab}
+              handleItemClick={handleItemClick}
+              isExpanded={isExpanded}
+              activeColor={colors[index % colors.length]}
+            />
+            {index === 0 && isExpanded && !isMobile && (
+              <div className="sidebar-subsection-title">
+                MODULES
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+
+      {isExpanded && !isMobile && (
         <div className="sidebar-subsection-title">
-          MODULES
+          ONTWERP
         </div>
       )}
-    </React.Fragment>
-  ))}
 
+      {/* Hardcoded Ontwerp item with pencil icon */}
+      <SidebarItem
+        item={{ id: 'ontwerp', title: 'Ontwerp', icon: FaPencilAlt }}
+        activeTab={activeTab}
+        handleItemClick={handleOntwerpClick}
+        isExpanded={isExpanded}
+        activeColor={colors[0]}
+      />
 
       <div className="sidebar-controls">
         <div className="sidebar-toggle-group">
