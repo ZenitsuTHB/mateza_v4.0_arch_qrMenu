@@ -10,7 +10,6 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
   // Determine the greeting based on the current time
-// Determine the greeting based on the current time
   const hour = new Date().getHours();
   let greeting;
   if (hour < 6) {
@@ -22,7 +21,6 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   } else {
     greeting = 'Goedenavond 😊'; // Smiley for evening
   }
-
 
   const [formData, setFormData] = useState({
     first_name: accountData.first_name || '',
@@ -41,6 +39,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // When accountData changes, update formData and also store restaurant name in localStorage if present
   useEffect(() => {
     setFormData({
       first_name: accountData.first_name || '',
@@ -55,6 +54,10 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
       imageId: accountData.imageId || '',
       restaurant_name: accountData.restaurant_name || '',
     });
+
+    if (accountData.restaurant_name) {
+      localStorage.setItem('restaurantName', accountData.restaurant_name);
+    }
   }, [accountData]);
 
   const handleChange = (e) => {
@@ -82,6 +85,10 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
         } else {
           responseData = await api.post(`${window.baseDomain}api/account`, formData);
           triggerNotification('Gegevens toegevoegd', 'success');
+        }
+        // On successful save, store the restaurant name in localStorage
+        if (formData.restaurant_name) {
+          localStorage.setItem('restaurantName', formData.restaurant_name);
         }
         setLoading(false);
       } catch (error) {

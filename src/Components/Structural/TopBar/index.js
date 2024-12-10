@@ -1,6 +1,4 @@
-// TopBar.jsx
-
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
@@ -19,9 +17,17 @@ const TopBar = () => {
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
-
-  // New state to control profile modal visibility
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  // Get the restaurant name from localStorage or default to "Mijn Restaurant"
+  const [restaurantName, setRestaurantName] = useState('Mijn Restaurant');
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('restaurantName');
+    if (storedName) {
+      setRestaurantName(storedName);
+    }
+  }, []);
 
   const handleAppsMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);
@@ -43,7 +49,6 @@ const TopBar = () => {
   };
 
   const closeProfileModal = (e) => {
-    // Optional: close the modal if clicking outside the modal content
     if (e.target.classList.contains('profile-modal-overlay')) {
       setIsProfileModalOpen(false);
     }
@@ -67,14 +72,6 @@ const TopBar = () => {
           </div>
           <h3 className="top-bar-title">Mateza Booking</h3>
           <img src={logoImage} alt="Logo" className="title-image" />
-          {/*
-          {isAppsMenuOpen && (
-            <AppsMenu
-              onMouseEnter={handleAppsMouseEnter}
-              onMouseLeave={handleAppsMouseLeave}
-            />
-          )}
-          */}
         </div>
 
         {/* Middle Side */}
@@ -90,17 +87,16 @@ const TopBar = () => {
           )}
         </div>
 
-        {/* Right Side: White box with icon, name "Thibault", and chevron */}
+        {/* Right Side */}
         <div className="top-bar-right">
           <div className="user-box" onClick={openProfileModal}>
             <FaUser className="user-icon" />
-            <span className="user-name">Thibault</span>
+            <span className="user-name">{restaurantName || 'Mijn Restaurant'}</span>
             <FaChevronDown className="user-chevron" />
           </div>
         </div>
       </div>
 
-      {/* Conditional rendering of the profile modal */}
       {isProfileModalOpen && (
         <div className="profile-modal-overlay" onClick={closeProfileModal}>
           <div className="profile-modal-content">
