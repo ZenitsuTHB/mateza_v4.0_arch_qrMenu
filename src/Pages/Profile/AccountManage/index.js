@@ -1,7 +1,5 @@
-// src/components/Profile/AccountManage.jsx
-
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils, FaEnvelope } from 'react-icons/fa'; // Added FaEnvelope
+import { FaUser, FaPhone, FaHome, FaCity, FaMapPin, FaUtensils, FaEnvelope } from 'react-icons/fa';
 import useNotification from '../../../Components/Notification';
 import { validateAccountData } from './Utils/validationUtils';
 import FormField from './FormField';
@@ -11,10 +9,23 @@ import './css/mobile.css';
 const AccountManage = ({ accountData, setAccountData, api }) => {
   const { triggerNotification, NotificationComponent } = useNotification();
 
+  // Determine the greeting based on the current time
+  const hour = new Date().getHours();
+  let greeting;
+  if (hour < 6) {
+    greeting = 'Goedenacht,';
+  } else if (hour < 12) {
+    greeting = 'Goedemorgen,';
+  } else if (hour < 18) {
+    greeting = 'Goedemiddag,';
+  } else {
+    greeting = 'Goedenavond,';
+  }
+
   const [formData, setFormData] = useState({
     first_name: accountData.first_name || '',
     last_name: accountData.last_name || '',
-    email: accountData.email || '', // Added email
+    email: accountData.email || '',
     phone_number: accountData.phone_number || '',
     street: accountData.street || '',
     house_number: accountData.house_number || '',
@@ -32,7 +43,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
     setFormData({
       first_name: accountData.first_name || '',
       last_name: accountData.last_name || '',
-      email: accountData.email || '', // Added email
+      email: accountData.email || '',
       phone_number: accountData.phone_number || '',
       street: accountData.street || '',
       house_number: accountData.house_number || '',
@@ -80,7 +91,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
 
   return (
     <div className="profile-page">
-      <h2 className="account-manage-title">Account beheren</h2>
+      <h2 className="account-manage-title">{greeting}</h2>
       <div className="account-manage-container">
         <NotificationComponent />
         <form className="account-manage-form" onSubmit={handleSave} noValidate>
@@ -103,7 +114,7 @@ const AccountManage = ({ accountData, setAccountData, api }) => {
             icon={FaUser}
           />
           <FormField
-            label="Email" // New Email Field
+            label="Email"
             name="email"
             type="email"
             placeholder="Email"

@@ -3,8 +3,14 @@
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-}
+	margin: 0 auto;
+	padding: 20px;
+	max-width: 600px; /* Restrict overall container width */
+	width: 100%; 
+  }
+
   
+
 .profile-page__container {
 	position: relative;
 	width: 100%;

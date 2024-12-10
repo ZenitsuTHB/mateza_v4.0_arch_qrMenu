@@ -7,11 +7,14 @@
 	width: 100%;
   }
 
-  .profile-page .account-manage-title {
-	margin-top: 30px;
-	margin-bottom: 30px;
+  .account-manage-title {
+	max-width: 200px; /* Limit title width */
+	margin: 20px auto; /* Center it horizontally */
+	text-align: center;
+	font-size: 24px;
+	color: black;
+	font-weight: 600;
   }
-  
 
   .profile-page .account-manage-form {
 	display: flex;
