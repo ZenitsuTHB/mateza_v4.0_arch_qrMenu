@@ -10,6 +10,7 @@ import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
 import { FaUser, FaChevronDown } from 'react-icons/fa';
+import Profile from '../../../Pages/Profile'; // Adjust this import based on your file structure
 
 const TopBar = () => {
   const menuTimeoutRef = useRef(null);
@@ -17,8 +18,10 @@ const TopBar = () => {
   const location = useLocation();
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
-  // Handlers for Apps Menu (Left Side) - can be removed if not needed
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
+
+  // New state to control profile modal visibility
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleAppsMouseEnter = () => {
     clearTimeout(menuTimeoutRef.current);
@@ -33,6 +36,17 @@ const TopBar = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const openProfileModal = () => {
+    setIsProfileModalOpen(true);
+  };
+
+  const closeProfileModal = (e) => {
+    // Optional: close the modal if clicking outside the modal content
+    if (e.target.classList.contains('profile-modal-overlay')) {
+      setIsProfileModalOpen(false);
+    }
   };
 
   return (
@@ -78,13 +92,25 @@ const TopBar = () => {
 
         {/* Right Side: White box with icon, name "Thibault", and chevron */}
         <div className="top-bar-right">
-          <div className="user-box">
+          <div className="user-box" onClick={openProfileModal}>
             <FaUser className="user-icon" />
             <span className="user-name">Thibault</span>
             <FaChevronDown className="user-chevron" />
           </div>
         </div>
       </div>
+
+      {/* Conditional rendering of the profile modal */}
+      {isProfileModalOpen && (
+        <div className="profile-modal-overlay" onClick={closeProfileModal}>
+          <div className="profile-modal-content">
+            <span className="profile-modal-close" onClick={() => setIsProfileModalOpen(false)}>
+              &times;
+            </span>
+            <Profile /> 
+          </div>
+        </div>
+      )}
     </div>
   );
 };

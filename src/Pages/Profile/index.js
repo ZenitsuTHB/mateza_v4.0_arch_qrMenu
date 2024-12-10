@@ -1,7 +1,6 @@
 // src/components/Profile/Profile.jsx
 
 import React, { useState, useEffect } from 'react';
-import { withHeader } from '../../Components/Structural/Header';
 import ProfileImage from './ProfileImage';
 import ProfileBio from './ProfileBio';
 import AccountManage from './AccountManage';
@@ -95,4 +94,4 @@ const Profile = () => {
   );
 };
 
-export default withHeader(Profile);
+export default Profile;
