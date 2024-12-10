@@ -1,6 +1,7 @@
 @media (max-width: 900px) {
 	.sidebar-component {
 		position: fixed;
+		top: inherit;
 		bottom: 0;
 		left: 0;
 		right: 0;

@@ -83,6 +83,10 @@
 	font-weight: 500;
 }
 
+.sidebar-item__text:hover {
+	color: white;
+}
+
 /* Tooltip */
 .sidebar-component .tooltip {
 	position: absolute;
