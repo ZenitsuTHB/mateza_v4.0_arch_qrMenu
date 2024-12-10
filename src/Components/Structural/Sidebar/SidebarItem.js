@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 
@@ -9,7 +9,6 @@ const SidebarItem = ({
   isExpanded,
   activeColor
 }) => {
-  const [tooltipDisabled, setTooltipDisabled] = useState(false);
   const IconComponent = item.icon;
 
   // Determine if we are on a mobile screen
@@ -17,9 +16,7 @@ const SidebarItem = ({
 
   const handleItemClickWrapper = (id) => {
     handleItemClick(id);
-    if (isExpanded) {
-      setTooltipDisabled(true); // Disable tooltip after clicking when sidebar is expanded
-    }
+    // No need to disable text permanently; just rely on conditions
   };
 
   // Determine if the main item is active
@@ -51,7 +48,7 @@ const SidebarItem = ({
             <IconComponent />
           </span>
           <AnimatePresence>
-            {(isExpanded || isMobile) && (
+            {isExpanded && !isMobile && (
               <motion.span
                 className="sidebar-item__text"
                 initial={{ opacity: 0, x: -10 }}
@@ -63,8 +60,8 @@ const SidebarItem = ({
               </motion.span>
             )}
           </AnimatePresence>
-          {/* Do not show tooltip on mobile or when expanded */}
-          {!isExpanded && !isMobile && !tooltipDisabled && (
+          {/* Tooltip only when not expanded, not mobile, and no click behavior needed */}
+          {!isExpanded && !isMobile && (
             <span className="tooltip">{item.title}</span>
           )}
         </div>
