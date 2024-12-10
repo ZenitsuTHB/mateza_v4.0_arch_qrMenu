@@ -50,3 +50,18 @@
   }
   
 
+/* Responsive behavior mirroring the top bar */
+.app-component:not(.sidebar-hidden).sidebar-expanded .secondary-top-bar-component .secondary-top-bar {
+	left: 200px;
+	width: calc(100% - 200px);
+}
+
+.app-component:not(.sidebar-hidden):not(.sidebar-expanded) .secondary-top-bar-component .secondary-top-bar {
+	left: 60px;
+	width: calc(100% - 60px);
+}
+
+.app-component.sidebar-hidden .secondary-top-bar-component .secondary-top-bar {
+	left: 0;
+	width: 100%;
+}
