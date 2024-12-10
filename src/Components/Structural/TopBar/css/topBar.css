@@ -76,7 +76,6 @@
 	height: 21px;
 	cursor: pointer;
 	position: relative;
-	display: none;
   }
   
   .top-bar-component .nine-dots .dot {
@@ -290,6 +289,57 @@
   }
   
   /* If sidebar is hidden entirely, topbar is full width */
+  .app-component.sidebar-hidden .top-bar-component .top-bar {
+	left: 0;
+	width: 100%;
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  
+
+  /* topBar.css */
+
+/* Existing styles remain above */
+
+/* User box on the right side */
+.top-bar-component .user-box {
+	display: flex;
+	align-items: center;
+	border-radius: 20px; /* Rounded corners */
+	padding: 5px 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .top-bar-component .user-icon {
+	color: var(--color-accent-main);
+	margin-right: 8px;
+	font-size: 16px;
+  }
+  
+  .top-bar-component .user-name {
+	color: #000000;
+	font-weight: 500;
+	margin-right: 8px;
+  }
+  
+  .top-bar-component .user-chevron {
+	color: #000000;
+	font-size: 14px;
+  }
+  
+  /* Adjust if sidebar is expanded/collapsed */
+  .app-component:not(.sidebar-hidden).sidebar-expanded .top-bar-component .top-bar {
+	left: 200px;
+	width: calc(100% - 200px);
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  
+  .app-component:not(.sidebar-hidden):not(.sidebar-expanded) .top-bar-component .top-bar {
+	left: 60px;
+	width: calc(100% - 60px);
+	transition: left 0.3s ease, width 0.3s ease;
+  }
+  
   .app-component.sidebar-hidden .top-bar-component .top-bar {
 	left: 0;
 	width: 100%;

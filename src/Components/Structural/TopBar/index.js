@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import topBarConfig from '../../../Config/topbarConfig.js';
 import SearchBar from './SearchBar';
 import AppsMenu from './AppsMenu';
 import { SearchContext } from '../../../Context/SearchContext.js';
@@ -10,17 +9,15 @@ import './css/topBar.css';
 import './css/mobile.css';
 import './css/animations.css';
 import logoImage from '../../../Assets/logos/logo.webp';
-import { FaSignOutAlt, FaExternalLinkAlt } from 'react-icons/fa'; // Import additional icons
-import { motion, AnimatePresence } from 'framer-motion';
+import { FaUser, FaChevronDown } from 'react-icons/fa';
 
 const TopBar = () => {
-  const [openDropdown, setOpenDropdown] = useState(null); // Tracks which dropdown is open
   const menuTimeoutRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
-  // Handlers for Apps Menu (Left Side)
+  // Handlers for Apps Menu (Left Side) - can be removed if not needed
   const [isAppsMenuOpen, setIsAppsMenuOpen] = useState(false);
 
   const handleAppsMouseEnter = () => {
@@ -34,44 +31,8 @@ const TopBar = () => {
     }, 300);
   };
 
-  // Handlers for Account, Add, and Edit Dropdowns (Right Side)
-  const handleDropdownMouseEnter = (label) => {
-    clearTimeout(menuTimeoutRef.current);
-    setOpenDropdown(label);
-  };
-
-  const handleDropdownMouseLeave = () => {
-    menuTimeoutRef.current = setTimeout(() => {
-      setOpenDropdown(null);
-    }, 300);
-  };
-
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-  };
-
-  const handleLogout = () => {
-    localStorage.setItem('loginSuccessful', false);
-    window.location.reload();
-  };
-
-  // Define animation variants for the dropdown menus
-  const dropdownMenuVariants = {
-    hidden: { opacity: 0, y: '-10px' },
-    visible: { opacity: 1, y: '0' },
-    exit: { opacity: 0, y: '-10px' },
-  };
-
-  // New handler for button clicks (both top-level and dropdown items)
-  const handleButtonClick = (item) => {
-    if (item.action === 'logout') {
-      handleLogout();
-    } else if (item.isExternal && item.path) {
-      window.open(item.path, '_blank', 'noopener,noreferrer');
-      // Alternatively, use window.location.href = item.path; to navigate in the same tab
-    } else if (item.path) {
-      navigate(item.path);
-    }
   };
 
   return (
@@ -83,7 +44,6 @@ const TopBar = () => {
           onMouseEnter={handleAppsMouseEnter}
           onMouseLeave={handleAppsMouseLeave}
         >
-          
           <div className={`nine-dots-wrapper ${isAppsMenuOpen ? 'active' : ''}`}>
             <div className="nine-dots">
               {[...Array(9)].map((_, index) => (
@@ -93,16 +53,14 @@ const TopBar = () => {
           </div>
           <h3 className="top-bar-title">Mateza Booking</h3>
           <img src={logoImage} alt="Logo" className="title-image" />
-          {
-          /*
+          {/*
           {isAppsMenuOpen && (
             <AppsMenu
               onMouseEnter={handleAppsMouseEnter}
               onMouseLeave={handleAppsMouseLeave}
             />
           )}
-            */
-          }
+          */}
         </div>
 
         {/* Middle Side */}
@@ -118,73 +76,13 @@ const TopBar = () => {
           )}
         </div>
 
-        {/* Right Side */}
+        {/* Right Side: White box with icon, name "Thibault", and chevron */}
         <div className="top-bar-right">
-          {topBarConfig.map((button) => {
-            const IconComponent = button.icon;
-            const isExternal = button.isExternal || false;
-
-            if (button.hasDropdown) {
-              return (
-                <div
-                  key={button.label}
-                  className="dropdown-button-wrapper"
-                  onMouseEnter={() => handleDropdownMouseEnter(button.label)}
-                  onMouseLeave={handleDropdownMouseLeave}
-                >
-                  <button
-                    className="icon-button"
-                    aria-label={button.label}
-                    onClick={() => handleButtonClick(button)}
-                    style={{ color: button.iconColor || 'var(--color-accent)' }}
-                  >
-                    <IconComponent />
-                    {/* If the button is external, show an external link icon */}
-                  </button>
-                  <AnimatePresence>
-                    {openDropdown === button.label && (
-                      <motion.div
-                        className="dropdown-menu"
-                        variants={dropdownMenuVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        transition={{ duration: 0.3 }}
-                      >
-                        {button.dropdownItems.map((item, index) => (
-                          <button
-                            key={index}
-                            className="dropdown-button"
-                            onClick={() => handleButtonClick(item)}
-                          >
-                            <item.icon
-                              className={`dropdown-icon ${item.isLogout ? 'logout' : ''}`}
-                              style={{ color: item.iconColor || 'black' }}
-                            />
-                            <span className="dropdown-text">{item.label}</span>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            } else {
-              // For buttons without dropdown
-              return (
-                <button
-                  key={button.label}
-                  className="icon-button"
-                  aria-label={button.label}
-                  onClick={() => handleButtonClick(button)}
-                  style={{ color: button.iconColor || 'var(--color-accent)' }}
-                >
-                  <IconComponent />
-                  {/* If the button is external, show an external link icon */}
-                </button>
-              );
-            }
-          })}
+          <div className="user-box">
+            <FaUser className="user-icon" />
+            <span className="user-name">Thibault</span>
+            <FaChevronDown className="user-chevron" />
+          </div>
         </div>
       </div>
     </div>
