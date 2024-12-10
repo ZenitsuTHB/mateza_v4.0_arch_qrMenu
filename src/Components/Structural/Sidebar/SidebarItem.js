@@ -9,6 +9,7 @@ const SidebarItem = ({
   isExpanded,
   isPinned,
   secondaryTopBar,
+  activeColor
 }) => {
   const [showSecondaryItems, setShowSecondaryItems] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
@@ -121,7 +122,10 @@ const SidebarItem = ({
           />
         )}
         <div className="sidebar-item__content">
-          <span className="sidebar-item__icon">
+          <span 
+            className="sidebar-item__icon" 
+            style={isActive ? { color: activeColor } : {}}
+          >
             <IconComponent />
           </span>
           <AnimatePresence>

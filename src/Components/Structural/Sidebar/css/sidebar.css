@@ -30,7 +30,7 @@
 }
 
 .sidebar-item__active .sidebar-item__icon {
-	color: #5fa5bf; /* Theme 11 accent */
+	color: var(--color-blue); /* Theme 11 accent */
 }
 
 /* Sidebar Toggle */

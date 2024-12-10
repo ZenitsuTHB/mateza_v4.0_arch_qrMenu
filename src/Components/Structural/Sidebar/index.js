@@ -1,4 +1,3 @@
-// Sidebar.js
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarItem from './SidebarItem';
@@ -10,13 +9,27 @@ import './css/mobile.css';
 
 const Sidebar = () => {
   const isIframe = typeof window !== 'undefined' && window.isIframe;
-  
+
   const [activeTab, setActiveTab] = useState(routesConfig[0].path);
   const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= 900);
   const [isPinned, setIsPinned] = useState(false);
   const [collapseTimeout, setCollapseTimeout] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Define a fixed array of subtle variants of #48aaaf
+  const colors = [
+    "#48aaaf",
+    "#4bb0b5",
+    "#4fb5ba",
+    "#53bbbf",
+    "#56c0c4",
+    "#5ac6c9",
+    "#5ecbce",
+    "#62d1d3",
+    "#66d6d8",
+    "#69dcdd"
+  ];
 
   const handleItemClick = (path) => {
     setActiveTab(path);
@@ -111,7 +124,7 @@ const Sidebar = () => {
     >
       {routesConfig
         .filter((route) => route.isMenu)
-        .map((route) => (
+        .map((route, index) => (
           <SidebarItem
             key={route.path}
             item={{ id: route.path, title: route.label, icon: route.icon }}
@@ -120,6 +133,7 @@ const Sidebar = () => {
             isExpanded={isExpanded}
             isPinned={isPinned}
             secondaryTopBar={route.secondaryTopBar}
+            activeColor={colors[index % colors.length]} // Assign subtle variant color for icon
           />
         ))}
       <div className="sidebar-controls">
