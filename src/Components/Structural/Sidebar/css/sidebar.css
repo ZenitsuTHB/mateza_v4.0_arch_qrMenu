@@ -1,57 +1,57 @@
-/* Sidebar Component */
+/* Reset to full height layout, pinned to left with top:60px */
 .sidebar-component {
 	position: fixed;
+	top: 60px; /* Offset from the top */
+	left: 0;
+	bottom: 0; /* Full height down to bottom */
+	z-index: 1000;
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-	background-color: var(--color-white);
-	z-index: var(--z-index-nav);
+	background-color: #202020; /* Dark background */
 	padding: 10px 4px;
-	margin-top: 57px;
-	border-radius: 10px;
-	margin-left: 10px;
 	width: 60px; /* Collapsed width */
 	transition: width 0.3s ease;
-  }
-  
-  .sidebar-component.expanded {
-    width: 200px;
-    max-height: calc(100vh - 100px); /* Adjust the offset as needed */
-    overflow-y: auto; /* Use 'auto' instead of 'scroll' */
+	color: #f0f0f0;
+	/* Remove border-radius and margins so it pins flush to the edge */
+	/* No margin-top, no margin-left */
 }
 
+.sidebar-component.expanded {
+	width: 200px;
+	overflow-y: auto;
+	border-right: 1px solid #444; /* Border when expanded */
+}
 
-
-  .sidebar-component .sidebar-item__active-bg {
+/* Active background for selected item */
+.sidebar-item__active-bg {
 	position: absolute;
 	inset: 0;
 	border-radius: 10px;
-	background-color: var(--color-bg);
-	
-  }
-	/* Change icon color when the item is active */
-	.sidebar-item__active .sidebar-item__icon {
-		color: var(--color-blue);
-	}
+	background-color: #333; /* Active background */
+}
 
-  
-  /* Sidebar Toggle */
-  .sidebar-toggle {
-	margin-top: auto; /* Pushes the toggle to the bottom */
+.sidebar-item__active .sidebar-item__icon {
+	color: #616161;
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+	margin-top: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
 	padding: 10px;
-	color: var(--color-accent);
-  }
-  
-  .sidebar-toggle:hover {
-	color: #000;
-  }
-  
-  /* Sidebar Item */
-  .sidebar-component .sidebar-item {
+	color: #616161;
+}
+
+.sidebar-toggle:hover {
+	color: #fff;
+}
+
+/* Sidebar Item */
+.sidebar-component .sidebar-item {
 	position: relative;
 	height: 40px;
 	display: flex;
@@ -59,114 +59,112 @@
 	padding: 10px 16px;
 	cursor: pointer;
 	font-weight: 500;
-	color: var(--color-black);
+	color: #f0f0f0;
 	transition: background-color 0.4s ease, color 0.4s ease;
-  }
+}
 
-  
-  .sidebar-item__content {
+.sidebar-item__content {
 	display: flex;
 	align-items: center;
 	position: relative;
-  }
-  
-  /* Sidebar Item Icon */
-  .sidebar-item__icon {
+}
+
+/* Sidebar Item Icon */
+.sidebar-item__icon {
 	display: flex;
 	align-items: center;
-	color: var(--color-accent);
-	transition: color 0.3s ease;
-  }
-  
-  
-  /* Sidebar Item Text */
-  .sidebar-item__text {
-	margin-left: 12px; /* Margin between icon and text */
-	color: var(--color-black);
+	color: #616161;
+	transition: color 0.3s ease, transform 0.3s ease;
+	font-size: 1.2rem;
+}
+
+.sidebar-item__content:hover .sidebar-item__icon {
+	transform: scale(1.1);
+}
+
+/* Sidebar Item Text */
+.sidebar-item__text {
+	margin-left: 12px; 
+	color: #f0f0f0;
 	font-weight: 500;
-  }
-  
-  /* Tooltip */
-  .sidebar-component .tooltip {
+}
+
+/* Tooltip */
+.sidebar-component .tooltip {
 	position: absolute;
 	left: 100%;
 	top: 50%;
 	transform: translateY(-50%) translateX(18px);
-	background-color: var(--color-bg);
-	color: var(--color-text);
+	background-color: #333;
+	color: #f0f0f0;
 	padding: 4px 8px;
 	border-radius: 4px;
-	border: 1px solid var(--color-border);
+	border: 1px solid #444;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	white-space: nowrap;
 	opacity: 0;
 	visibility: hidden;
 	backdrop-filter: blur(30px);
 	transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  
-  .sidebar-item__icon:hover + .tooltip {
+}
+
+.sidebar-item__icon:hover + .tooltip,
+.sidebar-item__content:hover .tooltip {
 	opacity: 1;
 	visibility: visible;
-  }
-  
-  .sidebar-item__content:hover .tooltip {
-	opacity: 1;
-	visibility: visible;
-  }
-  
-  /* Hide tooltip when sidebar is expanded */
-  .sidebar-component.expanded .tooltip {
+}
+
+/* Hide tooltip when sidebar is expanded */
+.sidebar-component.expanded .tooltip {
 	display: none;
-  }
-  
+}
 
 /* Secondary Items */
 .sidebar-item__secondary {
 	margin-top: 5px;
-	margin-left: 20px; /* Indent */
-	font-size: 0.9em; /* Smaller font */
+	margin-left: 20px;
+	font-size: 0.9em;
 	display: flex;
 	flex-direction: column;
-  }
-  
-  .sidebar-item__secondary-item {
-	padding: 5px 0 5px 20px; /* Additional indent */
-	cursor: pointer;
-	color: var(--color-black);
-  }
-  
-  .sidebar-item__secondary-item:hover {
-	color: var(--color-accent);
-  }
-  
+}
 
-  /* Sidebar Controls */
+.sidebar-item__secondary-item {
+	padding: 5px 0 5px 20px;
+	cursor: pointer;
+	color: #f0f0f0;
+	transition: color 0.3s ease;
+}
+
+.sidebar-item__secondary-item:hover {
+	color: #616161;
+}
+
+/* Sidebar Controls */
 .sidebar-controls {
-	margin-top: auto; /* Pushes the controls to the bottom */
+	margin-top: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  }
-  
-  .sidebar-toggle-group {
+}
+
+.sidebar-toggle-group {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-  }
-  
-  .sidebar-toggle,
-  .sidebar-pin {
+}
+
+.sidebar-toggle,
+.sidebar-pin {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-	color: var(--color-accent);
+	color: #616161;
 	padding: 10px;
-  }
-  
-  .sidebar-toggle:hover,
-  .sidebar-pin:hover {
-	color: #000;
-  }
-  
+	transition: color 0.3s ease;
+}
+
+.sidebar-toggle:hover,
+.sidebar-pin:hover {
+	color: #fff;
+}

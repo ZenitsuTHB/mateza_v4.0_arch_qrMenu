@@ -1,4 +1,3 @@
-// SidebarItem.js
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
@@ -47,11 +46,8 @@ const SidebarItem = ({
 
   // Update showSecondaryItems based on isPinned
   useEffect(() => {
-    if (isPinned) {
-      setShowSecondaryItems(true);
-    } else {
-      setShowSecondaryItems(false);
-    }
+    if (isPinned) setShowSecondaryItems(true);
+    else setShowSecondaryItems(false);
   }, [isPinned]);
 
   // Variants for the secondary items container
