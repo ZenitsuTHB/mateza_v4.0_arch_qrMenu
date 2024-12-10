@@ -1,24 +1,22 @@
+/* secondaryTopBar.css */
+
 .secondary-top-bar-component .secondary-top-bar {
-	position: fixed;
-	top: 60px; /* Directly below the main top bar which is 60px high */
+	position: absolute;
 	left: 0;
 	width: 100%;
 	height: 50px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: var(--color-bg); /* If you want it to have a background */
-	transition: left 0.3s ease, width 0.3s ease;
-	z-index: 999; /* Ensure it's above content but below modal overlays */
-}
-
-.secondary-top-bar-component .buttons-container {
+  }
+  
+  .secondary-top-bar-component .buttons-container {
 	display: flex;
 	gap: 40px;
 	position: relative;
-}
-
-.secondary-top-bar-component .secondary-button {
+  }
+  
+  .secondary-top-bar-component .secondary-button {
 	position: relative;
 	background: none;
 	border: none;
@@ -28,18 +26,18 @@
 	padding: 8px 0;
 	transition: color 0.3s ease;
 	text-decoration: none;
-}
-
-.secondary-top-bar-component .secondary-button.active {
+  }
+  
+  .secondary-top-bar-component .secondary-button.active {
 	color: var(--color-blue);
-}
-
-.secondary-top-bar-component .button-link {
+  }
+  
+  .secondary-top-bar-component .button-link {
 	text-decoration: none;
 	color: inherit;
-}
-
-.secondary-top-bar-component .underline {
+  }
+  
+  .secondary-top-bar-component .underline {
 	position: absolute;
 	bottom: -5px;
 	left: 0;
@@ -49,20 +47,6 @@
 	border-radius: 2px;
 	opacity: 0;
 	transition: opacity 0.3s ease, transform 0.3s ease;
-}
+  }
+  
 
-/* Responsive behavior mirroring the top bar */
-.app-component:not(.sidebar-hidden).sidebar-expanded .secondary-top-bar-component .secondary-top-bar {
-	left: 200px;
-	width: calc(100% - 200px);
-}
-
-.app-component:not(.sidebar-hidden):not(.sidebar-expanded) .secondary-top-bar-component .secondary-top-bar {
-	left: 60px;
-	width: calc(100% - 60px);
-}
-
-.app-component.sidebar-hidden .secondary-top-bar-component .secondary-top-bar {
-	left: 0;
-	width: 100%;
-}
